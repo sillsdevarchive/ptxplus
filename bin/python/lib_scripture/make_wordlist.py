@@ -43,6 +43,8 @@ class MakeWordlist (object) :
 		bookWordlist = {}
 
 		# If we already have a master word list lets look at it.
+		# Also, it is assumed that this file is in the target
+		# encoding so no encoding conversion will be applied
 		if os.path.isfile(masterReportFile) :
 			masterWordlistObject = codecs.open(masterReportFile, "r", encoding='utf-8')
 			# Push it into a dictionary w/o line endings
@@ -92,6 +94,7 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		self._masterWordlist = masterWordlist
 		self._book = ""
 		self._encoding_manager = EncodingManager(log_manager._settings)
+		self._targetEncodingPath = log_manager._settings['General']['TextFeatures']['targetEncodingPath']
 
 
 	def start (self, tag, num, info, prefix) :
@@ -125,6 +128,10 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 				if self.isWord(word) :
 					word = self.cleanWord(word)
 					if word != "" :
+						# At this point we will apply any encoding changes necessary
+						if self._targetEncodingPath :
+							word = self.encodingConversion(word)
+
 						if self._bookWordlist.get(word) != None :
 							self._bookWordlist[word] = int(self._bookWordlist.get(word)) + 1
 						else :
@@ -155,6 +162,15 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		# we will ignore them here.
 		# self._log_manager.log("ERRR", msg + "Marker [\\" + tag + "]")
 		pass
+
+
+	def encodingConversion (self, word) :
+		'''Using the TECKit module, do an encoding conversion on the
+			supplied string.'''
+
+
+
+		return word
 
 	def isWord (self, word) :
 		'''According to settings in the .conf file, return True if this
