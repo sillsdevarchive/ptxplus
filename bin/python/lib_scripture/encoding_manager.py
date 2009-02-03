@@ -81,6 +81,7 @@ class EncodingManager (object) :
 		#			look for an optional : or . as well followed by number range
 		#	(\)|\])?	Finally, match on ] or ) (optional)
 		self._basicNumRefTest = re.compile('(\(|\[)?' + numRange + '[:.]' + numRange + '(-,' + numRange + '([:.]' + numRange + ')?)?(\)|\])?')
+		self._basicNumTest = re.compile( numRange )
 
 		# Test for combined abbreviation character combinations
 		# (1+ != . followed by . followed by 1+ != . followed by .)
@@ -554,6 +555,15 @@ class EncodingManager (object) :
 		# up in __init__ where the match was defined.
 		#return self._basicNumRef.match(word)
 		if self._basicNumRefTest.match(word) :
+			return True
+		else :
+			return False
+
+
+	def isNumber (self, word) :
+		'''Very simple test to see if the string is a number.'''
+
+		if self._basicNumTest.match(word) :
 			return True
 		else :
 			return False

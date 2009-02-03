@@ -37,15 +37,20 @@ class MakeWordlist (object) :
 
 		bookFile = log_manager._currentOutput
 		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
-		reportFile = os.getcwd() + "/" + reportPath + "/wordlist.txt"
-		wordlist = {}
+		masterReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.txt"
+		bookReportFile = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.txt"
+		masterWordlist = {}
+		bookWordlist = {}
 
-		if os.path.isfile(reportFile) :
-			wordlistObject = codecs.open(reportFile, "r", encoding='utf-8')
-			for word in wordlistObject :
-				wordlist[word.strip()] = 1
+		# If we already have a master word list lets look at it.
+		if os.path.isfile(masterReportFile) :
+			masterWordlistObject = codecs.open(masterReportFile, "r", encoding='utf-8')
+			# Push it into a dictionary w/o line endings
+			for line in masterWordlistObject :
+				data = line.split()
+				masterWordlist[data[0].strip()] = data[1].strip()
 
-			wordlistObject.close()
+			masterWordlistObject.close()
 
 		# Get our current book object
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
@@ -53,27 +58,38 @@ class MakeWordlist (object) :
 		# Load in the parser
 		parser = parse_sfm.Parser()
 
-		# This calls a version of the handler which strips out everything
-		# but the text and basic format.
-		handler = MakeWordlistHandler(log_manager, wordlist)
+		# This calls a version of the handler which also builds
+		# our wordlist for us. Later on we will pole it to get
+		# what was stored in it by the handler.
+		handler = MakeWordlistHandler(log_manager, bookWordlist, masterWordlist)
 		parser.setHandler(handler)
 		parser.parse(bookObject)
 
-		# Output the wordlistObject to the wordlist file (we'll overwrite the existing one)
-		newWordlistObject = codecs.open(reportFile, "w", encoding='utf-8')
-		newWordlist = handler._wordlist.keys()
-		newWordlist.sort()
-		newWordlistObject.write("\n".join(newWordlist))
-		newWordlistObject.close()
+		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
+		bookWordlistObject = codecs.open(bookReportFile, "w", encoding='utf-8')
+		bookWordlist = handler._bookWordlist.keys()
+		bookWordlist.sort()
+		for f in bookWordlist :
+			bookWordlistObject.write(f + " " + str(handler._bookWordlist[f]) + "\n")
+		bookWordlistObject.close()
+
+		# Output the masterWordlist to the masterReportFile
+		masterWordlistObject = codecs.open(masterReportFile, "w", encoding='utf-8')
+		masterWordlist = handler._masterWordlist.keys()
+		masterWordlist.sort()
+		for f in masterWordlist :
+			masterWordlistObject.write(f + " " + str(handler._masterWordlist[f]) + "\n")
+		masterWordlistObject.close()
 
 
 class MakeWordlistHandler (parse_sfm.Handler) :
 	'''This class replaces the Handler class in the parse_sfm module.'''
 
-	def __init__(self, log_manager, wordlist) :
+	def __init__(self, log_manager, bookWordlist, masterWordlist) :
 
 		self._log_manager = log_manager
-		self._wordlist = wordlist
+		self._bookWordlist = bookWordlist
+		self._masterWordlist = masterWordlist
 		self._book = ""
 		self._encoding_manager = EncodingManager(log_manager._settings)
 
@@ -107,7 +123,16 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 				word = word.strip()
 				# Add it to the dictionary if it is a real word
 				if self.isWord(word) :
-					self._wordlist[word] = 1
+					word = self.cleanWord(word)
+					if word != "" :
+						try :
+							self._bookWordlist[word] = int(self._bookWordlist.get(word)) + 1
+							self._masterWordlist[word] = int(self._masterWordlist.get(word)) + 1
+						except :
+							self._bookWordlist[word] = 1
+							self._masterWordlist[word] = 1
+
+				# How would we do a proper word count here?
 
 			return text
 
@@ -133,7 +158,41 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		'''According to settings in the .conf file, return True if this
 			proves to be a real word.'''
 
-		return False
+		# First eliminate numbers and references
+		if not self._encoding_manager.isReferenceNumber(word) and not self._encoding_manager.isNumber(word) :
+			return True
+
+
+	def cleanWord (self, word) :
+		'''Do a simple clean up of the word by looking for and removing any
+			punctuation found stuck to the string.'''
+
+		# This probably needs to be optimized with a regexp or something
+
+		# First look for quote markers
+		if self._log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
+			quoteSystem = "DumbQuotes"
+		else :
+			quoteSystem = "SmartQuotes"
+
+		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
+			if v != '' :
+				if word.find(v) > -1 :
+					word = word.replace(v, '')
+		# Now look for brackets
+		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
+			if v != '' :
+				if word.find(v) > -1 :
+					word = word.replace(v, '')
+		# Now look for word final punctuation
+		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
+			if v != '' :
+				if word.find(v) > -1 :
+					word = word.replace(v, '')
+
+		# Return whatever we got
+		return word
+
 
 
 # This starts the whole process going
