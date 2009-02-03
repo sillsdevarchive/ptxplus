@@ -125,11 +125,13 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 				if self.isWord(word) :
 					word = self.cleanWord(word)
 					if word != "" :
-						try :
+						if self._bookWordlist.get(word) != None :
 							self._bookWordlist[word] = int(self._bookWordlist.get(word)) + 1
-							self._masterWordlist[word] = int(self._masterWordlist.get(word)) + 1
-						except :
+						else :
 							self._bookWordlist[word] = 1
+						if self._masterWordlist.get(word) != None :
+							self._masterWordlist[word] = int(self._masterWordlist.get(word)) + 1
+						else :
 							self._masterWordlist[word] = 1
 
 				# How would we do a proper word count here?
