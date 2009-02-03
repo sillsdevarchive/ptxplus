@@ -76,9 +76,10 @@ make-styles :
 make-template :
 	$(PY_RUN_SYSTEM_PROCESS) make_template
 
-# Prepare a wordlist from all the books in the project
-make-wordlist :
-	$(PY_RUN_SYSTEM_PROCESS) make_wordlist
+# Update a developer version of ptxplus
+# This assumes you have Mercurial installed and setup
+dev-update :
+	hg pull $(PTXPLUS_BASE)
 
 
 ###############################################################
