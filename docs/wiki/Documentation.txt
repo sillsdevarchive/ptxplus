@@ -1,0 +1,43 @@
+====== XETEX-ptxplus ======
+
+Description: A Scripture publication management system for XeTeX
+XeTeX-ptxplus is designed to manage the process of typesetting Scripture
+text by tracking project settings and specifications and creating the
+necessary control files for typesetting a project. The end result is a
+formatted PDF file that can be delivered to a print shop for printing and
+binding.
+
+The ptxplus package supports the publishing specialist in completing the
+tasks required to publish USFM Scripture text. It provides a centralized
+settings files for entering specifications for the Bible layout. It
+has a suite of automated checking scripts which ensure accuracy in the
+text output. It automates the composition process using XETEX and the
+ptx2pdf macro package which was was previously done manually. This leaves
+the publishing specialist free to concentrate on the final adjustments
+necessary for a high quality publication.
+
+This package is being developed by the SIL MSEA Group for limited
+deployment in the context of MSEA. For broader application further
+development of the GUI will be needed as well as other parts of the
+system. Ptxplus is designed to work on the Ubuntu operating system.
+
+The following operations are in the process of being automated:
+
+* Placement of footnotes and cross references
+* Placement of illustrations
+* Creating of page headers and footers
+* Creation and management a table of contents
+* Creation and management of text adjustment files
+* Creation and management of peripheral matter
+* File dependency management
+* Binding PDF files
+* File management (including administrative data)
+* Text pre-process checking
+* Text processing (changing quotes, etc)
+* XETEX typesetting process execution
+* Auto-open of typeset PDF files
+* Project creation
+* Simple project backup
+* Project archiving
+* Auto map creation
+* Diglot support

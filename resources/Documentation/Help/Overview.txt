@@ -1,0 +1,5 @@
+====== Overview ======
+
+There is a good deal of art involved in typesetting Scripture. Even more so when the publishing specialist uses TEX as the typesetting application. The ptx2pdf TEX macro package makes the task of typesetting Paratext Scripture much easier. However, there is much left to the imagination as to how to setup and manage a Scripture publishing project. XETEX-ptxplus is designed to make this process much easier.
+
+The ptxplus package supports the publishing specialist in completing the tasks required to publish USFM Scripture text. It provides a centralized settings files for entering specifications for the Bible layout, and then automates the composition process using XETEX and the ptx2pdf macro package which was was previously done manually. This leaves the publishing specialist free to concentrate on the final adjustments necessary for a high quality publication.

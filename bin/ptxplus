@@ -1,0 +1,279 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# version: 20080423
+# By Dennis Drescher (dennis_drescher at sil.org)
+
+# This script has been tested on Python 2.5.1 (Ubuntu)
+# it may not work right with earlier versions.
+
+#############################################################
+################ Description/Documentation ##################
+#############################################################
+
+# One script to rule them all. This is the mother script of
+# the whole system. This script will drive all processes and
+# keep track of what happens in the project log in each
+# respective project.
+
+# History:
+# 20080613 - djd - Initial draft
+# 20081023 - djd - Refactor project.conf structure changes
+# 20081028 - djd - Removed system logging. Only using
+#		process logging now.
+
+
+#############################################################
+######################### Load Modules ######################
+#############################################################
+# Firstly, import all the standard Python modules we need for
+# this process
+
+import sys, os, codecs, shutil
+
+basePath = os.environ.get('PTXPLUS_BASE')
+if not basePath :
+	basePath = "/usr/share/xetex-ptxplus"
+	os.environ['PTXPLUS_BASE'] = basePath
+
+sys.path.append(basePath + '/bin/python')
+sys.path.append(basePath + '/bin/python/lib_system')
+sys.path.append(basePath + '/bin/python/lib_scripture')
+
+# Import supporting local classes
+#from lib_system.tools import *
+from tools import *
+from log_manager import *
+from error_manager import *
+
+
+# We want to see one valid arguments given. However, that
+# may not happen so this script is all about testing the
+# arguments given and getting things directed to the right
+# place.
+
+command = ""
+
+if len(sys.argv) >= 2 :
+	command = sys.argv[1].lower()
+else :
+	tools.userMessage("Welcome to XeTeX-ptxplus!")
+	command = "manage"
+
+# Instantiate classes
+tools		= Tools()
+error_manager	= ErrorManager()
+
+
+#############################################################
+################# Define Script functions ###################
+#############################################################
+
+
+def setupNewProject () :
+	'''Setup a new project.'''
+
+	if len(sys.argv) > 2 :
+
+		# Let's see if a project already exists here
+		if tools.isProjectFolder() == False :
+			# Now we will set up the new project
+			mod = __import__('make_new_project')
+			mod.doIt(os.path.abspath(sys.argv[2]))
+		else :
+			tools.userMessage('Sorry, a project already exists here, aborting operation now.')
+			sys.exit()
+
+
+	# We should try to give a little more useful information here if possible
+	elif tools.userConfirm("Would you like to start a new project?") == True :
+		tools.userMessage('What fun! Could you please tell me what you want to call the project? (The project ID code, or the folder name if you prefer.) Try to keep it short, less than 15 characters if possible. Also, do not use spaces or weird characters please.')
+		projectID = tools.userInput('Enter your new Project ID here: ').upper()
+
+
+
+
+def restoreFromBackup () :
+	'''Restore a project from the last back up.'''
+
+	# Check to see if the backup file exists
+	if tools.isBackedUp() == True :
+		mod = __import__("restore_project")
+		mod.doIt()
+	else :
+		tools.userMessage("Restore error: This project could not be restored from backup. No backup file found or project does not exist.")
+
+
+def importProject () :
+	'''Import a new project from the archive area.'''
+
+	# This should just go to where the archives are kept and bring back a list for
+	# the user to choose from. For now we'll just use a path and file name so we
+	# can point to anything.
+	if len(sys.argv) < 3 :
+		archiveFile = tools.userInput('Please enter the path and filename of the archive file to import: ')
+	else :
+		archiveFile = sys.argv[2]
+
+	mod = __import__("import_project")
+	mod.doIt(archiveFile)
+
+
+def archiveProject () :
+	'''Do an archive of any project. If a file name argument is passed we know
+		the ptxplus-manager is initiating the call. If no file name is sent
+		then it is a blind call from the ptxplus program and will use default
+		settings to produce an archive file in the Archive folder.'''
+
+	if len(sys.argv) < 3 :
+		fileName = tools.getProjectID()
+	else :
+		fileName = sys.argv[2]
+
+	mod = __import__("archive_project")
+	mod.doIt(fileName)
+
+
+def backupProject () :
+	'''Do a simple backup of the current project.'''
+
+	mod = __import__("backup_project")
+	tools.userMessage("Backing up project, please wait...")
+	mod.doIt()
+
+
+#############################################################
+################# Main Body of the Script ###################
+#############################################################
+
+noCommandMsg = "Sorry, no valid command was given. Try again."
+
+if command == "manage" :
+	# In this instance we want to just call the GUI manager and release control cleanly
+	os.execl(basePath + "/bin/python/ptxplus-manager/ptxplus-manager")
+
+elif command == "help" :
+	# We have to help the user get started so this will allow us to call help
+	# even if a project is not open.
+	os.system('zim ' + basePath + '/resources/Documentation/Help/ Home.txt')
+
+elif command == "about" :
+	# Give the user an "about" window even if not in a project.
+	os.system('zim ' + basePath + '/resources/Documentation/Help/ About.txt')
+
+elif command == "version" :
+	# Give the user the current system version number
+	tools.userMessage('Current version: ' + tools.getSystemVersion())
+
+elif command == "user" :
+	# Set the system user name
+		tools.userMessage(tools.getSystemUser())
+
+elif command == "set-user" :
+	# Set the system user name
+	try :
+		if sys.argv[2] :
+			tools.setSystemUser(sys.argv[2])
+	except :
+		tools.userMessage('No user name given, try again.')
+
+elif command == "example" :
+	# This is a special instance of the import function to facilitate
+	# running the example project for demonstration purposes.
+
+	try :
+		if sys.argv[2] :
+			if os.path.isdir(sys.argv[2]) == True :
+				os.chdir(sys.argv[2])
+			else :
+				os.mkdir(sys.argv[2])
+				os.chdir(sys.argv[2])
+
+	except :
+		os.mkdir("ptxplus-example")
+		os.chdir("ptxplus-example")
+
+
+	mod = __import__("import_project")
+	# For now, I've hard coded the path to the example file. Shame on me!
+	mod.doIt(basePath + '/resources/Documentation/Help/default_example.tar.gz')
+
+else :
+	# This will test to see if we are in the project or not
+	# To do system commands we need to be one folder above
+	# However, if we find we are in a project folder, then
+	# we will perform project processes on that specific project
+	if tools.inProject() == True :
+
+		# Sort out the commands. These are commands that
+		# can be used from inside the project area
+		if command == "restore" :
+			restoreFromBackup()
+		elif command == "backup" :
+			backupProject()
+		elif command == "archive" :
+			archiveProject()
+		elif command == "import" or command == "setup" :
+			tools.userMessage('Sorry, that command cannot be used in this location.')
+
+		else :
+			# So, it looks like we are going to do some work on the project so we
+			# should do some tests and even automatic repairs and updates.
+
+			# Right off we need to tell the user if the project is locked (only if it is locked)
+
+
+			# Update the project.conf file if it needs it
+			mod = __import__("update_project_settings")
+			mod.doIt()
+
+			# Next look to see if the fonts.conf file needs localizing
+			from font_manager import *
+			font_manager	= FontManager()
+			font_manager.localiseFontsConf()
+
+			# There are a number of processes we may want to run before we want to
+			# start the actual process. These are done via the GlobalProcesses listed
+			# in the project.conf file.
+			#log_manager.logItSystem("INFO", "Looking for global project processes to run.")
+
+			# Look for all the global processes that need to be run
+			try :
+				for key, value in tools.getSettingsObject()['General']['GlobalProcesses'].iteritems() :
+					# Run any that are set to "true"
+					if value == "true" :
+						module = __import__(key, globals(), locals(), [])
+						module.doIt()
+
+			except :
+
+				tools.userMessage('Error: Could not run Global processes. Project.conf might be corrupt.')
+			# Get rid of the old error log file.
+			error_manager.deleteErrorLog()
+
+			# The project should be ready now
+			tools.userMessage("Starting a process. Command: " +  command)
+
+			# Now send off the command to makefile
+			errorCode = tools.makefileCommand(command)
+			if errorCode != 0 :
+				tools.userMessage("Makefile process failed. (Error: " + str(errorCode) + ")")
+
+			# Report our errors to the terminal
+			error_manager.outputProcessErrorReport()
+
+	elif tools.inProject() == False :
+		# These are system level commands and have to be used
+		# from outside the project area
+		if command == "setup" :
+			setupNewProject()
+		elif command == "import" :
+			importProject()
+		else :
+			tools.userMessage("There does not seem to be a valid project in this location and the [" + command + "] command is not recognized in this context.")
+
+	else :
+		tools.userMessage(noCommandMsg)
+
+
+# All done
+tools.userMessage("Thank you, please come again!")

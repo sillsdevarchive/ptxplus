@@ -1,0 +1,8 @@
+[Notebook]
+document_root=/home/dennis/Projects/ptxplus/resources/Documentation/Help
+home=
+icon=
+name=ptxplus-Help
+slow_fs=1
+
+# vim: syntax=desktop

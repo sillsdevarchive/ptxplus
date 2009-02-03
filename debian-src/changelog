@@ -1,0 +1,87 @@
+xetex-ptxplus (0.4.1-1) hardy; urgency=low
+
+  * Test build
+  * 
+
+ -- Dennis <dennis@dennis-desktop>  Fri, 14 Nov 2008 14:43:22 +0700
+
+xetex-ptxplus (0.4-1) hardy; urgency=low
+
+  * Non-maintainer upload.
+  * 
+
+ -- Martin Hosken <martin_hosken@sil.org>  Wed, 12 Nov 2008 15:53:58 +0700
+
+xetex-ptxplus (0.3-1.1) hardy; urgency=low
+
+  * Various bug fixes and reorganisation
+
+ -- Martin Hosken <martin_hosken@sil.org>  Wed, 05 Nov 2008 16:19:18 -0500
+
+xetex-ptxplus (0.3-1) hardy; urgency=low
+
+  * Reorganise for more public release
+
+ -- Martin Hosken <martin_hosken@sil.org>  Fri, 24 Oct 2008 09:14:44 +0700
+
+xetex-ptxplus (0.2-2.3) hardy; urgency=low
+
+  * Non-maintainer upload.
+  * Split off examples into separate package
+
+ -- Martin Hosken <martin_hosken@sil.org>  Thu, 23 Oct 2008 10:59:40 +0700
+
+xetex-ptxplus (0.2-2.2) hardy; urgency=low
+
+  * Local release
+  * 
+
+ -- Martin Hosken <martin_hosken@sil.org>  Fri, 17 Oct 2008 16:43:37 +0700
+
+xetex-ptxplus (0.2-2.1) hardy; urgency=low
+
+  * Interim test release
+  * 
+
+ -- Martin Hosken <martin_hosken@sil.org>  Thu, 16 Oct 2008 15:21:28 +0700
+
+xetex-ptxplus (0.2-2) hardy; urgency=low
+
+  * Minor release to cover demos
+
+ -- Martin Hosken <martin_hosken@sil.org>  Wed, 15 Oct 2008 16:58:02 +0700
+
+xetex-ptxplus (0.2-2~dennis1ubuntu1.1) hardy; urgency=low
+
+  * Interface nearly done testing menu entry function
+  * 
+
+ -- Dennis <dennis@dennis-desktop>  Tue, 14 Oct 2008 12:57:40 +0700
+
+xetex-ptxplus (0.2-2~dennis1ubuntu1) hardy; urgency=low
+
+  * More work has been going into the interface and bug fixes 
+  * 
+
+ -- Dennis <dennis@dennis-desktop>  Fri, 10 Oct 2008 16:57:27 +0700
+
+xetex-ptxplus (0.2-2~dennis1) hardy; urgency=low
+
+  * Test build on aphpa version
+  *
+  * 
+
+ -- Dennis <dennis@dennis-desktop>  Mon, 06 Oct 2008 10:26:56 +0700
+
+xetex-ptxplus (0.2-1) hardy; urgency=low
+
+  * Close to a first release, this is still alpha
+  * 
+
+ -- Dennis <dennis@dennis-desktop>  Mon, 06 Oct 2008 10:04:27 +0700
+
+xetex-ptxplus (0.1-1) hardy; urgency=low
+
+  * Initial release.
+
+ -- Martin Hosken <martin_hosken@sil.org>  Wed, 27 Aug 2008 11:36:03 +0700

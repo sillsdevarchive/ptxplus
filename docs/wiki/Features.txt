@@ -1,0 +1,61 @@
+====== Features ======
+
+Here is a list of features (pretty much functional) for ptxplus:
+
+**Simple Backup**
+Desc: Backup a project to a designated folder.
+
+**Generate Maps**
+Desc: Take an SVG map template and replace the English names with the names of the target language as defined in a CSV file.
+
+**Wiki Information System**
+Desc: Convey all data to the user via Wiki pages. Use wiki to also collect data as well such as general log entries and issues too. The system can also deliver process reports via wiki.
+
+**Archive**
+Desc: When a project is complete an archive process will be run which will pull in all project data and package it so it can be easily moved and set up on another system without any other data needed. You should be able to duplicate the results anywhere. The archive process is configurable in terms of what kinds of files and folders will be taken and not taken.
+
+
+
+===== Features to Complete: =====
+(The asterisk  '*' indicates importance.)
+
+**Multiple Editor Support** *
+Status: In Process
+Desc: Be able to pull in USFM source text from other editors other than PTX, such as BE and TE.
+Status: project.conf file has a place for it and the right .mk file will be loaded according to which editor is selected. The .mk files need to be completed. Right now nothing is known about TE's output. There are naming problems with BE so the definitions in the [[.mk]] file for BE are not complete.
+
+
+
+==== Features to Add: ====
+
+**Recent Projects**
+Status: Open
+Desc: In ptxplus-manager, in the file menu, add the ability to track recent projects that have been worked on. By clicking on the project of choice it will automatically load the project in the browser.
+
+**Make Illustration Lists** *
+Status: Open
+Desc: Automatically create a .csv file that would contain all entries for each book being processed based on a data file found in the library being used. The .csv file would then be used to generate the corresponding files (ex. jas.usfm.piclist) that would be used by the TeX process.
+
+**Peripheral Pictures** **
+Status: Open
+Desc: Develop an easy procedure to input pics on peripheral matter, fore example logos and book covers. (Note: This may not be completely necessary as there is the USFM \fig marker that can be used. Testing is needed.
+
+**Custom Processes** **
+Status: Open
+Desc: Provide a way for users to "drop-in" their own custom processes. The trick is where to do this and how much to allow. After all, it wouldn't be that hard to just write the module to do it from within.
+
+**Inherit Format Features** *
+Status: Open
+Desc: Provide a way to import or link to another project's format features. Linking might be the best way with some kind of local override for slight variances in projects.
+
+**Markup Inventory** *
+Status: Open
+Desc: Scan the text of an incoming file and take an inventory of its SFM markers. Then insert those markers into override values in the project.conf file.
+
+**Create .sty Override File** *
+Status: Open
+Desc: From the project.conf file extract all the SFM markers added from the markup inventory and create an override .sty sheet for the project.
+
+**Font changing** *
+Status: Open
+Desc: Need ways to manage fonts globally.

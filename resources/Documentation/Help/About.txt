@@ -1,0 +1,7 @@
+====== ptxplus: About ======
+
+Version 0.3-1 (November 2008)
+
+[[XeTeX]]-ptxplus is a Scripture publishing management system written by Dennis Drescher and Martin Hosken. It is currently being deployed in MSEAG and is under heavy development. Anyone wanting to try this system should be warned that it may not work in their context. However, the underlying principals of the system should work in any long document publishing environment. Therefore the package should be evaluated with that in mind.
+
+We welcome input and participation in this project. It is our hope it will be able to serve more than just MSEAG. For questions or more information please write: dennis_drescher@sil.org

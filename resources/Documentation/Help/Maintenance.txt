@@ -1,0 +1,34 @@
+====== Project Maintenance ======
+
+==== Archive ====
+The Archive process is an important feature of ptxplus. It is designed with two goals in mind. First, we wanted to provide portability for projects. Meaning they can be moved from one system to another with one single file. Second, we wanted to be able to reproduce results across systems too. We do this by gathering all the necessary project data, including history, font and all necessary control and configuration files. However, we exclude files that are unnecessary such as log files and others that are created in the process of making the final PDF files. This helps keep the size of the archive down and makes it easier to find important files.
+**Archive Settings**
+There are a number of settings which help to drive this process. These are normally fond in the ptxplus.conf file which you normally do not edit. They are as follows:
+	[Archive]
+	excludeArchiveDirs = 'Log Process Source .svn .bzr .hg .git'
+	excludeArchiveFiles = 'Makefile project.conf'
+	excludeArchiveFileTypes = '.tar.gz .zip .log .tex .delayed .parlocs'
+	includeArchiveFiles = 'hyphenation.tex'
+	archivePath = '../Archive'
+If you wish to override any of them you can make a entry in the project.conf file with the new setting.
+
+==== Import ====
+To import an archived project into a new work area (i.e. you may not import over the top of an existing project) use this command:
+	ptxplus import <path/archiveFile>
+This will deposit the archived project in the current directory. At this point, if you need to work with external source you will have to hook it up manually. Normally you shouldn't need external source files once the project is archived. You will need to set the paths to the files and set the 'LOCKED' key to '0' (zero) so it will copy the external source to the Texts folder.
+
+==== Backup ====
+The ptxplus system has a simple backup routine which will create a tar.gz file of the project in its current state. Just use the command:
+	ptxplus backup
+This will create a backup file in the default system backup folder with a name like this:
+	<ProjectID>-backup.tar.gz
+Changing the default location of the system Backup folder can be done by adding an override path in the project.conf file. It would look like this:
+	[Backup]
+	lastBackup = 0
+	backupPath = path/to/new/folder
+Either a relative or an absolute path is ok.
+
+==== Restore ====
+To restore a project from a backup file made from of a previous state use the command:
+	ptxplus restore
+If a backup file exists it will be found in system backup folder, then you will need to confirm this is really what you want to do. The important thing to remember is that tar.gz backup file will be extracted over the top of existing project files. If you had any data files you wanted save, it will be over written. Be careful when you use this feature.

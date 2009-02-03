@@ -1,0 +1,91 @@
+====== Log ======
+
+**Sat 03 Jan 2009 4:14 PM ICT**
+Added 2 experimental formating scripts today. One which strips out the footnotes and cross references and puts them in a separate peripheral file. A second script which removes footnotes and cross refs too and also takes out the verse numbers so that the text can be read without all the extra-Biblical references.
+
+These are only drafts and more work needs to be done on them to make them usable in a production environment.
+
+**Thu 25 Sep 2008 07:58:41 AM ICT **
+Yesterday, while IMing with Martin I stumbled on zim, a wiki application. I've come to find this to be the most efficient way to convey information in the system so I will be implementing it in all aspects of the system. If a better wiki management program comes along I can always easily change. Right now the only additional thing I would like zim to do for me is spell checking.
+
+**20080823**
+So it is not lost, this is a solution that Martin gave me to change the case on file names within Makefile. The situation is this. You have a file name like $(1).log which expands to name.log. However, you need it to be NAME.log for things to work right. With a little Perl code you can do like this:
+
+	$(shell perl -e 'print uc("$(1)")').log
+
+We used this for a while in the code but due to some changes we no longer needed it. It is here for possible future use.
+
+**20080822**
+To pull info out of fonts we can use ftinfo (part of fttools package) and cut. This line will deliver a list of fonts from a folder with their name and typeface:
+
+	ftinfo -n *.ttf | cut -d : -f 1,5
+
+ftinfo delivers a big list of stuff but then cut takes out all the stuff we don't want.
+
+**20080815**
+To build the package do this:
+
+1) Starting in the project directory (ptxplus) run:
+	ln -s debian-src debian
+
+2) If you don't have it, install dch with:
+	sudo apt-get install dch
+
+3) Run:
+	dch -n
+
+4) To build, you may need to install the pbuilder package:
+	sudo apt-get install pbuilder
+	then
+	pbuilder --create
+This will take a while as it has to download and install a lot of stuff
+You may need to also install the debhelper package if pbuilder fails.
+
+	Finally:
+	pdebuild --debbuildopts -I --logfile
+
+If you can't find the .deb file look in /var/cache/pbuilder/results
+
+**20080814**
+History: (09:26:05 AM) uniscript: I'm thinking of calling the package xetex-ptxplus
+
+**20080810**
+Kokou has been officially named ptx-plus. It has now been separated from the project file work area and will be packaged and will have dependencies on XeTeX and a bunch of other packages. Right now, while under development, we have to install manually and that take a couple operations:
+
+Edit the .profile file
+	sudo gedit ~/.profile
+Add this to the end:
+	export PTXPLUS_BASE=/home/dennis/Projects/ptxplus
+
+or, to do it auto-magically use:
+	PTXPLUS_BASE=/home/dennis/Projects/ptxplus >>  ~/.profile
+
+(Note: Adjust the paths if your system is different)
+Next time you reboot the new settings will be there.
+
+To get it working on the current login (terminal) use:
+	source ~/.profile
+
+To see it use
+	echo $PTXPLUS_BASE
+
+To use it easier we need to link ptxplus (main program) to /usr/bin
+	sudo ln -s /home/dennis/Projects/ptxplus/bin/ptxplus /usr/bin/ptxplus
+
+That should do it.
+
+To get rid of the settings from the system environment use:
+	unset PTXPLUS_BASE
+
+You may also need to go to /usr/local/bin and get rid of the link there to avoid confusion in the system. Use:
+	sudo rm /usr/local/bin/ptxplus
+
+**20080806**
+It might have been this day when Martin first mentioned naming it ptx-plus
+
+**20080401**
+Kokou may be presented at CTC this fall by Martin in a 5 min. presentation. Much will need to be done to get the system in order and have it well documented. Right now Texinfo might be the way to go. Look at:
+
+http://www.gnu.org/software/texinfo/manual/texinfo/
+
+That way documentation could be generated both in static form and live on the web. More thought is needed.

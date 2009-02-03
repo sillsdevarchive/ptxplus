@@ -1,0 +1,1176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<!--Generated with glade3 3.4.5 on Sat Jan 10 22:51:23 2009 -->
+<glade-interface>
+  <widget class="GtkWindow" id="w_main">
+	<property name="visible">True</property>
+	<property name="title" translatable="yes">ptxplus-manager</property>
+	<signal name="destroy" handler="on_w_main_destroy"/>
+	<child>
+	  <widget class="GtkVBox" id="vbox1">
+		<property name="visible">True</property>
+		<child>
+		  <widget class="GtkMenuBar" id="menubar1">
+			<property name="visible">True</property>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_project">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">_Project</property>
+				<property name="use_underline">True</property>
+				<child>
+				  <widget class="GtkMenu" id="project">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_new">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Create a new project</property>
+						<property name="label" translatable="yes">gtk-new</property>
+						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_menu_new_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="gtk-open">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Open an existing project</property>
+						<property name="label" translatable="yes">gtk-open</property>
+						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_gtk-open_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_import">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Import from project archive file</property>
+						<property name="label" translatable="yes">Import...</property>
+						<signal name="activate" handler="on_menu_import_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_archive">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Archive a project</property>
+						<property name="label" translatable="yes">Archive...</property>
+						<signal name="activate" handler="on_menu_archive_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_restore">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Restore project from last backup</property>
+						<property name="label" translatable="yes">Restore</property>
+						<signal name="activate" handler="on_menu_restore_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_backup">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Backup project</property>
+						<property name="label" translatable="yes">Backup</property>
+						<signal name="activate" handler="on_menu_backup_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem1">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_reload">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Reload project settings</property>
+						<property name="label" translatable="yes">Reload</property>
+						<signal name="activate" handler="on_menu_reload_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_reset">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove all auto-generated project material (Be very careful!)</property>
+						<property name="label" translatable="yes">Reset</property>
+						<signal name="activate" handler="on_menu_reset_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="menu-item-image6">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_quit">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Quite ptxplus manager</property>
+						<property name="label" translatable="yes">gtk-quit</property>
+						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_menu_quit_activate"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_edit">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">_Edit</property>
+				<property name="use_underline">True</property>
+				<child>
+				  <widget class="GtkMenu" id="edit">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_cut">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Cut selected object</property>
+						<property name="label" translatable="yes">gtk-cut</property>
+						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_menu_cut_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_copy">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Copy selected object</property>
+						<property name="label" translatable="yes">gtk-copy</property>
+						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_menu_copy_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_paste">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Paste object from memory</property>
+						<property name="label" translatable="yes">gtk-paste</property>
+						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_menu_paste_activate"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_preproces">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Preprocess</property>
+				<child>
+				  <widget class="GtkMenu" id="preprocess">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_preprocess_all">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Run all the selected preprocesses on the entire project</property>
+						<property name="label" translatable="yes">Preprocess All</property>
+						<signal name="activate" handler="on_menu_preprocess_activate"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_process">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Process</property>
+				<child>
+				  <widget class="GtkMenu" id="process">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_make_piclist">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Create an picture list file for this book</property>
+						<property name="label" translatable="yes">Add Pictures</property>
+						<signal name="activate" handler="on_menu_make_pic_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_remove_piclist_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove the illustrations list file for this book</property>
+						<property name="label" translatable="yes">Remove Pictures</property>
+						<signal name="activate" handler="on_menu_remove_pic_current_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_clean_pic_all">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove all the illustrations list files for this publication</property>
+						<property name="label" translatable="yes">Remove All Pictures</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_clean_pic_all_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="menu-item-image4">
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_remove_adj">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove the current adjustment list file</property>
+						<property name="label" translatable="yes">Remove Adjustments (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_remove_adj_current_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="menu-item-image7">
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_clean_adj_all">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove all the adjustment list files for this publication</property>
+						<property name="label" translatable="yes">Remove Adjustments (All)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_clean_adj_all_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="menu-item-image9">
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem2">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_make_booklet_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Create a PDF booklet of the current book only</property>
+						<property name="label" translatable="yes">Make Booklet (Current)</property>
+						<signal name="activate" handler="on_menu_bind_booklet_current_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_view_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Create a test PDF file of the current book</property>
+						<property name="label" translatable="yes">View (Current)</property>
+						<signal name="activate" handler="on_b_view_clicked"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_remove_pdf_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove the PDF file for this book</property>
+						<property name="label" translatable="yes">Remove PDF (Current)</property>
+						<signal name="activate" handler="on_menu_remove_pdf_current_activate"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_peripheral">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Peripheral</property>
+				<property name="use_underline">True</property>
+				<child>
+				  <widget class="GtkMenu" id="peripheral">
+					<property name="visible">True</property>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_bin">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Bind</property>
+				<child>
+				  <widget class="GtkMenu" id="bind">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_bind_all">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Bind to PDF all project components</property>
+						<property name="label" translatable="yes">Bind all</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_bind_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_bind_booklet">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Bind to PDF all project components then create a booklet from the PDF</property>
+						<property name="label" translatable="yes">Bind Booklet</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_bind_booklet_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_remove_pdf">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove the main bind PDF file</property>
+						<property name="label" translatable="yes">Remove PDF</property>
+						<signal name="activate" handler="on_menu_remove_pdf_activate"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_help">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">_Help</property>
+				<property name="use_underline">True</property>
+				<child>
+				  <widget class="GtkMenu" id="help">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_sys_help">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Pull up system help wiki</property>
+						<property name="label" translatable="yes">_System Help</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_help_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="menu-item-image2">
+							<property name="visible">True</property>
+							<property name="stock">gtk-help</property>
+						  </widget>
+						</child>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_example">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Work with an example project</property>
+						<property name="label" translatable="yes">Example</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_example_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="menu-item-image1">
+							<property name="visible">True</property>
+							<property name="stock">gtk-execute</property>
+						  </widget>
+						</child>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_about">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">About XeTeX-ptxplus Manager</property>
+						<property name="label" translatable="yes">gtk-about</property>
+						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_menu_about_activate"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+		  </widget>
+		  <packing>
+			<property name="expand">False</property>
+			<property name="fill">False</property>
+		  </packing>
+		</child>
+		<child>
+		  <widget class="GtkHBox" id="hbox2">
+			<property name="visible">True</property>
+			<child>
+			  <placeholder/>
+			</child>
+			<child>
+			  <placeholder/>
+			</child>
+			<child>
+			  <widget class="GtkComboBox" id="cb_books">
+				<property name="visible">True</property>
+				<property name="wrap_width">5</property>
+				<signal name="changed" handler="on_cb_books_changed"/>
+			  </widget>
+			  <packing>
+				<property name="expand">False</property>
+				<property name="pack_type">GTK_PACK_END</property>
+				<property name="position">2</property>
+			  </packing>
+			</child>
+		  </widget>
+		  <packing>
+			<property name="expand">False</property>
+			<property name="fill">False</property>
+			<property name="position">1</property>
+		  </packing>
+		</child>
+		<child>
+		  <widget class="GtkHBox" id="hbox1">
+			<property name="visible">True</property>
+			<child>
+			  <widget class="GtkVBox" id="vbox3">
+				<property name="visible">True</property>
+				<child>
+				  <widget class="GtkVButtonBox" id="vbuttonbox1">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkButton" id="b_view">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+						<property name="receives_default">True</property>
+						<property name="label" translatable="yes">_View-book</property>
+						<property name="use_underline">True</property>
+						<property name="response_id">0</property>
+						<signal name="clicked" handler="on_b_view_clicked"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkButton" id="b_check">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+						<property name="receives_default">True</property>
+						<property name="label" translatable="yes">_Check-book</property>
+						<property name="use_underline">True</property>
+						<property name="response_id">0</property>
+						<signal name="clicked" handler="on_b_check_clicked"/>
+					  </widget>
+					  <packing>
+						<property name="position">1</property>
+					  </packing>
+					</child>
+					<child>
+					  <widget class="GtkButton" id="b_reload">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+						<property name="receives_default">True</property>
+						<property name="label" translatable="yes">_Reload</property>
+						<property name="use_underline">True</property>
+						<property name="response_id">0</property>
+						<signal name="clicked" handler="on_menu_reload_activate"/>
+					  </widget>
+					  <packing>
+						<property name="position">2</property>
+					  </packing>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="expand">False</property>
+					<property name="fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <placeholder/>
+				</child>
+				<child>
+				  <widget class="GtkVButtonBox" id="vbuttonbox2">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkButton" id="b_wiki">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+						<property name="receives_default">True</property>
+						<property name="label" translatable="yes">_Wiki</property>
+						<property name="use_underline">True</property>
+						<property name="response_id">0</property>
+						<signal name="clicked" handler="on_b_wiki_clicked"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkButton" id="b_note">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+						<property name="receives_default">True</property>
+						<property name="label" translatable="yes">Add Note</property>
+						<property name="response_id">0</property>
+						<signal name="clicked" handler="on_b_note_clicked"/>
+					  </widget>
+					  <packing>
+						<property name="position">1</property>
+					  </packing>
+					</child>
+					<child>
+					  <widget class="GtkButton" id="b_issue">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+						<property name="receives_default">True</property>
+						<property name="label" translatable="yes">Add Issue</property>
+						<property name="response_id">0</property>
+						<signal name="clicked" handler="on_b_issue_clicked"/>
+					  </widget>
+					  <packing>
+						<property name="position">2</property>
+					  </packing>
+					</child>
+					<child>
+					  <widget class="GtkButton" id="b_backup">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+						<property name="receives_default">True</property>
+						<property name="label" translatable="yes">_Backup</property>
+						<property name="use_underline">True</property>
+						<property name="response_id">0</property>
+						<signal name="clicked" handler="on_b_backup_clicked"/>
+					  </widget>
+					  <packing>
+						<property name="position">3</property>
+					  </packing>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="expand">False</property>
+					<property name="fill">False</property>
+					<property name="pack_type">GTK_PACK_END</property>
+					<property name="position">2</property>
+				  </packing>
+				</child>
+			  </widget>
+			  <packing>
+				<property name="expand">False</property>
+				<property name="fill">False</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkNotebook" id="notebook1">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<child>
+				  <widget class="GtkScrolledWindow" id="sc_session">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<child>
+					  <placeholder/>
+					</child>
+				  </widget>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="label10">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">Session</property>
+				  </widget>
+				  <packing>
+					<property name="type">tab</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="scrolledwindow8">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<child>
+					  <widget class="GtkTextView" id="tv_usfm">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+					  </widget>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">1</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="label15">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">USFM</property>
+				  </widget>
+				  <packing>
+					<property name="type">tab</property>
+					<property name="position">1</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkHPaned" id="hpaned1">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<child>
+					  <widget class="GtkScrolledWindow" id="scrolledwindow1">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+						<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+						<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+						<child>
+						  <widget class="GtkTreeView" id="tv_sections">
+							<property name="width_request">150</property>
+							<property name="visible">True</property>
+							<property name="can_focus">True</property>
+							<property name="headers_visible">False</property>
+							<property name="enable_tree_lines">True</property>
+							<signal name="select_cursor_row" handler="on_tv_sections_select_cursor_row"/>
+						  </widget>
+						</child>
+					  </widget>
+					  <packing>
+						<property name="resize">True</property>
+						<property name="shrink">False</property>
+					  </packing>
+					</child>
+					<child>
+					  <widget class="GtkVPaned" id="vpaned1">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+						<child>
+						  <widget class="GtkScrolledWindow" id="scrolledwindow2">
+							<property name="visible">True</property>
+							<property name="can_focus">True</property>
+							<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+							<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+							<child>
+							  <widget class="GtkTreeView" id="tv_keys">
+								<property name="height_request">150</property>
+								<property name="visible">True</property>
+								<property name="can_focus">True</property>
+								<property name="search_column">0</property>
+								<property name="show_expanders">False</property>
+								<signal name="row_activated" handler="on_tv_keys_row_activated"/>
+							  </widget>
+							</child>
+						  </widget>
+						  <packing>
+							<property name="resize">True</property>
+							<property name="shrink">False</property>
+						  </packing>
+						</child>
+						<child>
+						  <widget class="GtkVBox" id="vbox2">
+							<property name="visible">True</property>
+							<child>
+							  <widget class="GtkLabel" id="label1">
+								<property name="visible">True</property>
+								<property name="xalign">0</property>
+								<property name="yalign">0</property>
+								<property name="xpad">10</property>
+								<property name="label" translatable="yes">&lt;b&gt;Description:&lt;/b&gt;</property>
+								<property name="use_markup">True</property>
+								<property name="wrap">True</property>
+								<property name="wrap_mode">PANGO_WRAP_WORD_CHAR</property>
+								<property name="single_line_mode">True</property>
+							  </widget>
+							  <packing>
+								<property name="expand">False</property>
+								<property name="padding">3</property>
+							  </packing>
+							</child>
+							<child>
+							  <widget class="GtkLabel" id="lab_desc">
+								<property name="height_request">150</property>
+								<property name="visible">True</property>
+								<property name="xalign">0</property>
+								<property name="yalign">0</property>
+								<property name="xpad">20</property>
+								<property name="label" translatable="yes">Description</property>
+								<property name="use_markup">True</property>
+								<property name="wrap">True</property>
+								<property name="wrap_mode">PANGO_WRAP_WORD_CHAR</property>
+								<property name="selectable">True</property>
+								<property name="width_chars">50</property>
+								<property name="max_width_chars">40</property>
+							  </widget>
+							  <packing>
+								<property name="position">1</property>
+							  </packing>
+							</child>
+						  </widget>
+						  <packing>
+							<property name="resize">True</property>
+							<property name="shrink">True</property>
+						  </packing>
+						</child>
+					  </widget>
+					  <packing>
+						<property name="resize">True</property>
+						<property name="shrink">True</property>
+					  </packing>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">2</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="label5">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">Config</property>
+				  </widget>
+				  <packing>
+					<property name="type">tab</property>
+					<property name="position">2</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="scrolledwindow3">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<child>
+					  <widget class="GtkTextView" id="tv_styles">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+					  </widget>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">3</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="label6">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">Styles</property>
+				  </widget>
+				  <packing>
+					<property name="type">tab</property>
+					<property name="position">3</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="scrolledwindow4">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<child>
+					  <widget class="GtkTextView" id="tv_setup">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+					  </widget>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">4</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="label7">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">Setup</property>
+				  </widget>
+				  <packing>
+					<property name="type">tab</property>
+					<property name="position">4</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="scrolledwindow7">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<child>
+					  <widget class="GtkTextView" id="tv_fonts">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+					  </widget>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">5</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="label12">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">Fonts</property>
+				  </widget>
+				  <packing>
+					<property name="type">tab</property>
+					<property name="position">5</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="scrolledwindow5">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<child>
+					  <widget class="GtkTextView" id="tv_adj">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+					  </widget>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">6</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="label8">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">Adjustments</property>
+				  </widget>
+				  <packing>
+					<property name="type">tab</property>
+					<property name="position">6</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="scrolledwindow6">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<child>
+					  <widget class="GtkTextView" id="tv_errors">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+					  </widget>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">7</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="label9">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">Errors</property>
+				  </widget>
+				  <packing>
+					<property name="type">tab</property>
+					<property name="position">7</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="scrolledwindow9">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+					<child>
+					  <widget class="GtkTextView" id="tv_texlog">
+						<property name="visible">True</property>
+						<property name="can_focus">True</property>
+					  </widget>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">8</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="label11">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">Tex Log</property>
+					<property name="justify">GTK_JUSTIFY_RIGHT</property>
+				  </widget>
+				  <packing>
+					<property name="type">tab</property>
+					<property name="position">8</property>
+					<property name="tab_fill">False</property>
+				  </packing>
+				</child>
+			  </widget>
+			  <packing>
+				<property name="position">1</property>
+			  </packing>
+			</child>
+		  </widget>
+		  <packing>
+			<property name="pack_type">GTK_PACK_END</property>
+			<property name="position">3</property>
+		  </packing>
+		</child>
+		<child>
+		  <widget class="GtkStatusbar" id="statusbar1">
+			<property name="visible">True</property>
+			<property name="spacing">2</property>
+		  </widget>
+		  <packing>
+			<property name="expand">False</property>
+			<property name="pack_type">GTK_PACK_END</property>
+			<property name="position">2</property>
+		  </packing>
+		</child>
+	  </widget>
+	</child>
+  </widget>
+  <widget class="GtkDialog" id="d_entry">
+	<property name="border_width">5</property>
+	<property name="resizable">False</property>
+	<property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+	<property name="destroy_with_parent">True</property>
+	<property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+	<property name="skip_taskbar_hint">True</property>
+	<property name="skip_pager_hint">True</property>
+	<property name="has_separator">False</property>
+	<child internal-child="vbox">
+	  <widget class="GtkVBox" id="dialog-vbox1">
+		<property name="visible">True</property>
+		<property name="spacing">2</property>
+		<child>
+		  <widget class="GtkTable" id="table1">
+			<property name="visible">True</property>
+			<property name="n_rows">3</property>
+			<property name="n_columns">2</property>
+			<child>
+			  <widget class="GtkLabel" id="label2">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Name:</property>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkEntry" id="te_name">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="editable">False</property>
+				<property name="has_frame">False</property>
+			  </widget>
+			  <packing>
+				<property name="left_attach">1</property>
+				<property name="right_attach">2</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkLabel" id="label3">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Type:</property>
+			  </widget>
+			  <packing>
+				<property name="top_attach">1</property>
+				<property name="bottom_attach">2</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkEntry" id="te_type">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="editable">False</property>
+				<property name="has_frame">False</property>
+			  </widget>
+			  <packing>
+				<property name="left_attach">1</property>
+				<property name="right_attach">2</property>
+				<property name="top_attach">1</property>
+				<property name="bottom_attach">2</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkLabel" id="label4">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Value:</property>
+			  </widget>
+			  <packing>
+				<property name="top_attach">2</property>
+				<property name="bottom_attach">3</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkEntry" id="te_value">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="activates_default">True</property>
+			  </widget>
+			  <packing>
+				<property name="left_attach">1</property>
+				<property name="right_attach">2</property>
+				<property name="top_attach">2</property>
+				<property name="bottom_attach">3</property>
+			  </packing>
+			</child>
+		  </widget>
+		  <packing>
+			<property name="expand">False</property>
+			<property name="fill">False</property>
+			<property name="position">1</property>
+		  </packing>
+		</child>
+		<child internal-child="action_area">
+		  <widget class="GtkHButtonBox" id="dialog-action_area1">
+			<property name="visible">True</property>
+			<property name="layout_style">GTK_BUTTONBOX_END</property>
+			<child>
+			  <placeholder/>
+			</child>
+			<child>
+			  <widget class="GtkButton" id="bt_apply_entry">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="can_default">True</property>
+				<property name="has_default">True</property>
+				<property name="receives_default">True</property>
+				<property name="label" translatable="yes">gtk-apply</property>
+				<property name="use_stock">True</property>
+				<property name="response_id">0</property>
+				<signal name="activate" handler="on_bt_apply_entry_activate"/>
+			  </widget>
+			  <packing>
+				<property name="position">1</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkButton" id="bt_cancel_entry">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="label" translatable="yes">gtk-close</property>
+				<property name="use_stock">True</property>
+				<property name="response_id">0</property>
+			  </widget>
+			  <packing>
+				<property name="position">2</property>
+			  </packing>
+			</child>
+		  </widget>
+		  <packing>
+			<property name="expand">False</property>
+			<property name="fill">False</property>
+			<property name="pack_type">GTK_PACK_END</property>
+		  </packing>
+		</child>
+	  </widget>
+	</child>
+  </widget>
+  <widget class="GtkDialog" id="d_import">
+	<property name="border_width">5</property>
+	<property name="title" translatable="yes">Import Project</property>
+	<property name="resizable">False</property>
+	<property name="modal">True</property>
+	<property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+	<property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+	<property name="has_separator">False</property>
+	<child internal-child="vbox">
+	  <widget class="GtkVBox" id="dialog-vbox2">
+		<property name="visible">True</property>
+		<property name="spacing">2</property>
+		<child>
+		  <widget class="GtkTable" id="table2">
+			<property name="visible">True</property>
+			<property name="n_rows">2</property>
+			<property name="n_columns">3</property>
+			<child>
+			  <widget class="GtkButton" id="b_browse_archive">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="receives_default">True</property>
+				<property name="label" translatable="yes">Browse...</property>
+				<property name="response_id">0</property>
+			  </widget>
+			  <packing>
+				<property name="left_attach">2</property>
+				<property name="right_attach">3</property>
+				<property name="top_attach">1</property>
+				<property name="bottom_attach">2</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkButton" id="b_browse_dir">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="receives_default">True</property>
+				<property name="label" translatable="yes">Browse...</property>
+				<property name="response_id">0</property>
+			  </widget>
+			  <packing>
+				<property name="left_attach">2</property>
+				<property name="right_attach">3</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkLabel" id="label14">
+				<property name="visible">True</property>
+				<property name="xalign">1</property>
+				<property name="label" translatable="yes">Archive File:</property>
+				<property name="justify">GTK_JUSTIFY_RIGHT</property>
+			  </widget>
+			  <packing>
+				<property name="top_attach">1</property>
+				<property name="bottom_attach">2</property>
+				<property name="x_padding">5</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkEntry" id="e_archive">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+			  </widget>
+			  <packing>
+				<property name="left_attach">1</property>
+				<property name="right_attach">2</property>
+				<property name="top_attach">1</property>
+				<property name="bottom_attach">2</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkEntry" id="e_dir">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+			  </widget>
+			  <packing>
+				<property name="left_attach">1</property>
+				<property name="right_attach">2</property>
+			  </packing>
+			</child>
+			<child>
+			  <widget class="GtkLabel" id="label13">
+				<property name="visible">True</property>
+				<property name="xalign">1</property>
+				<property name="label" translatable="yes">Project Directory:</property>
+				<property name="justify">GTK_JUSTIFY_RIGHT</property>
+			  </widget>
+			  <packing>
+				<property name="y_options"></property>
+				<property name="x_padding">5</property>
+			  </packing>
+			</child>
+		  </widget>
+		  <packing>
+			<property name="expand">False</property>
+			<property name="position">1</property>
+		  </packing>
+		</child>
+		<child internal-child="action_area">
+		  <widget class="GtkHButtonBox" id="dialog-action_area2">
+			<property name="visible">True</property>
+			<property name="layout_style">GTK_BUTTONBOX_END</property>
+			<child>
+			  <widget class="GtkButton" id="b_import_cancel">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="receives_default">True</property>
+				<property name="label" translatable="yes">gtk-cancel</property>
+				<property name="use_stock">True</property>
+				<property name="response_id">0</property>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkButton" id="b_import_ok">
+				<property name="visible">True</property>
+				<property name="can_focus">True</property>
+				<property name="receives_default">True</property>
+				<property name="label" translatable="yes">gtk-ok</property>
+				<property name="use_stock">True</property>
+				<property name="response_id">0</property>
+			  </widget>
+			  <packing>
+				<property name="position">1</property>
+			  </packing>
+			</child>
+		  </widget>
+		  <packing>
+			<property name="expand">False</property>
+			<property name="pack_type">GTK_PACK_END</property>
+		  </packing>
+		</child>
+	  </widget>
+	</child>
+  </widget>
+</glade-interface>

@@ -1,0 +1,76 @@
+====== Procedure Guidelines ======
+
+This section (page) attempts to capture the entire process of creating a Bible (in the physical sense). Beginning with the completion of translation checking and continuing through project archival, this section will outline all the steps necessary in the context of ptxplus to put a PDF version of the publication  into the hands of the printers.
+
+===== Project Setup =====
+
+Basic procedure for setting up a publishing project.
+=====
+
+Translation Approval =====
+
+Outline what a project that is ready for publishing looks like.
+=====
+Mechanical Checks =====
+
+Go over the mechanical checks that most
+=====
+Format Development =====
+
+The necessary steps to develop a suitable format for a Scripture publication aimed at a specific audience.
+
+Focus should be given to:
+
+1) Page size
+2) Page layout (1 col. vs 2 / diglot, etc.)
+3) Font size
+4) Hyphenation
+5) Handling of less common markup
+6) Poetry markup
+7) Other?
+
+Testing...
+=====
+
+Compiling Peripheral Matter =====
+
+How to pull together the necessary peripheral matter of a Scripture publication.
+
+* Copyright page
+* TOC
+* Maps
+* Glossary
+* Index
+=====
+Compositing =====
+
+Compositing is the process putting the components of a publication into their final resting place. This process, performed by the compositor (also known as the typesetter), goes right down to the character level. When complete, the translator, referred to here as the client (which could include a designee), agrees that the publication is ready for print.
+
+==== Freezing the Text ====
+The process begins with the "freezing" of the text. This means that no more edits are allowed to the text by the client. At this point, the only edits that will be made to the text will be made by the compositor, and only after consulting the translator. For efficiency's sake it is very important that the source text is stable at this point. Any significant edits done to the text at this point could set the project back days, if not weeks, and cause a lot of rework to be done.
+
+==== Draft Approval ====
+After it is agreed that the text is locked, frozen, stable or whatever metaphor you want to use, the next step is to produce a rough draft of the body text for a final read-through. A PDF of the books to be included in this Scripture publication will be sent to the client who will print the manuscript out and read through it page-by-page. Hopefully, through the mechanical check process we will have fixed any problems with punctuation and markup so at this point the client will be looking for issues such as:
+
+* Section head wrapping
+* Inconsistent format of references, footnotes, etc.
+* Minor adjustments in spacing, indents, etc.
+* Misspelled words or typos (hopefully not global changes)
+* Other?
+
+The client will return the printed manuscript to the compositor with issues clearly marked and any action that should be taken clearly noted. The compositor will then also perform his own inspection of the manuscript page-by-page looking for notes by the client and also marking format problem areas. For example column balancing and line breaking issues. If any issues are found by the compositor which go beyond formating and require changes to the source text, these will be reported to the client. They will then agree on what the best course of action will be to fix the problem.
+
+==== Final Composition ====
+Satisfied that the body text is in good condition to do final compositing, the compositor will then work through the entire marked up manuscript and correct each issue identified. The end result will be a PDF file which is ready to be bound with the rest of the peripheral matter and be sent to the printer.
+
+==== Final Approval ====
+Before the final PDF file is turned over to the publishing entity, the client will have one more opportunity to proof read the entire publication from cover to cover. A final print out will be made of the final PDF file. The client will go over it page-by-page one more time. S/He will initial each page of the peripheral matter and the first page of every book in the entire publication indicating approval.
+
+If there are any problems with the text at this point the compositor will be required to make the correction as indicated by the client and then rerun as much of the process as necessary to ensure the correction has been incorporated into the final output. Then, depending on magnitude of the correction, the client will need to go back over the effected area and approve the change. Worse case, an entire reprint will be needed and the final proofing process will be done again.
+
+==== Publishing/Printing ====
+When the client is satisfied with contents and quality of the final form of the publication it will be turned over to the publishing entity for processing it in that stage of the process.
+=====
+Project Archive =====
+
+The publishing specialist is responsible for this final phase of the publishing process...
