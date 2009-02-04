@@ -35,8 +35,28 @@ class MakeHyphenWordlist (object) :
 
 	def main (self, log_manager) :
 
-# Change this to reflect the fact that we are working with a wordlist, not a Scripture file.
-# actually don't work with any SFM here so we don't need the paser
+		self._log_manager = log_manager
+		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
+		hyphenPath = log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
+		wordlistReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.txt"
+		hyphenationFile = os.getcwd() + "/" + hyphenPath + "/hyphenation.txt"
+		prefixListFile = os.getcwd() + "/" + hyphenPath + "/prefixes.txt"
+		suffixListFile = os.getcwd() + "/" + hyphenPath + "/suffixes.txt"
+
+		# Check for the wordlistReportFile, it is essential, abort if it is missing
+		if os.path.isfile(wordlistReportFile) :
+			masterWordlistObject = codecs.open(wordlistReportFile, "r", encoding='utf-8')
+			# Push it into a dictionary w/o line endings
+			for line in masterWordlistObject :
+				if line != "" :
+					masterWordlist[line.strip()] = 1
+
+			masterWordlistObject.close()
+		else :
+			self._log_manager.log("ERROR", "The word list report file was not found. Aborting process.")
+			os._exit()
+
+
 
 		??? = log_manager._currentOutput
 

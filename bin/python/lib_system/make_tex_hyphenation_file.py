@@ -46,7 +46,7 @@ class MakeTexHyphenationFile (object) :
 
 		# Set the output file name and the wordlist file name
 		texHyphenFileName = hyphenPath + "/hyphenation.tex"
-		wordListFileName =  hyphenPath + "/wordlist.txt"
+		wordListFileName =  hyphenPath + "/hyphenation.txt"
 		lcCodeListFileName = hyphenPath + "/lccodelist.txt"
 
 		# Make the TeX hyphen file

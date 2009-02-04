@@ -16,6 +16,10 @@
 
 # History:
 # 20090130 - djd - Initial draft
+# 20090204 - djd - Completed working first version. However,
+#			There is a lot of potential with this process
+#			but a lot of work needs to be done such as
+#			CSV output on the book report files.
 
 
 #############################################################
@@ -37,7 +41,12 @@ class MakeWordlist (object) :
 
 		self._log_manager = log_manager
 		bookFile = log_manager._currentOutput
-		customProcessA = log_manager._settings['General']['CustomProcesses']['customProcessA']
+		# Custom processes are optional
+		try :
+			customProcessA = log_manager._settings['General']['CustomProcesses']['customProcessA']
+		except :
+			customProcessA = ""
+
 		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
 		masterReportFileTemp = os.getcwd() + "/" + reportPath + "/wordlist-master.tmp"
 		masterReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.txt"
@@ -84,7 +93,6 @@ class MakeWordlist (object) :
 		masterWordlist = handler._masterWordlist.keys()
 		masterWordlist.sort()
 		for k in masterWordlist :
-#			masterWordlistObject.write(k + " " + str(handler._masterWordlist[k]) + "\n")
 			masterWordlistObject.write(k + "\n")
 
 		masterWordlistObject.close()
@@ -95,10 +103,13 @@ class MakeWordlist (object) :
 		if customProcessA != "" :
 			self.doCustomProcess(customProcessA, masterReportFileTemp, masterReportFile)
 			self.doCustomProcess(customProcessA, bookReportFileTemp, bookReportFile)
+			os.unlink(masterReportFileTemp)
+			os.unlink(bookReportFileTemp)
 		else :
 			# If there were no custom processes to run then we'll just rename the .tmp
 			# file to .txt so it can be identified by other processes.
-			pass # for now
+			os.rename(masterReportFileTemp, masterReportFile)
+			os.rename(bookReportFileTemp, bookReportFile)
 
 
 	def doCustomProcess (self, process, inFile, outFile) :
@@ -241,7 +252,7 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 				if word.find(v) > -1 :
 					word = word.replace(v, '')
 
-		# Return whatever we got
+		# Return whatever is leftover
 		return word
 
 

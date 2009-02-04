@@ -79,7 +79,8 @@ make-template :
 # Update a developer version of ptxplus
 # This assumes you have Mercurial installed and setup
 dev-update :
-	hg pull $(PTXPLUS_BASE)
+	cd $(PTXPLUS_BASE)
+	hg pull -u
 
 
 ###############################################################
@@ -121,6 +122,7 @@ log-clean :
 
 # Clean the reports folder
 reports-clean :
+	rm -f $(PATH_REPORTS)/*.tmp
 	rm -f $(PATH_REPORTS)/*.txt
 	rm -f $(PATH_REPORTS)/*.html
 
