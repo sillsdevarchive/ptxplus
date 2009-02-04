@@ -35,9 +35,13 @@ class MakeWordlist (object) :
 
 	def main (self, log_manager) :
 
+		self._log_manager = log_manager
 		bookFile = log_manager._currentOutput
+		customProcessA = log_manager._settings['General']['CustomProcesses']['customProcessA']
 		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
+		masterReportFileTemp = os.getcwd() + "/" + reportPath + "/wordlist-master.tmp"
 		masterReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.txt"
+		bookReportFileTemp = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.tmp"
 		bookReportFile = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.txt"
 		masterWordlist = {}
 		bookWordlist = {}
@@ -49,8 +53,8 @@ class MakeWordlist (object) :
 			masterWordlistObject = codecs.open(masterReportFile, "r", encoding='utf-8')
 			# Push it into a dictionary w/o line endings
 			for line in masterWordlistObject :
-				data = line.split()
-				masterWordlist[data[0].strip()] = data[1].strip()
+				if line != "" :
+					masterWordlist[line.strip()] = 1
 
 			masterWordlistObject.close()
 
@@ -68,20 +72,54 @@ class MakeWordlist (object) :
 		parser.parse(bookObject)
 
 		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
-		bookWordlistObject = codecs.open(bookReportFile, "w", encoding='utf-8')
+		bookWordlistObject = codecs.open(bookReportFileTemp, "w", encoding='utf-8')
 		bookWordlist = handler._bookWordlist.keys()
 		bookWordlist.sort()
 		for f in bookWordlist :
 			bookWordlistObject.write(f + " " + str(handler._bookWordlist[f]) + "\n")
 		bookWordlistObject.close()
 
-		# Output the masterWordlist to the masterReportFile
-		masterWordlistObject = codecs.open(masterReportFile, "w", encoding='utf-8')
+		# Output the masterWordlist to the masterReportFile (simple word list)
+		masterWordlistObject = codecs.open(masterReportFileTemp, "w", encoding='utf-8')
 		masterWordlist = handler._masterWordlist.keys()
 		masterWordlist.sort()
-		for f in masterWordlist :
-			masterWordlistObject.write(f + " " + str(handler._masterWordlist[f]) + "\n")
+		for k in masterWordlist :
+#			masterWordlistObject.write(k + " " + str(handler._masterWordlist[k]) + "\n")
+			masterWordlistObject.write(k + "\n")
+
 		masterWordlistObject.close()
+
+		# At this point we will apply any encoding changes necessary to the
+		# masterReportFile via custom post-process command on the file we
+		# just wrote out.
+		if customProcessA != "" :
+			self.doCustomProcess(customProcessA, masterReportFileTemp, masterReportFile)
+			self.doCustomProcess(customProcessA, bookReportFileTemp, bookReportFile)
+		else :
+			# If there were no custom processes to run then we'll just rename the .tmp
+			# file to .txt so it can be identified by other processes.
+			pass # for now
+
+
+	def doCustomProcess (self, process, inFile, outFile) :
+		'''Run a custom process on a file.'''
+
+		# Because we want to be able to customize the command if necessary the
+		# incoming command has placeholders for the input and output. We need
+		# to replace this here.
+		process = process.replace('[infile]', inFile)
+		process = process.replace('[outfile]', outFile)
+		# But just in case we'll look for mixed case on the placeholders
+		# This may not be enough but it will do for now.
+		process = process.replace('[inFile]', inFile)
+		process = process.replace('[outFile]', outFile)
+		# Send off the command
+		error = os.system(process)
+		# Check to see if the copy actually took place.
+		if not error :
+			self._log_manager.log("INFO", "Post-process completed successfully")
+		else :
+			self._log_manager.log("ERROR", "Post-process did not completed successfully, command: " + process)
 
 
 class MakeWordlistHandler (parse_sfm.Handler) :
@@ -94,7 +132,6 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		self._masterWordlist = masterWordlist
 		self._book = ""
 		self._encoding_manager = EncodingManager(log_manager._settings)
-		self._targetEncodingPath = log_manager._settings['General']['TextFeatures']['targetEncodingPath']
 
 
 	def start (self, tag, num, info, prefix) :
@@ -128,10 +165,6 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 				if self.isWord(word) :
 					word = self.cleanWord(word)
 					if word != "" :
-						# At this point we will apply any encoding changes necessary
-						if self._targetEncodingPath :
-							word = self.encodingConversion(word)
-
 						if self._bookWordlist.get(word) != None :
 							self._bookWordlist[word] = int(self._bookWordlist.get(word)) + 1
 						else :
