@@ -184,11 +184,11 @@ class RunProcesses (object) :
 			module = __import__(moduleName, globals(), locals(), [])
 
 			# Tell the log what we're doing.
-			log_manager.logIt("runIt()", "DBUG", "Starting process: " + moduleName)
+			log_manager.log("DBUG", "Starting process: " + moduleName)
 
 			# Run the module
 			module.doIt(log_manager)
-			log_manager.logIt("runIt()", "DBUG", "Process completed: " + moduleName)
+			log_manager.log("DBUG", "Process completed: " + moduleName)
 
 			# Close out the process by reporting to the log file
 			log_manager.closeOutSessionLog()

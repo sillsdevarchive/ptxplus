@@ -27,6 +27,11 @@
 % between the columns in the column gutter. (default = no rule)
 %\ColumnGutterRuletrue
 
+% ColumnGutterRuleSkip - It may be necessary to push the top
+% of the gutter rule down a few points. This allows you to
+% do that.
+%\ColumnGutterRuleSkip=4pt
+
 % Columnshift - This is used for marginal verses. It will
 % shift the columns over so the page apears more balanced.
 % 15pt is the default setting.

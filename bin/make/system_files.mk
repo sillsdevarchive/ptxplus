@@ -39,9 +39,15 @@
 $(PATH_HYPHENATION) :
 	mkdir -p $(PATH_HYPHENATION)
 
-# Make a blank word list if necessary
+# Create the "raw" hyphenation word list file
 $(TEX_HYPHENATION_WORDLIST) : $(PATH_HYPHENATION)
-	touch $(TEX_HYPHENATION_WORDLIST)
+	$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
+
+#	touch $(TEX_HYPHENATION_WORDLIST)
+
+# Manually create the hyphenation word list file
+make-hyphen-wordlist :
+	$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
 
 # Create a TeX hyphenation rules file based on what is in the
 # project.conf file

@@ -39,6 +39,9 @@
 #		text processing system
 # 20080624 - djd - Added dynamic module loading
 # 20081028 - djd - Removed system logging, messages only now
+# 20090206 - djd - As some tasks need log_manager resources
+#		I have added it back in. This will break a lot of
+#		of things so they will need to be fixed
 
 
 #############################################################
@@ -48,6 +51,14 @@
 # this process
 
 import os, sys
+
+# Import supporting local classes
+from tools import *
+from log_manager import *
+
+# Instantiate local classes
+tools		= Tools()
+log_manager	= LogManager()
 
 basePath = os.environ.get('PTXPLUS_BASE')
 if not basePath :
@@ -60,6 +71,16 @@ sys.path.append(basePath + '/bin/python/lib_scripture')
 
 # All we should need to get things going is the projectID
 task		= sys.argv[1]
+# We may not get a 2nd or 3rd argument so we have to be careful
+try :
+	inputFile	= os.getcwd() + "/" + sys.argv[2]
+except :
+	inputFile = "none"
+try :
+	outputFile = os.getcwd() + "/" + sys.argv[3]
+except :
+	outputFile = "none"
+
 
 
 class RunProcess (object) :
@@ -75,8 +96,25 @@ class RunProcess (object) :
 		# been defined earlier.
 		module = __import__(task, globals(), locals(), [])
 
+		# Initialize the log manager to do its thing. However, as
+		# this is a system process we don't book ID and may not
+		# even have input or output.
+		log_manager.initializeLog(task, "NA", inputFile, outputFile)
+
+		# This will dynamically import the module
+		# This will work because all the right paths have
+		# been defined earlier.
+		module = __import__(task, globals(), locals(), [])
+
+		# Tell the log what we're doing.
+		log_manager.log("DBUG", "Starting process: " + task)
+
 		# Run the module
-		module.doIt()
+		module.doIt(log_manager)
+		log_manager.log("DBUG", "Process completed: " + task)
+
+		# Close out the process by reporting to the log file
+		log_manager.closeOutSessionLog()
 
 
 

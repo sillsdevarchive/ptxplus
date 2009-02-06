@@ -37,7 +37,7 @@ tools = Tools()
 class MakeTexHyphenationFile (object) :
 
 
-	def main (self) :
+	def main (self, log_manager) :
 
 
 		settings = tools.getSettingsObject()
@@ -104,7 +104,7 @@ class MakeTexHyphenationFile (object) :
 
 
 # This starts the whole process going
-def doIt():
+def doIt(log_manager):
 
 	thisModule = MakeTexHyphenationFile()
-	return thisModule.main()
+	return thisModule.main(log_manager)
