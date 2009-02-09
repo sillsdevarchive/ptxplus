@@ -20,6 +20,8 @@
 # History:
 # 20090120 - djd - Initial draft - Works but we may want to
 #			Add some additional testing
+# 20090209 - djd - Fixed a problem with not getting paragraph
+# 		certain kinds of paragraph covered. Also added counting
 
 
 #############################################################
@@ -40,6 +42,8 @@ class NBSPForShortWords (object) :
 	def main (self, log_manager) :
 
 		bookFile = log_manager._currentOutput
+		log_manager._currentSubProcess = 'NBSPForShortWords'
+		replacementCount = 0
 
 		# Get our book object
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
@@ -49,22 +53,30 @@ class NBSPForShortWords (object) :
 
 		# This calls a version of the handler which strips out everything
 		# but the text and basic format.
-		parser.setHandler(NBSPForShortWordsHandler(log_manager))
+		#parser.setHandler(NBSPForShortWordsHandler(log_manager, replacementCount))
+		#newBookOutput = parser.transduce(bookObject)
+
+		handler = NBSPForShortWordsHandler(log_manager, replacementCount)
+		parser.setHandler(handler)
 		newBookOutput = parser.transduce(bookObject)
+
+
 
 		# Output the modified book file
 		newBookObject = codecs.open(bookFile, "w", encoding='utf-8')
 		newBookObject.write(newBookOutput)
+		log_manager.log("INFO", "Replaced U+0020 with U+00A0 a total of " + str(handler._replacementCount) + " times")
 
 
 class NBSPForShortWordsHandler (parse_sfm.Handler) :
 	'''This class replaces the Handler class in the parse_sfm module.'''
 
-	def __init__(self, log_manager) :
+	def __init__(self, log_manager, count) :
 
 		self._log_manager = log_manager
 		self._book = ""
 		self._encoding_manager = EncodingManager(log_manager._settings)
+		self._replacementCount = count
 
 
 	def start (self, tag, num, info, prefix) :
@@ -91,7 +103,7 @@ class NBSPForShortWordsHandler (parse_sfm.Handler) :
 		self._log_manager._currentContext = tools.getSliceOfText(text, 0, 10)
 
 		# Find a string of text that is not an inline container
-		if info.isChar and not info.isEnd :
+		if info.isChar or info.isPara and not info.isEnd :
 
 			# What is the last word in this string, we want to test it
 			words = text.split()
@@ -107,6 +119,8 @@ class NBSPForShortWordsHandler (parse_sfm.Handler) :
 						# Since we know what the last word is find it and replace the
 						# space infront of it with a NBSP
 						text = text.replace(u'\u0020' + lastWord, u'\u00A0' + lastWord)
+						self._replacementCount +=1
+
 			except :
 				pass
 
