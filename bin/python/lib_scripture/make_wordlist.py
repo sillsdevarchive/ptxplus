@@ -20,6 +20,8 @@
 #			There is a lot of potential with this process
 #			but a lot of work needs to be done such as
 #			CSV output on the book report files.
+# 20090209 - djd - Completed optimization, works very fast
+#			now. We may want to incorporate this in check_book
 
 
 #############################################################
@@ -41,6 +43,8 @@ class MakeWordlist (object) :
 
 		self._log_manager = log_manager
 		bookFile = log_manager._currentOutput
+		log_manager._currentSubProcess = 'WordList'
+
 		# Custom processes are optional
 		try :
 			customProcessA = log_manager._settings['General']['CustomProcesses']['customProcessA']
@@ -58,14 +62,14 @@ class MakeWordlist (object) :
 		# If we already have a master word list lets look at it.
 		# Also, it is assumed that this file is in the target
 		# encoding so no encoding conversion will be applied
-		#if os.path.isfile(masterReportFile) :
-			#masterWordlistObject = codecs.open(masterReportFile, "r", encoding='utf-8')
+		if os.path.isfile(masterReportFile) :
+			masterWordlistObject = codecs.open(masterReportFile, "r", encoding='utf-8')
 			## Push it into a dictionary w/o line endings
-			#for line in masterWordlistObject :
-				#if line != "" :
-					#masterWordlist[line.strip()] = 1
+			for line in masterWordlistObject :
+				if line != "" :
+					masterWordlist[line.strip()] = 1
 
-			#masterWordlistObject.close()
+			masterWordlistObject.close()
 
 		# Get our current book object
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
@@ -142,6 +146,8 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		self._bookWordlist = bookWordlist
 		self._masterWordlist = masterWordlist
 		self._book = ""
+		self._quotemap = {}
+		self._nonWordCharsMap = {}
 		self._encoding_manager = EncodingManager(log_manager._settings)
 		# First look for quote markers
 		if log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
@@ -149,28 +155,28 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		else :
 			quoteSystem = "SmartQuotes"
 		cList = ""
-		# To prevent duplicate chars we'll put them in a dict.
-		nonWordChars = {}
+		# To prevent duplicate chars we'll put them in a mapping dictionary (nonWordCharsMap)
+		# Note the use of ord() allows us to use exact unicode integer range, then we map that
+		# to nothing because we want to strip those characters off of the word
 		# First add quote marker characters
 		for k, v, in log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
-			if k != "quoteMarkerPairs" :
-				nonWordChars[v] = 1
+			if len(v) == 1 :
+				self._nonWordCharsMap[ord(v)] = None
 		## Now add brackets
-		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
-			#if k != "bracketMarkerPairs" :
-				#nonWordChars[v] = 1
+		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
+			if k != "bracketMarkerPairs" :
+				self._nonWordCharsMap[ord(v)] = None
 		# Now add word final punctuation
-		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
-			#nonWordChars[v] = 1
+		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
+			if v != "" :
+				self._nonWordCharsMap[ord(v)] = None
 
-		# Build the core of our regexp
-		for c in nonWordChars :
-			cList = cList + c + "|"
+#		# Build the core of our regexp
+		for c in self._nonWordCharsMap :
+			cList = cList + chr(c) + "|"
 
-		regexp = "^(?ui)(" + cList.rstrip('|') + ")(?=\w)"
-		#regexp = "(" + cList.rstrip('|') + ")"
-		print regexp
-		self._charTest = re.compile(regexp)
+		# Report what we will be using in this process for non-word characters
+		self._log_manager.log("INFO", "The process will exclude these characters from all words: [" + cList.rstrip('|') + "]")
 
 
 	def start (self, tag, num, info, prefix) :
@@ -202,12 +208,9 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 				word = word.strip()
 				# Add it to the dictionary if it is a real word
 				if self.isWord(word) :
-
-					#word = self._charTest.sub(r"\1", word)
-					#t = ""
-					#t.maketrans("”", " ")
-					word.translate("’‘”“")
-
+					# Strip out any non-word chars using the mapping we made above
+					word = word.translate(self._nonWordCharsMap)
+					# Whatever is left we will add to our word dictionaries
 					if word != "" :
 						if self._bookWordlist.get(word) != None :
 							self._bookWordlist[word] = int(self._bookWordlist.get(word)) + 1

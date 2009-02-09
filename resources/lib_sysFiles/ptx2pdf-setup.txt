@@ -224,6 +224,11 @@
 % a known size.
 %\def\PageBorder{tuborder.pdf scaled 825}
 
+% ChapterVerseSeparator - Adjust the space or change the
+% character used for the chapter verse seperator. The default
+% is "." I like to use a ":".
+\def\ChapterVerseSeparator{\kern.02em:\kern.02em}
+
 
 %%%%%%%%%%%%%%%%%%%%% Footnote Settings %%%%%%%%%%%%%%%%%%%%%
 % Footnote modifications, edit as needed.

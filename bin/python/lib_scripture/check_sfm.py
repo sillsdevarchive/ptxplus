@@ -148,6 +148,10 @@ class SFMContextHandler (parse_sfm.Handler) :
 		'''This function tells us when an element is closed. We will
 			use this to mark the end of events.'''
 
+		# We need to test for closing of inline markers some how.
+		# How will we do that? Should we set a flag earlier and
+		# test here?
+
 		# Is this a real closing tag?
 		if tag + "*" == ctag :
 			return "\\" + ctag
