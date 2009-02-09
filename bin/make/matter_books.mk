@@ -105,13 +105,16 @@ preprocess-$(1) : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOUR
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
 
-# Output to the TeX control file (Do a little clean up first)
+# TeX control - Call the TeX control file creation script which will
+# create a TeX control file on the fly.
 $(PATH_PROCESS)/$(1).tex :
-	rm -f $$@
-	echo '\\input $(TEX_PTX2PDF)' >> $$@
-	echo '\\input $(TEX_SETUP)' >> $$@
-	echo '\\ptxfile{$(PATH_TEXTS)/$(1).usfm}' >> $$@
-	echo '\\bye' >> $$@
+	$(PY_PROCESS_SCRIPTURE_TEXT) MakeTexControlFile $(1) '$$@'
+
+# Depricated
+#	echo '\\input $(TEX_PTX2PDF)' >> $$@
+#	echo '\\input $(TEX_SETUP)' >> $$@
+#	echo '\\ptxfile{$(PATH_TEXTS)/$(1).usfm}' >> $$@
+#	echo '\\bye' >> $$@
 
 # Process a single book and produce the final PDF. Special dependencies
 # are set for the .adj and .piclist files in case they have been altered.
