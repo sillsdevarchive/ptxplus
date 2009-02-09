@@ -58,14 +58,14 @@ class MakeWordlist (object) :
 		# If we already have a master word list lets look at it.
 		# Also, it is assumed that this file is in the target
 		# encoding so no encoding conversion will be applied
-		if os.path.isfile(masterReportFile) :
-			masterWordlistObject = codecs.open(masterReportFile, "r", encoding='utf-8')
-			# Push it into a dictionary w/o line endings
-			for line in masterWordlistObject :
-				if line != "" :
-					masterWordlist[line.strip()] = 1
+		#if os.path.isfile(masterReportFile) :
+			#masterWordlistObject = codecs.open(masterReportFile, "r", encoding='utf-8')
+			## Push it into a dictionary w/o line endings
+			#for line in masterWordlistObject :
+				#if line != "" :
+					#masterWordlist[line.strip()] = 1
 
-			masterWordlistObject.close()
+			#masterWordlistObject.close()
 
 		# Get our current book object
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
@@ -143,6 +143,34 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		self._masterWordlist = masterWordlist
 		self._book = ""
 		self._encoding_manager = EncodingManager(log_manager._settings)
+		# First look for quote markers
+		if log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
+			quoteSystem = "DumbQuotes"
+		else :
+			quoteSystem = "SmartQuotes"
+		cList = ""
+		# To prevent duplicate chars we'll put them in a dict.
+		nonWordChars = {}
+		# First add quote marker characters
+		for k, v, in log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
+			if k != "quoteMarkerPairs" :
+				nonWordChars[v] = 1
+		## Now add brackets
+		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
+			#if k != "bracketMarkerPairs" :
+				#nonWordChars[v] = 1
+		# Now add word final punctuation
+		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
+			#nonWordChars[v] = 1
+
+		# Build the core of our regexp
+		for c in nonWordChars :
+			cList = cList + c + "|"
+
+		regexp = "^(?ui)(" + cList.rstrip('|') + ")(?=\w)"
+		#regexp = "(" + cList.rstrip('|') + ")"
+		print regexp
+		self._charTest = re.compile(regexp)
 
 
 	def start (self, tag, num, info, prefix) :
@@ -174,7 +202,12 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 				word = word.strip()
 				# Add it to the dictionary if it is a real word
 				if self.isWord(word) :
-					word = self.cleanWord(word)
+
+					#word = self._charTest.sub(r"\1", word)
+					#t = ""
+					#t.maketrans("”", " ")
+					word.translate("’‘”“")
+
 					if word != "" :
 						if self._bookWordlist.get(word) != None :
 							self._bookWordlist[word] = int(self._bookWordlist.get(word)) + 1
@@ -184,8 +217,6 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 							self._masterWordlist[word] = int(self._masterWordlist.get(word)) + 1
 						else :
 							self._masterWordlist[word] = 1
-
-				# How would we do a proper word count here?
 
 			return text
 
@@ -217,10 +248,8 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		return word
 
 	def isWord (self, word) :
-		'''According to settings in the .conf file, return True if this
-			proves to be a real word.'''
+		'''Check to see if this is a word not a reference or number.'''
 
-		# First eliminate numbers and references
 		if not self._encoding_manager.isReferenceNumber(word) and not self._encoding_manager.isNumber(word) :
 			return True
 
@@ -229,31 +258,8 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		'''Do a simple clean up of the word by looking for and removing any
 			punctuation found stuck to the string.'''
 
-		# This probably needs to be optimized with a regexp or something
-
-		# First look for quote markers
-		if self._log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
-			quoteSystem = "DumbQuotes"
-		else :
-			quoteSystem = "SmartQuotes"
-
-		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
-			if v != '' :
-				if word.find(v) > -1 :
-					word = word.replace(v, '')
-		# Now look for brackets
-		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
-			if v != '' :
-				if word.find(v) > -1 :
-					word = word.replace(v, '')
-		# Now look for word final punctuation
-		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
-			if v != '' :
-				if word.find(v) > -1 :
-					word = word.replace(v, '')
-
-		# Return whatever is leftover
-		return word
+#		word = re.sub(self._qList, "“", word)
+		return self._charTest.sub("\1", word)
 
 
 
