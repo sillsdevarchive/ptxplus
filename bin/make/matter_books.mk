@@ -221,10 +221,6 @@ MATTER_BOOKS_NT_TEX=$(PATH_PROCESS)/MATTER_BOOKS_NT.tex
 $(MATTER_BOOKS_NT_TEX) : project.conf
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file nt 'Null' '$@'
 
-test :
-	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file nt 'Null' $(MATTER_BOOKS_NT_TEX)
-
-
 #	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_BOOKS_NT),$(PATH_TEXTS)/$(v).usfm) > $@
 
 # Render the entire NT
