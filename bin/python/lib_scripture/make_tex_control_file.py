@@ -10,7 +10,10 @@
 ################ Description/Documentation ##################
 #############################################################
 
-# Generate a TeX control file for Scripture processing
+# Generate a TeX control file for Scripture processing. This
+# is designed to work with individual control files or will
+# create a control file for processing a number of book files.
+
 
 # History:
 # 20090209 - djd - Initial draft
@@ -35,52 +38,78 @@ class MakeTexControlFile (object) :
 
 		self._log_manager = log_manager
 		texControlFile = log_manager._currentOutput
+		bookID = log_manager._currentTargetID
 		log_manager._currentSubProcess = 'MkContFile'
-		sfmCount = 0
 
 		# Look for settings to apply, not all of them will be
 		# usable in every case
 		try :
-			oneChapOmmitRule = log_manager._settings['Format']['Scripture']['ChapterVerse']['shortBookChapterOmit']
+			oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse']['shortBookChapterOmit']
 		except :
 			oneChapOmmitRule = "false"
 
 		# Build some paths and file names
-		setupFile = os.getcwd() + "/ptx2pdf-setup.txt"
+		pathToText = os.getcwd() + "/Texts"
+		texMacros = log_manager._settings['Process']['TeX']['TEX_PTX2PDF']
+		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['TeX']['TEX_SETUP']
+
+		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
+		texControlObject = codecs.open(texControlFile, "w", encoding='utf-8')
+		texControlObject.write('\\input ' + texMacros + '\n')
+		texControlObject.write('\\input ' + setupFile + '\n')
+
+		# Passing in all the book IDs is problematic we can get that
+		# information from the .config file so we'll use a syntax
+		# shortcut to indicate which one we are looking for.
+		# Check for nt or ot and write out a ptxfile line for each
+		# book ID found. Otherwise just write out for a single book
+		if bookID.lower() == "ot" :
+			bookID = self._log_manager._settings['Process']['Binding']['MATTER_BOOKS_OT']
+		elif bookID.lower() == "nt" :
+			bookID = self._log_manager._settings['Process']['Binding']['MATTER_BOOKS_NT']
+		books = bookID.split()
+		for book in books :
+			thisBook = pathToText + '/' + book.lower() + '.usfm'
+			bookInfo = self.parseThisBook(thisBook)
+			if oneChapOmmitRule == "true" and bookInfo['chapCount'] == 1 :
+				texControlObject.write('\\OmitChapterNumbertrue\n')
+				texControlObject.write('\\ptxfile{' + thisBook + '}\n')
+				texControlObject.write('\\OmitChapterNumberfalse\n')
+			else :
+				texControlObject.write('\\ptxfile{' + thisBook + '}\n')
+		texControlObject.write('\\bye\n')
+		texControlObject.close()
+
+	def parseThisBook (self, book) :
+		'''Parse a specific book based on ID then return relevant info.'''
 
 		# Get our current book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+		bookObject = "".join(codecs.open(book, "r", encoding='utf-8'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()
 
-		# This calls a version of the handler which also builds
-		# our wordlist for us. Later on we will pole it to get
-		# what was stored in it by the handler.
-		handler = MakeTexControlFileHandler(log_manager, sfmCount)
+		# Set some vars to pass
+		info = {}
+		chapCount = 0
+
+		# This calls a custom version of the handler for this script
+		handler = MakeTexControlFileHandler(self._log_manager, chapCount)
 		parser.setHandler(handler)
 		parser.parse(bookObject)
 
-		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
-		texControlObject = codecs.open(texControlFile, "w", encoding='utf-8')
-#	echo '\\input $(TEX_PTX2PDF)' >> $$@
-#	echo '\\input $(TEX_SETUP)' >> $$@
-		if oneChapOmmitRule == "true" :
-			texControlObject.write('\OmitChapterNumbertrue\n')
-#	echo '\\ptxfile{$(PATH_TEXTS)/$(1).usfm}' >> $$@
-#	echo '\\bye' >> $$@
-		texControlObject.close()
+		info['chapCount'] = handler._chapCount
 
-
+		return info
 
 class MakeTexControlFileHandler (parse_sfm.Handler) :
 	'''This class replaces the Handler class in the parse_sfm module.'''
 
-	def __init__(self, log_manager, sfmCount) :
+	def __init__(self, log_manager, chapCount) :
 
 		self._log_manager = log_manager
 		self._book = ""
-		self._sfmCount = sfmCount
+		self._chapCount = chapCount
 
 
 	def start (self, tag, num, info, prefix) :
@@ -89,6 +118,10 @@ class MakeTexControlFileHandler (parse_sfm.Handler) :
 
 		# Track the location
 		self._log_manager.setLocation(self._book, tag, num)
+
+		# Right now, a chapter count is about the only thing we will be doing
+		if tag == "c" :
+			self._chapCount = int(num)
 
 		if num != "" :
 			return "\\" + tag + " " + num

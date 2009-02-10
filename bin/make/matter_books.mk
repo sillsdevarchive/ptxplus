@@ -108,7 +108,7 @@ preprocess-$(1) : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOUR
 # TeX control - Call the TeX control file creation script which will
 # create a TeX control file on the fly.
 $(PATH_PROCESS)/$(1).tex :
-	$(PY_PROCESS_SCRIPTURE_TEXT) MakeTexControlFile $(1) '$$@'
+	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file $(1) 'Null' '$$@'
 
 # Depricated
 #	echo '\\input $(TEX_PTX2PDF)' >> $$@
@@ -196,7 +196,10 @@ MATTER_BOOKS_OT_TEX=$(PATH_PROCESS)/MATTER_BOOKS_OT.tex
 # like NT, OT or Bible. This is done with a little Perl code
 # here. We may want to change this but as long as it works...
 $(MATTER_BOOKS_OT_TEX) : project.conf
-	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_BOOKS_OT),$(PATH_TEXTS)/$(v).usfm) > $@
+	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file ot 'Null' '$@'
+
+
+#	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_BOOKS_OT),$(PATH_TEXTS)/$(v).usfm) > $@
 
 # Render the entire OT
 $(MATTER_BOOKS_OT_PDF) : \
@@ -216,7 +219,13 @@ MATTER_BOOKS_NT_TEX=$(PATH_PROCESS)/MATTER_BOOKS_NT.tex
 
 # Just like with the OT, this builds the .tex control file for all NT books
 $(MATTER_BOOKS_NT_TEX) : project.conf
-	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_BOOKS_NT),$(PATH_TEXTS)/$(v).usfm) > $@
+	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file nt 'Null' '$@'
+
+test :
+	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file nt 'Null' $(MATTER_BOOKS_NT_TEX)
+
+
+#	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_BOOKS_NT),$(PATH_TEXTS)/$(v).usfm) > $@
 
 # Render the entire NT
 $(MATTER_BOOKS_NT_PDF) : \
