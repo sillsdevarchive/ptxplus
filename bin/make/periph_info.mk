@@ -6,6 +6,7 @@
 
 # History
 # 20080819 - djd - First working version
+# 20090211 - djd - Added more cover labels
 
 
 ###################### Start Definitions #########################
@@ -25,6 +26,9 @@ blank_periph		= BLANK
 concordance_periph	= CONCORDANCE
 copyright_periph	= COPYRIGHT
 cover_periph		= COVER
+coverf_periph		= COVERF
+coverb_periph		= COVERB
+spine_periph		= SPINE
 forward_periph		= FORWARD
 glossary_periph		= GLOSSARY
 index_periph		= INDEX
@@ -32,4 +36,4 @@ intro_periph		= INTRO
 preface_periph		= PREFACE
 publisher_periph	= PUBLISHER
 title_periph		= TITLE
-toc_periph		= TOC
+toc_periph			= TOC
