@@ -171,11 +171,10 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 			if v != "" :
 				self._nonWordCharsMap[ord(v)] = None
 
-#		# Build the core of our regexp
+		# Report what we will be using in this process for non-word characters
 		for c in self._nonWordCharsMap :
 			cList = cList + chr(c) + "|"
 
-		# Report what we will be using in this process for non-word characters
 		self._log_manager.log("INFO", "The process will exclude these characters from all words: [" + cList.rstrip('|') + "]")
 
 
@@ -255,15 +254,6 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 
 		if not self._encoding_manager.isReferenceNumber(word) and not self._encoding_manager.isNumber(word) :
 			return True
-
-
-	def cleanWord (self, word) :
-		'''Do a simple clean up of the word by looking for and removing any
-			punctuation found stuck to the string.'''
-
-#		word = re.sub(self._qList, "“", word)
-		return self._charTest.sub("\1", word)
-
 
 
 # This starts the whole process going
