@@ -36,6 +36,7 @@
 #		to allow for parsing other kinds of SFM models
 #		Also changed the name to parse_sfm.py as the
 #		module is more generalized now
+# 20090214 - djd - Added error handling for missing tags
 
 
 #############################################################
@@ -196,7 +197,12 @@ class Parser (object) :
 				res = self.merge(res, r)
 
 		elif Parser.sfms.has_key(tag) and Parser.sfms[tag].isEmpty :
-			res = self.handler.start(tag, '', Parser.sfms[tag])
+			# Just in case we have a bad tag here
+			try :
+				res = self.handler.start(tag, '', Parser.sfms[tag])
+			except :
+				self.handler.error(tag, text, "This tag is not registered with the system.")
+
 			r = self.handler.end(tag, tag, Parser.sfms[tag])
 			res = self.merge(res, r)
 			r = self.handler.text(text, tag, Parser.sfms[tag])

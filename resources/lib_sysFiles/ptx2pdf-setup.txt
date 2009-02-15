@@ -283,6 +283,12 @@
 % "\BaseLine 10pt" (or whatever pt size it needs to be) to
 % the \f marker in the .sty file
 
+% Inter-note Penalty - Control the amount of "tension" between
+% parts of a footnote to help control line breaking. If you
+% use the highest setting, 10000, it will never break. A lower
+% setting, like 9999, will lossen it up. Default is 9999.
+\def\internotepenalty{9999}
+
 %%%%%%%%%%%%%%%%%%%%%% File Locations %%%%%%%%%%%%%%%%%%%%%%
 
 % The file locations rely on relative paths and also setting
