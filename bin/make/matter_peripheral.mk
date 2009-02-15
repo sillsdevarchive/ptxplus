@@ -114,6 +114,14 @@ $(foreach v,$(ALL_PERIPH), $(eval $(call periph_rules,$(v))))
 ###############################################################
 
 
+# Cover matter binding rules
+ifneq ($(MATTER_COVER),)
+MATTER_COVER_PDF = $(PATH_PROCESS)/MATTER_COVER.pdf
+$(MATTER_COVER_PDF) : $(foreach v,$(MATTER_COVER),$(PATH_PROCESS)/$(v).pdf) $(DEPENDENT_FILE_LIST)
+	pdftk $(foreach v,$(MATTER_COVER),$(PATH_PROCESS)/$(v).pdf) cat output $@
+
+endif
+
 # Front matter binding rules
 ifneq ($(MATTER_FRONT),)
 MATTER_FRONT_PDF = $(PATH_PROCESS)/MATTER_FRONT.pdf
