@@ -58,18 +58,18 @@ class SFM (object) :
 
 	def __init__ (self, settings = None) :
 
-		self.isNum		= False
-		self.isEnd		= False
-		self.isNonV		= False
-		self.isNonPub	= False
 		self.isChar		= False
-		self.isNote		= False
-		self.isRef		= False
 		self.isEmpty	= False
-		self.isTitle	= False
-		self.isInline	= False
+		self.isEnd		= False
 		self.isFormat	= False
+		self.isInline	= False
+		self.isNonPub	= False
+		self.isNonV		= False
+		self.isNote		= False
+		self.isNum		= False
 		self.isPara		= False
+		self.isRef		= False
+		self.isTitle	= False
 
 		if settings :
 			for s in settings :
@@ -77,11 +77,11 @@ class SFM (object) :
 
 	def __repr__ (self) :
 		res = "SFM( "
-		for s in ('isNum', 'isEnd', 'isNonV', 'isNonPub', 'isChar', 'isNote', 'isRef', \
-			'isEmpty', 'isTitle', 'isInline', 'isFormat', 'isPara') :
+		for s in ('isChar', 'isEmpty', 'isEnd', 'isFormat', 'isInline', \
+			'isNonPub', 'isNonV', 'isNote', 'isNum', 'isPara', 'isRef', 'isTitle' ) :
 			if self.__getattribute__(s) : res += s + " "
 		res += ")"
-		SFM = res
+		return res
 
 
 class Parser (object) :
@@ -102,6 +102,8 @@ class Parser (object) :
 		self.stack = list()
 		self._prefix = ""
 
+	def __repr__ (self):
+		return 'Parser: handler=%s stack=%s _prefix="%s"' % (self.handler, self.stack, self._prefix)
 
 	def getSFMDefinitions (self, filename, replace = 0) :
 		'''Pull in the definitions of the possible USFM markers we might find.
@@ -154,7 +156,7 @@ class Parser (object) :
 			class. This module contains a default handler but it can be substituted by
 			the calling application.'''
 		res = ''
-
+#		print 'marker: "%s" "%s"' % (tag, text)
 		# Here we strip off the "*"
 		x = tag.find('*')
 		if x != -1 :
@@ -163,7 +165,7 @@ class Parser (object) :
 
 		if x != -1 :
 			temp = []
-			while len(self.stack) :
+			while self.stack :
 				info = self.stack.pop()
 				if info[0] == tag :
 					while len(temp) :
@@ -176,13 +178,13 @@ class Parser (object) :
 						info[1] = SFM(('isEnd', 'isChar'))
 					r = self.handler.end(info[0], tag + "*", info[1])
 					res = self.merge(res, r)
-					if len(self.stack) :
+					if self.stack :
 						r = self.handler.text(text, self.stack[-1][0], self.stack[-1][1])
 						res = self.merge(res, r)
 					break
 				else :
 					temp.insert(0, info)
-			if len(temp) :
+			if temp :
 				self.handler.error(tag + "*", text, "No open tag for closing tag")
 				# error recovery code, treat as just a tag of unknown purpose
 				self.stack.extend(temp)

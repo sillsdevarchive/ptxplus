@@ -84,7 +84,8 @@ def init_usfm () :
 		'ndx'		: ['isEnd', 'isChar', 'isInline'],
 		'periph'	: ['isNonPub', 'isNonV'],
 		'efm'		: ['isEnd', 'isChar', 'isNonV', 'isNote', 'isInline'],
-		'ef'		: ['isEnd', 'isNote', 'isNonPub']
+		'ef'		: ['isEnd', 'isNote', 'isNonPub'],
+		'fig'		: ['isEnd', 'isInline']
 	}
 
 	# Add the above attributes to the SFM tuple list
@@ -94,18 +95,18 @@ def init_usfm () :
 	# Create temp dict with para elements and attributes
 	# Right now they are blank, we may want to add attributes later
 	paraInfo = {
-		'p'			: ['isPara'],
-		'm'			: ['isPara'],
-		'pmo'		: ['isPara'],
-		'pm'		: ['isPara'],
-		'pmc'		: ['isPara'],
-		'pmr'		: ['isPara'],
-		'mi'		: ['isPara'],
-		'nb'		: ['isPara'],
-		'cls'		: ['isPara'],
-		'pc'		: ['isPara'],
-		'pr'		: ['isPara'],
-		'b'			: ['isPara']
+		'p'			: ['isPara', 'isChar'],
+		'm'			: ['isPara', 'isChar'],
+		'pmo'		: ['isPara', 'isChar'],
+		'pm'		: ['isPara', 'isChar'],
+		'pmc'		: ['isPara', 'isChar'],
+		'pmr'		: ['isPara', 'isChar'],
+		'mi'		: ['isPara', 'isChar'],
+		'nb'		: ['isPara', 'isChar'],
+		'cls'		: ['isPara', 'isChar'],
+		'pc'		: ['isPara', 'isChar'],
+		'pr'		: ['isPara', 'isChar'],
+		'b'			: ['isPara', 'isChar']
 	}
 
 	# Add the above para attributes to the SFM tuple list
@@ -132,6 +133,13 @@ def init_usfm () :
 	for k in ('th', 'tc', 'thr', 'tcr') :
 		for n in range(1, 4) :
 			res[k + str(n)] = parse.SFM(['isEnd', 'isChar'])
+
+	# Supplemental, non-USFM markup used in peripheral material
+	for k in ('ct') :
+		for n in range(1, 4) :
+			res[k + str(n)] = parse.SFM(['isPara', 'isChar'])
+
+	res['spacer'] = parse.SFM(['isFormat'])
 
 	return res
 

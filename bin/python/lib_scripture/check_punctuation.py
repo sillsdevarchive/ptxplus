@@ -91,7 +91,7 @@ class CheckPunctuation (object) :
 			# Is there word-final at the beginning of the string?
 			if preChar == "" :
 				# Check for an exception to this if the preceeding text was marked up with special formating
-				if text[0] == thisPunct and len(text) > 1 and lastCloseTagInfo.isFormat == False :
+				if text[0] == thisPunct and len(text) > 1 and not lastCloseTagInfo.isFormat :
 					self._log_manager.log("ERRR", "Word-final punctuation character found at the beginning of a string. Character: [" + thisPunct + "]")
 				# In this case there was only one character found and it was punctuation. Proabably not good
 				elif len(text) == 1 :
@@ -120,7 +120,7 @@ class PunctuationContextHandler (parse_sfm.Handler) :
 		self._verse = ""
 		self._punctuationChecker = CheckPunctuation(self._log_manager)
 		self._lastCloseTag = ""
-		self._lastCloseTagInfo = []
+		self._lastCloseTagInfo = None
 		self._log_manager.resetLocation()
 
 
@@ -130,7 +130,7 @@ class PunctuationContextHandler (parse_sfm.Handler) :
 
 		# Track the location
 		self._log_manager.setLocation(self._book, tag, num)
-
+#		print 'start\ttag=%s\tinfo=%r\tnum="%s"\tprefix="%s"' % (tag.ljust(8), info, num.strip(), prefix.strip())
 		# Return the tag we are currently, adjust for verse numbers
 		if num == "" :
 			return "\\" + tag
@@ -141,7 +141,7 @@ class PunctuationContextHandler (parse_sfm.Handler) :
 	def text (self, text, tag, info) :
 		'''This function allows us to harvest the text from a given text element. This will
 			be used to check for quotes.'''
-
+#		print 'text\ttag=%s\tinfo=%r\ttext="%s"' % (tag.ljust(8) ,info, text.strip()[0:8])
 		# Get the book id for setting our location in start()
 		if tag == 'id' :
 			self._book = text
@@ -155,13 +155,13 @@ class PunctuationContextHandler (parse_sfm.Handler) :
 	def end (self, tag, ctag, info) :
 		'''This function tells us when an element is closed. We will
 			use this to mark the end of events.'''
-
+#		print 'end\ttag=%s\tinfo=%r\tctag=%s' % (tag.ljust(8), info, ctag.ljust(8))
 		# Is this a real closing tag?
-		if tag + "*" == ctag :
-			# Keep track of the last closing tag and it's info
-			self._lastCloseTag = ctag
-			self._lastCloseTagInfo = info
-			return "\\" + ctag
+
+		# Keep track of the last closing tag and it's info
+		self._lastCloseTag = ctag
+		self._lastCloseTagInfo = info
+		return "\\" + ctag
 
 
 	def error (self, tag, text, msg) :
