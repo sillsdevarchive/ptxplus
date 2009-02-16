@@ -85,7 +85,7 @@ def init_usfm () :
 		'periph'	: ['isNonPub', 'isNonV'],
 		'efm'		: ['isEnd', 'isChar', 'isNonV', 'isNote', 'isInline'],
 		'ef'		: ['isEnd', 'isNote', 'isNonPub'],
-		'fig'		: ['isEnd', 'isInline']
+		'fig'		: ['isEnd', 'isInline', 'isNonV']
 	}
 
 	# Add the above attributes to the SFM tuple list
