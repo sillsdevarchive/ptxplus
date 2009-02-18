@@ -18,6 +18,8 @@
 # 20080806 - djd - Initial draft
 # 20081023 - djd - Refactor project.conf structure changes
 # 20081028 - djd - Removed system logging, messages only now
+# 20090218 - djd - Added system logging access as other like
+#		processes needed it too
 
 
 #############################################################
@@ -35,11 +37,10 @@ tools = Tools()
 class MakeMakefile (object) :
 
 
-	def main (self) :
+	def main (self, log_manager) :
 		'''This is the main process function for generating the makefile.'''
 
-		# Get a fresh settings object
-		settings = tools.getSettingsObject()
+		self._log_manager = log_manager
 
 		# Create the new makefile object (overwrite the old file)
 		makefileObject = codecs.open('Makefile', 'w', encoding='utf-8')
@@ -52,30 +53,30 @@ class MakeMakefile (object) :
 		# As there are sub-sections we will add them to the settings object one
 		# at after another. There's probably a better way to do this but not today ;-)
 		makefileSettings = ""
-		for key, value, in settings['Process']['General'].iteritems() :
+		for key, value, in self._log_manager._settings['Process']['General'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in settings['Process']['Paths'].iteritems() :
+		for key, value, in self._log_manager._settings['Process']['Paths'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in settings['Process']['TeX'].iteritems() :
+		for key, value, in self._log_manager._settings['Process']['TeX'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in settings['Process']['Binding'].iteritems() :
+		for key, value, in self._log_manager._settings['Process']['Binding'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in settings['Process']['HelperCommands'].iteritems() :
+		for key, value, in self._log_manager._settings['Process']['HelperCommands'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
 		editorBibleInfo = ""
 
 		# Add rules from the system that are not in the .conf files
 		basePath = os.environ.get('PTXPLUS_BASE')
-		if settings['General']['projectEditor'] == 'ptx' :
+		if self._log_manager._settings['General']['projectEditor'] == 'ptx' :
 			editorBibleInfo = "include " + basePath + "/bin/make/ptx_bible_info.mk\n"
-		elif settings['General']['projectEditor'] == 'be' :
+		elif self._log_manager._settings['General']['projectEditor'] == 'be' :
 			editorBibleInfo = "include " + basePath + "/bin/make/be_bible_info.mk\n"
-		elif settings['General']['projectEditor'] == 'te' :
+		elif self._log_manager._settings['General']['projectEditor'] == 'te' :
 			editorBibleInfo = "include " + basePath + "/bin/make/te_bible_info.mk\n"
 
 		makefileFinal = "include " + basePath + "/bin/make/common_bible_info.mk\n" + \
@@ -91,6 +92,6 @@ class MakeMakefile (object) :
 
 
 # This starts the whole process going
-def doIt():
+def doIt(log_manager):
 	thisModule = MakeMakefile()
-	return thisModule.main()
+	return thisModule.main(log_manager)

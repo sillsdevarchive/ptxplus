@@ -60,8 +60,9 @@ else :
 	command = "manage"
 
 # Instantiate classes
-tools		= Tools()
+tools			= Tools()
 error_manager	= ErrorManager()
+log_manager		= LogManager()
 
 
 #############################################################
@@ -239,14 +240,22 @@ else :
 			# Look for all the global processes that need to be run
 			try :
 				for key, value in tools.getSettingsObject()['General']['GlobalProcesses'].iteritems() :
+
+					# Initialize the log manager to do its thing. However, as
+					# this is a system process we don't book ID and may not
+					# even have input or output.
+					log_manager.initializeLog(key, "NA", "", "")
+
 					# Run any that are set to "true"
 					if value == "true" :
-						module = __import__(key, globals(), locals(), [])
-						module.doIt()
-
+						try :
+							module = __import__(key, globals(), locals(), [])
+							module.doIt(log_manager)
+						except :
+							tools.userMessage('Error: Could not run the ' + key + ' process in global processes.')
 			except :
+				tools.userMessage('Error: No global processes seem to be present, might be a problem with the .conf file.')
 
-				tools.userMessage('Error: Could not run Global processes. Project.conf might be corrupt.')
 			# Get rid of the old error log file.
 			error_manager.deleteErrorLog()
 

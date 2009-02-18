@@ -18,6 +18,8 @@
 # History:
 # 20080819 - djd - Initial draft
 # 20081028 - djd - Removed system logging, messages only now
+# 20090218 - djd - Readded system logging access as some
+#		other processes need it
 
 
 #############################################################
@@ -33,8 +35,10 @@ tools = Tools()
 class CheckForFonts (object) :
 
 
-	def main (self) :
+	def main (self, log_manager) :
 		'''This is the main process function for generating the makefile.'''
+
+		self._log_manager = log_manager
 
 		# Check to see if the right fonts are in the project. Put them
 		# there if not and if that fails, throw an error
@@ -46,7 +50,7 @@ class CheckForFonts (object) :
 
 
 # This starts the whole process going
-def doIt():
+def doIt(log_manager):
 
 	thisModule = CheckForFonts()
-	return thisModule.main()
+	return thisModule.main(log_manager)

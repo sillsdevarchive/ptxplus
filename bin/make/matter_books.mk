@@ -47,6 +47,8 @@
 #		from version control. Now controled manually via the GUI
 #		or the command line.
 # 20090110 - djd - Added booklet binding for single book files
+# 20090218 - djd - Added warning messages and extra locks for
+#		protecting text when the system is locked down
 
 
 ##############################################################
@@ -101,9 +103,13 @@ endif
 # If we are checking text that means we are not sure about how good it is. That
 # being the case, we don't want this text in the system yet so the very first
 # thing we do is try to delete any existing copies from the source directory.
+ifeq ($(LOCKED),0)
 preprocess-$(1) : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
+else
+	$(warning Cannot preprocess, system text is locked for the book of: $(1))
+endif
 
 # TeX control - Call the TeX control file creation script which will
 # create a TeX control file on the fly.
@@ -175,13 +181,9 @@ endef
 
 ####################### Start Main Process ###################
 
-# These build a rule (in memory) for all books based on the
-# macro above. The list of books is taken from the bible info
-# .mk file. We will not need them all but we'll have them.
-# These rules will be called when we process the actual list
-# of books we will use in this publication.
-$(foreach v,$(OT_BOOKS), $(eval $(call book_rules,$(v))))
-$(foreach v,$(NT_BOOKS), $(eval $(call book_rules,$(v))))
+# These build a rule (in memory) for all books in the project
+$(foreach v,$(MATTER_BOOKS_OT), $(eval $(call book_rules,$(v))))
+$(foreach v,$(MATTER_BOOKS_NT), $(eval $(call book_rules,$(v))))
 # Here we could add a line for Deuterocanonical/Apocryphal
 # books but we will let that go for now.
 
