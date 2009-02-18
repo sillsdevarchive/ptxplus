@@ -116,12 +116,6 @@ endif
 $(PATH_PROCESS)/$(1).tex :
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file $(1) 'Null' '$$@'
 
-# Depricated
-#	echo '\\input $(TEX_PTX2PDF)' >> $$@
-#	echo '\\input $(TEX_SETUP)' >> $$@
-#	echo '\\ptxfile{$(PATH_TEXTS)/$(1).usfm}' >> $$@
-#	echo '\\bye' >> $$@
-
 # Process a single book and produce the final PDF. Special dependencies
 # are set for the .adj and .piclist files in case they have been altered.
 $(PATH_PROCESS)/$(1).pdf : \
@@ -181,16 +175,12 @@ endef
 
 ####################### Start Main Process ###################
 
-# These build a rule (in memory) for all books in the project
-$(foreach v,$(MATTER_BOOKS_OT), $(eval $(call book_rules,$(v))))
-$(foreach v,$(MATTER_BOOKS_NT), $(eval $(call book_rules,$(v))))
-# Here we could add a line for Deuterocanonical/Apocryphal
-# books but we will let that go for now.
-
 # Build a TeX control file that will process the books in a publication
 
 # Start with the OT but we don't want to do anything if there are no books to process
 ifneq ($(MATTER_BOOKS_OT),)
+# These build a rule (in memory) for this set of books
+$(foreach v,$(MATTER_BOOKS_OT), $(eval $(call book_rules,$(v))))
 MATTER_BOOKS_OT_PDF=$(PATH_PROCESS)/MATTER_BOOKS_OT.pdf
 MATTER_BOOKS_OT_TEX=$(PATH_PROCESS)/MATTER_BOOKS_OT.tex
 
@@ -216,6 +206,8 @@ endif
 
 # Moving along we will do the NT if there are any books listed in the project.conf file
 ifneq ($(MATTER_BOOKS_NT),)
+# These build a rule (in memory) for this set of books
+$(foreach v,$(MATTER_BOOKS_NT), $(eval $(call book_rules,$(v))))
 MATTER_BOOKS_NT_PDF=$(PATH_PROCESS)/MATTER_BOOKS_NT.pdf
 MATTER_BOOKS_NT_TEX=$(PATH_PROCESS)/MATTER_BOOKS_NT.tex
 

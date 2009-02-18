@@ -7,11 +7,10 @@
 # History
 # 20080819 - djd - First working version
 # 20090211 - djd - Added more cover labels
+# 20090218 - djd - Removed ALL_PERIPH var
 
 
 ###################### Start Definitions #########################
-
-ALL_PERIPH=blank concordance copyright cover forward glossary index intro preface publisher title title_nt title_ot toc
 
 
 # These are peripheral matter that goes with the books, not in the

@@ -45,6 +45,10 @@ from tools import *
 from log_manager import *
 from error_manager import *
 
+# Instantiate classes
+tools			= Tools()
+error_manager	= ErrorManager()
+log_manager		= LogManager()
 
 # We want to see one valid arguments given. However, that
 # may not happen so this script is all about testing the
@@ -54,15 +58,20 @@ from error_manager import *
 command = ""
 
 if len(sys.argv) >= 2 :
-	command = sys.argv[1].lower()
+	# The second argv is normally the file name or book ID
+	books = tools.getSettingsObject()['Process']['Binding']['MATTER_BOOKS_OT']
+	books = books + tools.getSettingsObject()['Process']['Binding']['MATTER_BOOKS_NT']
+	books = books.split()
+	for book in books :
+		# We will lc that for consistency
+		if sys.argv[1].lower() == book.lower() :
+			command = sys.argv[1].lower()
+		else :
+			command = sys.argv[1]
 else :
 	tools.userMessage("Welcome to XeTeX-ptxplus!")
 	command = "manage"
 
-# Instantiate classes
-tools			= Tools()
-error_manager	= ErrorManager()
-log_manager		= LogManager()
 
 
 #############################################################
