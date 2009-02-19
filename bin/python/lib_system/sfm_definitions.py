@@ -115,19 +115,19 @@ def init_usfm () :
 
 	# Attributes for para markers with levels, including poetry (but we may need to separate this out)
 	for k in ('pi', 'li', 'ph', 'q') :
-		res[k] = parse.SFM(['isPara'])
+		res[k] = parse.SFM(['isPara', 'isChar'])
 		for n in range(1, 4) :
-			res[k + str(n)] = parse.SFM(['isPara'])
+			res[k + str(n)] = parse.SFM(['isPara', 'isChar'])
 
 	# Attributes for heading markers with levels
 	for k in ('h', 'mt', 'mte', 'ms', 's', 'imt', 'is') :
-		res[k] = parse.SFM(['isTitle'])
+		res[k] = parse.SFM(['isTitle', 'isChar'])
 		for n in range(1, 4) :
-			res[k + str(n)] = parse.SFM(['isTitle'])
+			res[k + str(n)] = parse.SFM(['isTitle', 'isChar'])
 
 	# Attributes for reference markers
 	for k in ('mr', 'sr', 'r', 'rq', 'd', 'sp') :
-		res[k] = parse.SFM(['isTitle'])
+		res[k] = parse.SFM(['isTitle', 'isChar'])
 
 	# Attributes for table markers
 	for k in ('th', 'tc', 'thr', 'tcr') :
@@ -137,9 +137,11 @@ def init_usfm () :
 	# Supplemental, non-USFM markup used in peripheral material
 	for k in ('ct') :
 		for n in range(1, 4) :
-			res[k + str(n)] = parse.SFM(['isPara', 'isChar'])
+			res[k + str(n)] = parse.SFM(['isPara', 'isTitle', 'isChar'])
 
 	res['spacer'] = parse.SFM(['isFormat'])
+	res['tah'] = parse.SFM(['isEnd', 'isChar', 'isInline', 'isFormat'])
+	res['tar'] = parse.SFM(['isEnd', 'isChar', 'isInline', 'isFormat'])
 
 	return res
 

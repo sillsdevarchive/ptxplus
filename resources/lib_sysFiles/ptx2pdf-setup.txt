@@ -368,14 +368,26 @@
 
 %%%%%%%%%%%%%%%%%%%%% TOC Generation %%%%%%%%%%%%%%%%%%%%%%
 
-% GenerateTOC - Some notes on how to generate a TOC with
-% ptx2pdf. (This needs some expanding...)
-% Uncomment and insert a tile to generate a TOC file. Then
-% comment the line after you have a final TOC generated.
-% However, if you want to create this file in the front matter
-% folder (prefered) you will need to be sure you edit the
-% texmf.conf file...  (More info to follow)
-%\GenerateTOC[Table of Contents]{../Process/toc.usfm}
+% GenerateTOC -The following command will auto-generate a
+% TOC file in the Process folder. The information found
+% in that file can then be used to build the final TOC file.
+\GenerateTOC[Table of Contents]{toc-auto.usfm}
+
+% The following code controls the layout of the TOC file
+% This code can be addjusted to get the right look to your
+% TOC. You can also adjust the \tah and \tar styles found
+% in the .sty file. The functions that are embedded in the
+% TOC file are \tocheader{}{}{} and \tocrow{}{}{}
+\catcode`@=11
+\def\makedigitsother{\m@kedigitsother}
+\def\makedigitsletters{\m@kedigitsletters}
+\newdimen\tocheaderlabel
+\global\def\leaderfill{\leaders\hbox to .5em {\hss\tar .\tar*\hss}\hfil}%
+\def\tocheader#1#2#3{\parfillskip=0.15in\setbox0\hbox{\tah #1\tah*\relax}\tocheaderlabel=\wd0
+  \noindent\box0\quad\tah #2\tah*\hfil\tah #3\tah*\par\vskip 10pt}
+\def\tocrow#1#2#3{\parskip=5pt\parfillskip=0.15in\noindent\hbox to \tocheaderlabel{\tar #1\tar*\hss\relax}%
+  \quad\tar #2\tar*\quad\leaderfill\quad\tar #3\tar*\par}
+\catcode `@=12
 
 
 %%%%%%%%%%%%%%%%%%%%%%%  Extra Tweaks %%%%%%%%%%%%%%%%%%%%%%
