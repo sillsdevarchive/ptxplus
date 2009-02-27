@@ -1,0 +1,13 @@
+"StyleName","Value","Notes"
+"Title","font-size:14px;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial-Bold",
+"City","font-size:10px;font-family:Arial",
+"Region","font-size:14px;fill:#934711;font-family:Arial",
+"Water","font-size:8px;fill:#007dbf;font-family:Arial",
+"Sea","font-size:14px;fill:#007dbf;font-family:Arial",
+"Scale","font-size:6px;font-family:Arial-Bold",
+"Road","font-size:8px;font-family:Arial",
+"Gate","font-size:8px;fill:#007dbf;font-family:Arial",
+"Key","font-size:6px;font-family:Arial-Bold",
+"Place","font-size:10px;font-family:Arial",
+"Label","font-size:6px;font-family:Arial",
+"Tag","font-size:12px;font-family:Arial",
