@@ -161,6 +161,7 @@ texts-clean :
 ifeq ($(LOCKED),0)
 	rm -f $(PATH_TEXTS)/*.txt
 	rm -f $(PATH_TEXTS)/*.usfm
+	rm -f $(PATH_TEXTS)/*.USFM
 endif
 	rm -f $(PATH_TEXTS)/*.bak
 	rm -f $(PATH_TEXTS)/*~

@@ -42,3 +42,18 @@ Some times you may need to substitute a font on a specific text marker. For exam
 	\sethook{start}{mt2}{\chapterfont}
 
 That should do it. This is a work around so you will need to make adjustment to the fonts file and the style file. (Until we come up with some cleaver programing to make this more automated.)
+
+==== Misc... ====
+These are just some miscalanious notes and we don't have a better place to keep them.
+
+=== Override code for .tex files ===
+The [[.tex]] files that ptxplus produces is automated but near the end of a project it may be necessary to tweak them by added code. This shouldn't be done until the text is locked down. An example would be setting overrides for page behavior in peripheral matter like these lines:
+
+\BodyColumns=1
+\def\RHtitleleft{\empty}
+\def\RHtitlecenter{\empty}
+\def\RHtitleright{\empty}
+\def\RHoddcenter{\empty}
+\def\RHevencenter{\empty}
+
+These would be inserted manually to keep the page number from appearing and making it a single column page.

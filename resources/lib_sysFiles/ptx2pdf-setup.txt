@@ -377,16 +377,29 @@
 % This code can be addjusted to get the right look to your
 % TOC. You can also adjust the \tah and \tar styles found
 % in the .sty file. The functions that are embedded in the
-% TOC file are \tocheader{}{}{} and \tocrow{}{}{}
+% TOC file are:
+%	\tocheader{lable1}{lable2}{label3}
+%	\tocrow{val1}{val2}{leader char}{val3}
+
 \catcode`@=11
 \def\makedigitsother{\m@kedigitsother}
 \def\makedigitsletters{\m@kedigitsletters}
+% These are custom settings that can go in the .tex file to
+% adjust elements on the page
+\def\leaderspace{0.5em}
+\def\tamarginright{0in}
+\def\tarowspace{1pt}
+\def\taheaderspace{10pt}
+
+% Macro code:
 \newdimen\tocheaderlabel
-\global\def\leaderfill{\leaders\hbox to .5em {\hss\tar .\tar*\hss}\hfil}%
-\def\tocheader#1#2#3{\parfillskip=0.15in\setbox0\hbox{\tah #1\tah*\relax}\tocheaderlabel=\wd0
-  \noindent\box0\quad\tah #2\tah*\hfil\tah #3\tah*\par\vskip 10pt}
-\def\tocrow#1#2#3{\parskip=5pt\parfillskip=0.15in\noindent\hbox to \tocheaderlabel{\tar #1\tar*\hss\relax}%
-  \quad\tar #2\tar*\quad\leaderfill\quad\tar #3\tar*\par}
+\def\tocheader#1#2#3{\parfillskip=\tamarginright\setbox0\hbox{\tah #1\tah*\relax}\tocheaderlabel=\wd0
+  \noindent\box0\quad\tah #2\tah*\hfil\tah #3\tah*\par\vskip \taheaderspace}
+\def\tocrow#1#2#3#4{\parskip=\tarowspace\parfillskip=\tamarginright\noindent\hbox to \tocheaderlabel{\tar #1\tar*\hss\relax}%
+  \quad\tar #2\tar*
+  \quad\leaders\hbox to \leaderspace {\hss\tar #3\tar*\hss}\hfil
+  \quad\tar #4\tar*\par}
+
 \catcode `@=12
 
 

@@ -45,16 +45,20 @@ class MakeMapFile (object) :
 
 		# Pull in all the relevant vars and settings
 		basePath = os.environ.get('PTXPLUS_BASE')
-		mapFolder = log_manager._settings['Process']['Paths']['PATH_MAPS']
+		mapProject = log_manager._settings['Process']['Paths']['PATH_MAPS']
+		mapSource = log_manager._settings['Process']['Paths']['PATH_MAPS_SOURCE']
+		mapSource = mapSource.replace( '$(PTXPLUS_BASE)', "")
 		inputFile = log_manager._currentInput
 		csvFileName = inputFile.replace('.svg', '.csv')
 		(head, tail) = os.path.split(csvFileName)
-		svgSourceFile = basePath + "/environment/resources/lib_maps/" + os.path.basename(inputFile)
-		csvSourceFile = basePath + "/environment/resources/lib_maps/" + tail
+		csvStyleFileName = head + "/styles.csv"
+		csvStyleFileSource = basePath + "/" + mapProject + "/styles.csv"
+		svgSourceFile = basePath + mapSource + "/" + os.path.basename(inputFile)
+		csvSourceFile = basePath + mapSource + tail
 
 		# See if the maps folder exists then check for the files we need.
-		if not os.path.isdir(mapFolder) :
-			os.mkdir(mapFolder)
+		if not os.path.isdir(mapProject) :
+			os.mkdir(mapProject)
 
 		# Is our input file there? Just because Make told us this doesn't make it so.
 		if not os.path.isfile(inputFile) :
@@ -64,32 +68,44 @@ class MakeMapFile (object) :
 		if not os.path.isfile(csvFileName) :
 			shutil.copy(csvSourceFile, csvFileName)
 
+		# And our style file?
+		if not os.path.isfile(csvStyleFileName) :
+			shutil.copy(csvStyleFileSource, csvStyleFileName)
+
 		# Open and read XML file
 		fhXML = file(inputFile)
 		txtXML = ''.join(fhXML)
 		fhXML.close
 		(eXML, dXML) = XMLID(txtXML)
 
-		# Pull in the CSV data
-		fhCsv = file(csvFileName)
-		csv = reader(fhCsv, dialect = 'excel')
+		# Pull in the CSV map point data
+		csvMapData = file(csvFileName)
+		mapData = reader(csvMapData, dialect = 'excel')
 
+		# Pull in the CSV style data
+		csvStyleData = file(csvStyleFileName)
+		styleData = reader(csvStyleData, dialect = 'excel')
+
+		# Gather the new map point data
 		map = {}
-		styles = {}
-		# Replace the key fields in the XML data with the CSV data
-		for row in csv:
-			# need to add font handling here
-			res = re.sub("Style_", "", row[0])
-			if res != row[0] :
-				styles[res] = row[1]
-			else :
+		for row in mapData:
+			if row[0] != "MapPointData" :
 				map[row[0]] = row[1]
 
+		# Gather the new style data
+		styles = {}
+		for row in styleData:
+			if row[0] != "StyleName" :
+				styles[row[0]] = row[1]
+
+# Note how to do a replace in re: res = re.sub("Style_", "", row[0])
+
+		# Replace the key fields in the XML data with the new map data
 		for key in map.keys() :
 			if dXML.has_key(key) :
 				dXML[key].text = unicode(map[key], 'utf-8')
 				temp = re.sub("_.*$", '', key)
-				#print key, temp
+#				print key, temp
 				if styles.has_key(temp) :
 					dXML[key].set('style', styles[temp])
 

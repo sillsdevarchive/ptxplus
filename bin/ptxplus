@@ -56,23 +56,35 @@ log_manager		= LogManager()
 # place.
 
 command = ""
+bkid = ""
 
+# There should always be at least one arg, look for a second
 if len(sys.argv) >= 2 :
+
 	# The second argv is normally the file name or book ID
 	books = tools.getSettingsObject()['Process']['Binding']['MATTER_BOOKS_OT']
 	books = books + tools.getSettingsObject()['Process']['Binding']['MATTER_BOOKS_NT']
 	books = books.split()
-	for book in books :
-		# We will lc that for consistency
-		if sys.argv[1].lower() == book.lower() :
-			command = sys.argv[1].lower()
-		else :
-			command = sys.argv[1]
+	# This part only works if we are processing books
+	if len(books) > 0 :
+		for book in books :
+			# We will lc that for consistency
+			if sys.argv[1].lower() == book.lower() :
+				bkid = sys.argv[1].lower()
+
+	# If we found an argv with an lc bkid then that becomes the command
+	if bkid != "" :
+		command = bkid
+	# Otherwise we'll just read it in raw
+	else :
+		command = sys.argv[1]
+
+# Other wise we'll just start up the manager
 else :
 	tools.userMessage("Welcome to XeTeX-ptxplus!")
 	command = "manage"
 
-
+print "command = " + command
 
 #############################################################
 ################# Define Script functions ###################
