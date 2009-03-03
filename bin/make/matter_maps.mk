@@ -78,7 +78,11 @@ $(PATH_MAPS)/styles.csv :
 # exist there.
 $(PATH_MAPS)/$(1).pdf : $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/styles.csv
 	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_MAPS)/$(1).svg -A $(PATH_MAPS)/$(1).pdf -T -F -d 2400
-	$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
+
+# Don't think this is needed in the above rule
+#	$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
+
+
 
 # Process the SVG file and edit it in Inkscape when it is done
 # This prorocess is dependent on the .svg and .csv files.
