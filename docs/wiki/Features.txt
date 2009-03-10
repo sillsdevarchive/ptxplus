@@ -59,3 +59,7 @@ Desc: From the project.conf file extract all the SFM markers added from the mark
 **Font changing** *
 Status: Open
 Desc: Need ways to manage fonts globally.
+
+**Test for End Markers**
+Status: Open
+Desc: Need a test for end marker markup on in-line markers.

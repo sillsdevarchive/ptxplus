@@ -64,6 +64,10 @@ define map_rules
 $(PATH_MAPS)/$(1).svg :
 	cp $(PATH_MAPS_SOURCE)/$(1).svg $(PATH_MAPS)/$(1).svg
 
+# Create a Maps folder if one isn't there already
+$(PATH_MAPS) :
+	mkdir -p $(PATH_MAPS)
+
 # Create a default version of the .csv file if one isn't there already
 $(PATH_MAPS)/$(1).csv :
 	cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_MAPS)/$(1).csv
@@ -82,16 +86,25 @@ $(PATH_MAPS)/$(1).pdf : $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/$(1).svg $(PATH_MAPS)
 # Don't think this is needed in the above rule
 #	$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
 
-
-
 # Process the SVG file and edit it in Inkscape when it is done
-# This prorocess is dependent on the .svg and .csv files.
-preprocess-$(1) : $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/styles.csv
+# This prorocess has a double dependency in the following rules
+# it will check each of them and run them in the order listed.
+# Dependency #1
+preprocess-$(1) :: $(PATH_MAPS)
+
+# Dependency #2
+preprocess-$(1) :: $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/styles.csv
 	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$< &
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
 
 # Process the SVG file and view it in PDF when it is done
-view-$(1) : $(PATH_MAPS)/$(1).pdf
+# This prorocess also has a double dependency in the following rules
+# it will check each of them and run them in the order listed.
+# Dependency #1
+view-$(1) :: $(PATH_MAPS)
+
+# Dependency #2
+view-$(1) :: $(PATH_MAPS)/$(1).pdf
 	@ $(VIEWPDF) $$< &
 
 $(1) : $(PATH_MAPS)/$(1).svg

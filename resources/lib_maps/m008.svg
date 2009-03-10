@@ -300,7 +300,7 @@
    style="font-size:8px;font-family:Arial"
    x="414.02386"
    y="315.42105"
-   id="City_Rhodes">Rhodes</text>
+   id="Island_Rhodes">Rhodes</text>
 
 <text
    style="font-size:8px;font-family:Arial"
@@ -312,7 +312,7 @@
    style="font-size:8px;font-family:Arial"
    x="360.01935"
    y="284.06497"
-   id="City_Patmos">Patmos</text>
+   id="Island_Patmos">Patmos</text>
 
 <text
    style="font-size:8px;font-family:Arial"
@@ -336,7 +336,7 @@
    style="font-size:8px;font-family:Arial"
    x="342.42328"
    y="242.23337"
-   id="City_Chios">Chios</text>
+   id="Island_Chios">Chios</text>
 
 <text
    style="font-size:8px;font-family:Arial"
@@ -486,7 +486,7 @@
    style="font-size:12px;fill:#934711;font-family:Arial"
    x="529.70276"
    y="343.01868"
-   id="Region_Cyprus">CYPRUS</text>
+   id="Island_Cyprus">Cyprus</text>
 
 <text
    style="font-size:12px;fill:#934711;font-family:Arial"
@@ -568,13 +568,13 @@
    style="font-size:12px;fill:#934711;font-family:Arial"
    x="331.35168"
    y="322.66138"
-   id="Region_Crete">CRETE</text>
+   id="Island_Crete">Crete</text>
 
 <text
    style="font-size:12px;fill:#934711;font-family:Arial"
    x="260.95059"
    y="279.08807"
-   id="Region_Achaia">ACHAIA</text>
+   id="Island_Achaia">Achaia</text>
 
 <text
    style="font-size:12px;fill:#934711;font-family:Arial"
@@ -601,7 +601,7 @@
    x="147.96999"
    y="228.85974"
    transform="matrix(0.9567852,0.2907955,-0.2907955,0.9567852,0,0)"
-   id="Region_Sicily">SICILY</text>
+   id="Island_Sicily">Sicily</text>
 
 <text
    style="font-size:12px;fill:#934711;font-family:Arial"

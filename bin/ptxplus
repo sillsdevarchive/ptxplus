@@ -35,9 +35,12 @@ if not basePath :
 	basePath = "/usr/share/xetex-ptxplus"
 	os.environ['PTXPLUS_BASE'] = basePath
 
-sys.path.append(basePath + '/bin/python')
-sys.path.append(basePath + '/bin/python/lib_system')
-sys.path.append(basePath + '/bin/python/lib_scripture')
+#sys.path.append(basePath + '/bin/python')
+#sys.path.append(basePath + '/bin/python/lib_system')
+#sys.path.append(basePath + '/bin/python/lib_scripture')
+sys.path.insert(0, basePath + '/bin/python')
+sys.path.insert(0, basePath + '/bin/python/lib_system')
+sys.path.insert(0, basePath + '/bin/python/lib_scripture')
 
 # Import supporting local classes
 #from lib_system.tools import *

@@ -89,7 +89,7 @@ class MakeMapFile (object) :
 		# Gather the new map point data
 		map = {}
 		for row in mapData:
-			if row[0] != "MapPointData" :
+			if len(row) > 0 and row[0] != "MapPointData" :
 				map[row[0]] = row[1]
 
 		# Gather the new style data
@@ -105,7 +105,6 @@ class MakeMapFile (object) :
 			if dXML.has_key(key) :
 				dXML[key].text = unicode(map[key], 'utf-8')
 				temp = re.sub("_.*$", '', key)
-#				print key, temp
 				if styles.has_key(temp) :
 					dXML[key].set('style', styles[temp])
 
