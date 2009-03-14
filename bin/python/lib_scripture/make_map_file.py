@@ -45,16 +45,25 @@ class MakeMapFile (object) :
 
 		# Pull in all the relevant vars and settings
 		basePath = os.environ.get('PTXPLUS_BASE')
-		mapProject = log_manager._settings['Process']['Paths']['PATH_MAPS']
+		mapProject = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_MAPS']
 		mapSource = log_manager._settings['Process']['Paths']['PATH_MAPS_SOURCE']
-		mapSource = mapSource.replace( '$(PTXPLUS_BASE)', "")
+		mapSource = mapSource.replace( '$(PTXPLUS_BASE)', basePath)
+		colorMode = log_manager._settings['General']['MapProcesses']['mapColorMode']
 		inputFile = log_manager._currentInput
-		csvFileName = inputFile.replace('.svg', '.csv')
-		(head, tail) = os.path.split(csvFileName)
-		csvStyleFileName = head + "/styles.csv"
-		csvStyleFileSource = basePath + "/" + mapProject + "/styles.csv"
-		svgSourceFile = basePath + mapSource + "/" + os.path.basename(inputFile)
-		csvSourceFile = basePath + mapSource + tail
+		(head, tail) = os.path.split(inputFile)
+		csvFileName =  mapProject + "/" + tail.replace('.svg', '.csv')
+		csvStyleFileName = mapProject + "/styles.csv"
+		csvStyleFileSource = mapSource + "/styles.csv"
+		svgSourceFile = mapSource + "/" + tail
+		csvSourceFile = mapSource + "/" + tail.replace('.svg', '.csv')
+		# This may be optional but we'll build a file name for it anyway
+		if colorMode == "true" :
+#			mapBackgroundImageFile = inputFile.replace('.svg', '-bkgrnd-cl.png')
+			mapBackgroundImageFile = tail.replace('.svg', '-bkgrnd-cl.png')
+			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-cl.png')
+		else :
+			mapBackgroundImageFile = inputFile.replace('.svg', '-bkgrnd-gr.png')
+			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-gr.png')
 
 		# See if the maps folder exists then check for the files we need.
 		if not os.path.isdir(mapProject) :
@@ -63,6 +72,11 @@ class MakeMapFile (object) :
 		# Is our input file there? Just because Make told us this doesn't make it so.
 		if not os.path.isfile(inputFile) :
 			shutil.copy(svgSourceFile, inputFile)
+
+		# Does this map need a background image, is it there?
+		if not os.path.isfile(mapBackgroundImageFile) :
+			if os.path.isfile(mapBackgroundImageFileSource) :
+				shutil.copy(mapBackgroundImageFileSource, mapBackgroundImageFile)
 
 		# How about our data file?
 		if not os.path.isfile(csvFileName) :
@@ -98,7 +112,19 @@ class MakeMapFile (object) :
 			if row[0] != "StyleName" :
 				styles[row[0]] = row[1]
 
-# Note how to do a replace in re: res = re.sub("Style_", "", row[0])
+#####################################################################################
+
+		# Replace background image file name (if needed)
+# This does not work yet there is a problem with setting the background image
+# file name. It doesn't like xlink:href or something like that.
+# Not sure what to do at this point as this seems to be a namespace issue
+# which could be a part of a larger issue. For now, the file name of the
+# background image has to be set by hand.
+		if dXML.has_key('BackgroundImage') :
+			dXML['BackgroundImage'].set('xlink:href', mapBackgroundImageFile)
+
+######################################################################################
+
 
 		# Replace the key fields in the XML data with the new map data
 		for key in map.keys() :

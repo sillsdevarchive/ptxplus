@@ -97,6 +97,8 @@ preprocess-$(1) :: $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/styl
 	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$< &
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
 
+
+
 # Process the SVG file and view it in PDF when it is done
 # This prorocess also has a double dependency in the following rules
 # it will check each of them and run them in the order listed.
