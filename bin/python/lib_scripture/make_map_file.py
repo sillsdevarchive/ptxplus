@@ -86,11 +86,20 @@ class MakeMapFile (object) :
 		if not os.path.isfile(csvStyleFileName) :
 			shutil.copy(csvStyleFileSource, csvStyleFileName)
 
+############################################################################################################################
+# There's a problem with working with namespaces. The solution, or at least part of it, migh be if we use
+# ElementTree.parse() (or something close to that) which will help it work better with namespaces.
+# Another possible solution could be using a call from ElementTree called qname. This might help it
+# better keep track of namespaces and get the data needed in the righ place.
+
 		# Open and read XML file
 		fhXML = file(inputFile)
 		txtXML = ''.join(fhXML)
 		fhXML.close
 		(eXML, dXML) = XMLID(txtXML)
+
+############################################################################################################################
+
 
 		# Pull in the CSV map point data
 		csvMapData = file(csvFileName)
@@ -115,6 +124,7 @@ class MakeMapFile (object) :
 #####################################################################################
 
 		# Replace background image file name (if needed)
+# See note above first...
 # This does not work yet there is a problem with setting the background image
 # file name. It doesn't like xlink:href or something like that.
 # Not sure what to do at this point as this seems to be a namespace issue
