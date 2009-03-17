@@ -166,10 +166,18 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
 			if k != "bracketMarkerPairs" :
 				self._nonWordCharsMap[ord(v)] = None
+
+###############################################################################################################
+
 		# Now add word final punctuation
+# The problem here is that for PUA characters this breaks!
 		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
 			if v != "" :
+				print v
 				self._nonWordCharsMap[ord(v)] = None
+
+################################################################################################################
+
 
 		# Report what we will be using in this process for non-word characters
 		for c in self._nonWordCharsMap :
