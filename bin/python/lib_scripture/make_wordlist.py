@@ -46,10 +46,12 @@ class MakeWordlist (object) :
 		log_manager._currentSubProcess = 'WordList'
 
 		# Custom processes are optional
+# We need to build an absolute paths in the command. That may need to
+# happen here
 		try :
-			customProcessA = log_manager._settings['General']['CustomProcesses']['customProcessA']
+			customEncodingProcess = log_manager._settings['Encoding']['Processing']['customEncodingProcess']
 		except :
-			customProcessA = ""
+			customEncodingProcess = ""
 
 		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
 		masterReportFileTemp = os.getcwd() + "/" + reportPath + "/wordlist-master.tmp"
@@ -104,9 +106,9 @@ class MakeWordlist (object) :
 		# At this point we will apply any encoding changes necessary to the
 		# masterReportFile via custom post-process command on the file we
 		# just wrote out.
-		if customProcessA != "" :
-			self.doCustomProcess(customProcessA, masterReportFileTemp, masterReportFile)
-			self.doCustomProcess(customProcessA, bookReportFileTemp, bookReportFile)
+		if customEncodingProcess != "" :
+			tools.doCustomProcess(customEncodingProcess, masterReportFileTemp, masterReportFile)
+			tools.doCustomProcess(customEncodingProcess, bookReportFileTemp, bookReportFile)
 			os.unlink(masterReportFileTemp)
 			os.unlink(bookReportFileTemp)
 		else :
@@ -114,27 +116,6 @@ class MakeWordlist (object) :
 			# file to .txt so it can be identified by other processes.
 			os.rename(masterReportFileTemp, masterReportFile)
 			os.rename(bookReportFileTemp, bookReportFile)
-
-
-	def doCustomProcess (self, process, inFile, outFile) :
-		'''Run a custom process on a file.'''
-
-		# Because we want to be able to customize the command if necessary the
-		# incoming command has placeholders for the input and output. We need
-		# to replace this here.
-		process = process.replace('[infile]', inFile)
-		process = process.replace('[outfile]', outFile)
-		# But just in case we'll look for mixed case on the placeholders
-		# This may not be enough but it will do for now.
-		process = process.replace('[inFile]', inFile)
-		process = process.replace('[outFile]', outFile)
-		# Send off the command
-		error = os.system(process)
-		# Check to see if the copy actually took place.
-		if not error :
-			self._log_manager.log("INFO", "Post-process completed successfully")
-		else :
-			self._log_manager.log("ERROR", "Post-process did not completed successfully, command: " + process)
 
 
 class MakeWordlistHandler (parse_sfm.Handler) :

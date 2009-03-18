@@ -344,6 +344,21 @@ class Tools (object) :
 			self.userMessage('Could not run makefile command. The project.conf file may be corrupt.')
 
 
+	def doCustomProcess (self, processCommand) :
+		'''Run a custom command line process on a file. The process string is
+			the complete command line with absolute paths for all files used.
+			Return True if successful.'''
+
+		# Send off the command to the system
+		error = os.system(processCommand)
+
+		# Report if the copy actually took place.
+		if not error :
+			return True
+		else :
+			return False
+
+
 	def copyFiles (self, src, dst) :
 		'''Copy all the files in a dir to another. It assumes the
 			destination dir exists and it will not copy
