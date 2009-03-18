@@ -272,6 +272,7 @@ else :
 
 					# Run any that are set to "true"
 					if value == "true" :
+						print key, value
 						try :
 							module = __import__(key, globals(), locals(), [])
 							module.doIt(log_manager)

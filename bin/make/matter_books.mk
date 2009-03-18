@@ -107,9 +107,14 @@ ifeq ($(LOCKED),0)
 preprocess-$(1) : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
-else
-	$(warning Cannot preprocess, system text is locked for the book of: $(1))
 endif
+
+#################################
+# Problem: It would be nice if we could include a warning to users in the above process
+# whenever the system is locked so they know why it isn't processing their text. The
+# problem is that an else statement with a warning doesn't seem to work. Don't know
+# why so I had to remove it for now.
+#################################
 
 # TeX control - Call the TeX control file creation script which will
 # create a TeX control file on the fly.

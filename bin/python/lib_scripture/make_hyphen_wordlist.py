@@ -150,6 +150,7 @@ class MakeHyphenWordlist (object) :
 				m = prefixTest.sub(r"\1-", word)
 				m = suffixTest.sub(r"-\1", m)
 				if m.find('-') > -1 and not hyphenList.has_key(word) and m.rfind('-') < len(m) - 1 :
+					print m
 					hyphenList[word] = m
 
 		# Output the masterWordlist to the masterReportFile (simple word list)
