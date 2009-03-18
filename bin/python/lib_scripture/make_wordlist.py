@@ -44,15 +44,6 @@ class MakeWordlist (object) :
 		self._log_manager = log_manager
 		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'WordList'
-
-		# Custom processes are optional
-# We need to build an absolute paths in the command. That may need to
-# happen here
-		try :
-			customEncodingProcess = log_manager._settings['Encoding']['Processing']['customEncodingProcess']
-		except :
-			customEncodingProcess = ""
-
 		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
 		masterReportFileTemp = os.getcwd() + "/" + reportPath + "/wordlist-master.tmp"
 		masterReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.txt"
@@ -60,6 +51,19 @@ class MakeWordlist (object) :
 		bookReportFile = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.txt"
 		masterWordlist = {}
 		bookWordlist = {}
+
+
+		# Custom processes are optional
+# We need to build the command here and it will need to have place holders
+# in it.
+# masterReportFileTemp, masterReportFile
+# bookReportFileTemp, bookReportFile
+		try :
+			customEncodingProcess = log_manager._settings['Encoding']['Processing']['customEncodingProcess']
+		except :
+			customEncodingProcess = ""
+
+
 
 		# If we already have a master word list lets look at it.
 		# Also, it is assumed that this file is in the target
@@ -106,9 +110,15 @@ class MakeWordlist (object) :
 		# At this point we will apply any encoding changes necessary to the
 		# masterReportFile via custom post-process command on the file we
 		# just wrote out.
+
+
+
+
+# Change the if to try and also report back on if the process was successful
+# or not with T or F
 		if customEncodingProcess != "" :
-			tools.doCustomProcess(customEncodingProcess, masterReportFileTemp, masterReportFile)
-			tools.doCustomProcess(customEncodingProcess, bookReportFileTemp, bookReportFile)
+			tools.doCustomProcess(customEncodingProcess)
+			tools.doCustomProcess(customEncodingProcess)
 			os.unlink(masterReportFileTemp)
 			os.unlink(bookReportFileTemp)
 		else :
@@ -116,6 +126,13 @@ class MakeWordlist (object) :
 			# file to .txt so it can be identified by other processes.
 			os.rename(masterReportFileTemp, masterReportFile)
 			os.rename(bookReportFileTemp, bookReportFile)
+
+
+
+
+
+
+
 
 
 class MakeWordlistHandler (parse_sfm.Handler) :
