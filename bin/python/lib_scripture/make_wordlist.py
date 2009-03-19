@@ -28,7 +28,7 @@
 ######################### Shell Class #######################
 #############################################################
 
-import codecs, os
+import codecs, os, csv
 import parse_sfm
 
 # Import supporting local classes
@@ -51,6 +51,10 @@ class MakeWordlist (object) :
 		bookReportFile = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.txt"
 		masterWordlist = {}
 		bookWordlist = {}
+
+# This may need to be modified if we go with the python TECKit encoding mod
+# to re-encode row[0] below. Info on that mod is here:
+# http://code.google.com/p/kaprao/
 
 		# Custom processes are optional but we'll try to build them here. If we
 		# can't, then we'll keep them blank and test below
@@ -91,7 +95,17 @@ class MakeWordlist (object) :
 		parser.setHandler(handler)
 		parser.parse(bookObject)
 
-		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
+		# Output the bookWordlist list to the bookWordlist
+		# file, we'll overwrite the existing one and do it
+		# in one shot. This needs to be done in csv.
+
+# The csv mod doesn't handle unicode. This has more info:
+# http://docs.python.org/library/csv.html#writer-objects
+
+# Also, it would be nice if we could encode (if needed)
+# row[0] which is the word we are storing. The other
+# fields would not need any encoding changes
+
 		bookWordlistObject = codecs.open(bookReportFileTemp, "w", encoding='utf-8')
 		bookWordlist = handler._bookWordlist.keys()
 		bookWordlist.sort()
@@ -99,7 +113,17 @@ class MakeWordlist (object) :
 			bookWordlistObject.write(f + " " + str(handler._bookWordlist[f]) + "\n")
 		bookWordlistObject.close()
 
-		# Output the masterWordlist to the masterReportFile (simple word list)
+
+# After the book file is written out wouldn't it be better if we could open
+# that up here and harvest it into a new or existing word list? If that
+# were done we wouldn't need a couple of the next steps
+
+
+		# Output the masterWordlist list to a temp version of
+		# the masterReportFile. We will harvest this next and
+		# remove duplicate words. This does not need to be csv,
+		# just a simple word list. We will take the data from row[0]
+# If row[0] is encoded, there would not be a need to do anything more
 		masterWordlistObject = codecs.open(masterReportFileTemp, "w", encoding='utf-8')
 		masterWordlist = handler._masterWordlist.keys()
 		masterWordlist.sort()
@@ -112,6 +136,10 @@ class MakeWordlist (object) :
 		# masterReportFile via custom post-process command on the file we
 		# just wrote out. If there are none then we'll just rename our
 		# temp file to the final name.
+
+# This is not necessary if we can do a re-encode on row[0] in the book report csv file
+
+
 		try :
 			if tools.doCustomProcess(customEncodingProcessMaster) :
 #				os.unlink(masterReportFileTemp)
@@ -221,6 +249,13 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 					if word != "" :
 						if self._bookWordlist.get(word) != None :
 							self._bookWordlist[word] = int(self._bookWordlist.get(word)) + 1
+
+
+
+# Why do we need two dicts here? Could we not do this in one and harvest what we
+# need for the master list?
+
+
 						else :
 							self._bookWordlist[word] = 1
 						if self._masterWordlist.get(word) != None :
