@@ -52,18 +52,19 @@ class MakeWordlist (object) :
 		masterWordlist = {}
 		bookWordlist = {}
 
-
-		# Custom processes are optional
-# We need to build the command here and it will need to have place holders
-# in it.
-# masterReportFileTemp, masterReportFile
-# bookReportFileTemp, bookReportFile
+		# Custom processes are optional but we'll try to build them here. If we
+		# can't, then we'll keep them blank and test below
 		try :
 			customEncodingProcess = log_manager._settings['Encoding']['Processing']['customEncodingProcess']
 		except :
-			customEncodingProcess = ""
+			customEncodingProcessMaster = ""
+			customEncodingProcessBook = ""
 
-
+		# If there is a custom process we will replace the file name place holders here
+		customEncodingProcessMaster = customEncodingProcess.replace('[inFile]', masterReportFileTemp)
+		customEncodingProcessMaster = customEncodingProcessMaster.replace('[outFile]', masterReportFile)
+		customEncodingProcessBook = customEncodingProcess.replace('[inFile]', bookReportFileTemp)
+		customEncodingProcessBook = customEncodingProcessBook.replace('[outFile]', bookReportFile)
 
 		# If we already have a master word list lets look at it.
 		# Also, it is assumed that this file is in the target
@@ -109,30 +110,31 @@ class MakeWordlist (object) :
 
 		# At this point we will apply any encoding changes necessary to the
 		# masterReportFile via custom post-process command on the file we
-		# just wrote out.
-
-
-
-
-# Change the if to try and also report back on if the process was successful
-# or not with T or F
-		if customEncodingProcess != "" :
-			tools.doCustomProcess(customEncodingProcess)
-			tools.doCustomProcess(customEncodingProcess)
-			os.unlink(masterReportFileTemp)
-			os.unlink(bookReportFileTemp)
-		else :
-			# If there were no custom processes to run then we'll just rename the .tmp
-			# file to .txt so it can be identified by other processes.
+		# just wrote out. If there are none then we'll just rename our
+		# temp file to the final name.
+		try :
+			if tools.doCustomProcess(customEncodingProcessMaster) :
+#				os.unlink(masterReportFileTemp)
+				self._log_manager.log("INFO", "Custom encoding processes were run on " + bookReportFile)
+				self._log_manager.log("DBUG", "Custom encoding processes command: " + customEncodingProcessMaster)
+		except :
 			os.rename(masterReportFileTemp, masterReportFile)
+			if not customEncodingProcessMaster :
+				self._log_manager.log("INFO", "No custom encoding processes were run on " + masterReportFile)
+			else :
+				self._log_manager.log("ERRR", "No custom encoding processes failed on " + masterReportFile + " The command was: " + customEncodingProcessMaster)
+
+		try :
+			if tools.doCustomProcess(customEncodingProcessBook) :
+#				os.unlink(bookReportFileTemp)
+				self._log_manager.log("INFO", "Custom encoding processes were run on " + bookReportFile)
+				self._log_manager.log("DBUG", "Custom encoding processes command: " + customEncodingProcessBook)
+		except :
 			os.rename(bookReportFileTemp, bookReportFile)
-
-
-
-
-
-
-
+			if not customEncodingProcessBook :
+				self._log_manager.log("INFO", "No custom encoding processes were run on " + bookReportFile)
+			else :
+				self._log_manager.log("ERRR", "No custom encoding processes failed on " + bookReportFile + " The command was: " + customEncodingProcessBook)
 
 
 class MakeWordlistHandler (parse_sfm.Handler) :

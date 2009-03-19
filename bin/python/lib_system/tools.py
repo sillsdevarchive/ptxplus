@@ -346,7 +346,7 @@ class Tools (object) :
 
 	def doCustomProcess (self, processCommand) :
 		'''Run a custom command line process on a file. The process string is
-			the complete command line with absolute paths for all files used.
+			the complete command line with valid paths for all files used.
 			Return True if successful.'''
 
 		# Send off the command to the system
