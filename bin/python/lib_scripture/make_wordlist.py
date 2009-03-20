@@ -29,11 +29,13 @@
 #############################################################
 
 import codecs, os, csv
-import parse_sfm
+import parse_sfm, teckit
 
 # Import supporting local classes
 from encoding_manager import *
 from tools import *
+from threading import Thread
+from collections import defaultdict
 tools = Tools()
 
 
@@ -50,128 +52,85 @@ class MakeWordlist (object) :
 		bookReportFileTemp = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.tmp"
 		bookReportFile = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.txt"
 		masterWordlist = {}
-		bookWordlist = {}
+		wordlist = []
+		alreadyProcessed = False
 
-# This may need to be modified if we go with the python TECKit encoding mod
-# to re-encode row[0] below. Info on that mod is here:
-# http://code.google.com/p/kaprao/
+####################
+		# Load in the books meta-data file so we can check if this book
+		# has been processed already. Create a new file if it isn't there
+		# already. At the end of the process we'll report to it that this
+		# book has been processed.
+		# <Code Here>
+		alreadyProcessed = True
 
-		# Custom processes are optional but we'll try to build them here. If we
-		# can't, then we'll keep them blank and test below
-		try :
-			customEncodingProcess = log_manager._settings['Encoding']['Processing']['customEncodingProcess']
-		except :
-			customEncodingProcessMaster = ""
-			customEncodingProcessBook = ""
+		# Get our current book object
+		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
 
-		# If there is a custom process we will replace the file name place holders here
-		customEncodingProcessMaster = customEncodingProcess.replace('[inFile]', masterReportFileTemp)
-		customEncodingProcessMaster = customEncodingProcessMaster.replace('[outFile]', masterReportFile)
-		customEncodingProcessBook = customEncodingProcess.replace('[inFile]', bookReportFileTemp)
-		customEncodingProcessBook = customEncodingProcessBook.replace('[outFile]', bookReportFile)
+		# Load in the sfm parser
+		parser = parse_sfm.Parser()
 
-		# If we already have a master word list lets look at it.
-		# Also, it is assumed that this file is in the target
-		# encoding so no encoding conversion will be applied
-		if os.path.isfile(masterReportFile) :
+		# This calls a version of the handler which returns a simple
+		# wordlist for us. That will be processed and information harvested
+		# from it to be used in our output.
+		handler = MakeWordlistHandler(log_manager, wordlist)
+		parser.setHandler(handler)
+		parser.parse(bookObject)
+
+		# Output the wordlist list to the bookReportFileTemp
+		# file, we'll overwrite the existing one and do it
+		# in one shot. This needs to be done in csv.
+		# More info on writing to csv is here:
+		#	http://docs.python.org/library/csv.html#writer-objects
+		encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
+		encodingChain = txtconv_chain([s.strip() for s in encodingChain.split(',')])
+		handler._wordlist = encodingChain.convert('\n'.join(handler._wordlist)).split('\n')
+
+		# Here we create a word_counts dict using the defaultdict mod. Then we
+		# we add the words and do the counting in the process
+		word_counts = defaultdict(int)
+		for k in handler._wordlist:
+			word_counts[k] += 1
+
+		# Write out the new csv book word count file
+		cvs_file = csv.writer(open(bookReportFileTemp, "wb"), dialect=csv.excel)
+		cvs_file.writerows(word_counts.items())
+
+		# Load the master word list if there is one. If not, make one.
+		# However, if there is one and there is an entry in the books
+		# mata-data file for the book we are currently processing we
+		# will not even bother opening it.
+		if os.path.isfile(masterReportFile) and alreadyProcessed == False :
 			masterWordlistObject = codecs.open(masterReportFile, "r", encoding='utf-8')
 			## Push it into a dictionary w/o line endings
+
+			# Use defaultdict here too!
+
 			for line in masterWordlistObject :
 				if line != "" :
 					masterWordlist[line.strip()] = 1
 
 			masterWordlistObject.close()
+		else :
+			# Create a new masterReportFile here and an empty dictionary
+			# Use the defaultdict mod for this:
+			# http://docs.python.org/library/collections.html?highlight=defaultdict#collections.defaultdict
 
-		# Get our current book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+			# Fill the new dictionary object with the book file data
+			# Then write out to the master file
 
-		# Load in the parser
-		parser = parse_sfm.Parser()
+		# Report to the books meta-data file that this book has been processed
+		# and close the file
 
-		# This calls a version of the handler which also builds
-		# our wordlist for us. Later on we will pole it to get
-		# what was stored in it by the handler.
-		handler = MakeWordlistHandler(log_manager, bookWordlist, masterWordlist)
-		parser.setHandler(handler)
-		parser.parse(bookObject)
-
-		# Output the bookWordlist list to the bookWordlist
-		# file, we'll overwrite the existing one and do it
-		# in one shot. This needs to be done in csv.
-
-# The csv mod doesn't handle unicode. This has more info:
-# http://docs.python.org/library/csv.html#writer-objects
-
-# Also, it would be nice if we could encode (if needed)
-# row[0] which is the word we are storing. The other
-# fields would not need any encoding changes
-
-		bookWordlistObject = codecs.open(bookReportFileTemp, "w", encoding='utf-8')
-		bookWordlist = handler._bookWordlist.keys()
-		bookWordlist.sort()
-		for f in bookWordlist :
-			bookWordlistObject.write(f + " " + str(handler._bookWordlist[f]) + "\n")
-		bookWordlistObject.close()
-
-
-# After the book file is written out wouldn't it be better if we could open
-# that up here and harvest it into a new or existing word list? If that
-# were done we wouldn't need a couple of the next steps
-
-
-		# Output the masterWordlist list to a temp version of
-		# the masterReportFile. We will harvest this next and
-		# remove duplicate words. This does not need to be csv,
-		# just a simple word list. We will take the data from row[0]
-# If row[0] is encoded, there would not be a need to do anything more
-		masterWordlistObject = codecs.open(masterReportFileTemp, "w", encoding='utf-8')
-		masterWordlist = handler._masterWordlist.keys()
-		masterWordlist.sort()
-		for k in masterWordlist :
-			masterWordlistObject.write(k + "\n")
-
-		masterWordlistObject.close()
-
-		# At this point we will apply any encoding changes necessary to the
-		# masterReportFile via custom post-process command on the file we
-		# just wrote out. If there are none then we'll just rename our
-		# temp file to the final name.
-
-# This is not necessary if we can do a re-encode on row[0] in the book report csv file
-
-
-		try :
-			if tools.doCustomProcess(customEncodingProcessMaster) :
-#				os.unlink(masterReportFileTemp)
-				self._log_manager.log("INFO", "Custom encoding processes were run on " + bookReportFile)
-				self._log_manager.log("DBUG", "Custom encoding processes command: " + customEncodingProcessMaster)
-		except :
-			os.rename(masterReportFileTemp, masterReportFile)
-			if not customEncodingProcessMaster :
-				self._log_manager.log("INFO", "No custom encoding processes were run on " + masterReportFile)
-			else :
-				self._log_manager.log("ERRR", "No custom encoding processes failed on " + masterReportFile + " The command was: " + customEncodingProcessMaster)
-
-		try :
-			if tools.doCustomProcess(customEncodingProcessBook) :
-#				os.unlink(bookReportFileTemp)
-				self._log_manager.log("INFO", "Custom encoding processes were run on " + bookReportFile)
-				self._log_manager.log("DBUG", "Custom encoding processes command: " + customEncodingProcessBook)
-		except :
-			os.rename(bookReportFileTemp, bookReportFile)
-			if not customEncodingProcessBook :
-				self._log_manager.log("INFO", "No custom encoding processes were run on " + bookReportFile)
-			else :
-				self._log_manager.log("ERRR", "No custom encoding processes failed on " + bookReportFile + " The command was: " + customEncodingProcessBook)
+		# <Code Here>
 
 
 class MakeWordlistHandler (parse_sfm.Handler) :
 	'''This class replaces the Handler class in the parse_sfm module.'''
 
-	def __init__(self, log_manager, bookWordlist, masterWordlist) :
+	def __init__(self, log_manager, wordlist) :
 
 		self._log_manager = log_manager
-		self._bookWordlist = bookWordlist
+		self._wordlist = wordlist
 		self._masterWordlist = masterWordlist
 		self._book = ""
 		self._quotemap = {}
@@ -212,6 +171,17 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 
 		self._log_manager.log("INFO", "The process will exclude these characters from all words: [" + cList.rstrip('|') + "]")
 
+		# Encoding handling
+		# Use:
+		#	converted_string = self._teckitStack.convert('some text')
+		# If we want to only use part of the stack we can slice it up
+		# Example:
+		#	other_string = self._teckit[:-1].convert('some text')
+		print log_manager._settings['Encoding']['Processing']['encodingChain']
+		encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
+		encodingChain = [s.strip() for s in encodingChain.split(',')]
+		print encodingChain
+
 
 	def start (self, tag, num, info, prefix) :
 		'''This tells us when a tag starts. We will use this information to set location
@@ -246,24 +216,11 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 					# Remember that translate will only work with ordinal values. It is dumb but fast
 					word = word.translate(self._nonWordCharsMap)
 					# Whatever is left we will add to our word dictionaries
-					if word != "" :
-						if self._bookWordlist.get(word) != None :
-							self._bookWordlist[word] = int(self._bookWordlist.get(word)) + 1
+					if word:
+						self._wordlist.append(word)
 
-
-
-# Why do we need two dicts here? Could we not do this in one and harvest what we
-# need for the master list?
-
-
-						else :
-							self._bookWordlist[word] = 1
-						if self._masterWordlist.get(word) != None :
-							self._masterWordlist[word] = int(self._masterWordlist.get(word)) + 1
-						else :
-							self._masterWordlist[word] = 1
-
-			return text
+		# This may not be needed
+		return text
 
 
 	def end (self, tag, ctag, info) :
@@ -304,3 +261,58 @@ def doIt (log_manager) :
 
 	thisModule = MakeWordlist()
 	return thisModule.main(log_manager)
+
+
+class txtconv_chain(list):
+	"""txtconv_chain() -> empty stack
+	   txtconv_chain(iterable) -> engine stack
+	   iterable is a sequence of multi-txtconv conversion spec strings
+		in which case an engine stack with loaded engines is returned."""
+
+	def convert(self, data):
+		"""convert the data by 'piping' it through the stack of engines."""
+		args = ' '.join(['"' + tec + '"' for tec in self])
+		print 'multi-txtconv.sh /dev/stdin /dev/stdout ' + args
+		(cin,cout) = os.popen2('multi-txtconv.sh /dev/stdin /dev/stdout ' + args)
+		def writer():
+			cin.write(data); cin.flush(); cin.close()
+		Thread(target=writer).start()
+		try:
+			result = cout.read()
+			cout.close()
+		except:
+			print result
+		return result
+
+	@staticmethod
+	def reader(f,result):
+		def g():
+			result[0] = f.read()
+		t=Thread(target=g)
+		t.start()
+		return t
+
+class teckit_stack(list):
+	"""A stack of teckit engines to allow multiple sequenced conversions of
+	   data when convert is called."""
+	def __init__(self,iter=None):
+		"""tekit_stack() -> empty stack
+		   tekit_stack(iterable) -> engine stack
+			  iterable can be:
+				1) a sequence of teckit conversion file paths in
+				   which case an engine stack with loaded engines
+				   is returned.
+				2) a list of tekit engines in which case they are copied
+				   into the stack."""
+		for i in iter:
+			if type(i) == teckit.Engine:
+				self.append(i)
+			else:
+				te = teckit.Engine(i)
+				self.append(te)
+
+	def convert(self, data):
+		"""convert the data by 'piping' it through the stack of engines."""
+		for te in self:
+			data = te.convert(data)
+		return data
