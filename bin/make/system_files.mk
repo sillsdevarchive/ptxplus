@@ -32,9 +32,6 @@
 #               Rules for building and managing system files
 ##############################################################
 
-# We run these next two processes at setup but if there are
-# any changes they need to be rerun at text process time.
-
 # Make a Hyphenation folder if necessary
 $(PATH_HYPHENATION) :
 	mkdir -p $(PATH_HYPHENATION)
@@ -44,6 +41,12 @@ $(TEX_HYPHENATION_WORDLIST) : $(PATH_HYPHENATION)
 	$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
 
 #	touch $(TEX_HYPHENATION_WORDLIST)
+
+# Manually create a master wordlist based on existing book
+# wordlists in the Reports file. Best to run this after
+# a preprocess-all command
+make-master-wordlist :
+	$(PY_RUN_SYSTEM_PROCESS) make_master_wordlist
 
 # Manually create the hyphenation word list file
 make-hyphen-wordlist :
@@ -85,8 +88,7 @@ make-template :
 # Update a developer version of ptxplus
 # This assumes you have Mercurial installed and setup
 dev-update :
-	cd $(PTXPLUS_BASE)
-	hg pull -u
+	cd $(PTXPLUS_BASE) && hg pull -u ptxplus
 
 
 ###############################################################
@@ -243,3 +245,5 @@ maps :
 # This will open the hyphenation word list
 hyphenation :
 	$(EDITCONF) $(TEX_HYPHENATION_WORDLIST)
+
+###############################################################
