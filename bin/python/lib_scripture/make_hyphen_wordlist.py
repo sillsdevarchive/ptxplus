@@ -23,7 +23,7 @@
 ######################### Shell Class #######################
 #############################################################
 
-import codecs
+import codecs, csv
 
 # Import supporting local classes
 from encoding_manager import *
@@ -38,7 +38,7 @@ class MakeHyphenWordlist (object) :
 		self._log_manager = log_manager
 		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
 		hyphenPath = log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
-		wordlistReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.txt"
+		wordlistReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.csv"
 		orgHyphenationFile = os.getcwd() + "/" + hyphenPath + "/hyphenation.txt"
 		newHyphenationFile = os.getcwd() + "/" + hyphenPath + "/hyphenation.txt"
 		prefixListFile = os.getcwd() + "/" + hyphenPath + "/prefixes.txt"
@@ -47,12 +47,34 @@ class MakeHyphenWordlist (object) :
 		wordlistReport = {}
 		prefixList = []
 		suffixList = []
+		wordIntakeCount = 0
+		prefixIntakeCount = 0
+		suffixIntakeCount = 0
+		hyphenWordCount = 0
+
 
 		# We need to load files in order to avoid wasting time if something is not there
 		# The assumption here is that all these files are in the same encoding and if
 		# any changes are needed they will be applied to the final file we produce.
 		# Note, the encoding should match the wordlist-master.txt file as it is made
 		# by another process.
+
+		# Check for the wordlistReportFile, it is essential, abort if it is missing
+		if os.path.isfile(wordlistReportFile) :
+			wordlistReportObject = csv.reader(open(wordlistReportFile), dialect=csv.excel)
+			for word,count in wordlistReportObject :
+				wordlistReport[word] = 1
+				wordIntakeCount +=1
+
+			self._log_manager.log("DBUG", "Word list loaded, found " + str(wordIntakeCount) + " words.")
+		else :
+			self._log_manager.log("ERRR", "The word list report file was not found. Aborting process.")
+			# Leave now
+			return
+
+# Both prefix and suffix lists come from a single source in some cases
+# This may not be normal but we should allow for this and have a process
+# in place to make it happen
 
 		# Is there a prefixList to process?
 		if os.path.isfile(prefixListFile) :
@@ -65,6 +87,9 @@ class MakeHyphenWordlist (object) :
 					# Just in case they added the hyphen, strip it out
 					line = line.replace('-', '')
 					prefixList.append(line.strip())
+					prefixIntakeCount += 1
+
+			self._log_manager.log("DBUG", "Prefix list loaded, found " + str(prefixIntakeCount) + " words.")
 
 			prefixListObject.close
 
@@ -80,29 +105,21 @@ class MakeHyphenWordlist (object) :
 					line = line.replace('-', '')
 					suffixList.append(line.strip())
 
+					suffixIntakeCount += 1
+
+			self._log_manager.log("DBUG", "Suffix list loaded, found " + str(suffixIntakeCount) + " words.")
 			prefixListObject.close
+
+
+##############################################################################
+
+
 
 		# This is all about auto-generating hyphenated words. This can be
 		# done a number of ways. If none of the above lists are found then
 		# there is no sense going on. Do a reality check here.
 		if len(prefixList) < 1 or len(suffixList) < 1 :
-			self._log_manager.log("ERROR", "No prefix or suffix lists were found. Aborting process.")
-			# Leave now
-			return
-
-		# Check for the wordlistReportFile, it is essential, abort if it is missing
-		if os.path.isfile(wordlistReportFile) :
-			wordlistReportObject = codecs.open(wordlistReportFile, "r", encoding='utf-8')
-			# Push it into a dictionary w/o line endings
-			for line in wordlistReportObject :
-				# BOM search and destroy
-				line = re.compile(u'^\uFEFF').sub('',line)
-				if line != "" :
-					wordlistReport[line.strip()] = 1
-
-			wordlistReportObject.close()
-		else :
-			self._log_manager.log("ERROR", "The word list report file was not found. Aborting process.")
+			self._log_manager.log("ERRR", "No prefix or suffix lists were found. Aborting process.")
 			# Leave now
 			return
 
@@ -150,7 +167,6 @@ class MakeHyphenWordlist (object) :
 				m = prefixTest.sub(r"\1-", word)
 				m = suffixTest.sub(r"-\1", m)
 				if m.find('-') > -1 and not hyphenList.has_key(word) and m.rfind('-') < len(m) - 1 :
-					print m
 					hyphenList[word] = m
 
 		# Output the masterWordlist to the masterReportFile (simple word list)
@@ -161,7 +177,9 @@ class MakeHyphenWordlist (object) :
 		for k in hyphenkeys :
 			debugObject.write(k + " " + hyphenList[k] + "\n")
 			newHyphenationObject.write(hyphenList[k] + "\n")
+			hyphenWordCount += 1
 
+		self._log_manager.log("DBUG", "Hyphenated word list created, made " + str(hyphenWordCount) + " words.")
 		newHyphenationObject.close()
 
 
