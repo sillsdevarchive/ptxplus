@@ -11,9 +11,12 @@
 #############################################################
 
 # Generate a list of hyphenated words based on supplied
-# suffixes and prefixes and a word list. Then, if it is
-# already there, merge it with the hyphenated word list
-# in the hyphenation folder.
+# suffixes and prefixes and a word list that are part of
+# the source text. This script will look for these files
+# in the specified location and process them. The results
+# are a hyphenated word list in the Hyphenation folder which
+# can be used by another process to create the actual file
+# TeX will use for hyphenation on the text.
 
 # History:
 # 20090130 - djd - Initial draft
@@ -24,6 +27,7 @@
 #############################################################
 
 import codecs, csv
+from collections import defaultdict
 
 # Import supporting local classes
 from encoding_manager import *
@@ -39,11 +43,13 @@ class MakeHyphenWordlist (object) :
 		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
 		hyphenPath = log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
 		wordlistReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.csv"
-		orgHyphenationFile = os.getcwd() + "/" + hyphenPath + "/hyphenation.txt"
+		sourceHyphenationFile = log_manager._settings['TeX']['Hyphenation']['sourceHyphenWords']
 		newHyphenationFile = os.getcwd() + "/" + hyphenPath + "/hyphenation.txt"
-		prefixListFile = os.getcwd() + "/" + hyphenPath + "/prefixes.txt"
-		suffixListFile = os.getcwd() + "/" + hyphenPath + "/suffixes.txt"
-		hyphenList = {}
+		prefixListFile = log_manager._settings['TeX']['Hyphenation']['sourcePrefixes']
+		suffixListFile = log_manager._settings['TeX']['Hyphenation']['sourceSuffixes']
+		# Bring in any encoding mapings we may need.
+		encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
+		hyphenList = defaultdict(int)
 		wordlistReport = {}
 		prefixList = []
 		suffixList = []
@@ -52,126 +58,167 @@ class MakeHyphenWordlist (object) :
 		suffixIntakeCount = 0
 		hyphenWordCount = 0
 
+		if encodingChain != "" :
+			# Build the encoding engine(s)
+			encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
 
-		# We need to load files in order to avoid wasting time if something is not there
-		# The assumption here is that all these files are in the same encoding and if
-		# any changes are needed they will be applied to the final file we produce.
-		# Note, the encoding should match the wordlist-master.txt file as it is made
-		# by another process.
+		# Load the exsiting hyphen words source list if one is in the source folder.
+		# We will fill a dictionary here that was created above with the defaultdict
+		# module. That will be used for the final output when we're done.
+		if os.path.isfile(sourceHyphenationFile) :
+			try :
+				# We don't know exactly what the encoding of this file is. It is probably
+				# Unicode, more than likely UTF-8. As such, we'll bring in the text raw,
+				# then decode to Unicode. That should keep things working
+				sourceHyphenListObject = open(sourceHyphenationFile, 'rb')
+				# Do an encoding conversion if necessary
+				if encodingChain != "" :
+					sourceHyphenListObject = encodingChain.convert(sourceHyphenListObject.read()).decode('utf-8').split('\n')
 
-		# Check for the wordlistReportFile, it is essential, abort if it is missing
-		if os.path.isfile(wordlistReportFile) :
-			wordlistReportObject = csv.reader(open(wordlistReportFile), dialect=csv.excel)
-			for word,count in wordlistReportObject :
-				wordlistReport[word] = 1
-				wordIntakeCount +=1
+				# Push it into a dictionary w/o line endings
+				for line in sourceHyphenListObject :
+					if line != "" :
+						word = line.strip()
+						hyphenList[word.replace('-', '')] = word
 
-			self._log_manager.log("DBUG", "Word list loaded, found " + str(wordIntakeCount) + " words.")
+				self._log_manager.log("INFO", sourceHyphenationFile + " loaded, found " + str(len(hyphenList)) + " words.")
+
+			except UnicodeDecodeError, e :
+				self._log_manager.log("ERRR", sourceHyphenationFile + ": " + str(e))
+				return
+
+			#finally:
+				#sourceHyphenListObject.close
+
 		else :
-			self._log_manager.log("ERRR", "The word list report file was not found. Aborting process.")
-			# Leave now
-			return
+				self._log_manager.log("DBUG", sourceHyphenationFile + " not found")
 
-# Both prefix and suffix lists come from a single source in some cases
-# This may not be normal but we should allow for this and have a process
-# in place to make it happen
+		# Now we will look for and load all the peripheral files and report
+		# on what we found.
+
+		# Check for the wordlistReportFile
+		if os.path.isfile(wordlistReportFile) :
+			try :
+				wordlistReportObject = csv.reader(open(wordlistReportFile), dialect=csv.excel)
+				for word,count in wordlistReportObject :
+					wordlistReport[word] = 1
+					wordIntakeCount +=1
+
+				self._log_manager.log("INFO", wordlistReportFile + " loaded, found " + str(wordIntakeCount) + " words.")
+
+			# If there is a file to load and it fails we need to know about it
+			except e :
+				self._log_manager.log("ERRR", wordlistReportFile + ": " + str(e))
+				return
+
+			finally :
+				pass
+		else :
+			self._log_manager.log("DBUG", wordlistReportFile + " was not found, continued process.")
 
 		# Is there a prefixList to process?
 		if os.path.isfile(prefixListFile) :
-			prefixListObject = codecs.open(prefixListFile, 'r', encoding='utf-8')
-			# Push to a dictionary (w/o line endings)
-			for line in prefixListObject :
-				# BOM search and destroy
-				line = re.compile(u'^\uFEFF').sub('',line)
-				if line != "" :
-					# Just in case they added the hyphen, strip it out
-					line = line.replace('-', '')
-					prefixList.append(line.strip())
-					prefixIntakeCount += 1
+			try :
+				prefixListObject = open(prefixListFile, 'rb')
+				# Do an encoding conversion if necessary
+				if encodingChain != "" :
+					prefixListObject = encodingChain.convert(prefixListObject.read()).decode('utf-8').split('\n')
 
-			self._log_manager.log("DBUG", "Prefix list loaded, found " + str(prefixIntakeCount) + " words.")
+				# Push to a dictionary (w/o line endings)
+				for line in prefixListObject :
+					if line != "" :
+						# Just in case they added of the many kinds of the hyphens, strip it out
+						line = re.compile(u'^\u002D | \u2010 | \u2011 | \u2012 | \u2013 | \u2014').sub('',line, count = 0)
+						#line = line.replace('-', '')
+						prefixList.append(line.strip())
+						prefixIntakeCount += 1
 
-			prefixListObject.close
+				self._log_manager.log("INFO", prefixListFile + " loaded, found " + str(prefixIntakeCount) + " words.")
+
+			# If there is a file to load and it fails we need to know about it
+			except UnicodeDecodeError, e :
+				self._log_manager.log("ERRR", prefixListFile + ": " + str(e))
+				return
+
+			#finally:
+				#prefixListObject.close
+
+		else :
+				self._log_manager.log("DBUG", prefixListFile + " not found")
+
 
 		# How about suffixes, any of those?
 		if os.path.isfile(suffixListFile) :
-			suffixListObject = codecs.open(suffixListFile, 'r', encoding='utf-8')
-			# Push to a dictionary (w/o line endings)
-			for line in suffixListObject :
-				# BOM search and destroy
-				line = re.compile(u'^\uFEFF').sub('',line)
-				if line != "" :
-					# Just in case they added the hyphen, strip it out
-					line = line.replace('-', '')
-					suffixList.append(line.strip())
+			try :
+				suffixListObject = open(suffixListFile, 'rb')
+				# Do an encoding conversion if necessary
+				if encodingChain != "" :
+					suffixListObject = encodingChain.convert(suffixListObject.read()).decode('utf-8').split('\n')
+				# Push to a dictionary (w/o line endings)
+				for line in suffixListObject :
+					if line != "" :
+						# Just in case they added of the many kinds of the hyphens, strip it out
+						line = re.compile(u'^\u002D | \u2010 | \u2011 | \u2012 | \u2013 | \u2014').sub('',line, count = 0)
+						#line = line.replace('-', '')
+						suffixList.append(line.strip())
+						suffixIntakeCount += 1
 
-					suffixIntakeCount += 1
+				self._log_manager.log("INFO", suffixListFile + " loaded, found " + str(suffixIntakeCount) + " words.")
 
-			self._log_manager.log("DBUG", "Suffix list loaded, found " + str(suffixIntakeCount) + " words.")
-			prefixListObject.close
+			# If there is a file to load and it fails we need to know about it
+			except UnicodeDecodeError, e :
+				self._log_manager.log("ERRR", suffixListFile + ": " + str(e))
+				return
 
+			#finally:
+				#suffixListObject.close
 
-##############################################################################
+		else :
+				self._log_manager.log("DBUG", suffixListFile + " not found")
 
+		# This part is all about auto-generating hyphenated words. This can
+		# be done a number of ways. Test to see if we have enough of the
+		# above objects to auto-generate some hyphenated words. If not
+		# we will just move on to see if there is an existing list we can use.
+		if wordIntakeCount > 0 and  len(prefixList) < 0 or len(suffixList) < 0 :
+			self._log_manager.log("ERRR", "Could not generate any hyphenated words with the resources loaded.")
+		else :
+			# If we made it this far the actual process can begin
 
+			# Apply prefixes and suffixes to word list and create
+			# new hyphenated words, add them to hyphenCandidates{}
 
-		# This is all about auto-generating hyphenated words. This can be
-		# done a number of ways. If none of the above lists are found then
-		# there is no sense going on. Do a reality check here.
-		if len(prefixList) < 1 or len(suffixList) < 1 :
-			self._log_manager.log("ERRR", "No prefix or suffix lists were found. Aborting process.")
-			# Leave now
-			return
+			# Build a regex for both prefixes and suffixes
+			pList = ""
+			sList = ""
+			# Prefixes
+			prefixList.sort(self.lencmp)
+			suffixList.sort(self.lencmp)
+			for p in prefixList :
+				p = p.replace('-', '')
+				pList = pList + p + '|'
 
-		# Check for existing hyphenation list file, if one is found we'll pull in the contents
-		if os.path.isfile(orgHyphenationFile) :
-			orgHyphenListObject = codecs.open(orgHyphenationFile, 'r', encoding='utf-8')
-			# Push it into a dictionary w/o line endings
-			for line in orgHyphenListObject :
-				# BOM search and destroy
-				line = re.compile(u'^\uFEFF').sub('',line)
-				if line != "" :
-					word = line.strip()
-					hyphenList[word.replace('-', '')] = word
+			for s in suffixList :
+				s = s.replace('-', '')
+				sList = sList + s + '|'
 
-			orgHyphenListObject.close()
-			# Rename the file with a .old extension
-			os.rename(orgHyphenationFile, orgHyphenationFile.replace('.txt', '.old'))
+			prefixes = "^(?ui)(" + pList.rstrip('|') + ")(?=\w)"
+			prefixTest = re.compile(prefixes)
+			suffixes = "(?ui)(?<=\w)(" + sList.rstrip('|') + ")$"
+			suffixTest = re.compile(suffixes)
 
-		# If we made it this far the actual process can begin
-
-		# Apply prefixes and suffixes to word list and create
-		# new hyphenated words, add them to hyphenCandidates{}
-
-		# Build a regex for both prefixes and suffixes
-		pList = ""
-		sList = ""
-		# Prefixes
-		prefixList.sort(self.lencmp)
-		suffixList.sort(self.lencmp)
-		for p in prefixList :
-			p = p.replace('-', '')
-			pList = pList + p + '|'
-
-		for s in suffixList :
-			s = s.replace('-', '')
-			sList = sList + s + '|'
-
-		prefixes = "^(?ui)(" + pList.rstrip('|') + ")(?=\w)"
-		prefixTest = re.compile(prefixes)
-		suffixes = "(?ui)(?<=\w)(" + sList.rstrip('|') + ")$"
-		suffixTest = re.compile(suffixes)
-
-		for word in wordlistReport :
-			if word != "" :
-				m = prefixTest.sub(r"\1-", word)
-				m = suffixTest.sub(r"-\1", m)
-				if m.find('-') > -1 and not hyphenList.has_key(word) and m.rfind('-') < len(m) - 1 :
-					hyphenList[word] = m
+			for word in wordlistReport :
+				if word != "" :
+					m = prefixTest.sub(r"\1-", word)
+					m = suffixTest.sub(r"-\1", m)
+					if m.find('-') > -1 and not hyphenList.has_key(word) and m.rfind('-') < len(m) - 1 :
+						hyphenList[word] = m
 
 		# Output the masterWordlist to the masterReportFile (simple word list)
 		newHyphenationObject = codecs.open(newHyphenationFile, "w", encoding='utf-8')
+
 		debugObject = codecs.open("test.txt", "w", encoding='utf-8')
+
 		hyphenkeys = hyphenList.keys()
 		hyphenkeys.sort()
 		for k in hyphenkeys :

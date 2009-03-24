@@ -133,6 +133,7 @@ reports-clean :
 	rm -f $(PATH_REPORTS)/*.tmp
 	rm -f $(PATH_REPORTS)/*.txt
 	rm -f $(PATH_REPORTS)/*.html
+	rm -f $(PATH_REPORTS)/*.csv
 
 # Just in case we need to clean up to have a fresh start
 process-clean :

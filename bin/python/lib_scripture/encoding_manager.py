@@ -20,6 +20,8 @@
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081103 - djd - Added hasBracketOpenInLine() and
 #		hasBracketCloseInLine()
+# 20090324 - djd - Added the txtconv class that was written
+#		by Tim Eves
 
 
 #############################################################
@@ -28,11 +30,41 @@
 # Firstly, import all the standard Python modules we need for
 # this process
 
-import codecs, re
+import codecs, re, os
+from threading import Thread
 
 # Import supporting local classes
 from tools import *
 tools = Tools()
+
+
+class TxtconvChain(list):
+	'''This will perform encoding conversions (multiple if necessary) on
+		text objects passed to it. Internally it treats them like if it
+		was a function, externally it is actually a piped file process.
+		txtconv_chain() -> empty stack
+		txtconv_chain(iterable) -> engine stack
+		iterable is a sequence of multi-txtconv conversion spec strings
+		in which case an engine stack with loaded engines is returned.
+		Written by Tim Eves.'''
+
+	def convert(self, data):
+		"""convert the data by 'piping' it through the stack of engines.
+		   data must be of type str and not type unicode."""
+		args = ' '.join(['"' + tec + '"' for tec in self])
+		(cin,cout) = os.popen2('multi-txtconv.sh /dev/stdin /dev/stdout ' + args)
+		def writer():
+			try: cin.write(data)
+			finally: cin.flush(); cin.close()
+		Thread(target=writer).start()
+		try:
+			result = cout.read()
+			cout.close()
+		except:
+			print "Error:" + result
+
+		return result
+
 
 
 class EncodingManager (object) :

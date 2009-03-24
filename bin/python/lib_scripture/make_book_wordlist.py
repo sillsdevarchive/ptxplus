@@ -36,16 +36,14 @@ import parse_sfm
 # Import supporting local classes
 from encoding_manager import *
 from tools import *
-from threading import Thread
 from collections import defaultdict
 tools = Tools()
 
 
-class MakeWordlist (object) :
+class MakeBookWordlist (object) :
 
 	def main (self, log_manager) :
 
-		self._log_manager = log_manager
 		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'BookWordlist'
 		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
@@ -81,7 +79,7 @@ class MakeWordlist (object) :
 		encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
 		if encodingChain != "" :
 			# Build the encoding engine(s)
-			encodingChain = txtconv_chain([s.strip() for s in encodingChain.split(',')])
+			encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
 			# Run the conversions on all our text
 			handler._wordlist = encodingChain.convert('\n'.join(handler._wordlist)).split('\n')
 
@@ -222,38 +220,6 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 # This starts the whole process going
 def doIt (log_manager) :
 
-	thisModule = MakeWordlist()
+	thisModule = MakeBookWordlist()
 	return thisModule.main(log_manager)
 
-
-# This may need to be moved out of here at some point if another process
-# needs to have access to it. Right now this is the only one that needs it.
-class txtconv_chain(list):
-	'''txtconv_chain() -> empty stack
-		txtconv_chain(iterable) -> engine stack
-		iterable is a sequence of multi-txtconv conversion spec strings
-		in which case an engine stack with loaded engines is returned.
-		Written by Tim Eves.'''
-
-	def convert(self, data):
-		"""convert the data by 'piping' it through the stack of engines."""
-		args = ' '.join(['"' + tec + '"' for tec in self])
-		(cin,cout) = os.popen2('multi-txtconv.sh /dev/stdin /dev/stdout ' + args)
-		def writer():
-			cin.write(data); cin.flush(); cin.close()
-		Thread(target=writer).start()
-		try:
-			result = cout.read()
-			cout.close()
-		except:
-			print "Error:" + result
-
-		return result
-
-	@staticmethod
-	def reader(f,result):
-		def g():
-			result[0] = f.read()
-		t=Thread(target=g)
-		t.start()
-		return t
