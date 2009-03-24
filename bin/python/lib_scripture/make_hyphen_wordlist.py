@@ -28,6 +28,7 @@
 
 import codecs, csv
 from collections import defaultdict
+from operator import itemgetter
 
 # Import supporting local classes
 from encoding_manager import *
@@ -49,7 +50,7 @@ class MakeHyphenWordlist (object) :
 		suffixListFile = log_manager._settings['TeX']['Hyphenation']['sourceSuffixes']
 		# Bring in any encoding mapings we may need.
 		encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
-		hyphenList = defaultdict(int)
+		hyphenList = {}
 		wordlistReport = {}
 		prefixList = []
 		suffixList = []
@@ -101,7 +102,7 @@ class MakeHyphenWordlist (object) :
 			try :
 				wordlistReportObject = csv.reader(open(wordlistReportFile), dialect=csv.excel)
 				for word,count in wordlistReportObject :
-					wordlistReport[word] = 1
+					wordlistReport[word.decode('utf-8')] = 1
 					wordIntakeCount +=1
 
 				self._log_manager.log("INFO", wordlistReportFile + " loaded, found " + str(wordIntakeCount) + " words.")
@@ -180,49 +181,55 @@ class MakeHyphenWordlist (object) :
 		# be done a number of ways. Test to see if we have enough of the
 		# above objects to auto-generate some hyphenated words. If not
 		# we will just move on to see if there is an existing list we can use.
-		if wordIntakeCount > 0 and  len(prefixList) < 0 or len(suffixList) < 0 :
-			self._log_manager.log("ERRR", "Could not generate any hyphenated words with the resources loaded.")
+		if wordIntakeCount > 0:
+			if prefixList or suffixList:
+				# If we made it this far the actual process can begin
+
+				# Apply prefixes and suffixes to word list and create
+				# new hyphenated words, add them to hyphenCandidates{}
+
+				# Build a regex for both prefixes and suffixes
+				pList = ""
+				sList = ""
+				# Prefixes
+				prefixList.sort(self.lencmp)
+				suffixList.sort(self.lencmp)
+				for p in prefixList :
+					p = p.replace('-', '')
+					pList = pList + p + '|'
+
+				for s in suffixList :
+					s = s.replace('-', '')
+					sList = sList + s + '|'
+
+				prefixes = "^(?ui)(" + pList.rstrip('|') + ")(?=\w)"
+				prefixTest = re.compile(prefixes)
+				suffixes = "(?ui)(?<=\w)(" + sList.rstrip('|') + ")$"
+				suffixTest = re.compile(suffixes)
+
+				for word in wordlistReport :
+					if word != "" :
+						m = prefixTest.sub(r"\1-", word)
+						m = suffixTest.sub(r"-\1", m)
+						if m.find('-') > -1 and not hyphenList.has_key(word) and m.rfind('-') < len(m) - 1 :
+							hyphenList[word] = m
+			else:
+				self._log_manager.log("DBUG", "Could not generate any hyphenated words, no prefix or suffix files found.")
+
 		else :
-			# If we made it this far the actual process can begin
-
-			# Apply prefixes and suffixes to word list and create
-			# new hyphenated words, add them to hyphenCandidates{}
-
-			# Build a regex for both prefixes and suffixes
-			pList = ""
-			sList = ""
-			# Prefixes
-			prefixList.sort(self.lencmp)
-			suffixList.sort(self.lencmp)
-			for p in prefixList :
-				p = p.replace('-', '')
-				pList = pList + p + '|'
-
-			for s in suffixList :
-				s = s.replace('-', '')
-				sList = sList + s + '|'
-
-			prefixes = "^(?ui)(" + pList.rstrip('|') + ")(?=\w)"
-			prefixTest = re.compile(prefixes)
-			suffixes = "(?ui)(?<=\w)(" + sList.rstrip('|') + ")$"
-			suffixTest = re.compile(suffixes)
-
-			for word in wordlistReport :
-				if word != "" :
-					m = prefixTest.sub(r"\1-", word)
-					m = suffixTest.sub(r"-\1", m)
-					if m.find('-') > -1 and not hyphenList.has_key(word) and m.rfind('-') < len(m) - 1 :
-						hyphenList[word] = m
+			self._log_manager.log("ERRR", "Could not generate any hyphenated, Word list not found.")
 
 		# Output the masterWordlist to the masterReportFile (simple word list)
 		newHyphenationObject = codecs.open(newHyphenationFile, "w", encoding='utf-8')
 
-		debugObject = codecs.open("test.txt", "w", encoding='utf-8')
+
+
+		#hyphenkeys = hyphenList.items()
+		#hyphenkeys.sort(key=itemgetter(0))
 
 		hyphenkeys = hyphenList.keys()
-		hyphenkeys.sort()
+		#hyphenkeys.sort()
 		for k in hyphenkeys :
-			debugObject.write(k + " " + hyphenList[k] + "\n")
 			newHyphenationObject.write(hyphenList[k] + "\n")
 			hyphenWordCount += 1
 
