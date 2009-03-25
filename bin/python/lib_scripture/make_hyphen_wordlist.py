@@ -46,7 +46,7 @@ class MakeHyphenWordlist (object) :
 		wordlistReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.csv"
 		sourceHyphenationFile = log_manager._settings['TeX']['Hyphenation']['sourceHyphenWords']
 		newHyphenationFile = os.getcwd() + "/" + hyphenPath + "/hyphenation.txt"
-		prefixListFile = log_manager._settings['TeX']['Hyphenation']['sourcePrefixes']
+		prefixListPath = log_manager._settings['TeX']['Hyphenation']['sourcePrefixes']
 		suffixListFile = log_manager._settings['TeX']['Hyphenation']['sourceSuffixes']
 		# Bring in any encoding mapings we may need.
 		encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
@@ -76,20 +76,20 @@ class MakeHyphenWordlist (object) :
 				if encodingChain != "" :
 					sourceHyphenListObject = encodingChain.convert(sourceHyphenListObject.read()).decode('utf-8').split('\n')
 
+				c = 0
 				# Push it into a dictionary w/o line endings
 				for line in sourceHyphenListObject :
 					if line != "" :
 						word = line.strip()
 						hyphenList[word.replace('-', '')] = word
+						c +=1
+						print c, word
 
 				self._log_manager.log("INFO", sourceHyphenationFile + " loaded, found " + str(len(hyphenList)) + " words.")
 
 			except UnicodeDecodeError, e :
 				self._log_manager.log("ERRR", sourceHyphenationFile + ": " + str(e))
 				return
-
-			#finally:
-				#sourceHyphenListObject.close
 
 		else :
 				self._log_manager.log("DBUG", sourceHyphenationFile + " not found")
@@ -118,12 +118,12 @@ class MakeHyphenWordlist (object) :
 			self._log_manager.log("DBUG", wordlistReportFile + " was not found, continued process.")
 
 		# Is there a prefixList to process?
-		if os.path.isfile(prefixListFile) :
+		if os.path.isfile(prefixListPath) :
 			try :
-				prefixListObject = open(prefixListFile, 'rb')
+				prefixListFile = open(prefixListPath, 'rb')
 				# Do an encoding conversion if necessary
 				if encodingChain != "" :
-					prefixListObject = encodingChain.convert(prefixListObject.read()).decode('utf-8').split('\n')
+					prefixListObject = encodingChain.convert(prefixListFile.read()).decode('utf-8').split('\n')
 
 				# Push to a dictionary (w/o line endings)
 				for line in prefixListObject :
@@ -134,19 +134,18 @@ class MakeHyphenWordlist (object) :
 						prefixList.append(line.strip())
 						prefixIntakeCount += 1
 
-				self._log_manager.log("INFO", prefixListFile + " loaded, found " + str(prefixIntakeCount) + " words.")
+				self._log_manager.log("INFO", prefixListPath + " loaded, found " + str(prefixIntakeCount) + " words.")
 
 			# If there is a file to load and it fails we need to know about it
 			except UnicodeDecodeError, e :
-				self._log_manager.log("ERRR", prefixListFile + ": " + str(e))
+				self._log_manager.log("ERRR", prefixListPath + ": " + str(e))
 				return
 
-			#finally:
-				#prefixListObject.close
+			finally :
+				prefixListFile.close()
 
 		else :
-				self._log_manager.log("DBUG", prefixListFile + " not found")
-
+				self._log_manager.log("DBUG", prefixListPath + " not found")
 
 		# How about suffixes, any of those?
 		if os.path.isfile(suffixListFile) :
@@ -170,9 +169,6 @@ class MakeHyphenWordlist (object) :
 			except UnicodeDecodeError, e :
 				self._log_manager.log("ERRR", suffixListFile + ": " + str(e))
 				return
-
-			#finally:
-				#suffixListObject.close
 
 		else :
 				self._log_manager.log("DBUG", suffixListFile + " not found")
@@ -207,10 +203,7 @@ class MakeHyphenWordlist (object) :
 				suffixes = "(?ui)(?<=\w)(" + sList.rstrip('|') + ")$"
 				suffixTest = re.compile(suffixes)
 
-# Problem here!!!!!!!!!!!!!!!!!!!!
-
 				for word in wordlistReport :
-				print word
 					if word != "" :
 						m = prefixTest.sub(r"\1-", word)
 						m = suffixTest.sub(r"-\1", m)
@@ -227,13 +220,14 @@ class MakeHyphenWordlist (object) :
 
 
 
-		#hyphenkeys = hyphenList.items()
-		#hyphenkeys.sort(key=itemgetter(0))
-
-		hyphenkeys = hyphenList.keys()
+		hyphenkeys = hyphenList.items()
+		hyphenkeys.sort(key=itemgetter(0))
+		c = 0
 		#hyphenkeys.sort()
-		for k in hyphenkeys :
-			newHyphenationObject.write(hyphenList[k] + "\n")
+		for k,v in hyphenkeys :
+			newHyphenationObject.write(v + "\n")
+			c +=1
+			print c, v
 			hyphenWordCount += 1
 
 		self._log_manager.log("DBUG", "Hyphenated word list created, made " + str(hyphenWordCount) + " words.")
