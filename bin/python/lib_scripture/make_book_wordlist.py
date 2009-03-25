@@ -133,7 +133,7 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 
 		# Now add word final punctuation. We use decode to be sure the comparison works right
 		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
-			if v:
+			if v :
 				self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 
 		# This is only for report what we will be using in this

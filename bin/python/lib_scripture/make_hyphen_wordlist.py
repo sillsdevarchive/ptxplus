@@ -207,7 +207,10 @@ class MakeHyphenWordlist (object) :
 				suffixes = "(?ui)(?<=\w)(" + sList.rstrip('|') + ")$"
 				suffixTest = re.compile(suffixes)
 
+# Problem here!!!!!!!!!!!!!!!!!!!!
+
 				for word in wordlistReport :
+				print word
 					if word != "" :
 						m = prefixTest.sub(r"\1-", word)
 						m = suffixTest.sub(r"-\1", m)
