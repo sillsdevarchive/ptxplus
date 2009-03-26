@@ -81,6 +81,7 @@ class EncodingManager (object) :
 		self._quotation = {}
 		self._quotationDumb = {}
 		self._quotationSmart = {}
+		self._nonWordCharsMap = {}
 		# Find out what kind of quote system we use
 		# Define some dictionaries we'll use
 		if settings['General']['TextFeatures']['dumbQuotes'] == "true" :
@@ -122,16 +123,25 @@ class EncodingManager (object) :
 		self._emailAddressTest = re.compile('@')
 		# Build a dictionary of valid bracket related key/value pairs
 		for k, v, in self._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
-			if v != '' :
-				self._brackets[k] = v
+			if k != "bracketMarkerPairs" :
+				if v != '' :
+					self._brackets[k] = v
+					# Add any relevant characters to our nonWordChars dict
+					self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 		# Build a dictionary of valid word-final related key/value pairs
 		for k, v, in self._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
 			if v != '' :
 				self._wordFinal[k] = v
+				# Add any relevant characters to our nonWordChars dict
+				self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 		# Build a dictionary of quotation related key/value pairs for whatever the specific quote system is
 		for k, v, in self._settings['Encoding']['Punctuation']['Quotation'][self._currentQuoteSystem].iteritems() :
 			if v != '' :
 				self._quotation[k] = v
+				# Add any relevant characters to our nonWordChars dict
+				v = v.decode('utf_8')
+				if len(v) == 1 :
+					self._nonWordCharsMap[ord(v)] = None
 		# Build a dictionary of quotation related key/value pairs for dumb quotes
 		for k, v, in self._settings['Encoding']['Punctuation']['Quotation']['DumbQuotes'].iteritems() :
 			if v != '' :
@@ -428,6 +438,16 @@ class EncodingManager (object) :
 
 	###############################################################################
 	# Punctuation functions
+
+	def stripNonWordCharsFromWord(self, word) :
+		'''Strip any non-word forming characters out of a word string'''
+
+		# Strip out any non-word chars using the mapping we made above using translate
+		# Remember that translate will only work with ordinal values. It is dumb but fast
+		word = word.translate(self._nonWordCharsMap)
+
+		return word
+
 
 	def isWordForming (self, char) :
 		'''Determine if a character is word forming by finding out what it is not.'''

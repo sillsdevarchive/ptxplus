@@ -72,18 +72,19 @@ class MakeHyphenWordlist (object) :
 				# Unicode, more than likely UTF-8. As such, we'll bring in the text raw,
 				# then decode to Unicode. That should keep things working
 				sourceHyphenListObject = open(sourceHyphenationFile, 'rb')
+
+# There needs to be a routine inserted here that will remove any stray word-final
+# chars from the string using encoding_manager.stripNonWordCharsFromWord()
+
 				# Do an encoding conversion if necessary
 				if encodingChain != "" :
 					sourceHyphenListObject = encodingChain.convert(sourceHyphenListObject.read()).decode('utf-8').split('\n')
 
-				c = 0
 				# Push it into a dictionary w/o line endings
 				for line in sourceHyphenListObject :
 					if line != "" :
 						word = line.strip()
 						hyphenList[word.replace('-', '')] = word
-						c +=1
-						print c, word
 
 				self._log_manager.log("INFO", sourceHyphenationFile + " loaded, found " + str(len(hyphenList)) + " words.")
 
@@ -203,12 +204,19 @@ class MakeHyphenWordlist (object) :
 				suffixes = "(?ui)(?<=\w)(" + sList.rstrip('|') + ")$"
 				suffixTest = re.compile(suffixes)
 
+# for some reason we have a very large difference between two scripts tested in
+# the same langague. We'd expect similar results but it is off by thousands.
+
+
 				for word in wordlistReport :
 					if word != "" :
 						m = prefixTest.sub(r"\1-", word)
 						m = suffixTest.sub(r"-\1", m)
 						if m.find('-') > -1 and not hyphenList.has_key(word) and m.rfind('-') < len(m) - 1 :
 							hyphenList[word] = m
+
+#######################################################################################
+
 			else:
 				self._log_manager.log("DBUG", "Could not generate any hyphenated words, no prefix or suffix files found.")
 
@@ -217,17 +225,12 @@ class MakeHyphenWordlist (object) :
 
 		# Output the masterWordlist to the masterReportFile (simple word list)
 		newHyphenationObject = codecs.open(newHyphenationFile, "w", encoding='utf-8')
-
-
-
+		# Turn the hyphenList to a list and sort it
 		hyphenkeys = hyphenList.items()
 		hyphenkeys.sort(key=itemgetter(0))
-		c = 0
-		#hyphenkeys.sort()
+		# Output the words
 		for k,v in hyphenkeys :
 			newHyphenationObject.write(v + "\n")
-			c +=1
-			print c, v
 			hyphenWordCount += 1
 
 		self._log_manager.log("DBUG", "Hyphenated word list created, made " + str(hyphenWordCount) + " words.")

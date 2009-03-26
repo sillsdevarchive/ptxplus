@@ -102,46 +102,46 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 
 	def __init__(self, log_manager, wordlist) :
 
-		self._log_manager = log_manager
+		self.log_manager = log_manager
 		self._wordlist = wordlist
 		self._book = ""
 		self._quotemap = {}
-		self._nonWordCharsMap = {}
-		self._encoding_manager = EncodingManager(log_manager._settings)
+		#self._nonWordCharsMap = {}
+		self.encoding_manager = EncodingManager(log_manager._settings)
 		# First look for quote markers
-		if log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
-			quoteSystem = "DumbQuotes"
-		else :
-			quoteSystem = "SmartQuotes"
+		#if log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
+			#quoteSystem = "DumbQuotes"
+		#else :
+			#quoteSystem = "SmartQuotes"
 		cList = ""
 		# To prevent duplicate chars we'll put them in a mapping dictionary (nonWordCharsMap)
 		# Note the use of ord() allows us to use exact unicode integer range, then we map that
 		# to nothing because we want to strip those characters off of the word
 		# First add quote marker characters
-		for k, v, in log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
+		#for k, v, in log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
 			# In this particular instance we want to check the len() of the string because we only
 			# want single character units. However, our data coming in might not turn up that way
 			# because it hasn't been decoded. For example the len of a quote mark like U+201D would
 			# would be 3, not 1. By decoding we get a len of 1 for the same character.
-			v = v.decode('utf_8')
-			if len(v) == 1 :
-				self._nonWordCharsMap[ord(v)] = None
+			#v = v.decode('utf_8')
+			#if len(v) == 1 :
+				#self._nonWordCharsMap[ord(v)] = None
 		## Now add brackets
-		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
-			if k != "bracketMarkerPairs" :
-				self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
+		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
+			#if k != "bracketMarkerPairs" :
+				#self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 
 		# Now add word final punctuation. We use decode to be sure the comparison works right
-		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
-			if v :
-				self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
+		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
+			#if v :
+				#self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 
 		# This is only for report what we will be using in this
 		# process for non-word characters
-		for c in self._nonWordCharsMap :
+		for c in self.encoding_manager._nonWordCharsMap :
 			cList = cList + unichr(c) + "|"
 
-		self._log_manager.log("INFO", "The process will exclude these characters from all words: [" + cList.rstrip('|') + "]")
+		self.log_manager.log("INFO", "The process will exclude these characters from all words: [" + cList.rstrip('|') + "]")
 
 
 	def start (self, tag, num, info, prefix) :
@@ -149,7 +149,7 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 			and trigger events.'''
 
 		# Track the location
-		self._log_manager.setLocation(self._book, tag, num)
+		self.log_manager.setLocation(self._book, tag, num)
 
 		if num != "" :
 			return "\\" + tag + " " + num
@@ -173,9 +173,8 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 				word = word.strip()
 				# Add it to the dictionary if it is a real word
 				if self.isWord(word) :
-					# Strip out any non-word chars using the mapping we made above using translate
-					# Remember that translate will only work with ordinal values. It is dumb but fast
-					word = word.translate(self._nonWordCharsMap)
+					# Strip out any non-word chars
+					word = self.encoding_manager.stripNonWordCharsFromWord(word)
 					# Whatever is left we will add to our all words dictionary
 					if word :
 						self._wordlist.append(word)
@@ -213,7 +212,7 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 	def isWord (self, word) :
 		'''Check to see if this is a word not a reference or number.'''
 
-		if not self._encoding_manager.isReferenceNumber(word) and not self._encoding_manager.isNumber(word) :
+		if not self.encoding_manager.isReferenceNumber(word) and not self.encoding_manager.isNumber(word) :
 			return True
 
 
