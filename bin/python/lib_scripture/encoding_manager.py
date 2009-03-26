@@ -440,10 +440,10 @@ class EncodingManager (object) :
 	# Punctuation functions
 
 	def stripNonWordCharsFromWord(self, word) :
-		'''Strip any non-word forming characters out of a word string'''
+		'''Strip out any non-word chars using the mapping we made above
+			in the __init__ section. We'll be using translate which will
+			only work with ordinal values. It maybe dumb but its fast.'''
 
-		# Strip out any non-word chars using the mapping we made above using translate
-		# Remember that translate will only work with ordinal values. It is dumb but fast
 		word = word.translate(self._nonWordCharsMap)
 
 		return word
