@@ -20,6 +20,9 @@
 
 # History:
 # 20090130 - djd - Initial draft
+# 20090327 - djd - Draft is working but issues remain over
+#		output discrepancies. This needs to be revisited
+#		later after some other larger issues are settled.
 
 
 #############################################################
@@ -73,8 +76,12 @@ class MakeHyphenWordlist (object) :
 				# then decode to Unicode. That should keep things working
 				sourceHyphenListObject = open(sourceHyphenationFile, 'rb')
 
-# There needs to be a routine inserted here that will remove any stray word-final
-# chars from the string using encoding_manager.stripNonWordCharsFromWord()
+				# A problem can occur here where stray word-final punctuation or other
+				# non-word-forming characters can get included in the word string.
+				# It would be possible to remove them here but it would not be easy.
+				# After much thought I have decided to rely on the translator to
+				# provide clean data and any problems found will need to be edited
+				# by hand to correct them.
 
 				# Do an encoding conversion if necessary
 				if encodingChain != "" :
@@ -188,9 +195,9 @@ class MakeHyphenWordlist (object) :
 				# Build a regex for both prefixes and suffixes
 				pList = ""
 				sList = ""
-				# Prefixes
 				prefixList.sort(self.lencmp)
 				suffixList.sort(self.lencmp)
+				# Populate the lists
 				for p in prefixList :
 					p = p.replace('-', '')
 					pList = pList + p + '|'
@@ -198,15 +205,16 @@ class MakeHyphenWordlist (object) :
 				for s in suffixList :
 					s = s.replace('-', '')
 					sList = sList + s + '|'
-
+				# Make the Regex
 				prefixes = "^(?ui)(" + pList.rstrip('|') + ")(?=\w)"
 				prefixTest = re.compile(prefixes)
 				suffixes = "(?ui)(?<=\w)(" + sList.rstrip('|') + ")$"
 				suffixTest = re.compile(suffixes)
 
-# for some reason we have a very large difference between two scripts tested in
-# the same langague. We'd expect similar results but it is off by thousands.
-
+# Problem: For some reason we have a very large difference between two scripts tested in
+# the same langague. We'd expect similar results but it is off by thousands. I think it is
+# happening around here in the code. At this point there are some encoding issues to fix
+# so until that is done there is no point testing any further. This remains an open issue.
 
 				for word in wordlistReport :
 					if word != "" :

@@ -24,6 +24,9 @@
 #		now. We may want to incorporate this in check_book
 # 20090323 - djd - With Tim E's help we got the encoding
 #		issues ironed out and added true CSV output.
+# 20090326 - djd - Moved the process to strip out non-word
+#		characters to the encoding manager so it can be
+#		shared by other processes.
 
 
 #############################################################
@@ -108,34 +111,8 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		self._quotemap = {}
 		#self._nonWordCharsMap = {}
 		self.encoding_manager = EncodingManager(log_manager._settings)
-		# First look for quote markers
-		#if log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
-			#quoteSystem = "DumbQuotes"
-		#else :
-			#quoteSystem = "SmartQuotes"
+
 		cList = ""
-		# To prevent duplicate chars we'll put them in a mapping dictionary (nonWordCharsMap)
-		# Note the use of ord() allows us to use exact unicode integer range, then we map that
-		# to nothing because we want to strip those characters off of the word
-		# First add quote marker characters
-		#for k, v, in log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
-			# In this particular instance we want to check the len() of the string because we only
-			# want single character units. However, our data coming in might not turn up that way
-			# because it hasn't been decoded. For example the len of a quote mark like U+201D would
-			# would be 3, not 1. By decoding we get a len of 1 for the same character.
-			#v = v.decode('utf_8')
-			#if len(v) == 1 :
-				#self._nonWordCharsMap[ord(v)] = None
-		## Now add brackets
-		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
-			#if k != "bracketMarkerPairs" :
-				#self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
-
-		# Now add word final punctuation. We use decode to be sure the comparison works right
-		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
-			#if v :
-				#self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
-
 		# This is only for report what we will be using in this
 		# process for non-word characters
 		for c in self.encoding_manager._nonWordCharsMap :
@@ -200,14 +177,6 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 		# self._log_manager.log("ERRR", msg + "Marker [\\" + tag + "]")
 		pass
 
-
-	def encodingConversion (self, word) :
-		'''Using the TECKit module, do an encoding conversion on the
-			supplied string.'''
-
-		# Not implemented yet!
-
-		return word
 
 	def isWord (self, word) :
 		'''Check to see if this is a word not a reference or number.'''
