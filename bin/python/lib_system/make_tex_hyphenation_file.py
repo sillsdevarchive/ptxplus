@@ -90,7 +90,7 @@ class MakeTexHyphenationFile (object) :
 				"% This is an auto-generated hyphenation rules file for this project.\n" \
 				"% Please refer to the documentation for details on how to make changes.\n\n"
 		# Pickup our settings
-		settingsToGet = settings["TeX"]["Hyphenation"]
+		settingsToGet = settings['TeX']['Hyphenation']['FileSettings']
 		for key, value in settingsToGet.iteritems() :
 			contents = contents + value + "\n"
 

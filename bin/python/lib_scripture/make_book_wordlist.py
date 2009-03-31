@@ -84,20 +84,42 @@ class MakeBookWordlist (object) :
 			# Build the encoding engine(s)
 			encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
 			# Run the conversions on all our text
-			handler._wordlist = encodingChain.convert('\n'.join(handler._wordlist)).split('\n')
+			print 'make_book_wordlist: Preconversion length', len(handler._wordlist)
+			pre_wordlist = [s.encode('utf-8') for s in handler._wordlist]
+			raw_str = encodingChain.convert('\n'.join(pre_wordlist))
+			handler._wordlist = raw_str.split('\n')
+			print 'make_book_wordlist: Postconversion length', len(handler._wordlist)
 
 		# Here we create a bookWordlist dict using the defaultdict mod. Then we
 		# we add the words we collected from the text handler and do the counting
 		# here as well
-		bookWordlist = defaultdict(int)
-		for k in handler._wordlist :
-			bookWordlist[k] += 1
-
-		# Write out the new csv book word count file
+		preBookWordlist = defaultdict(set)
+		for n,k in enumerate(pre_wordlist):
+			preBookWordlist[k].add(n)
+		bookWordlist = defaultdict(set)
+		for n,k in enumerate(handler._wordlist):
+			bookWordlist[k].add(n)
+		open('/tmp/raw wordlist','wb').write(raw_str)
+		print 'make_book_wordlist: Pre - post unique wordlist lengths:', 'match' if len(preBookWordlist) == len(bookWordlist) else 'differ'
+		print '\tunique words - pre', len(preBookWordlist), ' post',len(bookWordlist)
+		odd_words = set(map(repr,preBookWordlist.values())).difference(set(map(repr,bookWordlist.values())))
+		for ids in odd_words:
+			print '-'*20
+			for id in eval(ids):
+				pre_word = pre_wordlist[id]; post_word = handler._wordlist[id]
+				print 'word missing from converted master list: source text word no=%d' % id
+				print '\t unicode codepoint:\n\t\tpre= "%s"\n\t\tpost="%s"' % (
+					pre_word.decode('utf_8').encode('unicode_escape'),
+					post_word.decode('utf_8').encode('unicode_escape'))
+				print '\t raw utf-8 sequence:\n\t\tpre= "%s"\n\t\tpost="%s"' % (
+					pre_word.encode('string_escape'),
+					post_word.encode('string_escape'))
+			print '-'*15
+# Write out the new csv book word count file
 		# More info on writing to csv is here:
 		#	http://docs.python.org/library/csv.html#writer-objects
-		cvsBookFile = csv.writer(open(bookReportFile, "wb"), dialect=csv.excel)
-		cvsBookFile.writerows(bookWordlist.items())
+#		cvsBookFile = csv.writer(open(bookReportFile, "wb"), dialect=csv.excel)
+#		cvsBookFile.writerows(bookWordlist.items())
 
 
 class MakeWordlistHandler (parse_sfm.Handler) :
