@@ -53,6 +53,10 @@ class MakeBookWordlist (object) :
 		bookReportFile = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.csv"
 		bookWordlist = {}
 		wordlist = []
+		pre_wordlist = {}
+		raw_str = ''
+
+
 		# Make our Report folder if it isn't there
 		if not os.path.isdir(reportPath) :
 			os.mkdir(reportPath)
