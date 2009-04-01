@@ -54,7 +54,7 @@ class MakePiclistFile (object) :
 		self._errors = 0
 
 
-	def writePicLine (self, bid, cn, vn, fid, cr, cp) :
+	def writePicLine (self, use, bid, cn, vn, fid, cr, cp) :
 		'''Write out the illustration description line. The incoming
 			file will not have all the information we need so we'll make
 			some things up here and use them as defaults. The format goes
@@ -66,7 +66,12 @@ class MakePiclistFile (object) :
 
 		# Assuming png we'll add that here
 		fileName = fid + ".png"
-		line = bid + " " + cn + "." + vn + " |" + fileName + "|span|b|" + cr + "|" + cp + "|"
+		# Is this an illustration that we'll be using?
+		switch = ""
+		if use.upper() != "TRUE" :
+			switch = "%"
+
+		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|span|b|" + cr + "|" + cp + "|"
 		self._outFileObject.write(line + "\n")
 		self._log_manager.log("DBUG", "Wrote out to piclist file: " + line)
 
@@ -136,10 +141,10 @@ class MakePiclistFile (object) :
 					# More error correction needs to go here
 					# I would think but this will be ok to
 					# start with.
-					self.writePicLine(line[0].upper(), line[1], line[2], \
-					line[3], \
-					line[5], line[6])
-					self.processIllustration(line[3])
+					self.writePicLine(line[0].upper(), line[1].upper(), line[2], line[3], \
+					line[5], \
+					line[6], line[7])
+					self.processIllustration(line[4])
 					pics +=1
 
 
