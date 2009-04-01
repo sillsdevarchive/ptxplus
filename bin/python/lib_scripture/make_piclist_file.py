@@ -53,16 +53,39 @@ class MakePiclistFile (object) :
 		self._csvMasterFile = self._processIllustrationsPath + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsControlFile']
 		self._errors = 0
 
+# We need to add some settings to the conf file to handle encoding of the
+# translation field on multi-script projects
 
-	def writePicLine (self, use, bid, cn, vn, fid, cr, cp) :
+
+
+
+# Do that now!
+
+
+
+
+
+
+
+
+
+
+
+	def writePicLine (self, use, bid, cn, vn, fid, cr, cp, tr) :
 		'''Write out the illustration description line. The incoming
 			file will not have all the information we need so we'll make
 			some things up here and use them as defaults. The format goes
 			like this:
 				bid c.v |fileName|span|b/t|Copyright|Caption|
+
 			Note the space after the v, that needs to be there or TeX
-			will choke. Also, I think something needs to go after the
-			caption field but I don't know what yet. Will add later.'''
+			will choke. The caption field "cp" contains the English
+			version of the caption. Next to that goes the translation
+			field "tr" which holds the vernacular version of the
+			caption field.
+
+			The use field allows us to regulate the use of the whole
+			row (record). That gets translated to the switch field.'''
 
 		# Assuming png we'll add that here
 		fileName = fid + ".png"
@@ -71,7 +94,11 @@ class MakePiclistFile (object) :
 		if use.upper() != "TRUE" :
 			switch = "%"
 
-		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|span|b|" + cr + "|" + cp + "|"
+		caption = cp
+		if tr != "" :
+			caption = tr
+
+		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|span|b|" + cr + "|" + caption + "|"
 		self._outFileObject.write(line + "\n")
 		self._log_manager.log("DBUG", "Wrote out to piclist file: " + line)
 
@@ -100,8 +127,6 @@ class MakePiclistFile (object) :
 			the current book we are working with. It will then create
 			a piclist file for that book file so pdf2ptx can work with
 			it. We will do this one book at a time.'''
-
-# This needs to be rewritten to use the sfm parser so it will run more efficiently
 
 		if not os.path.isfile(self._csvMasterFile) :
 			# If it doesn't exist that isn't necessarily a problem
@@ -136,14 +161,14 @@ class MakePiclistFile (object) :
 				pics +=1
 				continue
 			else :
-				if self._bookID == line[0] :
+				if self._bookID == line[1] :
 					# Now we'll write out what we've found
 					# More error correction needs to go here
 					# I would think but this will be ok to
 					# start with.
 					self.writePicLine(line[0].upper(), line[1].upper(), line[2], line[3], \
 					line[5], \
-					line[6], line[7])
+					line[6], line[7], line[8])
 					self.processIllustration(line[4])
 					pics +=1
 

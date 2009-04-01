@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.5
 # -*- coding: utf-8 -*-
 # version: 20090120
 # By Dennis Drescher (dennis_drescher at sil.org)
@@ -27,6 +27,9 @@
 # 20090326 - djd - Moved the process to strip out non-word
 #		characters to the encoding manager so it can be
 #		shared by other processes.
+# 20090401 - djd - Added some better debugging to track
+#		possible problems with encoding transformations.
+#		Again, Tim E did pretty much all of it
 
 
 #############################################################
@@ -88,42 +91,58 @@ class MakeBookWordlist (object) :
 			# Build the encoding engine(s)
 			encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
 			# Run the conversions on all our text
-			print 'make_book_wordlist: Preconversion length', len(handler._wordlist)
+			log_manager.log("DBUG", 'make_book_wordlist: Preconversion length ' + str(len(handler._wordlist)))
 			pre_wordlist = [s.encode('utf-8') for s in handler._wordlist]
-			raw_str = encodingChain.convert('\n'.join(pre_wordlist))
-			handler._wordlist = raw_str.split('\n')
-			print 'make_book_wordlist: Postconversion length', len(handler._wordlist)
+			handler._wordlist = encodingChain.convert('\n'.join(pre_wordlist)).split('\n')
+			log_manager.log("DBUG", 'make_book_wordlist: Postconversion length ' + str(len(handler._wordlist)))
 
 		# Here we create a bookWordlist dict using the defaultdict mod. Then we
 		# we add the words we collected from the text handler and do the counting
 		# here as well
-		preBookWordlist = defaultdict(set)
-		for n,k in enumerate(pre_wordlist):
-			preBookWordlist[k].add(n)
-		bookWordlist = defaultdict(set)
-		for n,k in enumerate(handler._wordlist):
-			bookWordlist[k].add(n)
-		open('/tmp/raw wordlist','wb').write(raw_str)
-		print 'make_book_wordlist: Pre - post unique wordlist lengths:', 'match' if len(preBookWordlist) == len(bookWordlist) else 'differ'
-		print '\tunique words - pre', len(preBookWordlist), ' post',len(bookWordlist)
-		odd_words = set(map(repr,preBookWordlist.values())).difference(set(map(repr,bookWordlist.values())))
-		for ids in odd_words:
-			print '-'*20
-			for id in eval(ids):
-				pre_word = pre_wordlist[id]; post_word = handler._wordlist[id]
-				print 'word missing from converted master list: source text word no=%d' % id
-				print '\t unicode codepoint:\n\t\tpre= "%s"\n\t\tpost="%s"' % (
-					pre_word.decode('utf_8').encode('unicode_escape'),
-					post_word.decode('utf_8').encode('unicode_escape'))
-				print '\t raw utf-8 sequence:\n\t\tpre= "%s"\n\t\tpost="%s"' % (
-					pre_word.encode('string_escape'),
-					post_word.encode('string_escape'))
-			print '-'*15
-# Write out the new csv book word count file
+		bookWordlist = defaultdict(int)
+		for word in handler._wordlist:
+			bookWordlist[word] += 1
+
+		# If the lists after removing duplicates and the set before do not match there
+		# may be an encoding problem.  Only generate extended logging info if this is the case
+		num_uniq_pre  = len(set(pre_wordlist))
+		num_uniq_post = len(bookWordlist)
+		if num_uniq_pre != num_uniq_post:
+			log_manager.log("WARN",
+				'possible conversion error: number of unique words do not match: %d -> %d' % (
+					num_uniq_pre,num_uniq_post))
+
+			# Generate before and after inverse word number to word mappings.
+			pre_word_num_map = defaultdict(set)
+			post_word_num_map = defaultdict(set)
+			for n,w in enumerate(pre_wordlist): pre_word_num_map[w].add(n)
+			for n,w in enumerate(handler._wordlist): post_word_num_map[w].add(n)
+
+			larger = (pre_wordlist, set(map(tuple,pre_word_num_map.values())), 'source')
+			smaller = (handler._wordlist, set(map(tuple,post_word_num_map.values())), 'target')
+			# we always need to take the smaller set from the larger so there are more words
+			# /after/ the conversion swap them around
+			if num_uniq_pre < num_uniq_post: larger, smaller = smaller,larger
+			for ids in larger[1].difference(smaller[1]):
+				for id in ids:
+					larger[0][id]; smaller[0][id]
+					log_manager.log("DBUG",
+						'%s text word no. %d has ambiguous mapping in %s: codepoint sequences (source -> target): %s -> %s' % (
+							larger[2], id, smaller[2],
+							unicode_sequence(pre_wordlist[id].decode('utf_8')),
+							unicode_sequence(handler._wordlist[id].decode('utf_8'))))
+
+		# Write out the new csv book word count file
 		# More info on writing to csv is here:
 		#	http://docs.python.org/library/csv.html#writer-objects
-#		cvsBookFile = csv.writer(open(bookReportFile, "wb"), dialect=csv.excel)
-#		cvsBookFile.writerows(bookWordlist.items())
+		cvsBookFile = csv.writer(open(bookReportFile, "wb"), dialect=csv.excel)
+		cvsBookFile.writerows(bookWordlist.items())
+
+
+def unicode_sequence(str):
+	'''This creates a human-readable sequence of unicode code points'''
+
+	return '<' + ' '.join("%04x" % ord(u) for u in str) + '>'
 
 
 class MakeWordlistHandler (parse_sfm.Handler) :

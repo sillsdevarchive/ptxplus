@@ -30,12 +30,13 @@ cat <"$input_file" >$tmp_in
 # Take the commands one at a time in the order they are in the
 # command line and run them. The "$@" allows there to be spaces
 # in each quoted command.
+n=3
 for tec_command in "$@"
 do
 	txtconv -i "$tmp_in" -o "$tmp_out" -t $tec_command
-	tmp_var=$tmp_in
 	tmp_in=$tmp_out
-	tmp_out=$tmp_var
+	tmp_out=$tmp_area/temp_$n
+	n=$(($n+1))
 done
 
 # Copy the results to where we need it.
