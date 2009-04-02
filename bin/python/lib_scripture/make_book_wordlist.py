@@ -138,6 +138,9 @@ class MakeBookWordlist (object) :
 		cvsBookFile = csv.writer(open(bookReportFile, "wb"), dialect=csv.excel)
 		cvsBookFile.writerows(bookWordlist.items())
 
+		# Report what happened
+		log_manager.log("INFO", "Process complete. Total words found = " + str(len(handler._wordlist)) + " / Unique words = " + str(len(bookWordlist)))
+
 
 def unicode_sequence(str):
 	'''This creates a human-readable sequence of unicode code points'''

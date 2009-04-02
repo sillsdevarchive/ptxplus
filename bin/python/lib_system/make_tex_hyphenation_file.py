@@ -43,6 +43,7 @@ class MakeTexHyphenationFile (object) :
 		settings = tools.getSettingsObject()
 		hyphenPath = settings['Process']['Paths']['PATH_HYPHENATION']
 		lcCodeList = ""
+		hyphenList = ""
 
 		# Set the output file name and the wordlist file name
 		texHyphenFileName = hyphenPath + "/hyphenation.tex"
@@ -74,25 +75,36 @@ class MakeTexHyphenationFile (object) :
 		else :
 			wordListFileObject = codecs.open(wordListFileName, 'r', encoding='utf-8')
 
-			list = "\hyphenation{\n"
+			hyphenList = "\hyphenation{\n"
 			for line in wordListFileObject :
 				# This next line will handle the BOM if there is one in the file (at the begining)
 				line = re.compile(u'^\uFEFF').sub('',line)
 				# Take out any commented lines
 				if line[:1] != "%" :
-					list = list + line
+					hyphenList = hyphenList + line
 
-			list = list + "}\n"
-			settings["TeX"]["Hyphenation"]["hyphenWords"] = list
+			hyphenList = hyphenList + "}\n"
 
 		# Make header line
 		contents = 	"% hyphenation.tex\n" \
 				"% This is an auto-generated hyphenation rules file for this project.\n" \
 				"% Please refer to the documentation for details on how to make changes.\n\n"
-		# Pickup our settings
+
+		# Pickup our settings and insert any data we might have auto-generated
 		settingsToGet = settings['TeX']['Hyphenation']['FileSettings']
 		for key, value in settingsToGet.iteritems() :
-			contents = contents + value + "\n"
+			if key == "hyphenWords" :
+				# Add lcCodes here if there are any
+				if lcCodeList != "" :
+					contents = contents + lcCodeList + "\n"
+
+				if hyphenList != "" :
+					contents = contents + hyphenList
+				else :
+					contents = contents + value + "\n"
+
+			else :
+				contents = contents + value + "\n"
 
 
 		# End here by writing out the contents we produced

@@ -52,6 +52,10 @@ make-master-wordlist :
 make-hyphen-wordlist :
 	$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
 
+# Manually create the TeX hyphenation file
+make-tex-hyphens :
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_hyphenation_file
+
 # Create a TeX hyphenation rules file based on what is in the
 # project.conf file
 $(TEX_HYPHENATION_FILE) : $(TEX_HYPHENATION_WORDLIST)
