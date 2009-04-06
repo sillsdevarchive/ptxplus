@@ -51,6 +51,7 @@ class MakePiclistFile (object) :
 		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
 		self._sourceIllustrationsLib = self._settings['General']['Resources']['Illustrations']['pathToIllustrationsLib'] + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsLib']
 		self._csvMasterFile = self._processIllustrationsPath + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsControlFile']
+		self._texsize = self._settings['General']['Resources']['Illustrations']['size'] + "|" + self._settings['General']['Resources']['Illustrations']['position']
 		self._errors = 0
 
 # We need to add some settings to the conf file to handle encoding of the
@@ -98,7 +99,7 @@ class MakePiclistFile (object) :
 		if tr != "" :
 			caption = tr
 
-		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|span|b|" + cr + "|" + caption + "|"
+		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|" + self._texsize + "|" + cr + "|" + caption + "|"
 		self._outFileObject.write(line + "\n")
 		self._log_manager.log("DBUG", "Wrote out to piclist file: " + line)
 
@@ -167,7 +168,7 @@ class MakePiclistFile (object) :
 					# I would think but this will be ok to
 					# start with.
 					self.writePicLine(line[0].upper(), line[1].upper(), line[2], line[3], \
-					line[5], \
+					line[4], \
 					line[6], line[7], line[8])
 					self.processIllustration(line[4])
 					pics +=1

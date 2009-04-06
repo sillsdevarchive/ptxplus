@@ -52,7 +52,7 @@ class TxtconvChain(list):
 		"""convert the data by 'piping' it through the stack of engines.
 		   data must be of type str and not type unicode."""
 		args = ' '.join(['"' + tec + '"' for tec in self])
-		(cin,cout) = os.popen2('multi-txtconv.sh /dev/stdin /dev/stdout ' + args)
+		(cin,cout) = os.popen2(os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh /dev/stdin /dev/stdout ' + args)
 		def writer():
 			try: cin.write(data)
 			finally: cin.flush(); cin.close()
