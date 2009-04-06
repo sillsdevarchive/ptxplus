@@ -126,6 +126,7 @@ $(PATH_PROCESS)/$(1).tex :
 $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1).usfm \
 	$(PATH_TEXTS)/$(1).usfm.adj \
+	$(PATH_TEXTS)/$(1).usfm.piclist \
 	$(PATH_PROCESS)/$(1).tex \
 	$(DEPENDENT_FILE_LIST)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
