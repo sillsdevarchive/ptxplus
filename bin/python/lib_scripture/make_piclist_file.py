@@ -32,6 +32,7 @@
 # this process
 
 import os, sys, codecs, csv, shutil
+from operator import itemgetter
 
 # Import supporting local classes
 from tools import *
@@ -96,11 +97,13 @@ class MakePiclistFile (object) :
 			More will need to be done as this matures. The first assumption
 			is that all the pictures we work with are in PNG format'''
 
-		# Copy the picture file from the source to the target location
+		# Build the file names
 		source = self._sourceIllustrationsLib + "/" + fileID + ".png"
 		target = self._processIllustrationsPath + "/" + fileID + ".png"
-
+		# Check to see if the file is there or not. We don't want to copy
+		# one in if one exists already.
 		if not os.path.isfile(target) :
+			# Copy the picture file from the source to the target location
 			shutil.copy(source, target)
 			self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
 
@@ -148,29 +151,37 @@ class MakePiclistFile (object) :
 						self._log_manager.log("INFO", "The " + self._csvMasterFile + " has been copied from the Source folder.")
 
 
-			# If we didn't bail out right above, we'll go ahead and open the file
+			# If we didn't bail out right above, we'll go ahead and open the data file
 			# The assumption here is that the encoding of the pieces of the csv are
 			# what they need to be.
 			inFileData = csv.reader(open(self._csvMasterFile), dialect=csv.excel)
 
-			pics = 0
-
+			# Right here we will sort the list by BCV. This should prevent unsorted
+			# data from getting out into the piclist. First change the data to a list.
+			masterData = []
 			for line in inFileData :
+				masterData.append(line)
+
+			# This will sort it
+			masterData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
+
+			pics = 0
+			for line in masterData :
 				# Throw out the header line (there should be one!)
-				if pics == 0 :
+				#if pics == 0 :
+					#pics +=1
+					#continue
+				#else :
+				if self._bookID == line[1] :
+					# Now we'll write out what we've found
+					# More error correction needs to go here
+					# I would think but this will be ok to
+					# start with.
+					self.collectPicLine(line[0].upper(), line[1].upper(), line[2], line[3], \
+					line[4], \
+					line[5], line[6], line[8])
+					self.processIllustration(line[4])
 					pics +=1
-					continue
-				else :
-					if self._bookID == line[1] :
-						# Now we'll write out what we've found
-						# More error correction needs to go here
-						# I would think but this will be ok to
-						# start with.
-						self.collectPicLine(line[0].upper(), line[1].upper(), line[2], line[3], \
-						line[4], \
-						line[5], line[6], line[8])
-						self.processIllustration(line[4])
-						pics +=1
 
 			# Now we need output anything we might have collected. If nothing was
 			# found, just an empty file will be put out.

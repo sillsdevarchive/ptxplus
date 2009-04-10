@@ -61,7 +61,7 @@ class TransformCSV (object) :
 		# Ok, let's do some work. First we'll make a list of all the data in the field we need
 		for row in sourceData :
 			orgData.append(row)
-			fieldData = fieldData + row[8] + "\n"
+			fieldData = fieldData + row[field] + "\n"
 
 		# Initialize the encoder
 		encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
@@ -71,13 +71,10 @@ class TransformCSV (object) :
 		rc = 0
 		cvsOutputFile = csv.writer(open(target, "w"), dialect=csv.excel)
 		for row in orgData :
-			row[8] = newFieldData[rc]
+			row[field] = newFieldData[rc]
 			rc +=1
 
 		cvsOutputFile.writerows(orgData)
-
-
-# continue on here
 
 
 
