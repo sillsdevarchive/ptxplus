@@ -54,6 +54,10 @@ class MakePiclistFile (object) :
 		self._sourcePath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_SOURCE']
 		self._sourceIllustrationsLib = self._settings['General']['Resources']['Illustrations']['pathToIllustrationsLib'] + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsLib']
 		self._csvMasterFile = self._processIllustrationsPath + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsControlFile']
+		self._texsize = self._settings['General']['Resources']['Illustrations'].get('size')
+		if not self._texsize : self._texsize = 'span'
+		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position')
+		if not self._texpos : self._texpos = 'b'
 		(head, tail) = os.path.split(self._csvMasterFile)
 		self._csvSourceFile = self._sourcePath + "/" + tail
 		self._errors = 0
@@ -87,7 +91,7 @@ class MakePiclistFile (object) :
 		if tr != "" :
 			caption = tr
 
-		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|span|b|" + cr + "|" + caption + "|"
+		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + cr + "|" + caption + "|"
 		self._piclistData.append(line)
 		self._log_manager.log("DBUG", "Collected: " + line)
 
