@@ -44,36 +44,27 @@ class MakePiclistFile (object) :
 
 		self._settings = log_manager._settings
 		self._log_manager = log_manager
+		self._log_manager._currentSubProcess = 'MakePiclistFile'
 		self._inputFile = log_manager._currentInput
 		self._bookID = log_manager._currentTargetID
 		self._outputFile = self._inputFile + ".piclist"
 		self._outFileObject = {}
 		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
+		self._sourcePath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_SOURCE']
 		self._sourceIllustrationsLib = self._settings['General']['Resources']['Illustrations']['pathToIllustrationsLib'] + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsLib']
 		self._csvMasterFile = self._processIllustrationsPath + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsControlFile']
-		self._texsize = self._settings['General']['Resources']['Illustrations']['size'] + "|" + self._settings['General']['Resources']['Illustrations']['position']
+		self._texsize = self._settings['General']['Resources']['Illustrations'].get('size')
+		if not self._texsize : self._texsize = 'span'
+		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position')
+		if not self._texpos : self._texpos = 'b'
+		(head, tail) = os.path.split(self._csvMasterFile)
+		self._csvSourceFile = self._sourcePath + "/" + tail
 		self._errors = 0
-
-# We need to add some settings to the conf file to handle encoding of the
-# translation field on multi-script projects
+		self._piclistData = []
 
 
-
-
-# Do that now!
-
-
-
-
-
-
-
-
-
-
-
-	def writePicLine (self, use, bid, cn, vn, fid, cr, cp, tr) :
-		'''Write out the illustration description line. The incoming
+	def collectPicLine (self, use, bid, cn, vn, fid, cr, cp, tr) :
+		'''Collect and format an illustration description line. The incoming
 			file will not have all the information we need so we'll make
 			some things up here and use them as defaults. The format goes
 			like this:
@@ -99,9 +90,9 @@ class MakePiclistFile (object) :
 		if tr != "" :
 			caption = tr
 
-		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|" + self._texsize + "|" + cr + "|" + caption + "|"
-		self._outFileObject.write(line + "\n")
-		self._log_manager.log("DBUG", "Wrote out to piclist file: " + line)
+		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + cr + "|" + caption + "|"
+		self._piclistData.append(line)
+		self._log_manager.log("DBUG", "Collected: " + line)
 
 
 
@@ -129,53 +120,75 @@ class MakePiclistFile (object) :
 			a piclist file for that book file so pdf2ptx can work with
 			it. We will do this one book at a time.'''
 
-		if not os.path.isfile(self._csvMasterFile) :
-			# If it doesn't exist that isn't necessarily a problem
-			# We'll just output a warning to the log and exit gracefully.
-
-			self._log_manager.log("WARN", self._csvMasterFile + " does not exsist for this book ID.")
-			return
+		pics = 0
+		if os.path.isfile(self._outputFile) :
+			# If the book piclist exists we will not go through with the process
+			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
 
 		else :
-			csvObject = csv.reader(open(self._csvMasterFile, "rb"))
+			# Otherwise we will create a new book piclist file
+			if not os.path.isfile(self._csvMasterFile) :
+				# If it doesn't exist that isn't necessarily a problem.
+				# First we'll go look for a source file and if we find it
+				# we'll copy it into the Illustrations folder and process
+				# it as needed. If we don't find one we'll just output
+				# a warning to the log and exit gracefully.
 
-		# The main dependency of this process is the master file. If
-		# a change is made there we will have to rewrite the book.piclist
-		# file. At least that's the way we're approching it right now.
+				# Is there a source file of the same name in the Source folder?
+				if os.path.isfile(self._csvSourceFile) :
+					# Assumption: If encoding chain exists, we process
+					chain = self._settings['Encoding']['Processing']['encodingChain']
+					if chain != "" :
+						mod = __import__("transformCSV")
+						# We'll give the source, target, encoding chain and field to transform
+						res = mod.doIt(self._csvSourceFile, self._csvMasterFile, chain, 8)
+						if res != None :
+							self._log_manager.log("ERRR", res)
+							return
+						else :
+							self._log_manager.log("INFO", "The " + self._csvMasterFile + " has been copied from the Source folder with an encoding tranformation on the caption field.")
 
-		# Also, book files have a dependency on the .piclist files. This
-		# being the case, we need to create one even if it is empty. Then,
-		# when there are no changes the book will not be remade. We will
-		# just open the file now and if there is anything that goes in it
-		# that will fine. If not, that's okay too.
-
-		self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf-8')
-		self._log_manager.log("DBUG", "Created file: " + self._outputFile)
+					# If there is no encoding chain a simple file copy will do
+					else :
+						x = shutil.copy(self._csvSourceFile, self._csvMasterFile)
+						self._log_manager.log("INFO", "The " + self._csvMasterFile + " has been copied from the Source folder.")
 
 
-		pics = 0
+			# If we didn't bail out right above, we'll go ahead and open the file
+			# The assumption here is that the encoding of the pieces of the csv are
+			# what they need to be.
+			inFileData = csv.reader(open(self._csvMasterFile), dialect=csv.excel)
 
-		for line in csvObject :
 
-			# Throw out the header line (there should be one!)
-			if pics == 0 :
-				pics +=1
-				continue
-			else :
-				if self._bookID == line[1] :
-					# Now we'll write out what we've found
-					# More error correction needs to go here
-					# I would think but this will be ok to
-					# start with.
-					self.writePicLine(line[0].upper(), line[1].upper(), line[2], line[3], \
-					line[4], \
-					line[6], line[7], line[8])
-					self.processIllustration(line[4])
+			for line in inFileData :
+				# Throw out the header line (there should be one!)
+				if pics == 0 :
 					pics +=1
+					continue
+				else :
+					if self._bookID == line[1] :
+						# Now we'll write out what we've found
+						# More error correction needs to go here
+						# I would think but this will be ok to
+						# start with.
+						self.collectPicLine(line[0].upper(), line[1].upper(), line[2], line[3], \
+						line[4], \
+						line[5], line[6], line[8])
+						self.processIllustration(line[4])
+						pics +=1
 
+			# Now we need output anything we might have collected. If nothing was
+			# found, just an empty file will be put out.
+			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf-8')
+			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
+			for line in self._piclistData :
+				self._outFileObject.write(line + "\n")
 
-		# Close the piclist file
-		self._outFileObject.close()
+			# Close the piclist file
+			self._outFileObject.close()
+
+			# Tell the world what we did
+			self._log_manager.log("INFO", "We processed " + str(pics-1) + " illustration line(s) for: " + self._bookID)
 
 		# Tell the world what we did
 		self._log_manager.log("INFO", "We processed " + str(pics-1) + " illustration line(s) for: " + self._bookID)
