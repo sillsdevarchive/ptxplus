@@ -58,6 +58,8 @@ class MakePiclistFile (object) :
 		if not self._texsize : self._texsize = 'span'
 		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position')
 		if not self._texpos : self._texpos = 'b'
+		self._texscale = self._settings['General']['Resources']['Illustrations'].get('scale')
+		if not self._texscale : self._texscale = 1.0
 		(head, tail) = os.path.split(self._csvMasterFile)
 		self._csvSourceFile = self._sourcePath + "/" + tail
 		self._errors = 0
@@ -91,7 +93,7 @@ class MakePiclistFile (object) :
 		if tr != "" :
 			caption = tr
 
-		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + cr + "|" + caption + "|"
+		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + str(self._texscale) + "|" + cr + "|" + caption + "|"
 		self._piclistData.append(line)
 		self._log_manager.log("DBUG", "Collected: " + line)
 
