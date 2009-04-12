@@ -143,8 +143,12 @@ edit-$(1) : $(PATH_TEXTS)/$(1).usfm
 # Shortcut to open the PDF file
 $(1) : $(PATH_PROCESS)/$(1).pdf
 
-# Make illustrations file
+# Make illustrations file manualy
 make-picfile-$(1) :
+	$(PY_PROCESS_SCRIPTURE_TEXT) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
+
+# Make illustrations file automatically
+$(PATH_TEXTS)/$(1).usfm.piclist : $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
 
 # Make adjustment file
