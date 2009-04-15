@@ -349,7 +349,7 @@
 %\input "ptxplus-marginalverses.tex"
 
 %%%%% Verse number handling
-% To stop it from outputing a verse #1 use:
+% To stop it from outputing a verse #1 on in-line verses use:
 %\OmitVerseNumberOnetrue
 
 %%%%% Extra space after verse and chapter numbers
