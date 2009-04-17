@@ -250,7 +250,7 @@ view-nt : $(MATTER_BOOKS_NT_PDF)
 # Just do all the books in a section but don't bother looking at them
 ot : $(MATTER_BOOKS_OT_PDF)
 
-nt : $(MATTER_BOOKS_OT_PDF)
+nt : $(MATTER_BOOKS_NT_PDF)
 
 
 # Preproces all the books in a project
