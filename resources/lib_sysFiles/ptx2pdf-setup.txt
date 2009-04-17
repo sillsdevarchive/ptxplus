@@ -298,7 +298,11 @@
 %%%%% Master PTX Stylesheet
 % Define the Paratext stylesheet to be used as a basis for formatting
 % This first stylesheet contains standard USFM formats. Do not modify!
-\stylesheet{usfm.sty}
+% By default this is commented out because the only place your project
+% should be getting it's style info is from the project style sheet.
+% This is only used as a back up and anything in the project style
+% sheet will override these default format settings.
+%\stylesheet{usfm.sty}
 
 %%%%% Additional Marginal Verse Settings
 % For marginal verse output we need to insert this right here.
@@ -319,7 +323,9 @@
 % \Bold
 % \NoSuperscript
 
-% This next stylesheet containes over-ride styles. This is the one to edit.
+% This next stylesheet containes all the format styles for a project.
+% If the default style sheet is activated, this one will override
+% any settings in that file.
 \stylesheet{ptx2pdf.sty}
 
 %%%%% Illustrations
