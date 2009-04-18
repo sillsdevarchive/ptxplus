@@ -50,68 +50,75 @@ class MakeTexHyphenationFile (object) :
 		wordListFileName =  hyphenPath + "/hyphenation.txt"
 		lcCodeListFileName = hyphenPath + "/lccodelist.txt"
 
-		# Make the TeX hyphen file
-		texHyphenFileObject = codecs.open(texHyphenFileName, "w", encoding='utf-8')
+		# If we see that the texHyphenFile exists we will abort
+		# That file needs to be manually removed to avoid problems
+		if os.path.isfile(texHyphenFileName) == True :
+			# Report that we found a .tex file and had to stop
+			tools.userMessage("make_tex_hyphenation_file: The file, " + texHyphenFileName + " already exists. Process halted")
 
-		# It may be necessary to have an lcCodeList included. These codes can be
-		# kept in an external file or in a field in the project.conf called lcCode.
-		# We will look for a file first, if we don't find one, we'll look in the
-		# settings to see if there are any codes there. The file will override
-		# anything in the settings. BTW, currently there are no dependencies on
-		# this setting. It will work happily without it, but TeX may not. :-(
-		if os.path.isfile(lcCodeListFileName) == True :
-			lcCodeListObject = codecs.open(lcCodeListFileName, 'r', encoding='utf-8')
-			for line in lcCodeListObject :
-				lcCodeList = lcCodeList + line
-
-			settings['TeX']['Hyphenation']['lcCode'] = lcCodeList
-
-		# Check to see if the word list exsists. If it doesn't we will make a new one.
-		# If it does exist we will not touch it so we don't lose any data.
-		if os.path.isfile(wordListFileName) == False :
-			# Just make the file, nothing else
-			wordListFileObject = codecs.open(wordListFileName, 'w', encoding='utf-8')
-			wordListFileObject.close()
 		else :
-			wordListFileObject = codecs.open(wordListFileName, 'r', encoding='utf-8')
+			# Make the TeX hyphen file
+			texHyphenFileObject = codecs.open(texHyphenFileName, "w", encoding='utf-8')
 
-			hyphenList = "\hyphenation{\n"
-			for line in wordListFileObject :
-				# This next line will handle the BOM if there is one in the file (at the begining)
-				line = re.compile(u'^\uFEFF').sub('',line)
-				# Take out any commented lines
-				if line[:1] != "%" :
-					hyphenList = hyphenList + line
+			# It may be necessary to have an lcCodeList included. These codes can be
+			# kept in an external file or in a field in the project.conf called lcCode.
+			# We will look for a file first, if we don't find one, we'll look in the
+			# settings to see if there are any codes there. The file will override
+			# anything in the settings. BTW, currently there are no dependencies on
+			# this setting. It will work happily without it, but TeX may not. :-(
+			if os.path.isfile(lcCodeListFileName) == True :
+				lcCodeListObject = codecs.open(lcCodeListFileName, 'r', encoding='utf-8')
+				for line in lcCodeListObject :
+					lcCodeList = lcCodeList + line
 
-			hyphenList = hyphenList + "}\n"
+				settings['TeX']['Hyphenation']['lcCode'] = lcCodeList
 
-		# Make header line
-		contents = 	"% hyphenation.tex\n" \
-				"% This is an auto-generated hyphenation rules file for this project.\n" \
-				"% Please refer to the documentation for details on how to make changes.\n\n"
+			# Check to see if the word list exsists. If it doesn't we will make a new one.
+			# If it does exist we will not touch it so we don't lose any data.
+			if os.path.isfile(wordListFileName) == False :
+				# Just make the file, nothing else
+				wordListFileObject = codecs.open(wordListFileName, 'w', encoding='utf-8')
+				wordListFileObject.close()
+			else :
+				wordListFileObject = codecs.open(wordListFileName, 'r', encoding='utf-8')
 
-		# Pickup our settings and insert any data we might have auto-generated
-		settingsToGet = settings['TeX']['Hyphenation']['FileSettings']
-		for key, value in settingsToGet.iteritems() :
-			if key == "hyphenWords" :
-				# Add lcCodes here if there are any
-				if lcCodeList != "" :
-					contents = contents + lcCodeList + "\n"
+				hyphenList = "\hyphenation{\n"
+				for line in wordListFileObject :
+					# This next line will handle the BOM if there is one in the file (at the begining)
+					line = re.compile(u'^\uFEFF').sub('',line)
+					# Take out any commented lines
+					if line[:1] != "%" :
+						hyphenList = hyphenList + line
 
-				if hyphenList != "" :
-					contents = contents + hyphenList
+				hyphenList = hyphenList + "}\n"
+
+			# Make header line
+			contents = 	"% hyphenation.tex\n" \
+					"% This is an auto-generated hyphenation rules file for this project.\n" \
+					"% Please refer to the documentation for details on how to make changes.\n\n"
+
+			# Pickup our settings and insert any data we might have auto-generated
+			settingsToGet = settings['TeX']['Hyphenation']['FileSettings']
+			for key, value in settingsToGet.iteritems() :
+				if key == "hyphenWords" :
+					# Add lcCodes here if there are any
+					if lcCodeList != "" :
+						contents = contents + lcCodeList + "\n"
+
+					if hyphenList != "" :
+						contents = contents + hyphenList
+					else :
+						contents = contents + value + "\n"
+
 				else :
 					contents = contents + value + "\n"
 
-			else :
-				contents = contents + value + "\n"
 
+			# End here by writing out the contents we produced
+			texHyphenFileObject.write(contents)
 
-		# End here by writing out the contents we produced
-		texHyphenFileObject.write(contents)
-
-		# Tell the world what we did
-		tools.userMessage("Wrote out file: " + texHyphenFileName)
+			# Tell the world what we did
+			tools.userMessage("make_tex_hyphenation_file: Wrote out file: " + texHyphenFileName)
 
 
 
