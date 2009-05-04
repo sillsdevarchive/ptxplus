@@ -40,6 +40,7 @@
 #		it handles all the parameters it needs.
 # 20081230 - djd - Changed over to work stand-alone instead
 #		of through version control.
+# 20090504 - djd - Added a filter for peripheral matter files
 
 
 #############################################################
@@ -75,6 +76,14 @@ class MakeParaAdjustFile (object) :
 		for k, v, in self._settings['Markup']['Paragraphs'].iteritems() :
 			self._paragraphMarkers[k] = v
 
+		# Need to test if this file is part of the peripheral mater or not
+		self._isPeripheralMatter = False
+		# Alter the path to look in the peripheral folder
+		lookSee = self._inputFile.replace("Texts", "Peripheral")
+		# If it is there then set this to true
+		if os.path.isfile(lookSee) :
+			self._isPeripheralMatter = True
+
 
 	def writeAdjLine (self, verseCount, footnoteCount, wordCount, \
 		location, paragraphType, paragraphLegnth, outputObject) :
@@ -103,7 +112,6 @@ class MakeParaAdjustFile (object) :
 		verseNumberMarker = "\\" + self._settings['Markup']['ChaptersVerses']['verseNumber']
 		footnoteOpenMarker = "\\" + self._settings['Markup']['Footnotes']['footnoteOpenMarker']
 
-		# Open up our .adj output file
 		if os.path.isfile(self._outputFile) :
 			# If it exists that may be a problem as we don't want to
 			# accidently wipe out any adjustment data that has been
@@ -112,6 +120,14 @@ class MakeParaAdjustFile (object) :
 			# to the log and exit gracefully.
 
 			self._log_manager.log("INFO", "The file " + self._outputFile + " already exists so I will not build a new one.")
+
+			return
+
+		if self._isPeripheralMatter :
+			# If the parent file belongs to the peripheral mater we will
+			# not go through with the process
+
+			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
 
 			return
 

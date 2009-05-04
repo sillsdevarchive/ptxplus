@@ -23,6 +23,7 @@
 #		it handles all the parameters it needs.
 # 20081230 - djd - Changed over to work stand-alone instead
 #		of through version control.
+# 20090504 - djd - Added a filter for peripheral matter files
 
 
 #############################################################
@@ -64,6 +65,15 @@ class MakePiclistFile (object) :
 		self._csvSourceFile = self._sourcePath + "/" + tail
 		self._errors = 0
 		self._piclistData = []
+
+		# Need to test if this file is part of the peripheral mater or not
+		self._isPeripheralMatter = False
+		# Alter the path to look in the peripheral folder
+		lookSee = self._inputFile.replace("Texts", "Peripheral")
+		# If it is there then set this to true
+		if os.path.isfile(lookSee) :
+			self._isPeripheralMatter = True
+
 
 
 	def collectPicLine (self, use, bid, cn, vn, fid, cr, cp, tr) :
@@ -127,6 +137,10 @@ class MakePiclistFile (object) :
 		if os.path.isfile(self._outputFile) :
 			# If the book piclist exists we will not go through with the process
 			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
+
+		elif self._isPeripheralMatter :
+			# If the file belongs to the peripheral mater we will not go through with the process
+			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
 
 		else :
 			# Otherwise we will create a new book piclist file
