@@ -76,14 +76,6 @@ class MakeParaAdjustFile (object) :
 		for k, v, in self._settings['Markup']['Paragraphs'].iteritems() :
 			self._paragraphMarkers[k] = v
 
-		# Need to test if this file is part of the peripheral mater or not
-		self._isPeripheralMatter = False
-		# Alter the path to look in the peripheral folder
-		lookSee = self._inputFile.replace("Texts", "Peripheral")
-		# If it is there then set this to true
-		if os.path.isfile(lookSee) :
-			self._isPeripheralMatter = True
-
 
 	def writeAdjLine (self, verseCount, footnoteCount, wordCount, \
 		location, paragraphType, paragraphLegnth, outputObject) :
@@ -123,7 +115,7 @@ class MakeParaAdjustFile (object) :
 
 			return
 
-		if self._isPeripheralMatter :
+		if tools.isPeripheralMatter(self._inputFile) :
 			# If the parent file belongs to the peripheral mater we will
 			# not go through with the process
 

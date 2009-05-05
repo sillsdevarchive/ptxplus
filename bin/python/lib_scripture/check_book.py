@@ -17,6 +17,7 @@
 
 # History:
 # 20081128 - djd - Initial draft
+# 20090505 - djd - Added a filter for peripheral matter files
 
 
 #############################################################
@@ -28,11 +29,20 @@ from parse_sfm import *
 from check_sfm import *
 from check_punctuation import *
 from check_quotes import *
+# Import supporting local classes
+from tools import *
+tools = Tools()
 
 
 class CheckBook (object) :
 
 	def main (self, log_manager) :
+
+		# Filter out any peripheral files now
+		if tools.isPeripheralMatter(log_manager._currentInput) :
+
+			return
+
 
 		# Get our book object
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))

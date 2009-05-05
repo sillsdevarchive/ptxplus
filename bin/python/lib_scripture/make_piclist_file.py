@@ -66,15 +66,6 @@ class MakePiclistFile (object) :
 		self._errors = 0
 		self._piclistData = []
 
-		# Need to test if this file is part of the peripheral mater or not
-		self._isPeripheralMatter = False
-		# Alter the path to look in the peripheral folder
-		lookSee = self._inputFile.replace("Texts", "Peripheral")
-		# If it is there then set this to true
-		if os.path.isfile(lookSee) :
-			self._isPeripheralMatter = True
-
-
 
 	def collectPicLine (self, use, bid, cn, vn, fid, cr, cp, tr) :
 		'''Collect and format an illustration description line. The incoming
@@ -138,7 +129,7 @@ class MakePiclistFile (object) :
 			# If the book piclist exists we will not go through with the process
 			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
 
-		elif self._isPeripheralMatter :
+		elif tools.isPeripheralMatter(self._inputFile) :
 			# If the file belongs to the peripheral mater we will not go through with the process
 			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
 

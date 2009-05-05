@@ -294,6 +294,16 @@ class Tools (object) :
 
 		return ok
 
+	def isPeripheralMatter (self, fileName) :
+		'''Check to see if this file (from wherever) exists in the Peripheral folder.
+			return True if it does.'''
+
+		(head, tail) = os.path.split(fileName)
+		path = os.getcwd() + "/Peripheral"
+		target = path + "/" + tail
+		if os.path.isfile(target) :
+			return True
+
 
 	def userConfirm (self, msg) :
 		'''Ask the user to confirm something.'''

@@ -50,6 +50,7 @@ class MakeBookWordlist (object) :
 
 	def main (self, log_manager) :
 
+		inputFile = log_manager._currentInput
 		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'BookWordlist'
 		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
@@ -59,13 +60,19 @@ class MakeBookWordlist (object) :
 		pre_wordlist = {}
 		raw_str = ''
 
+		# The focus of this script is Scripture text but there maybe times
+		# when it is called to work on peripheral matter. At this time we
+		# don't want to go there. So, we will filter out peripheral material
+		# here by bailing out at this point.
+		if tools.isPeripheralMatter(inputFile) :
+			return
 
 		# Make our Report folder if it isn't there
 		if not os.path.isdir(reportPath) :
 			os.mkdir(reportPath)
 
 		# Get our current book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+		bookObject = "".join(codecs.open(inputFile, "r", encoding='utf-8'))
 
 		# Load in the sfm parser
 		parser = parse_sfm.Parser()

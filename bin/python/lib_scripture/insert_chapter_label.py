@@ -22,6 +22,7 @@
 #		it handles all the parameters it needs.
 # 20090130 - djd - Added insert of ZWSP in cases where there
 #		is no lable insert text found in .conf
+# 20090505 - djd - Added a filter for peripheral matter files
 
 
 #############################################################
@@ -32,6 +33,9 @@
 
 import codecs
 import parse_sfm
+# Import supporting local classes
+from tools import *
+tools = Tools()
 
 
 class InsertChapterLabel (object) :
@@ -40,6 +44,11 @@ class InsertChapterLabel (object) :
 	def main(self, log_manager):
 
 		bookFile = log_manager._currentOutput
+
+		# Filter out any peripheral files now
+		if tools.isPeripheralMatter(log_manager._currentInput) :
+
+			return
 
 		# Get our book object
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))

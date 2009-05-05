@@ -26,6 +26,7 @@
 # 20081030 - djd - Added total dependence on log_manager.
 #		This script will not run without it because
 #		it handles all the parameters it needs.
+# 20090505 - djd - Added a filter for peripheral matter files
 
 
 #############################################################
@@ -58,6 +59,11 @@ class CheckCrossreferences (object) :
 
 		# Set some local vars
 		crossrefLines = ""
+
+		# Filter out any peripheral files now
+		if tools.isPeripheralMatter(self._inputFile) :
+
+			return
 
 		# Get our book object
 		bookObject = codecs.open(self._inputFile, "r", encoding='utf-8')

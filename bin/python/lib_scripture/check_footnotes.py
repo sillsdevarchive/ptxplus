@@ -30,6 +30,7 @@
 #		This script will not run without it because
 #		it handles all the parameters it needs.
 # 20081216 - djd - Changed to work with new sfm parser.
+# 20090505 - djd - Added a filter for peripheral matter files
 
 
 #############################################################
@@ -64,6 +65,11 @@ class CheckFootnotes (object) :
 
 		# Set some local vars
 		footnoteLines = ""
+
+		# Filter out any peripheral files now
+		if tools.isPeripheralMatter(self._inputFile) :
+
+			return
 
 		# Get our book object
 		bookObject = codecs.open(self._inputFile, "r", encoding='utf-8')
