@@ -71,6 +71,7 @@ class TransformCSV (object) :
 		rc = 0
 		cvsOutputFile = csv.writer(open(target, "w"), dialect=csv.excel)
 		for row in orgData :
+			print field, rc
 			row[field] = newFieldData[rc]
 			rc +=1
 

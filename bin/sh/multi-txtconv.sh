@@ -5,7 +5,9 @@
 # enable it to run multiple conversions on a single text file. This may
 # be needed in situations where one conversion mapping is not enough.
 # Usage:
-#		multi-txtconv.sh infile.txt outfile.txt table.tec [options]
+#		multi-txtconv.sh infile.txt outfile.txt "table.tec [options]"
+
+
 
 # Set our input files
 input_file="$1"

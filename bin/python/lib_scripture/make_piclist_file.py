@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.5
 # -*- coding: utf-8 -*-
 # version: 20080622
 # By Dennis Drescher (dennis_drescher at sil.org)
@@ -10,7 +10,9 @@
 ################ Description/Documentation ##################
 #############################################################
 
-# This class will check the basic form of a given file.
+# This class will create a picture listing file for a
+# Bible book being processed with the pdf2ptx macro set
+# in XeTeX.
 
 # History:
 # 20080623 - djd - Initial draft

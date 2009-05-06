@@ -102,6 +102,13 @@ view-$(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
 # Do not open the PDF file with reader
 $(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
 
+# Remove the PDF file for this source file
+pdf-remove-$(1) :
+	rm -f $(PATH_PROCESS)/$(1).pdf
+
+
+
+
 endef
 
 
@@ -153,3 +160,7 @@ front : $(MATTER_FRONT_PDF)
 back : $(MATTER_BACK_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
+
+# Make the content for a topical index from CSV data
+make-topic-index :
+	$(PY_PROCESS_SCRIPTURE_TEXT) make_topic_index_file 'NA' $(PATH_SOURCE)/TOPICAL_INDEX.CSV $(PATH_PERIPH)/TOPICAL_INDEX.USFM
