@@ -58,69 +58,70 @@ class MakeTopicIndexFile (object) :
 			then we need to gracefully stop at that point. This will
 			prevent other processes from crashing.'''
 
-		if os.path.isfile(self._outputFile) :
-			# If the output file exists we will not go through with the process
-			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
-
-		elif not os.path.isfile(self._csvInputFile) :
+		if not os.path.isfile(self._csvInputFile) :
 			# If we don't have a CSV input file we're done now.
 			self._log_manager.log("ERRR", "The [" + self._csvInputFile + "] file does not exist so the process has been halted.")
 
+		#elif os.path.isfile(self._outputFile) :
+			## If the output file exists we will not go through with the process
+			#self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
+
 		else :
 
-# here we will go directly to the TxtconvChain module to do the work.
-# we don't need to do any individual fields, just push the whole file
-# this is the code we should need (needs mods)
-
-		# Initialize the encoder
-		encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
-		# Re-encode the data
-		newFieldData = encodingChain.convert(fieldData).split('\n')
-
-
-
-
 			# Copy over our CSV data so we can work with it
+			# Read in the raw source data (don't worry about CSV)
+			orgData = ""
+			oldFieldData = ""
+			fieldData = codecs.open(self._csvInputFile, "r", encoding='utf-8')
+			for row in fieldData :
+				#orgData.append(row)
+				orgData = orgData + row + "\n"
+
 			# Assumption: If encoding chain exists, we process
-			chain = self._settings['Encoding']['Processing']['encodingChain']
-			if chain != "" :
-				mod = __import__("transformCSV")
-				# We'll give the source, target, encoding chain and field to transform
-				res = mod.doIt(self._csvInputFile, self._csvWorkFile, chain, 1)
-				if res != None :
-					self._log_manager.log("ERRR", res)
-					return
-				else :
-					self._log_manager.log("INFO", "The " + self._csvWorkFile + " has been copied from the Source folder with encoding tranformation on all fields.")
+			encodingChain = self._settings['Encoding']['Processing']['encodingChain']
+			newFieldData = ""
+			if encodingChain != "" :
+				# Initialize the encoder
+				encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
+				# Re-encode the data
+				newFieldData = encodingChain.convert(orgData).split('\n')
+				if newFieldData != "" :
+					# Write out results
+					convertedData = codecs.open(self._csvWorkFile, "w", encoding='utf-8')
+					for line in newFieldData :
+						if line != "" :
+							convertedData.write(line + "\n")
+
+					convertedData.close()
+					self._log_manager.log("DBUG", "The " + self._csvWorkFile + " has been created from the CSV file in the Source folder with encoding tranformation on all fields.")
 
 			# If there is no encoding chain a simple file copy will do
 			else :
 				x = shutil.copy(self._csvInputFile, self._csvWorkFile)
-				self._log_manager.log("INFO", "The " + self._csvMasterFile + " has been copied from the Source folder.")
-
+				self._log_manager.log("DBUG", "The " + self._csvWorkFile + " has been copied from the Source folder.")
 
 			# If we didn't bail out right above, we'll go ahead and open the data file
 			# The assumption here is that the encoding of the pieces of the csv are
 			# what they need to be.
+			newDataObject = ""
 			inFileData = csv.reader(open(self._csvWorkFile), dialect=csv.excel)
 
 			for line in inFileData :
-				self._outFileObject = line[4]
+#				print "0) ", line[0], "1) ", line[1], "2) ", line[2], "3) ", line[3]
+				newDataObject = line[1]
 
 			# Now we need output anything we might have collected. If nothing was
 			# found, just an empty file will be put out.
 			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf-8')
 			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
-			for line in self._piclistData :
+			for line in newDataObject :
+				print line
 				self._outFileObject.write(line + "\n")
 
 			# Close the piclist file
 			self._outFileObject.close()
 
 			# Delete the temp CSV working file
-
-			# Tell the world what we did
-			self._log_manager.log("INFO", "Process complete")
 
 
 
