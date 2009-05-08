@@ -3,7 +3,27 @@
 So much [[TeX]] and so little time...
 
 ===== Notes on hyphenation =====
-<Cover how [[TeX]] hyphenation is handled in ptxplus>
+Hyphenation is an important issue in any publication. Here are some notes on various hyphenation problems that can be encountered.
+
+==== Increasing the Hyphenation Exception Word List Size ====
+It may be necessary to change the maximium number of words allowed in the hyphenation exceptions list. To do this the /etc/texmf/texmf.cnf file needs to be changed. However, the warning at the top of the file makes it clear that you don't want to edit that specific file because it is auto-generated. Instead, you want to edit this file:
+
+sudo gedit /etc/texmf/texmf.d/95NonPath.cnf
+
+Near the bottom you will find hyph_size = 8191. That's a lot but if you need more you can increase it. However it must be a prime number. To find out if the number you want to use is prime or not go to: http://primes.utm.edu/lists/small/10000.txt
+
+So far, when I have had to change it I chose 10193 which is a prime number around 10000.
+
+Once you have changed the setting you will need to remake the main texmf.cnf. To do this run this command:
+
+sudo update-texmf
+
+Then just to be safe you should probably run this too to update the fmt files (I think, either way, it doesn't seem to hurt):
+
+fmtutil --refresh
+
+Your new settings should be recognized by the system
+
 
 ==== \lccode ====
 When using some Unicode fonts it is sometimes necessary to set the \lccode for those characters which would be normally set to '0'. (See the TeX book pg. 41 & 345 for more details.)
@@ -44,7 +64,7 @@ Some times you may need to substitute a font on a specific text marker. For exam
 That should do it. This is a work around so you will need to make adjustment to the fonts file and the style file. (Until we come up with some cleaver programing to make this more automated.)
 
 ==== Misc... ====
-These are just some miscalanious notes and we don't have a better place to keep them.
+These are just some miscellaneous notes and we don't have a better place to keep them.
 
 === Override code for .tex files ===
 The [[.tex]] files that ptxplus produces is automated but near the end of a project it may be necessary to tweak them by added code. This shouldn't be done until the text is locked down. An example would be setting overrides for page behavior in peripheral matter like these lines:

@@ -64,27 +64,21 @@ define map_rules
 $(PATH_MAPS)/$(1).svg :
 	cp $(PATH_MAPS_SOURCE)/$(1).svg $(PATH_MAPS)/$(1).svg
 
+# Create a common project map translation file
+$(PATH_MAPS_PROJECT)/$(1).csv :
+	cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_MAPS_PROJECT)/$(1).csv
+
 # Create a Maps folder if one isn't there already
 $(PATH_MAPS) :
 	mkdir -p $(PATH_MAPS)
 
-# Create a default version of the .csv file if one isn't there already
+# Migrate the common project map translation file to the Maps folder
 $(PATH_MAPS)/$(1).csv :
-	cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_MAPS)/$(1).csv
+	$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_MAPS_PROJECT)/$(1).csv $(PATH_MAPS)/$(1).csv
 
 # Move the styles.csv file over if it isn't there already
 $(PATH_MAPS)/styles.csv :
 	cp $(PATH_MAPS_SOURCE)/styles.csv $(PATH_MAPS)/styles.csv
-
-# Create the PDF version of the map
-# This is dependent of other files in the process. A default version
-# will be copied into the project Maps folder if one doesn't already
-# exist there.
-$(PATH_MAPS)/$(1).pdf : $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/styles.csv
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_MAPS)/$(1).svg -A $(PATH_MAPS)/$(1).pdf -T -F -d 2400
-
-# Don't think this is needed in the above rule
-#	$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
 
 # Process the SVG file and edit it in Inkscape when it is done
 # This prorocess has a double dependency in the following rules
@@ -97,6 +91,12 @@ preprocess-$(1) :: $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/styl
 	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$< &
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
 
+# Create the PDF version of the map
+# This is dependent of other files in the process. A default version
+# will be copied into the project Maps folder if one doesn't already
+# exist there.
+$(PATH_MAPS)/$(1).pdf : $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/styles.csv
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_MAPS)/$(1).svg -A $(PATH_MAPS)/$(1).pdf -T -F -d 2400
 
 
 # Process the SVG file and view it in PDF when it is done
