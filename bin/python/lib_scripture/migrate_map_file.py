@@ -42,7 +42,7 @@ class MigrateMapFile (object) :
 		self._log_manager._currentSubProcess = 'MigrateMapFile'
 		self._inputFile = log_manager._currentInput
 		self._bookID = log_manager._currentTargetID
-		self._outputFile = self._currentOutput
+		self._outputFile = log_manager._currentOutput
 		self._outFileObject = {}
 #		self._sourcePath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_SOURCE']
 
@@ -53,93 +53,30 @@ class MigrateMapFile (object) :
 			then we need to gracefully stop at that point. This will
 			prevent other processes from crashing.'''
 
+		#if os.path.isfile(self._outputFile) :
+			## If the project map csv file exists we will not go through with the process
+			#self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
 
-# Start up here fixing this file
+		#else :
 
+		# Otherwise we will create a new project map csv file
+		# Assumption: If encoding chain exists, we process
+		chain = self._settings['Encoding']['Processing']['encodingChain']
+		if chain != "" :
+			mod = __import__("transformCSV")
+			# We'll give the source, target, encoding chain and field to transform
+			# Remember that the field count starts at 0
+			res = mod.doIt(self._inputFile, self._outputFile, chain, 1)
+			if res != None :
+				self._log_manager.log("ERRR", res)
+				return
+			else :
+				self._log_manager.log("INFO", "The " + self._outputFile + " has been copied from the Maps folder with an encoding tranformation on the caption field.")
 
-
-		if os.path.isfile(self._outputFile) :
-			# If the book piclist exists we will not go through with the process
-			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
-
-		elif tools.isPeripheralMatter(self._inputFile) :
-			# If the file belongs to the peripheral mater we will not go through with the process
-			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
-
+		# If there is no encoding chain a simple file copy will do
 		else :
-			# Otherwise we will create a new book piclist file
-			if not os.path.isfile(self._csvMasterFile) :
-				# If it doesn't exist that isn't necessarily a problem.
-				# First we'll go look for a source file and if we find it
-				# we'll copy it into the Illustrations folder and process
-				# it as needed. If we don't find one we'll just output
-				# a warning to the log and exit gracefully.
-
-				# Is there a source file of the same name in the Source folder?
-				if os.path.isfile(self._csvSourceFile) :
-					# Assumption: If encoding chain exists, we process
-					chain = self._settings['Encoding']['Processing']['encodingChain']
-					if chain != "" :
-						mod = __import__("transformCSV")
-						# We'll give the source, target, encoding chain and field to transform
-						res = mod.doIt(self._csvSourceFile, self._csvMasterFile, chain, 8)
-						if res != None :
-							self._log_manager.log("ERRR", res)
-							return
-						else :
-							self._log_manager.log("INFO", "The " + self._csvMasterFile + " has been copied from the Source folder with an encoding tranformation on the caption field.")
-
-					# If there is no encoding chain a simple file copy will do
-					else :
-						x = shutil.copy(self._csvSourceFile, self._csvMasterFile)
-						self._log_manager.log("INFO", "The " + self._csvMasterFile + " has been copied from the Source folder.")
-
-
-			# If we didn't bail out right above, we'll go ahead and open the data file
-			# The assumption here is that the encoding of the pieces of the csv are
-			# what they need to be.
-			inFileData = csv.reader(open(self._csvMasterFile), dialect=csv.excel)
-
-			# Right here we will sort the list by BCV. This should prevent unsorted
-			# data from getting out into the piclist. First change the data to a list.
-			masterData = []
-			for line in inFileData :
-				masterData.append(line)
-
-			# This will sort it
-			masterData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
-
-			pics = 0
-			for line in masterData :
-				# Throw out the header line (there should be one!)
-				#if pics == 0 :
-					#pics +=1
-					#continue
-				#else :
-				if self._bookID == line[1] :
-					# Now we'll write out what we've found
-					# More error correction needs to go here
-					# I would think but this will be ok to
-					# start with.
-					self.collectPicLine(line[0].upper(), line[1].upper(), line[2], line[3], \
-					line[4], \
-					line[5], line[6], line[8])
-					self.processIllustration(line[4])
-					pics +=1
-
-			# Now we need output anything we might have collected. If nothing was
-			# found, just an empty file will be put out.
-			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf-8')
-			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
-			for line in self._piclistData :
-				self._outFileObject.write(line + "\n")
-
-			# Close the piclist file
-			self._outFileObject.close()
-
-			# Tell the world what we did
-			self._log_manager.log("INFO", "We processed " + str(pics-1) + " illustration line(s) for: " + self._bookID)
-
+			x = shutil.copy(self._inputFile, self._outputFile)
+			self._log_manager.log("INFO", "The " + self._outputFile + " has been copied from the Maps folder.")
 
 
 # This starts the whole process going

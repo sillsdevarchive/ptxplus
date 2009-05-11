@@ -12,8 +12,10 @@
 
 # Do an encoding transformation on a single field in a CSV
 # file and output a new version of the file. This is more
-# of a utility so it doesn't interact much with other modules
-# in ptxplus
+# of a utility so it doesn't interact much with many modules
+# in ptxplus. Note that the TECkit transformation table
+# file names must NOT have any spaces in them. It will take
+# more code to facilitate spaces in file names.
 
 # History:
 # 20090406 - djd - Initial draft
@@ -28,22 +30,27 @@ import codecs, os, csv
 # Import supporting local classes
 from encoding_manager import *
 from tools import *
+from operator import itemgetter, setitem
 tools = Tools()
 
 
 class TransformCSV (object) :
 
-	def main (self, source, target, encodingChain, field) :
+	def main (self, source, target, encodingChain, field, firstRowIsHeader=True) :
 
 		# Initialize some vars, etc.
 		fieldData = ""
 		orgData = []
+		header = None
+		encodingChain = [s.strip() for s in encodingChain.split(',')]
 
 		# Do we have a source file to work with?
 		if os.path.isfile(source) :
 			try :
-				sourceData = csv.reader(open(source), dialect=csv.excel)
-
+				orgData = list(csv.reader(open(source), dialect=csv.excel))
+				if firstRowIsHeader:
+					header = orgData[0]
+					orgData = orgData[1:]
 			except :
 				return "Error: TransformCSV aborted, could not read source file! (File name: " + source + ")"
 
@@ -53,34 +60,28 @@ class TransformCSV (object) :
 		# Are our encoding mappings in place? Keep in mind that there may be switches
 		# included, we'll try to filter them out assuming that they always come after
 		# the file name
-		for mapping in encodingChain.split(',') :
-			fn = mapping.split()
-			if not os.path.isfile(fn[0].strip()) :
+		for mapping in encodingChain :
+			if not os.path.isfile(mapping.split()[0].strip()) :
 				return "Error: TransformCSV aborted, missing mapping file: " + mapping
 
 		# Ok, let's do some work. First we'll make a list of all the data in the field we need
-		for row in sourceData :
-			orgData.append(row)
-			fieldData = fieldData + row[field] + "\n"
+		fields = '\n'.join(map(itemgetter(field), orgData))
 
-		# Initialize the encoder
-		encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
-		# Re-encode the data
-		newFieldData = encodingChain.convert(fieldData).split('\n')
+		# Initialize the encoder & re-encode the data.
+		convertedFields = TxtconvChain(encodingChain).convert(fields).split('\n')
 
-		rc = 0
+		# replace the field of row with the converted value.
+		map(setitem, orgData, [field]*len(orgData), convertedFields)
+
 		cvsOutputFile = csv.writer(open(target, "w"), dialect=csv.excel)
-		for row in orgData :
-			print field, rc
-			row[field] = newFieldData[rc]
-			rc +=1
-
-		cvsOutputFile.writerows(orgData)
+		cvsOutputFile.writerows([header] + orgData if header else orgData)
 
 
 
 # This starts the whole process going
-def doIt (source, target, processChain, field) :
+# Note that the first row by default is a header. It must be explicitly
+# set to false to include that data.
+def doIt (source, target, processChain, field, firstRowIsHeader=True) :
 
 	thisModule = TransformCSV()
-	return thisModule.main(source, target, processChain, field)
+	return thisModule.main(source, target, processChain, field, firstRowIsHeader)

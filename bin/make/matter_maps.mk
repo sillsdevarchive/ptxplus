@@ -76,6 +76,9 @@ $(PATH_MAPS) :
 $(PATH_MAPS)/$(1).csv :
 	$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_MAPS_PROJECT)/$(1).csv $(PATH_MAPS)/$(1).csv
 
+test-$(1) :
+	$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_MAPS_PROJECT)/$(1).csv $(PATH_MAPS)/$(1).csv
+
 # Move the styles.csv file over if it isn't there already
 $(PATH_MAPS)/styles.csv :
 	cp $(PATH_MAPS_SOURCE)/styles.csv $(PATH_MAPS)/styles.csv
