@@ -28,7 +28,7 @@
 # Firstly, import all the standard Python modules we need for
 # this process
 
-import os, sys, codecs, csv, shutil
+import os, sys, codecs, csv, shutil, operator
 
 # Import supporting local classes
 from encoding_manager import *
@@ -69,32 +69,12 @@ class MakeTopicIndexFile (object) :
 		else :
 
 			# Copy over our CSV data so we can work with it
-			# Read in the raw source data (don't worry about CSV)
-			orgData = ""
-			oldFieldData = ""
-			fieldData = codecs.open(self._csvInputFile, "r", encoding='utf-8')
-			for row in fieldData :
-				#orgData.append(row)
-				orgData = orgData + row + "\n"
-
 			# Assumption: If encoding chain exists, we process
 			encodingChain = self._settings['Encoding']['Processing']['encodingChain']
-			newFieldData = ""
-			if encodingChain != "" :
-				# Initialize the encoder
-				encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
-				# Re-encode the data
-				newFieldData = encodingChain.convert(orgData).split('\n')
-				if newFieldData != "" :
-					# Write out results
-					convertedData = codecs.open(self._csvWorkFile, "w", encoding='utf-8')
-					for line in newFieldData :
-						if line != "" :
-							convertedData.write(line + "\n")
-
-					convertedData.close()
-					self._log_manager.log("DBUG", "The " + self._csvWorkFile + " has been created from the CSV file in the Source folder with encoding tranformation on all fields.")
-
+			if encodingChain:
+				args = ' '.join(['"' + tec.strip() + '"' for tec in encodingChain.split(',')])
+				os.system(os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh ' +  self._csvInputFile + ' ' + self._csvWorkFile + ' ' + args)
+				self._log_manager.log("DBUG", "The " + self._csvWorkFile + " has been created from the CSV file in the Source folder with encoding tranformation on all fields.")
 			# If there is no encoding chain a simple file copy will do
 			else :
 				x = shutil.copy(self._csvInputFile, self._csvWorkFile)
@@ -103,25 +83,30 @@ class MakeTopicIndexFile (object) :
 			# If we didn't bail out right above, we'll go ahead and open the data file
 			# The assumption here is that the encoding of the pieces of the csv are
 			# what they need to be.
-			newDataObject = ""
-			inFileData = csv.reader(open(self._csvWorkFile), dialect=csv.excel)
-
-			for line in inFileData :
-#				print "0) ", line[0], "1) ", line[1], "2) ", line[2], "3) ", line[3]
-				newDataObject = line[1]
-
+			USFMTags = ['\T1', '\T2', '\T3', '\T4']
+			csv_records = list(csv.reader(open(self._csvWorkFile), dialect=csv.excel))
+			# Do per field processing here on csv_records
+			for rec in csv_records:
+				# This next line does the replace on the refs. The last translate (0x000D:None)
+				# is there to replace Windows carage returns.
+				rec[3] = unicode(rec[3]).translate({0x0020:0x00A0, 0x000A:u'; ', 0x000D:None})
 			# Now we need output anything we might have collected. If nothing was
 			# found, just an empty file will be put out.
 			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf-8')
 			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
-			for line in newDataObject :
-				print line
-				self._outFileObject.write(line + "\n")
+			self._outFileObject.write(recordsToUSFM(USFMTags, csv_records))
 
 			# Close the piclist file
 			self._outFileObject.close()
 
 			# Delete the temp CSV working file
+
+def recordsToUSFM(tags, records):
+	usfm = []
+	for rec in records:
+		usfm.extend(map(lambda t,v: t + ' ' + v if v else '', tags, rec))
+	return '\n'.join(usfm)
+
 
 
 

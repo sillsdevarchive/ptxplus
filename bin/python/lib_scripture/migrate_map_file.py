@@ -53,30 +53,30 @@ class MigrateMapFile (object) :
 			then we need to gracefully stop at that point. This will
 			prevent other processes from crashing.'''
 
-		#if os.path.isfile(self._outputFile) :
-			## If the project map csv file exists we will not go through with the process
-			#self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
+		if os.path.isfile(self._outputFile) :
+			# If the project map csv file exists we will not go through with the process
+			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
 
-		#else :
-
-		# Otherwise we will create a new project map csv file
-		# Assumption: If encoding chain exists, we process
-		chain = self._settings['Encoding']['Processing']['encodingChain']
-		if chain != "" :
-			mod = __import__("transformCSV")
-			# We'll give the source, target, encoding chain and field to transform
-			# Remember that the field count starts at 0
-			res = mod.doIt(self._inputFile, self._outputFile, chain, 1)
-			if res != None :
-				self._log_manager.log("ERRR", res)
-				return
-			else :
-				self._log_manager.log("INFO", "The " + self._outputFile + " has been copied from the Maps folder with an encoding tranformation on the caption field.")
-
-		# If there is no encoding chain a simple file copy will do
 		else :
-			x = shutil.copy(self._inputFile, self._outputFile)
-			self._log_manager.log("INFO", "The " + self._outputFile + " has been copied from the Maps folder.")
+
+			# Otherwise we will create a new project map csv file
+			# Assumption: If encoding chain exists, we process
+			chain = self._settings['Encoding']['Processing']['encodingChain']
+			if chain != "" :
+				mod = __import__("transformCSV")
+				# We'll give the source, target, encoding chain and field to transform
+				# Remember that the field count starts at 0
+				res = mod.doIt(self._inputFile, self._outputFile, chain, 1)
+				if res != None :
+					self._log_manager.log("ERRR", res)
+					return
+				else :
+					self._log_manager.log("INFO", "The " + self._outputFile + " has been copied from the Maps folder with an encoding tranformation on the caption field.")
+
+			# If there is no encoding chain a simple file copy will do
+			else :
+				x = shutil.copy(self._inputFile, self._outputFile)
+				self._log_manager.log("INFO", "The " + self._outputFile + " has been copied from the Maps folder.")
 
 
 # This starts the whole process going
