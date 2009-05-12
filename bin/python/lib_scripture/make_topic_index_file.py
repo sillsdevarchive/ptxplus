@@ -62,9 +62,9 @@ class MakeTopicIndexFile (object) :
 			# If we don't have a CSV input file we're done now.
 			self._log_manager.log("ERRR", "The [" + self._csvInputFile + "] file does not exist so the process has been halted.")
 
-		#elif os.path.isfile(self._outputFile) :
-			## If the output file exists we will not go through with the process
-			#self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
+		elif os.path.isfile(self._outputFile) :
+			# If the output file exists we will not go through with the process
+			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being skipped.")
 
 		else :
 
@@ -83,7 +83,7 @@ class MakeTopicIndexFile (object) :
 			# If we didn't bail out right above, we'll go ahead and open the data file
 			# The assumption here is that the encoding of the pieces of the csv are
 			# what they need to be.
-			USFMTags = ['\T1', '\T2', '\T3', '\T4']
+			USFMTags = ['\\ti1', '\\ti2', '\\ti3', '\\tiref']
 			csv_records = list(csv.reader(open(self._csvWorkFile), dialect=csv.excel))
 			# Do per field processing here on csv_records
 			for rec in csv_records:
@@ -100,12 +100,21 @@ class MakeTopicIndexFile (object) :
 			self._outFileObject.close()
 
 			# Delete the temp CSV working file
+			if os.remove(self._csvWorkFile) == None :
+				self._log_manager.log("DBUG", "Removed file: " + self._csvWorkFile)
 
-def recordsToUSFM(tags, records):
+
+
+def recordsToUSFM(tags, records) :
+	'''Process each field in a record and add an SFM tag to it.
+		if the field is empty do not output. Return a string.'''
+
 	usfm = []
 	for rec in records:
-		usfm.extend(map(lambda t,v: t + ' ' + v if v else '', tags, rec))
-	return '\n'.join(usfm)
+		usfm.extend(map(lambda t,v: t + ' ' + v + '\n' if v else '', tags, rec))
+	# Turn the list into a string
+	return "".join(usfm)
+
 
 
 
