@@ -33,7 +33,6 @@ def init_usfm () :
 		'id'		: ['isNonV', 'isNonPub'],
 		'ide'		: ['isNonV', 'isNonPub'],
 		'rem'		: ['isNonV', 'isNonPub'],
-		'ior'		: ['isEnd', 'isChar', 'isInline'],
 		'c'			: ['isNum'],
 		'v'			: ['isNum', 'isChar'],
 		'va'		: ['isEnd', 'isChar', 'isInline'],
@@ -92,8 +91,9 @@ def init_usfm () :
 	for (s, a) in sfmInfo.iteritems() :
 		res[s] = parse.SFM(a)
 
-	# Create temp dict with para elements and attributes
-	# Right now they are blank, we may want to add attributes later
+	# Create temp dict with normal paragraph elements and attributes
+	# Note: we may need to split some of these out to their own
+	# section at some point
 	paraInfo = {
 		'p'			: ['isPara', 'isChar'],
 		'm'			: ['isPara', 'isChar'],
@@ -109,18 +109,39 @@ def init_usfm () :
 		'b'			: ['isPara', 'isChar']
 	}
 
-	# Add the above para attributes to the SFM tuple list
+	# Add the above normal para attributes to the SFM tuple list
 	for (s, a) in paraInfo.iteritems() :
 		res[s] = parse.SFM(a)
 
-	# Attributes for para markers with levels, including poetry (but we may need to separate this out)
-	for k in ('pi', 'li', 'ph', 'q') :
+	# Create a temp dict with introduction elements and attributes
+	# This will not contain numbered elements
+	introInfo = {
+		'ip'			: ['isPara', 'isChar', 'isIntro'],
+		'ipi'			: ['isPara', 'isChar', 'isIntro'],
+		'im'			: ['isPara', 'isChar', 'isIntro'],
+		'imi'			: ['isPara', 'isChar', 'isIntro'],
+		'ipq'			: ['isPara', 'isChar', 'isIntro'],
+		'imq'			: ['isPara', 'isChar', 'isIntro'],
+		'ipr'			: ['isPara', 'isChar', 'isIntro'],
+		'ib'			: ['isPara', 'isChar', 'isIntro'],
+		'iot'			: ['isPara', 'isChar', 'isIntro'],
+		'iex'			: ['isPara', 'isChar', 'isIntro'],
+		'imte'			: ['isPara', 'isChar', 'isIntro'],
+		'ie'			: ['isPara', 'isChar', 'isIntro'],
+		'ior'			: ['isEnd', 'isChar', 'isInline', 'isIntro']
+	}
+
+	# Attributes for para markers with levels, including poetry
+	# (but we may need to separate this out)
+	for k in ('pi', 'li', 'ili', 'ph', 'q', 'iq') :
 		res[k] = parse.SFM(['isPara', 'isChar'])
 		for n in range(1, 4) :
 			res[k + str(n)] = parse.SFM(['isPara', 'isChar'])
 
-	# Attributes for heading markers with levels
-	for k in ('h', 'mt', 'mte', 'ms', 's', 'imt', 'is') :
+	# Attributes for heading markers with levels. This can be
+	# used for all kinds of title markers that use level numbers
+	# since the range is always 1-4
+	for k in ('h', 'mt', 'mte', 'ms', 's', 'imt', 'is', 'io') :
 		res[k] = parse.SFM(['isTitle', 'isChar'])
 		for n in range(1, 4) :
 			res[k + str(n)] = parse.SFM(['isTitle', 'isChar'])

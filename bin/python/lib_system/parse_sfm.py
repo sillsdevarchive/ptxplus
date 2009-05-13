@@ -70,6 +70,7 @@ class SFM (object) :
 		self.isPara		= False
 		self.isRef		= False
 		self.isTitle	= False
+		self.isInfo		= False
 
 		if settings :
 			for s in settings :
@@ -78,7 +79,8 @@ class SFM (object) :
 	def __repr__ (self) :
 		res = "SFM( "
 		for s in ('isChar', 'isEmpty', 'isEnd', 'isFormat', 'isInline', \
-			'isNonPub', 'isNonV', 'isNote', 'isNum', 'isPara', 'isRef', 'isTitle' ) :
+			'isNonPub', 'isNonV', 'isNote', 'isNum', 'isPara', 'isRef', \
+			'isTitle', 'isInfo') :
 			if self.__getattribute__(s) : res += s + " "
 		res += ")"
 		return res

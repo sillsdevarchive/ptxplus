@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.5
 # -*- coding: utf-8 -*-
 # version: 20080619
 # By Dennis Drescher (dennis_drescher at sil.org)
@@ -53,6 +53,15 @@ class TxtconvChain(list):
 		   data must be of type str and not type unicode."""
 		args = ' '.join(['"' + tec + '"' for tec in self])
 		(cin,cout) = os.popen2(os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh /dev/stdin /dev/stdout ' + args)
+
+		# Just FYI, the above process can be extracted for just simple
+		# file output like this:
+		#	encodingChain = self._settings['Encoding']['Processing']['encodingChain']
+		#	if encodingChain:
+		#		args = ' '.join(['"' + tec.strip() + '"' for tec in encodingChain.split(',')])
+		#		os.system(os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh ' +  inputFile + ' ' + outputFile + ' ' + args)
+
+
 		def writer():
 			try: cin.write(data)
 			finally: cin.flush(); cin.close()

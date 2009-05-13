@@ -1,5 +1,10 @@
 ====== Log ======
 
+**Wed 13 May 2009 3:13 PM ICT**
+Implemented a topical index process. It will take a csv file in the project source area and convert it to an sfm file in the Peripheral folder. That is still a commandline process at this point. It goes like: ptxplus make_topic_index
+
+Once the sfm file is made it can be processed like other kinds of peripheral material with the view command. This needs to be automated at some point. However, we don't want it to blow away existing data.
+
 **Sat 03 Jan 2009 4:14 PM ICT**
 Added 2 experimental formating scripts today. One which strips out the footnotes and cross references and puts them in a separate peripheral file. A second script which removes footnotes and cross refs too and also takes out the verse numbers so that the text can be read without all the extra-Biblical references.
 

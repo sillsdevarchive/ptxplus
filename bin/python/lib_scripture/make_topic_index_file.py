@@ -12,11 +12,12 @@
 
 # This class will create the contents for a basic topical
 # index. It assumes:
-#	1) CSV input (section title, topic, sub topic, references)
+#	1) CSV 4 field input (section title, topic, sub topic, references)
 #	2) Output to SFM (fixed markers)
 #
 # With these parameters met it will produce an SFM file that
-# will need further editing.
+# will need further processing, including possible encoding
+# transformations, space and \n removal and editing.
 
 # History:
 # 20090506 - djd - Initial draft
@@ -69,32 +70,27 @@ class MakeTopicIndexFile (object) :
 		else :
 
 			# Copy over our CSV data so we can work with it
-			# Assumption: If encoding chain exists, we process
-			encodingChain = self._settings['Encoding']['Processing']['encodingChain']
-			if encodingChain:
-				args = ' '.join(['"' + tec.strip() + '"' for tec in encodingChain.split(',')])
-				os.system(os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh ' +  self._csvInputFile + ' ' + self._csvWorkFile + ' ' + args)
-				self._log_manager.log("DBUG", "The " + self._csvWorkFile + " has been created from the CSV file in the Source folder with encoding tranformation on all fields.")
-			# If there is no encoding chain a simple file copy will do
-			else :
-				x = shutil.copy(self._csvInputFile, self._csvWorkFile)
-				self._log_manager.log("DBUG", "The " + self._csvWorkFile + " has been copied from the Source folder.")
+			# A simple file copy will do
+			x = shutil.copy(self._csvInputFile, self._csvWorkFile)
+			self._log_manager.log("DBUG", "The " + self._csvWorkFile + " has been copied from the Source folder.")
+
+			# These tags are hard-coded tags and we are trying to repurpose the USFM
+			# introduction tags. If there are conflicts between this and the introduction
+			# texts we may need to introduce special new tags.
+			USFMTags = ['\\imt1', '\\imt2', '\\imt3', '\\ipi']
+			# Creage header information for this sfm file
+			headerInfo = "\\id OTH\n\\ide UTF-8\n\\periph Title Page\n\\mt1 <Title for Topical Index>\n"
 
 			# If we didn't bail out right above, we'll go ahead and open the data file
 			# The assumption here is that the encoding of the pieces of the csv are
 			# what they need to be.
-			USFMTags = ['\\ti1', '\\ti2', '\\ti3', '\\tiref']
 			csv_records = list(csv.reader(open(self._csvWorkFile), dialect=csv.excel))
-			# Do per field processing here on csv_records
-			for rec in csv_records:
-				# This next line does the replace on the refs. The last translate (0x000D:None)
-				# is there to replace Windows carage returns.
-				rec[3] = unicode(rec[3]).translate({0x0020:0x00A0, 0x000A:u'; ', 0x000D:None})
 			# Now we need output anything we might have collected. If nothing was
-			# found, just an empty file will be put out.
+			# found, just output the header.
 			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf-8')
-			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
+			self._outFileObject.write(headerInfo)
 			self._outFileObject.write(recordsToUSFM(USFMTags, csv_records))
+			self._log_manager.log("DBUG", "Created file and wrote out to: " + self._outputFile)
 
 			# Close the piclist file
 			self._outFileObject.close()

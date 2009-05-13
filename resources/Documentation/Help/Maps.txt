@@ -1,5 +1,5 @@
 ====== Managing Maps ======
-The finer points of how to work with maps in ptxplus.
+The finer points of how to work with maps in ptxplus. Maps are really a part of the peripheral matter but since they require a significant amount of work they get their own page.
 
 === Summary ===
 Producing a map, or set of maps, is a three step process.
