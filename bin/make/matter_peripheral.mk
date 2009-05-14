@@ -146,7 +146,7 @@ $(MATTER_BACK_PDF) : $(foreach v,$(MATTER_BACK),$(PATH_PROCESS)/$(v).pdf) $(DEPE
 
 endif
 
-# Produce just the font matter (bound)
+# Produce just the cover
 cover : $(MATTER_COVER_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
