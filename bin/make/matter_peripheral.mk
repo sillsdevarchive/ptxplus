@@ -53,22 +53,31 @@ define periph_rules
 # proecesses are run it will copy the text into the system and then it will
 # run any necessary text processes on the system source text as defined in
 # the project.conf file.
+#
+# A possible problem here is if the custom process was to be run on
+# a peripheral file that was meant for Scripture text and changes
+# were made that were not supposed to. We may need to add a little
+# switch at the start of each of the text processes that would only
+# perform them on specific kind of file taken from the \periph field.
+
 ifeq ($(LOCKED),0)
 $(PATH_TEXTS)/$(1) : $(PATH_PERIPH)/$(1)
-	rm -f $(PATH_TEXTS)/$(1)
-	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<' '$$@'
-	$(PY_PROCESS_SCRIPTURE_TEXT) CopyIntoSystem $(1) '$$<' '$$@'
-	$(PY_PROCESS_SCRIPTURE_TEXT) TextProcesses $(1) '$$@' '$$@'
+	@echo Regenerating $(PATH_TEXTS)/$(1)
+	@rm -f $(PATH_TEXTS)/$(1)
+	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<' '$$@'
+	@$(PY_PROCESS_SCRIPTURE_TEXT) CopyIntoSystem $(1) '$$<' '$$@'
+	@$(PY_PROCESS_SCRIPTURE_TEXT) TextProcesses $(1) '$$@' '$$@'
 endif
 
 # This enables us to do the preprocessing on a single peripheral item. Then it
 # will open the log file produced from the processes run.
-ifeq ($(LOCKED),0)
 preprocess-$(1) : $(PATH_PERIPH)/$(1)
-	rm -f $(PATH_TEXTS)/$(1)
-	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
+ifeq ($(LOCKED),0)
+	@echo Preprocessing $(1)
+	@rm -f $(PATH_TEXTS)/$(1)
+	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
 else
-	$(warning Cannot preprocess, system text is locked for file: $(1))
+	@echo Source locked: Will not preprocess file: $(1)
 endif
 
 # Output to the TeX control file (Do a little clean up first)
@@ -77,22 +86,22 @@ endif
 # publication. This will insert a specially defined var done in
 # the makefile.conf file.
 $(PATH_PROCESS)/$(1).tex :
-	echo '\\input $(TEX_PTX2PDF)' >> $$@
-	echo '\\input $(TEX_SETUP)' >> $$@
-	echo '$($(1)_TEXSPECIAL) \\ptxfile{$(PATH_TEXTS)/$(1)}' >> $$@
-	echo '\\bye' >> $$@
+	@echo '\\input $(TEX_PTX2PDF)' >> $$@
+	@echo '\\input $(TEX_SETUP)' >> $$@
+	@echo '$($(1)_TEXSPECIAL) \\ptxfile{$(PATH_TEXTS)/$(1)}' >> $$@
+	@echo '\\bye' >> $$@
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1) \
 	$(PATH_PROCESS)/$(1).tex \
 	$(DEPENDENT_FILE_LIST)
-	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 
 # Each peripheral item needs a source but if it doesn't exist in the source folder
 # then we need to copy one in from the templates we have in the system.
 $(PATH_PERIPH)/$(1) :
-	cp $(PATH_PERIPH_SOURCE)/$(1) '$$@'
+	@cp $(PATH_PERIPH_SOURCE)/$(1) '$$@'
 
 # Open the PDF file with reader
 view-$(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
@@ -106,9 +115,19 @@ $(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
 pdf-remove-$(1) :
 	rm -f $(PATH_PROCESS)/$(1).pdf
 
+endef
 
+define uniq
+$(if $(1),$(firstword $(1)) $(call uniq,$(filter-out $(firstword $(1)),$(1))),)
+endef
 
-
+define matter_binding
+$(foreach v,$(call uniq,$($(1))), $(call periph_rules,$(v)))
+ifneq ($($(1)),)
+$(1)_PDF = $(PATH_PROCESS)/$(1).pdf
+$(PATH_PROCESS)/$(1).pdf : $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) $(DEPENDENT_FILE_LIST)
+	pdftk $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) cat output $$@
+endif
 endef
 
 
@@ -120,36 +139,21 @@ endef
 
 
 # Cover matter binding rules
-ifneq ($(MATTER_COVER),)
-$(foreach v,$(MATTER_COVER), $(eval $(call periph_rules,$(v))))
-MATTER_COVER_PDF = $(PATH_PROCESS)/MATTER_COVER.pdf
-$(MATTER_COVER_PDF) : $(foreach v,$(MATTER_COVER),$(PATH_PROCESS)/$(v).pdf) $(DEPENDENT_FILE_LIST)
-	pdftk $(foreach v,$(MATTER_COVER),$(PATH_PROCESS)/$(v).pdf) cat output $@
-
-endif
+$(eval $(call matter_binding,MATTER_COVER))
 
 # Front matter binding rules
-ifneq ($(MATTER_FRONT),)
-$(foreach v,$(MATTER_FRONT), $(eval $(call periph_rules,$(v))))
-MATTER_FRONT_PDF = $(PATH_PROCESS)/MATTER_FRONT.pdf
-$(MATTER_FRONT_PDF) : $(foreach v,$(MATTER_FRONT),$(PATH_PROCESS)/$(v).pdf) $(DEPENDENT_FILE_LIST)
-	pdftk $(foreach v,$(MATTER_FRONT),$(PATH_PROCESS)/$(v).pdf) cat output $@
-
-endif
+$(eval $(call matter_binding,MATTER_FRONT))
 
 # Back matter binding rules
-ifneq ($(MATTER_BACK),)
-$(foreach v,$(MATTER_BACK), $(eval $(call periph_rules,$(v))))
-MATTER_BACK_PDF = $(PATH_PROCESS)/MATTER_BACK.pdf
-$(MATTER_BACK_PDF) : $(foreach v,$(MATTER_BACK),$(PATH_PROCESS)/$(v).pdf) $(DEPENDENT_FILE_LIST)
-	pdftk $(foreach v,$(MATTER_BACK),$(PATH_PROCESS)/$(v).pdf) cat output $@
+$(eval $(call matter_binding,MATTER_BACK))
 
-endif
-
-# Produce just the cover
+# Produce all the outer cover material in one PDF file
 cover : $(MATTER_COVER_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
+
+# To produce individual elements of the outer cover just
+# use: ptxplus view-<file_name>
 
 # Produce just the font matter (bound)
 front : $(MATTER_FRONT_PDF)
@@ -163,4 +167,4 @@ back : $(MATTER_BACK_PDF)
 
 # Make the content for a topical index from CSV data
 make-topic-index :
-	$(PY_PROCESS_SCRIPTURE_TEXT) make_topic_index_file 'NA' $(PATH_SOURCE)/TOPICAL_INDEX.CSV $(PATH_PERIPH)/TOPICAL_INDEX.USFM
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_topic_index_file 'NA' $(PATH_SOURCE)/TOPICAL_INDEX.CSV $(PATH_PERIPH)/TOPICAL_INDEX.USFM

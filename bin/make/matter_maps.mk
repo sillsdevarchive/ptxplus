@@ -61,27 +61,16 @@ define map_rules
 # script will see to it that there is a Maps folder and a csv
 # file for this map. It takes care of the copy process. It should
 # be able to do this and if it can't it should tell us why.
-$(PATH_MAPS)/$(1).svg :
+$(PATH_MAPS)/$(1).svg : $(PATH_MAPS)
 	cp $(PATH_MAPS_SOURCE)/$(1).svg $(PATH_MAPS)/$(1).svg
 
 # Create a common project map translation file
-$(PATH_MAPS_PROJECT)/$(1).csv :
+$(PATH_MAPS_PROJECT)/$(1).csv : $(PATH_MAPS)
 	cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_MAPS_PROJECT)/$(1).csv
 
-# Create a Maps folder if one isn't there already
-$(PATH_MAPS) :
-	mkdir -p $(PATH_MAPS)
-
 # Migrate the common project map translation file to the Maps folder
-$(PATH_MAPS)/$(1).csv :
+$(PATH_MAPS)/$(1).csv : $(PATH_MAPS) $(PATH_MAPS_PROJECT)/$(1).csv
 	$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_MAPS_PROJECT)/$(1).csv $(PATH_MAPS)/$(1).csv
-
-test-$(1) :
-	$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_MAPS_PROJECT)/$(1).csv $(PATH_MAPS)/$(1).csv
-
-# Move the styles.csv file over if it isn't there already
-$(PATH_MAPS)/styles.csv :
-	cp $(PATH_MAPS_SOURCE)/styles.csv $(PATH_MAPS)/styles.csv
 
 # Process the SVG file and edit it in Inkscape when it is done
 # This prorocess has a double dependency in the following rules
@@ -120,6 +109,18 @@ endef
 ##############################################################
 #		Main processing rules
 ##############################################################
+
+# First we need some rules to make sure the necessary files
+# are in the right places
+
+# Create a Maps folder if one isn't there already
+$(PATH_MAPS) :
+	mkdir -p $(PATH_MAPS)
+
+# Move the styles.csv file over if it isn't there already
+$(PATH_MAPS)/styles.csv : $(PATH_MAPS)
+	cp $(PATH_MAPS_SOURCE)/styles.csv $(PATH_MAPS)/styles.csv
+
 
 # This builds a rule (in memory) for all maps using the macro
 # above. These will be called below when we process the

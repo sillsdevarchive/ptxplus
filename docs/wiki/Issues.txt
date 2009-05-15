@@ -1,5 +1,13 @@
 ====== Issues ======
 
+**Fri 15 May 2009 11:31 AM ICT**
+Status: Open
+A specification needs to be written for ptxplus so it can be redesigned. The original package has been developed in a reactionary fashion so the code is very convoluted. With a good specification it could be rewritten or at least reorganized so it could be more generalized for wider use.
+
+**Fri 15 May 2009 11:29 AM ICT**
+Status: Open
+Text processes need a way to be applied to the specific files they were intended for. Right now, a text process can be applied to any file that comes through. This could cause problems.
+
 **Mon 29 Dec 2008 03:40 PM ICT**
 Status: Open
 ptx2pdf - The macro is allowing orphaned words to occur on a line. The default should be two or more words (or maybe 10-15% of the line) on a line at the least.
