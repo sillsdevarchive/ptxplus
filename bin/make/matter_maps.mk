@@ -65,8 +65,10 @@ $(PATH_MAPS)/$(1).svg : $(PATH_MAPS)
 	cp $(PATH_MAPS_SOURCE)/$(1).svg $(PATH_MAPS)/$(1).svg
 
 # Create a common project map translation file
-$(PATH_MAPS_PROJECT)/$(1).csv : $(PATH_MAPS)
-	cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_MAPS_PROJECT)/$(1).csv
+$(PATH_MAPS_PROJECT)/$(1).csv ::
+	@echo I just tried to blow a way your source file
+
+#	cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_MAPS_PROJECT)/$(1).csv
 
 # Migrate the common project map translation file to the Maps folder
 $(PATH_MAPS)/$(1).csv : $(PATH_MAPS) $(PATH_MAPS_PROJECT)/$(1).csv
