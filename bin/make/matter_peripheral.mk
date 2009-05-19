@@ -101,6 +101,7 @@ $(PATH_PROCESS)/$(1).pdf : \
 # Each peripheral item needs a source but if it doesn't exist in the source folder
 # then we need to copy one in from the templates we have in the system.
 $(PATH_PERIPH)/$(1) :
+	@echo WARNING: Peripheral item: $(PATH_PERIPH)/$(1) missing adding template to project.
 	@cp $(PATH_PERIPH_SOURCE)/$(1) '$$@'
 
 # Open the PDF file with reader

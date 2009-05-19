@@ -367,14 +367,13 @@
 %\def\AfterVerseSpaceFactor{2}
 %\def\AfterChapterSpaceFactor{3}
 
-% This sets the vertical distance between verse numbers when
-% using flying verse numbers. This can prevent clashing when
-% using number systems in which the character baseline can
-% vary from number to number. The default behavior is to use
-% the font size. If this is too close you will want to uncomment
-% this setting and change it to be larger than the font size
-% being used.
-%\baseline [< font size]
+% To set the vertical distance between verse numbers when
+% using flying verse numbers. You need to insert in the .sty
+% this command in the verse marker: \BaseLine 10pt
+% This can help prevent clashing when using number systems
+% in which the character baseline can vary from number to
+% number. The default behavior is to use the font size. If this
+% is too close you will want to change the number as desired.
 
 % For additional settings concerning marginal verses look
 % in the file location settings. Some settings may need
