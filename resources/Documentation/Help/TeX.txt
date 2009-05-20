@@ -6,7 +6,7 @@ So much [[TeX]] and so little time...
 Hyphenation is an important issue in any publication. Here are some notes on various hyphenation problems that can be encountered.
 
 ==== Increasing the Hyphenation Exception Word List Size ====
-It may be necessary to change the maximium number of words allowed in the hyphenation exceptions list. To do this the /etc/texmf/texmf.cnf file needs to be changed. However, the warning at the top of the file makes it clear that you don't want to edit that specific file because it is auto-generated. Instead, you want to edit this file:
+It may be necessary to change the maximum number of words allowed in the hyphenation exceptions list. To do this the /etc/texmf/texmf.cnf file needs to be changed. However, the warning at the top of the file makes it clear that you don't want to edit that specific file because it is auto-generated. Instead, you want to edit this file:
 
 sudo gedit /etc/texmf/texmf.d/95NonPath.cnf
 
@@ -22,7 +22,17 @@ Then just to be safe you should probably run this too to update the fmt files (I
 
 fmtutil --refresh
 
-Your new settings should be recognized by the system
+Your new settings should be recognized by the system.
+
+Now, after saying all that, it might not work. If that is the case then you can try just editing /etc/texmf/texmf.cnf directly despite warnings not to. If you are running a single user, single install system, you'll probably be okay, but you have been warned. The way to do this is edit this file with
+
+sudo gedit /etc/texmf/texmf.cnf
+
+Change the hyph_size setting to whatever you need it to be. Then run:
+
+fmtutil --refresh
+
+and you should be good to go.
 
 
 ==== \lccode ====
