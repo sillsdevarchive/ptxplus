@@ -1,0 +1,13 @@
+====== Hyphenation ======
+
+Hyphenation is a complex but a very important part of any Scripture publication. This system will generate a hyphenated word list that will work with the [[TeX]] typesetting system and maybe others as well. This system will take multiple forms of input to generate this word list. It works like this.
+
+The client will provide a list of words which will form the primary input. The words it contains will go into the [[TeX]] hyphenation exceptions list. [[TeX]] will break on syllable or word boundaries exactly as they are described to it in this list. For example "Wis-con-sin" will break on one of the two hyphens in the word. If it was expressed "Wisconsin" it wouldn't break at all and that might be what you want.
+
+Put the list you just made in a file named hyphen-words.txt and put it in the Source folder. Make sure the character encoding is the same as the Scripture text files in that are in that folder. The final encoding changes can be made when the final list is generated.
+
+Much of the time this list is not enough and many more break boundary descriptions are needed. The next step is to create a list of prefixes and suffixes for every possible word that uses one. That may not be possible but if it is, create two separate files one named prefixes.txt and one called suffixes.txt and put them in the Source folder. In the prefix file make a list, one prefix unit per line and put a hyphen mark after it. Example: pre- but don't put any whole words like, pre-fix. In the suffix file make a list but this time put the hyphen marker at the front of the unit. Example: -fix do not do, suf-fix. Like with the first list, be sure the encoding is the same as all the others in the Source folder.
+
+With these two lists in place a lot of words can be generated for the final list but there is one more possible means that can be used to get even more. A provision has been made where you can use a regular expression to generate more words based on simple rules. This is a very limited way but with some languages it can be very effective. To activate this you will need to enter a regular expression in the project.conf file in the hyphenBreakRules field which is found under [[TeX]] -> Hyphenation.
+
+Much more must be written on this but this will have to do for now.

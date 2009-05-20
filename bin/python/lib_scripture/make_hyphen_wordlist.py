@@ -40,31 +40,42 @@ tools = Tools()
 
 
 class MakeHyphenWordlist (object) :
-
-	def main (self, log_manager) :
+	def __init__(self, log_manager):
 		self._log_manager = log_manager
 		self._hyphens_re = re.compile(u'\u002D|\u2010|\u2011|\u2012|\u2013|\u2014|\ufeff')
-		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
-		hyphenPath = log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
-		wordlistReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.csv"
-		sourceHyphenationFile = log_manager._settings['TeX']['Hyphenation']['sourceHyphenWords']
-		newHyphenationFile = os.getcwd() + "/" + hyphenPath + "/hyphenation.txt"
-		prefixListPath = log_manager._settings['TeX']['Hyphenation']['sourcePrefixes']
-		suffixListFile = log_manager._settings['TeX']['Hyphenation']['sourceSuffixes']
-		# Bring in any encoding mapings we may need.
+		self._hyphenations={}
+		self._hyphen = set()
+		self._hyphenCounts = {}
+		self._wordlistReport = set()
 		self._encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
-		wordlistReport = set()
-		prefixList = []
-		suffixList = []
-		wordIntakeCount = 0
-		prefixIntakeCount = 0
-		suffixIntakeCount = 0
-		hyphenWordCount = 0
-
 		if self._encodingChain:
 			# Build the encoding engine(s)
 			self._encodingChain = TxtconvChain([s.strip() for s in self._encodingChain.split(',')])
 
+	def main (self) :
+		reportPath = self._log_manager._settings['Process']['Paths']['PATH_REPORTS']
+		hyphenPath = self._log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
+		wordlistReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.csv"
+		sourceHyphenationFile = self._log_manager._settings['TeX']['Hyphenation']['sourceHyphenWords']
+		newHyphenationFile = os.getcwd() + "/" + hyphenPath + "/hyphenation.txt"
+		prefixListPath = self._log_manager._settings['TeX']['Hyphenation']['sourcePrefixes']
+		suffixListFile = self._log_manager._settings['TeX']['Hyphenation']['sourceSuffixes']
+		hyphenBreakRules = self._log_manager._settings['TeX']['Hyphenation']['hyphenBreakRules'].decode('utf-8').decode('unicode_escape')
+
+		# load the source hyphenation file is there is one.
+		self.loadPreHyphenatedWordList(sourceHyphenationFile)
+
+		# Pass 1: This part is all about auto-generating hyphenated words. This can
+		# be done a number of ways.
+		self.generatePrefixSuffixHyphenation(wordlistReportFile,prefixListPath,suffixListFile)
+		# Pass 2: Use the provided regexp to find automatic break points.
+		self.generateRuleBrokenHyphenations(hyphenBreakRules)
+
+		#write out the hyphenation list
+		self.writeHyphenationList(newHyphenationFile)
+
+
+	def loadPreHyphenatedWordList(self,filepath):
 		# Load the exsiting hyphen words source list if one is in the source folder.
 		# We will fill a dictionary here that was created above with the defaultdict
 		# module. That will be used for the final output when we're done.
@@ -75,82 +86,102 @@ class MakeHyphenWordlist (object) :
 		# After much thought I have decided to rely on the translator to
 		# provide clean data and any problems found will need to be edited
 		# by hand to correct them.
-		words = self.wordListFromFile(sourceHyphenationFile)
-		hyphenList = dict(zip(self.cleanWordList(words),words))
+		words = self.wordListFromFile(filepath)
+		self._hyphenations = dict(zip(self.cleanWordList(words),words))
+		self.logHyphenCount("load " + filepath)
 
+
+	def loadWordlistReport(self,wordlistReportFile):
+		# Read the wordlistReportFile
+		f = open(wordlistReportFile)
+		wordlist_csv = csv.reader(f, dialect=csv.excel)
+		for w in (w.decode('utf-8').translate({0xfeff:None}) for w,c in wordlist_csv):
+			if self._hyphens_re.search(w):
+				self._log_manager.log("INFO", "Input candidate word already hyphenated: " + w)
+			else:
+				self._wordlistReport.add(w)
+		self._log_manager.log("INFO", wordlistReportFile + " loaded, found " + str(len(self._wordlistReport)) + " words.")
+
+
+	def generatePrefixSuffixHyphenation(self,wordlistReportFile,prefixListPath,suffixListPath):
 		# Now we will look for and load all the peripheral files and report
 		# on what we found.
+		# Load the master wordlist.
+		try:
+			self.loadWordlistReport(wordlistReportFile)
+		except IOError, e:
+			self._log_manager.log("ERRR", "Hyphenation auto-generation failed. Word list not read, due to: " + str(e))
+			return
 
-		# Check for the wordlistReportFile
-		if os.path.isfile(wordlistReportFile) :
-			try :
-				wordlistReportObject = csv.reader(open(wordlistReportFile), dialect=csv.excel)
-				for w in (w.decode('utf-8').translate({0xfeff:None}) for w,c in wordlistReportObject):
-					if not self._hyphens_re.search(w):
-						wordlistReport.add(w)
-					else:
-						self._log_manager.log("INFO", "Input word already hyphenated: " + w)
-				self._log_manager.log("INFO", wordlistReportFile + " loaded, found " + str(len(wordlistReport)) + " words.")
-			# If there is a file to load and it fails we need to know about it
-			except :
-				self._log_manager.log("ERRR", wordlistReportFile + ": " + str(sys.exc_info()))
-				return
-		else :
-			self._log_manager.log("DBUG", wordlistReportFile + " was not found, continued process.")
+		# Are there prefixList or suffixList to process?
+		prefixList = self.cleanWordList(self.wordListFromFile(prefixListPath))
+		suffixList = self.cleanWordList(self.wordListFromFile(suffixListPath))
 
-		# Is there a prefixList to process?
-		suffixList = self.cleanWordList(self.wordListFromFile(prefixListPath))
-		# How about suffixes, any of those?
-		prefixList = self.cleanWordList(self.wordListFromFile(suffixListFile))
+		# Test to see if we have enough of the above objects to auto-generate some hyphenated words.
+		if not (prefixList or suffixList):
+			self._log_manager.log("WARN", "Could not auto-generate any hyphenated words, no prefix or suffix files found.")
+			return
 
-		# This part is all about auto-generating hyphenated words. This can
-		# be done a number of ways. Test to see if we have enough of the
-		# above objects to auto-generate some hyphenated words. If not
-		# we will just move on to see if there is an existing list we can use.
-		if wordlistReport:
-			if prefixList or suffixList:
-				# If we made it this far the actual process can begin
+		# If we made it this far the actual process can begin
 
-				# Apply prefixes and suffixes to word list and create
-				# new hyphenated words, add them to hyphenCandidates{}
+		# Apply prefixes and suffixes to word list and create
+		# new hyphenated words, add them to hyphenCandidates{}
 
-				# Build a regex for both prefixes and suffixes
-				prefixList.sort(key=len)
-				suffixList.sort(key=len)
-				pList = '|'.join(prefixList)
-				sList = '|'.join(suffixList)
+		# Build a regex for both prefixes and suffixes
+		prefixList.sort(key=len,reverse=True)
+		prefixList.sort(reverse=True)
+		suffixList.sort(key=len,reverse=True)
+		suffixList.sort(reverse=True)
 
-				# Make the Regex
-				prefixes = "^(?ui)(" + pList + ")(?=.)"
-				prefixTest = re.compile(prefixes)
-				suffixes = "(?ui)(?<=[^\-])(" + sList + ")$"
-				suffixTest = re.compile(suffixes)
+		# Make the Regex
+		prefixTest = re.compile("^(?ui)(" + ('|'.join(prefixList)) + ")(?=\w.)")
+		suffixTest = re.compile("(?ui)(?<=..)(" + ('|'.join(suffixList)) + ")$")
 
-				for word in wordlistReport :
-					m = prefixTest.sub(r"\1-", word)
-					m = suffixTest.sub(r"-\1", m)
-					if '-' in m and not hyphenList.has_key(word) and m[-1] != '-' :
-						hyphenList[word] = m
-			else:
-				self._log_manager.log("DBUG", "Could not generate any hyphenated words, no prefix or suffix files found.")
-		else :
-			self._log_manager.log("ERRR", "Could not generate any hyphenated, Word list not found.")
+		for word in frozenset(self._wordlistReport):
+			m = suffixTest.sub(r"-\1", prefixTest.sub(r"\1-", word))
+			if '-' in m and m[-1] != '-' and not self._hyphenations.has_key(word):
+				self._hyphenations[word] = m
+				self._wordlistReport.discard(word)
+		self.logHyphenCount("prefix/suffix hyphenation")
 
-		# Output the masterWordlist to the masterReportFile (simple word list)
-		newHyphenationObject = codecs.open(newHyphenationFile, "w", encoding='utf-8')
-		# Turn the hyphenList to a list and sort it
-		hyphenkeys = hyphenList.items()
+	def generateRuleBrokenHyphenations(self, hyphenBreakRules):
+		if hyphenBreakRules:
+			hyphenBreaks = re.compile(hyphenBreakRules)
+			for word in frozenset(self._wordlistReport):
+				hyphenation = word
+				for off,match in enumerate(hyphenBreaks.finditer(word)):
+					hyphenation = hyphenation[:match.end()+off] + '-' + hyphenation[match.end()+off:]
+				if hyphenation != word:
+					if '-' in hyphenation and hyphenation[-1] != '-' and not self._hyphenations.has_key(word):
+						self._hyphenations[word] = hyphenation
+						self._wordlistReport.discard(word)
+			self.logHyphenCount("Rules based hyphenation")
+
+
+	def writeHyphenationList(self,newHyphenationFilePath):
+		# Output the values sorted by key to the newHyphenationFile (simple word list)
+		# Turn the hyphenList to a list and sort it on the key.
+		double_hyphens = re.compile(u'-{2,}')
+		hyphenkeys = self._hyphenations.items()
 		hyphenkeys.sort(key=itemgetter(0))
-		# Output the words
-		for k,v in hyphenkeys :
-			newHyphenationObject.write(v + "\n")
-			hyphenWordCount += 1
+		f = codecs.open(newHyphenationFilePath, "w", encoding='utf-8')
+		f.writelines(double_hyphens.sub('',v)+'\n' for k,v in hyphenkeys)
+		f.close()
+		self._log_manager.log('DBUG', "Total hyphenations added = %d" % sum(self._hyphenCounts.itervalues()))
+		self._log_manager.log("DBUG", "Hyphenated word list created, made " + str(len(hyphenkeys)) + " words.")
 
-#			self._log_manager.log("DBUG", "Hyphenated word list created, made " + str(hyphenWordCount) + " words.")
-		newHyphenationObject.close()
+
+	def logHyphenCount(self, phase):
+		last = sum(self._hyphenCounts.itervalues())
+		n = sum(h.count('-') for h in self._hyphenations.itervalues()) - last
+		self._hyphenCounts[phase] = n
+		self._log_manager.log('INFO','phase %s found %d hyphenations.' % (phase,n))
+		self._log_manager.log('INFO','phase %s left %d words un-hyphenated.' % (phase,len(self._wordlistReport)))
+
 
 	def cleanWordList(self, words):
-		return [self._hyphens_re.sub('',w) for w in words]
+		return [self._hyphens_re.sub('', w) for w in words]
+
 
 	def wordListFromFile(self, file_path):
 		word_list = []
@@ -184,5 +215,6 @@ class MakeHyphenWordlist (object) :
 # This starts the whole process going
 def doIt (log_manager) :
 
-	thisModule = MakeHyphenWordlist()
-	return thisModule.main(log_manager)
+	thisModule = MakeHyphenWordlist(log_manager)
+	return thisModule.main()
+
