@@ -23,6 +23,9 @@
 # 20090327 - djd - Draft is working but issues remain over
 #		output discrepancies. This needs to be revisited
 #		later after some other larger issues are settled.
+# 20090520 - djd - Massive changes made by TimE to add
+#		regexp rules for making breaks and he also restructured
+#		the file too.
 
 
 #############################################################
@@ -53,21 +56,29 @@ class MakeHyphenWordlist (object) :
 			self._encodingChain = TxtconvChain([s.strip() for s in self._encodingChain.split(',')])
 
 	def main (self) :
-		reportPath = self._log_manager._settings['Process']['Paths']['PATH_REPORTS']
-		hyphenPath = self._log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
-		wordlistReportFile = os.getcwd() + "/" + reportPath + "/wordlist-master.csv"
-		sourceHyphenationFile = self._log_manager._settings['TeX']['Hyphenation']['sourceHyphenWords']
-		newHyphenationFile = os.getcwd() + "/" + hyphenPath + "/hyphenation.txt"
-		prefixListPath = self._log_manager._settings['TeX']['Hyphenation']['sourcePrefixes']
-		suffixListFile = self._log_manager._settings['TeX']['Hyphenation']['sourceSuffixes']
-		hyphenBreakRules = self._log_manager._settings['TeX']['Hyphenation']['hyphenBreakRules'].decode('utf-8').decode('unicode_escape')
+		sourceMasterWordsFile = self._log_manager._settings['Process']['Hyphenation']['sourceMasterWordsFile']
+		sourceUserWordsFile = self._log_manager._settings['Process']['Hyphenation']['sourceUserWordsFile']
+		sourceUserNamesFile = self._log_manager._settings['Process']['Hyphenation']['sourceUserNamesFile']
+		sourcePrefixListFile = self._log_manager._settings['Process']['Hyphenation']['sourcePrefixListFile']
+		sourceSuffixListFile = self._log_manager._settings['Process']['Hyphenation']['sourceSuffixListFile']
+		newHyphenationFile = self._log_manager._settings['Process']['Hyphenation']['newHyphenationFile']
+		hyphenBreakRules = self._log_manager._settings['Process']['Hyphenation']['hyphenBreakRules'].decode('utf-8').decode('unicode_escape')
 
-		# load the source hyphenation file is there is one.
-		self.loadPreHyphenatedWordList(sourceHyphenationFile)
+		# Load the master wordlist.
+		try:
+			self.loadWordlistReport(sourceMasterWordsFile)
+		except IOError, e:
+			self._log_manager.log("ERRR", "Hyphenation auto-generation failed. Word list not read, due to: " + str(e))
+			return
+
+		# load the source user custom hyphenation file is there is one.
+		self.loadPreHyphenatedWordList(sourceUserWordsFile)
+		# load the source user names hyphenation file is there is one.
+		self.loadPreHyphenatedWordList(sourceUserNamesFile)
 
 		# Pass 1: This part is all about auto-generating hyphenated words. This can
 		# be done a number of ways.
-		self.generatePrefixSuffixHyphenation(wordlistReportFile,prefixListPath,suffixListFile)
+		self.generatePrefixSuffixHyphenation(sourceMasterWordsFile,sourcePrefixListFile,sourceSuffixListFile)
 		# Pass 2: Use the provided regexp to find automatic break points.
 		self.generateRuleBrokenHyphenations(hyphenBreakRules)
 
@@ -88,33 +99,27 @@ class MakeHyphenWordlist (object) :
 		# by hand to correct them.
 		words = self.wordListFromFile(filepath)
 		self._hyphenations = dict(zip(self.cleanWordList(words),words))
+		self._wordlistReport.difference_update(set(self._hyphenations))
 		self.logHyphenCount("load " + filepath)
 
 
-	def loadWordlistReport(self,wordlistReportFile):
-		# Read the wordlistReportFile
-		f = open(wordlistReportFile)
+	def loadWordlistReport(self,sourceMasterWordsFile):
+		# Read the sourceMasterWordsFile
+		f = open(sourceMasterWordsFile)
 		wordlist_csv = csv.reader(f, dialect=csv.excel)
 		for w in (w.decode('utf-8').translate({0xfeff:None}) for w,c in wordlist_csv):
 			if self._hyphens_re.search(w):
 				self._log_manager.log("INFO", "Input candidate word already hyphenated: " + w)
 			else:
 				self._wordlistReport.add(w)
-		self._log_manager.log("INFO", wordlistReportFile + " loaded, found " + str(len(self._wordlistReport)) + " words.")
+		self._log_manager.log("INFO", sourceMasterWordsFile + " loaded, found " + str(len(self._wordlistReport)) + " words.")
 
 
-	def generatePrefixSuffixHyphenation(self,wordlistReportFile,prefixListPath,suffixListPath):
+	def generatePrefixSuffixHyphenation(self,sourceMasterWordsFile,sourcePrefixListFile,suffixListPath):
 		# Now we will look for and load all the peripheral files and report
 		# on what we found.
-		# Load the master wordlist.
-		try:
-			self.loadWordlistReport(wordlistReportFile)
-		except IOError, e:
-			self._log_manager.log("ERRR", "Hyphenation auto-generation failed. Word list not read, due to: " + str(e))
-			return
-
 		# Are there prefixList or suffixList to process?
-		prefixList = self.cleanWordList(self.wordListFromFile(prefixListPath))
+		prefixList = self.cleanWordList(self.wordListFromFile(sourcePrefixListFile))
 		suffixList = self.cleanWordList(self.wordListFromFile(suffixListPath))
 
 		# Test to see if we have enough of the above objects to auto-generate some hyphenated words.
