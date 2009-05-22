@@ -98,7 +98,7 @@ class MakeTexHyphenationFile (object) :
 					"% Please refer to the documentation for details on how to make changes.\n\n"
 
 			# Pickup our settings and insert any data we might have auto-generated
-			settingsToGet = settings['TeX']['Hyphenation']['FileSettings']
+			settingsToGet = settings['TeX']['Hyphenation']
 			for key, value in settingsToGet.iteritems() :
 				if key == "hyphenWords" :
 					# Add lcCodes here if there are any

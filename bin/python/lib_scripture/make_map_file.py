@@ -65,6 +65,8 @@ class MakeMapFile (object) :
 			mapBackgroundImageFile = inputFile.replace('.svg', '-bkgrnd-gr.png')
 			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-gr.png')
 
+		print colorMode
+
 		# See if the maps folder exists then check for the files we need.
 		if not os.path.isdir(mapProject) :
 			os.mkdir(mapProject)

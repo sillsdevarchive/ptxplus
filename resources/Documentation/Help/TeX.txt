@@ -62,6 +62,7 @@ perl -CSD -ne 'foreach(split("")){$c{$_}++}; END {print join("\n", map {sprintf(
 
 Again, adjust for your project.
 
+
 ==== Font Substitution ====
 Some times you may need to substitute a font on a specific text marker. For example, a text using a non-Roman script but needs to have a book title in another language which needs characters that are not included in the publication font. Here's what you do:
 
@@ -73,8 +74,30 @@ Some times you may need to substitute a font on a specific text marker. For exam
 
 That should do it. This is a work around so you will need to make adjustment to the fonts file and the style file. (Until we come up with some cleaver programing to make this more automated.)
 
+
+==== Watermark ====
+You could use the "border" feature; this was intended for decorative borders but could just as well do a watermark.
+
+Put whatever watermark you like into a PDF file by itself -- you'll want it fairly light gray, probably, if it's going to go behind all the text. Then just add something like
+
+	\def\PageBorder{mywatermark.pdf}
+
+to the setup file, and the specified PDF file will be added behind each page. You can add options to resize it, etc:
+
+	\def\PageBorder{mywatermark.pdf scaled 2000 rotated 45}
+
+(the "scaled" factor is relative to 1000, so this would be double the original image size).
+
+
 ==== Misc... ====
 These are just some miscellaneous notes and we don't have a better place to keep them.
+
+=== Page Number Override ===
+Some times you need to override the page number at a given place in a publication. This is easy to do. Find the [[TeX]] file (look in the process folder for a file with a [[.tex]] extension) that drives the process and add this simple command to it:
+
+\pageno = nn
+
+This will cause [[TeX]] to start the first page of that section with nn.
 
 === Override code for .tex files ===
 The [[.tex]] files that ptxplus produces is automated but near the end of a project it may be necessary to tweak them by added code. This shouldn't be done until the text is locked down. An example would be setting overrides for page behavior in peripheral matter like these lines:

@@ -63,3 +63,7 @@ Desc: Need ways to manage fonts globally.
 **Test for End Markers**
 Status: Open
 Desc: Need a test for end marker markup on in-line markers.
+
+**Hyphenation Wizard**
+Status: Open
+Desc: Make a wizard that would guide the user in the whole process of making an accurate hyphenation table for [[TeX]] to use.

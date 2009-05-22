@@ -1,5 +1,8 @@
 ====== Issues ======
 
+Fri 22 May 2009 04:18 PM ICT
+Status:
+
 **Fri 15 May 2009 11:31 AM ICT**
 Status: Open
 A specification needs to be written for ptxplus so it can be redesigned. The original package has been developed in a reactionary fashion so the code is very convoluted. With a good specification it could be rewritten or at least reorganized so it could be more generalized for wider use.
