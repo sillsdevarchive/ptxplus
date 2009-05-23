@@ -62,6 +62,7 @@ class MakeHyphenWordlist (object) :
 		sourceHyphenatedNamesFile = self._log_manager._settings['Process']['Hyphenation']['sourceHyphenatedNamesFile']
 		sourcePrefixListFile = self._log_manager._settings['Process']['Hyphenation']['sourcePrefixListFile']
 		sourceSuffixListFile = self._log_manager._settings['Process']['Hyphenation']['sourceSuffixListFile']
+		reportNonHypenatedWords = self._log_manager._settings['Process']['Hyphenation']['reportNonHypenatedWords']
 		newHyphenationFile = self._log_manager._settings['Process']['Hyphenation']['newHyphenationFile']
 		hyphenBreakRules = self._log_manager._settings['Process']['Hyphenation']['hyphenBreakRules'].decode('utf-8').decode('unicode_escape')
 
@@ -87,7 +88,7 @@ class MakeHyphenWordlist (object) :
 		self.writeHyphenationList(newHyphenationFile)
 
 		#Debuging, write out words that could not be hyphenated
-		self.writeFailedWords('Reports/unhyphenated-words.txt')
+		self.writeFailedWords(reportNonHypenatedWords)
 
 	def loadPreHyphenatedWordList(self,filepath):
 		# Load the exsiting hyphen words source list if one is in the source folder.
