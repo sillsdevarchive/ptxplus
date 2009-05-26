@@ -129,7 +129,7 @@ class MakeHyphenWordlist (object) :
 
 		# Test to see if we have enough of the above objects to auto-generate some hyphenated words.
 		if not (prefixList or suffixList):
-			self._log_manager.log("WARN", "Could not auto-generate any hyphenated words, no prefix or suffix files found.")
+			self._log_manager.log("DBUG", "Could not auto-generate hyphenated words, based on prefix or suffix. One or both of those files were not found.")
 			return
 
 		# If we made it this far the actual process can begin

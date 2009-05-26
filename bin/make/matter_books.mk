@@ -105,7 +105,7 @@ endif
 # If we are checking text that means we are not sure about how good it is. That
 # being the case, we don't want this text in the system yet so the very first
 # thing we do is try to delete any existing copies from the source directory.
-preprocess-$(1) : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
+preprocess-book-$(1) : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
@@ -130,6 +130,7 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1).usfm.adj \
 	$(PATH_TEXTS)/$(1).usfm.piclist \
 	$(PATH_PROCESS)/$(1).tex \
+	$(TEX_HYPHENATION_FILE) \
 	$(DEPENDENT_FILE_LIST)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 
@@ -174,12 +175,6 @@ bind-booklet-$(1) : $(PATH_PROCESS)/$(1).pdf
 	@- $(CLOSEPDF)
 	$(MAKE_BOOKLET) $$<
 	@ $(VIEWPDF) $$< &
-
-
-# For testing
-test-$(1) :
-	$(PY_PROCESS_SCRIPTURE_TEXT) TextProcesses $(1) $(PATH_TEXTS)/$(1).usfm $(PATH_TEXTS)/$(1).usfm
-
 
 endef
 
@@ -249,13 +244,35 @@ view-nt : $(MATTER_BOOKS_NT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
-# Just do all the books in a section but don't bother looking at them
-ot : $(MATTER_BOOKS_OT_PDF)
 
-nt : $(MATTER_BOOKS_NT_PDF)
+# Preproces all the books in a project then run whatever global processes
+# needed like make-master-wordlist.
+preprocess-checks:
+	@echo Preprocess checking OT books:
+	@$(foreach v,$(MATTER_BOOKS_OT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@echo Preprocess checking NT books:
+	@$(foreach v,$(MATTER_BOOKS_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
+# Manually create a master wordlist based on existing book
+# wordlists in the Reports file. Best to run this after
+# a preprocess-all command
+make-master-wordlist : preprocess-checks
+	@echo Creating a new master word list
+	@$(PY_RUN_SYSTEM_PROCESS) make_master_wordlist
 
-# Preproces all the books in a project
-preprocess :
-	$(foreach v,$(MATTER_BOOKS_OT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) ; )
-	$(foreach v,$(MATTER_BOOKS_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) ; )
+# Manually create the hyphenation word list file
+$(newHyphenationFile) : $(PATH_HYPHENATION) make-master-wordlist
+	@echo Creating a new hyphenation word list
+	@$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
+
+# Manually create the hyphenation word list file
+force-make-hyphen-wordlist : $(PATH_HYPHENATION) make-master-wordlist
+	@echo Creating a new hyphenation word list
+	@$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
+
+# This enables all the preprocessing to be done in one command
+preprocess: force-make-hyphen-wordlist
+	@echo Completed preprocessing steps
+
+.PHONY: view-ot view-nt preprocess make-hyphen-wordlist make-master-wordlist preprocess-checks
+

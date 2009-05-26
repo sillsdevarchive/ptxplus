@@ -276,7 +276,7 @@ class ConfigGUI (object) :
 #        self.set_book(self.bkid)
 
 	def b_check_clicked (self, widget) :
-		self.execute("ptxplus", "preprocess-" + self.bkid)
+		self.execute("ptxplus", "preprocess-book-" + self.bkid)
 #        self.set_book(self.bkid)
 
 	def b_wiki_clicked (self, widget) :

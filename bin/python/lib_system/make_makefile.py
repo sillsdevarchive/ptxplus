@@ -82,10 +82,10 @@ class MakeMakefile (object) :
 		makefileFinal = "include " + basePath + "/bin/make/common_bible_info.mk\n" + \
 				editorBibleInfo + \
 				"include " + basePath + "/bin/make/periph_info.mk\n" + \
+				"include " + basePath + "/bin/make/system_files.mk\n" + \
 				"include " + basePath + "/bin/make/matter_books.mk\n" + \
 				"include " + basePath + "/bin/make/matter_maps.mk\n" + \
-				"include " + basePath + "/bin/make/matter_peripheral.mk\n" + \
-				"include " + basePath + "/bin/make/system_files.mk\n"
+				"include " + basePath + "/bin/make/matter_peripheral.mk\n"
 
 		# Output to the new makefile file
 		makefileObject.write(makefileHeader + makefileSettings + makefileFinal)

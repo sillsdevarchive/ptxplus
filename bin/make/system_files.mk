@@ -36,29 +36,13 @@
 $(PATH_HYPHENATION) :
 	mkdir -p $(PATH_HYPHENATION)
 
-# Create the "raw" hyphenation word list file
-$(TEX_HYPHENATION_WORDLIST) : $(PATH_HYPHENATION)
-	$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
-
-#	touch $(TEX_HYPHENATION_WORDLIST)
-
-# Manually create a master wordlist based on existing book
-# wordlists in the Reports file. Best to run this after
-# a preprocess-all command
-make-master-wordlist :
-	$(PY_RUN_SYSTEM_PROCESS) make_master_wordlist
-
-# Manually create the hyphenation word list file
-make-hyphen-wordlist :
-	$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
-
 # Manually create the TeX hyphenation file
 make-tex-hyphens :
 	$(PY_RUN_SYSTEM_PROCESS) make_tex_hyphenation_file
 
 # Create a TeX hyphenation rules file based on what is in the
 # project.conf file
-$(TEX_HYPHENATION_FILE) : $(TEX_HYPHENATION_WORDLIST)
+$(TEX_HYPHENATION_FILE) : $(newHyphenationFile)
 	$(PY_RUN_SYSTEM_PROCESS) make_tex_hyphenation_file
 
 # In case the process folder isn't there (because of archive)
@@ -247,8 +231,3 @@ illustrations :
 maps :
 	$(EDITCSV) $(PATH_MAPS)/maps_data.csv
 
-# This will open the hyphenation word list
-hyphenation :
-	$(EDITCONF) $(TEX_HYPHENATION_WORDLIST)
-
-###############################################################

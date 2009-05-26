@@ -77,7 +77,7 @@ class MakeTopicIndexFile (object) :
 			# These tags are hard-coded tags and we are trying to repurpose the USFM
 			# introduction tags. If there are conflicts between this and the introduction
 			# texts we may need to introduce special new tags.
-			USFMTags = ['\\imt1', '\\imt2', '\\imt3', '\\ipi']
+			USFMTags = ['\\imt1', '\\imt2', '\\imt3', '\\imi']
 			# Creage header information for this sfm file
 			headerInfo = "\\id OTH\n\\ide UTF-8\n\\periph Title Page\n\\mt1 <Title for Topical Index>\n"
 
