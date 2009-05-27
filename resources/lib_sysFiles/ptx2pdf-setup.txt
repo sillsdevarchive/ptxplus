@@ -105,6 +105,12 @@
 \def\HeaderPosition{.5}
 \def\FooterPostion{.5}
 
+# \BindingGutter and \BindingGuttertrue will add more to the gutter
+# margin so binding can be applied to the binding edge of the page.
+# Be sure to add the same amount to the page width.
+%\BindingGutter=12mm
+%\BindingGuttertrue
+
 %%%%% Turn Off Graphics
 % Uncomment and ptx2pdf will not output the actual picture
 % graphic, just the space it goes in. This makes it much faster.

@@ -81,7 +81,7 @@ class ProcessTopicIndexHandler (parse_sfm.Handler) :
 			self._book = text
 
 		# If it is a note we may want to make some changes
-		if tag == 'ipi' :
+		if tag == 'imi' :
 			# Get rid of the last \n if there is on
 			if text[-1] == "\n" :
 				text = text[:-1]
