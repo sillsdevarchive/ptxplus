@@ -89,14 +89,14 @@ define book_rules
 # proecesses are run it will copy the text into the system and then it will
 # run any necessary text processes on the system source text as defined in
 # the project.conf file.
-$(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
 ifeq ($(LOCKED),0)
+$(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<' '$$@'
 	$(PY_PROCESS_SCRIPTURE_TEXT) CopyIntoSystem $(1) '$$<' '$$@'
 	$(PY_PROCESS_SCRIPTURE_TEXT) TextProcesses $(1) '$$@' '$$@'
 else
-	@echo File $(PATH_TEXTS)/$(1).usfm is locked
+#	@echo File $(PATH_TEXTS)/$(1).usfm is locked
 endif
 
 # This enables us to do the preprocessing on a single book and view the log file
