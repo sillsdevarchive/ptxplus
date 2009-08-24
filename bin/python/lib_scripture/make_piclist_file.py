@@ -180,12 +180,9 @@ class MakePiclistFile (object) :
 
 			pics = 0
 			for line in masterData :
-				# Throw out the header line (there should be one!)
-				#if pics == 0 :
-					#pics +=1
-					#continue
-				#else :
-				if self._bookID == line[1] :
+				# Do not process unless we are in the right book and the
+				# illustration is tagged to be used (True or False)
+				if self._bookID == line[1] and line[0] == True :
 					# Now we'll write out what we've found
 					# More error correction needs to go here
 					# I would think but this will be ok to
