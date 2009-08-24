@@ -1,9 +1,9 @@
 Readme file for the manual installation of the developer version of the ptxplus package
 	By Dennis Drescher (dennis_drescher@sil.org)
-	Last editied: 24/08/2009
+	Last edited: 24/08/2009
 
 
-These are instructions for manually installing the developer version of the ptxplus package on a typical Ubuntu operating system (Jaunty +). Ultimatly we want ptxplus to completly install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
+These are instructions for manually installing the developer version of the ptxplus package on a typical Ubuntu operating system (Jaunty +). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
 
 
 PYTHON
