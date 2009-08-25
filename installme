@@ -45,9 +45,11 @@ Add this to the end of that file (on its own line):
 
 Next time you reboot or login, the new path settings will be there.
 
-If you don't want to reboot right now and you just want to get it working on the current login use:
+If you don't want to reboot right now and you just want to get it working on the current login (terminal) use:
 
 	source ~/.profile
+
+That will enable you to test in the current terminal but if you want it to take effect system-wide then you will need to log off then log back in.
 
 Test to see if the system recognizes the additional path with:
 
@@ -61,6 +63,30 @@ This should complete the manual installation of ptxplus. Now you should be able 
 
 	ptxplus
 
-If you start it from the root of a project folder it should find the project.conf file and automatically load that project.
+In a terminal, if you start it from the root of a project folder it should find the project.conf file and automatically load that project. However, if you want to start ptxplus with a right-click from the file browser then you will need to follow the instructions below in the SYSTEM TWEAKS to install a Nautilus script that will make this happen for you.
 
-Have fun!
+
+SYSTEM TWEAKS
+Starting ptxplus from a right-click:
+Create a text file in /home/<yourhome>/.gnome2/nautilus-scripts called ptxplus. Be sure to set the permissions on that file to be exicutable. (Right-click on the file then go to Properties -> Permissions, and click the Execute box.) Now open that file for editing and insert these two lines. (Edit as necessary.):
+
+	#!/bin/sh
+	/home/<yourhome>/Projects/ptxplus/bin/python/ptxplus-manager/ptxplus-manager
+
+Once you save the file you should be able to, from within your file browser, right click inside a valid project folder and you will see the "Scripts" entry in the menu. Inside that you will find the ptxplus entry and when you click in it, it should open that project in ptxplus.
+
+Starting a terminal with a right-click:
+Some times you want to open a terminal at a certain location in your Nautilus file browser. As above, create a text file in the scripts folder called "Open Terminal" and give it exicutable properties. Open the file in your editor and add these two lines:
+
+	#!/bin/sh
+	gnome-terminal
+
+When you are done you should see the "Open Terminal" in the menu when you right-click.
+
+
+OTHER REQUIRED SOFTWARE
+
+List them here
+
+Note XeTeX has to be installed twice, first texlive, then texlive-xetex-snapshot
+
