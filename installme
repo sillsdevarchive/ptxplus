@@ -1,4 +1,4 @@
-Readme file for the manual installation of the developer version of the ptxplus package
+Manual installation instructions of the developer version of the ptxplus package
 	By Dennis Drescher (dennis_drescher@sil.org)
 	Last edited: 24/08/2009
 
@@ -6,8 +6,30 @@ Readme file for the manual installation of the developer version of the ptxplus 
 These are instructions for manually installing the developer version of the ptxplus package on a typical Ubuntu operating system (Jaunty +). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
 
 
-PYTHON
-Nothing in this package will work without Python. Be sure you have Python 2.5 installed on your system.
+REQUIRED PACKAGES
+There are a number of packages that need to be installed for ptxplus to work. Some are more critical than others but all of them are needed. One of the packages is located on the packages.sil.org site, so if you have not already modified your repository source list then open this system file for editing:
+
+	sudo gedit /etc/apt/sources.list
+
+Next, add this line to the bottom of the file:
+
+	deb http://packages.sil.org/ubuntu jaunty main
+
+Update your package list with:
+
+	sudo apt-get update
+
+Now you should be able to install all the necessary packages to run ptxplus with this command:
+
+	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk libgtk2-spell-perl
+
+As of Ubuntu 9.04 (Jaunty) these instructions will install a version of xetex (3.141592-2.2-0.996-patch2) that will handle most things. However, if you need the latest version, then you will need to get it from the packages.sil.org repository. To do that use:
+
+	sudo apt-get install texlive-xetex-snapshot
+
+That will remove the other version and replace it with version 3.1415926-2.2-0.999.7 or greater.
+
+With all the above packages installed, we are ready to move on to installing ptxplus.
 
 
 GETTING ptxplus
@@ -31,7 +53,7 @@ That should put ptxplus where you need it. From time to time you may want to upd
 
 
 INSTALLATION
-For easier operation it is necessary to get ptxplus properly registered in your system. The first thing that needs to be done is to link ptxplus.conf file to /etc folder. That is done with:
+For easier operation it is necessary to get ptxplus properly located in your system. The first thing that needs to be done is to link ptxplus.conf file to /etc folder. That is done with:
 
 	sudo ln -s ~/Projects/ptxplus/bin/ptxplus.conf /etc/ptxplus.conf
 
@@ -51,7 +73,7 @@ If you don't want to reboot right now and you just want to get it working on the
 
 That will enable you to test in the current terminal but if you want it to take effect system-wide then you will need to log off then log back in.
 
-Test to see if the system recognizes the additional path with:
+Test to see if the system recognises the additional path with:
 
 	echo $PTXPLUS_BASE
 
@@ -67,26 +89,38 @@ In a terminal, if you start it from the root of a project folder it should find 
 
 
 SYSTEM TWEAKS
+
 Starting ptxplus from a right-click:
-Create a text file in /home/<yourhome>/.gnome2/nautilus-scripts called ptxplus. Be sure to set the permissions on that file to be exicutable. (Right-click on the file then go to Properties -> Permissions, and click the Execute box.) Now open that file for editing and insert these two lines. (Edit as necessary.):
+Create a text file in your Nautilus scripts folder with:
+
+	gedit ~/.gnome2/nautilus-scripts/ptxplus
+
+Inside that file paste these two lines:
 
 	#!/bin/sh
-	/home/<yourhome>/Projects/ptxplus/bin/python/ptxplus-manager/ptxplus-manager
+	~/Projects/ptxplus/bin/python/ptxplus-manager/ptxplus-manager
 
-Once you save the file you should be able to, from within your file browser, right click inside a valid project folder and you will see the "Scripts" entry in the menu. Inside that you will find the ptxplus entry and when you click in it, it should open that project in ptxplus.
+Be sure to set the permissions on that file to be executable with:
+
+	chmod 775 ~/.gnome2/nautilus-scripts/ptxplus
+
+Now you should be able to, from within your file browser, right click inside a valid project folder and you will see the "Scripts" entry in the menu. Inside that you will find the ptxplus entry and when you click in it, it should open that project in ptxplus.
 
 Starting a terminal with a right-click:
-Some times you want to open a terminal at a certain location in your Nautilus file browser. As above, create a text file in the scripts folder called "Open Terminal" and give it exicutable properties. Open the file in your editor and add these two lines:
+Some times you want to open a terminal at a certain location in your Nautilus file browser. To do this, create a text file in your Nautilus scripts folder with:
+
+	gedit ~/.gnome2/nautilus-scripts/Open\ Terminal
+
+Inside that file paste these two lines:
 
 	#!/bin/sh
 	gnome-terminal
 
+Next, set the permissions on that file like above:
+
+	chmod 775 ~/.gnome2/nautilus-scripts/Open\ Terminal
+
 When you are done you should see the "Open Terminal" in the menu when you right-click.
 
 
-OTHER REQUIRED SOFTWARE
-
-List them here
-
-Note XeTeX has to be installed twice, first texlive, then texlive-xetex-snapshot
 
