@@ -1,6 +1,6 @@
 Manual installation instructions of the developer version of the ptxplus package
 	By Dennis Drescher (dennis_drescher@sil.org)
-	Last edited: 24/08/2009
+	Last edited: 27/08/2009
 
 
 These are instructions for manually installing the developer version of the ptxplus package on a typical Ubuntu operating system (Jaunty +). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
@@ -77,50 +77,18 @@ Test to see if the system recognises the additional path with:
 
 	echo $PTXPLUS_BASE
 
-Next we need link ptxplus (main program) to /usr/local/bin so it can be started from any location like a real program would. To do that do:
+Next we need link ptxplus (main program) to /usr/local/bin so it can be started from any location like a real program would. Also, you will need to link a couple utilities that are good to run globally out of the ~/bin folder (Be sure you have one to link it to first.) and also right-click from the Nautilus scripts folder. To make these links do these commands:
 
 	sudo ln -s ~/Projects/ptxplus/bin/ptxplus /usr/local/bin/ptxplus
+	ln -s ~/Projects/ptxplus/bin/sh/multi-txtconv.sh ~/bin/multi-txtconv.sh
+	ln -s ~/Projects/ptxplus/bin/python/lib_extras/get-clip ~/bin/get-clip
+	ln -s ~/Projects/ptxplus/bin/sh/ptxplus ~/.gnome2/nautilus-scripts/ptxplus
+	ln -s ~/Projects/ptxplus/bin/sh/Open\ Terminal ~/.gnome2/nautilus-scripts/Open\ Terminal
 
 This should complete the manual installation of ptxplus. Now you should be able to start the program from anywhere with:
 
 	ptxplus
 
 In a terminal, if you start it from the root of a project folder it should find the project.conf file and automatically load that project. However, if you want to start ptxplus with a right-click from the file browser then you will need to follow the instructions below in the SYSTEM TWEAKS to install a Nautilus script that will make this happen for you.
-
-
-SYSTEM TWEAKS
-
-Starting ptxplus from a right-click:
-Create a text file in your Nautilus scripts folder with:
-
-	gedit ~/.gnome2/nautilus-scripts/ptxplus
-
-Inside that file paste these two lines:
-
-	#!/bin/sh
-	~/Projects/ptxplus/bin/python/ptxplus-manager/ptxplus-manager
-
-Be sure to set the permissions on that file to be executable with:
-
-	chmod 775 ~/.gnome2/nautilus-scripts/ptxplus
-
-Now you should be able to, from within your file browser, right click inside a valid project folder and you will see the "Scripts" entry in the menu. Inside that you will find the ptxplus entry and when you click in it, it should open that project in ptxplus.
-
-Starting a terminal with a right-click:
-Some times you want to open a terminal at a certain location in your Nautilus file browser. To do this, create a text file in your Nautilus scripts folder with:
-
-	gedit ~/.gnome2/nautilus-scripts/Open\ Terminal
-
-Inside that file paste these two lines:
-
-	#!/bin/sh
-	gnome-terminal
-
-Next, set the permissions on that file like above:
-
-	chmod 775 ~/.gnome2/nautilus-scripts/Open\ Terminal
-
-When you are done you should see the "Open Terminal" in the menu when you right-click.
-
 
 
