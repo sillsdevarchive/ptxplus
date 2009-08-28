@@ -33,8 +33,12 @@ class MergeCrossRefs (object) :
 	def main (self, log_manager) :
 
 		outputFile = log_manager._currentOutput
+
+# Something evil seems to be going on here
+
+		print "xxxxxxxxxxxx " . log_manager._currentOutput
 		# Get our book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+		bookObject = "".join(codecs.open(outputFile, "r", encoding='utf-8'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()

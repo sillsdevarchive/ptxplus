@@ -21,7 +21,7 @@ Update your package list with:
 
 Now you should be able to install all the necessary packages to run ptxplus with this command:
 
-	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk libgtk2-spell-perl
+	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk libgtk2-spell-perl teckit
 
 As of Ubuntu 9.04 (Jaunty) these instructions will install a version of xetex (3.141592-2.2-0.996-patch2) that will handle most things. However, if you need the latest version, then you will need to get it from the packages.sil.org repository. To do that use:
 
