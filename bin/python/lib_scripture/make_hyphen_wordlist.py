@@ -26,6 +26,7 @@
 # 20090520 - djd - Massive changes made by TimE to add
 #		regexp rules for making breaks and he also restructured
 #		the file too.
+# 20090831 - djd - Fixed file pointer config setting that was wrong
 
 
 #############################################################
@@ -58,8 +59,8 @@ class MakeHyphenWordlist (object) :
 
 	def main (self) :
 		sourceMasterWordsFile = self._log_manager._settings['Process']['Hyphenation']['sourceMasterWordsFile']
-		sourceHyphenatedWordsFile = self._log_manager._settings['Process']['Hyphenation']['sourceHyphenatedWordsFile']
-		sourceHyphenatedNamesFile = self._log_manager._settings['Process']['Hyphenation']['sourceHyphenatedNamesFile']
+		sourceHyphenatedWordsFile = self._log_manager._settings['Process']['Hyphenation']['sourceUserWordsFile']
+		sourceHyphenatedNamesFile = self._log_manager._settings['Process']['Hyphenation']['sourceUserNamesFile']
 		sourcePrefixListFile = self._log_manager._settings['Process']['Hyphenation']['sourcePrefixListFile']
 		sourceSuffixListFile = self._log_manager._settings['Process']['Hyphenation']['sourceSuffixListFile']
 		reportNonHypenatedWords = self._log_manager._settings['Process']['Hyphenation']['reportNonHypenatedWords']
@@ -161,10 +162,10 @@ class MakeHyphenWordlist (object) :
 				hyphenation = word
 				for off,match in enumerate(hyphenBreaks.finditer(word)):
 					hyphenation = hyphenation[:match.end()+off] + '-' + hyphenation[match.end()+off:]
-				if hyphenation != word:
-					if '-' in hyphenation and hyphenation[-1] != '-' and not self._hyphenations.has_key(word):
-						self._hyphenations[word] = hyphenation
-						self._wordlistReport.discard(word)
+				hyphenation = hyphenation.strip('-')
+				if hyphenation != word and word not in self._hyphenations:
+					self._hyphenations[word] = hyphenation
+					self._wordlistReport.discard(word)
 			self.logHyphenCount("Rules based hyphenation")
 
 
