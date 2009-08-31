@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.5
 # -*- coding: utf-8 -*-
 # version: 20080729
 # By Dennis Drescher (dennis_drescher at sil.org)
@@ -18,6 +18,7 @@
 
 # History:
 # 20081226 - djd - Initial draft
+# 20090831 - djd - Fixed init and log_manager bug
 
 
 #############################################################
@@ -30,13 +31,13 @@ import parse_sfm
 
 class MergeCrossRefs (object) :
 
-	def main (self, log_manager) :
+	def __init__(self, log_manager):
+		self._log_manager = log_manager
 
-		outputFile = log_manager._currentOutput
+	def main (self) :
 
-# Something evil seems to be going on here
+		outputFile = self._log_manager._currentOutput
 
-		print "xxxxxxxxxxxx " . log_manager._currentOutput
 		# Get our book object
 		bookObject = "".join(codecs.open(outputFile, "r", encoding='utf-8'))
 
@@ -44,7 +45,7 @@ class MergeCrossRefs (object) :
 		parser = parse_sfm.Parser()
 
 		# This calls the cross ref merge handler which should merge the refs
-		parser.setHandler(CrossRefMergeContextHandler(log_manager))
+		parser.setHandler(CrossRefMergeContextHandler(self._log_manager))
 		output = parser.transduce(bookObject)
 
 		# The whole idea of this module is to swap quotes but we need to be
@@ -140,5 +141,7 @@ class CrossRefMergeContextHandler (parse_sfm.Handler) :
 # This starts the whole process going
 def doIt (log_manager) :
 
-	thisModule = MergeCrossRefs()
-	return thisModule.main(log_manager)
+	thisModule = MergeCrossRefs(log_manager)
+	return thisModule.main()
+
+
