@@ -27,6 +27,8 @@
 #		regexp rules for making breaks and he also restructured
 #		the file too.
 # 20090831 - djd - Fixed file pointer config setting that was wrong
+# 20090831 - te - Fixed bug that prevented spurious hyphens from getting
+#		through not allowing strings to be analyzed
 
 
 #############################################################
