@@ -1,10 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Tue, 01 Sep 2009 16:20:47 +0700
+
 ====== Hyphenation ======
 
 Hyphenation is a complex but a very important part of any Scripture publication. This system will generate a hyphenated word list that will work with the [[TeX]] typesetting system and maybe others as well. This system will take multiple forms of input to generate this word list. It works like this.
 
 The client will provide a list of words which will form the primary input. The words it contains will go into the [[TeX]] hyphenation exceptions list. [[TeX]] will break on syllable or word boundaries exactly as they are described to it in this list. For example "Wis-con-sin" will break on one of the two hyphens in the word. If it was expressed "Wisconsin" it wouldn't break at all and that might be what you want.
 
-Add more about the names hyphenation file here...
+*****Add more about the names hyphenation file here...
 
 Put the list you just made in a file named hyphen-words.txt and put it in the Source folder. Make sure the character encoding is the same as the Scripture text files in that are in that folder. The final encoding changes can be made when the final list is generated.
 
@@ -14,4 +19,4 @@ With these two lists in place a lot of words can be generated for the final list
 
 Much more must be written on this but this will have to do for now.
 
-Outline the basic procedure with the commands needed to make it happen. Remember that the project needs to be reset and the source must be in its final form before an accurate word list can be generated.
+*****Outline the basic procedure with the commands needed to make it happen. Remember that the project needs to be reset and the source must be in its final form before an accurate word list can be generated.

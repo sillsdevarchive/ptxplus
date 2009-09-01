@@ -1,3 +1,8 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Tue, 01 Sep 2009 16:19:02 +0700
+
 ====== TeX ======
 
 So much [[TeX]] and so little time...
@@ -38,17 +43,11 @@ and you should be good to go.
 ==== \lccode ====
 When using some Unicode fonts it is sometimes necessary to set the \lccode for those characters which would be normally set to '0'. (See the TeX book pg. 41 & 345 for more details.)
 
-For just a few characters you can enter them in the project.conf file. Do is something like this:
-
-	\lccode"1000="1000 \lccode"1001="1001
-
-Only use spaces between the entries. However, if you have a large range to cover you will want to put the entire list in a file in your Hyphenation directory called "lccodelist.txt". The make_tex_hyphenation.py process will find it and insert them into your project hyphenation next time it builds it. The codes should be entered into that file like this:
+Sometimes you have a large rangeof codes to cover so for this reason we put the list in a file in your Hyphenation directory called "lccodelist.txt". The make_tex_hyphenation.py process will find it and insert them into your project hyphenation next time it builds it. The codes should be entered into that file like this:
 
 \lccode"1000="1000
 \lccode"1001="1001
 ...
-
-When using the external file to hold your \lccodes it is important not to have any entered in the project.conf file. Leave the field blank if you plan on using an external list. When using an external file the hyphenation script will ignore any values in the project.conf file.
 
 If you have a whole bunch of characters to cover you may want to automate the process with this nifty line of Perl code by Martin Hosken:
 
@@ -80,11 +79,15 @@ You could use the "border" feature; this was intended for decorative borders but
 
 Put whatever watermark you like into a PDF file by itself -- you'll want it fairly light gray, probably, if it's going to go behind all the text. Then just add something like
 
-	\def\PageBorder{mywatermark.pdf}
+'''
+\def\PageBorder{mywatermark.pdf}
+'''
 
 to the setup file, and the specified PDF file will be added behind each page. You can add options to resize it, etc:
 
-	\def\PageBorder{mywatermark.pdf scaled 2000 rotated 45}
+'''
+\def\PageBorder{mywatermark.pdf scaled 2000 rotated 45}
+'''
 
 (the "scaled" factor is relative to 1000, so this would be double the original image size).
 
