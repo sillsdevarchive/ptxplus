@@ -66,10 +66,9 @@ class MakePiclistFile (object) :
 		(head, tail) = os.path.split(self._csvMasterFile)
 		self._csvSourceFile = self._sourcePath + "/" + tail
 		self._errors = 0
-		self._piclistData = []
 
 
-	def collectPicLine (self, use, bid, cn, vn, fid, cr, cp, tr) :
+	def collectPicLine (self, use, bid, cn, vn, fid, ils, cr, cp, tr, altr) :
 		'''Collect and format an illustration description line. The incoming
 			file will not have all the information we need so we'll make
 			some things up here and use them as defaults. The format goes
@@ -97,9 +96,8 @@ class MakePiclistFile (object) :
 			caption = tr
 
 		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + str(self._texscale) + "|" + cr + "|" + caption + "|"
-		self._piclistData.append(line)
 		self._log_manager.log("DBUG", "Collected: " + line)
-
+		return line
 
 	def processIllustration (self, fileID) :
 		'''This is just a generalized illustration processing function.
@@ -167,49 +165,31 @@ class MakePiclistFile (object) :
 			# If we didn't bail out right above, we'll go ahead and open the data file
 			# The assumption here is that the encoding of the pieces of the csv are
 			# what they need to be.
-			inFileData = csv.reader(open(self._csvMasterFile), dialect=csv.excel)
-
+			inFileData = filter(lambda l: l[1]==self._bookID,
+						csv.reader(open(self._csvMasterFile), dialect=csv.excel))
 			# Right here we will sort the list by BCV. This should prevent unsorted
-			# data from getting out into the piclist. First change the data to a list.
-			masterData = []
+			# data from getting out into the piclist.
+			inFileData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
+			# Do not process unless we are in the right book and the
+			# illustration is tagged to be used (True or False)
 			for line in inFileData :
-				masterData.append(line)
-
-			# This will sort it
-			masterData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
-
-			pics = 0
-			for line in masterData :
-				# Do not process unless we are in the right book and the
-				# illustration is tagged to be used (True or False)
-				if self._bookID == line[1] and line[0] == True :
-					# Now we'll write out what we've found
-					# More error correction needs to go here
-					# I would think but this will be ok to
-					# start with.
-					self.collectPicLine(line[0].upper(), line[1].upper(), line[2], line[3], \
-					line[4], \
-					line[5], line[6], line[8])
-					self.processIllustration(line[4])
-					pics +=1
+				self.processIllustration(line[4])
 
 			# Now we need output anything we might have collected. If nothing was
 			# found, just an empty file will be put out.
 			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf-8')
 			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
-			for line in self._piclistData :
-				self._outFileObject.write(line + "\n")
+			self._outFileObject.writelines(self.collectPicLine(*line) + '\n' for line in inFileData)
 
 			# Close the piclist file
 			self._outFileObject.close()
 
 			# Tell the world what we did
-			self._log_manager.log("INFO", "We processed " + str(pics-1) + " illustration line(s) for: " + self._bookID)
+			self._log_manager.log("INFO", "We processed " + str(len(inFileData)) + " illustration line(s) for: " + self._bookID)
 
 
 
 # This starts the whole process going
 def doIt(log_manager):
-
 	thisModule = MakePiclistFile(log_manager)
 	return thisModule.main()

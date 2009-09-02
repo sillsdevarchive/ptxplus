@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Tue, 01 Sep 2009 16:19:02 +0700
+Modification-Date: Wed, 02 Sep 2009 14:23:34 +0700
 
 ====== TeX ======
 
@@ -17,9 +17,11 @@ sudo gedit /etc/texmf/texmf.d/95NonPath.cnf
 
 Near the bottom you will find hyph_size = 8191. That's a lot but if you need more you can increase it. However it must be a prime number. To find out if the number you want to use is prime or not go to: http://primes.utm.edu/lists/small/10000.txt
 
-So far, when I have had to change it I chose 10193 which is a prime number around 10000.
+You will want to choose a number that is greater than the number of words in your list. For example, your list is 10,033 words long so you will want to choose a the prime number of 10193 which is a prime number over 10,033.
 
-Once you have changed the setting you will need to remake the main texmf.cnf. To do this run this command:
+Once you have changed the setting you will need to save your file and close the editor so the terminal is free to move on to the next step.
+
+The next step is to remake the main texmf.cnf. To do this, run this command:
 
 sudo update-texmf
 
