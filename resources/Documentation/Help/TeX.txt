@@ -1,11 +1,18 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Wed, 02 Sep 2009 14:23:34 +0700
+Modification-Date: Tue, 08 Sep 2009 16:53:48 +0700
 
 ====== TeX ======
 
 So much [[TeX]] and so little time...
+
+===== Paging Tips and Tricks =====
+Here are some tips on how to get column balance and other paging operations:
+
+==== Inserting blank lines on first page ====
+Some times, when the introduction is short, there is room for body text on the first page. However, a section heading found shortly after the first few verses can throw things off and leave you with several blank lines on the left column. One way around this is to insert a blank line in the introduction section before the horizontal divider line (if one is used). You do this by inserting something like a \ip followed by a normal space (to be legal SFM) then a character like a zero width space (U+200B). You can insert several of them if needed to push the text down and balance the right column with the left.
+
 
 ===== Notes on hyphenation =====
 Hyphenation is an important issue in any publication. Here are some notes on various hyphenation problems that can be encountered.

@@ -68,6 +68,10 @@
 %	\PaperWidth=172mm	\PaperHeight=235mm
 % UBS Series 90
 %	\PaperWidth=210mm	\PaperHeight=295mm
+% GPS typical size (5.25" x 8.25")
+%	\PaperWidth=133mm	\PaperHeight=210mm
+% GPS large size (5.8" x 8.7")
+%	\PaperWidth=147mm	\PaperHeight=221mm
 
 
 %%%%%%%%%%%%%%%%% Other Page Options %%%%%%%%%%%%%%%%%%%%%
