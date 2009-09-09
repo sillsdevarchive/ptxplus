@@ -132,9 +132,9 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_PROCESS)/$(1).tex \
 	$(TEX_HYPHENATION_FILE) \
 	$(DEPENDENT_FILE_LIST)
-#	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
-	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
-	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
+	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
+#	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
+#	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
 
 # Open the PDF file with reader
 view-$(1) : $(PATH_PROCESS)/$(1).pdf

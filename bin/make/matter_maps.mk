@@ -17,6 +17,10 @@
 # History:
 
 # 20080925 - djd - Initial draft version.
+# 20090909 - te - Some debugging work was done to fix a problem
+#		with a python script not being called. More needs
+#		to be done on this and other make file scripts to
+#		make them more concise in the way the exicute.
 
 
 ##############################################################
@@ -61,7 +65,7 @@ define map_rules
 # script will see to it that there is a Maps folder and a csv
 # file for this map. It takes care of the copy process. It should
 # be able to do this and if it can't it should tell us why.
-$(PATH_MAPS)/$(1).svg :
+$(PATH_MAPS)/$(1).svg : $(PATH_MAPS)
 	@echo WARNING: Map: $(PATH_MAPS)/$(1).svg not found adding default to project.
 	@cp $(PATH_MAPS_SOURCE)/$(1).svg $(PATH_MAPS)/$(1).svg
 
@@ -71,40 +75,50 @@ $(PATH_MAPS_PROJECT)/$(1).csv :
 	@cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_MAPS_PROJECT)/$(1).csv
 
 # Migrate the common project map translation file to the Maps folder
-$(PATH_MAPS)/$(1).csv : $(PATH_MAPS_PROJECT)/$(1).csv
+$(PATH_MAPS)/$(1).csv : $(PATH_MAPS) $(PATH_MAPS_PROJECT)/$(1).csv
 	@echo INFO: Migrating data for: $(PATH_MAPS)/$(1).csv
 	@$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_MAPS_PROJECT)/$(1).csv $(PATH_MAPS)/$(1).csv
 
-# Process the SVG file and edit it in Inkscape when it is done
-# This prorocess has a double dependency in the following rules
-# it will check each of them and run them in the order listed.
-# Dependency #1
-preprocess-$(1) :: $(PATH_MAPS)
+
+
+###################################################################
+# Some work needs to be done here and in the calling Python code
+# to make things more consistant and less hassel to maintain.
+# There may be some problems here that need to be figured out.
+###################################################################
+
+# Following was commented out to work around a problem with the
+# Python script not being called:
+## Process the SVG file and edit it in Inkscape when it is done
+## This prorocess has a double dependency in the following rules
+## it will check each of them and run them in the order listed.
+## Dependency #1
+#preprocess-map-$(1) ::
 
 # Dependency #2
-preprocess-$(1) :: $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/styles.csv
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$< &
+preprocess-map-$(1) : $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/styles.csv
+	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$< &
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
 
 # Create the PDF version of the map
 # This is dependent of other files in the process. A default version
 # will be copied into the project Maps folder if one doesn't already
 # exist there.
-$(PATH_MAPS)/$(1).pdf : $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/styles.csv
+$(PATH_MAPS)/$(1).pdf : $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/styles.csv preprocess-map-$(1)
 	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_MAPS)/$(1).svg -A $(PATH_MAPS)/$(1).pdf -T -F -d 2400
 
 
-# Process the SVG file and view it in PDF when it is done
-# This prorocess also has a double dependency in the following rules
-# it will check each of them and run them in the order listed.
-# Dependency #1
-view-$(1) :: $(PATH_MAPS)
+## Process the SVG file and view it in PDF when it is done
+## This prorocess also has a double dependency in the following rules
+## it will check each of them and run them in the order listed.
+## Dependency #1
+#view-$(1) :: $(PATH_MAPS)
 
 # Dependency #2
 view-$(1) :: $(PATH_MAPS)/$(1).pdf
 	@ $(VIEWPDF) $$< &
 
-$(1) : $(PATH_MAPS)/$(1).svg
+#$(1) : $(PATH_MAPS)/$(1).svg
 
 
 endef
@@ -121,7 +135,7 @@ $(PATH_MAPS) :
 	@mkdir -p $(PATH_MAPS)
 
 # Move the styles.csv file over if it isn't there already
-$(PATH_MAPS)/styles.csv :
+$(PATH_MAPS)/styles.csv : $(PATH_MAPS)
 	@echo WARNING: Map style data: $(PATH_MAPS)/styles.csv not found copying default.
 	@cp $(PATH_MAPS_SOURCE)/styles.csv $(PATH_MAPS)/styles.csv
 

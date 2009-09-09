@@ -19,6 +19,8 @@
 # 20081030 - djd - Added total dependence on log_manager.
 #		This script will not run without it because
 #		it handles all the parameters it needs.
+# 20090909 - te - Fixed bug in XML namespaces and a path
+#		problem in a copy routine
 
 
 #############################################################
@@ -32,7 +34,7 @@ import os, shutil
 # Import supporting local classes
 from tools import *
 from csv import reader
-from xml.etree.cElementTree import XMLID, ElementTree
+from xml.etree.ElementTree import XMLID, ElementTree
 
 # Instantiate local classes
 tools		= Tools()
@@ -65,8 +67,6 @@ class MakeMapFile (object) :
 			mapBackgroundImageFile = inputFile.replace('.svg', '-bkgrnd-gr.png')
 			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-gr.png')
 
-		print colorMode
-
 		# See if the maps folder exists then check for the files we need.
 		if not os.path.isdir(mapProject) :
 			os.mkdir(mapProject)
@@ -78,7 +78,7 @@ class MakeMapFile (object) :
 		# Does this map need a background image, is it there?
 		if not os.path.isfile(mapBackgroundImageFile) :
 			if os.path.isfile(mapBackgroundImageFileSource) :
-				shutil.copy(mapBackgroundImageFileSource, mapBackgroundImageFile)
+				shutil.copy(mapBackgroundImageFileSource, mapProject + "/" + mapBackgroundImageFile)
 
 		# How about our data file?
 		if not os.path.isfile(csvFileName) :
@@ -132,8 +132,13 @@ class MakeMapFile (object) :
 # Not sure what to do at this point as this seems to be a namespace issue
 # which could be a part of a larger issue. For now, the file name of the
 # background image has to be set by hand.
+# In the syntax below using set() it is important to use the {} around the
+# name for it to be generated right. See:
+# http://docs.python.org/library/xml.etree.elementtree.html#the-element-interface
+# for more info.
+
 		if dXML.has_key('BackgroundImage') :
-			dXML['BackgroundImage'].set('xlink:href', mapBackgroundImageFile)
+			dXML['BackgroundImage'].set('{http://www.w3.org/1999/xlink}href', mapBackgroundImageFile)
 
 ######################################################################################
 
@@ -152,6 +157,6 @@ class MakeMapFile (object) :
 
 # This starts the whole process going
 def doIt(log_manager):
-
+	import pdb
 	thisModule = MakeMapFile()
-	return thisModule.main(log_manager)
+	return pdb.runcall(thisModule.main,log_manager)
