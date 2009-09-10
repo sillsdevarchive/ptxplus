@@ -44,15 +44,14 @@ class NBSPForShortWords (object) :
 		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'NBSPForShortWords'
 		replacementCount = 0
-		wordList = {}
+		wordLenght = ""
 
 		# Get the parameters if they exist
 		try :
-			list = log_manager._settings['General']['TextProcesses']['nbspWordList']
-			for word in list.split(',') :
-				wordList[word] = 1
+			wordLenght = log_manager._settings['General']['TextProcesses']['nbspWordLength']
+
 		except :
-			log_manager.log("ERRR", "This process is checked as true but no words were found in the word list. Process aborted.")
+			log_manager.log("ERRR", "This process is checked as true but the short word length is not set. Process aborted.")
 
 		# Get our book object
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
@@ -65,7 +64,7 @@ class NBSPForShortWords (object) :
 		#parser.setHandler(NBSPForShortWordsHandler(log_manager, replacementCount))
 		#newBookOutput = parser.transduce(bookObject)
 
-		handler = NBSPForShortWordsHandler(log_manager, wordList, replacementCount)
+		handler = NBSPForShortWordsHandler(log_manager, wordLenght, replacementCount)
 		parser.setHandler(handler)
 		newBookOutput = parser.transduce(bookObject)
 
@@ -80,12 +79,12 @@ class NBSPForShortWords (object) :
 class NBSPForShortWordsHandler (parse_sfm.Handler) :
 	'''This class replaces the Handler class in the parse_sfm module.'''
 
-	def __init__(self, log_manager, wordList, count) :
+	def __init__(self, log_manager, wordLenght, count) :
 
 		self._log_manager = log_manager
 		self._book = ""
 		self._encoding_manager = EncodingManager(log_manager._settings)
-		self._wordList = wordList
+		self._wordLenght = wordLenght
 		self._replacementCount = count
 		self._period = self._log_manager._settings['Encoding']['Punctuation']['WordFinal']['period']
 		self._nonWordCharsMap = {}
@@ -153,11 +152,8 @@ class NBSPForShortWordsHandler (parse_sfm.Handler) :
 				if len(words) > 1 :
 					# Grab the last word in the string
 					lastWord = words[len(words)-1]
-					# See if it has a period on it
-					if self._encoding_manager.hasCharacter(lastWord, self._period) == True :
-						# Strip out any non-word chars using the mapping we made above
-						lastWord = lastWord.translate(self._nonWordCharsMap)
-
+					# If it is shorter than wordLenght we need to join it
+					if len(lastWord) <= wordLenght :
 						for word in self._wordList :
 							if word == lastWord :
 								# Since we know what the last word is find it and replace the
