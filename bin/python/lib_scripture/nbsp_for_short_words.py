@@ -44,11 +44,11 @@ class NBSPForShortWords (object) :
 		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'NBSPForShortWords'
 		replacementCount = 0
-		wordLenght = ""
+		wordLength = ""
 
 		# Get the parameters if they exist
 		try :
-			wordLenght = log_manager._settings['General']['TextProcesses']['nbspWordLength']
+			wordLength = log_manager._settings['General']['TextProcesses']['nbspWordLength']
 
 		except :
 			log_manager.log("ERRR", "This process is checked as true but the short word length is not set. Process aborted.")
@@ -64,7 +64,7 @@ class NBSPForShortWords (object) :
 		#parser.setHandler(NBSPForShortWordsHandler(log_manager, replacementCount))
 		#newBookOutput = parser.transduce(bookObject)
 
-		handler = NBSPForShortWordsHandler(log_manager, wordLenght, replacementCount)
+		handler = NBSPForShortWordsHandler(log_manager, wordLength, replacementCount)
 		parser.setHandler(handler)
 		newBookOutput = parser.transduce(bookObject)
 
@@ -79,43 +79,43 @@ class NBSPForShortWords (object) :
 class NBSPForShortWordsHandler (parse_sfm.Handler) :
 	'''This class replaces the Handler class in the parse_sfm module.'''
 
-	def __init__(self, log_manager, wordLenght, count) :
+	def __init__(self, log_manager, wordLength, count) :
 
 		self._log_manager = log_manager
 		self._book = ""
 		self._encoding_manager = EncodingManager(log_manager._settings)
-		self._wordLenght = wordLenght
+		self._wordLength = wordLength
 		self._replacementCount = count
-		self._period = self._log_manager._settings['Encoding']['Punctuation']['WordFinal']['period']
-		self._nonWordCharsMap = {}
-		self._encoding_manager = EncodingManager(log_manager._settings)
-		# First look for quote markers
-		if log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
-			quoteSystem = "DumbQuotes"
-		else :
-			quoteSystem = "SmartQuotes"
-		cList = ""
+		#self._period = self._log_manager._settings['Encoding']['Punctuation']['WordFinal']['period']
+		#self._nonWordCharsMap = {}
+		#self._encoding_manager = EncodingManager(log_manager._settings)
+		## First look for quote markers
+		#if log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
+			#quoteSystem = "DumbQuotes"
+		#else :
+			#quoteSystem = "SmartQuotes"
+		#cList = ""
 		# To prevent duplicate chars we'll put them in a mapping dictionary (nonWordCharsMap)
 		# Note the use of ord() allows us to use exact unicode integer range, then we map that
 		# to nothing because we want to strip those characters off of the word
 		# First add quote marker characters
-		for k, v, in log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
-			if len(v) == 1 :
-				self._nonWordCharsMap[ord(v)] = None
-		## Now add brackets
-		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
-			if k != "bracketMarkerPairs" :
-				self._nonWordCharsMap[ord(v)] = None
-		# Now add word final punctuation
-		for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
-			if v != "" :
-				self._nonWordCharsMap[ord(v)] = None
+		#for k, v, in log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
+			#if len(v) == 1 :
+				#self._nonWordCharsMap[ord(v)] = None
+		### Now add brackets
+		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
+			#if k != "bracketMarkerPairs" :
+				#self._nonWordCharsMap[ord(v)] = None
+		## Now add word final punctuation
+		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
+			#if v != "" :
+				#self._nonWordCharsMap[ord(v)] = None
 
-		# Report what we will be using in this process for non-word characters
-		for c in self._nonWordCharsMap :
-			cList = cList + chr(c) + "|"
+		## Report what we will be using in this process for non-word characters
+		#for c in self._nonWordCharsMap :
+			#cList = cList + chr(c) + "|"
 
-		self._log_manager.log("INFO", "The process will exclude these characters from all words: [" + cList.rstrip('|') + "]")
+		#self._log_manager.log("INFO", "The process will exclude these characters from all words: [" + cList.rstrip('|') + "]")
 
 
 	def start (self, tag, num, info, prefix) :
@@ -152,14 +152,16 @@ class NBSPForShortWordsHandler (parse_sfm.Handler) :
 				if len(words) > 1 :
 					# Grab the last word in the string
 					lastWord = words[len(words)-1]
-					# If it is shorter than wordLenght we need to join it
-					if len(lastWord) <= wordLenght :
-						for word in self._wordList :
-							if word == lastWord :
-								# Since we know what the last word is find it and replace the
-								# space infront of it with a NBSP
-								text = text.replace(u'\u0020' + lastWord, u'\u00A0' + lastWord)
-								self._replacementCount +=1
+					# If it is shorter than wordLength we need to join it
+					thisWordLen = len(lastWord)
+					print self._wordLength, " > ", thisWordLen
+					if self._wordLength < thisWordLen :
+						print "%d is less than %d" % ( self._wordLength, thisWordLen )
+
+						# Since we know what the last word is find it and replace the
+						# space infront of it with a NBSP
+						text = text.replace(u'\u0020' + lastWord, u'\u00A0' + lastWord)
+						self._replacementCount +=1
 
 			except :
 				pass
