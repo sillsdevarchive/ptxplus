@@ -21,7 +21,10 @@
 # 20090120 - djd - Initial draft - Works but we may want to
 #			Add some additional testing
 # 20090209 - djd - Fixed a problem with not getting paragraph
-# 		certain kinds of paragraph covered. Also added counting
+# 		certain kinds of paragraph covered. Also added
+#		counting
+# 20090911 - djd - Changed the process to work only with word
+#		lengths rather than specific words.
 
 
 #############################################################
@@ -44,12 +47,12 @@ class NBSPForShortWords (object) :
 		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'NBSPForShortWords'
 		replacementCount = 0
-		wordLength = ""
+		wordLength = 0
 
-		# Get the parameters if they exist
+		# Get the parameters if they exist. Note it is important to set this
+		# to an integer now so it stays persistent.
 		try :
-			wordLength = log_manager._settings['General']['TextProcesses']['nbspWordLength']
-
+			wordLength = int(log_manager._settings['General']['TextProcesses']['nbspWordLength'])
 		except :
 			log_manager.log("ERRR", "This process is checked as true but the short word length is not set. Process aborted.")
 
@@ -61,9 +64,6 @@ class NBSPForShortWords (object) :
 
 		# This calls a version of the handler which strips out everything
 		# but the text and basic format.
-		#parser.setHandler(NBSPForShortWordsHandler(log_manager, replacementCount))
-		#newBookOutput = parser.transduce(bookObject)
-
 		handler = NBSPForShortWordsHandler(log_manager, wordLength, replacementCount)
 		parser.setHandler(handler)
 		newBookOutput = parser.transduce(bookObject)
@@ -86,36 +86,6 @@ class NBSPForShortWordsHandler (parse_sfm.Handler) :
 		self._encoding_manager = EncodingManager(log_manager._settings)
 		self._wordLength = wordLength
 		self._replacementCount = count
-		#self._period = self._log_manager._settings['Encoding']['Punctuation']['WordFinal']['period']
-		#self._nonWordCharsMap = {}
-		#self._encoding_manager = EncodingManager(log_manager._settings)
-		## First look for quote markers
-		#if log_manager._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
-			#quoteSystem = "DumbQuotes"
-		#else :
-			#quoteSystem = "SmartQuotes"
-		#cList = ""
-		# To prevent duplicate chars we'll put them in a mapping dictionary (nonWordCharsMap)
-		# Note the use of ord() allows us to use exact unicode integer range, then we map that
-		# to nothing because we want to strip those characters off of the word
-		# First add quote marker characters
-		#for k, v, in log_manager._settings['Encoding']['Punctuation']['Quotation'][quoteSystem].iteritems() :
-			#if len(v) == 1 :
-				#self._nonWordCharsMap[ord(v)] = None
-		### Now add brackets
-		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
-			#if k != "bracketMarkerPairs" :
-				#self._nonWordCharsMap[ord(v)] = None
-		## Now add word final punctuation
-		#for k, v, in self._log_manager._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
-			#if v != "" :
-				#self._nonWordCharsMap[ord(v)] = None
-
-		## Report what we will be using in this process for non-word characters
-		#for c in self._nonWordCharsMap :
-			#cList = cList + chr(c) + "|"
-
-		#self._log_manager.log("INFO", "The process will exclude these characters from all words: [" + cList.rstrip('|') + "]")
 
 
 	def start (self, tag, num, info, prefix) :
@@ -152,12 +122,8 @@ class NBSPForShortWordsHandler (parse_sfm.Handler) :
 				if len(words) > 1 :
 					# Grab the last word in the string
 					lastWord = words[len(words)-1]
-					# If it is shorter than wordLength we need to join it
-					thisWordLen = len(lastWord)
-					print self._wordLength, " > ", thisWordLen
-					if self._wordLength < thisWordLen :
-						print "%d is less than %d" % ( self._wordLength, thisWordLen )
-
+					# If it is shorter or egual to wordLength we need to join it
+					if len(lastWord) <= self._wordLength :
 						# Since we know what the last word is find it and replace the
 						# space infront of it with a NBSP
 						text = text.replace(u'\u0020' + lastWord, u'\u00A0' + lastWord)
