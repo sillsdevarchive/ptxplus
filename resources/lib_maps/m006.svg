@@ -1,21 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
    width="673.17096"
    height="1099.2285"
    viewBox="0 0 326 542"
    id="svg2"
    xml:space="preserve"
-   style="overflow:visible"><defs
-   id="defs275" />
+   style="overflow:visible"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="m006.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"><metadata
+   id="metadata90"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   inkscape:window-height="726"
+   inkscape:window-width="645"
+   inkscape:pageshadow="2"
+   inkscape:pageopacity="0.0"
+   guidetolerance="10.0"
+   gridtolerance="10.0"
+   objecttolerance="10.0"
+   borderopacity="1.0"
+   bordercolor="#666666"
+   pagecolor="#ffffff"
+   id="base"
+   showgrid="false"
+   inkscape:zoom="1.2646927"
+   inkscape:cx="185.24586"
+   inkscape:cy="972.82359"
+   inkscape:window-x="1440"
+   inkscape:window-y="0"
+   inkscape:current-layer="svg2" /><defs
+   id="defs275"><inkscape:perspective
+     sodipodi:type="inkscape:persp3d"
+     inkscape:vp_x="0 : 549.61426 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_z="673.17096 : 549.61426 : 1"
+     inkscape:persp3d-origin="336.58548 : 366.40951 : 1"
+     id="perspective92" /></defs>
 
 <image
    id="BackgroundImage"
-   xlink:href="m006-bkgrnd-gr.png"
+   xlink:href="m006-bkgrnd-cl.png"
    x="11"
    y="18.700001"
    width="304"
@@ -83,47 +119,58 @@
 <text
    x="30.953503"
    y="114.86607"
-   id="Scale_Number_A"
+   id="Scale_K_Number_A"
    style="font-size:6px;font-family:Arial">0</text>
-
-
-
 
 <text
    x="61.314003"
    y="114.86607"
-   id="Scale_Number_B"
+   id="Scale_K_Number_B"
    style="font-size:6px;font-family:Arial">20</text>
-
-
-
 
 <text
    x="93.475571"
    y="114.86607"
-   id="Scale_Number_C"
+   id="Scale_K_Number_C"
    style="font-size:6px;font-family:Arial">40</text>
-
-
-
 
 <text
    x="125.7999"
    y="114.86607"
-   id="Scale_Number_D"
+   id="Scale_K_Number_D"
    style="font-size:6px;font-family:Arial">60</text>
-
-
-
 
 <text
    x="67.007919"
    y="127.55686"
-   id="Scale_DistanceKey"
+   id="Scale_K_DistanceKey"
    style="font-size:6px;font-family:Arial">Kilometers</text>
 
-
-
+<text
+   x="30.514898"
+   y="138.54286"
+   id="Scale_M_Number_A"
+   style="font-size:6px;overflow:visible;font-family:Arial">0</text>
+<text
+   x="53.972385"
+   y="138.54286"
+   id="Scale_M_Number_B"
+   style="font-size:6px;overflow:visible;font-family:Arial">10</text>
+<text
+   x="79.230934"
+   y="138.54286"
+   id="Scale_M_Number_C"
+   style="font-size:6px;overflow:visible;font-family:Arial">20</text>
+<text
+   x="105.63838"
+   y="138.54286"
+   id="Scale_M_Number_D"
+   style="font-size:6px;overflow:visible;font-family:Arial">30</text>
+<text
+   x="62.624733"
+   y="151.23366"
+   id="Scale_M_DistanceKey"
+   style="font-size:6px;overflow:visible;font-family:Arial">Miles</text>
 
 <image
    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH4AAABWCAYAAAAJ3CLTAAAACXBIWXMAAAsSAAALEgHS3X78AAAA BGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAKnSURB VHja7J1RaxNBFEZ3mjFNSKCCIqhP4v//WbUIjTaQkKTJJt7Bb/SymW2qiMzSc+CD7W4mDz337s7N yzYNvEjCP/oM1Mfpb6SGTiiA4Qk/dfKk+Cz6yjJyCYgflPiU1uXYLYCuzCx8bJlYrnUckT8o6QfL o2Vn2eo4F8CZ+CDpSfbccqPMdW6kwoB6OUpwEr6yLJWVzrW560On219J9BvLe+WtZabOR3z94lN3 ry33ljtlIfn73PWx0PHpFv/a8sHy2fJRf+euh3rJ3f5guZXTjQpho0dA48UHJ953fZL+ScdTt9GD Op/vrQQvdC4VwFc59Zv0Uyzs6qNu6zM945P0dxIfEV+1+IPEJ765R/SZt9gzu0e3s58qM8QPQnwj X5PCRBZK4kuzfB7vogvi6/7hJroJ7KpvDI8Xviz0BOrk2Z4Yz14oiEc8IB4QD4gHxAPiAfGAeEA8 IB4QD4gHxAPiAfGAeEA8IB4QD4gHxAPiAfGIB8QD4gHxgHhAPCAeEA+IB8QD4gHxgHhAPCAeEA+I B8QD4gHxgHhAPCAe8fwLEA+IB8QD4gHxgHhAPCAeEA+IB8QD4uH/c+lt0qdCoE7+yFV84guOStv8 fCF9fik9rxGvV3z21Dp/xSKIPRWTFj9atpaNkj+P+LrFZ19bOTyU7gKxZ3FasLYsLQtdm1pGiK9a fCvpC7lbd+SfdfzJLdxbVlp8q+vfLdcSD/WS/O0sD3K3kMu9rv3q+liomK0WftG5dDyzjJkCqufo 7tb3ljv52zrxZxu1oI5OnT233Chz1+2Ir1987vqVbvdLHe+8/FCY60fq7omEj92mjuf7MEa6vE/b uU1e3ukXR7MsNxfAyG3okD4s+a3L2VjXJzN0wvw+LPHNpR9zniMT4cMuAIDf/BBgAF/EveEYkene AAAAAElFTkSuQmCC"
@@ -161,11 +208,13 @@
 
 
 
+
 <text
    x="167.72067"
    y="81.799652"
    id="City_Sidon"
    style="font-size:8px;font-family:Arial">Sidon</text>
+
 
 
 
@@ -179,11 +228,13 @@
 
 
 
+
 <text
    x="143.90349"
    y="132.02835"
    id="City_Tyre"
    style="font-size:8px;font-family:Arial">Tyre</text>
+
 
 
 
@@ -197,11 +248,13 @@
 
 
 
+
 <text
    x="174.81596"
    y="200.32288"
    id="City_Capernaum"
    style="font-size:8px;font-family:Arial">Capernaum</text>
+
 
 
 
@@ -215,11 +268,13 @@
 
 
 
+
 <text
    x="217.86142"
    y="225.00459"
    id="City_Tiberias"
    style="font-size:8px;font-family:Arial">Tiberias</text>
+
 
 
 
@@ -233,11 +288,13 @@
 
 
 
+
 <text
    x="181.92227"
    y="212.41585"
    id="City_Cana"
    style="font-size:8px;font-family:Arial">Cana</text>
+
 
 
 
@@ -251,11 +308,13 @@
 
 
 
+
 <text
    x="190.84337"
    y="248.03159"
    id="City_Nain"
    style="font-size:8px;font-family:Arial">Nain</text>
+
 
 
 
@@ -269,11 +328,13 @@
 
 
 
+
 <text
    x="122.60784"
    y="260.56726"
    id="City_Caesarea"
    style="font-size:8px;font-family:Arial">Caesarea</text>
+
 
 
 
@@ -287,11 +348,13 @@
 
 
 
+
 <text
    x="143.2487"
    y="320.0571"
    id="City_Sychar"
    style="font-size:8px;font-family:Arial">Sychar</text>
+
 
 
 
@@ -305,11 +368,13 @@
 
 
 
+
 <text
    x="132.65291"
    y="347.60706"
    id="City_Arimathea"
    style="font-size:8px;font-family:Arial">Arimathea</text>
+
 
 
 
@@ -323,11 +388,13 @@
 
 
 
+
 <text
    x="174.8988"
    y="376.77042"
    id="City_Jericho"
    style="font-size:8px;font-family:Arial">Jericho</text>
+
 
 
 
@@ -341,11 +408,13 @@
 
 
 
+
 <text
    x="179.84723"
    y="388.28024"
    id="City_Bethphage"
    style="font-size:8px;font-family:Arial">Bethphage</text>
+
 
 
 
@@ -359,11 +428,13 @@
 
 
 
+
 <text
    x="122.47495"
    y="403.40915"
    id="City_Bethlehem"
    style="font-size:8px;font-family:Arial">Bethlehem</text>
+
 
 
 
@@ -377,11 +448,13 @@
 
 
 
+
 <text
    x="243.69182"
    y="138.1212"
    id="City_CaesareaPhilippi"
    style="font-size:8px;font-family:Arial">Caesarea Philippi</text>
+
 
 
 
@@ -395,11 +468,13 @@
 
 
 
+
 <text
    x="222.23106"
    y="208.00192"
    id="Water_SeaOfGalilee"
    style="font-size:8px;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#333333;font-family:Arial">Sea of Galilee</text>
+
 
 
 
@@ -414,12 +489,14 @@
 
 
 
+
 <text
    x="-242.52335"
    y="139.53603"
    transform="matrix(0.2893575,-0.9572211,0.9572211,0.2893575,0,0)"
    id="Sea_MediterraneanSea"
    style="font-size:10px;fill:#333333;font-family:Arial">Mediterranean Sea</text>
+
 
 
 
@@ -434,6 +511,7 @@
 
 
 
+
 <text
    x="133.59775"
    y="299.09796"
@@ -443,11 +521,13 @@
 
 
 
+
 <text
    x="121.85494"
    y="424.04846"
    id="Region_Judea"
    style="font-size:12px;letter-spacing:0.93532079;fill:#333333;font-family:Arial">JUDEA</text>
+
 
 
 
@@ -462,12 +542,14 @@
 
 
 
+
 <text
    x="-65.564911"
    y="329.04419"
    transform="matrix(0.3547979,-0.934943,0.934943,0.3547979,0,0)"
    id="Region_Syria"
    style="font-size:12px;fill:#333333;font-family:Arial">SYRIA</text>
+
 
 
 
@@ -482,12 +564,14 @@
 
 
 
+
 <text
    x="349.98465"
    y="42.618145"
    transform="matrix(0.7652203,0.6437685,-0.6437685,0.7652203,0,0)"
    id="Region_Decapolis"
    style="font-size:12px;fill:#333333;font-family:Arial">DECAPOLIS</text>
+
 
 
 
@@ -743,4 +827,59 @@
 <path
    d="M 209.10901,217.33889 C 212.66989,210.01931 212.66989,210.01931 212.66989,210.01931"
    id="path2464"
-   style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.93532079px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" /></svg>
+   style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.93532079px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" /><g
+   style="overflow:visible"
+   transform="matrix(0.7528215,0,0,0.9353208,13.773185,40.801827)"
+   id="g2465">
+   <rect
+   width="34.467999"
+   height="3.7709999"
+   x="57.597"
+   y="106.183"
+   id="rect2467"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.30590001;stroke-miterlimit:2.41420007" />
+
+<g
+   id="g2469">
+
+<rect
+   width="34.467999"
+   height="3.7709999"
+   x="23.128"
+   y="106.183"
+   id="rect2471"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.30500001;stroke-miterlimit:2.41420007" />
+
+<line
+   id="line2473"
+   clip-rule="evenodd"
+   stroke-miterlimit="2.4142"
+   x1="23.256001"
+   y1="108.068"
+   x2="57.723999"
+   y2="108.068"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007" /></g>
+
+<g
+   id="g2475">
+
+<rect
+   width="34.467999"
+   height="3.7709999"
+   x="92.064003"
+   y="106.183"
+   id="rect2477"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.30500001;stroke-miterlimit:2.41420007" />
+
+<line
+   id="line2479"
+   clip-rule="evenodd"
+   stroke-miterlimit="2.4142"
+   x1="92.064003"
+   y1="108.068"
+   x2="126.533"
+   y2="108.068"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007" /></g></g>
+
+
+</svg>

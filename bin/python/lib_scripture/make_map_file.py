@@ -86,6 +86,7 @@ class MakeMapFile (object) :
 
 		# And our style file?
 		if not os.path.isfile(csvStyleFileName) :
+			print "******* Hey! I didn't find the file " + csvStyleFileName + "something has gone dreadfully wrong."
 			shutil.copy(csvStyleFileSource, csvStyleFileName)
 
 ############################################################################################################################
