@@ -49,6 +49,8 @@
 # 20090110 - djd - Added booklet binding for single book files
 # 20090218 - djd - Added warning messages and extra locks for
 #		protecting text when the system is locked down
+# 20090914 - djd - Changed the preprocess-book command to just
+#		"preprocess" to avoid conflict with maps.
 
 
 ##############################################################
@@ -105,7 +107,7 @@ endif
 # If we are checking text that means we are not sure about how good it is. That
 # being the case, we don't want this text in the system yet so the very first
 # thing we do is try to delete any existing copies from the source directory.
-preprocess-book-$(1) : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
+preprocess-$(1) : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'

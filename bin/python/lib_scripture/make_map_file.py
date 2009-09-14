@@ -21,6 +21,8 @@
 #		it handles all the parameters it needs.
 # 20090909 - te - Fixed bug in XML namespaces and a path
 #		problem in a copy routine
+# 20090914 - djd - Removed code that was duplicating makefile
+#		functions like creating the Maps folder, etc.
 
 
 #############################################################
@@ -67,27 +69,27 @@ class MakeMapFile (object) :
 			mapBackgroundImageFile = inputFile.replace('.svg', '-bkgrnd-gr.png')
 			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-gr.png')
 
-		# See if the maps folder exists then check for the files we need.
-		if not os.path.isdir(mapProject) :
-			os.mkdir(mapProject)
+		## See if the maps folder exists then check for the files we need.
+		#if not os.path.isdir(mapProject) :
+			#os.mkdir(mapProject)
 
-		# Is our input file there? Just because Make told us this doesn't make it so.
-		if not os.path.isfile(inputFile) :
-			shutil.copy(svgSourceFile, inputFile)
+		## Is our input file there? Just because Make told us this doesn't make it so.
+		#if not os.path.isfile(inputFile) :
+			#shutil.copy(svgSourceFile, inputFile)
 
 		# Does this map need a background image, is it there?
 		if not os.path.isfile(mapBackgroundImageFile) :
 			if os.path.isfile(mapBackgroundImageFileSource) :
 				shutil.copy(mapBackgroundImageFileSource, mapProject + "/" + mapBackgroundImageFile)
 
-		# How about our data file?
-		if not os.path.isfile(csvFileName) :
-			shutil.copy(csvSourceFile, csvFileName)
+		## How about our data file?
+		#if not os.path.isfile(csvFileName) :
+			#shutil.copy(csvSourceFile, csvFileName)
 
-		# And our style file?
-		if not os.path.isfile(csvStyleFileName) :
-			print "******* Hey! I didn't find the file " + csvStyleFileName + "something has gone dreadfully wrong."
-			shutil.copy(csvStyleFileSource, csvStyleFileName)
+		## And our style file?
+		#if not os.path.isfile(csvStyleFileName) :
+			#print "******* Hey! I didn't find the file " + csvStyleFileName + "something has gone dreadfully wrong."
+			#shutil.copy(csvStyleFileSource, csvStyleFileName)
 
 ############################################################################################################################
 # There's a problem with working with namespaces. The solution, or at least part of it, migh be if we use
@@ -158,6 +160,6 @@ class MakeMapFile (object) :
 
 # This starts the whole process going
 def doIt(log_manager):
-	import pdb
+
 	thisModule = MakeMapFile()
-	return pdb.runcall(thisModule.main,log_manager)
+	return thisModule.main(log_manager)

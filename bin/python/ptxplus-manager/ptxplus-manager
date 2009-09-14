@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.5
+# -*- coding: utf-8 -*-
 
 ########################################################################################
 # Todo:
@@ -9,6 +10,8 @@
 #		reorganization to the project.conf file
 # 20081112 - djd - Added an example menu item
 # 20081229 - djd - Added menu items, Preprocess, Process and Bind
+# 20090914 - djd - Removed "-book" from preprocess-book to try to resolve
+#		a makefile conflict with the maps routine.
 
 ########################################################################################
 
@@ -276,7 +279,7 @@ class ConfigGUI (object) :
 #        self.set_book(self.bkid)
 
 	def b_check_clicked (self, widget) :
-		self.execute("ptxplus", "preprocess-book-" + self.bkid)
+		self.execute("ptxplus", "preprocess-" + self.bkid)
 #        self.set_book(self.bkid)
 
 	def b_wiki_clicked (self, widget) :

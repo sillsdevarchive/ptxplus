@@ -21,6 +21,11 @@
 #		with a python script not being called. More needs
 #		to be done on this and other make file scripts to
 #		make them more concise in the way the exicute.
+# 20090914 - djd - Removed some double dependency rules to simplify
+#		the process. Also removed the dependency for
+#		pdf generation. The process will fail if preprocessing
+#		has not been done. The reason is that there is
+#		a proceedure conflict between maps and books.
 
 
 ##############################################################
@@ -65,7 +70,7 @@ define map_rules
 # script will see to it that there is a Maps folder and a csv
 # file for this map. It takes care of the copy process. It should
 # be able to do this and if it can't it should tell us why.
-$(PATH_MAPS)/$(1).svg : $(PATH_MAPS)
+$(PATH_MAPS)/$(1).svg :
 	@echo WARNING: Map: $(PATH_MAPS)/$(1).svg not found adding default to project.
 	@cp $(PATH_MAPS_SOURCE)/$(1).svg $(PATH_MAPS)/$(1).svg
 
@@ -75,50 +80,27 @@ $(PATH_MAPS_PROJECT)/$(1).csv :
 	@cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_MAPS_PROJECT)/$(1).csv
 
 # Migrate the common project map translation file to the Maps folder
-$(PATH_MAPS)/$(1).csv : $(PATH_MAPS) $(PATH_MAPS_PROJECT)/$(1).csv
+$(PATH_MAPS)/$(1).csv : $(PATH_MAPS_PROJECT)/$(1).csv
 	@echo INFO: Migrating data for: $(PATH_MAPS)/$(1).csv
 	@$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_MAPS_PROJECT)/$(1).csv $(PATH_MAPS)/$(1).csv
 
-
-
-###################################################################
-# Some work needs to be done here and in the calling Python code
-# to make things more consistant and less hassel to maintain.
-# There may be some problems here that need to be figured out.
-###################################################################
-
-# Following was commented out to work around a problem with the
-# Python script not being called:
-## Process the SVG file and edit it in Inkscape when it is done
-## This prorocess has a double dependency in the following rules
-## it will check each of them and run them in the order listed.
-## Dependency #1
-#preprocess-map-$(1) ::
-
-# Dependency #2
-preprocess-map-$(1) : $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/styles.csv
-	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$< &
+# Process the SVG file and edit it in Inkscape when it is done.
+# This must be done before the pdf conversion can be done.
+preprocess-$(1) : $(PATH_MAPS) $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/styles.csv
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
+	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_MAPS)/$(1).svg &
 
 # Create the PDF version of the map
-# This is dependent of other files in the process. A default version
-# will be copied into the project Maps folder if one doesn't already
-# exist there.
-$(PATH_MAPS)/$(1).pdf : $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/styles.csv preprocess-map-$(1)
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_MAPS)/$(1).svg -A $(PATH_MAPS)/$(1).pdf -T -F -d 2400
+# This will transform the svg file to pdf. However, if the preprocess has
+# not been run or failed, this process will fail too.
+$(PATH_MAPS)/$(1).pdf :
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_MAPS)/$(1).svg -A $(PATH_MAPS)/$(1).pdf
 
-
-## Process the SVG file and view it in PDF when it is done
-## This prorocess also has a double dependency in the following rules
-## it will check each of them and run them in the order listed.
-## Dependency #1
-#view-$(1) :: $(PATH_MAPS)
-
-# Dependency #2
+# Process the SVG file and view it in PDF when it is done. Note that this
+# process will fail if the preprocess has not been run first. The map making
+# process differs from typesetting so it has to be this way for now.
 view-$(1) :: $(PATH_MAPS)/$(1).pdf
 	@ $(VIEWPDF) $$< &
-
-#$(1) : $(PATH_MAPS)/$(1).svg
 
 
 endef
@@ -135,10 +117,9 @@ $(PATH_MAPS) :
 	@mkdir -p $(PATH_MAPS)
 
 # Move the styles.csv file over if it isn't there already
-$(PATH_MAPS)/styles.csv : $(PATH_MAPS)
+$(PATH_MAPS)/styles.csv :
 	@echo WARNING: Map style data: $(PATH_MAPS)/styles.csv not found copying default.
 	@cp $(PATH_MAPS_SOURCE)/styles.csv $(PATH_MAPS)/styles.csv
-
 
 # This builds a rule (in memory) for all maps using the macro
 # above. These will be called below when we process the
@@ -165,5 +146,5 @@ endif
 
 # This will call TeX to create a "book" of maps. The results will
 # be a PDF file that will be viewed in the PDF viewer.
-view-maps : $(MATTER_MAPS_PDF)
+view : $(MATTER_MAPS_PDF)
 	@$(VIEWPDF) $< &
