@@ -373,7 +373,7 @@
 <text
    x="611.15021"
    y="270.96539"
-   id="City_Antioch"
+   id="City_Antioch-A"
    style="font-size:8px;font-family:Arial">Antioch</text>
 
 
@@ -413,7 +413,7 @@
 <text
    x="493.4231"
    y="218.76524"
-   id="text40"
+   id="City_Antioch-B"
    style="font-size:8px;font-family:Arial">Antioch</text>
 
 
@@ -865,7 +865,7 @@
 <text
    x="260.95059"
    y="279.08807"
-   id="Island_Achaia"
+   id="Region_Achaia"
    style="font-size:12px;fill:#934711;font-family:Arial">Achaia</text>
 
 
@@ -900,7 +900,7 @@
    x="147.96999"
    y="228.85974"
    transform="matrix(0.9567852,0.2907955,-0.2907955,0.9567852,0,0)"
-   id="Island_Sicily"
+   id="Region_Sicily"
    style="font-size:12px;fill:#934711;font-family:Arial">Sicily</text>
 
 
