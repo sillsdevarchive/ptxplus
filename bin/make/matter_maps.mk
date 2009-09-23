@@ -26,6 +26,8 @@
 #		pdf generation. The process will fail if preprocessing
 #		has not been done. The reason is that there is
 #		a proceedure conflict between maps and books.
+# 20090923 - djd - Added the link-maps command to make created linked
+#		files easier.
 
 
 ##############################################################
@@ -102,6 +104,10 @@ $(PATH_MAPS)/$(1).pdf :
 view-$(1) :: $(PATH_MAPS)/$(1).pdf
 	@ $(VIEWPDF) $$< &
 
+link-$(1) :: $(PATH_MAPS)/$(1).pdf
+	@ rm $../$(PATH_PROCESS)/$(1).pdf &
+	@ ln -s ../$$< $(PATH_PROCESS)/$(1).pdf &
+
 
 endef
 
@@ -127,7 +133,6 @@ $(PATH_MAPS)/styles.csv :
 
 $(foreach v,$(MAP_IDS), $(eval $(call map_rules,$(v))))
 
-
 ###############################################################
 
 ifneq ($(MAP_IDS),)
@@ -146,5 +151,7 @@ endif
 
 # This will call TeX to create a "book" of maps. The results will
 # be a PDF file that will be viewed in the PDF viewer.
-view : $(MATTER_MAPS_PDF)
+view-maps : $(MATTER_MAPS_PDF)
 	@$(VIEWPDF) $< &
+
+link-maps : $(foreach v,$(MAP_IDS), link-$(v))
