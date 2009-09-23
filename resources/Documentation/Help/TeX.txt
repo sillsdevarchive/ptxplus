@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Tue, 08 Sep 2009 16:53:48 +0700
+Modification-Date: Wed, 23 Sep 2009 09:12:23 +0700
 
 ====== TeX ======
 
@@ -13,6 +13,15 @@ Here are some tips on how to get column balance and other paging operations:
 ==== Inserting blank lines on first page ====
 Some times, when the introduction is short, there is room for body text on the first page. However, a section heading found shortly after the first few verses can throw things off and leave you with several blank lines on the left column. One way around this is to insert a blank line in the introduction section before the horizontal divider line (if one is used). You do this by inserting something like a \ip followed by a normal space (to be legal SFM) then a character like a zero width space (U+200B). You can insert several of them if needed to push the text down and balance the right column with the left.
 
+==== Inserting Raw TeX code inside a USFM Document ====
+
+This is not recommended but if you need to insert raw [[TeX]] code inside a USFM document you can do that something like this:
+
+\makedigitsother\catcode`{=1 \catcode`}=2
+\vskip 4pt plus 1fil
+\makedigitsletters\catcode`{=11\catcode`}=11
+
+In this example we are trying to put some extra vertical space between lines or a section. This is not plain TeX, however, because it relies on two external macro calls from the setup file. (At some point I would like to replace this example with a fully plain [[TeX]] one.)
 
 ===== Notes on hyphenation =====
 Hyphenation is an important issue in any publication. Here are some notes on various hyphenation problems that can be encountered.
@@ -50,9 +59,11 @@ and you should be good to go.
 
 
 ==== \lccode ====
-When using some Unicode fonts it is sometimes necessary to set the \lccode for those characters which would be normally set to '0'. (See the TeX book pg. 41 & 345 for more details.)
+At this time, not everything is fully understood about hyphenation in TeX. What we do know now is that when it works, it looks great, when it doesn't work, it looks ugly. There's much to learn about this from the [[TeX]] book in Appendix H (pg. 448-455) and other places in the book.
 
-Sometimes you have a large rangeof codes to cover so for this reason we put the list in a file in your Hyphenation directory called "lccodelist.txt". The make_tex_hyphenation.py process will find it and insert them into your project hyphenation next time it builds it. The codes should be entered into that file like this:
+As we are not yet running under a rules-based system, which would be nice to do at some point, we use the exceptions list to drive our hyphenation process in TeX. This works, but is not optimal. One thing that is necessary in using the exceptions list is to set the llcode. When using some Unicode fonts it is sometimes necessary to set the \lccode for those characters which would be normally set to '0'. (See the TeX book pg. 41 & 345 for more details.)
+
+Sometimes you have a large range of codes to cover so for this reason we put the list in a file in your Hyphenation directory called "lccodelist.txt". The make_tex_hyphenation.py process will find it and insert them into your project hyphenation next time it builds it. The codes should be entered into that file like this:
 
 \lccode"1000="1000
 \lccode"1001="1001
@@ -70,6 +81,8 @@ perl -CSD -ne 'foreach(split("")){$c{$_}++}; END {print join("\n", map {sprintf(
 
 Again, adjust for your project.
 
+**One last note**, it is important and very necessary that you define non-word-forming characters in the lccode list. They need to be set to "0". If you do not, [[TeX]] will look for words that contain them and when it doesn't find one it will not bother to hyphenate the word, even though it is in the exceptions list. When you start a new project an lccodelist.txt file should have been copied into the Hyphenation folder. It should contain definitions for all the non-word-forming characters such as punctuation. However, you may need to add to it additional characters found in your orthography that are used for punctuation and such.
+
 
 ==== Font Substitution ====
 Some times you may need to substitute a font on a specific text marker. For example, a text using a non-Roman script but needs to have a book title in another language which needs characters that are not included in the publication font. Here's what you do:
@@ -81,6 +94,12 @@ Some times you may need to substitute a font on a specific text marker. For exam
 	\sethook{start}{mt2}{\chapterfont}
 
 That should do it. This is a work around so you will need to make adjustment to the fonts file and the style file. (Until we come up with some cleaver programing to make this more automated.)
+
+A variation on this would enable you to apply formating for a specific character, like bullet points in a list. This code would apply format to the "#" character:
+
+	% define superscript for #
+	\font\glossaryfont="Charis SIL" at 8pt
+	\DefineActiveChar{#}{\raise4pt\hbox{\glossaryfont\char35}}
 
 
 ==== Watermark ====
