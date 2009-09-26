@@ -226,6 +226,22 @@
 \def\RFevencenter{\empty}
 \def\RFtitlecenter{\empty}
 
+% Put a page number on the bottom of the title page so
+% the TOC makes more sense to newer readers. This is
+% turned on by default so the question is asked early
+% in the project setup. Turn it off (comment it) only
+% if you know the client doesn't want it.
+\def\RFtitleleft{\empty}
+\def\RFtitlecenter{\pagenumber}
+\def\RFtitleright{\empty}
+
+% Same as above but it will put the number on the top-outside
+% of the Title page when that is the normal position. This
+% is turned off by default.
+%\def\RHtitleleft{\ifodd\pageno\empty\else\pagenumber\fi}
+%\def\RHtitlecenter{\empty}
+%\def\RHtitleright{\ifodd\pageno\pagenumber\else\empty\fi}
+
 % PageBorder - Define this to add a border to all pages, from
 % a PDF file containing the graphic "scaled <factor>" adjusts
 % the size (1000 would keep the border at its original size)
