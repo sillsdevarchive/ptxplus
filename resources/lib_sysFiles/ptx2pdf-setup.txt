@@ -107,7 +107,7 @@
 % the header/footer relative to the top/bottom edge of the paper (not
 % the text area).
 \def\HeaderPosition{.5}
-\def\FooterPostion{.5}
+\def\FooterPosition{.5}
 
 # \BindingGutter and \BindingGuttertrue will add more to the gutter
 # margin so binding can be applied to the binding edge of the page.
