@@ -22,8 +22,8 @@
    id="metadata86"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
-   inkscape:window-height="875"
-   inkscape:window-width="1440"
+   inkscape:window-height="817"
+   inkscape:window-width="1430"
    inkscape:pageshadow="2"
    inkscape:pageopacity="0.0"
    guidetolerance="10.0"
@@ -36,7 +36,7 @@
    showgrid="false"
    inkscape:zoom="1.15"
    inkscape:cx="177.38316"
-   inkscape:cy="270.78669"
+   inkscape:cy="305.5693"
    inkscape:window-x="1440"
    inkscape:window-y="0"
    inkscape:current-layer="svg2" /><defs
@@ -367,11 +367,13 @@
    id="Title_Main">The Temple in the time of Jesus Christ</text>
 
 
+
 <text
    style="font-size:12px;font-family:Arial"
    x="195.47488"
    y="285.66003"
    id="Tag_1">1</text>
+
 
 
 <text
@@ -381,11 +383,13 @@
    id="Tag_2">2</text>
 
 
+
 <text
    style="font-size:12px;font-family:Arial"
    x="112.86258"
    y="421.86212"
    id="Tag_3">3</text>
+
 
 
 <text
@@ -395,11 +399,13 @@
    id="Tag_4">4</text>
 
 
+
 <text
    style="font-size:12px;font-family:Arial"
    x="12.863081"
    y="323.28693"
    id="Tag_5">5</text>
+
 
 
 <text
@@ -409,11 +415,13 @@
    id="Tag_6">6</text>
 
 
+
 <text
    style="font-size:10px;font-family:Arial"
    x="73.61824"
    y="455.42859"
    id="Key_TableShowbread">1. The Table of Showbread</text>
+
 
    
 <text
@@ -422,12 +430,14 @@
    y="468.62857"
    id="Key_Lampstand">2. The Lampstand</text>
 
+
    
 <text
    style="font-size:10px;font-family:Arial"
    x="73.61824"
    y="481.82858"
    id="Key_AltarIncense">3. The Altar of Incense</text>
+
 
    
 <text
@@ -436,12 +446,14 @@
    y="495.02856"
    id="Key_Curtain">4. The Curtain</text>
 
+
    
 <text
    style="font-size:10px;font-family:Arial"
    x="73.61824"
    y="508.22858"
    id="Key_ArkCovenant">5. The Ark of the Covenant</text>
+
 
    
 <text
@@ -451,11 +463,13 @@
    id="Key_Cherubim">6. The Cherubim</text>
 
 
+
 <text
    style="font-size:10px;font-family:Arial"
    x="54.541939"
    y="334.103"
    id="Label_HolyHolies">The Holy of Holies</text>
+
 
 
 <text
@@ -465,6 +479,7 @@
    id="Label_HolyPlace">The Holy Place</text>
 
 
+
 <text
    style="font-size:10px;font-family:Arial"
    x="241.24544"
@@ -472,11 +487,13 @@
    id="Label_Entrance">The Entrance</text>
 
 
+
 <text
    style="font-size:12px;font-family:Arial"
    x="111.12112"
    y="250.93626"
    id="Place_Temple">The Temple itself</text>
+
 
 
 
@@ -504,4 +521,4 @@
    height="193.97716"
    width="285.10355"
    sodipodi:absref="/home/dennis/Projects/ptxplus/resources/lib_maps/m009-temple.png"
-   xlink:href="m009-temple.png" /></svg>
+   xlink:href="m009-bkgrnd-gr.png" /></svg>
