@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Wed, 30 Sep 2009 13:00:52 +0700
+Modification-Date: Wed, 30 Sep 2009 16:30:20 +0700
 
 ====== Repositories ======
 
@@ -12,10 +12,10 @@ An important place to start is with the project Identifier (ID). It is important
 
 So now, the first thing you need to do is think up a project ID and write it down somewhere so you have it during the rest of the project setup.
 
-===== Repository Setup =====
+===== Repository Creation =====
 Actually, I have no idea how this is done. You need to go to your local administrator to have this done. Have him/her set up a Mercurial repository using the language ID as the name, for example, "eng".
 
-===== Redmine Project =====
+===== Redmine Project Setup =====
 For everything to work a project needs to be set up on the Redmine system. Without great detail as to how the website interface works, this is basically what needs to be done:
 
 1) To begin the process go to the Language Forge project website at:
@@ -34,7 +34,14 @@ Where the "eng" is the language code for the project that you used to set it up 
 
 Of course for this all to work, you need to have administration privileges. If you do not, you will need to get them or find someone who has them.
 
-===== Local Setup =====
+===== Cloning A Project =====
+If this is not a new project setup (covered below) you can clone an existing project from a repository. Assuming that you have [[TortoiseHg]] installed (see below) all you need to do is right-click and follow the instructions in the dialogs to follow. You will be asked to enter the path to the repository. In the MSEAG context that would look like this:
+
+	https://hg.mseag.org/<project ID>
+
+You will need to provide your user ID and password and point it to an existing folder. Once you do that it will make a copy of the repository version on your local file system.  //[Warning: Odd behavior has been seen with this operation in that after working for a bit it asks for your user ID and password again. If you do that it will put yet another copy inside the copy you just cloned. Just cancel the operation the second time it asks for that information and it should be okay. This bug may have been fixed by the time you read this.]//
+
+===== New Project Setup =====
 Once the above steps have been completed and you have a repository and project all setup, you need to set the project up on your local machine. These are the steps:
 
 1) Inside the folder you use for working on your publishing projects, create a folder and name it with the language ID you are working with, just the language ID.
@@ -61,4 +68,4 @@ Ultimately we want ptxplus along with Mercurial to manage project data as seamle
 
 Once you have [[TortoiseHg]] integrated into your system you can keep an eye on what's going on with the data in your project.
 
-Here I should add some tutorials on how to use Mercurial and TortoiseHg.
+Here I should add some tutorial links on how to use Mercurial and TortoiseHg.
