@@ -1,8 +1,64 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Fri, 28 Aug 2009 15:00:07 +0700
+Modification-Date: Wed, 30 Sep 2009 13:00:52 +0700
 
 ====== Repositories ======
 
-This will contain general instructions on how to work with repositories.
+Mercurial is the repository system of choice at this time. Though other systems like SVN can be used, ptxplus is geared toward the Mercurial system. There are several steps that are needed to setup a project from nothing. We will outline the steps here. Note that these instructions are made in the context of our palaso.org system. Your millage may vary.
+
+===== Project ID =====
+An important place to start is with the project Identifier (ID). It is important to use a meaningful and consistent ID in your system to help you organize your work. In MSEAG, for identification purposes, we try to organize projects by language, script and project ID. For the first two we use ISO language and writing system ID codes. The project ID can be anything but it is good to keep it brief. So, for example the ID ENG-LATN-BIBA project would be English written in the Latin script and this would be the first full Bible publication (in this environment). Try to remember this while setting your project up and do it the same way with all projects.
+
+So now, the first thing you need to do is think up a project ID and write it down somewhere so you have it during the rest of the project setup.
+
+===== Repository Setup =====
+Actually, I have no idea how this is done. You need to go to your local administrator to have this done. Have him/her set up a Mercurial repository using the language ID as the name, for example, "eng".
+
+===== Redmine Project =====
+For everything to work a project needs to be set up on the Redmine system. Without great detail as to how the website interface works, this is basically what needs to be done:
+
+1) To begin the process go to the Language Forge project website at:
+
+	https://projects.mseag.org
+
+2) Create a project using the project ID you created above. Setup a main project area using the language ID code as a sub-project of "Typesetting". Remember, this project will contain all the publishing projects for that language.
+
+3) Add members to your project. You may need to add members to the system as well so they can be added to the project. Add the people you need to start things going. You can always add more later.
+
+4) Add the empty repository (made by your administrator) to the project. The SCM should be set to Mercurial and the URL should be something like this:
+
+	[[/var/vcs/mseag.org_hg/eng]]
+
+Where the "eng" is the language code for the project that you used to set it up earlier. Change it to suite your context. After you complete this, everything should be ready to work.
+
+Of course for this all to work, you need to have administration privileges. If you do not, you will need to get them or find someone who has them.
+
+===== Local Setup =====
+Once the above steps have been completed and you have a repository and project all setup, you need to set the project up on your local machine. These are the steps:
+
+1) Inside the folder you use for working on your publishing projects, create a folder and name it with the language ID you are working with, just the language ID.
+
+2) Create two folders inside the project folder, one named "Text", the other with the script and project IDs. For example "LATN-BIBA".
+
+3) Once the folders are in place, they need to be populated with the initial data. In the Text folder put the source text for the project. In the project folder, e.g. "LATN-BIBA" begin a new ptxplus project and allow it to create all the initial data.
+
+4) Next, open a terminal in the project folder at the text and project level. Then, enter these commands for Mercurial:
+
+	hg init
+	hg add
+	hg commit -m "import"
+	hg push https://hg.mseag.org/eng
+
+Again, edit the project language as needed but once this is done, your initial project data will be pushed up to the repository. If it is necessary to have the source linked in from another repository the above instructions will need to be modified, but I'm not yet sure in what way. :-(
+
+With all of this done you should be ready to push and pull data from your repository. As your project progresses you will want to include more files so none of your hard work is lost in the case of a data catastrophe.
+
+===== Repository Data Management =====
+Ultimately we want ptxplus along with Mercurial to manage project data as seamlessly as possible. However, that may not be possible or there maybe instances where a more "hands-on" approach is needed. For data management under Mercurial, TortoiseHg, integrated with Nautilus, has been found to be a very good tool. To date, the best instructions for Gnome/Nautilus integration can be found here:
+
+	http://bitbucket.org/tortoisehg/stable/wiki/nautilus
+
+Once you have [[TortoiseHg]] integrated into your system you can keep an eye on what's going on with the data in your project.
+
+Here I should add some tutorials on how to use Mercurial and TortoiseHg.
