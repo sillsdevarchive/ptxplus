@@ -1,0 +1,13 @@
+graph A {
+	subgraph clusterA {
+		label="Project";
+		Admin "Meta Data";
+		subgraph clusterB {
+			label="Book";
+			subgraph clusterC {
+				label="Group";
+				Item
+			}
+		}
+	}
+}

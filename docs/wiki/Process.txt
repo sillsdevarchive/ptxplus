@@ -1,0 +1,44 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Fri, 02 Oct 2009 20:34:27 +0700
+Modification-Date: Fri, 02 Oct 2009 22:15:03 +0700
+
+====== Process ======
+Created Friday 02 October 2009
+
+This document will describe the tasks or processes the ptxplus system performs. It is meant to be a guide to help design the API for ptxplus.
+
+In it's design, there are several rules ptxplus tries to always maintain.
+
+1) Every task is done with a command line call
+2) Every task must report its results to a project log
+3) <add more rules here>
+
+The publishing process is very linear but also cyclic as well. A subprocess may need to performed a number of times before process is complete. The following diagram shows the process.
+
+{{./diagram_01.png?type=diagram}}
+
+Next we will explain what happens in each process.
+
+==== Project Intake ====
+
+
+==== Project Setup ====
+
+
+==== Format Setup ====
+
+
+==== Text Checking ====
+
+
+==== Composition ====
+
+
+==== Binding ====
+
+
+==== Delivery ====
+
+
+==== Archiving ====
