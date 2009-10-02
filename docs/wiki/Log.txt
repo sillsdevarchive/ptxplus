@@ -1,7 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Fri, 02 Oct 2009 15:09:22 +0700
+
 ====== Log ======
 
+**Fri 2 October 2009 3:03 PM ICT**
+Branched to stable in order to continue development on the default repository branch. Development will begin with writing specifications and descriptions of publishing components or objects as they will be referred to. The specifications and object descriptions can be found in the [[Specifications]] document.
+
 **Wed 13 May 2009 3:13 PM ICT**
-Implemented a topical index process. It will take a csv file in the project source area and convert it to an sfm file in the Peripheral folder. That is still a commandline process at this point. It goes like: ptxplus make_topic_index
+Implemented a topical index process. It will take a csv file in the project source area and convert it to an sfm file in the Peripheral folder. That is still a command line process at this point. It goes like: ptxplus make_topic_index
 
 Once the sfm file is made it can be processed like other kinds of peripheral material with the view command. This needs to be automated at some point. However, we don't want it to blow away existing data.
 
@@ -16,14 +24,18 @@ Yesterday, while IMing with Martin I stumbled on zim, a wiki application. I've c
 **20080823**
 So it is not lost, this is a solution that Martin gave me to change the case on file names within Makefile. The situation is this. You have a file name like $(1).log which expands to name.log. However, you need it to be NAME.log for things to work right. With a little Perl code you can do like this:
 
-	$(shell perl -e 'print uc("$(1)")').log
+'''
+$(shell perl -e 'print uc("$(1)")').log
+'''
 
 We used this for a while in the code but due to some changes we no longer needed it. It is here for possible future use.
 
 **20080822**
 To pull info out of fonts we can use ftinfo (part of fttools package) and cut. This line will deliver a list of fonts from a folder with their name and typeface:
 
-	ftinfo -n *.ttf | cut -d : -f 1,5
+'''
+ftinfo -n *.ttf | cut -d : -f 1,5
+'''
 
 ftinfo delivers a big list of stuff but then cut takes out all the stuff we don't want.
 
@@ -46,8 +58,10 @@ To build the package do this:
 This will take a while as it has to download and install a lot of stuff
 You may need to also install the debhelper package if pbuilder fails.
 
-	Finally:
-	pdebuild --debbuildopts -I --logfile
+'''
+Finally:
+pdebuild --debbuildopts -I --logfile
+'''
 
 If you can't find the .deb file look in /var/cache/pbuilder/results
 
