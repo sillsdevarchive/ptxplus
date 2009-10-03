@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 02 Oct 2009 15:08:16 +0700
-Modification-Date: Fri, 02 Oct 2009 22:08:18 +0700
+Modification-Date: Sat, 03 Oct 2009 22:46:01 +0700
 
 ====== Specifications ======
 Created Friday 02 October 2009
@@ -10,6 +10,18 @@ Documentation here outlines general descriptions components of a publishing proc
 
 
 ===== Objects =====
-**Summary:** Objects have a hierarchy. At the highest level you have the //Project// object which encompasses the entire publishing project. Inside this we find one, and only one, Book. Also, at this level we have the Admin object which contains a number of administrative documents dealing with project management. There is also a Meta Data object which contains data for other objects in the project. Inside the Book object is contained Groups. Inside those groups we find items. This diagram is a basic view of the relationships of the objects.
+**Summary:** Objects have a hierarchy. At the highest level you have the //Project// object which encompasses the entire publishing project. Inside this we find one, and only one, Book. Also, at this level we have the Admin object which contains a number of administrative documents dealing with project management. There is also a Data object which contains data for other objects in the project. Inside the Book object is contained Groups. Inside those groups we find items. This diagram is a basic view of the relationships of the objects.
 {{./diagram_02.png?type=diagram}}
 Next we will look at the components of each object, the relationship it has with other objects, and the tasks that can be performed on it by the system.
+
+==== Data ====
+Project data is needed to complete various parts of the project. The data is kept in the [[project.conf]] file and is a collection of key/value pairs and a description of each item.
+
+
+==== Admin ====
+
+Book
+
+Group
+
+Item

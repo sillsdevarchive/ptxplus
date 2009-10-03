@@ -1,7 +1,7 @@
 graph A {
 	subgraph clusterA {
 		label="Project";
-		Admin "Meta Data";
+		Admin Data;
 		subgraph clusterB {
 			label="Book";
 			subgraph clusterC {
