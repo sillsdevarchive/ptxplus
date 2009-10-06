@@ -57,12 +57,10 @@ class MakePiclistFile (object) :
 		self._sourcePath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_SOURCE']
 		self._sourceIllustrationsLib = self._settings['General']['Resources']['Illustrations']['pathToIllustrationsLib'] + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsLib']
 		self._csvMasterFile = self._processIllustrationsPath + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsControlFile']
-		self._texsize = self._settings['General']['Resources']['Illustrations'].get('size')
-		if not self._texsize : self._texsize = 'span'
-		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position')
-		if not self._texpos : self._texpos = 'b'
-		self._texscale = self._settings['General']['Resources']['Illustrations'].get('scale')
-		if not self._texscale : self._texscale = 1.0
+		# Next pull in some default sizing params if they exist, if not use the default settings.
+		self._texsize = self._settings['General']['Resources']['Illustrations'].get('size','col')
+		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position','tl')
+		self._texscale = self._settings['General']['Resources']['Illustrations'].get('scale',1.0)
 		(head, tail) = os.path.split(self._csvMasterFile)
 		self._csvSourceFile = self._sourcePath + "/" + tail
 		self._errors = 0
