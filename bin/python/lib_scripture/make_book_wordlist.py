@@ -72,7 +72,7 @@ class MakeBookWordlist (object) :
 			os.mkdir(reportPath)
 
 		# Get our current book object
-		bookObject = "".join(codecs.open(inputFile, "r", encoding='utf-8'))
+		bookObject = codecs.open(inputFile, "r", encoding='utf-8').read()
 
 		# Load in the sfm parser
 		parser = parse_sfm.Parser()
@@ -94,14 +94,14 @@ class MakeBookWordlist (object) :
 		# very seamless.
 		# Bring in any encoding mapings we may need.
 		encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
-		if encodingChain != "" :
+		pre_wordlist = [s.encode('utf-8') for s in handler._wordlist]
+		if encodingChain:
 			# Build the encoding engine(s)
 			encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
 			# Run the conversions on all our text
-			log_manager.log("DBUG", 'make_book_wordlist: Preconversion length ' + str(len(handler._wordlist)))
-			pre_wordlist = [s.encode('utf-8') for s in handler._wordlist]
+			log_manager.log("DBUG", 'make_book_wordlist: Preconversion length %d' % len(pre_wordlist))
 			handler._wordlist = encodingChain.convert('\n'.join(pre_wordlist)).split('\n')
-			log_manager.log("DBUG", 'make_book_wordlist: Postconversion length ' + str(len(handler._wordlist)))
+			log_manager.log("DBUG", 'make_book_wordlist: Postconversion length %d' % len(filter(bool, handler._wordlist)))
 
 		# Here we create a bookWordlist dict using the defaultdict mod. Then we
 		# we add the words we collected from the text handler and do the counting
@@ -109,6 +109,7 @@ class MakeBookWordlist (object) :
 		bookWordlist = defaultdict(int)
 		for word in handler._wordlist:
 			bookWordlist[word] += 1
+
 
 		# If the lists after removing duplicates and the set before do not match there
 		# may be an encoding problem.  Only generate extended logging info if this is the case
@@ -119,25 +120,24 @@ class MakeBookWordlist (object) :
 				'possible conversion error: number of unique words do not match: %d -> %d' % (
 					num_uniq_pre,num_uniq_post))
 
-			# Generate before and after inverse word number to word mappings.
+			# Generate before and after word to word number sets mappings.
 			pre_word_num_map = defaultdict(set)
 			post_word_num_map = defaultdict(set)
 			for n,w in enumerate(pre_wordlist): pre_word_num_map[w].add(n)
 			for n,w in enumerate(handler._wordlist): post_word_num_map[w].add(n)
 
-			larger = (pre_wordlist, set(map(tuple,pre_word_num_map.values())), 'source')
+			larger  = (pre_wordlist,      set(map(tuple,pre_word_num_map.values())),  'source')
 			smaller = (handler._wordlist, set(map(tuple,post_word_num_map.values())), 'target')
 			# we always need to take the smaller set from the larger so there are more words
 			# /after/ the conversion swap them around
 			if num_uniq_pre < num_uniq_post: larger, smaller = smaller,larger
 			for ids in larger[1].difference(smaller[1]):
-				for id in ids:
-					larger[0][id]; smaller[0][id]
+				for i in ids:
 					log_manager.log("DBUG",
 						'%s text word no. %d has ambiguous mapping in %s: codepoint sequences (source -> target): %s -> %s' % (
-							larger[2], id, smaller[2],
-							unicode_sequence(pre_wordlist[id].decode('utf_8')),
-							unicode_sequence(handler._wordlist[id].decode('utf_8'))))
+							larger[2], i, smaller[2],
+							unicode_sequence(pre_wordlist[i].decode('utf_8')),
+							unicode_sequence(handler._wordlist[i].decode('utf_8'))))
 
 		# Write out the new csv book word count file
 		# More info on writing to csv is here:
@@ -149,10 +149,10 @@ class MakeBookWordlist (object) :
 		log_manager.log("INFO", "Process complete. Total words found = " + str(len(handler._wordlist)) + " / Unique words = " + str(len(bookWordlist)))
 
 
-def unicode_sequence(str):
+def unicode_sequence(s):
 	'''This creates a human-readable sequence of unicode code points'''
 
-	return '<' + ' '.join("%04x" % ord(u) for u in str) + '>'
+	return '<' + ' '.join("%04x" % ord(u) for u in s) + '>'
 
 
 class MakeWordlistHandler (parse_sfm.Handler) :
@@ -242,7 +242,7 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 
 # This starts the whole process going
 def doIt (log_manager) :
-
+#	import pdb
 	thisModule = MakeBookWordlist()
 	return thisModule.main(log_manager)
 

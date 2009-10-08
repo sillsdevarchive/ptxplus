@@ -266,7 +266,6 @@ class LogManager (object) :
 		else :
 			return False
 
-
 	def closeOutSessionLog (self) :
 		'''This will write out all the logged entries to the log files
 			at the end of a process. However, we will first check
@@ -293,3 +292,5 @@ class LogManager (object) :
 
 		else:
 			tools.userMessage("Sorry, cannot write out the log files because we do not seem to be inside a project.")
+
+	flush = closeOutSessionLog
