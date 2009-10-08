@@ -1,0 +1,94 @@
+Manual installation instructions of the developer version of the ptxplus package
+	By Dennis Drescher (dennis_drescher@sil.org)
+	Last edited: 27/08/2009
+
+
+These are instructions for manually installing the developer version of the ptxplus package on a typical Ubuntu operating system (Jaunty +). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
+
+
+REQUIRED PACKAGES
+There are a number of packages that need to be installed for ptxplus to work. Some are more critical than others but all of them are needed. One of the packages is located on the packages.sil.org site, so if you have not already modified your repository source list then open this system file for editing:
+
+	sudo gedit /etc/apt/sources.list
+
+Next, add this line to the bottom of the file:
+
+	deb http://packages.sil.org/ubuntu jaunty main
+
+Update your package list with:
+
+	sudo apt-get update
+
+Now you should be able to install all the necessary packages to run ptxplus with this command:
+
+	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk libgtk2-spell-perl teckit
+
+As of Ubuntu 9.04 (Jaunty) these instructions will install a version of xetex (3.141592-2.2-0.996-patch2) that will handle most things. However, if you need the latest version, then you will need to get it from the packages.sil.org repository. To do that use:
+
+	sudo apt-get install texlive-xetex-snapshot
+
+That will remove the other version and replace it with version 3.1415926-2.2-0.999.7 or greater.
+
+With all the above packages installed, we are ready to move on to installing ptxplus.
+
+
+GETTING ptxplus
+To obtain the ptxplus, you need to check it out from the Mercurial repository it resides in. To simplify these instructions we will assume that the ptxplus package will go in this location:
+
+	~/Projects
+
+Create the above path if it does not exist or adjust the commands to suite your system.
+
+If you do not have the Mercurial distributed version control system installed on your system, use this command to install the package and the Meld differential file viewing program as well:
+
+	sudo apt-get install mercurial meld
+
+Now you can to go to the Palaso website and clone the project code with:
+
+	hg clone http://hg.palaso.org/ptxplus ~/Projects/ptxplus
+
+That should put ptxplus where you need it. From time to time you may want to update it. To do that, from inside the ptxplus project folder (~/Projects/ptxplus), this is the command you need:
+
+	hg pull
+
+
+INSTALLATION
+For easier operation it is necessary to get ptxplus properly located in your system. The first thing that needs to be done is to link ptxplus.conf file to /etc folder. That is done with:
+
+	sudo ln -s ~/Projects/ptxplus/bin/ptxplus.conf /etc/ptxplus.conf
+
+Now we will get ptxplus in your path by editing the ~/.profile file. To do that use this command:
+
+	sudo gedit ~/.profile
+
+Add this to the end of that file (on its own line):
+
+	export PTXPLUS_BASE="$HOME/Projects/ptxplus"
+
+Next time you reboot or login, the new path settings will be there.
+
+If you don't want to reboot right now and you just want to get it working on the current login (terminal) use:
+
+	source ~/.profile
+
+That will enable you to test in the current terminal but if you want it to take effect system-wide then you will need to log off then log back in.
+
+Test to see if the system recognises the additional path with:
+
+	echo $PTXPLUS_BASE
+
+Next we need link ptxplus (main program) to /usr/local/bin so it can be started from any location like a real program would. Also, you will need to link a couple utilities that are good to run globally out of the ~/bin folder (Be sure you have one to link it to first.) and also right-click from the Nautilus scripts folder. To make these links do these commands:
+
+	sudo ln -s ~/Projects/ptxplus/bin/ptxplus /usr/local/bin/ptxplus
+	ln -s ~/Projects/ptxplus/bin/sh/multi-txtconv.sh ~/bin/multi-txtconv.sh
+	ln -s ~/Projects/ptxplus/bin/python/lib_extras/get-clip ~/bin/get-clip
+	ln -s ~/Projects/ptxplus/bin/sh/ptxplus ~/.gnome2/nautilus-scripts/ptxplus
+	ln -s ~/Projects/ptxplus/bin/sh/Open\ Terminal ~/.gnome2/nautilus-scripts/Open\ Terminal
+
+This should complete the manual installation of ptxplus. Now you should be able to start the program from anywhere with:
+
+	ptxplus
+
+In a terminal, if you start it from the root of a project folder it should find the project.conf file and automatically load that project. Because a special Nautilus script was installed (above) You can start ptxplus with a right-click from the file browser.
+
+At this point you may need to load some projects on your local system or start a new project. To do this, start ptxplus and open the system help with Help->System Help. You can then look at the Repository section to get a better idea of how to get going.

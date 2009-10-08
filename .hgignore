@@ -1,0 +1,6 @@
+syntax: glob
+*.pyc
+*~
+
+relre:.cache
+relre:state.conf

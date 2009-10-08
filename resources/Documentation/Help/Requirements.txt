@@ -1,0 +1,16 @@
+====== Requirements ======
+
+[[XeTeX]]
+* ptx2pdf macro package (comes with ptxplus)
+
+Python 2.5
+* python-htmlgen
+* python-configobj
+* python-mako
+
+Evince
+
+Inkscape
+
+zim (and all it's Perl dependents)
+* libgtk2-spell-perl (to enable spell checking)

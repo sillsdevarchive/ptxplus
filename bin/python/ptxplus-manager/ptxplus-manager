@@ -1,0 +1,682 @@
+#!/usr/bin/env python2.5
+# -*- coding: utf-8 -*-
+
+########################################################################################
+# Todo:
+#	Add a dialog to confirm restore of a backup
+
+# History:
+# 20081023 - djd - Changed references to config object to reflect
+#		reorganization to the project.conf file
+# 20081112 - djd - Added an example menu item
+# 20081229 - djd - Added menu items, Preprocess, Process and Bind
+# 20090914 - djd - Removed "-book" from preprocess-book to try to resolve
+#		a makefile conflict with the maps routine.
+
+########################################################################################
+
+
+import sys, re, os, time
+try:
+	import pygtk
+	pygtk.require("2.0")
+except:
+	pass
+try:
+	import gtk
+	import gtk.glade
+except:
+	sys.exit(1)
+
+from configobj import ConfigObj
+import vte
+
+class ConfigGUI (object) :
+	"""A GTK based configuration file editor."""
+
+	def __init__ (self) :
+		basePath = os.environ.get('PTXPLUS_BASE')
+		if not basePath:
+			basePath = "/usr/share/xetex-ptxplus"
+			self.binpath = ''
+		else :
+			self.binpath = basePath + "/bin/"
+
+		self.gladefile = basePath + "/bin/python/ptxplus-manager/ptxplus-manager.glade"
+		dic = {
+			"on_w_main_destroy"						: self.quit,
+			"on_b_view_clicked"						: self.b_view_clicked,
+			"on_b_check_clicked"					: self.b_check_clicked,
+			"on_b_wiki_clicked"						: self.b_wiki_clicked,
+			"on_b_note_clicked"						: self.b_note_clicked,
+			"on_b_issue_clicked"					: self.b_issue_clicked,
+			"on_b_backup_clicked"					: self.b_backup_clicked,
+			"on_cb_books_changed"					: self.cb_books_changed,
+			"on_menu_new_activate"					: self.m_new,
+			"on_gtk-open_activate"					: self.m_open,
+			"on_menu_import_activate"				: self.m_import,
+			"on_menu_archive_activate"				: self.m_archive,
+			"on_menu_restore_activate"				: self.m_restore,
+			"on_menu_backup_activate"				: self.m_backup,
+			"on_menu_reload_activate"				: self.m_reload,
+			"on_menu_preprocess_activate"			: self.m_preprocess,
+			"on_menu_bind_activate"					: self.m_bind,
+			"on_menu_bind_booklet_activate"			: self.m_bind_booklet,
+			"on_menu_bind_booklet_current_activate"	: self.m_bind_booklet_current,
+			"on_menu_reset_activate"				: self.m_reset,
+			"on_menu_clean_adj_all_activate"		: self.m_clean_adj_all,
+			"on_menu_clean_pic_all_activate"		: self.m_clean_pic_all,
+			"on_menu_remove_adj_current_activate"	: self.m_remove_adj_current,
+			"on_menu_remove_pic_current_activate"	: self.m_remove_pic_current,
+			"on_menu_remove_pdf_activate"			: self.m_remove_pdf,
+			"on_menu_remove_pdf_current_activate"	: self.m_remove_pdf_current,
+			"on_menu_make_pic_activate"				: self.m_make_pic,
+			"on_menu_quit_activate"					: self.quit,
+			"on_menu_cut_activate"					: self.m_cut,
+			"on_menu_copy_activate"					: self.m_copy,
+			"on_menu_paste_activate"				: self.m_paste,
+			"on_menu_help_activate"					: self.m_help,
+			"on_menu_example_activate"				: self.m_example,
+			"on_menu_about_activate"				: self.m_about
+		}
+		self.bkid = ''
+		self.wTree = gtk.glade.XML(self.gladefile)
+		self.wTree.signal_autoconnect(dic)
+		self.b_view = self.wTree.get_widget('b_view')
+		self.b_check = self.wTree.get_widget('b_check')
+
+		self.vte = vte.Terminal()
+		self.vte.connect('child-exited', self.quit)
+		self.vte.fork_command()
+		self.wTree.get_widget('sc_session').add_with_viewport(self.vte)
+		self.vte.set_colors(gtk.gdk.color_parse('#000000'), gtk.gdk.color_parse('#FFFFFF'), [])
+		self.vte.set_scroll_on_output(True)
+		self.vte.set_scrollback_lines(1000)
+		self.vte.set_size(80, 19)
+		self.vte.show_all()
+
+		self.cb_books = self.wTree.get_widget('cb_books')
+		cell = gtk.CellRendererText()
+		self.cb_books.pack_start(cell, True)
+		self.cb_books.add_attribute(cell, 'text', 0)
+		self.ceditor = None
+		self.cimport = ImportDialog(self.wTree, 'd_import', self)
+		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
+		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
+
+		if os.access('project.conf', os.R_OK) :
+			self.init_dir()
+		else :
+			self.close_dir()        # to declare the attributes ;)
+
+	def init_dir (self, bkid='') :
+		if not os.access('project.conf', os.R_OK) :
+			self.close_dir()
+		return
+		if self.ceditor :
+			self.ceditor.new_config('project.conf')
+		else :
+			self.ceditor = ConfigEditor('project.conf', self.wTree, 'tv_sections', 'tv_keys')
+
+		self.styles = FileEditor('ptx2pdf.sty', self.wTree.get_widget('tv_styles'))
+		self.setup = FileEditor('ptx2pdf-setup.txt', self.wTree.get_widget('tv_setup'))
+		self.fonts = FileEditor('ptx2pdf-fonts.txt', self.wTree.get_widget('tv_fonts'))
+
+		try :
+		title = self.ceditor.config['General']['ProjectInformation'].get('projectName')
+	except :
+			title = os.getcwd()
+
+		self.wTree.get_widget('w_main').set_title(title)
+		self.cb_books = self.wTree.get_widget('cb_books')
+		self.cs_books = gtk.ListStore(str)
+		self.cb_books.set_model(self.cs_books)
+		index = 0
+
+		for a in ('MATTER_FRONT', 'MATTER_BOOKS_OT', 'MATTER_BOOKS_NT', 'MATTER_BACK', 'MAP_IDS') :
+			for b in (self.ceditor.config['Process']['Binding'].get(a).split()) :
+				if b == bkid : index = len(self.cs_books)
+				if b : self.cs_books.append([b])
+		self.cb_books.set_active(index)
+
+	def close_dir (self) :
+		self.styles = None
+		self.fonts = None
+		self.setup = None
+		self.adjust = None
+		self.usfm = None
+		self.texlog = None
+		self.log = None
+
+	def set_book (self, bkid) :
+		self.bkid = bkid
+		self.b_view.set_label("_View-" + bkid)
+		self.b_check.set_label("_Check-" + bkid)
+		self.adjust = FileEditor("Texts/" + bkid + ".usfm.adj", self.wTree.get_widget('tv_adj'))
+		self.usfm = FileEditor("Texts/" + bkid + ".usfm", self.wTree.get_widget('tv_usfm'))
+		self.log = FileEditor("Log/error.log", self.wTree.get_widget('tv_errors'))
+		self.log.readonly = True
+		self.texlog = FileEditor("Process/" + bkid + ".log", self.wTree.get_widget('tv_texlog'))
+		self.texlog.readonly = True
+
+######################################################################################################
+# Major problem here!
+# What is needed is a reload call once the command is finished. However, this call only makes the call
+# blindly from the terminal. It has no idea of when the process is done. For this reason, we cannot
+# have calls after it. The execute command must be the last thing that is run in any instance.
+# It will take major work to make it any different. So, for now, to compensate for this we have a
+# reload button that theu user will need to push after most processes if they want to see anything
+# updated in the UI.
+
+	def execute (self, command, *opts) :
+		if command == 'ptxplus' and self.binpath != '' :
+			command = self.binpath + command
+		str = "%s %s" % (command, " ".join(opts))
+		self.write_files()
+		self.vte.feed_child(str + "\n")
+#        sys.stderr.write("Command fed: " + str)
+
+#######################################################################################################
+
+	def write_files (self) :
+		if self.styles : self.styles.write('')
+		if self.fonts : self.fonts.write('')
+		if self.setup : self.setup.write('')
+		if self.adjust : self.adjust.write('')
+		if self.usfm : self.usfm.write('')
+
+	def set_working_dir (self, isProject) :
+		newdir = None
+		while not newdir :
+			if isProject :
+				title = "ptxplus: Open Project Directory"
+				action = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER
+			else :
+				title = "ptxplus: Create Project Directory"
+				action = gtk.FILE_CHOOSER_ACTION_CREATE_FOLDER
+
+			fcd = gtk.FileChooserDialog(title, self.wTree.get_widget('w_main'),
+					action, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+							 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+			fcd.set_default_response(gtk.RESPONSE_OK)
+			res = fcd.run()
+			if res == gtk.RESPONSE_CANCEL :
+				fcd.destroy()
+				return None
+			newdir = fcd.get_filename()
+			fcd.destroy()
+
+			if isProject :
+				if not os.access(os.path.join(newdir, "project.conf"), os.R_OK) :
+					dialog = gtk.MessageDialog(None,
+						gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+						gtk.MESSAGE_ERROR, gtk.BUTTONS_OK_CANCEL,
+						"Directory: %s has no project.conf" % newdir)
+					res = dialog.run()
+					dialog.destroy()
+					if res == gtk.RESPONSE_CANCEL : return None
+					newdir = None
+			else :
+				try : os.makedirs(newdir)
+				except OSError : pass
+		self.chdir(newdir)
+
+	def chdir (self, newdir) :
+		self.close_dir()
+		os.chdir(newdir)
+		self.execute("cd", newdir)
+		self.init_dir()
+
+	def quit (self, widget) :
+		self.write_files()
+		gtk.main_quit()
+
+	def m_help (self, widget) :
+		self.execute('ptxplus', 'help')
+
+
+	def m_example (self, widget) :
+	'''This will install the example project to where the user
+		chooses to have it, or just in a default folder in
+		the current location.'''
+
+	# The following code runs the dialog box. It should be made more
+	# generic and moved into a seperate function as it is used by several
+	# other functions.
+		dialog = gtk.FileChooserDialog("ptxplus: Install Example Project", None,
+			  gtk.FILE_CHOOSER_ACTION_SAVE,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		dialog.set_default_response(gtk.RESPONSE_OK)
+	dialog.set_current_name("ptxplus-example")
+		res = dialog.run()
+		if res == gtk.RESPONSE_CANCEL :
+			dialog.destroy()
+			return
+		newdir = dialog.get_filename()
+		dialog.destroy()
+		self.execute("ptxplus", "example", newdir)
+
+	def makeDir (self) :
+		fcd = gtk.FileChooserDialog("ptxplus: Project Directory", None,
+				gtk.FILE_CHOOSER_ACTION_CREATE_FOLDER,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		fcd.set_default_response(gtk.RESPONSE_OK)
+		res = fcd.run()
+		if res == gtk.RESPONSE_CANCEL :
+			fcd.destroy()
+			return
+		newdir = fcd.get_filename()
+		self.e_dir.set_text(newdir)
+		fcd.destroy()
+
+	def m_about (self, widget) :
+		self.execute('ptxplus', 'about')
+
+	def b_view_clicked (self, widget) :
+		self.execute("ptxplus", "view-" + self.bkid)
+#        self.set_book(self.bkid)
+
+	def b_check_clicked (self, widget) :
+		self.execute("ptxplus", "preprocess-" + self.bkid)
+#        self.set_book(self.bkid)
+
+	def b_wiki_clicked (self, widget) :
+		self.execute("ptxplus", "wiki")
+
+	def b_note_clicked (self, widget) :
+		self.execute("ptxplus", "note")
+
+	def b_issue_clicked (self, widget) :
+		self.execute("ptxplus", "issue")
+
+	def b_backup_clicked (self, widget) :
+		self.execute("ptxplus", "backup")
+
+	def cb_books_changed (self, widget) :
+		index = widget.get_active()
+		bkid = self.cs_books[index][0]
+		self.set_book(bkid)
+
+	def m_new (self, widget) :
+		self.set_working_dir(False)
+		self.execute("ptxplus", "setup", ".")
+		self.init_dir()
+
+	def m_open (self, widget) :
+		self.set_working_dir(True)
+
+	def m_import (self, widget) :
+		self.cimport.run()
+
+################################################################################
+# We need to make a reload event happen here but it needs to wait until the
+# archive is unpacked. See the note above on execute as to why this cannot
+# easily be done.
+
+	def do_import (self) :
+		if self.cimport.dir :
+			os.chdir(self.cimport.dir)
+			self.execute("cd", self.cimport.dir)
+			self.execute("ptxplus", "import", self.cimport.archive)
+			self.wTree.get_widget('menu_reload').emit('activate')
+
+################################################################################
+
+	def m_archive (self, widget) :
+		fcd = gtk.FileChooserDialog("ptxplus: Archive File", None,
+				gtk.FILE_CHOOSER_ACTION_SAVE,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		fcd.set_default_response(gtk.RESPONSE_OK)
+		res = fcd.run()
+		if res == gtk.RESPONSE_CANCEL :
+			fcd.destroy()
+			return
+		newdir = fcd.get_filename()
+		fcd.destroy()
+		self.execute("ptxplus", "archive", newdir)
+
+	def m_restore (self, widget) :
+		self.execute("ptxplus", "restore")
+
+	def m_backup (self, widget) :
+		self.execute("ptxplus", "backup")
+
+	def m_reload (self, widget) :
+		self.init_dir(self.bkid)
+
+	def m_bind (self, widget) :
+		self.execute("ptxplus", "bind-all")
+
+	def m_bind_booklet (self, widget) :
+		self.execute("ptxplus", "bind-booklet")
+
+	def m_bind_booklet_current (self, widget) :
+		self.execute("ptxplus", "bind-booklet-" + self.bkid)
+
+	def m_remove_pdf (self, widget) :
+		self.execute("ptxplus", "pdf-remove")
+
+	def m_remove_pdf_current (self, widget) :
+		self.execute("ptxplus", "pdf-remove-" + self.bkid)
+
+	def m_reset (self, widget) :
+		self.execute("ptxplus", "reset")
+
+	def m_clean_adj_all (self, widget) :
+		self.execute("ptxplus", "adjfile-clean-all")
+
+	def m_clean_pic_all (self, widget) :
+		self.execute("ptxplus", "picfile-clean-all")
+
+	def m_remove_adj_current (self, widget) :
+		self.execute("ptxplus", "adjfile-remove-" + self.bkid)
+
+	def m_remove_pic_current (self, widget) :
+		self.execute("ptxplus", "picfile-remove-" + self.bkid)
+
+	def m_make_pic (self, widget) :
+		self.execute("ptxplus", "make-picfile-" + self.bkid)
+
+	def m_preprocess (self, widget) :
+		self.execute("ptxplus", "preprocess")
+
+	def m_quit (self, widget) :
+		self.quit()
+
+	def m_copy (self, widget) :
+		if self.clipPrimary.get_owner() :
+			selectionText = self.clipPrimary.wait_for_text()
+			if selectionText:
+				self.clipboard.set_text(selectionText, -1)
+
+	def m_cut (self, widget) :
+		owner = self.clipPrimary.get_owner()
+		if owner:
+			if isinstance(owner, gtk.Editable) :
+				owner.cut_clipboard()
+			elif isinstance(owner, gtk.TextView) :
+				owner.get_buffer().cut_clipboard(self.clipboard, owner.get_editable())
+			else:
+				selectionText = self.clipPrimary.wait_for_text()
+				if selectionText:
+					self.clipboard.set_text(selectionText, -1)
+
+	def m_paste (self, widget) :
+		entry = self.wTree.get_widget('w_main').focus_widget
+		if isinstance(entry, gtk.Editable) :
+			entry.paste_clipboard()
+		elif isinstance(entry, gtk.TextView) :
+			entry.get_buffer().paste_clipboard(self.clipboard, None, entry.get_editable())
+
+class ConfigEditor (object) :
+
+	def __init__ (self, filename, wTree, sname, kname) :
+		self.wTree = wTree
+		self.sections_tv = wTree.get_widget(sname)
+		cell = gtk.CellRendererText()
+		self.sections_tc = [gtk.TreeViewColumn('section', cell)]
+		self.sections_tc[0].set_cell_data_func(cell, self.sections_cell)
+		self.sections_tv.append_column(self.sections_tc[0])
+
+		cell_data_funcs = [self.keys_keycell, self.keys_valuecell]
+		cell_data_names = ['Property', 'Value']
+		self.keys_tv = wTree.get_widget(kname)
+		self.keys_tc = list()
+		for i in range(0,2) :
+			cell = gtk.CellRendererText()
+			self.keys_tc.append(gtk.TreeViewColumn(cell_data_names[i], cell))
+			self.keys_tc[i].set_cell_data_func(cell, cell_data_funcs[i])
+			self.keys_tv.append_column(self.keys_tc[i])
+		self.keys_ts = gtk.ListStore(str, str)
+		self.keys_tv.set_model(self.keys_ts)
+		self.keys_tv.connect('cursor-changed', self.select_key)
+		self.keys_tv.connect("row-activated", self.active_row)
+
+		self.desc_l = wTree.get_widget("lab_desc")
+		self.entry_w = wTree.get_widget("d_entry")
+		self.entry_name = wTree.get_widget("te_name")
+		self.entry_type = wTree.get_widget("te_type")
+		self.entry_value = wTree.get_widget("te_value")
+
+		self.new_config(filename)
+
+	def new_config (self, filename) :
+		self.config = ConfigObj(filename)
+		self.sections_ts = gtk.TreeStore(str)
+		self.pathtree = list()
+		self.sections_parents = {id(self.config) : None}
+		self.config.walk(self.sections_walk, call_on_sections=True)
+		self.sections_tv.set_model(self.sections_ts)
+		self.sections_tv.expand_row(0, False)
+		self.sections_tv.connect('cursor-changed', self.select_section)
+
+	def sections_walk (self, section, key) :
+		val = section[key]
+		if isinstance(val, (tuple, dict)) :
+			iter = self.sections_ts.append(self.sections_parents[id(section)], [key])
+			self.sections_parents[id(val)] = iter
+			self.set_pathkey(key, self.sections_ts.get_path(iter))
+
+	def sections_cell (self, column, cell, model, iter) :
+		cell.set_property('text', model.get_value(iter, 0))
+
+	def keys_keycell (self, column, cell, model, iter) :
+		cell.set_property('text', model.get_value(iter, 0))
+
+	def keys_valuecell (self, column, cell, model, iter) :
+		cell.set_property('text', model.get_value(iter, 1))
+
+	def select_section (self, widget) :
+		selection = widget.get_selection()
+		(model, iter) = selection.get_selected()
+		if iter :
+			section = self.get_section(model.get_path(iter))
+			self.keys_fill(section)
+
+	def set_pathkey (self, key, path_tuple) :
+		path = list(path_tuple)
+		last = path.pop()
+		curr = self.pathtree
+		while path :
+			i = path.pop(0)
+			while len(curr) <= i : curr.append(['', list()])
+			curr = curr[i][1]
+		while len(curr) < last + 1 : curr.append(['', list()])
+		if len(curr) <= last + 1:
+			curr[last] = [key, list()]
+		else:
+			curr[last][0] = key
+
+	def get_section (self, path_tuple) :
+		path = list(path_tuple)
+		curr = self.pathtree
+		sect = self.config
+		while path :
+			self.sections_parent = sect
+			i = path.pop(0)
+			name = curr[i][0]
+			sect = sect[name]
+			curr = curr[i][1]
+		self.sections_curr = sect
+		if i == 0 and self.sections_parent == self.config :
+			lines = self.config.initial_comment
+		else :
+			lines = self.sections_parent.comments[name]
+		self.desc_l.set_markup(self.parse(lines))
+		return sect
+
+	def keys_fill (self, section) :
+		self.keys_ts.clear()
+		for k in section.keys() :
+			v = section[k]
+			if isinstance(v, list) :
+				self.keys_ts.append([k, ", ".join(v)])
+			elif not isinstance(v, (dict, tuple)) :
+				self.keys_ts.append([k, v])
+
+	def select_key (self, widget) :
+		selection = widget.get_selection()
+		(model, iter) = selection.get_selected()
+		if iter :
+			key = self.keys_ts[iter][0]
+			if self.sections_curr.comments.has_key(key) :
+				self.desc_l.set_markup(self.parse(self.sections_curr.comments[key]))
+
+	def active_row (self, widget, path, column) :
+		self.entry_type.set_text("String")
+		self.entry_name.set_text(self.keys_ts[path][0])
+		self.entry_value.set_text(self.keys_ts[path][1])
+		self.wTree.get_widget("bt_apply_entry").connect("clicked", self.entry_apply)
+		self.wTree.get_widget("bt_cancel_entry").connect("clicked", self.entry_cancel)
+		self.entry_w.show()
+
+	def entry_apply (self, widget) :
+		self.sections_curr[self.entry_name.get_text()] = self.entry_value.get_text()
+		self.keys_fill(self.sections_curr)
+		self.save()
+
+	def entry_cancel (self, widget) :
+		self.entry_w.hide()
+
+	def save (self) :
+		self.config.write()
+
+	def parse (self, lines) :
+		inpara = 0
+		res = ''
+		for l in (re.sub("^#\s?", "", f.strip()) for f in lines) :
+			if re.match("^\s*$", l) and inpara != 0:
+				res = res + "\n\n"
+				inpara = 0
+			elif re.match("^\s+", l) :
+				if inpara != 0:
+					res = res + "\n"
+					inpara = 0
+				res = res + "<tt>" + l + "</tt>\n"
+			elif inpara != 0:
+				res = res + " " + l
+			else:
+				res = res + l
+				inpara = 1
+		return res
+
+class FileEditor (object) :
+	"""Edits a given file in a given textview with autosave on exit"""
+
+	def __init__ (self, filename, textview) :
+		self.filename = filename
+		self.textview = textview
+		self.readonly = False
+		buff = textview.get_buffer()
+
+		try:
+			fin = file(filename)
+			textview.set_sensitive(False)
+			buff.set_text(fin.read())
+			fin.close()
+		except:
+			buff.set_text('')
+
+		buff.set_modified(False)
+		textview.set_sensitive(True)
+
+	def __del__ (self) :
+		self.write('')
+
+	def error (self, str) :
+		dialog = gtk.MessageDialog(None,
+				gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, str)
+		dialog.run()
+		dialog.destroy()
+
+	def write (self, filename) :
+
+		if self.readonly : return
+
+		if filename:
+			self.filename = filename
+
+		buff = self.textview.get_buffer()
+		if not buff.get_modified() : return
+		self.textview.set_sensitive(False)
+		text  = buff.get_text(buff.get_start_iter(), buff.get_end_iter())
+		self.textview.set_sensitive(True)
+		buff.set_modified(False)
+
+		try:
+			fout = file(self.filename, "w")
+			fout.write(text)
+			fout.close()
+		except:
+			self.error("Can't write to file: %s" % self.filename)
+
+class ImportDialog (object) :
+
+	def __init__ (self, wTree, dname, parent) :
+		dc = {
+			'b_browse_dir' : self.browse_dir,
+			'b_browse_archive' : self.browse_archive,
+			'b_import_ok' : self.exit,
+			'b_import_cancel' : self.quit}
+		for (k, v) in dc.items() :
+			wTree.get_widget(k).connect('clicked', v)
+		self.dia = wTree.get_widget(dname)
+		self.e_dir = wTree.get_widget('e_dir')
+		self.e_archive = wTree.get_widget('e_archive')
+		self.dir = ''
+		self.archive = ''
+		self.parent = parent
+
+	def run (self) :
+		self.dia.show()
+
+	def exit (self, widget) :
+		self.dir = self.e_dir.get_text()
+		self.archive = self.e_archive.get_text()
+		print "dir = %s, archive = %s" % (self.dir, self.archive)
+		self.dia.hide()
+		self.parent.do_import()
+
+	def quit (self, widget) :
+		self.dir = ''
+		self.archive = ''
+		self.dia.hide()
+		self.parent.do_import()
+
+	def browse_dir (self, widget) :
+		fcd = gtk.FileChooserDialog("Project Directory", None,
+				gtk.FILE_CHOOSER_ACTION_CREATE_FOLDER,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		fcd.set_default_response(gtk.RESPONSE_OK)
+		res = fcd.run()
+		if res == gtk.RESPONSE_CANCEL :
+			fcd.destroy()
+			return
+		newdir = fcd.get_filename()
+		self.e_dir.set_text(newdir)
+		fcd.destroy()
+
+	def browse_archive (self, widget) :
+		fcd = gtk.FileChooserDialog("Archive File", None,
+				gtk.FILE_CHOOSER_ACTION_OPEN,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		fcd.set_default_response(gtk.RESPONSE_OK)
+		res = fcd.run()
+		if res == gtk.RESPONSE_CANCEL :
+			fcd.destroy()
+			return
+		newdir = fcd.get_filename()
+		self.e_archive.set_text(newdir)
+		fcd.destroy()
+
+
+
+if __name__ == "__main__":
+	cg = ConfigGUI()
+	gtk.main()

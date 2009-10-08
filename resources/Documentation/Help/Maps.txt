@@ -1,0 +1,35 @@
+====== Managing Maps ======
+The finer points of how to work with maps in ptxplus. Maps are really a part of the peripheral matter but since they require a significant amount of work they get their own page.
+
+=== Summary ===
+Producing a map, or set of maps, is a three step process.
+1) Edit the project.conf maps_data.csv files
+2) Edit the project SVG map files
+3) Produce the PDF files and bind
+
+=== Map Data ===
+<write>
+
+=== Editing the Maps ===
+<write>
+
+=== Creating Map PDF Files ===
+<write>
+
+=== Font Issues ===
+<write>
+
+=== Map Templates ===
+Currently there are 11 map templates to choose from. Here is a brief description of each one:
+
+	m001 = Modern world
+	m002 = Ancient world
+	m003 = Exodus from Egypt
+	m004 = Conquest of Canaan
+	m005 = Kingdoms of Israel and Judah
+	m006 = Holy Land in the Time of Jesus Christ
+	m007 = Jerusalem in New Testament Times
+	m008 = Paul's Missionary Journeys
+	m009 = The Temple in the time of Jesus Christ
+	m010 = Seven Churches of Asia
+	m011 = The Temple Buildings

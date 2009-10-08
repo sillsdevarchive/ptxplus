@@ -1,0 +1,29 @@
+====== Binding ======
+
+Binding is the process of taking PDF files that have been created in ptxplus and put them together in the right order. Sort of an electronic version of the real physical process.
+
+===== Bind All =====
+
+The last command you should ever have to run on any project is 'Bind All'. that should run any processes that need to be run, collect up all the PDF files produced and then concatenate them into one large master file. As to if the project was ready to be bound is discovered in the read-through of the resulting material. Normally it is necessary to run the Bind All command numerous times in a project before it is actually ready to go.
+
+The Bind All command relies on the pdftk utility to do the binding of the PDF files. More on this below.
+
+===== Other kinds of Binding =====
+
+==== Booklets ====
+There is more than just the Bind All command found in the Bind category of commands. There are also the Booklet making commands which are still somewhat experimental so I will not write anything about them for now. But I will say that they are a part of the ??? Perl module written by Martin Hosken. To make the booklet version PDF we use the pdfbklt utility. As the functionality of this feature matures more will be added here.
+
+==== Custom pdftk Commands ====
+As noted above, ptxplus uses the pdftk utility to bind together the PDF files produced by the [[TeX]] processes. However, much more can be done with this utility than what the system uses it for. To find out more type: 'pdftk -h' in a terminal window to get more help. However, it is useful to note a couple examples of its use here. For example, say you need to extract a range of pages from a book you have just typeset to show the client a particular format problem you are having. To do this use a command like this:
+
+	pdftk  input.pdf cat 11-15 output output.pdf
+
+To do just one page (page 2) you would use:
+
+	pdftk  input.pdf cat 2 output output.pdf
+
+To remove page 13 you could use something like this:
+
+	pdftk  input.pdf cat 1-12 14-end output output.pdf
+
+The possibilities are endless. This is a very handy utility to know about and be able to use.

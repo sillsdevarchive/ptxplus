@@ -1,0 +1,95 @@
+====== Issues ======
+
+Fri 22 May 2009 04:18 PM ICT
+Status:
+
+**Fri 15 May 2009 11:31 AM ICT**
+Status: Open
+A specification needs to be written for ptxplus so it can be redesigned. The original package has been developed in a reactionary fashion so the code is very convoluted. With a good specification it could be rewritten or at least reorganized so it could be more generalized for wider use.
+
+**Fri 15 May 2009 11:29 AM ICT**
+Status: Open
+Text processes need a way to be applied to the specific files they were intended for. Right now, a text process can be applied to any file that comes through. This could cause problems.
+
+**Mon 29 Dec 2008 03:40 PM ICT**
+Status: Open
+ptx2pdf - The macro is allowing orphaned words to occur on a line. The default should be two or more words (or maybe 10-15% of the line) on a line at the least.
+
+**Mon 29 Dec 2008 03:40 PM ICT**
+Status: Open
+[[ptx2pdf:Columnshift]] - When in single column mode and you try to shift the column to move the verse numbers out of the margin the header line shifts but the footnote does not. This looks goofy. At least in single column mode the header should stay put and the body text and the verse numbers should shift to the right.
+
+
+**Wed 26 Nov 2008 04:31 PM ICT**
+Status: Closed
+Need to add a feature that allows you to preprocess check all books with one command.
+
+
+**Thu 13 Nov 2008 09:11:26 AM ICT **
+Status: Close
+Quote checking fails to find a quote marker at the end of a line. The line contains a special word quote so this might be the problem. It may be moving on to the next line after clearing the special word. Example Text in KYU MAT around line 1550, above actually.
+
+
+**Wed 12 Nov 2008 02:09:17 PM ICT **
+Status: Open
+Need to block any cleanup operation when the text is locked down.
+
+**Thu 30 Oct 2008 09:58:08 PM ICT **
+Status: Closed
+In markup_manager.py there are some functions that are only place holders. In some instances bracket checking my not return accurate results. These functions need to be finished. [Closing note: By using an sfm parser this class is becoming obsolete.]
+
+**Help!**
+Status: Closed
+We can't call system help when a project doesn't exist. This needs to be called from the ptxplus file. Right now a work around is in the GUI.
+
+**ptx-adj-list.tex**
+Tue 14 Oct 2008 10:20:06 AM ICT
+Status: Open
+There is a problem with the macro reading the blank line at the adjustments file. We have commented out the line that throws the error for now but this should be looked into. ptx2pdf adjustments should be able to handle a blank line at the end of the file. Here is the code we are working with:
+
+\def\closeadjlist{% close the adjustment list, with an error message if we didn't process it fully
+ %\ifeof\@djlist\else \errmessage{Did not use all adjustments in list}\fi
+ \closein\@djlist
+}
+
+There seem to be some other issues with the adjustment procedure and at this point it doesn't seem to be working at all.
+
+**CMYK**
+Thu 02 Oct 2008 03:06:43 PM ICT
+Status: Open
+There is an issue with CMYK. Inkscap#$(MATTER_MAPS_PDF) : $(MATTER_MAPS_TEX) \
+#	$(foreach v,$(MAP_IDS), $(PATH_MAPS)/$(v).usfm)
+#	cd $(PATH_MAPS) && $(TEX_INPUTS) xetex $(MATTER_MAPS_TEX)
+e cannot and will not work with the CMYK color space. It was never designed to do press-ready work as SVG is more of a Web technology. There is specifications for some CMYK and other color management in the W3C specification. It can be found here: http://www.w3.org/TR/SVG11/color.html#ColorProfileDescriptions This is a little dated though so more research will need to be done.
+
+After some discussion on this it was decided to let it rest for now and focus on other system issues. As we get closer to press time we will revisit this issue and find a solution. More than likely we will need to add an extra process that will produce the press-ready CMYK maps PDF file. Ghostscript is a possibility for this. However, gs might have an issue with handling the map relief image which is embedded png. It may leave that alone and just change only the simple svg elements of the document. This would leave us with a document that had mixed color profiles which would not be good.
+
+**matter_maps.mk**
+Thu 02 Oct 2008 09:58:08 AM ICT
+Status: **Closed**
+After much testing in Inkscape this seems to be the command line that will generate a PDF from an SVG file without crashing the program and it seems to give us the quality we need:
+
+@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_MAPS)/$(1).svg -A $(PATH_MAPS)/$(1).pdf -T -F -d 2400
+
+One problem that remains is that the dependencies in this file are wrong with the csv and svg files. Now, when you want to recreate a pdf file, either with view-??? or view-maps it does not recognize the status of its two dependent files.
+
+**Parsing vars for Python in .mk files**
+Wed 01 Oct 2008 04:02:36 PM ICT
+Status: Open
+It would be good if we could parse out the vars used in makefile.conf like $(PATH_MAPS) so that we could pass the real value on to Python for processes being done. This may not be easy to do.
+
+**matter_maps.mk**
+Wed 01 Oct 2008 03:19:04 PM ICT
+Status: Open
+Font linking to a local dir is possible and we have code to support it. However, if you are working with a special font it is very much necessary to eliminate every instance of that font (normally in the [[~/.fonts]] folder) from the system so that you can be sure that the map is using the exact font you want. Inkscape is not as separated from the system as [[XeTeX]] so this could be an issue. **The needs to go into the help files.**
+
+**check_punctuation.py**
+Thu 25 Sep 2008 07:48:00 AM ICT
+Status: Close
+	- Does not find space before sentence-final punctuation
+
+**check_sfm.py**
+Thu 25 Sep 2008 07:47:49 AM ICT
+Status: Open
+	- Does not catch missing space after \f*
+	- Needs to find spaces before \f and give a warning

@@ -1,0 +1,7 @@
+bin     usr/share/xetex-ptxplus
+resources     usr/share/xetex-ptxplus
+bin/ptxplus     usr/bin
+bin/python/ptxplus-manager/ptxplus-manager    usr/bin
+debian/xetex-ptxplus.desktop    /usr/share/applications
+debian/xetex-ptxplus.png        /usr/share/icons/hicolor/48x48/apps
+debian/xetex-ptxplus.png        /usr/share/icons/gnome/48x48/apps

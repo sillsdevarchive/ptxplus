@@ -1,0 +1,25 @@
+====== Peripherals ======
+
+There are a number of different types of matter used in every Scripture publication. This page give information on the current procedure of how to do each one (if I've kept up with the documentation).
+
+===== Outer Cover =====
+The production of the outer cover is somewhat separate from the rest of the publication. This is because the content can vary greatly. Here are some basic tips on how to use functions built in for this purpose.
+
+To produce an entire cover file in one PDF file use:
+
+	ptxplus cover
+
+To view individual elements of the cover use:
+
+	ptxplus view-<file_name>
+
+
+===== Topical Index =====
+
+To create a topical index you first need your client to translate the TOPICAL_INDEX.csv file found in the ptxplus library. (At some point it would be nice to have it auto-copy to your source folder if you choose to include a topical index in your publication.)
+
+That file should become the TOPICAL_INDEX.CSV file in your Source folder. Next you will want to run in your project session window: ptxplus make-topic_index
+
+This will create the TOPICAL_INDEX.USFM file in the Peripherals folder. This is your working copy and all corrections are done on that file. However, if you wish to reuse this index for other publications you will want to be sure that your content corrections are made to the CSV file too in case it needs to be run against another project.
+
+When you have the SFM file in your Peripheral folder you can click the view button to process it and see it in its typeset form.

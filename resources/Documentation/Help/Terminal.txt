@@ -1,0 +1,60 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Wed, 23 Sep 2009 13:41:03 +0700
+
+====== Terminal Commands ======
+
+Virtually everything ptxplus does actually happens with a terminal command. The ptxplus manager simply helps the user access the commands with a GUI. This page contains a listing of all the commands available to the user in the terminal. By using these commands a user could manage a publishing project completely from the command line. This feature is useful for those who suffer from //command-line separation anxiety//. :-)
+
+The commands are listed below by category. To access them please remember to type //ptxplus //before each one. For example, to get this help system you would type:
+	ptxplus help
+
+[Note these are out of date - djd, 20090124]
+
+=== System Commands ===
+See System for more information.
+manage
+help
+user
+set-user <'User Name'>
+example
+about
+version
+
+=== Scripture Processing ===
+See [[Scripture]] for more information.
+<BID>			Background processes that book only
+view-<BID>		Processes that book, views the resulting PDF
+edit-<BID>.usfm.adj	Brings up the adjustment file for that book
+issue				Opens the project Issues wiki page
+log				Opens the project Log wiki page
+bind-all			Binds all project PDF files into one
+illustrations			Open the illustrations.csv file
+hyphenation		Open the wordlist.txt file for editing
+make-master-wordlist	Build a CSV master word list file from all books
+
+=== Map Functions ===
+See [[Maps]] for more information.
+preprocess-<mapID>	Creates a map.svg file and opens it in the SVG editor
+view-<mapID>		Creates a map.pdf file and opens it in the PDF viewer
+view-maps			Typesets all the map files into one PDF file
+link-<mapID>		Create a link in Process folder to the PDF in Maps
+link-maps			Create a link for all maps to the Process folder
+
+=== Project Maintenance ===
+See [[Maintenance]] for more information.
+archive <path/name>	Create an archive of the project
+configure			Opens all the project config and setup files in an editor
+config-gtk			Opens the project.conf file in a GUI editor
+backup			Puts project data (except linked files) into
+				[[../Backup/<ProjectID>-backup.tar.gz]]
+restore			Restores from your last backup
+
+**Some Cleaning Commands **//(use with care)//
+bind-clean			Deletes the resulting BIBLE,PDF file
+log-clean			Cleans out the logs folder
+reports-clean		Cleans out the reports folder
+process-clean		Removes all auto-generated process files
+texts-clean			Removes all text files (be very careful!)
+clean-all			Runs all the above (basically resets the project)

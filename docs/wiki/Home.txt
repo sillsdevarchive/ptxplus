@@ -1,0 +1,6 @@
+====== Home ======
+
+Welcome to ptxplus, a Scripture publishing management system. This is the development wiki where we keep all the notes concerning development issues.
+
+The general log is found on the [[Log]] page
+For bugs and problems go to [[Issues]]

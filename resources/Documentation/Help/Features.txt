@@ -1,0 +1,30 @@
+====== Features ======
+
+The following operations have all been successfully automated in ptxplus:
+
+* Creation of text adjustment files
+* Management of cover and other peripheral matter
+* File dependency management
+* Binding PDF files
+* File management (including administrative data)
+* Text pre-process checking
+* Text processing (changing quotes, etc)
+* Auto-creation of [[TeX]] hypenation file
+* XETEX typesetting process execution
+* Auto-open of typeset PDF files
+* Project creation
+* Project backup
+* Project archiving
+
+ptxplus also helps to manage these features that are included in the ptx2pdf macro package:
+
+* Placement of footnotes and cross references
+* Placement of illustrations
+* Creating of page headers and footers
+
+Semi-automated processes include:
+* Map creation
+
+Automated processes to come include:
+* Table of contents creation
+* Diglot support

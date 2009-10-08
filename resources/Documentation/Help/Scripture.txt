@@ -1,0 +1,40 @@
+====== Scripture Processing ======
+
+All you need to know about processing Scripture files in ptxplus.
+
+===== Preprocess Checking =====
+
+Before text can be processed by the system it needs to go through a number of pre-process checks. The checks in ptxplus are written in Python. Other scripting languages can be used but they will have to wrapped in a Python script to be available to the system.
+
+There is one kind of master check called check_book.py which connects to a number of checking modules. These are considered to be fundamental checks that every SFM file should undergo. Right now it handles basic SFM checking, punctuation checks and quote checks. More may be added in the future. If you find a certain check that you consider to be fundamental is not included, please let us know and we'll add it. Likewise, if you see a particular problem being missed by the checks we want to know about that too.
+
+Checks can be run, or not run, depending on if the particular check has been activated (value set to 'true') in the system configuration. To see what pre-process checks are available click on the Config tab, then General and PreprocessChecks. You can then see what checks are activated and what they do.
+
+It is always possible to add more pre-processing checks to the system. However, to do this you will need to 'poke around under the hood.' First, it is good to have an understanding of how the ptxplus libraries work. If you do, you can save yourself a lot of time and effort. However, the library goes beyond the scope of this documentation. But, even if you don't, you can still write free-standing checks which work independently from the system. Regardless of how you choose to write your checks, the process to hook them into the system is the same.
+
+The first step is to edit the project.conf file. Find the [[PreprocessChecks]] section, then insert a comment line that briefly describes what the check does. After the description, add a line that has the name of the name of the Python script which is (or will be) located in the lib_scripture folder in the ptxplus system. However, do not include the '.py' extension only the file name. After the check name insert an '=' character and then 'true' or 'false' in lower case, depending on if you want the check activated right then. When you are done, your edit in the project.conf file should look something like this:
+
+[PreprocessChecks]
+
+# This is my own special check which does special things.
+#  The default setting 'false'
+my_own_check    =    'false'
+
+Once the project.conf file has been edited ptxplus will be ready to execute the module you have written that is located in the lib_scripture folder. To learn how to write custom checks it would be a good idea to look at pre-existing checks and see how they use the infrastructure that is in place in the system for reporting and file management. It can save you lots of time.
+
+===== Copy Into System =====
+
+In this section we control the copying of the source text into the system after it has been checked. Normally the default on this setting, copy_from_source, is true but if for some reason you need to prevent it from happening you can change it to false. BTW, copy_from_source is also the Python module name. The default setting for the copyCommand is "cp [inFile] [outFile]". This is just a simple system copy command.
+
+However, you can do more at this point in the process than copy files, you can also modify this command to do things like an encoding conversion. In stead of using the default setting like above you could do something like this:
+	txtconv -nobom -i [inFile] -o [outFile] -t encode.tec
+
+This would perform an encoding conversion and deposit the results in the Texts folder ready for further processing. Just like the copy command only the text encoding has been changed along the way. Any number of changes like this could be done at this point.
+
+===== Text Processes =====
+
+Text processes are fun! Here you get to manipulate the text to make things turn out the way you want. The reason you can do this is because it happens to the text that has been copied into the system, not the source text. If you mess up, it's no problem because no harm has come to the source text. We never want to touch the source text.
+
+At some point you may need to write your own text process to accomplish something that others my not have encountered. Hooking custom text processes into the system works just like text pre-processes. The only difference is that you edit the project.conf file in the [TextProcesses] section. Otherwise it's the same. Please see the notes above on that.
+
+Also, like with writing any process in ptxplus, it is good to know what's available to you in the libraries and how to use the logging and file handling services. Again, the best way to learn is to reverse-engineer existing scripts.

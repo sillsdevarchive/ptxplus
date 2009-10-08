@@ -1,0 +1,48 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Fri, 02 Oct 2009 20:34:27 +0700
+Modification-Date: Sat, 03 Oct 2009 11:28:14 +0700
+
+====== Process ======
+Created Friday 02 October 2009
+
+This document will describe the tasks or processes the ptxplus system performs. It is meant to be a guide to help design the API for ptxplus.
+
+In it's design, there are several rules ptxplus tries to always maintain.
+
+1) Every task is done with a command line call
+2) Every task must report its results to a project log
+3) <add more rules here>
+
+The publishing process is very linear but also cyclic as well. A subprocess may need to performed a number of times before process is complete. The following diagram shows the process.
+
+{{./diagram_01.png?type=diagram}}
+
+Next we will explain what happens in each process.
+
+==== Project Intake ====
+Project intake is the process of gathering data about the project that is going to be undertaken. It is pretty certain at this point that the project is feasible but during this process feasibility should be questioned as well.
+
+The ptxplus interface facilitates project intake by providing dialogs that guide the user in the details of new project setup. It is important that a project not begin until enough is known about it. The intake process helps determine this by giving each piece of collected data a weight (a number from 1 through 9). From an administrative standpoint, a project cannot officially begin until a data threshold has been reached.
+
+The status of the data threshold is communicated to the user by a simple red, yellow, green indicator on the ptxplus dashboard. Red indicates the project cannot be started and work can only proceed with administrative override. The user can click on the red icon to pull up the data input dialog. Yellow indicates the project can proceed but some data is missing. Again, the user can click on the icon to find out which pieces of information are missing. For a description of the data fields used in this process and their properties, see the Specifications section.
+
+==== Project Setup ====
+
+
+==== Format Setup ====
+
+
+==== Text Checking ====
+
+
+==== Composition ====
+
+
+==== Binding ====
+
+
+==== Delivery ====
+
+
+==== Archiving ====

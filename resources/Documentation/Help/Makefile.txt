@@ -1,0 +1,29 @@
+====== Makefile ======
+
+This page contains information on how Makefile functions in the ptxplus system.
+
+Binding
+
+Front Matter
+
+Books
+
+Back Matter
+
+Maps
+# Maps are technically back matter but they are handled in a
+# seperate process. The maps we want to include are listed
+# in order here with a space between each one.
+# Recognized choices:
+#	blank = Blank page (for odd pages)
+#	m001 = Modern world
+#	m002 = Ancient world
+#	m003 = Exodus from Egypt
+#	m004 = Conquest of Canaan
+#	m005 = Kingdoms of Israel and Judah
+#	m006 = Holy Land in the Time of Jesus Christ
+#	m007 = Jerusalem in New Testament Times
+#	m008 = Paul's Missionary Journeys
+#	m009 = The Temple in the time of Jesus Christ
+#	m010 = Seven Churches of Asia
+#	m011 = The Temple Buildings

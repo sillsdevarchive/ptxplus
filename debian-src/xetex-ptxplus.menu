@@ -1,0 +1,5 @@
+?package(xetex-ptxplus):needs="X11" section="Applications/Office" \
+  title="PtxPlus Manager" command="/usr/bin/ptxplus-manager" \
+  longtitle="PtxPlus Manager" \
+  description="GUI to control ptxplus" \
+  icon48x48="/usr/share/icons/hicolor/48x48/xetex-ptxplus.png"
