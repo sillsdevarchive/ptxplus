@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Fri, 02 Oct 2009 11:12:25 +0700
+Modification-Date: Fri, 02 Oct 2009 22:35:30 +0700
 
 ====== Repositories ======
 
@@ -62,30 +62,13 @@ Again, edit the project language as needed but once this is done, your initial p
 With all of this done you should be ready to push and pull data from your repository. As your project progresses you will want to include more files so none of your hard work is lost in the case of a data catastrophe.
 
 ===== Repository Data Management =====
-Ultimately we want ptxplus along with Mercurial to manage project data as seamlessly as possible. However, that may not be possible or there maybe instances where a more "hands-on" approach is needed. For data management under Mercurial, TortoiseHg, integrated with Nautilus, has been found to be a very good tool. More information about this package can be found here:
+Ultimately we want ptxplus along with Mercurial to manage project data as seamlessly as possible. However, that may not be possible or there maybe instances where a more "hands-on" approach is needed. For data management under Mercurial, TortoiseHg, integrated with Nautilus, has been found to be a very good tool. To date, the best instructions for Gnome/Nautilus integration can be found here:
 
-	http://bitbucket.org/tortoisehg/stable/wiki/Home
+	http://bitbucket.org/tortoisehg/stable/wiki/nautilus
 
-Installation on Ubuntu systems like Karmic or newer is fairly easy. You can update your system with unsupported packages like this one from an untrusted PPA by adding:
+You might have a problem with getting settings to work in [[TortoiseHG]] that involve the iniparse package. That is not in a normal repository and you can find it here:
 
-	ppa:tortoisehg-ppa/releases
-
-to your system's Software Sources. After you update your package manager you will be able to find the tortoisehg-nautilus package like any other.
-
-If you are running a pre-Karmic version of Ubuntu then there is a little more involved.
-
-1) Update your package manager to look in these repositories:
-	deb http://ppa.launchpad.net/mercurial-ppa/builddeps/ubuntu jaunty main
-	deb http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu jaunty main
-
-2) Before you reload, in a terminal add the authentication key needed with:
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'
-
-More information can be found at:
-
-	https://launchpad.net/~tortoisehg-ppa/+archive/releases
-
-3) After you have updated your package manager you will be able to find tortoisehg-nautilus package and install it.
+http://code.google.com/p/iniparse/
 
 Once you have [[TortoiseHg]] integrated into your system you can keep an eye on what's going on with the data in your project.
 

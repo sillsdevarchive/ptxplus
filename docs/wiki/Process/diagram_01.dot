@@ -1,0 +1,3 @@
+digraph G {
+	Intake->Setup->Format->Checking->Composition->Binding->Delivery->Archive;
+}

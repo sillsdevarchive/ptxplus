@@ -7,7 +7,7 @@ Standards-Version: 3.7.2
 
 Package: xetex-ptxplus
 Architecture: all
-Depends: texlive-xetex-snapshot, python (>= 2.5), python-htmlgen, python-configobj, python-mako, evince, inkscape, zim, python-gtk2 (>= 2.12), python-vte, pdftk, libgtk2-spell-perl
+Depends: texlive-xetex-snapshot, python (>= 2.5), python-htmlgen, python-configobj, python-mako, evince, inkscape, zim, graphviz, python-gtk2 (>= 2.12), python-vte, pdftk, libgtk2-spell-perl, teckit
 Description: A Scripture publication management system for XeTeX
  XeTeX-ptxplus is designed to manage the process of typesetting Scripture
  text by tracking project settings and specifications and creating the
