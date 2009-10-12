@@ -30,6 +30,9 @@
 # 20090401 - djd - Added some better debugging to track
 #		possible problems with encoding transformations.
 #		Again, Tim E did pretty much all of it
+# 20091009 - te - Reordered process and added piping so that
+# 		a common encoding conversion process could be
+#		used rather than having two seperate processes.
 
 
 #############################################################
@@ -71,8 +74,26 @@ class MakeBookWordlist (object) :
 		if not os.path.isdir(reportPath) :
 			os.mkdir(reportPath)
 
+		# Now we will collect all the words from this book from the text handler
+		# and we will apply any encoding changes that are necessary. The process
+		# here is more complex than should be but pyTecKit doesn't allow us to
+		# do multiple encodings chained together as some projects require. As such
+		# we will use a home-spun module to call a shell script that will use the
+		# txtconv program to do the encoding conversion externally, then bring it
+		# back in to finish the processing. This is done with pipes so it seems
+		# very seamless.
+		# Bring in any encoding mapings we may need.
+		encoder = log_manager._settings['Encoding']['Processing']['customEncodingProcess']
+		if encoder:
+			# Process the customEncodingProcess string to set the meta filesnames
+			encoder = encoder.replace('[outfile]','/dev/stdout').replace('[infile]',inputFile).split()
+			# Run the conversions on all our text
+#			log_manager.log("DBUG", 'make_book_wordlist: Preconversion length %d' % len(pre_wordlist))
+#			handler._wordlist = pipe_to(encoder, '\n'.join(pre_wordlist)).split('\n')
+#			log_manager.log("DBUG", 'make_book_wordlist: Postconversion length %d' % len(filter(bool, handler._wordlist)))
+
 		# Get our current book object
-		bookObject = codecs.open(inputFile, "r", encoding='utf-8').read()
+		bookObject = childprocess(encoder).decode('utf-8') if encoder else codecs.open(inputFile, "r", encoding='utf-8').read()
 
 		# Load in the sfm parser
 		parser = parse_sfm.Parser()
@@ -84,24 +105,7 @@ class MakeBookWordlist (object) :
 		parser.setHandler(handler)
 		parser.parse(bookObject)
 
-		# Now we will collect all the words from this book from the text handler
-		# and we will apply any encoding changes that are necessary. The process
-		# here is more complex than should be but pyTecKit doesn't allow us to
-		# do multiple encodings chained together as some projects require. As such
-		# we will use a home-spun module to call a shell script that will use the
-		# txtconv program to do the encoding conversion externally, then bring it
-		# back in to finish the processing. This is done with pipes so it seems
-		# very seamless.
-		# Bring in any encoding mapings we may need.
-		encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
 		pre_wordlist = [s.encode('utf-8') for s in handler._wordlist]
-		if encodingChain:
-			# Build the encoding engine(s)
-			encodingChain = TxtconvChain([s.strip() for s in encodingChain.split(',')])
-			# Run the conversions on all our text
-			log_manager.log("DBUG", 'make_book_wordlist: Preconversion length %d' % len(pre_wordlist))
-			handler._wordlist = encodingChain.convert('\n'.join(pre_wordlist)).split('\n')
-			log_manager.log("DBUG", 'make_book_wordlist: Postconversion length %d' % len(filter(bool, handler._wordlist)))
 
 		# Here we create a bookWordlist dict using the defaultdict mod. Then we
 		# we add the words we collected from the text handler and do the counting
@@ -111,33 +115,33 @@ class MakeBookWordlist (object) :
 			bookWordlist[word] += 1
 
 
-		# If the lists after removing duplicates and the set before do not match there
-		# may be an encoding problem.  Only generate extended logging info if this is the case
-		num_uniq_pre  = len(set(pre_wordlist))
-		num_uniq_post = len(bookWordlist)
-		if num_uniq_pre != num_uniq_post:
-			log_manager.log("WARN",
-				'possible conversion error: number of unique words do not match: %d -> %d' % (
-					num_uniq_pre,num_uniq_post))
-
-			# Generate before and after word to word number sets mappings.
-			pre_word_num_map = defaultdict(set)
-			post_word_num_map = defaultdict(set)
-			for n,w in enumerate(pre_wordlist): pre_word_num_map[w].add(n)
-			for n,w in enumerate(handler._wordlist): post_word_num_map[w].add(n)
-
-			larger  = (pre_wordlist,      set(map(tuple,pre_word_num_map.values())),  'source')
-			smaller = (handler._wordlist, set(map(tuple,post_word_num_map.values())), 'target')
-			# we always need to take the smaller set from the larger so there are more words
-			# /after/ the conversion swap them around
-			if num_uniq_pre < num_uniq_post: larger, smaller = smaller,larger
-			for ids in larger[1].difference(smaller[1]):
-				for i in ids:
-					log_manager.log("DBUG",
-						'%s text word no. %d has ambiguous mapping in %s: codepoint sequences (source -> target): %s -> %s' % (
-							larger[2], i, smaller[2],
-							unicode_sequence(pre_wordlist[i].decode('utf_8')),
-							unicode_sequence(handler._wordlist[i].decode('utf_8'))))
+#		# If the lists after removing duplicates and the set before do not match there
+#		# may be an encoding problem.  Only generate extended logging info if this is the case
+#		num_uniq_pre  = len(set(pre_wordlist))
+#		num_uniq_post = len(bookWordlist)
+#		if num_uniq_pre != num_uniq_post:
+#			log_manager.log("WARN",
+#				'possible conversion error: number of unique words do not match: %d -> %d' % (
+#					num_uniq_pre,num_uniq_post))
+#
+#			# Generate before and after word to word number sets mappings.
+#			pre_word_num_map = defaultdict(set)
+#			post_word_num_map = defaultdict(set)
+#			for n,w in enumerate(pre_wordlist): pre_word_num_map[w].add(n)
+#			for n,w in enumerate(handler._wordlist): post_word_num_map[w].add(n)
+#
+#			larger  = (pre_wordlist,      set(map(tuple,pre_word_num_map.values())),  'source')
+#			smaller = (handler._wordlist, set(map(tuple,post_word_num_map.values())), 'target')
+#			# we always need to take the smaller set from the larger so there are more words
+#			# /after/ the conversion swap them around
+#			if num_uniq_pre < num_uniq_post: larger, smaller = smaller,larger
+#			for ids in larger[1].difference(smaller[1]):
+#				for i in ids:
+#					log_manager.log("DBUG",
+#						'%s text word no. %d has ambiguous mapping in %s: codepoint sequences (source -> target): %s -> %s' % (
+#							larger[2], i, smaller[2],
+#							unicode_sequence(pre_wordlist[i].decode('utf_8')),
+#							unicode_sequence(handler._wordlist[i].decode('utf_8'))))
 
 		# Write out the new csv book word count file
 		# More info on writing to csv is here:
@@ -242,7 +246,6 @@ class MakeWordlistHandler (parse_sfm.Handler) :
 
 # This starts the whole process going
 def doIt (log_manager) :
-#	import pdb
 	thisModule = MakeBookWordlist()
 	return thisModule.main(log_manager)
 

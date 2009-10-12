@@ -19,6 +19,7 @@
 #		changed the routines here to reflect that
 # 20081023 - djd - Refactor project.conf structure changes
 # 20081028 - djd - Moved localiseFontsConf to font_manager.py
+# 20091009 - te - Added "No Context" return to getSliceOfText()
 
 
 #############################################################

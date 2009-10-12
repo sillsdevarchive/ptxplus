@@ -22,6 +22,8 @@
 #		hasBracketCloseInLine()
 # 20090324 - djd - Added the txtconv class that was written
 #		by Tim Eves
+# 20091009 - te - Added childprocess() to help with piping
+#		processes
 
 
 #############################################################
@@ -30,13 +32,16 @@
 # Firstly, import all the standard Python modules we need for
 # this process
 
-import codecs, re, os
-from threading import Thread
+import re, os, subprocess
 
 # Import supporting local classes
 from tools import *
 tools = Tools()
 
+def childprocess(cmdline, input_str=None):
+	res = subprocess.Popen(cmdline, stdin=subprocess.PIPE,stdout=subprocess.PIPE).communicate(input_str)
+	if res[1]: raise RuntimeError, res[1]
+	return res[0]
 
 class TxtconvChain(list):
 	'''This will perform encoding conversions (multiple if necessary) on
@@ -51,28 +56,8 @@ class TxtconvChain(list):
 	def convert(self, data):
 		"""convert the data by 'piping' it through the stack of engines.
 		   data must be of type str and not type unicode."""
-		args = ' '.join(['"' + tec + '"' for tec in self])
-		(cin,cout) = os.popen2(os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh /dev/stdin /dev/stdout ' + args)
 
-		# Just FYI, the above process can be extracted for just simple
-		# file output like this:
-		#	encodingChain = self._settings['Encoding']['Processing']['encodingChain']
-		#	if encodingChain:
-		#		args = ' '.join(['"' + tec.strip() + '"' for tec in encodingChain.split(',')])
-		#		os.system(os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh ' +  inputFile + ' ' + outputFile + ' ' + args)
-
-
-		def writer():
-			try: cin.write(data)
-			finally: cin.flush(); cin.close()
-		Thread(target=writer).start()
-		try:
-			result = cout.read()
-			cout.close()
-		except:
-			print "Error:" + result
-
-		return result
+		return callout_to([os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh', '/dev/stdin','/dev/stdout'] + self, data)
 
 
 
