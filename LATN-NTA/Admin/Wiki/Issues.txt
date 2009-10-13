@@ -1,3 +1,0 @@
-====== Project Issues ======
-
-Use the Issues button in the ptxplus manager to enter an issue note on this page.
