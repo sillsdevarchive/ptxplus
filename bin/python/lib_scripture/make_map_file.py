@@ -61,35 +61,21 @@ class MakeMapFile (object) :
 		svgSourceFile = mapSource + "/" + tail
 		csvSourceFile = mapSource + "/" + tail.replace('.svg', '.csv')
 		# This may be optional but we'll build a file name for it anyway
+		# Where this falls down is when the illustration is greyscale but the project
+		# calls for color. The work-around for now is to make the svg file work with
+		# both kinds.
 		if colorMode == "true" :
-#			mapBackgroundImageFile = inputFile.replace('.svg', '-bkgrnd-cl.png')
 			mapBackgroundImageFile = tail.replace('.svg', '-bkgrnd-cl.png')
 			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-cl.png')
 		else :
 			mapBackgroundImageFile = inputFile.replace('.svg', '-bkgrnd-gr.png')
 			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-gr.png')
 
-		## See if the maps folder exists then check for the files we need.
-		#if not os.path.isdir(mapProject) :
-			#os.mkdir(mapProject)
-
-		## Is our input file there? Just because Make told us this doesn't make it so.
-		#if not os.path.isfile(inputFile) :
-			#shutil.copy(svgSourceFile, inputFile)
-
 		# Does this map need a background image, is it there?
 		if not os.path.isfile(mapBackgroundImageFile) :
 			if os.path.isfile(mapBackgroundImageFileSource) :
 				shutil.copy(mapBackgroundImageFileSource, mapProject + "/" + mapBackgroundImageFile)
 
-		## How about our data file?
-		#if not os.path.isfile(csvFileName) :
-			#shutil.copy(csvSourceFile, csvFileName)
-
-		## And our style file?
-		#if not os.path.isfile(csvStyleFileName) :
-			#print "******* Hey! I didn't find the file " + csvStyleFileName + "something has gone dreadfully wrong."
-			#shutil.copy(csvStyleFileSource, csvStyleFileName)
 
 ############################################################################################################################
 # There's a problem with working with namespaces. The solution, or at least part of it, migh be if we use

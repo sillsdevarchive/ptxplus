@@ -514,11 +514,17 @@
 	</g>
 
 
+   <!-- The following may not be the best way to handle this but because this illustration can be used 
+   	in both color or grey-scale publications we are going to use two references here and let the 
+   	application sort it out. If theres a better way I would really like to know.  -->
+
 <image
    y="32.443657"
    x="30.038385"
    id="image2544"
    height="193.97716"
    width="285.10355"
-   sodipodi:absref="/home/dennis/Projects/ptxplus/resources/lib_maps/m009-temple.png"
-   xlink:href="m009-bkgrnd-gr.png" /></svg>
+   sodipodi:absref="m009-bkgrnd-gr.png"
+   xlink:href="m009-bkgrnd-cl.png" />
+   
+   </svg>
