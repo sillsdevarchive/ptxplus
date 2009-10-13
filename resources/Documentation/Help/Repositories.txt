@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Fri, 02 Oct 2009 22:35:30 +0700
+Modification-Date: Tue, 13 Oct 2009 14:37:26 +0700
 
 ====== Repositories ======
 
@@ -62,13 +62,16 @@ Again, edit the project language as needed but once this is done, your initial p
 With all of this done you should be ready to push and pull data from your repository. As your project progresses you will want to include more files so none of your hard work is lost in the case of a data catastrophe.
 
 ===== Repository Data Management =====
-Ultimately we want ptxplus along with Mercurial to manage project data as seamlessly as possible. However, that may not be possible or there maybe instances where a more "hands-on" approach is needed. For data management under Mercurial, TortoiseHg, integrated with Nautilus, has been found to be a very good tool. To date, the best instructions for Gnome/Nautilus integration can be found here:
+Ultimately we want ptxplus along with Mercurial to manage project data as seamlessly as possible. However, that may not be possible or there maybe instances where a more "hands-on" approach is needed. For data management under Mercurial, TortoiseHg, integrated with Nautilus, has been found to be a very good tool. To install it add these repositories to your Synaptic Package Manager:
 
-	http://bitbucket.org/tortoisehg/stable/wiki/nautilus
+	http://ppa.launchpad.net/mercurial-ppa/builddeps/ubuntu jaunty main
+	http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu jaunty main
+
+If you are not using Jaunty (9.04) substitute "jaunty" with the name of your distribution of Ubuntu.
 
 You might have a problem with getting settings to work in [[TortoiseHG]] that involve the iniparse package. That is not in a normal repository and you can find it here:
 
-http://code.google.com/p/iniparse/
+	http://code.google.com/p/iniparse/
 
 Once you have [[TortoiseHg]] integrated into your system you can keep an eye on what's going on with the data in your project.
 

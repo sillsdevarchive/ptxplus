@@ -71,14 +71,10 @@ class CopyFromSource (object) :
 		# Because we want to be able to customize the command if necessary the
 		# incoming command has placeholders for the input and output. We need
 		# to replace this here.
-#		copyCommand = copyCommand.replace('[infile]', "'" + inputFile + "'")
-#		copyCommand = copyCommand.replace('[outfile]', "'" + outputFile + "'")
 		copyCommand = copyCommand.replace('[infile]', inputFile)
 		copyCommand = copyCommand.replace('[outfile]', outputFile)
 		# But just in case we'll look for mixed case on the placeholders
 		# This may not be enough but it will do for now.
-#		copyCommand = copyCommand.replace('[inFile]', "'" + inputFile + "'")
-#		copyCommand = copyCommand.replace('[outFile]', "'" + outputFile + "'")
 		copyCommand = copyCommand.replace('[inFile]', inputFile)
 		copyCommand = copyCommand.replace('[outFile]', outputFile)
 
