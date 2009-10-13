@@ -86,7 +86,7 @@ class MakeBookWordlist (object) :
 		encoder = log_manager._settings['Encoding']['Processing']['customEncodingProcess']
 		if encoder:
 			# Process the customEncodingProcess string to set the meta filesnames
-			encoder = encoder.replace('[outfile]','/dev/stdout').replace('[infile]',inputFile).split()
+			encoder = [arg.replace('[outfile]','/dev/stdout').replace('[infile]',inputFile) for arg in encoder.split()]
 			# Run the conversions on all our text
 #			log_manager.log("DBUG", 'make_book_wordlist: Preconversion length %d' % len(pre_wordlist))
 #			handler._wordlist = pipe_to(encoder, '\n'.join(pre_wordlist)).split('\n')
