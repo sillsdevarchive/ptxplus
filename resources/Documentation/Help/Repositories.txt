@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Tue, 13 Oct 2009 14:37:26 +0700
+Modification-Date: Wed, 14 Oct 2009 13:13:06 +0700
 
 ====== Repositories ======
 
@@ -68,6 +68,10 @@ Ultimately we want ptxplus along with Mercurial to manage project data as seamle
 	http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu jaunty main
 
 If you are not using Jaunty (9.04) substitute "jaunty" with the name of your distribution of Ubuntu.
+
+Before you update your package list you should be sure that you have an authentic key installed for the above repositories. You do that with this command:
+
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'p
 
 You might have a problem with getting settings to work in [[TortoiseHG]] that involve the iniparse package. That is not in a normal repository and you can find it here:
 
