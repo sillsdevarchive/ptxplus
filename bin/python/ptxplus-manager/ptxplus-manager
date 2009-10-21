@@ -30,6 +30,7 @@ except:
 
 from configobj import ConfigObj
 import vte
+from gtksourceview import SourceView, SourceBuffer
 
 class ConfigGUI (object) :
 	"""A GTK based configuration file editor."""
@@ -97,6 +98,17 @@ class ConfigGUI (object) :
 		self.vte.set_size(80, 19)
 		self.vte.show_all()
 
+		# replace TextView with SourceView
+		sourceviews = ['usfm', 'styles', 'setup', 'fonts', 'adj', 'errors', 'texlog']
+		for s in sourceviews:
+			sc = 'sc_'+s
+			tv = 'tv_'+s
+			b = SourceBuffer()
+			sv = SourceView(b)
+			self.wTree.get_widget(sc).add_with_viewport(sv)
+			setattr(self,tv,sv)
+			sv.show_all()
+
 		self.cb_books = self.wTree.get_widget('cb_books')
 		cell = gtk.CellRendererText()
 		self.cb_books.pack_start(cell, True)
@@ -120,9 +132,9 @@ class ConfigGUI (object) :
 		else :
 			self.ceditor = ConfigEditor('project.conf', self.wTree, 'tv_sections', 'tv_keys')
 
-		self.styles = FileEditor('ptx2pdf.sty', self.wTree.get_widget('tv_styles'))
-		self.setup = FileEditor('ptx2pdf-setup.txt', self.wTree.get_widget('tv_setup'))
-		self.fonts = FileEditor('ptx2pdf-fonts.txt', self.wTree.get_widget('tv_fonts'))
+		self.styles = FileEditor('ptx2pdf.sty', self.tv_styles)
+		self.setup = FileEditor('ptx2pdf-setup.txt', self.tv_setup)
+		self.fonts = FileEditor('ptx2pdf-fonts.txt', self.tv_fonts)
 
 		try :
 			title = self.ceditor.config['General']['ProjectInformation'].get('projectName')
@@ -154,11 +166,11 @@ class ConfigGUI (object) :
 		self.bkid = bkid
 		self.b_view.set_label("_View-" + bkid)
 		self.b_check.set_label("_Check-" + bkid)
-		self.adjust = FileEditor("Texts/" + bkid + ".usfm.adj", self.wTree.get_widget('tv_adj'))
-		self.usfm = FileEditor("Texts/" + bkid + ".usfm", self.wTree.get_widget('tv_usfm'))
-		self.log = FileEditor("Log/error.log", self.wTree.get_widget('tv_errors'))
+		self.adjust = FileEditor("Texts/" + bkid + ".usfm.adj", self.tv_adj)
+		self.usfm = FileEditor("Texts/" + bkid + ".usfm", self.tv_usfm)
+		self.log = FileEditor("Log/error.log", self.tv_errors)
 		self.log.readonly = True
-		self.texlog = FileEditor("Process/" + bkid + ".log", self.wTree.get_widget('tv_texlog'))
+		self.texlog = FileEditor("Process/" + bkid + ".log", self.tv_texlog)
 		self.texlog.readonly = True
 
 ######################################################################################################
@@ -573,6 +585,7 @@ class FileEditor (object) :
 		self.textview = textview
 		self.readonly = False
 		buff = textview.get_buffer()
+		buff.begin_not_undoable_action()
 
 		try:
 			fin = file(filename)
@@ -584,6 +597,7 @@ class FileEditor (object) :
 
 		buff.set_modified(False)
 		textview.set_sensitive(True)
+		buff.end_not_undoable_action()
 
 	def __del__ (self) :
 		self.write('')
