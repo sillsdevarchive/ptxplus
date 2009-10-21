@@ -43,6 +43,7 @@ class ConfigGUI (object) :
 			self.binpath = basePath + "/bin/"
 
 		self.gladefile = basePath + "/bin/python/ptxplus-manager/ptxplus-manager.glade"
+		self.iconfile = basePath + "/bin/python/ptxplus-manager/xetex-ptxplus.png"
 		dic = {
 			"on_w_main_destroy"                     : self.quit,
 			"on_b_view_clicked"                     : self.b_view_clicked,
@@ -81,6 +82,7 @@ class ConfigGUI (object) :
 		}
 		self.bkid = ''
 		self.wTree = gtk.glade.XML(self.gladefile)
+		self.wTree.get_widget('w_main').set_icon_from_file(self.iconfile)
 		self.wTree.signal_autoconnect(dic)
 		self.b_view = self.wTree.get_widget('b_view')
 		self.b_check = self.wTree.get_widget('b_check')
