@@ -90,9 +90,14 @@
 						<property name="label">Reset</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove all auto-generated project material (Be very careful!)</property>
-						<property name="use_underline">True</property>
-						<property name="use_stock">True</property>
+						<property name="use_stock">False</property>
 						<signal name="activate" handler="on_menu_reset_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image1">
+							<property name="visible">True</property>
+							<property name="stock">gtk-clear</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -198,9 +203,14 @@
 						<property name="label">Remove All Pictures</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove all the illustrations list files for this publication</property>
-						<property name="use_underline">True</property>
-						<property name="use_stock">True</property>
+						<property name="use_stock">False</property>
 						<signal name="activate" handler="on_menu_clean_pic_all_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image3">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -210,12 +220,17 @@
 					</child>
 					<child>
 					  <widget class="GtkImageMenuItem" id="menu_remove_adj">
-						<property name="label">Remove Adjustments (Current)</property>
+						<property name="label">Remove Adjustments (current)</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove the current adjustment list file</property>
-						<property name="use_underline">True</property>
-						<property name="use_stock">True</property>
+						<property name="use_stock">False</property>
 						<signal name="activate" handler="on_menu_remove_adj_current_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image4">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -223,9 +238,14 @@
 						<property name="label">Remove Adjustments (All)</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove all the adjustment list files for this publication</property>
-						<property name="use_underline">True</property>
-						<property name="use_stock">True</property>
+						<property name="use_stock">False</property>
 						<signal name="activate" handler="on_menu_clean_adj_all_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image5">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -320,7 +340,7 @@
 					<property name="visible">True</property>
 					<child>
 					  <widget class="GtkImageMenuItem" id="menu_sys_help">
-						<property name="label">_System Help</property>
+						<property name="label">gtk-help</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Pull up system help wiki</property>
 						<property name="use_underline">True</property>
@@ -333,9 +353,14 @@
 						<property name="label">Example</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Work with an example project</property>
-						<property name="use_underline">True</property>
-						<property name="use_stock">True</property>
+						<property name="use_stock">False</property>
 						<signal name="activate" handler="on_menu_example_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image2">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
