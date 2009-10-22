@@ -30,7 +30,7 @@ except:
 
 from configobj import ConfigObj
 import vte
-from gtksourceview import SourceView, SourceBuffer
+import gtksourceview2
 
 class ConfigGUI (object) :
 	"""A GTK based configuration file editor."""
@@ -103,8 +103,8 @@ class ConfigGUI (object) :
 		for s in sourceviews:
 			sc = 'sc_'+s
 			tv = 'tv_'+s
-			b = SourceBuffer()
-			sv = SourceView(b)
+			b = gtksourceview2.Buffer()
+			sv = gtksourceview2.View(b)
 			self.wTree.get_widget(sc).add_with_viewport(sv)
 			setattr(self,tv,sv)
 			sv.show_all()
