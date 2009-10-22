@@ -99,6 +99,7 @@ class ConfigGUI (object) :
 		self.vte.show_all()
 
 		# replace TextView with SourceView
+		self.language_manager = gtksourceview2.LanguageManager()
 		sourceviews = ['usfm', 'styles', 'setup', 'fonts', 'adj', 'errors', 'texlog']
 		for s in sourceviews:
 			sc = 'sc_'+s
@@ -132,9 +133,9 @@ class ConfigGUI (object) :
 		else :
 			self.ceditor = ConfigEditor('project.conf', self.wTree, 'tv_sections', 'tv_keys')
 
-		self.styles = FileEditor('ptx2pdf.sty', self.tv_styles)
-		self.setup = FileEditor('ptx2pdf-setup.txt', self.tv_setup)
-		self.fonts = FileEditor('ptx2pdf-fonts.txt', self.tv_fonts)
+		self.styles = FileEditor('ptx2pdf.sty', self.tv_styles, self.language_manager.get_language("latex"))
+		self.setup = FileEditor('ptx2pdf-setup.txt', self.tv_setup, self.language_manager.get_language("latex"))
+		self.fonts = FileEditor('ptx2pdf-fonts.txt', self.tv_fonts, self.language_manager.get_language("latex"))
 
 		try :
 			title = self.ceditor.config['General']['ProjectInformation'].get('projectName')
@@ -166,11 +167,11 @@ class ConfigGUI (object) :
 		self.bkid = bkid
 		self.b_view.set_label("_View-" + bkid)
 		self.b_check.set_label("_Check-" + bkid)
-		self.adjust = FileEditor("Texts/" + bkid + ".usfm.adj", self.tv_adj)
-		self.usfm = FileEditor("Texts/" + bkid + ".usfm", self.tv_usfm)
-		self.log = FileEditor("Log/error.log", self.tv_errors)
+		self.adjust = FileEditor("Texts/" + bkid + ".usfm.adj", self.tv_adj, self.language_manager.get_language("latex"))
+		self.usfm = FileEditor("Texts/" + bkid + ".usfm", self.tv_usfm, self.language_manager.get_language("latex"))
+		self.log = FileEditor("Log/error.log", self.tv_errors, None)
 		self.log.readonly = True
-		self.texlog = FileEditor("Process/" + bkid + ".log", self.tv_texlog)
+		self.texlog = FileEditor("Process/" + bkid + ".log", self.tv_texlog, None)
 		self.texlog.readonly = True
 
 ######################################################################################################
@@ -580,12 +581,15 @@ class ConfigEditor (object) :
 class FileEditor (object) :
 	"""Edits a given file in a given textview with autosave on exit"""
 
-	def __init__ (self, filename, textview) :
+	def __init__ (self, filename, textview, language) :
+		# language is for syntax - None is no syntax highlighting
 		self.filename = filename
 		self.textview = textview
 		self.readonly = False
 		buff = textview.get_buffer()
 		buff.begin_not_undoable_action()
+		if (language):
+			buff.set_language(language)
 
 		try:
 			fin = file(filename)
