@@ -44,7 +44,7 @@ class ConfigGUI (object) :
 			self.binpath = basePath + "/bin/"
 
 		self.gladefile = basePath + "/bin/python/ptxplus-manager/ptxplus-manager.glade"
-		self.iconfile = basePath + "/bin/python/ptxplus-manager/xetex-ptxplus.png"
+		self.iconfile = basePath + "/resources/icons/ptxplus.png"
 		dic = {
 			"on_w_main_destroy"                     : self.quit,
 			"on_b_view_clicked"                     : self.b_view_clicked,
