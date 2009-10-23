@@ -91,7 +91,7 @@ class ConfigGUI (object) :
 		self.vte = vte.Terminal()
 		self.vte.connect('child-exited', self.quit)
 		self.vte.fork_command()
-		self.wTree.get_widget('sc_session').add_with_viewport(self.vte)
+		self.wTree.get_widget('sc_session').add(self.vte)
 		self.vte.set_colors(gtk.gdk.color_parse('#000000'), gtk.gdk.color_parse('#FFFFFF'), [])
 		self.vte.set_scroll_on_output(True)
 		self.vte.set_scrollback_lines(1000)
@@ -106,7 +106,7 @@ class ConfigGUI (object) :
 			tv = 'tv_'+s
 			b = gtksourceview2.Buffer()
 			sv = gtksourceview2.View(b)
-			self.wTree.get_widget(sc).add_with_viewport(sv)
+			self.wTree.get_widget(sc).add(sv)
 			setattr(self,tv,sv)
 			sv.show_all()
 
