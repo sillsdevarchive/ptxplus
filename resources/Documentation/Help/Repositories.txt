@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Wed, 14 Oct 2009 13:13:06 +0700
+Modification-Date: Tue, 27 Oct 2009 15:38:40 +0700
 
 ====== Repositories ======
 
@@ -71,7 +71,18 @@ If you are not using Jaunty (9.04) substitute "jaunty" with the name of your dis
 
 Before you update your package list you should be sure that you have an authentic key installed for the above repositories. You do that with this command:
 
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'p
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'
+
+Next you will need to install the [[TortoiseHg]] package with:
+
+	sudo apt-get update
+	sudo apt-get upgrade
+
+The above lines will reload the repository lists and should upgrade the mercurial package to the one from the PPA repo installed above. Next, to install type this in the terminal:
+
+	sudo apt-get install tortoisehg tortoisehg-nautilus
+
+Finally, log out and log back in again so the system will recognize the newly installed packages. Now [[TortoiseHg]] should work.
 
 You might have a problem with getting settings to work in [[TortoiseHG]] that involve the iniparse package. That is not in a normal repository and you can find it here:
 
