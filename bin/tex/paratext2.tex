@@ -93,7 +93,7 @@
 \ifx\bolditalic\undefined\def\bolditalic{"Times New Roman/BI"}\fi
 
 % footnote macros based on plain.tex \footnote, \vfootnote
-\def\m@kenote#1#2{\let\@sf\empty % #1=class(e.g. f, x);
+\def\m@kenote#1#2#3{\let\@sf\empty % #1=class(e.g. f, x);
   % #2=caller + all the macros to setup the styling for the caller
   % text is read later
   \ifhmode\edef\@sf{\spacefactor\the\spacefactor}\/\fi
@@ -104,7 +104,7 @@
 	\else #2\fi % output caller
   \fi
   % @sf preserves the space factor (e.g. extra space after a period), restore it now
-  \@sf \vm@kenote{#1}{#2}}
+  \@sf \vm@kenote{#1}{\getp@ram{notecallerstyle}{#1}\ifx\p@ram\relax #2\else #3\fi}}
 
 \def\vm@kenote#1#2{%
   \let\next\relax
@@ -466,6 +466,7 @@
 	  \vbox{\hbox to \textwidth{\hbox to \columnshift{}\ifRTL \box\colB\makecolumngutter{\the\dimen3}{\the\availht}{\the\dimen0}\box\colA
 		\else \box\colA\makecolumngutter{\the\dimen3}{\the\availht}{\the\dimen0}\box\colB \fi}}}
 	\ht\partial=\dimen3
+	\global\holdinginserts=1
 	}
 
 
@@ -677,6 +678,7 @@
 \def\singlecolumn{%
   \ifnum\c@rrentcols>1
 	\ifhe@dings\endhe@dings\fi
+	\global\holdinginserts=0
 	\global\output={\savepartialpaged}\eject % save any partially-full page
 	\penalty-100\vskip\baselineskip % ensure blank line between single and double column material
 	\global\hsize=\textwidth% \advance\hsize by -\columnshift

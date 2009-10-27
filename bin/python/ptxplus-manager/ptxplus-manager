@@ -3,15 +3,15 @@
 
 ########################################################################################
 # Todo:
-#	Add a dialog to confirm restore of a backup
+#    Add a dialog to confirm restore of a backup
 
 # History:
 # 20081023 - djd - Changed references to config object to reflect
-#		reorganization to the project.conf file
+#        reorganization to the project.conf file
 # 20081112 - djd - Added an example menu item
 # 20081229 - djd - Added menu items, Preprocess, Process and Bind
 # 20090914 - djd - Removed "-book" from preprocess-book to try to resolve
-#		a makefile conflict with the maps routine.
+#        a makefile conflict with the maps routine.
 
 ########################################################################################
 
@@ -30,6 +30,7 @@ except:
 
 from configobj import ConfigObj
 import vte
+import gtksourceview2
 
 class ConfigGUI (object) :
 	"""A GTK based configuration file editor."""
@@ -43,44 +44,46 @@ class ConfigGUI (object) :
 			self.binpath = basePath + "/bin/"
 
 		self.gladefile = basePath + "/bin/python/ptxplus-manager/ptxplus-manager.glade"
+		self.iconfile = basePath + "/resources/icons/ptxplus.png"
 		dic = {
-			"on_w_main_destroy"						: self.quit,
-			"on_b_view_clicked"						: self.b_view_clicked,
-			"on_b_check_clicked"					: self.b_check_clicked,
-			"on_b_wiki_clicked"						: self.b_wiki_clicked,
-			"on_b_note_clicked"						: self.b_note_clicked,
-			"on_b_issue_clicked"					: self.b_issue_clicked,
-			"on_b_backup_clicked"					: self.b_backup_clicked,
-			"on_cb_books_changed"					: self.cb_books_changed,
-			"on_menu_new_activate"					: self.m_new,
-			"on_gtk-open_activate"					: self.m_open,
-			"on_menu_import_activate"				: self.m_import,
-			"on_menu_archive_activate"				: self.m_archive,
-			"on_menu_restore_activate"				: self.m_restore,
-			"on_menu_backup_activate"				: self.m_backup,
-			"on_menu_reload_activate"				: self.m_reload,
-			"on_menu_preprocess_activate"			: self.m_preprocess,
-			"on_menu_bind_activate"					: self.m_bind,
-			"on_menu_bind_booklet_activate"			: self.m_bind_booklet,
-			"on_menu_bind_booklet_current_activate"	: self.m_bind_booklet_current,
-			"on_menu_reset_activate"				: self.m_reset,
-			"on_menu_clean_adj_all_activate"		: self.m_clean_adj_all,
-			"on_menu_clean_pic_all_activate"		: self.m_clean_pic_all,
-			"on_menu_remove_adj_current_activate"	: self.m_remove_adj_current,
-			"on_menu_remove_pic_current_activate"	: self.m_remove_pic_current,
-			"on_menu_remove_pdf_activate"			: self.m_remove_pdf,
-			"on_menu_remove_pdf_current_activate"	: self.m_remove_pdf_current,
-			"on_menu_make_pic_activate"				: self.m_make_pic,
-			"on_menu_quit_activate"					: self.quit,
-			"on_menu_cut_activate"					: self.m_cut,
-			"on_menu_copy_activate"					: self.m_copy,
-			"on_menu_paste_activate"				: self.m_paste,
-			"on_menu_help_activate"					: self.m_help,
-			"on_menu_example_activate"				: self.m_example,
-			"on_menu_about_activate"				: self.m_about
+			"on_w_main_destroy"                     : self.quit,
+			"on_b_view_clicked"                     : self.b_view_clicked,
+			"on_b_check_clicked"                    : self.b_check_clicked,
+			"on_b_wiki_clicked"                     : self.b_wiki_clicked,
+			"on_b_note_clicked"                     : self.b_note_clicked,
+			"on_b_issue_clicked"                    : self.b_issue_clicked,
+			"on_b_backup_clicked"                   : self.b_backup_clicked,
+			"on_cb_books_changed"                   : self.cb_books_changed,
+			"on_menu_new_activate"                  : self.m_new,
+			"on_gtk-open_activate"                  : self.m_open,
+			"on_menu_import_activate"               : self.m_import,
+			"on_menu_archive_activate"              : self.m_archive,
+			"on_menu_restore_activate"              : self.m_restore,
+			"on_menu_backup_activate"               : self.m_backup,
+			"on_menu_reload_activate"               : self.m_reload,
+			"on_menu_preprocess_activate"           : self.m_preprocess,
+			"on_menu_bind_activate"                 : self.m_bind,
+			"on_menu_bind_booklet_activate"         : self.m_bind_booklet,
+			"on_menu_bind_booklet_current_activate" : self.m_bind_booklet_current,
+			"on_menu_reset_activate"                : self.m_reset,
+			"on_menu_clean_adj_all_activate"        : self.m_clean_adj_all,
+			"on_menu_clean_pic_all_activate"        : self.m_clean_pic_all,
+			"on_menu_remove_adj_current_activate"   : self.m_remove_adj_current,
+			"on_menu_remove_pic_current_activate"   : self.m_remove_pic_current,
+			"on_menu_remove_pdf_activate"           : self.m_remove_pdf,
+			"on_menu_remove_pdf_current_activate"   : self.m_remove_pdf_current,
+			"on_menu_make_pic_activate"             : self.m_make_pic,
+			"on_menu_quit_activate"                 : self.quit,
+			"on_menu_cut_activate"                  : self.m_cut,
+			"on_menu_copy_activate"                 : self.m_copy,
+			"on_menu_paste_activate"                : self.m_paste,
+			"on_menu_help_activate"                 : self.m_help,
+			"on_menu_example_activate"              : self.m_example,
+			"on_menu_about_activate"                : self.m_about
 		}
 		self.bkid = ''
 		self.wTree = gtk.glade.XML(self.gladefile)
+		self.wTree.get_widget('w_main').set_icon_from_file(self.iconfile)
 		self.wTree.signal_autoconnect(dic)
 		self.b_view = self.wTree.get_widget('b_view')
 		self.b_check = self.wTree.get_widget('b_check')
@@ -88,12 +91,24 @@ class ConfigGUI (object) :
 		self.vte = vte.Terminal()
 		self.vte.connect('child-exited', self.quit)
 		self.vte.fork_command()
-		self.wTree.get_widget('sc_session').add_with_viewport(self.vte)
+		self.wTree.get_widget('sc_session').add(self.vte)
 		self.vte.set_colors(gtk.gdk.color_parse('#000000'), gtk.gdk.color_parse('#FFFFFF'), [])
 		self.vte.set_scroll_on_output(True)
 		self.vte.set_scrollback_lines(1000)
 		self.vte.set_size(80, 19)
 		self.vte.show_all()
+
+		# replace TextView with SourceView
+		self.language_manager = gtksourceview2.LanguageManager()
+		sourceviews = ['usfm', 'styles', 'setup', 'fonts', 'adj', 'errors', 'texlog']
+		for s in sourceviews:
+			sc = 'sc_'+s
+			tv = 'tv_'+s
+			b = gtksourceview2.Buffer()
+			sv = gtksourceview2.View(b)
+			self.wTree.get_widget(sc).add(sv)
+			setattr(self,tv,sv)
+			sv.show_all()
 
 		self.cb_books = self.wTree.get_widget('cb_books')
 		cell = gtk.CellRendererText()
@@ -112,19 +127,19 @@ class ConfigGUI (object) :
 	def init_dir (self, bkid='') :
 		if not os.access('project.conf', os.R_OK) :
 			self.close_dir()
-		return
+			return
 		if self.ceditor :
 			self.ceditor.new_config('project.conf')
 		else :
 			self.ceditor = ConfigEditor('project.conf', self.wTree, 'tv_sections', 'tv_keys')
 
-		self.styles = FileEditor('ptx2pdf.sty', self.wTree.get_widget('tv_styles'))
-		self.setup = FileEditor('ptx2pdf-setup.txt', self.wTree.get_widget('tv_setup'))
-		self.fonts = FileEditor('ptx2pdf-fonts.txt', self.wTree.get_widget('tv_fonts'))
+		self.styles = FileEditor('ptx2pdf.sty', self.tv_styles, self.language_manager.get_language("latex"))
+		self.setup = FileEditor('ptx2pdf-setup.txt', self.tv_setup, self.language_manager.get_language("latex"))
+		self.fonts = FileEditor('ptx2pdf-fonts.txt', self.tv_fonts, self.language_manager.get_language("latex"))
 
 		try :
-		title = self.ceditor.config['General']['ProjectInformation'].get('projectName')
-	except :
+			title = self.ceditor.config['General']['ProjectInformation'].get('projectName')
+		except :
 			title = os.getcwd()
 
 		self.wTree.get_widget('w_main').set_title(title)
@@ -152,11 +167,11 @@ class ConfigGUI (object) :
 		self.bkid = bkid
 		self.b_view.set_label("_View-" + bkid)
 		self.b_check.set_label("_Check-" + bkid)
-		self.adjust = FileEditor("Texts/" + bkid + ".usfm.adj", self.wTree.get_widget('tv_adj'))
-		self.usfm = FileEditor("Texts/" + bkid + ".usfm", self.wTree.get_widget('tv_usfm'))
-		self.log = FileEditor("Log/error.log", self.wTree.get_widget('tv_errors'))
+		self.adjust = FileEditor("Texts/" + bkid + ".usfm.adj", self.tv_adj, self.language_manager.get_language("latex"))
+		self.usfm = FileEditor("Texts/" + bkid + ".usfm", self.tv_usfm, self.language_manager.get_language("latex"))
+		self.log = FileEditor("Log/error.log", self.tv_errors, None)
 		self.log.readonly = True
-		self.texlog = FileEditor("Process/" + bkid + ".log", self.wTree.get_widget('tv_texlog'))
+		self.texlog = FileEditor("Process/" + bkid + ".log", self.tv_texlog, None)
 		self.texlog.readonly = True
 
 ######################################################################################################
@@ -232,23 +247,23 @@ class ConfigGUI (object) :
 		gtk.main_quit()
 
 	def m_help (self, widget) :
-		self.execute('ptxplus', 'help')
+			self.execute('ptxplus', 'help')
 
 
 	def m_example (self, widget) :
-	'''This will install the example project to where the user
-		chooses to have it, or just in a default folder in
-		the current location.'''
+		'''This will install the example project to where the user
+		   chooses to have it, or just in a default folder in
+		   the current location.'''
 
-	# The following code runs the dialog box. It should be made more
-	# generic and moved into a seperate function as it is used by several
-	# other functions.
+		# The following code runs the dialog box. It should be made more
+		# generic and moved into a seperate function as it is used by several
+		# other functions.
 		dialog = gtk.FileChooserDialog("ptxplus: Install Example Project", None,
 			  gtk.FILE_CHOOSER_ACTION_SAVE,
 				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
-	dialog.set_current_name("ptxplus-example")
+		dialog.set_current_name("ptxplus-example")
 		res = dialog.run()
 		if res == gtk.RESPONSE_CANCEL :
 			dialog.destroy()
@@ -272,7 +287,7 @@ class ConfigGUI (object) :
 		fcd.destroy()
 
 	def m_about (self, widget) :
-		self.execute('ptxplus', 'about')
+			self.execute('ptxplus', 'about')
 
 	def b_view_clicked (self, widget) :
 		self.execute("ptxplus", "view-" + self.bkid)
@@ -566,11 +581,15 @@ class ConfigEditor (object) :
 class FileEditor (object) :
 	"""Edits a given file in a given textview with autosave on exit"""
 
-	def __init__ (self, filename, textview) :
+	def __init__ (self, filename, textview, language) :
+		# language is for syntax - None is no syntax highlighting
 		self.filename = filename
 		self.textview = textview
 		self.readonly = False
 		buff = textview.get_buffer()
+		buff.begin_not_undoable_action()
+		if (language):
+			buff.set_language(language)
 
 		try:
 			fin = file(filename)
@@ -582,6 +601,7 @@ class FileEditor (object) :
 
 		buff.set_modified(False)
 		textview.set_sensitive(True)
+		buff.end_not_undoable_action()
 
 	def __del__ (self) :
 		self.write('')
