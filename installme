@@ -32,6 +32,7 @@ That will remove the other version and replace it with version 3.1415926-2.2-0.9
 
 With all the above packages installed, we are ready to move on to installing ptxplus.
 
+
 Repository Data Management
 -----------------------------------------
 Ultimately we want ptxplus along with Mercurial to manage project data as seamlessly as possible. However, that may not be possible or there maybe instances where a more "hands-on" approach is needed. For data management under Mercurial, TortoiseHg, integrated with Nautilus, has been found to be a very good tool. To install it add these repositories to your Synaptic Package Manager:
