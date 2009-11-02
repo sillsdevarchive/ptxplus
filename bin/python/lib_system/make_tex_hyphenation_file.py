@@ -94,5 +94,6 @@ class MakeTexHyphenationFile (object) :
 
 # This starts the whole process going
 def doIt(log_manager):
+
 	thisModule = MakeTexHyphenationFile()
 	return thisModule.main(log_manager)

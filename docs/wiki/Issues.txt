@@ -1,4 +1,16 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Fri, 16 Oct 2009 16:49:16 +0700
+
 ====== Issues ======
+
+**Fri 16 Oct 2009**
+
+reportNonHypenatedWords is spelled wrong it should be:
+
+reportNonHyphenatedWords
+
 
 Fri 22 May 2009 04:18 PM ICT
 Status:

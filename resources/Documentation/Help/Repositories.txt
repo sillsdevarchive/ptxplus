@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Wed, 14 Oct 2009 13:13:06 +0700
+Modification-Date: Fri, 30 Oct 2009 10:55:17 +0700
 
 ====== Repositories ======
 
@@ -35,7 +35,7 @@ Where the "eng" is the language code for the project that you used to set it up 
 Of course for this all to work, you need to have administration privileges. If you do not, you will need to get them or find someone who has them.
 
 ===== Cloning A Project =====
-If this is not a new project setup (covered below) you can clone an existing project from a repository. Assuming that you have [[TortoiseHg]] installed (see below) all you need to do is right-click and follow the instructions in the dialogs to follow. You will be asked to enter the path to the repository. In the MSEAG context that would look like this:
+If this is not a new project setup (covered below) you can clone an existing project from a repository. Assuming that you have [[TortoiseHg]] installed all you need to do is right-click and follow the instructions in the dialogs to follow. You will be asked to enter the path to the repository. In the MSEAG context that would look like this:
 
 	https://hg.mseag.org/<project ID>
 
@@ -61,22 +61,3 @@ Again, edit the project language as needed but once this is done, your initial p
 
 With all of this done you should be ready to push and pull data from your repository. As your project progresses you will want to include more files so none of your hard work is lost in the case of a data catastrophe.
 
-===== Repository Data Management =====
-Ultimately we want ptxplus along with Mercurial to manage project data as seamlessly as possible. However, that may not be possible or there maybe instances where a more "hands-on" approach is needed. For data management under Mercurial, TortoiseHg, integrated with Nautilus, has been found to be a very good tool. To install it add these repositories to your Synaptic Package Manager:
-
-	http://ppa.launchpad.net/mercurial-ppa/builddeps/ubuntu jaunty main
-	http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu jaunty main
-
-If you are not using Jaunty (9.04) substitute "jaunty" with the name of your distribution of Ubuntu.
-
-Before you update your package list you should be sure that you have an authentic key installed for the above repositories. You do that with this command:
-
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'p
-
-You might have a problem with getting settings to work in [[TortoiseHG]] that involve the iniparse package. That is not in a normal repository and you can find it here:
-
-	http://code.google.com/p/iniparse/
-
-Once you have [[TortoiseHg]] integrated into your system you can keep an eye on what's going on with the data in your project.
-
-Here I should add some tutorial links on how to use Mercurial and TortoiseHg.

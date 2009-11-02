@@ -54,10 +54,10 @@ class MakeHyphenWordlist (object) :
 		self._hyphen = set()
 		self._hyphenCounts = {}
 		self._wordlistReport = set()
-		self._encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
-		if self._encodingChain:
-			# Build the encoding engine(s)
-			self._encodingChain = TxtconvChain([s.strip() for s in self._encodingChain.split(',')])
+#		self._encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
+#		if self._encodingChain:
+#			# Build the encoding engine(s)
+#			self._encodingChain = TxtconvChain([s.strip() for s in self._encodingChain.split(',')])
 
 	def main (self) :
 		sourceMasterWordsFile = self._log_manager._settings['Process']['Hyphenation']['sourceMasterWordsFile']
@@ -68,6 +68,8 @@ class MakeHyphenWordlist (object) :
 		reportNonHypenatedWords = self._log_manager._settings['Process']['Hyphenation']['reportNonHypenatedWords']
 		newHyphenationFile = self._log_manager._settings['Process']['Hyphenation']['newHyphenationFile']
 		hyphenBreakRules = self._log_manager._settings['Process']['Hyphenation']['hyphenBreakRules'].decode('utf-8').decode('unicode_escape')
+		if hyphenBreakRules == "" :
+			self._log_manager.log("WARN", "There were no hyphenation break rules found in your project.conf file. This may be ok but keep in mind that if there were no other hyphenated words manually listed there will be no output to the file this script is creating. Sorry, I cannot read your mind.")
 
 		# Load the master wordlist.
 		try:
@@ -212,9 +214,9 @@ class MakeHyphenWordlist (object) :
 				# then decode to Unicode. That should keep things working
 				f = open(file_path, 'rb')
 
-				# Do an encoding conversion if necessary
-				if self._encodingChain:
-					sourceHyphenListObject = self._encodingChain.convert(f.read()).decode('utf-8').split('\n')
+#				# Do an encoding conversion if necessary
+#				if self._encodingChain:
+#					sourceHyphenListObject = self._encodingChain.convert(f.read()).decode('utf-8').split('\n')
 
 				# Push it into a dictionary w/o line endings
 				word_list = [l for l in (line.strip() for line in sourceHyphenListObject) if l]

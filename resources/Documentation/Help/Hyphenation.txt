@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Tue, 01 Sep 2009 16:20:47 +0700
+Modification-Date: Fri, 16 Oct 2009 15:08:47 +0700
 
 ====== Hyphenation ======
 
@@ -15,8 +15,25 @@ Put the list you just made in a file named hyphen-words.txt and put it in the So
 
 Much of the time this list is not enough and many more break boundary descriptions are needed. The next step is to create a list of prefixes and suffixes for every possible word that uses one. That may not be possible but if it is, create two separate files one named prefixes.txt and one called suffixes.txt and put them in the Source folder. In the prefix file make a list, one prefix unit per line and put a hyphen mark after it. Example: pre- but don't put any whole words like, pre-fix. In the suffix file make a list but this time put the hyphen marker at the front of the unit. Example: -fix do not do, suf-fix. Like with the first list, be sure the encoding is the same as all the others in the Source folder.
 
-With these two lists in place a lot of words can be generated for the final list but there is one more possible means that can be used to get even more. A provision has been made where you can use a regular expression to generate more words based on simple rules. This is a very limited way but with some languages it can be very effective. To activate this you will need to enter a regular expression in the project.conf file in the hyphenBreakRules field which is found under [[TeX]] -> Hyphenation.
+===== Hyphenation Break Rules =====
+With these two lists in place a lot of words can be generated for the final list but there is one more possible means that can be used to get even more. A provision has been made where you can use a regular expression to generate more words based on simple rules. This is a very limited way but with some languages it can be very effective. To activate this you will need to enter a regular expression in the project.conf file in the hyphenBreakRules field.
 
-Much more must be written on this but this will have to do for now.
+Regular expressions are very powerful and can be quite difficult to write correctly. We will use an example here but there is a lot of flexibility in how you write them. In this example we have a Latin script language that can break a line on any syllable that makes it a fairly simple case. Here is the rule for this language as entered in the project.conf file:
+
+hyphenBreakRules = "(?u).([eo]\u0300|(uo|[uo])\u0302|[aeiou])[\u0301\u030C\u0324]?(?=[^\u0300-\u0302\u030C\u0324])"
+
+**Summary:**
+1. (?u) = Any character
+2. . = combined with...
+3. ([eo]\u0300 = the character "e" or "o" with the \u0300 diacritic
+4. | = or
+5. (uo | [uo] the character "u" or "o" or the character combination of "uo" that has the \u0302 diacritic with it
+6. |[aeiou] = or one of these characters "a, e, i, o, u"
+7. [\u0301\u030C\u0324]? = that could contain one of these diacritics
+8. (?=[^\u0300-\u0302\u030C\u0324]) = then match any character at the end of the string except for these noted here
+
+It should be noted that the order of the vowels is important. If the [aeiou] is at the beginning it will fail in a number of places. As the engine searches from left to right, it is always best to search from least occurrence to greatest.
+
+Write more here...
 
 *****Outline the basic procedure with the commands needed to make it happen. Remember that the project needs to be reset and the source must be in its final form before an accurate word list can be generated.
