@@ -667,14 +667,6 @@
 
 
 <text
-   x="308.05106"
-   y="343.10971"
-   id="City_Clauda"
-   style="font-size:8px;font-family:Arial">Clauda</text>
-
-
-
-<text
    x="293.74664"
    y="330.38654"
    id="City_Phoenix"
@@ -859,6 +851,14 @@
    y="322.66138"
    id="Island_Crete"
    style="font-size:12px;fill:#934711;font-family:Arial">Crete</text>
+
+
+
+<text
+   x="308.05106"
+   y="343.10971"
+   id="Island_Clauda"
+   style="font-size:10px;fill:#934711;font-family:Arial">Clauda</text>
 
 
 
