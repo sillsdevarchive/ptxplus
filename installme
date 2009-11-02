@@ -7,6 +7,7 @@ These are instructions for manually installing the developer version of the ptxp
 
 
 REQUIRED PACKAGES
+-----------------------------------------
 There are a number of packages that need to be installed for ptxplus to work. Some are more critical than others but all of them are needed. One of the packages is located on the packages.sil.org site, so if you have not already modified your repository source list then open this system file for editing:
 
 	sudo gedit /etc/apt/sources.list
@@ -32,7 +33,39 @@ That will remove the other version and replace it with version 3.1415926-2.2-0.9
 With all the above packages installed, we are ready to move on to installing ptxplus.
 
 
+Repository Data Management
+-----------------------------------------
+Ultimately we want ptxplus along with Mercurial to manage project data as seamlessly as possible. However, that may not be possible or there maybe instances where a more "hands-on" approach is needed. For data management under Mercurial, TortoiseHg, integrated with Nautilus, has been found to be a very good tool. To install it add these repositories to your Synaptic Package Manager:
+
+	http://ppa.launchpad.net/mercurial-ppa/builddeps/ubuntu karmic main
+	http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu karmic main
+
+If you are not using Karmic (9.10) substitute "karmic" with the name of your distribution of Ubuntu.
+
+Before you update your package list you should be sure that you have an authentic key installed for the above repositories. You do that with this command:
+
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'
+
+Next you will need to install the TortoiseHg package with:
+
+	sudo apt-get update
+	sudo apt-get upgrade
+
+The above lines will reload the repository lists and should upgrade the mercurial package to the one from the PPA repo installed above. Next, to install type this in the terminal:
+
+	sudo apt-get install tortoisehg tortoisehg-nautilus
+
+Finally, log out and log back in again so the system will recognize the newly installed packages. Now TortoiseHg should work.
+
+You might have a problem with getting settings to work in TortoiseHG that involve the iniparse package. That is not in a normal repository and you can find it here:
+
+	http://code.google.com/p/iniparse/
+
+Once you have TortoiseHg integrated into your system you can keep an eye on what's going on with the data in your project.
+
+
 GETTING ptxplus
+-----------------------------------------
 To obtain the ptxplus, you need to check it out from the Mercurial repository it resides in. To simplify these instructions we will assume that the ptxplus package will go in this location:
 
 	~/Projects
@@ -52,7 +85,8 @@ That should put ptxplus where you need it. From time to time you may want to upd
 	hg pull
 
 
-INSTALLATION
+SYSTEM INSTALLATION AND SETUP
+-----------------------------------------
 For easier operation it is necessary to get ptxplus properly located in your system. The first thing that needs to be done is to link ptxplus.conf file to /etc folder. That is done with:
 
 	sudo ln -s ~/Projects/ptxplus/bin/ptxplus.conf /etc/ptxplus.conf

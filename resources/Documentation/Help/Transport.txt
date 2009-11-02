@@ -1,0 +1,26 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Wed, 28 Oct 2009 15:01:07 +0700
+Modification-Date: Wed, 28 Oct 2009 15:24:42 +0700
+
+====== Transport ======
+
+Some notes on material transport as it pertains to shipping Bibles.
+
+===== Box Sizes =====
+Common box sizes used to transport Bibles in the MSEAG region are:
+
+	small = 23x30x30 cm
+	large = 31x47x31 cm
+
+Approximate price in 2009 to move one box from Chiang Mai to Yangon is:
+
+	small = 620 Baht
+	large = 640 Baht
+
+Number of average NTs that can fit in a box (A5 page size @ 650 pages, 30 Gram paper, 0.5 Kg per book):
+
+	small = 24 (12 Kg)
+	large = 58 (29 Kg)
+
+To transport 3000 copies, using the above factors it would cost approximately 37,120 Baht to transport 58 large boxes from Chiang Mai to Yangon and 77,500 for 125 small boxes. Also, FYI, note that the floor space for the large boxes would be about 4.5 feet cubed. No calculations on the small ones at this time.
