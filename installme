@@ -1,67 +1,47 @@
-Manual installation instructions of the developer version of the ptxplus package
+Manual installation instructions for the developer version of the ptxplus package
 	By Dennis Drescher (dennis_drescher@sil.org)
-	Last edited: 02/11/2009
+	Last edited: 07/11/2009
 
 
-These are instructions for manually installing the developer version of the ptxplus package on a typical Ubuntu operating system (currently Karmic, 9.10). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
+These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently Karmic, 9.10). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
 
 
 REQUIRED PACKAGES
 -----------------------------------------
-There are a number of packages that need to be installed for ptxplus to work. Some are more critical than others but all of them are needed. One of the packages is located on the packages.sil.org site, so if you have not already modified your repository source list then open this system file for editing:
+There are a number of packages that need to be installed for ptxplus to work. Some are more critical than others but all of them are needed. Some of the packages are located in other repositories that you will need to add to your system repository source list. Fastest way is to open the sources.list file for editing with this command in your terminal:
 
 	sudo gedit /etc/apt/sources.list
 
-Next, add this line to the bottom of the file:
+Next, in gedit in the file you just opened, go to the bottom of the file and add these lines if they do not already exist in the file:
 
 	deb http://packages.sil.org/ubuntu karmic main
+	deb http://ppa.launchpad.net/mercurial-ppa/builddeps/ubuntu karmic main
+	deb http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu karmic main
 
-Update your package list with:
+Save the file and close it.
+
+Before you can update your package list, you should be sure that you have an authentic key installed for the ppa repositories. You do that with this command:
+
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'
+
+Again, in the terminal, update your package list and update your system with the folling command and answer yes to the "install without verification" question:
 
 	sudo apt-get update
+	sudo apt-get upgrade
 
-Now you should be able to install all the necessary packages to run ptxplus with this command:
+Next, in the terminal, you need to install all the necessary packages to run the ptxplus publishing system. Use this command and answer yes like above:
 
-	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk libgtk2-spell-perl teckit
+	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk libgtk2-spell-perl teckit mercurial meld tortoisehg tortoisehg-nautilus
 
-As of Ubuntu 9.10 (Karmic) these instructions will install a version of xetex (3.141592-2.2-0.996-patch2) that will handle most things. However, if you need the latest version, then you will need to get it from the packages.sil.org repository. To do that use:
+As of Ubuntu 9.10 (Karmic) these instructions will install a version of xetex (3.141592-2.2-0.996-patch2) that will handle most things. However, we recommend you install the latest version over the one you installed above. It will come from the packages.sil.org repository. You do not need to do anything special just use this command:
 
 	sudo apt-get install texlive-xetex-snapshot
 
 That will remove the other version and replace it with version 3.1415926-2.2-0.999.7 or greater.
 
-With all the above packages installed, we are ready to move on to installing ptxplus.
+Finally, log out and log back in again so the system will properly recognize the newly installed packages and the TortoiseHg package should work correctly.
 
-
-Repository Data Management
------------------------------------------
-Ultimately we want ptxplus along with Mercurial to manage project data as seamlessly as possible. However, that may not be possible or there maybe instances where a more "hands-on" approach is needed. For data management under Mercurial, TortoiseHg, integrated with Nautilus, has been found to be a very good tool. To install it add these repositories to your Synaptic Package Manager:
-
-	http://ppa.launchpad.net/mercurial-ppa/builddeps/ubuntu karmic main
-	http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu karmic main
-
-If you are not using Karmic (9.10) substitute "karmic" with the name of your distribution of Ubuntu.
-
-Before you update your package list you should be sure that you have an authentic key installed for the above repositories. You do that with this command:
-
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'
-
-Next you will need to install the TortoiseHg package with:
-
-	sudo apt-get update
-	sudo apt-get upgrade
-
-The above lines will reload the repository lists and should upgrade the mercurial package to the one from the PPA repo installed above. Next, to install type this in the terminal:
-
-	sudo apt-get install tortoisehg tortoisehg-nautilus
-
-Finally, log out and log back in again so the system will recognize the newly installed packages. Now TortoiseHg should work.
-
-You might have a problem with getting settings to work in TortoiseHG that involve the iniparse package. That is not in a normal repository and you can find it here:
-
-	http://code.google.com/p/iniparse/
-
-Once you have TortoiseHg integrated into your system you can keep an eye on what's going on with the data in your project.
+With all the above packages installed, we are ready to move on to installing ptxplus publishing package.
 
 
 GETTING ptxplus
@@ -70,11 +50,9 @@ To obtain the ptxplus, you need to check it out from the Mercurial repository it
 
 	~/Projects
 
-Create the above path if it does not exist or adjust the commands to suite your system.
+Create the above path if it does not exist with this command in your terminal:
 
-If you do not have the Mercurial distributed version control system installed on your system, use this command to install the package and the Meld differential file viewing program as well:
-
-	sudo apt-get install mercurial meld
+	mkdir ~/Projects
 
 Now you can to go to the Palaso website and clone the project code with:
 
@@ -82,7 +60,7 @@ Now you can to go to the Palaso website and clone the project code with:
 
 That should put ptxplus where you need it. From time to time you may want to update it. To do that, from inside the ptxplus project folder (~/Projects/ptxplus), this is the command you need:
 
-	hg pull
+	hg pull --update
 
 
 SYSTEM INSTALLATION AND SETUP
@@ -95,11 +73,11 @@ Now we will get ptxplus in your path by editing the ~/.profile file. To do that 
 
 	sudo gedit ~/.profile
 
-Add this to the end of that file (on its own line):
+Add this to the end of the file you just opened on its own line:
 
 	export PTXPLUS_BASE="$HOME/Projects/ptxplus"
 
-Next time you reboot or login, the new path settings will be there.
+Save the file and close it. Next time you reboot or login, the new path settings will be there.
 
 If you don't want to reboot right now and you just want to get it working on the current login (terminal) use:
 
@@ -107,11 +85,17 @@ If you don't want to reboot right now and you just want to get it working on the
 
 That will enable you to test in the current terminal but if you want it to take effect system-wide then you will need to log off then log back in.
 
-Test to see if the system recognises the additional path with:
+Test to see if the system recognizes the additional path with:
 
 	echo $PTXPLUS_BASE
 
-Next we need link ptxplus (main program) to /usr/local/bin so it can be started from any location like a real program would. Also, you will need to link a couple utilities that are good to run globally out of the ~/bin folder (Be sure you have one to link it to first.) and also right-click from the Nautilus scripts folder. To make these links do these commands:
+After running this command you should see a path that leads to ptxplus.
+
+Next we need link ptxplus (main program) to /usr/local/bin so it can be started from any location like a real program would. First, varify that you have a bin folder. If you do not, create it in your terminal with this command:
+
+	mkdir ~/bin
+
+Now, you will need to link a couple utilities that are good to run globally out of the ~/bin folder and some links that will enable you to right-click from the Nautilus file browser. To make these links, run each of these commands in order:
 
 	sudo ln -s ~/Projects/ptxplus/bin/ptxplus /usr/local/bin/ptxplus
 	ln -s ~/Projects/ptxplus/bin/sh/multi-txtconv.sh ~/bin/multi-txtconv.sh
@@ -119,12 +103,13 @@ Next we need link ptxplus (main program) to /usr/local/bin so it can be started 
 	ln -s ~/Projects/ptxplus/bin/sh/ptxplus ~/.gnome2/nautilus-scripts/ptxplus
 	ln -s ~/Projects/ptxplus/bin/sh/Open\ Terminal ~/.gnome2/nautilus-scripts/Open\ Terminal
 
-This should complete the manual installation of ptxplus. Now you should be able to start the program from anywhere with:
+This should complete the manual installation of ptxplus. Now you should be able to start the program from your terminal at any location with:
 
 	ptxplus
+
+Go a head, give it a try.
 
 In a terminal, if you start it from the root of a project folder it should find the project.conf file and automatically load that project. Because a special Nautilus script was installed (above) You can start ptxplus with a right-click from the file browser.
 
 At this point you may need to load some projects on your local system or start a new project. To do this, start ptxplus and open the system help with Help->System Help. You can then look at the Repository section to get a better idea of how to get going.
-
 

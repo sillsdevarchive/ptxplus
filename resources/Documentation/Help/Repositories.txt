@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Wed, 04 Nov 2009 13:49:52 +0700
+Modification-Date: Sat, 07 Nov 2009 19:58:21 +0700
 
 ====== Repositories ======
 
@@ -64,10 +64,12 @@ With all of this done you should be ready to push and pull data from your reposi
 ===== Adding A Project =====
 If you have an existing language project repository set up and you need to add a publishing project to it, do the following.
 
-1) Set up a new publishing project in the language folder with ptxplus. Use the SCRIPT-PROJECT naming convention as described above.
-2) In a terminal located in the root of the project (same level as the project folder), do these steps:
+1) Create a project folder on the same level as the text folder. Use the same naming convention as described above, i.e. SCRIPT-PROJECT.
+2) Set up a new publishing project in that folder with ptxplus.
+3) In a terminal located in the root of the project, repeat step 4 in New Project Setup.
 
-	hg add <PROJECT-ID>
-	hg commit -m "import <PROJECT-ID>"
-	hg push [[https://hg.mseag.org/eng|https://hg.mseag.org/<Lang-IDhg >]]
+===== Tips For Working With TortoiseHg =====
+You might have a problem with getting settings to work in TortoiseHG that involve the iniparse package. That is not in a normal repository and you can find it here:
+
+	http://code.google.com/p/iniparse/
 
