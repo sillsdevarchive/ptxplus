@@ -35,4 +35,4 @@ intro_periph		= INTRO
 preface_periph		= PREFACE
 publisher_periph	= PUBLISHER
 title_periph		= TITLE
-toc_periph			= TOC
+toc_periph		= TOC
