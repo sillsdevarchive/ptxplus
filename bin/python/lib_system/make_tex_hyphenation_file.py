@@ -56,9 +56,14 @@ class MakeTexHyphenationFile (object) :
 			tools.userMessage("make_tex_hyphenation_file: The file, " + texHyphenFileName + " already exists. Process halted")
 		else :
 			# Just make the file, nothing else
+
+################ Something is wrong with this next line ###################
+
 			word_list_in = codecs.open(wordListFileName,
 				mode='r' if os.path.isfile(wordListFileName) else 'rw',
 				encoding='utf_8_sig')
+
+###########################################################################
 
 			# Make the TeX hyphen file
 			tex_hypens_out = codecs.open(texHyphenFileName, "w", encoding='utf-8')
@@ -94,6 +99,7 @@ class MakeTexHyphenationFile (object) :
 
 # This starts the whole process going
 def doIt(log_manager):
-
+#	import pdb
 	thisModule = MakeTexHyphenationFile()
 	return thisModule.main(log_manager)
+#	return pdb.run(thisModule.main, log_manager)
