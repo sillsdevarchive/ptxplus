@@ -59,9 +59,15 @@ class MakeTexHyphenationFile (object) :
 
 ################ Something is wrong with this next line ###################
 
-			word_list_in = codecs.open(wordListFileName,
-				mode='r' if os.path.isfile(wordListFileName) else 'rw',
-				encoding='utf_8_sig')
+#			word_list_in = codecs.open(wordListFileName,
+#				mode='r' if os.path.isfile(wordListFileName) else 'rw',
+#				encoding='utf_8_sig')
+
+# This seems to at least work but it isn't as pretty
+			if not os.path.isfile(wordListFileName) :
+				word_list_in = codecs.open(wordListFileName, mode='w', encoding='utf_8_sig')
+
+			word_list_in = codecs.open(wordListFileName, mode='r', encoding='utf_8_sig')
 
 ###########################################################################
 
