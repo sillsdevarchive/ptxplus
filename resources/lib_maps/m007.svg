@@ -1,21 +1,64 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
    width="350.44"
    height="525.27502"
    viewBox="0 0 350.44 525.275"
    id="svg2"
    xml:space="preserve"
-   style="overflow:visible"><defs
-   id="defs657">
+   style="overflow:visible"
+   inkscape:version="0.47pre4 r22446"
+   sodipodi:docname="m007.svg"><metadata
+   id="metadata227"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1024"
+   inkscape:window-height="696"
+   id="namedview225"
+   showgrid="false"
+   inkscape:zoom="2.5415593"
+   inkscape:cx="265.50648"
+   inkscape:cy="389.98193"
+   inkscape:window-x="0"
+   inkscape:window-y="24"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg2" /><defs
+   id="defs657"><inkscape:perspective
+   sodipodi:type="inkscape:persp3d"
+   inkscape:vp_x="0 : 262.63751 : 1"
+   inkscape:vp_y="0 : 1000 : 0"
+   inkscape:vp_z="350.44 : 262.63751 : 1"
+   inkscape:persp3d-origin="175.22 : 175.09167 : 1"
+   id="perspective229" />
 
-		</defs>
+		<inkscape:perspective
+   id="perspective3043"
+   inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+   inkscape:vp_z="1 : 0.5 : 1"
+   inkscape:vp_y="0 : 1000 : 0"
+   inkscape:vp_x="0 : 0.5 : 1"
+   sodipodi:type="inkscape:persp3d" /></defs>
 
 <image
+   sodipodi:absref="/home/dennis/Projects/ptxplus/resources/lib_maps/m007-bkgrnd-cl.png"
    xlink:href="m007-bkgrnd-cl.png"
    x="0.89649999"
    y="1.0029"
@@ -61,11 +104,15 @@
 
 
 
+
+
 <text
    x="222.17239"
    y="67.657204"
    id="Key_A"
    style="font-size:9px;font-family:Arial">Walls at the time of Jesus</text>
+
+
 
 
 
@@ -83,58 +130,13 @@
 
 
 
+
+
 <text
    x="222.17239"
    y="90.292999"
    id="Key_C"
    style="font-size:9px;font-family:Arial">Present day wall</text>
-
-
-
-
-
-<text
-   x="240.939"
-   y="112.3076"
-   id="Scale_DistanceKey"
-   style="font-size:6px;font-family:Arial-Italic">Kilometers</text>
-
-
-
-
-
-<text
-   transform="translate(222.561,100.7383)"
-   id="Scale_Number_A"
-   style="font-size:6.00010014px;font-family:Arial">0</text>
-
-
-
-
-
-<text
-   transform="translate(239.6226,100.7383)"
-   id="Scale_Number_B"
-   style="font-size:6.00010014px;font-family:Arial">0.1</text>
-
-
-
-
-
-<text
-   transform="translate(259.8804,100.7383)"
-   id="Scale_Number_C"
-   style="font-size:6.00010014px;font-family:Arial">0.2</text>
-
-
-
-
-
-<text
-   transform="translate(280.1528,100.7383)"
-   id="Scale_Number_D"
-   style="font-size:6.00010014px;font-family:Arial">0.3</text>
-
 
 
 
@@ -150,11 +152,10 @@
 
 
 
-<text
-   x="67.401901"
-   y="304.74219"
-   id="Water_TowersPool"
-   style="font-size:8px;fill:#007dbf;font-family:Arial-Italic">Tower's Pool</text>
+
+
+
+
 
 
 
@@ -172,11 +173,10 @@
 
 
 
-<text
-   x="185.79539"
-   y="449.5928"
-   id="Water_PoolSiloam"
-   style="font-size:8px;fill:#007dbf;font-family:Arial-Italic">Pool of Siloam</text>
+
+
+
+
 
 
 
@@ -194,11 +194,15 @@
 
 
 
+
+
 <text
-   x="234.8013"
-   y="511.76859"
+   x="231.65363"
+   y="506.26016"
    id="Water_EnrogelSpring"
    style="font-size:8px;fill:#007dbf;font-family:Arial-Italic">Enrogel Spring</text>
+
+
 
 
 
@@ -216,12 +220,16 @@
 
 
 
+
+
 <text
-   x="-264.27988"
-   y="311.54337"
-   transform="matrix(0.4264952,-0.9044898,0.9044898,0.4264952,0,0)"
+   x="-265.13287"
+   y="309.73438"
+   transform="matrix(0.42649521,-0.90448982,0.90448982,0.42649521,0,0)"
    id="Water_AqueductA"
    style="font-size:8px;fill:#007dbf;font-family:Arial-Italic">Aqueduct</text>
+
+
 
 
 
@@ -239,11 +247,15 @@
 
 
 
+
+
 <text
    x="30.689501"
    y="438.02151"
    id="Water_SerpentsPool"
    style="font-size:8px;fill:#007dbf;font-family:Arial-Italic">Serpent's Pool</text>
+
+
 
 
 
@@ -261,6 +273,8 @@
 
 
 
+
+
 <text
    x="105.7783"
    y="43.3428"
@@ -271,21 +285,22 @@
 
 
 
+
+
+
+
+
+
+
+
+
 <text
-   x="194.313"
-   y="513.98932"
-   id="Road_DeadSea"
-   style="font-size:8px;font-family:Arial">Road to the Dead Sea</text>
-
-
-
-
-
-<text
-   x="321.6235"
-   y="130.7715"
+   x="290.14676"
+   y="135.49301"
    id="Road_Jericho"
    style="font-size:8px;font-family:Arial">Road to Jericho</text>
+
+
 
 
 
@@ -302,21 +317,28 @@
 
 
 
+
+
 <text
-   x="19.606899"
-   y="513.98242"
+   x="-504.86874"
+   y="86.102997"
    id="Road_Bethlehem"
-   style="font-size:8px;font-family:Arial">Road to Bethlehem</text>
+   style="font-size:8px;font-family:Arial"
+   transform="matrix(0.14995952,-0.98869214,0.98869214,0.14995952,0,0)">Road to Bethlehem</text>
+
+
 
 
 
 
 
 <text
-   x="322.37839"
-   y="407.5127"
+   x="287.3605"
+   y="406.72577"
    id="Road_Bethany"
    style="font-size:8px;font-family:Arial">Road to Bethany</text>
+
+
 
 
 
@@ -333,11 +355,15 @@
 
 
 
+
+
 <text
    x="125.8452"
    y="385.0889"
    id="Place_Theater"
    style="font-size:8px;font-family:Arial">Theater</text>
+
+
 
 
 
@@ -354,6 +380,8 @@
 
 
 
+
+
 <text
    x="190.6841"
    y="335.71579"
@@ -364,9 +392,11 @@
 
 
 
+
+
 <text
-   x="130.38091"
-   y="511"
+   x="122.77437"
+   y="511.42618"
    id="Place_FieldBlood"
    style="font-size:8px;font-family:Arial">Field of Blood</text>
 
@@ -374,11 +404,15 @@
 
 
 
+
+
 <text
    x="301.4653"
-   y="253.1279"
+   y="249.1279"
    id="Place_Gethsemane"
    style="font-size:8px;font-family:Arial">Gethsemane</text>
+
+
 
 
 
@@ -394,11 +428,15 @@
 
 
 
+
+
 <text
    x="105.3657"
    y="269.9111"
    id="Place_Golgotha"
    style="font-size:8px;font-family:Arial">Golgotha</text>
+
+
 
 
 
@@ -414,11 +452,15 @@
 
 
 
+
+
 <text
    x="97.712898"
    y="362.24509"
    id="Place_HerodsPalace"
    style="font-size:8px;font-family:Arial">Herod's Palace</text>
+
+
 
 
 
@@ -434,6 +476,8 @@
 
 
 
+
+
 <text
    x="111.1914"
    y="406.10641"
@@ -444,11 +488,15 @@
 
 
 
+
+
 <text
    x="80.254898"
    y="430.0098"
    id="Place_UpperRoom"
    style="font-size:8px;font-family:Arial">Upper Room</text>
+
+
 
 
 
@@ -465,11 +513,15 @@
 
 
 
+
+
 <text
    x="102.0161"
    y="472.41409"
    id="Gate_Essene"
    style="font-size:8px;font-family:Arial">Essene Gate</text>
+
+
 
 
 
@@ -485,11 +537,15 @@
 
 
 
+
+
 <text
    x="224.3638"
    y="360.0332"
    id="Gate_Valley"
    style="font-size:8px;font-family:Arial">Valley Gate</text>
+
+
 
 
 
@@ -505,11 +561,15 @@
 
 
 
+
+
 <text
    x="264.26999"
    y="274.97949"
    id="Gate_Beautiful"
    style="font-size:8px;font-family:Arial">Beautiful Gate</text>
+
+
 
 
 
@@ -525,6 +585,8 @@
 
 
 
+
+
 <text
    x="185.9429"
    y="202.9697"
@@ -535,11 +597,10 @@
 
 
 
-<text
-   x="276.03659"
-   y="333.07321"
-   id="Place_PinnacleTemple"
-   style="font-size:8px;font-family:Arial">Pinnacle of Temple</text>
+
+
+
+
 
 
 
@@ -556,12 +617,16 @@
 
 
 
+
+
 <text
    x="303.64905"
    y="-225.85703"
    transform="matrix(9.7196602e-2,0.9952652,-0.9952652,9.7196602e-2,0,0)"
    id="Label_SolomonsPorch"
    style="font-size:5px;font-family:Arial">Solomon's Porch</text>
+
+
 
 
 
@@ -578,6 +643,8 @@
 
 
 
+
+
 <text
    x="184.04677"
    y="298.69733"
@@ -588,32 +655,34 @@
 
 
 
+
+
 <text
-   x="-353.19275"
-   y="291.23672"
-   transform="matrix(0.2545599,-0.967057,0.967057,0.2545599,0,0)"
+   x="-351.15625"
+   y="298.97318"
+   transform="matrix(0.2545599,-0.96705701,0.96705701,0.2545599,0,0)"
    id="Road_Herodian"
    style="font-size:5px;font-family:Arial">Herodian Street</text>
 
 
 
 
+
+
 <text
-   x="-334.16211"
-   y="347.19958"
-   transform="matrix(0.4342876,-0.9007743,0.9007743,0.4342876,0,0)"
+   x="-335.0307"
+   y="345.39804"
+   transform="matrix(0.43428759,-0.90077427,0.90077427,0.43428759,0,0)"
    id="Region_TyfopoeonValley"
    style="font-size:12px;fill:#934711;font-family:Arial-Italic">Tyfopoeon Valley</text>
 
 
 
 
-<text
-   x="383.2789"
-   y="270.8215"
-   transform="matrix(0.665976,0.7459731,-0.7459731,0.665976,0,0)"
-   id="Region_HinnomValley"
-   style="font-size:12px;fill:#934711;font-family:Arial-Italic">Hinnom Valley</text>
+
+
+
+
 
 
 
@@ -628,12 +697,16 @@
 
 
 
+
+
 <text
    x="-392.74899"
    y="343.95459"
    transform="matrix(0,-1,1,0,0,0)"
    id="Region_MountOlive"
    style="font-size:12px;fill:#934711;font-family:Arial-Italic">Mount of Olives</text>
+
+
 
 
 
@@ -1402,7 +1475,7 @@
    x="1"
    y="1"
    id="Border"
-   style="fill:none;stroke:#000000;stroke-width:2.0000999;stroke-miterlimit:2.41420007" />
+   style="fill:none;stroke:#000000;stroke-width:0.99999999;stroke-miterlimit:2.41420007;stroke-dasharray:none" />
    
 <g
    id="Bar">
@@ -1559,10 +1632,16 @@
    style="fill:#a2caec;fill-rule:evenodd;stroke:#007dbf;stroke-width:0.6999023;stroke-miterlimit:2.41420007" /><path
    d="M 69.106,524.275 C 64.486,517.165 46.024,489.053 41.488,481.89 C 38.012,476.401 32.653,472.585 29.707,467.668 C 27.289,463.633 26.431,458.45 27.108,453.795 L 36.29,390.668 C 38.128,378.033 50.812,376.622 54.654,390.147 C 59.081,405.73 57.288,422.733 61.758,437.666 C 65.985,451.786 77.203,460.917 89.305,467.148 C 93.355,469.233 97.805,468.115 100.74,466.107 C 114.073,456.984 135.906,452.637 140.761,450.499 C 147.85,447.377 148.739,441.943 146.651,437.492 C 145.554,435.153 145.239,432.567 144.745,430.035 C 144.258,427.534 145.071,425.347 146.305,422.752 C 147.87,419.455 147.528,415.436 146.998,411.825 C 146.479,408.29 153.998,402.262 156.407,398.997 C 160.088,394.005 173.729,368.055 176.697,362.012 C 180.422,354.427 182.377,349.764 185.262,341.954 C 187.083,337.025 183.174,332.821 180.645,329.447 C 177.832,325.695 177.396,321.184 180.171,317.125 C 187.96,305.726 208.804,300.381 221.343,307.945"
    id="path19"
-   style="fill:none;fill-rule:evenodd;stroke:#007dbf;stroke-width:0.69989997;stroke-miterlimit:2.41420007;stroke-dasharray:3.4994, 0.6999, 0, 0, 0, 0" /><path
+   style="fill:none;fill-rule:evenodd;stroke:#007dbf;stroke-width:0.7;stroke-miterlimit:2.41420007;stroke-dasharray:none" /><path
    d="M 224.139,504.316 C 219.861,500.178 210.765,496.731 199.672,497.721 C 187.689,498.789 175.069,495.689 162.492,493.993 C 159.766,493.626 156.858,493.814 154.273,494.758 C 146.008,497.772 137.606,501.682 123.116,497.912 C 111.637,494.925 94.208,499.982 83.167,495.646 C 73.651,491.908 61.988,482.917 54.946,473.996"
    id="path21"
-   style="fill:none;fill-rule:evenodd;stroke:#007dbf;stroke-width:0.69989997;stroke-miterlimit:2.41420007" /><rect
+   style="fill:none;fill-rule:evenodd;stroke:#007dbf;stroke-width:0.69989997;stroke-miterlimit:2.41420007" /><text
+   x="375.01889"
+   y="267.66684"
+   transform="matrix(0.66597603,0.74597314,-0.74597314,0.66597603,0,0)"
+   id="Region_HinnomValley"
+   style="font-size:11.99999905px;fill:#934711;font-family:Arial-Italic">Hinnom Valley</text>
+<rect
    width="11.873115"
    height="5.6070538"
    x="-290.2821"
@@ -1583,7 +1662,12 @@
    y="80.818459"
    transform="matrix(-4.890018e-2,-0.9988037,0.9988037,-4.890018e-2,0,0)"
    id="rect27"
-   style="fill:#a2caec;fill-rule:evenodd;stroke:#007dbf;stroke-width:0.69989741;stroke-miterlimit:2.41420007" /><rect
+   style="fill:#a2caec;fill-rule:evenodd;stroke:#007dbf;stroke-width:0.69989741;stroke-miterlimit:2.41420007" /><text
+   x="56.778503"
+   y="296.08609"
+   id="Water_TowersPool"
+   style="font-size:8px;fill:#007dbf;font-family:Arial-Italic">Tower's Pool</text>
+<rect
    width="6.4593377"
    height="17.162897"
    x="-269.37784"
@@ -1634,4 +1718,133 @@
 </g>
 
 
+
+
+<text
+   x="240.939"
+   y="112.3076"
+   id="Scale_K_DistanceKey"
+   style="font-size:7px;font-family:Arial-Italic">Kilometers</text>
+
+
+<text
+   transform="translate(222.561,100.7383)"
+   id="Scale_K_Number_A"
+   style="font-size:7px;font-family:Arial">0</text>
+
+
+<text
+   transform="translate(239.6226,100.7383)"
+   id="Scale_K_Number_B"
+   style="font-size:7px;font-family:Arial">0.1</text>
+
+
+<text
+   transform="translate(259.8804,100.7383)"
+   id="Scale_K_Number_C"
+   style="font-size:7px;font-family:Arial">0.2</text>
+
+
+<text
+   transform="translate(280.1528,100.7383)"
+   id="Scale_K_Number_D"
+   style="font-size:7px;font-family:Arial">0.3</text>
+
+
+
+
+
+
+
+<text
+   y="134.2058"
+   x="247.56529"
+   id="Scale_M_DistanceKey"
+   style="font-size:7px;font-family:Arial">Miles</text>
+
+     
+<text
+   y="122.6365"
+   x="223.1873"
+   id="Scale_M_Number_A"
+   style="font-size:7px;font-family:Arial">0</text>
+
+   
+<text
+   y="122.6365"
+   x="240.24892"
+   id="Scale_Number_B"
+   style="font-size:7px;font-family:Arial">0.1</text>
+
+   
+<text
+   y="122.6365"
+   x="260.50671"
+   id="Scale_M_Number_C"
+   style="font-size:7px;font-family:Arial">0.2</text>
+
+   
+<text
+   y="122.6365"
+   x="280.77911"
+   id="Scale_M_Number_D"
+   style="font-size:7px;font-family:Arial">0.3</text>
+
+   
+   
+   
+<g
+   transform="translate(0.62630654,21.898188)"
+   style="overflow:visible"
+   id="Bar-6"><g
+     id="Right-0"><rect
+       width="20.323999"
+       height="3.7709999"
+       x="264.03799"
+       y="102.422"
+       id="rect315-2"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2342;stroke-miterlimit:2.41420007" /><line
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.07690001;stroke-miterlimit:2.41420007"
+       id="line317-7"
+       y2="104.308"
+       x2="284.362"
+       y1="104.308"
+       x1="264.03799"
+       stroke-miterlimit="2.4142"
+       clip-rule="evenodd" /></g><rect
+     width="20.325001"
+     height="3.7709999"
+     x="243.71201"
+     y="102.422"
+     id="Center-6"
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2349;stroke-miterlimit:2.41420007" /><g
+     id="Left-1"><rect
+       width="20.325001"
+       height="3.7709999"
+       x="223.38699"
+       y="102.422"
+       id="rect321-3"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2342;stroke-miterlimit:2.41420007" /><line
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.07690001;stroke-miterlimit:2.41420007"
+       id="line323-2"
+       y2="104.308"
+       x2="243.78799"
+       y1="104.308"
+       x1="223.46201"
+       stroke-miterlimit="2.4142"
+       clip-rule="evenodd" /></g></g><text
+   x="194.313"
+   y="517.98932"
+   id="Road_DeadSea"
+   style="font-size:8px;font-family:Arial">Road to the Dead Sea</text>
+<text
+   x="171.79539"
+   y="451.5928"
+   id="Water_PoolSiloam"
+   style="font-size:8px;fill:#007dbf;font-family:Arial-Italic">Pool of Siloam</text>
+<text
+   x="276.03659"
+   y="333.07321"
+   id="Place_PinnacleTemple"
+   style="font-size:8px;font-family:Arial">Pinnacle of Temple</text>
 </svg>
