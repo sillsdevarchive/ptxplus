@@ -9,6 +9,7 @@
 	<child>
 	  <widget class="GtkVBox" id="vbox1">
 		<property name="visible">True</property>
+		<property name="orientation">vertical</property>
 		<child>
 		  <widget class="GtkMenuBar" id="menubar1">
 			<property name="visible">True</property>
@@ -413,14 +414,30 @@
 		  </packing>
 		</child>
 		<child>
+		  <widget class="GtkStatusbar" id="statusbar1">
+			<property name="visible">True</property>
+			<property name="spacing">2</property>
+		  </widget>
+		  <packing>
+			<property name="expand">False</property>
+			<property name="pack_type">end</property>
+			<property name="position">3</property>
+		  </packing>
+		</child>
+		<child>
 		  <widget class="GtkHBox" id="hbox1">
 			<property name="visible">True</property>
 			<child>
 			  <widget class="GtkVBox" id="vbox3">
 				<property name="visible">True</property>
+				<property name="orientation">vertical</property>
 				<child>
 				  <widget class="GtkVButtonBox" id="vbuttonbox1">
 					<property name="visible">True</property>
+					<property name="orientation">vertical</property>
+					<child>
+					  <placeholder/>
+					</child>
 					<child>
 					  <widget class="GtkButton" id="b_view">
 						<property name="label" translatable="yes">_View-book</property>
@@ -433,7 +450,7 @@
 					  <packing>
 						<property name="expand">False</property>
 						<property name="fill">False</property>
-						<property name="position">0</property>
+						<property name="position">1</property>
 					  </packing>
 					</child>
 					<child>
@@ -448,7 +465,7 @@
 					  <packing>
 						<property name="expand">False</property>
 						<property name="fill">False</property>
-						<property name="position">1</property>
+						<property name="position">2</property>
 					  </packing>
 					</child>
 					<child>
@@ -463,7 +480,7 @@
 					  <packing>
 						<property name="expand">False</property>
 						<property name="fill">False</property>
-						<property name="position">2</property>
+						<property name="position">3</property>
 					  </packing>
 					</child>
 				  </widget>
@@ -479,6 +496,7 @@
 				<child>
 				  <widget class="GtkVButtonBox" id="vbuttonbox2">
 					<property name="visible">True</property>
+					<property name="orientation">vertical</property>
 					<child>
 					  <widget class="GtkButton" id="b_wiki">
 						<property name="label" translatable="yes">_Wiki</property>
@@ -632,6 +650,7 @@
 					  <widget class="GtkVPaned" id="vpaned1">
 						<property name="visible">True</property>
 						<property name="can_focus">True</property>
+						<property name="orientation">vertical</property>
 						<child>
 						  <widget class="GtkScrolledWindow" id="scrolledwindow2">
 							<property name="visible">True</property>
@@ -657,6 +676,7 @@
 						<child>
 						  <widget class="GtkVBox" id="vbox2">
 							<property name="visible">True</property>
+							<property name="orientation">vertical</property>
 							<child>
 							  <widget class="GtkLabel" id="label1">
 								<property name="visible">True</property>
@@ -885,17 +905,6 @@
 			<property name="position">3</property>
 		  </packing>
 		</child>
-		<child>
-		  <widget class="GtkStatusbar" id="statusbar1">
-			<property name="visible">True</property>
-			<property name="spacing">2</property>
-		  </widget>
-		  <packing>
-			<property name="expand">False</property>
-			<property name="pack_type">end</property>
-			<property name="position">2</property>
-		  </packing>
-		</child>
 	  </widget>
 	</child>
   </widget>
@@ -911,6 +920,7 @@
 	<child internal-child="vbox">
 	  <widget class="GtkVBox" id="dialog-vbox1">
 		<property name="visible">True</property>
+		<property name="orientation">vertical</property>
 		<property name="spacing">2</property>
 		<child>
 		  <widget class="GtkTable" id="table1">
@@ -998,7 +1008,7 @@
 			</child>
 			<child>
 			  <widget class="GtkButton" id="bt_apply_entry">
-				<property name="label" translatable="yes">gtk-apply</property>
+				<property name="label">gtk-apply</property>
 				<property name="visible">True</property>
 				<property name="can_focus">True</property>
 				<property name="can_default">True</property>
@@ -1015,7 +1025,7 @@
 			</child>
 			<child>
 			  <widget class="GtkButton" id="bt_cancel_entry">
-				<property name="label" translatable="yes">gtk-close</property>
+				<property name="label">gtk-close</property>
 				<property name="visible">True</property>
 				<property name="can_focus">True</property>
 				<property name="receives_default">False</property>
@@ -1049,6 +1059,7 @@
 	<child internal-child="vbox">
 	  <widget class="GtkVBox" id="dialog-vbox2">
 		<property name="visible">True</property>
+		<property name="orientation">vertical</property>
 		<property name="spacing">2</property>
 		<child>
 		  <widget class="GtkTable" id="table2">
@@ -1140,7 +1151,7 @@
 			<property name="layout_style">end</property>
 			<child>
 			  <widget class="GtkButton" id="b_import_cancel">
-				<property name="label" translatable="yes">gtk-cancel</property>
+				<property name="label">gtk-cancel</property>
 				<property name="visible">True</property>
 				<property name="can_focus">True</property>
 				<property name="receives_default">True</property>
@@ -1154,7 +1165,7 @@
 			</child>
 			<child>
 			  <widget class="GtkButton" id="b_import_ok">
-				<property name="label" translatable="yes">gtk-ok</property>
+				<property name="label">gtk-ok</property>
 				<property name="visible">True</property>
 				<property name="can_focus">True</property>
 				<property name="receives_default">True</property>
