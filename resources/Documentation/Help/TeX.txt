@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Wed, 23 Sep 2009 09:12:23 +0700
+Modification-Date: Wed, 11 Nov 2009 09:38:39 +0700
 
 ====== TeX ======
 
@@ -17,9 +17,9 @@ Some times, when the introduction is short, there is room for body text on the f
 
 This is not recommended but if you need to insert raw [[TeX]] code inside a USFM document you can do that something like this:
 
-\makedigitsother\catcode`{=1 \catcode`}=2
-\vskip 4pt plus 1fil
-\makedigitsletters\catcode`{=11\catcode`}=11
+	\makedigitsother\catcode`{=1 \catcode`}=2
+	\vskip 4pt plus 1fil
+	\makedigitsletters\catcode`{=11\catcode`}=11
 
 In this example we are trying to put some extra vertical space between lines or a section. This is not plain TeX, however, because it relies on two external macro calls from the setup file. (At some point I would like to replace this example with a fully plain [[TeX]] one.)
 
@@ -29,7 +29,7 @@ Hyphenation is an important issue in any publication. Here are some notes on var
 ==== Increasing the Hyphenation Exception Word List Size ====
 It may be necessary to change the maximum number of words allowed in the hyphenation exceptions list. To do this the /etc/texmf/texmf.cnf file needs to be changed. However, the warning at the top of the file makes it clear that you don't want to edit that specific file because it is auto-generated. Instead, you want to edit this file:
 
-sudo gedit /etc/texmf/texmf.d/95NonPath.cnf
+	sudo gedit /etc/texmf/texmf.d/95NonPath.cnf
 
 Near the bottom you will find hyph_size = 8191. That's a lot but if you need more you can increase it. However it must be a prime number. To find out if the number you want to use is prime or not go to: http://primes.utm.edu/lists/small/10000.txt
 
@@ -39,21 +39,21 @@ Once you have changed the setting you will need to save your file and close the 
 
 The next step is to remake the main texmf.cnf. To do this, run this command:
 
-sudo update-texmf
+	sudo update-texmf
 
 Then just to be safe you should probably run this too to update the fmt files (I think, either way, it doesn't seem to hurt):
 
-fmtutil --refresh
+	fmtutil --refresh
 
 Your new settings should be recognized by the system.
 
 Now, after saying all that, it might not work. If that is the case then you can try just editing /etc/texmf/texmf.cnf directly despite warnings not to. If you are running a single user, single install system, you'll probably be okay, but you have been warned. The way to do this is edit this file with
 
-sudo gedit /etc/texmf/texmf.cnf
+	sudo gedit /etc/texmf/texmf.cnf
 
 Change the hyph_size setting to whatever you need it to be. Then run:
 
-fmtutil --refresh
+	fmtutil --refresh
 
 and you should be good to go.
 
@@ -65,19 +65,19 @@ As we are not yet running under a rules-based system, which would be nice to do 
 
 Sometimes you have a large range of codes to cover so for this reason we put the list in a file in your Hyphenation directory called "lccodelist.txt". The make_tex_hyphenation.py process will find it and insert them into your project hyphenation next time it builds it. The codes should be entered into that file like this:
 
-\lccode"1000="1000
-\lccode"1001="1001
-...
+	\lccode"1000="1000
+	\lccode"1001="1001
+	...
 
 If you have a whole bunch of characters to cover you may want to automate the process with this nifty line of Perl code by Martin Hosken:
 
-perl -e 'for (0x1000..0x109F) { printf "\\lccode \"%X = \"%X\n", $_, $_}' >lccodelist.txt
+	perl -e 'for (0x1000..0x109F) { printf "\\lccode \"%X = \"%X\n", $_, $_}' >lccodelist.txt
 
 Adjust for your situation.
 
 The above code will generate a blind list of \lccodes but you may want something more precise. Though not tested, this Perl code, also by Martin should give you an exact list of \ccodes for your project:
 
-perl -CSD -ne 'foreach(split("")){$c{$_}++}; END {print join("\n", map {sprintf("\\lcode \"%04X = \"%04X", ord($_), ord($_))} sort keys %c)}' wordlist.txt > lccodelist.txt
+	perl -CSD -ne 'foreach(split("")){$c{$_}++}; END {print join("\n", map {sprintf("\\lcode \"%04X = \"%04X", ord($_), ord($_))} sort keys %c)}' wordlist.txt > lccodelist.txt
 
 Again, adjust for your project.
 
@@ -88,6 +88,7 @@ Again, adjust for your project.
 Some times you may need to substitute a font on a specific text marker. For example, a text using a non-Roman script but needs to have a book title in another language which needs characters that are not included in the publication font. Here's what you do:
 
 1) In the place where fonts are defined, add a line like this:
+
 	\font\chapterfont = "[../Fonts/GenBkBas/GenBkBasBI.ttf]" at 14pt
 
 2) In the style file add a hook to the marker you want to use the special font on like this:
@@ -126,18 +127,18 @@ These are just some miscellaneous notes and we don't have a better place to keep
 === Page Number Override ===
 Some times you need to override the page number at a given place in a publication. This is easy to do. Find the [[TeX]] file (look in the process folder for a file with a [[.tex]] extension) that drives the process and add this simple command to it:
 
-\pageno = nn
+	\pageno = nn
 
 This will cause [[TeX]] to start the first page of that section with nn.
 
 === Override code for .tex files ===
 The [[.tex]] files that ptxplus produces is automated but near the end of a project it may be necessary to tweak them by added code. This shouldn't be done until the text is locked down. An example would be setting overrides for page behavior in peripheral matter like these lines:
 
-\BodyColumns=1
-\def\RHtitleleft{\empty}
-\def\RHtitlecenter{\empty}
-\def\RHtitleright{\empty}
-\def\RHoddcenter{\empty}
-\def\RHevencenter{\empty}
+	\BodyColumns=1
+	\def\RHtitleleft{\empty}
+	\def\RHtitlecenter{\empty}
+	\def\RHtitleright{\empty}
+	\def\RHoddcenter{\empty}
+	\def\RHevencenter{\empty}
 
 These would be inserted manually to keep the page number from appearing and making it a single column page.
