@@ -79,7 +79,10 @@ class ConfigGUI (object) :
 			"on_menu_paste_activate"                : self.m_paste,
 			"on_menu_help_activate"                 : self.m_help,
 			"on_menu_example_activate"              : self.m_example,
-			"on_menu_about_activate"                : self.m_about
+			"on_menu_about_activate"                : self.m_about,
+			"on_menu_undo_activate"                 : self.m_undo,
+			"on_menu_redo_activate"                 : self.m_redo,
+			"on_menu_edit_activate"            : self.m_edit,
 		}
 		self.bkid = ''
 		self.wTree = gtk.glade.XML(self.gladefile)
@@ -98,14 +101,20 @@ class ConfigGUI (object) :
 		self.vte.set_size(80, 19)
 		self.vte.show_all()
 
+		self.notebook = self.wTree.get_widget('notebook1')
+		self.menu_undo = self.wTree.get_widget('menu_undo')
+		self.menu_redo = self.wTree.get_widget('menu_redo')
+
 		# replace TextView with SourceView
 		self.language_manager = gtksourceview2.LanguageManager()
-		sourceviews = ['usfm', 'styles', 'setup', 'fonts', 'adj', 'errors', 'texlog']
-		for s in sourceviews:
+		sourceviews = {1:'usfm', 3:'styles', 4:'setup', 5:'fonts', 6:'adj', 7:'errors', 8:'texlog'}
+		self.notebook_buffer={}
+		for i,s in sourceviews.items():
 			sc = 'sc_'+s
 			tv = 'tv_'+s
 			b = gtksourceview2.Buffer()
 			sv = gtksourceview2.View(b)
+			self.notebook_buffer[i]=b
 			self.wTree.get_widget(sc).add(sv)
 			setattr(self,tv,sv)
 			sv.show_all()
@@ -246,8 +255,40 @@ class ConfigGUI (object) :
 		self.write_files()
 		gtk.main_quit()
 
+	def m_undo (self, widget) :
+		p = self.notebook.get_current_page()
+		try:
+			b = self.notebook_buffer[p]
+			if b.can_undo():
+				b.undo()
+			self.menu_undo.set_sensitive(b.can_undo())
+			self.menu_redo.set_sensitive(b.can_redo())
+		except KeyError:
+			pass
+
+	def m_redo (self, widget) :
+		p = self.notebook.get_current_page()
+		try:
+			b = self.notebook_buffer[p]
+			if b.can_redo():
+				b.redo()
+			self.menu_undo.set_sensitive(b.can_undo())
+			self.menu_redo.set_sensitive(b.can_redo())
+		except KeyError:
+			pass
+
+	def m_edit (self, widget) :
+		p = self.notebook.get_current_page()
+		try:
+			b = self.notebook_buffer[p]
+			self.menu_undo.set_sensitive(b.can_undo())
+			self.menu_redo.set_sensitive(b.can_redo())
+		except KeyError:
+			self.menu_undo.set_sensitive(False)
+			self.menu_redo.set_sensitive(False)
+
 	def m_help (self, widget) :
-			self.execute('ptxplus', 'help')
+		self.execute('ptxplus', 'help')
 
 
 	def m_example (self, widget) :

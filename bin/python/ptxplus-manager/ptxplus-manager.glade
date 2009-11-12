@@ -120,6 +120,7 @@
 				<property name="visible">True</property>
 				<property name="label" translatable="yes">_Edit</property>
 				<property name="use_underline">True</property>
+				<signal name="activate" handler="on_menu_edit_activate"/>
 				<child>
 				  <widget class="GtkMenu" id="edit">
 					<property name="visible">True</property>
@@ -151,6 +152,31 @@
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
 						<signal name="activate" handler="on_menu_paste_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem3">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_undo">
+						<property name="label">gtk-undo</property>
+						<property name="visible">True</property>
+						<property name="sensitive">False</property>
+						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_menu_undo_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_redo">
+						<property name="label">gtk-redo</property>
+						<property name="visible">True</property>
+						<property name="sensitive">False</property>
+						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_menu_redo_activate"/>
 					  </widget>
 					</child>
 				  </widget>
@@ -386,45 +412,6 @@
 		  </packing>
 		</child>
 		<child>
-		  <widget class="GtkHBox" id="hbox2">
-			<property name="visible">True</property>
-			<child>
-			  <placeholder/>
-			</child>
-			<child>
-			  <placeholder/>
-			</child>
-			<child>
-			  <widget class="GtkComboBox" id="cb_books">
-				<property name="visible">True</property>
-				<property name="wrap_width">5</property>
-				<signal name="changed" handler="on_cb_books_changed"/>
-			  </widget>
-			  <packing>
-				<property name="expand">False</property>
-				<property name="pack_type">end</property>
-				<property name="position">2</property>
-			  </packing>
-			</child>
-		  </widget>
-		  <packing>
-			<property name="expand">False</property>
-			<property name="fill">False</property>
-			<property name="position">1</property>
-		  </packing>
-		</child>
-		<child>
-		  <widget class="GtkStatusbar" id="statusbar1">
-			<property name="visible">True</property>
-			<property name="spacing">2</property>
-		  </widget>
-		  <packing>
-			<property name="expand">False</property>
-			<property name="pack_type">end</property>
-			<property name="position">3</property>
-		  </packing>
-		</child>
-		<child>
 		  <widget class="GtkHBox" id="hbox1">
 			<property name="visible">True</property>
 			<child>
@@ -432,12 +419,35 @@
 				<property name="visible">True</property>
 				<property name="orientation">vertical</property>
 				<child>
+				  <widget class="GtkLabel" id="label2">
+					<property name="visible">True</property>
+					<property name="yalign">1</property>
+					<property name="ypad">8</property>
+					<property name="label" translatable="yes">Book:</property>
+				  </widget>
+				  <packing>
+					<property name="expand">False</property>
+					<property name="position">0</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkComboBox" id="cb_books">
+					<property name="width_request">0</property>
+					<property name="visible">True</property>
+					<property name="wrap_width">5</property>
+					<signal name="changed" handler="on_cb_books_changed"/>
+				  </widget>
+				  <packing>
+					<property name="expand">False</property>
+					<property name="fill">False</property>
+					<property name="padding">4</property>
+					<property name="position">1</property>
+				  </packing>
+				</child>
+				<child>
 				  <widget class="GtkVButtonBox" id="vbuttonbox1">
 					<property name="visible">True</property>
 					<property name="orientation">vertical</property>
-					<child>
-					  <placeholder/>
-					</child>
 					<child>
 					  <widget class="GtkButton" id="b_view">
 						<property name="label" translatable="yes">_View-book</property>
@@ -450,7 +460,7 @@
 					  <packing>
 						<property name="expand">False</property>
 						<property name="fill">False</property>
-						<property name="position">1</property>
+						<property name="position">0</property>
 					  </packing>
 					</child>
 					<child>
@@ -465,7 +475,7 @@
 					  <packing>
 						<property name="expand">False</property>
 						<property name="fill">False</property>
-						<property name="position">2</property>
+						<property name="position">1</property>
 					  </packing>
 					</child>
 					<child>
@@ -480,18 +490,16 @@
 					  <packing>
 						<property name="expand">False</property>
 						<property name="fill">False</property>
-						<property name="position">3</property>
+						<property name="position">2</property>
 					  </packing>
 					</child>
 				  </widget>
 				  <packing>
 					<property name="expand">False</property>
 					<property name="fill">False</property>
-					<property name="position">0</property>
+					<property name="padding">15</property>
+					<property name="position">2</property>
 				  </packing>
-				</child>
-				<child>
-				  <placeholder/>
 				</child>
 				<child>
 				  <widget class="GtkVButtonBox" id="vbuttonbox2">
@@ -560,7 +568,7 @@
 					<property name="expand">False</property>
 					<property name="fill">False</property>
 					<property name="pack_type">end</property>
-					<property name="position">2</property>
+					<property name="position">3</property>
 				  </packing>
 				</child>
 			  </widget>
@@ -901,8 +909,17 @@
 			</child>
 		  </widget>
 		  <packing>
-			<property name="pack_type">end</property>
-			<property name="position">3</property>
+			<property name="position">1</property>
+		  </packing>
+		</child>
+		<child>
+		  <widget class="GtkStatusbar" id="statusbar1">
+			<property name="visible">True</property>
+			<property name="spacing">2</property>
+		  </widget>
+		  <packing>
+			<property name="expand">False</property>
+			<property name="position">2</property>
 		  </packing>
 		</child>
 	  </widget>
