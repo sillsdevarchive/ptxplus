@@ -202,6 +202,27 @@ class ConfigGUI (object) :
 
 #######################################################################################################
 
+	def search (self,widget,d=None,data=None) :
+		st = d['text'].get_text()
+		if st:
+			v = d['view']
+			b = d['buffer']
+			m = b.get_mark('last_search')
+			if (not m) or (data == 'search'):
+				i = b.get_start_iter()
+			else:
+				i = b.get_iter_at_mark(m)
+			if i:
+				try:
+					s,e = gtksourceview2.iter_forward_search(i,st,gtksourceview2.SEARCH_TEXT_ONLY|gtksourceview2.SEARCH_CASE_INSENSITIVE,None)
+				except TypeError:
+					pass
+				else:
+					if (s and e):
+						b.select_range(s,e)
+						m = b.create_mark('last_search',e)
+						v.scroll_to_mark(m,0.2)
+
 	def write_files (self) :
 		if self.styles : self.styles.write('')
 		if self.fonts : self.fonts.write('')
