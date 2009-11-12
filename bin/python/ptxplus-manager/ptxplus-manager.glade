@@ -412,34 +412,6 @@
 		  </packing>
 		</child>
 		<child>
-		  <widget class="GtkHBox" id="hbox2">
-			<property name="visible">True</property>
-			<child>
-			  <placeholder/>
-			</child>
-			<child>
-			  <placeholder/>
-			</child>
-			<child>
-			  <widget class="GtkComboBox" id="cb_books">
-				<property name="visible">True</property>
-				<property name="wrap_width">5</property>
-				<signal name="changed" handler="on_cb_books_changed"/>
-			  </widget>
-			  <packing>
-				<property name="expand">False</property>
-				<property name="pack_type">end</property>
-				<property name="position">2</property>
-			  </packing>
-			</child>
-		  </widget>
-		  <packing>
-			<property name="expand">False</property>
-			<property name="fill">False</property>
-			<property name="position">1</property>
-		  </packing>
-		</child>
-		<child>
 		  <widget class="GtkHBox" id="hbox1">
 			<property name="visible">True</property>
 			<child>
@@ -447,12 +419,35 @@
 				<property name="visible">True</property>
 				<property name="orientation">vertical</property>
 				<child>
+				  <widget class="GtkLabel" id="label2">
+					<property name="visible">True</property>
+					<property name="yalign">1</property>
+					<property name="ypad">8</property>
+					<property name="label" translatable="yes">Book:</property>
+				  </widget>
+				  <packing>
+					<property name="expand">False</property>
+					<property name="position">0</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkComboBox" id="cb_books">
+					<property name="width_request">0</property>
+					<property name="visible">True</property>
+					<property name="wrap_width">5</property>
+					<signal name="changed" handler="on_cb_books_changed"/>
+				  </widget>
+				  <packing>
+					<property name="expand">False</property>
+					<property name="fill">False</property>
+					<property name="padding">4</property>
+					<property name="position">1</property>
+				  </packing>
+				</child>
+				<child>
 				  <widget class="GtkVButtonBox" id="vbuttonbox1">
 					<property name="visible">True</property>
 					<property name="orientation">vertical</property>
-					<child>
-					  <placeholder/>
-					</child>
 					<child>
 					  <widget class="GtkButton" id="b_view">
 						<property name="label" translatable="yes">_View-book</property>
@@ -465,7 +460,7 @@
 					  <packing>
 						<property name="expand">False</property>
 						<property name="fill">False</property>
-						<property name="position">1</property>
+						<property name="position">0</property>
 					  </packing>
 					</child>
 					<child>
@@ -480,7 +475,7 @@
 					  <packing>
 						<property name="expand">False</property>
 						<property name="fill">False</property>
-						<property name="position">2</property>
+						<property name="position">1</property>
 					  </packing>
 					</child>
 					<child>
@@ -495,18 +490,16 @@
 					  <packing>
 						<property name="expand">False</property>
 						<property name="fill">False</property>
-						<property name="position">3</property>
+						<property name="position">2</property>
 					  </packing>
 					</child>
 				  </widget>
 				  <packing>
 					<property name="expand">False</property>
 					<property name="fill">False</property>
-					<property name="position">0</property>
+					<property name="padding">15</property>
+					<property name="position">2</property>
 				  </packing>
-				</child>
-				<child>
-				  <placeholder/>
 				</child>
 				<child>
 				  <widget class="GtkVButtonBox" id="vbuttonbox2">
@@ -575,7 +568,7 @@
 					<property name="expand">False</property>
 					<property name="fill">False</property>
 					<property name="pack_type">end</property>
-					<property name="position">2</property>
+					<property name="position">3</property>
 				  </packing>
 				</child>
 			  </widget>
@@ -916,8 +909,7 @@
 			</child>
 		  </widget>
 		  <packing>
-			<property name="pack_type">end</property>
-			<property name="position">3</property>
+			<property name="position">1</property>
 		  </packing>
 		</child>
 		<child>
@@ -927,8 +919,7 @@
 		  </widget>
 		  <packing>
 			<property name="expand">False</property>
-			<property name="pack_type">end</property>
-			<property name="position">3</property>
+			<property name="position">2</property>
 		  </packing>
 		</child>
 	  </widget>
