@@ -99,16 +99,16 @@ class ConfigGUI (object) :
 			"on_menu_undo_activate"                 : self.m_undo,
 			"on_menu_redo_activate"                 : self.m_redo,
 			"on_menu_edit_activate"                 : self.m_edit,
-			"on_menu_search_activate"               : self.m_search,
+			"on_menu_find_activate"                 : self.m_find,
 		}
 		self.wTree.signal_autoconnect(dic)
 
 		# put some widgets into self object
 		self.notebook1 = self.wTree.get_widget('notebook1')
-		self.d_search = self.wTree.get_widget('d_search')
+		self.d_find = self.wTree.get_widget('d_find')
 		self.menu_undo = self.wTree.get_widget('menu_undo')
 		self.menu_redo = self.wTree.get_widget('menu_redo')
-		self.menu_search = self.wTree.get_widget('menu_search')
+		self.menu_find = self.wTree.get_widget('menu_find')
 
 		# replace TextView with SourceView
 		self.language_manager = gtksourceview2.LanguageManager()
@@ -122,8 +122,8 @@ class ConfigGUI (object) :
 			setattr(self,tv,sv)
 			sv.show_all()
 
-		# initialize search dialog
-		self.search_dialog = SearchDialog(self.wTree, self.d_search,self.notebook1, self.wTree.get_widget('te_search'))
+		# initialize find dialog
+		self.find_dialog = FindDialog(self.wTree, self.d_find,self.notebook1, self.wTree.get_widget('te_find'))
 
 		self.b_view = self.wTree.get_widget('b_view')
 		self.b_check = self.wTree.get_widget('b_check')
@@ -275,8 +275,8 @@ class ConfigGUI (object) :
 		self.write_files()
 		gtk.main_quit()
 
-	def m_search (self, widget) :
-		self.search_dialog.open()
+	def m_find (self, widget) :
+		self.find_dialog.open()
 
 	def m_undo (self, widget) :
 		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
@@ -299,11 +299,11 @@ class ConfigGUI (object) :
 		if b:
 			self.menu_undo.set_sensitive(b.can_undo())
 			self.menu_redo.set_sensitive(b.can_redo())
-			self.menu_search.set_sensitive(True)
+			self.menu_find.set_sensitive(True)
 		else:
 			self.menu_undo.set_sensitive(False)
 			self.menu_redo.set_sensitive(False)
-			self.menu_search.set_sensitive(False)
+			self.menu_find.set_sensitive(False)
 
 	def m_help (self, widget) :
 		self.execute('ptxplus', 'help')
@@ -485,36 +485,36 @@ class ConfigGUI (object) :
 		elif isinstance(entry, gtk.TextView) :
 			entry.get_buffer().paste_clipboard(self.clipboard, None, entry.get_editable())
 
-class SearchDialog (object) :
-	def __init__ (self, wTree, d_search, notebook, te_search):
+class FindDialog (object) :
+	def __init__ (self, wTree, d_find, notebook, te_find):
 		wTree.signal_autoconnect(self)
 
-		self.d_search = d_search
+		self.d_find = d_find
 		self.notebook = notebook
-		self.te_search = te_search
+		self.te_find = te_find
 
 	def open (self):
-		self.d_search.set_keep_above(True)
-		self.d_search.show()
+		self.d_find.set_keep_above(True)
+		self.d_find.show()
 
-	def on_b_search_close_clicked(self,widget):
-		self.d_search.hide()
+	def on_b_find_close_clicked(self,widget):
+		self.d_find.hide()
 
-	def on_b_search_previous_clicked(self,widget):
-		self.search('previous')
+	def on_b_find_previous_clicked(self,widget):
+		self.find('previous')
 
-	def on_b_search_next_clicked(self,widget):
-		self.search('next')
+	def on_b_find_next_clicked(self,widget):
+		self.find('next')
 
-	def search (self, direction) :
+	def find (self, direction) :
 		(v,b) = get_gtksourceview_from_notebook(self.notebook)
-		st = self.te_search.get_text()
+		st = self.te_find.get_text()
 		if st and v:
 			if direction == 'previous':
-				m = b.get_mark('last_search_s')
+				m = b.get_mark('last_find_s')
 				iter_search = gtksourceview2.iter_backward_search
 			else:
-				m = b.get_mark('last_search_e')
+				m = b.get_mark('last_find_e')
 				iter_search = gtksourceview2.iter_forward_search
 			if m:
 				i = b.get_iter_at_mark(m)
@@ -530,8 +530,8 @@ class SearchDialog (object) :
 				else:
 					if (s and e):
 						b.select_range(s,e)
-						m = b.create_mark('last_search_s',s)
-						m = b.create_mark('last_search_e',e)
+						m = b.create_mark('last_find_s',s)
+						m = b.create_mark('last_find_e',e)
 						v.scroll_to_mark(m,0.2)
 
 
