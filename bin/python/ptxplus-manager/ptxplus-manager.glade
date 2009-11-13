@@ -209,6 +209,36 @@
 			  </widget>
 			</child>
 			<child>
+			  <widget class="GtkMenuItem" id="menu_view">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">_View</property>
+				<property name="use_underline">True</property>
+				<child>
+				  <widget class="GtkMenu" id="menu1">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_previous_tab">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">_Previous Tab</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_previous_tab_activate"/>
+						<accelerator key="Left" signal="activate" modifiers="GDK_MOD1_MASK"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_next_tab">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">_Next Tab</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_next_tab_activate"/>
+						<accelerator key="Right" signal="activate" modifiers="GDK_MOD1_MASK"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
 			  <widget class="GtkMenuItem" id="menu_preproces">
 				<property name="visible">True</property>
 				<property name="label" translatable="yes">Preprocess</property>

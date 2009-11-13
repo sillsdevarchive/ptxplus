@@ -101,6 +101,8 @@ class ConfigGUI (object) :
 			"on_menu_edit_activate"                 : self.m_edit,
 			"on_menu_find_activate"                 : self.m_find,
 			"on_notebook1_switch_page"              : self.nb_switch_page,
+			"on_menu_next_tab_activate"             : self.m_next_tab,
+			"on_menu_previous_tab_activate"         : self.m_previous_tab,
 		}
 		self.wTree.signal_autoconnect(dic)
 
@@ -289,6 +291,12 @@ class ConfigGUI (object) :
 			self.menu_redo.set_sensitive(False)
 			self.menu_find.set_sensitive(False)
 			self.menu_find_next.set_sensitive(False)
+
+	def m_next_tab (self, widget):
+		self.notebook1.next_page()
+
+	def m_previous_tab (self, widget):
+		self.notebook1.prev_page()
 
 	def m_find (self, widget) :
 		self.find_dialog.open()
