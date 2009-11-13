@@ -80,8 +80,17 @@
 % true, uncomment to turn off
 %\JustifyParsfalse
 
+% Do not eject the page at the end of a book to save space.
+% Default behaviour is to eject after every book. Uncomment
+% this to prevent it from ejecting.
+%\endbooknoejecttrue
+
 % CropMarkstrue - Need crop marks?
 \CropMarkstrue
+
+% Add a Draft watermark to each page. To use, uncomment and
+% and be sure the file name is valid.
+%\def\PageBorder{DraftWatermark-60.pdf}
 
 % MarginUnit - Basic unit for margins; changing this will
 % alter them all
