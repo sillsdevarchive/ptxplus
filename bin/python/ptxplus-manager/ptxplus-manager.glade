@@ -234,6 +234,20 @@
 						<accelerator key="Right" signal="activate" modifiers="GDK_MOD1_MASK"/>
 					  </widget>
 					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem5">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkCheckMenuItem" id="checkmenu_wrap">
+						<property name="visible">True</property>
+						<property name="sensitive">False</property>
+						<property name="label" translatable="yes">_Word Wrap (this tab)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_checkmenu_wrap_activate" after="yes"/>
+					  </widget>
+					</child>
 				  </widget>
 				</child>
 			  </widget>

@@ -103,6 +103,7 @@ class ConfigGUI (object) :
 			"on_notebook1_switch_page"              : self.nb_switch_page,
 			"on_menu_next_tab_activate"             : self.m_next_tab,
 			"on_menu_previous_tab_activate"         : self.m_previous_tab,
+			"on_checkmenu_wrap_activate"            : self.m_checkmenu_wrap,
 		}
 		self.wTree.signal_autoconnect(dic)
 
@@ -113,6 +114,7 @@ class ConfigGUI (object) :
 		self.menu_redo = self.wTree.get_widget('menu_redo')
 		self.menu_find = self.wTree.get_widget('menu_find')
 		self.menu_find_next = self.wTree.get_widget('menu_find_next')
+		self.checkmenu_wrap = self.wTree.get_widget('checkmenu_wrap')
 
 		# replace TextView with SourceView
 		self.language_manager = gtksourceview2.LanguageManager()
@@ -279,6 +281,15 @@ class ConfigGUI (object) :
 		self.write_files()
 		gtk.main_quit()
 
+	def m_checkmenu_wrap (self, widget):
+		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
+		if v:
+			if self.checkmenu_wrap.get_active():
+				v.set_wrap_mode(gtk.WRAP_WORD)
+			else:
+				v.set_wrap_mode(gtk.WRAP_NONE)
+
+
 	def nb_switch_page (self,widget,dummy,pagenum) :
 		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
 		if b:
@@ -286,11 +297,15 @@ class ConfigGUI (object) :
 			self.menu_redo.set_sensitive(b.can_redo())
 			self.menu_find.set_sensitive(True)
 			self.menu_find_next.set_sensitive(True)
+			self.checkmenu_wrap.set_sensitive(True)
+			self.checkmenu_wrap.set_active(v.get_wrap_mode() == gtk.WRAP_WORD)
 		else:
 			self.menu_undo.set_sensitive(False)
 			self.menu_redo.set_sensitive(False)
 			self.menu_find.set_sensitive(False)
 			self.menu_find_next.set_sensitive(False)
+			self.checkmenu_wrap.set_sensitive(False)
+			self.checkmenu_wrap.set_active(False)
 
 	def m_next_tab (self, widget):
 		self.notebook1.next_page()
