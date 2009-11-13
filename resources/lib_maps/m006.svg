@@ -10,8 +10,8 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
-   width="673.17096"
-   height="1099.2285"
+   width="110"
+   height="175"
    viewBox="0 0 326 542"
    id="svg2"
    xml:space="preserve"
@@ -23,8 +23,8 @@
    id="metadata90"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
-   inkscape:window-height="726"
-   inkscape:window-width="645"
+   inkscape:window-height="875"
+   inkscape:window-width="1440"
    inkscape:pageshadow="2"
    inkscape:pageopacity="0.0"
    guidetolerance="10.0"
@@ -35,9 +35,9 @@
    pagecolor="#ffffff"
    id="base"
    showgrid="false"
-   inkscape:zoom="1.2646927"
-   inkscape:cx="185.24586"
-   inkscape:cy="972.82359"
+   inkscape:zoom="14.308365"
+   inkscape:cx="36.106908"
+   inkscape:cy="157.3198"
    inkscape:window-x="1440"
    inkscape:window-y="0"
    inkscape:current-layer="svg2" /><defs
@@ -52,10 +52,10 @@
 <image
    id="BackgroundImage"
    xlink:href="m006-bkgrnd-cl.png"
-   x="11"
-   y="18.700001"
-   width="304"
-   height="505" /><rect
+   x="-7.1823716"
+   y="0.95054281"
+   width="339.49893"
+   height="540.28247" /><rect
    width="324.27994"
    height="529.52026"
    x="0.71141964"
@@ -122,11 +122,13 @@
    id="Scale_K_Number_A"
    style="font-size:6px;font-family:Arial">0</text>
 
+
 <text
    x="61.314003"
    y="114.86607"
    id="Scale_K_Number_B"
    style="font-size:6px;font-family:Arial">20</text>
+
 
 <text
    x="93.475571"
@@ -134,11 +136,13 @@
    id="Scale_K_Number_C"
    style="font-size:6px;font-family:Arial">40</text>
 
+
 <text
    x="125.7999"
    y="114.86607"
    id="Scale_K_Number_D"
    style="font-size:6px;font-family:Arial">60</text>
+
 
 <text
    x="67.007919"
@@ -146,31 +150,37 @@
    id="Scale_K_DistanceKey"
    style="font-size:6px;font-family:Arial">Kilometers</text>
 
+
 <text
    x="30.514898"
    y="138.54286"
    id="Scale_M_Number_A"
    style="font-size:6px;overflow:visible;font-family:Arial">0</text>
+
 <text
    x="53.972385"
    y="138.54286"
    id="Scale_M_Number_B"
    style="font-size:6px;overflow:visible;font-family:Arial">10</text>
+
 <text
    x="79.230934"
    y="138.54286"
    id="Scale_M_Number_C"
    style="font-size:6px;overflow:visible;font-family:Arial">20</text>
+
 <text
    x="105.63838"
    y="138.54286"
    id="Scale_M_Number_D"
    style="font-size:6px;overflow:visible;font-family:Arial">30</text>
+
 <text
    x="62.624733"
    y="151.23366"
    id="Scale_M_DistanceKey"
    style="font-size:6px;overflow:visible;font-family:Arial">Miles</text>
+
 
 <image
    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH4AAABWCAYAAAAJ3CLTAAAACXBIWXMAAAsSAAALEgHS3X78AAAA BGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAKnSURB VHja7J1RaxNBFEZ3mjFNSKCCIqhP4v//WbUIjTaQkKTJJt7Bb/SymW2qiMzSc+CD7W4mDz337s7N yzYNvEjCP/oM1Mfpb6SGTiiA4Qk/dfKk+Cz6yjJyCYgflPiU1uXYLYCuzCx8bJlYrnUckT8o6QfL o2Vn2eo4F8CZ+CDpSfbccqPMdW6kwoB6OUpwEr6yLJWVzrW560On219J9BvLe+WtZabOR3z94lN3 ry33ljtlIfn73PWx0PHpFv/a8sHy2fJRf+euh3rJ3f5guZXTjQpho0dA48UHJ953fZL+ScdTt9GD Op/vrQQvdC4VwFc59Zv0Uyzs6qNu6zM945P0dxIfEV+1+IPEJ765R/SZt9gzu0e3s58qM8QPQnwj X5PCRBZK4kuzfB7vogvi6/7hJroJ7KpvDI8Xviz0BOrk2Z4Yz14oiEc8IB4QD4gHxAPiAfGAeEA8 IB4QD4gHxAPiAfGAeEA8IB4QD4gHxAPiAfGIB8QD4gHxgHhAPCAeEA+IB8QD4gHxgHhAPCAeEA+I B8QD4gHxgHhAPCAe8fwLEA+IB8QD4gHxgHhAPCAeEA+IB8QD4uH/c+lt0qdCoE7+yFV84guOStv8 fCF9fik9rxGvV3z21Dp/xSKIPRWTFj9atpaNkj+P+LrFZ19bOTyU7gKxZ3FasLYsLQtdm1pGiK9a fCvpC7lbd+SfdfzJLdxbVlp8q+vfLdcSD/WS/O0sD3K3kMu9rv3q+liomK0WftG5dDyzjJkCqufo 7tb3ljv52zrxZxu1oI5OnT233Chz1+2Ir1987vqVbvdLHe+8/FCY60fq7omEj92mjuf7MEa6vE/b uU1e3ukXR7MsNxfAyG3okD4s+a3L2VjXJzN0wvw+LPHNpR9zniMT4cMuAIDf/BBgAF/EveEYkene AAAAAElFTkSuQmCC"
@@ -200,10 +210,12 @@
    style="fill:none;stroke:#000000;stroke-width:1.00010002;stroke-miterlimit:2.41420007" /></g>
 
 <text
-   x="79.993767"
-   y="53.920799"
+   x="114.62685"
+   y="58.68285"
    id="Title_Main"
-   style="font-size:12px;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial">The Holy Land in the Time of Jesus Christ</text>
+   style="font-size:12px;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial"
+   sodipodi:linespacing="150%">The Holy Land in the Time of Jesus Christ</text>
+
 
 
 
@@ -219,11 +231,13 @@
 
 
 
+
 <text
    x="258.091"
    y="97.490471"
    id="City_Damascus"
    style="font-size:8px;font-family:Arial">Damascus</text>
+
 
 
 
@@ -239,11 +253,13 @@
 
 
 
+
 <text
    x="177.43167"
    y="192.46234"
    id="City_Chorazin"
    style="font-size:8px;font-family:Arial">Chorazin</text>
+
 
 
 
@@ -259,11 +275,13 @@
 
 
 
+
 <text
    x="233.12431"
    y="199.19356"
    id="City_Bethsaida"
    style="font-size:8px;font-family:Arial">Bethsaida</text>
+
 
 
 
@@ -279,11 +297,13 @@
 
 
 
+
 <text
    x="176.05745"
    y="222.81558"
    id="City_Magadan"
    style="font-size:8px;font-family:Arial">Magadan</text>
+
 
 
 
@@ -299,11 +319,13 @@
 
 
 
+
 <text
    x="140.1468"
    y="233.02989"
    id="City_Nazareth"
    style="font-size:8px;font-family:Arial">Nazareth</text>
+
 
 
 
@@ -319,11 +341,13 @@
 
 
 
+
 <text
    x="239.7209"
    y="238.36617"
    id="City_Gadara"
    style="font-size:8px;font-family:Arial">Gadara</text>
+
 
 
 
@@ -339,11 +363,13 @@
 
 
 
+
 <text
    x="179.94733"
    y="314.53595"
    id="City_Shechem"
    style="font-size:8px;font-family:Arial">Shechem</text>
+
 
 
 
@@ -359,11 +385,13 @@
 
 
 
+
 <text
    x="102.18636"
    y="335.58206"
    id="City_Joppa"
    style="font-size:8px;font-family:Arial">Joppa</text>
+
 
 
 
@@ -379,11 +407,13 @@
 
 
 
+
 <text
    x="103.10146"
    y="381.43805"
    id="City_Emmaus"
    style="font-size:8px;font-family:Arial">Emmaus</text>
+
 
 
 
@@ -399,11 +429,13 @@
 
 
 
+
 <text
    x="123.26405"
    y="391.09903"
    id="City_Jerusalem"
    style="font-size:8px;font-family:Arial">Jerusalem</text>
+
 
 
 
@@ -419,11 +451,13 @@
 
 
 
+
 <text
    x="177.46806"
    y="397.80917"
    id="City_Bethany"
    style="font-size:8px;font-family:Arial">Bethany</text>
+
 
 
 
@@ -439,11 +473,13 @@
 
 
 
+
 <text
    x="53.217888"
    y="435.45267"
    id="City_Gaza"
    style="font-size:8px;font-family:Arial">Gaza</text>
+
 
 
 
@@ -459,6 +495,7 @@
 
 
 
+
 <text
    x="138.0768"
    y="332.35825"
@@ -469,11 +506,14 @@
 
 
 
+
 <text
    x="222.23106"
    y="208.00192"
    id="Water_SeaOfGalilee"
-   style="font-size:8px;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#333333;font-family:Arial">Sea of Galilee</text>
+   style="font-size:8px;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#333333;font-family:Arial"
+   sodipodi:linespacing="100%">Sea of Galilee</text>
+
 
 
 
@@ -490,12 +530,14 @@
 
 
 
+
 <text
    x="-242.52335"
    y="139.53603"
    transform="matrix(0.2893575,-0.9572211,0.9572211,0.2893575,0,0)"
    id="Sea_MediterraneanSea"
    style="font-size:10px;fill:#333333;font-family:Arial">Mediterranean Sea</text>
+
 
 
 
@@ -512,6 +554,7 @@
 
 
 
+
 <text
    x="133.59775"
    y="299.09796"
@@ -522,11 +565,13 @@
 
 
 
+
 <text
    x="121.85494"
    y="424.04846"
    id="Region_Judea"
    style="font-size:12px;letter-spacing:0.93532079;fill:#333333;font-family:Arial">JUDEA</text>
+
 
 
 
@@ -543,12 +588,14 @@
 
 
 
+
 <text
    x="-65.564911"
    y="329.04419"
    transform="matrix(0.3547979,-0.934943,0.934943,0.3547979,0,0)"
    id="Region_Syria"
    style="font-size:12px;fill:#333333;font-family:Arial">SYRIA</text>
+
 
 
 
@@ -565,6 +612,7 @@
 
 
 
+
 <text
    x="349.98465"
    y="42.618145"
@@ -576,13 +624,14 @@
 
 
 
+
 <rect
-   width="303.04398"
-   height="505.07324"
-   x="11.030883"
-   y="18.060358"
+   width="339.13385"
+   height="540.51373"
+   x="-6.4728951"
+   y="0.77303737"
    id="Map_Border"
-   style="fill:none;stroke:#000000;stroke-width:1.87073505;stroke-miterlimit:2.41420007" />
+   style="fill:none;stroke:#000000;stroke-width:0.67787582;stroke-miterlimit:2.41420007;stroke-dasharray:none" />
 
 <ellipse
    cx="207.83"
@@ -591,7 +640,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse54"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="207.83"
+   sodipodi:cy="384.00201"
+   sodipodi:rx="1.779"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="165.036"
@@ -600,7 +653,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse56"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="165.036"
+   sodipodi:cy="409.52301"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="176.646"
@@ -609,7 +666,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse58"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="176.646"
+   sodipodi:cy="397.08499"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="177.813"
@@ -618,7 +679,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse60"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="177.813"
+   sodipodi:cy="390.56601"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="169.19099"
@@ -627,7 +692,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse62"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="169.19099"
+   sodipodi:cy="395.52399"
+   sodipodi:rx="1.781"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="136.599"
@@ -636,7 +705,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse64"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="136.599"
+   sodipodi:cy="386.129"
+   sodipodi:rx="1.781"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="95.031998"
@@ -645,7 +718,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse66"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="95.031998"
+   sodipodi:cy="336.82901"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="126.853"
@@ -654,7 +731,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse68"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="126.853"
+   sodipodi:cy="349.797"
+   sodipodi:rx="1.781"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="177.757"
@@ -663,7 +744,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse70"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="177.757"
+   sodipodi:cy="314.379"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="172.933"
@@ -672,7 +757,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse72"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="172.933"
+   sodipodi:cy="320.61401"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="181.604"
@@ -681,7 +770,11 @@
    ry="1.285"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse74"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="181.604"
+   sodipodi:cy="327.836"
+   sodipodi:rx="1.295"
+   sodipodi:ry="1.285" />
 
 <ellipse
    cx="115.891"
@@ -690,7 +783,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse76"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="115.891"
+   sodipodi:cy="257.32599"
+   sodipodi:rx="1.781"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="191.364"
@@ -699,7 +796,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse78"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="191.364"
+   sodipodi:cy="237.717"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="178.646"
@@ -708,7 +809,11 @@
    ry="1.964"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse80"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="178.646"
+   sodipodi:cy="228.494"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.964" />
 
 <ellipse
    cx="180.68401"
@@ -717,7 +822,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse82"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="180.68401"
+   sodipodi:cy="205.75999"
+   sodipodi:rx="1.779"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="218.03101"
@@ -726,7 +835,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse84"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="218.03101"
+   sodipodi:cy="203.808"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="221.78999"
@@ -735,7 +848,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse86"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="221.78999"
+   sodipodi:cy="210.76401"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="242.10201"
@@ -744,7 +861,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse88"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="242.10201"
+   sodipodi:cy="233.45399"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="235.57899"
@@ -753,7 +874,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse90"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="235.57899"
+   sodipodi:cy="192.004"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="226.63901"
@@ -762,7 +887,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse92"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="226.63901"
+   sodipodi:cy="192.85699"
+   sodipodi:rx="1.781"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="224.07001"
@@ -771,7 +900,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse94"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="224.07001"
+   sodipodi:cy="184.847"
+   sodipodi:rx="1.781"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="245.35699"
@@ -780,7 +913,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse96"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="245.35699"
+   sodipodi:cy="127.462"
+   sodipodi:rx="1.781"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="164.31"
@@ -789,7 +926,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse98"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="164.31"
+   sodipodi:cy="120.504"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="194.804"
@@ -798,7 +939,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse100"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="194.804"
+   sodipodi:cy="66.902"
+   sodipodi:rx="1.78"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="309.061"
@@ -807,7 +952,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse102"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="309.061"
+   sodipodi:cy="83.447998"
+   sodipodi:rx="1.781"
+   sodipodi:ry="1.768" />
 
 <ellipse
    cx="42.111"
@@ -816,7 +965,11 @@
    ry="1.768"
    transform="matrix(0.9353208,0,0,0.9353208,10.095552,17.125034)"
    id="ellipse104"
-   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" />
+   style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007"
+   sodipodi:cx="42.111"
+   sodipodi:cy="443.125"
+   sodipodi:rx="1.781"
+   sodipodi:ry="1.768" />
 
 <g
    transform="translate(-47.42487,9.8745435)"
