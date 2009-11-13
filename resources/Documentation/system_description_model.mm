@@ -1,6 +1,6 @@
 <map version="0.9.0">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1254733644903" ID="ID_1396387734" MODIFIED="1254734903144" TEXT="Published Work">
+<node CREATED="1254733644903" ID="ID_1396387734" MODIFIED="1258097772180" TEXT="Published Work">
 <richcontent TYPE="NOTE"><html>
   <head>
 
@@ -22,8 +22,7 @@
 	  A task is a description of a process which creates a component of a publishing project.
 	</p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1254734098698" ID="ID_456689523" MODIFIED="1254734107847" TEXT="Depends On">
 <node CREATED="1254734116575" ID="ID_1298723906" MODIFIED="1254734124959" TEXT="Dependency List"/>
 </node>
@@ -38,7 +37,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1254733827774" ID="ID_1297901924" MODIFIED="1254734862866" POSITION="left" TEXT="Objects">
+<node CREATED="1254733827774" ID="ID_1297901924" MODIFIED="1258101104075" POSITION="left" TEXT="Objects">
 <richcontent TYPE="NOTE"><html>
   <head>
 
