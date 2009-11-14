@@ -248,6 +248,15 @@
 						<signal name="activate" handler="on_checkmenu_wrap_activate" after="yes"/>
 					  </widget>
 					</child>
+					<child>
+					  <widget class="GtkCheckMenuItem" id="checkmenu_line_numbers">
+						<property name="visible">True</property>
+						<property name="sensitive">False</property>
+						<property name="label" translatable="yes">Show Line _Numbers (this tab)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_checkmenu_line_numbers_activate"/>
+					  </widget>
+					</child>
 				  </widget>
 				</child>
 			  </widget>
