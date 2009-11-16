@@ -99,16 +99,24 @@ class ConfigGUI (object) :
 			"on_menu_undo_activate"                 : self.m_undo,
 			"on_menu_redo_activate"                 : self.m_redo,
 			"on_menu_edit_activate"                 : self.m_edit,
-			"on_menu_search_activate"               : self.m_search,
+			"on_menu_find_activate"                 : self.m_find,
+			"on_notebook1_switch_page"              : self.nb_switch_page,
+			"on_menu_next_tab_activate"             : self.m_next_tab,
+			"on_menu_previous_tab_activate"         : self.m_previous_tab,
+			"on_checkmenu_wrap_activate"            : self.m_checkmenu_wrap,
+			"on_checkmenu_line_numbers_activate"    : self.m_checkmenu_line_numbers,
 		}
 		self.wTree.signal_autoconnect(dic)
 
 		# put some widgets into self object
 		self.notebook1 = self.wTree.get_widget('notebook1')
-		self.d_search = self.wTree.get_widget('d_search')
+		self.d_find = self.wTree.get_widget('d_find')
 		self.menu_undo = self.wTree.get_widget('menu_undo')
 		self.menu_redo = self.wTree.get_widget('menu_redo')
-		self.menu_search = self.wTree.get_widget('menu_search')
+		self.menu_find = self.wTree.get_widget('menu_find')
+		self.menu_find_next = self.wTree.get_widget('menu_find_next')
+		self.checkmenu_wrap = self.wTree.get_widget('checkmenu_wrap')
+		self.checkmenu_line_numbers = self.wTree.get_widget('checkmenu_line_numbers')
 
 		# replace TextView with SourceView
 		self.language_manager = gtksourceview2.LanguageManager()
@@ -122,8 +130,8 @@ class ConfigGUI (object) :
 			setattr(self,tv,sv)
 			sv.show_all()
 
-		# initialize search dialog
-		self.search_dialog = SearchDialog(self.wTree, self.d_search,self.notebook1, self.wTree.get_widget('te_search'))
+		# initialize find dialog
+		self.find_dialog = FindDialog(self.wTree, self.d_find,self.notebook1, self.wTree.get_widget('te_find'))
 
 		self.b_view = self.wTree.get_widget('b_view')
 		self.b_check = self.wTree.get_widget('b_check')
@@ -275,8 +283,48 @@ class ConfigGUI (object) :
 		self.write_files()
 		gtk.main_quit()
 
-	def m_search (self, widget) :
-		self.search_dialog.open()
+	def m_checkmenu_wrap (self, widget):
+		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
+		if v:
+			if self.checkmenu_wrap.get_active():
+				v.set_wrap_mode(gtk.WRAP_WORD)
+			else:
+				v.set_wrap_mode(gtk.WRAP_NONE)
+
+	def m_checkmenu_line_numbers (self, widget):
+		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
+		if v:
+			v.set_show_line_numbers(self.checkmenu_line_numbers.get_active())
+
+	def nb_switch_page (self,widget,dummy,pagenum) :
+		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
+		if b:
+			self.menu_undo.set_sensitive(b.can_undo())
+			self.menu_redo.set_sensitive(b.can_redo())
+			self.menu_find.set_sensitive(True)
+			self.menu_find_next.set_sensitive(True)
+			self.checkmenu_wrap.set_sensitive(True)
+			self.checkmenu_wrap.set_active(v.get_wrap_mode() == gtk.WRAP_WORD)
+			self.checkmenu_line_numbers.set_sensitive(True)
+			self.checkmenu_line_numbers.set_active(v.get_show_line_numbers())
+		else:
+			self.menu_undo.set_sensitive(False)
+			self.menu_redo.set_sensitive(False)
+			self.menu_find.set_sensitive(False)
+			self.menu_find_next.set_sensitive(False)
+			self.checkmenu_wrap.set_sensitive(False)
+			self.checkmenu_wrap.set_active(False)
+			self.checkmenu_line_numbers.set_sensitive(False)
+			self.checkmenu_line_numbers.set_active(False)
+
+	def m_next_tab (self, widget):
+		self.notebook1.next_page()
+
+	def m_previous_tab (self, widget):
+		self.notebook1.prev_page()
+
+	def m_find (self, widget) :
+		self.find_dialog.open()
 
 	def m_undo (self, widget) :
 		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
@@ -295,15 +343,7 @@ class ConfigGUI (object) :
 			self.menu_redo.set_sensitive(b.can_redo())
 
 	def m_edit (self, widget) :
-		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
-		if b:
-			self.menu_undo.set_sensitive(b.can_undo())
-			self.menu_redo.set_sensitive(b.can_redo())
-			self.menu_search.set_sensitive(True)
-		else:
-			self.menu_undo.set_sensitive(False)
-			self.menu_redo.set_sensitive(False)
-			self.menu_search.set_sensitive(False)
+		self.nb_switch_page(None,None,None)
 
 	def m_help (self, widget) :
 		self.execute('ptxplus', 'help')
@@ -485,54 +525,64 @@ class ConfigGUI (object) :
 		elif isinstance(entry, gtk.TextView) :
 			entry.get_buffer().paste_clipboard(self.clipboard, None, entry.get_editable())
 
-class SearchDialog (object) :
-	def __init__ (self, wTree, d_search, notebook, te_search):
+class FindDialog (object) :
+	def __init__ (self, wTree, d_find, notebook, te_find):
 		wTree.signal_autoconnect(self)
 
-		self.d_search = d_search
+		self.d_find = d_find
 		self.notebook = notebook
-		self.te_search = te_search
+		self.te_find = te_find
 
 	def open (self):
-		self.d_search.set_keep_above(True)
-		self.d_search.show()
-
-	def on_b_search_close_clicked(self,widget):
-		self.d_search.hide()
-
-	def on_b_search_previous_clicked(self,widget):
-		self.search('previous')
-
-	def on_b_search_next_clicked(self,widget):
-		self.search('next')
-
-	def search (self, direction) :
 		(v,b) = get_gtksourceview_from_notebook(self.notebook)
-		st = self.te_search.get_text()
+		if v:
+			self.te_find.set_text('')
+			self.d_find.show()
+			self.te_find.grab_focus()
+
+	def on_b_find_close_clicked(self,widget):
+		self.d_find.hide()
+
+	def on_b_find_previous_clicked(self,widget):
+		self.find('previous')
+
+	def on_b_find_next_clicked(self,widget):
+		self.find('next')
+
+	def on_menu_find_next_activate(self,widget):
+		self.find('next')
+
+	def find (self, direction) :
+		(v,b) = get_gtksourceview_from_notebook(self.notebook)
+		st = self.te_find.get_text()
 		if st and v:
 			if direction == 'previous':
-				m = b.get_mark('last_search_s')
+				m = b.get_insert()
 				iter_search = gtksourceview2.iter_backward_search
+				fallback_iter = b.get_end_iter()
 			else:
-				m = b.get_mark('last_search_e')
+				m = b.get_selection_bound()
 				iter_search = gtksourceview2.iter_forward_search
+				fallback_iter = b.get_start_iter()
 			if m:
 				i = b.get_iter_at_mark(m)
 			else:
-				i = b.get_start_iter()
+				i = fallback_iter
 
 			if i:
 				s = e = None
 				try:
 					s,e = iter_search(i,st,gtksourceview2.SEARCH_TEXT_ONLY|gtksourceview2.SEARCH_CASE_INSENSITIVE,None)
 				except TypeError:
-					pass
-				else:
-					if (s and e):
-						b.select_range(s,e)
-						m = b.create_mark('last_search_s',s)
-						m = b.create_mark('last_search_e',e)
-						v.scroll_to_mark(m,0.2)
+					# could not find, so try again from the top (or bottom) to wrap around
+					try:
+						s,e = iter_search(fallback_iter,st,gtksourceview2.SEARCH_TEXT_ONLY|gtksourceview2.SEARCH_CASE_INSENSITIVE,None)
+					except TypeError:
+						# could not find again, so give up
+						pass
+				if (s and e):
+					b.select_range(s,e)
+					v.scroll_to_iter(s,0.2)
 
 
 

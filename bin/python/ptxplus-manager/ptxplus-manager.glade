@@ -160,12 +160,21 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_search">
+					  <widget class="GtkImageMenuItem" id="menu_find">
+						<property name="label">gtk-find</property>
 						<property name="visible">True</property>
-						<property name="sensitive">False</property>
-						<property name="label" translatable="yes">Search...</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_search_activate"/>
+						<property name="use_stock">True</property>
+						<signal name="activate" handler="on_menu_find_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_find_next">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">Find Next</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_find_next_activate"/>
+						<accelerator key="g" signal="activate" modifiers="GDK_CONTROL_MASK"/>
 					  </widget>
 					</child>
 					<child>
@@ -181,6 +190,7 @@
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
 						<signal name="activate" handler="on_menu_undo_activate"/>
+						<accelerator key="z" signal="activate" modifiers="GDK_CONTROL_MASK"/>
 					  </widget>
 					</child>
 					<child>
@@ -191,6 +201,60 @@
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
 						<signal name="activate" handler="on_menu_redo_activate"/>
+						<accelerator key="z" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_view">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">_View</property>
+				<property name="use_underline">True</property>
+				<child>
+				  <widget class="GtkMenu" id="menu1">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_previous_tab">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">_Previous Tab</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_previous_tab_activate"/>
+						<accelerator key="Left" signal="activate" modifiers="GDK_MOD1_MASK"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_next_tab">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">_Next Tab</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_next_tab_activate"/>
+						<accelerator key="Right" signal="activate" modifiers="GDK_MOD1_MASK"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem5">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkCheckMenuItem" id="checkmenu_wrap">
+						<property name="visible">True</property>
+						<property name="sensitive">False</property>
+						<property name="label" translatable="yes">_Word Wrap (this tab)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_checkmenu_wrap_activate" after="yes"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkCheckMenuItem" id="checkmenu_line_numbers">
+						<property name="visible">True</property>
+						<property name="sensitive">False</property>
+						<property name="label" translatable="yes">Show Line _Numbers (this tab)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_checkmenu_line_numbers_activate"/>
 					  </widget>
 					</child>
 				  </widget>
@@ -308,6 +372,7 @@
 						<property name="tooltip" translatable="yes">Create a test PDF file of the current book</property>
 						<property name="label" translatable="yes">View (Current)</property>
 						<signal name="activate" handler="on_b_view_clicked"/>
+						<accelerator key="v" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
 					  </widget>
 					</child>
 					<child>
@@ -596,6 +661,7 @@
 			  <widget class="GtkNotebook" id="notebook1">
 				<property name="visible">True</property>
 				<property name="can_focus">True</property>
+				<signal name="switch_page" handler="on_notebook1_switch_page" after="yes"/>
 				<child>
 				  <widget class="GtkScrolledWindow" id="sc_session">
 					<property name="visible">True</property>
@@ -1218,9 +1284,12 @@
 	  </widget>
 	</child>
   </widget>
-  <widget class="GtkDialog" id="d_search">
+  <widget class="GtkDialog" id="d_find">
 	<property name="border_width">5</property>
+	<property name="title" translatable="yes">Find</property>
+	<property name="resizable">False</property>
 	<property name="type_hint">normal</property>
+	<property name="transient_for">w_main</property>
 	<property name="has_separator">False</property>
 	<child internal-child="vbox">
 	  <widget class="GtkVBox" id="dialog-vbox3">
@@ -1228,24 +1297,26 @@
 		<property name="orientation">vertical</property>
 		<property name="spacing">2</property>
 		<child>
-		  <widget class="GtkVBox" id="vbox1">
+		  <widget class="GtkHBox" id="dialog-hbox1">
 			<property name="visible">True</property>
-			<property name="orientation">vertical</property>
 			<child>
 			  <widget class="GtkLabel" id="label1">
 				<property name="visible">True</property>
-				<property name="xalign">0</property>
-				<property name="label" translatable="yes">Search:</property>
+				<property name="xpad">4</property>
+				<property name="label" translatable="yes">Find:</property>
 			  </widget>
 			  <packing>
+				<property name="expand">False</property>
+				<property name="fill">False</property>
 				<property name="position">0</property>
 			  </packing>
 			</child>
 			<child>
-			  <widget class="GtkEntry" id="te_search">
+			  <widget class="GtkEntry" id="te_find">
 				<property name="visible">True</property>
 				<property name="can_focus">True</property>
 				<property name="invisible_char">&#x2022;</property>
+				<signal name="activate" handler="on_b_find_next_clicked"/>
 			  </widget>
 			  <packing>
 				<property name="position">1</property>
@@ -1261,13 +1332,13 @@
 			<property name="visible">True</property>
 			<property name="layout_style">spread</property>
 			<child>
-			  <widget class="GtkButton" id="b_search_previous">
+			  <widget class="GtkButton" id="b_find_previous">
 				<property name="label">gtk-media-previous</property>
 				<property name="visible">True</property>
 				<property name="can_focus">True</property>
 				<property name="receives_default">True</property>
 				<property name="use_stock">True</property>
-				<signal name="clicked" handler="on_b_search_previous_clicked"/>
+				<signal name="clicked" handler="on_b_find_previous_clicked"/>
 			  </widget>
 			  <packing>
 				<property name="expand">False</property>
@@ -1276,13 +1347,14 @@
 			  </packing>
 			</child>
 			<child>
-			  <widget class="GtkButton" id="b_search_next">
+			  <widget class="GtkButton" id="b_find_next">
 				<property name="label">gtk-media-next</property>
 				<property name="visible">True</property>
 				<property name="can_focus">True</property>
 				<property name="receives_default">True</property>
 				<property name="use_stock">True</property>
-				<signal name="clicked" handler="on_b_search_next_clicked"/>
+				<signal name="clicked" handler="on_b_find_next_clicked"/>
+				<accelerator key="g" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
 			  </widget>
 			  <packing>
 				<property name="expand">False</property>
@@ -1291,13 +1363,13 @@
 			  </packing>
 			</child>
 			<child>
-			  <widget class="GtkButton" id="b_search_close">
+			  <widget class="GtkButton" id="b_find_close">
 				<property name="label">gtk-close</property>
 				<property name="visible">True</property>
 				<property name="can_focus">True</property>
 				<property name="receives_default">True</property>
 				<property name="use_stock">True</property>
-				<signal name="clicked" handler="on_b_search_close_clicked"/>
+				<signal name="clicked" handler="on_b_find_close_clicked"/>
 			  </widget>
 			  <packing>
 				<property name="expand">False</property>
