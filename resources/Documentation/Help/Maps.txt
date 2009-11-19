@@ -1,3 +1,8 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Thu, 19 Nov 2009 11:24:35 +0700
+
 ====== Managing Maps ======
 The finer points of how to work with maps in ptxplus. Maps are really a part of the peripheral matter but since they require a significant amount of work they get their own page.
 
@@ -19,17 +24,35 @@ Producing a map, or set of maps, is a three step process.
 === Font Issues ===
 <write>
 
+=== Color Management ===
+Some printers require CMYK color space for the color material you give them. As the maps are generated with Inkscape, RGB is the default and there is no real CMYK output at this point.
+
+The way to fulfill this requirement is to take the PDF that you generated with the system and import it in the Gimp. The Gimp does a good job of importing PDF files. Use about 600 dpi as your desired output resolution. Once the import is done, use the Separate plugin to generate a CMYK file in the TIFF format. Then use the Separate plugin to save the layered CMYK file into a merged CYMK file that is suitable for separations. Save all your files in the Maps folder.
+
+Next, in the terminal located in the Maps folder, use the "convert" utility, which is part of [[ImageMagick]] package, to embed your new CMYK [[.tif]] file into a PDF file. The command line would be something  like this:
+
+	convert m006-CMYK.tif m006-CMYK.pdf
+
+Next, still in the terminal, link the new PDF files to the process directory with something like:
+
+	cd ../Process
+	ln -sf [[../Maps/m006-CMYK.pdf]] .
+
+Now open up the MAPS.USFM file in your Text folder and edit the necessary lines so that it will now point to the new CMYK PDF files you have made. This will generate a new version of the MAPS.USFM.pdf file. Be sure to copy it into the deliverables folder and rename it to indicate that it contains content in the CMYK color space.
+
 === Map Templates ===
 Currently there are 11 map templates to choose from. Here is a brief description of each one:
 
-	m001 = Modern world
-	m002 = Ancient world
-	m003 = Exodus from Egypt
-	m004 = Conquest of Canaan
-	m005 = Kingdoms of Israel and Judah
-	m006 = Holy Land in the Time of Jesus Christ
-	m007 = Jerusalem in New Testament Times
-	m008 = Paul's Missionary Journeys
-	m009 = The Temple in the time of Jesus Christ
-	m010 = Seven Churches of Asia
-	m011 = The Temple Buildings
+'''
+m001 = Modern world
+m002 = Ancient world
+m003 = Exodus from Egypt
+m004 = Conquest of Canaan
+m005 = Kingdoms of Israel and Judah
+m006 = Holy Land in the Time of Jesus Christ
+m007 = Jerusalem in New Testament Times
+m008 = Paul's Missionary Journeys
+m009 = The Temple in the time of Jesus Christ
+m010 = Seven Churches of Asia
+m011 = The Temple Buildings
+'''
