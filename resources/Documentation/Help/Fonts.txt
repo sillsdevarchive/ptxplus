@@ -1,0 +1,21 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Tue, 24 Nov 2009 08:30:52 +0700
+Modification-Date: Tue, 24 Nov 2009 08:41:34 +0700
+
+====== Fonts ======
+
+Tips on working with fonts in ptxplus and in general.
+
+==== FRET ====
+The FRET utility will help you to see just what is in your project font. You can install it by typing in your terminal:
+
+	sudo apt-get install libfont-ttf-scripts-perl
+
+Or, you can find the libfont-ttf-scripts-perl package in Synaptic if you have the SIL package repository installed. If not you will need to add it to your repository list. However, I'm not going to tell you how to do that because that should have happened during the install process. Check the installme file located in the root of your ptxplus system folder.
+
+Once FRET is installed, in a terminal, go to the Font folder of your project and then to the exact font folder where you have the [[.ttf]] font file and type this command with your font name:
+
+	fret -r fontName.ttf
+
+This will generate a report of the font in a PDF file in the same directory. You can then go into that file and find out what Unicode characters are actually in the file. Apart from a utility like this, it can be hard to know exactly what is there because sometimes the system will use fall-back characters to fill in for missing ones in the font. That, as I'm sure you know, is not good on a publishing project.

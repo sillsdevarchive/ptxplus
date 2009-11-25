@@ -1,3 +1,10 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Tue, 24 Nov 2009 08:30:39 +0700
+
 ====== FAQ ======
 
 This is where we will collect FAQs
+
+Where are they?
