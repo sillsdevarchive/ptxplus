@@ -12,7 +12,12 @@
 \catcode`\[=12
 
 % SIL GenBkBas - found in the _resources/fonts folder
-\def\regular{"[../Fonts/GenBkBas/GenBkBasR.ttf]"}
-\def\bold{"[../Fonts/GenBkBas/GenBkBasB.ttf]"}
-\def\italic{"[../Fonts/GenBkBas/GenBkBasI.ttf]"}
-\def\bolditalic{"[../Fonts/GenBkBas/GenBkBasBI.ttf]"}
+% Note that by default Graphite rendering is turned on.
+% It may not be needed in cases where simple Latin
+% text is being rendered. However, for complex scripts
+% Roman or otherwise, it should be turned on if the
+% font supports it.
+\def\regular{"[../Fonts/GenBkBas/GenBkBasR.ttf]/GR"}
+\def\bold{"[../Fonts/GenBkBas/GenBkBasB.ttf]/GR"}
+\def\italic{"[../Fonts/GenBkBas/GenBkBasI.ttf]/GR"}
+\def\bolditalic{"[../Fonts/GenBkBas/GenBkBasBI.ttf]/GR"}

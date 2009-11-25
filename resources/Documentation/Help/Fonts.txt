@@ -1,11 +1,18 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Tue, 24 Nov 2009 08:30:52 +0700
-Modification-Date: Tue, 24 Nov 2009 08:41:34 +0700
+Modification-Date: Wed, 25 Nov 2009 10:37:13 +0700
 
 ====== Fonts ======
 
 Tips on working with fonts in ptxplus and in general.
+
+Graphite Rendering
+To add Graphite rendering to your text you need to add a command to each of the fonts you are using. Something like this:
+
+	\def\regular{"[../Fonts/CharisSIL/CharisSILR.ttf]/GR"}
+
+The default rendering is ICU. However, a non-confirmed bug has been observed where some strings of text (complex Roman script) will cause [[XeTeX]] to crash. Adding graphite rendering seemed to fix this.
 
 ==== FRET ====
 The FRET utility will help you to see just what is in your project font. You can install it by typing in your terminal:
