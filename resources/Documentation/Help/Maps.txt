@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Mon, 23 Nov 2009 08:40:26 +0700
+Modification-Date: Fri, 27 Nov 2009 09:54:56 +0700
 
 ====== Managing Maps ======
 The finer points of how to work with maps in ptxplus. Maps are really a part of the peripheral matter but since they require a significant amount of work they get their own page.
@@ -33,7 +33,7 @@ The Separate plugin is included in an Ubuntu package called gimp-plugin-registry
 
 	sudo apt-get install gimp-plugin-registry icc-profiles
 
-Use the Separate plugin to create a new image of the imported map. It will have four layers in it, one for each color. Next, use the Separate plugin to save the layered CMYK file into a merged CYMK TIFF file that is suitable for printing separations. You cannot use any other format than TIFF. Save all your files in the Maps folder.
+Use the Separate plugin to create a new image of the imported map. It will have four layers in it, one for each color. Next, use the Separate plugin to save the layered CMYK file into a merged CYMK TIFF file that is suitable for printing separations. **Note, do not use the File -> Save As dialog**, only the Separate plugin save dialog found in the same area you find the separate command. Also note, you cannot use any other format than TIFF. Save all your files in the Maps folder.
 
 Next, in the terminal located in the Maps folder, use the "convert" utility, which is part of [[ImageMagick]] package, to embed your new CMYK TIFF file into a PDF file. The command line would be something  like this:
 
