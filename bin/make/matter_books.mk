@@ -163,7 +163,7 @@ $(PATH_TEXTS)/$(1).usfm.adj :
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).usfm
 
 # Remove the PDF for this book only
-pdf-remove-$(1) :
+pdf-remove-$(1) ::
 	rm -f $(PATH_PROCESS)/$(1).pdf
 
 # Remove the adjustment file for this book only

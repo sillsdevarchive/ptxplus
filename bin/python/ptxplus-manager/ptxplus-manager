@@ -193,7 +193,7 @@ class ConfigGUI (object) :
 				if item == bkid :
 					index = len(self.cs_books)
 				if item :
-					# We want to weed out the BIBLE group which is handled elsewhere
+					# We want to weed-out the BIBLE group which is handled elsewhere
 					if self.getGroupName(group) != 'BIBLE' :
 						 self.cs_books.append([item])
 
@@ -202,7 +202,7 @@ class ConfigGUI (object) :
 		for group in self.process_groups :
 			items = self.ceditor.config['Process']['Binding'][group]
 			if len(items) > 0 :
-				# Again, we want to weed out the BIBLE group
+				# Again, we want to weed-out the BIBLE group
 				if self.getGroupName(group) != 'BIBLE' :
 					self.cs_books.append([self.getGroupName(group).lower()])
 
@@ -499,6 +499,10 @@ class ConfigGUI (object) :
 		self.execute("ptxplus", "pdf-remove")
 
 	def m_remove_pdf_current (self, widget) :
+		# We need to look for a couple special cases
+		if self.bkid == 'nt' :
+		   self.bkid = 'MATTER_BOOKS_NT'
+
 		self.execute("ptxplus", "pdf-remove-" + self.bkid)
 
 	def m_reset (self, widget) :
