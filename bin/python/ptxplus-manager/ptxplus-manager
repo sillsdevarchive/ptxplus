@@ -59,8 +59,6 @@ class ConfigGUI (object) :
 		self.wTree = gtk.glade.XML(self.gladefile)
 		self.wTree.get_widget('w_main').set_icon_from_file(self.iconfile)
 
-
-
 		dic = {
 			"on_w_main_destroy"                     : self.quit,
 			"on_b_view_clicked"                     : self.b_view_clicked,
@@ -184,11 +182,38 @@ class ConfigGUI (object) :
 		self.cb_books.set_model(self.cs_books)
 		index = 0
 
-		for a in ('MATTER_FRONT', 'MATTER_BOOKS_OT', 'MATTER_BOOKS_NT', 'MATTER_BACK', 'MAP_IDS') :
-			for b in (self.ceditor.config['Process']['Binding'].get(a).split()) :
-				if b == bkid : index = len(self.cs_books)
-				if b : self.cs_books.append([b])
+		# Here we grab the binding group names for building our object and group list
+		# What we really need is to do this with a dictionary so we can eliminate
+		# duplicate names like with blank page inserts. This just take up extra space
+		# in the list. We only need them listed once. How would we do that
+		self.process_groups = self.ceditor.config['Process']['Binding']
+
+		for group in self.process_groups :
+			for item in self.process_groups.get(group).split() :
+				if item == bkid :
+					index = len(self.cs_books)
+				if item :
+					# We want to weed out the BIBLE group which is handled elsewhere
+					if self.getGroupName(group) != 'BIBLE' :
+						 self.cs_books.append([item])
+
+		# We want the groups last so we process them again here, this time
+		# grabbing only the group name tacking that on to the end of the list
+		for group in self.process_groups :
+			items = self.ceditor.config['Process']['Binding'][group]
+			if len(items) > 0 :
+				# Again, we want to weed out the BIBLE group
+				if self.getGroupName(group) != 'BIBLE' :
+					self.cs_books.append([self.getGroupName(group).lower()])
+
 		self.cb_books.set_active(index)
+
+
+	def getGroupName (self, group) :
+		# The last word in the group is (should be) the name
+		nList = group.split('_')
+		return nList[-1]
+
 
 	def close_dir (self) :
 		self.styles = None
