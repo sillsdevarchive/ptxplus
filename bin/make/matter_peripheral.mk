@@ -22,6 +22,8 @@
 # 20081010 - djd - Removed the -$(NAME_SOURCE_ORIGINAL) porton of
 #		the names to avoid problems in projects where
 #		multiple scripts are used.
+# 20091201 - djd - Changed some process commands to be more in line
+#		with others
 
 ##############################################################
 #		Variables for peripheral matter
@@ -149,7 +151,7 @@ $(eval $(call matter_binding,MATTER_FRONT))
 $(eval $(call matter_binding,MATTER_BACK))
 
 # Produce all the outer cover material in one PDF file
-cover : $(MATTER_COVER_PDF)
+view-cover : $(MATTER_COVER_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
@@ -157,12 +159,12 @@ cover : $(MATTER_COVER_PDF)
 # use: ptxplus view-<file_name>
 
 # Produce just the font matter (bound)
-front : $(MATTER_FRONT_PDF)
+view-front : $(MATTER_FRONT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
 # Produce just the back matter (bound)
-back : $(MATTER_BACK_PDF)
+view-back : $(MATTER_BACK_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 

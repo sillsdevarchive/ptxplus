@@ -28,6 +28,8 @@
 #		a proceedure conflict between maps and books.
 # 20090923 - djd - Added the link-maps command to make created linked
 #		files easier.
+# 20091201 - djd - Changed references for MAP_IDS to MATTER_MAPS to
+#		reflect changes in the rest of the system
 
 
 ##############################################################
@@ -131,17 +133,17 @@ $(PATH_MAPS)/styles.csv :
 # above. These will be called below when we process the
 # individual items.
 
-$(foreach v,$(MAP_IDS), $(eval $(call map_rules,$(v))))
+$(foreach v,$(MATTER_MAPS), $(eval $(call map_rules,$(v))))
 
 ###############################################################
 
-ifneq ($(MAP_IDS),)
+ifneq ($(MATTER_MAPS),)
 MATTER_MAPS_PDF		= $(PATH_MAPS)/MATTER_MAPS.pdf
 MATTER_MAPS_TEX		= $(PATH_MAPS)/MATTER_MAPS.tex
 
 # Create a TeX control file for building our book of maps
-$(MATTER_MAPS_TEX) : $(foreach v,$(MAP_IDS), $(PATH_MAPS)/$(v).pdf)
-	@perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\includepdf{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MAP_IDS),$(v).pdf) > $@
+$(MATTER_MAPS_TEX) : $(foreach v,$(MATTER_MAPS), $(PATH_MAPS)/$(v).pdf)
+	@perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\includepdf{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_MAPS),$(v).pdf) > $@
 
 
 $(MATTER_MAPS_PDF) : $(MATTER_MAPS_TEX)
@@ -154,4 +156,4 @@ endif
 view-maps : $(MATTER_MAPS_PDF)
 	@$(VIEWPDF) $< &
 
-link-maps : $(foreach v,$(MAP_IDS), link-$(v))
+link-maps : $(foreach v,$(MATTER_MAPS), link-$(v))

@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Wed, 23 Sep 2009 13:41:03 +0700
+Modification-Date: Tue, 01 Dec 2009 14:23:57 +0700
 
 ====== Terminal Commands ======
 
@@ -26,6 +26,11 @@ version
 See [[Scripture]] for more information.
 <BID>			Background processes that book only
 view-<BID>		Processes that book, views the resulting PDF
+view-front			Process front matter components, view resulting PDF
+view-back			Process back matter components, view resulting PDF
+view-ot			Process OT components, view resulting PDF
+view-nt			Process NT components, view resulting PDF
+view-maps			Process map components, view resulting PDF
 edit-<BID>.usfm.adj	Brings up the adjustment file for that book
 issue				Opens the project Issues wiki page
 log				Opens the project Log wiki page

@@ -51,6 +51,7 @@
 #		protecting text when the system is locked down
 # 20090914 - djd - Changed the preprocess-book command to just
 #		"preprocess" to avoid conflict with maps.
+# 20091202 - djd - Changed the output names for NT and OT processing
 
 
 ##############################################################
@@ -163,7 +164,7 @@ $(PATH_TEXTS)/$(1).usfm.adj :
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).usfm
 
 # Remove the PDF for this book only
-pdf-remove-$(1) ::
+pdf-remove-$(1) :
 	rm -f $(PATH_PROCESS)/$(1).pdf
 
 # Remove the adjustment file for this book only
@@ -192,8 +193,8 @@ endef
 ifneq ($(MATTER_BOOKS_OT),)
 # These build a rule (in memory) for this set of books
 $(foreach v,$(MATTER_BOOKS_OT), $(eval $(call book_rules,$(v))))
-MATTER_BOOKS_OT_PDF=$(PATH_PROCESS)/MATTER_BOOKS_OT.pdf
-MATTER_BOOKS_OT_TEX=$(PATH_PROCESS)/MATTER_BOOKS_OT.tex
+MATTER_BOOKS_OT_PDF=$(PATH_PROCESS)/ot.pdf
+MATTER_BOOKS_OT_TEX=$(PATH_PROCESS)/ot.tex
 
 # Rule for building the TeX file for an entire publication
 # like NT, OT or Bible. This is done with a little Perl code
@@ -212,15 +213,18 @@ $(MATTER_BOOKS_OT_PDF) : \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
 	$(MATTER_BOOKS_OT_TEX)
-	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex MATTER_BOOKS_OT.tex
+	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex ot.tex
 endif
+
+pdf-remove-ot :
+	rm -f $(MATTER_BOOKS_OT_PDF)
 
 # Moving along we will do the NT if there are any books listed in the project.conf file
 ifneq ($(MATTER_BOOKS_NT),)
 # These build a rule (in memory) for this set of books
 $(foreach v,$(MATTER_BOOKS_NT), $(eval $(call book_rules,$(v))))
-MATTER_BOOKS_NT_PDF=$(PATH_PROCESS)/MATTER_BOOKS_NT.pdf
-MATTER_BOOKS_NT_TEX=$(PATH_PROCESS)/MATTER_BOOKS_NT.tex
+MATTER_BOOKS_NT_PDF=$(PATH_PROCESS)/nt.pdf
+MATTER_BOOKS_NT_TEX=$(PATH_PROCESS)/nt.tex
 
 # Just like with the OT, this builds the .tex control file for all NT books
 $(MATTER_BOOKS_NT_TEX) : project.conf
@@ -236,8 +240,11 @@ $(MATTER_BOOKS_NT_PDF) : \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
 	$(MATTER_BOOKS_NT_TEX)
-	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex MATTER_BOOKS_NT.tex
+	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex nt.tex
 endif
+
+pdf-remove-nt :
+	rm -f $(MATTER_BOOKS_NT_PDF)
 
 # Do a book section and veiw the resulting output
 view-ot : $(MATTER_BOOKS_OT_PDF)

@@ -12,6 +12,8 @@
 # 20081229 - djd - Added menu items, Preprocess, Process and Bind
 # 20090914 - djd - Removed "-book" from preprocess-book to try to resolve
 #        a makefile conflict with the maps routine.
+# 20091201 - djd - Removed Preprocess menu item, added groups to the component list
+#        and a few other modifications for processing groups
 
 ########################################################################################
 
@@ -181,18 +183,19 @@ class ConfigGUI (object) :
 		self.cs_books = gtk.ListStore(str)
 		self.cb_books.set_model(self.cs_books)
 		index = 0
+		component_list = set()
 
-		# Here we grab the binding group names for building our object and group list
-		# What we really need is to do this with a dictionary so we can eliminate
-		# duplicate names like with blank page inserts. This just take up extra space
-		# in the list. We only need them listed once. How would we do that
+		# Here we grab the binding group names for building our component and group list
+		# To avoid duplicates in the list we use a set() to keep track of the components
+		# If one already exists it will not add it to the list.
 		self.process_groups = self.ceditor.config['Process']['Binding']
 
 		for group in self.process_groups :
 			for item in self.process_groups.get(group).split() :
 				if item == bkid :
 					index = len(self.cs_books)
-				if item :
+				if item and not item in component_list :
+					component_list.add(item)
 					# We want to weed-out the BIBLE group which is handled elsewhere
 					if self.getGroupName(group) != 'BIBLE' :
 						 self.cs_books.append([item])
@@ -202,9 +205,11 @@ class ConfigGUI (object) :
 		for group in self.process_groups :
 			items = self.ceditor.config['Process']['Binding'][group]
 			if len(items) > 0 :
+				gName = self.getGroupName(group)
 				# Again, we want to weed-out the BIBLE group
-				if self.getGroupName(group) != 'BIBLE' :
-					self.cs_books.append([self.getGroupName(group).lower()])
+				if gName != 'BIBLE' and gName not in component_list :
+					component_list.add(gName)
+					self.cs_books.append([gName.lower()])
 
 		self.cb_books.set_active(index)
 
@@ -499,10 +504,6 @@ class ConfigGUI (object) :
 		self.execute("ptxplus", "pdf-remove")
 
 	def m_remove_pdf_current (self, widget) :
-		# We need to look for a couple special cases
-		if self.bkid == 'nt' :
-		   self.bkid = 'MATTER_BOOKS_NT'
-
 		self.execute("ptxplus", "pdf-remove-" + self.bkid)
 
 	def m_reset (self, widget) :

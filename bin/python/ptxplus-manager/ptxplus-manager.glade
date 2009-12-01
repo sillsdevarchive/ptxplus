@@ -5,7 +5,6 @@
   <widget class="GtkWindow" id="w_main">
 	<property name="visible">True</property>
 	<property name="title" translatable="yes">ptxplus-manager</property>
-	<signal name="destroy" handler="on_w_main_destroy"/>
 	<child>
 	  <widget class="GtkVBox" id="vbox1">
 		<property name="visible">True</property>
@@ -388,18 +387,6 @@
 			  </widget>
 			</child>
 			<child>
-			  <widget class="GtkMenuItem" id="menu_peripheral">
-				<property name="visible">True</property>
-				<property name="label" translatable="yes">Peripheral</property>
-				<property name="use_underline">True</property>
-				<child>
-				  <widget class="GtkMenu" id="peripheral">
-					<property name="visible">True</property>
-				  </widget>
-				</child>
-			  </widget>
-			</child>
-			<child>
 			  <widget class="GtkMenuItem" id="menu_bin">
 				<property name="visible">True</property>
 				<property name="label" translatable="yes">Bind</property>
@@ -502,7 +489,7 @@
 					<property name="visible">True</property>
 					<property name="yalign">1</property>
 					<property name="ypad">8</property>
-					<property name="label" translatable="yes">Object:</property>
+					<property name="label" translatable="yes">Component:</property>
 				  </widget>
 				  <packing>
 					<property name="expand">False</property>
