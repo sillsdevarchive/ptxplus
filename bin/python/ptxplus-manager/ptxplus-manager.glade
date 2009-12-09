@@ -203,6 +203,27 @@
 						<accelerator key="z" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
 					  </widget>
 					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem6">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_getclip">
+						<property name="label" translatable="yes">Get Encoding</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Grab character encoding codes from memory</property>
+						<property name="use_stock">False</property>
+						<signal name="activate" handler="on_menu_getclip_activate"/>
+						<accelerator key="e" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+						 <child internal-child="image">
+						  <widget class="GtkImage" id="image6">
+							<property name="visible">True</property>
+							<property name="stock">gtk-missing-image</property>
+						  </widget>
+						</child>
+					  </widget>
+					</child>
 				  </widget>
 				</child>
 			  </widget>

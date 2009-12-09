@@ -14,6 +14,7 @@
 #        a makefile conflict with the maps routine.
 # 20091201 - djd - Removed Preprocess menu item, added groups to the component list
 #        and a few other modifications for processing groups
+# 20091209 - djd - Added code for get-clip command
 
 ########################################################################################
 
@@ -100,6 +101,7 @@ class ConfigGUI (object) :
 			"on_menu_redo_activate"                 : self.m_redo,
 			"on_menu_edit_activate"                 : self.m_edit,
 			"on_menu_find_activate"                 : self.m_find,
+			"on_menu_getclip_activate"              : self.m_getclip,
 			"on_notebook1_switch_page"              : self.nb_switch_page,
 			"on_menu_next_tab_activate"             : self.m_next_tab,
 			"on_menu_previous_tab_activate"         : self.m_previous_tab,
@@ -356,6 +358,9 @@ class ConfigGUI (object) :
 	def m_find (self, widget) :
 		self.find_dialog.open()
 
+	def m_getclip (self, widget) :
+		self.execute('get-clip', '-p')
+
 	def m_undo (self, widget) :
 		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
 		if b:
@@ -377,7 +382,6 @@ class ConfigGUI (object) :
 
 	def m_help (self, widget) :
 		self.execute('ptxplus', 'help')
-
 
 	def m_example (self, widget) :
 		'''This will install the example project to where the user
