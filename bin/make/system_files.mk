@@ -26,6 +26,8 @@
 # 20080926 - djd - Added Wiki information management rules
 # 20081004 - djd - Added project conf files editing rule
 # 20090110 - djd - Added booklet binding
+# 20091210 - djd - Reorganized and changed names of component
+#		groups to be more consistant
 
 
 ##############################################################
@@ -84,23 +86,12 @@ dev-update :
 ###############################################################
 
 # This is the main rule for the entire Bible
-$(BIBLE_FINAL) : $(MATTER_FRONT_PDF) $(MATTER_BOOKS_OT_PDF) $(MATTER_BOOKS_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF)
-	pdftk $(MATTER_FRONT_PDF) $(MATTER_BOOKS_OT_PDF) $(MATTER_BOOKS_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF) cat output $@
-
-# Remove the main bind PDF file
-pdf-remove :
-	rm -f $(BIBLE_FINAL)
+$(MATTER_BOOK_PDF) : $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF)
+	pdftk $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF) cat output $@
 
 # This is the caller for the main rule, let's look at the results
-bind-all : $(BIBLE_FINAL)
+view-book : $(MATTER_BOOK_PDF)
 	@- $(CLOSEPDF)
-	@ $(VIEWPDF) $< &
-
-# This is the main binding rule plus an additional call to a booklet
-# making tool.
-bind-booklet : $(BIBLE_FINAL)
-	@- $(CLOSEPDF)
-	$(MAKE_BOOKLET) $<
 	@ $(VIEWPDF) $< &
 
 
@@ -108,9 +99,9 @@ bind-booklet : $(BIBLE_FINAL)
 #		Clean up files
 ###############################################################
 
-# Clean up the delivery folder if needed
-bind-clean :
-	rm -f $(BIBLE_FINAL)
+# Remove the book PDF file
+book-clean :
+	rm -f $(MATTER_BOOK_PDF)
 
 # Clean out the log files
 log-clean :
@@ -172,7 +163,7 @@ endif
 # Just in case, here is a clean_all rule. However, be very
 # when using it. It will wipe out all your previous work. This
 # is mainly for using when you want to start over on a project.
-reset : bind-clean \
+reset : book-clean \
 	texts-clean \
 	adjfile-clean-all \
 	picfile-clean-all \

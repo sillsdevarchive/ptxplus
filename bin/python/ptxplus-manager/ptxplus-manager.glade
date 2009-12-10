@@ -216,7 +216,7 @@
 						<property name="use_stock">False</property>
 						<signal name="activate" handler="on_menu_getclip_activate"/>
 						<accelerator key="e" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-						 <child internal-child="image">
+						<child internal-child="image">
 						  <widget class="GtkImage" id="image6">
 							<property name="visible">True</property>
 							<property name="stock">gtk-missing-image</property>
@@ -310,7 +310,7 @@
 					<child>
 					  <widget class="GtkMenuItem" id="menu_make_piclist">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Create an picture list file for this book</property>
+						<property name="tooltip" translatable="yes">Create an picture list file for this component</property>
 						<property name="label" translatable="yes">Add Pictures</property>
 						<signal name="activate" handler="on_menu_make_pic_activate"/>
 					  </widget>
@@ -318,7 +318,7 @@
 					<child>
 					  <widget class="GtkMenuItem" id="menu_remove_piclist_current">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove the illustrations list file for this book</property>
+						<property name="tooltip" translatable="yes">Remove the illustrations list file for this component</property>
 						<property name="label" translatable="yes">Remove Pictures</property>
 						<signal name="activate" handler="on_menu_remove_pic_current_activate"/>
 					  </widget>
@@ -379,17 +379,9 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_make_booklet_current">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Create a PDF booklet of the current book only</property>
-						<property name="label" translatable="yes">Make Booklet (Current)</property>
-						<signal name="activate" handler="on_menu_bind_booklet_current_activate"/>
-					  </widget>
-					</child>
-					<child>
 					  <widget class="GtkMenuItem" id="menu_view_current">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Create a test PDF file of the current book</property>
+						<property name="tooltip" translatable="yes">Create a test PDF file of the current component</property>
 						<property name="label" translatable="yes">View (Current)</property>
 						<signal name="activate" handler="on_b_view_clicked"/>
 						<accelerator key="v" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
@@ -398,46 +390,9 @@
 					<child>
 					  <widget class="GtkMenuItem" id="menu_remove_pdf_current">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove the PDF file for this book</property>
+						<property name="tooltip" translatable="yes">Remove the PDF file for this component</property>
 						<property name="label" translatable="yes">Remove PDF (Current)</property>
 						<signal name="activate" handler="on_menu_remove_pdf_current_activate"/>
-					  </widget>
-					</child>
-				  </widget>
-				</child>
-			  </widget>
-			</child>
-			<child>
-			  <widget class="GtkMenuItem" id="menu_bin">
-				<property name="visible">True</property>
-				<property name="label" translatable="yes">Bind</property>
-				<child>
-				  <widget class="GtkMenu" id="bind">
-					<property name="visible">True</property>
-					<child>
-					  <widget class="GtkMenuItem" id="menu_bind_all">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Bind to PDF all project components</property>
-						<property name="label" translatable="yes">Bind all</property>
-						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_bind_activate"/>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkMenuItem" id="menu_bind_booklet">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Bind to PDF all project components then create a booklet from the PDF</property>
-						<property name="label" translatable="yes">Bind Booklet</property>
-						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_bind_booklet_activate"/>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkMenuItem" id="menu_remove_pdf">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove the main bind PDF file</property>
-						<property name="label" translatable="yes">Remove PDF</property>
-						<signal name="activate" handler="on_menu_remove_pdf_activate"/>
 					  </widget>
 					</child>
 				  </widget>
@@ -518,11 +473,11 @@
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkComboBox" id="cb_books">
+				  <widget class="GtkComboBox" id="cb_components">
 					<property name="width_request">1</property>
 					<property name="visible">True</property>
 					<property name="wrap_width">5</property>
-					<signal name="changed" handler="on_cb_books_changed"/>
+					<signal name="changed" handler="on_cb_components_changed"/>
 				  </widget>
 				  <packing>
 					<property name="expand">False</property>
@@ -537,7 +492,7 @@
 					<property name="orientation">vertical</property>
 					<child>
 					  <widget class="GtkButton" id="b_view">
-						<property name="label" translatable="yes">_View-book</property>
+						<property name="label" translatable="yes">_View-component</property>
 						<property name="visible">True</property>
 						<property name="can_focus">True</property>
 						<property name="receives_default">True</property>
@@ -552,7 +507,7 @@
 					</child>
 					<child>
 					  <widget class="GtkButton" id="b_check">
-						<property name="label" translatable="yes">_Check-book</property>
+						<property name="label" translatable="yes">_Check-component</property>
 						<property name="visible">True</property>
 						<property name="can_focus">True</property>
 						<property name="receives_default">True</property>

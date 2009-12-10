@@ -70,7 +70,7 @@ class ConfigGUI (object) :
 			"on_b_note_clicked"                     : self.b_note_clicked,
 			"on_b_issue_clicked"                    : self.b_issue_clicked,
 			"on_b_backup_clicked"                   : self.b_backup_clicked,
-			"on_cb_books_changed"                   : self.cb_books_changed,
+			"on_cb_components_changed"                   : self.cb_components_changed,
 			"on_menu_new_activate"                  : self.m_new,
 			"on_gtk-open_activate"                  : self.m_open,
 			"on_menu_import_activate"               : self.m_import,
@@ -148,10 +148,10 @@ class ConfigGUI (object) :
 		self.vte.set_size(80, 19)
 		self.vte.show_all()
 
-		self.cb_books = self.wTree.get_widget('cb_books')
+		self.cb_components = self.wTree.get_widget('cb_components')
 		cell = gtk.CellRendererText()
-		self.cb_books.pack_start(cell, True)
-		self.cb_books.add_attribute(cell, 'text', 0)
+		self.cb_components.pack_start(cell, True)
+		self.cb_components.add_attribute(cell, 'text', 0)
 		self.ceditor = None
 		self.cimport = ImportDialog(self.wTree, 'd_import', self)
 		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
@@ -181,9 +181,9 @@ class ConfigGUI (object) :
 			title = os.getcwd()
 
 		self.wTree.get_widget('w_main').set_title(title)
-		self.cb_books = self.wTree.get_widget('cb_books')
-		self.cs_books = gtk.ListStore(str)
-		self.cb_books.set_model(self.cs_books)
+		self.cb_components = self.wTree.get_widget('cb_components')
+		self.cs_components = gtk.ListStore(str)
+		self.cb_components.set_model(self.cs_components)
 		index = 0
 		component_list = set()
 
@@ -195,12 +195,13 @@ class ConfigGUI (object) :
 		for group in self.process_groups :
 			for item in self.process_groups.get(group).split() :
 				if item == bkid :
-					index = len(self.cs_books)
+					index = len(self.cs_components)
 				if item and not item in component_list :
 					component_list.add(item)
-					# We want to weed-out the BIBLE group which is handled elsewhere
-					if self.getGroupName(group) != 'BIBLE' :
-						 self.cs_books.append([item])
+					# We want to weed-out the BOOK group which is handled elsewhere
+					if self.getGroupName(group) != 'BOOK' :
+						 self.cs_components.append([item])
+
 
 		# We want the groups last so we process them again here, this time
 		# grabbing only the group name tacking that on to the end of the list
@@ -208,12 +209,10 @@ class ConfigGUI (object) :
 			items = self.ceditor.config['Process']['Binding'][group]
 			if len(items) > 0 :
 				gName = self.getGroupName(group)
-				# Again, we want to weed-out the BIBLE group
-				if gName != 'BIBLE' and gName not in component_list :
-					component_list.add(gName)
-					self.cs_books.append([gName.lower()])
+				self.cs_components.append([gName.lower()])
 
-		self.cb_books.set_active(index)
+
+		self.cb_components.set_active(index)
 
 
 	def getGroupName (self, group) :
@@ -442,9 +441,9 @@ class ConfigGUI (object) :
 	def b_backup_clicked (self, widget) :
 		self.execute("ptxplus", "backup")
 
-	def cb_books_changed (self, widget) :
+	def cb_components_changed (self, widget) :
 		index = widget.get_active()
-		bkid = self.cs_books[index][0]
+		bkid = self.cs_components[index][0]
 		self.set_book(bkid)
 
 	def m_new (self, widget) :

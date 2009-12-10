@@ -52,6 +52,8 @@
 # 20090914 - djd - Changed the preprocess-book command to just
 #		"preprocess" to avoid conflict with maps.
 # 20091202 - djd - Changed the output names for NT and OT processing
+# 20091210 - djd - Changed some more names to make things more
+#		consistant for component processing
 
 
 ##############################################################
@@ -59,10 +61,10 @@
 ##############################################################
 
 # Do a blank setting on the following
-MATTER_BOOKS_OT_PDF=
-MATTER_BOOKS_OT_TEX=
-MATTER_BOOKS_NT_PDF=
-MATTER_BOOKS_NT_TEX=
+MATTER_OT_PDF=
+MATTER_OT_TEX=
+MATTER_NT_PDF=
+MATTER_NT_TEX=
 
 
 ##############################################################
@@ -163,23 +165,18 @@ $(PATH_TEXTS)/$(1).usfm.piclist : $(PATH_TEXTS)/$(1).usfm
 $(PATH_TEXTS)/$(1).usfm.adj :
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).usfm
 
-# Remove the PDF for this book only
+# Remove the PDF for this component only
 pdf-remove-$(1) :
 	rm -f $(PATH_PROCESS)/$(1).pdf
 
-# Remove the adjustment file for this book only
+# Remove the adjustment file for this component only
 adjfile-remove-$(1) :
 	rm -f $(PATH_TEXTS)/$(1).usfm.adj
 
-# Remove the picture placement file for this book only
+# Remove the picture placement file for this component only
 picfile-remove-$(1) :
 	rm -f $(PATH_TEXTS)/$(1).usfm.piclist
 
-# Bind this book into a booklet
-bind-booklet-$(1) : $(PATH_PROCESS)/$(1).pdf
-	@- $(CLOSEPDF)
-	$(MAKE_BOOKLET) $$<
-	@ $(VIEWPDF) $$< &
 
 endef
 
@@ -190,68 +187,68 @@ endef
 # Build a TeX control file that will process the books in a publication
 
 # Start with the OT but we don't want to do anything if there are no books to process
-ifneq ($(MATTER_BOOKS_OT),)
+ifneq ($(MATTER_OT),)
 # These build a rule (in memory) for this set of books
-$(foreach v,$(MATTER_BOOKS_OT), $(eval $(call book_rules,$(v))))
-MATTER_BOOKS_OT_PDF=$(PATH_PROCESS)/ot.pdf
-MATTER_BOOKS_OT_TEX=$(PATH_PROCESS)/ot.tex
+$(foreach v,$(MATTER_OT), $(eval $(call book_rules,$(v))))
+MATTER_OT_PDF=$(PATH_PROCESS)/ot.pdf
+MATTER_OT_TEX=$(PATH_PROCESS)/ot.tex
 
 # Rule for building the TeX file for an entire publication
 # like NT, OT or Bible. This is done with a little Perl code
 # here. We may want to change this but as long as it works...
-$(MATTER_BOOKS_OT_TEX) : project.conf
+$(MATTER_OT_TEX) : project.conf
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file ot 'Null' '$@'
 
 
-#	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_BOOKS_OT),$(PATH_TEXTS)/$(v).usfm) > $@
+#	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_OT),$(PATH_TEXTS)/$(v).usfm) > $@
 
 # Render the entire OT
-$(MATTER_BOOKS_OT_PDF) : \
-	$(foreach v,$(filter $(OT_BOOKS),$(MATTER_BOOKS_OT)), \
+$(MATTER_OT_PDF) : \
+	$(foreach v,$(filter $(OT_BOOKS),$(MATTER_OT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
-	$(foreach v,$(filter-out $(OT_BOOKS),$(MATTER_BOOKS_OT)), \
+	$(foreach v,$(filter-out $(OT_BOOKS),$(MATTER_OT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
-	$(MATTER_BOOKS_OT_TEX)
+	$(MATTER_OT_TEX)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex ot.tex
 endif
 
 pdf-remove-ot :
-	rm -f $(MATTER_BOOKS_OT_PDF)
+	rm -f $(MATTER_OT_PDF)
 
 # Moving along we will do the NT if there are any books listed in the project.conf file
-ifneq ($(MATTER_BOOKS_NT),)
+ifneq ($(MATTER_NT),)
 # These build a rule (in memory) for this set of books
-$(foreach v,$(MATTER_BOOKS_NT), $(eval $(call book_rules,$(v))))
-MATTER_BOOKS_NT_PDF=$(PATH_PROCESS)/nt.pdf
-MATTER_BOOKS_NT_TEX=$(PATH_PROCESS)/nt.tex
+$(foreach v,$(MATTER_NT), $(eval $(call book_rules,$(v))))
+MATTER_NT_PDF=$(PATH_PROCESS)/nt.pdf
+MATTER_NT_TEX=$(PATH_PROCESS)/nt.tex
 
 # Just like with the OT, this builds the .tex control file for all NT books
-$(MATTER_BOOKS_NT_TEX) : project.conf
+$(MATTER_NT_TEX) : project.conf
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file nt 'Null' '$@'
 
-#	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_BOOKS_NT),$(PATH_TEXTS)/$(v).usfm) > $@
+#	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_NT),$(PATH_TEXTS)/$(v).usfm) > $@
 
 # Render the entire NT
-$(MATTER_BOOKS_NT_PDF) : \
-	$(foreach v,$(filter $(NT_BOOKS),$(MATTER_BOOKS_NT)), \
+$(MATTER_NT_PDF) : \
+	$(foreach v,$(filter $(NT_BOOKS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
-	$(foreach v,$(filter-out $(NT_BOOKS),$(MATTER_BOOKS_NT)), \
+	$(foreach v,$(filter-out $(NT_BOOKS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
-	$(MATTER_BOOKS_NT_TEX)
+	$(MATTER_NT_TEX)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex nt.tex
 endif
 
 pdf-remove-nt :
-	rm -f $(MATTER_BOOKS_NT_PDF)
+	rm -f $(MATTER_NT_PDF)
 
 # Do a book section and veiw the resulting output
-view-ot : $(MATTER_BOOKS_OT_PDF)
+view-ot : $(MATTER_OT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
-view-nt : $(MATTER_BOOKS_NT_PDF)
+view-nt : $(MATTER_NT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
@@ -260,9 +257,9 @@ view-nt : $(MATTER_BOOKS_NT_PDF)
 # needed like make-master-wordlist.
 preprocess-checks:
 	@echo Preprocess checking OT books:
-	@$(foreach v,$(MATTER_BOOKS_OT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@$(foreach v,$(MATTER_OT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 	@echo Preprocess checking NT books:
-	@$(foreach v,$(MATTER_BOOKS_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@$(foreach v,$(MATTER_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
 # Manually create a master wordlist based on existing book
 # wordlists in the Reports file. Best to run this after
