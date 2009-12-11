@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Fri, 11 Dec 2009 16:18:39 +0700
+Modification-Date: Fri, 11 Dec 2009 16:26:12 +0700
+
+====== Styles ======
+
+The style file (.sty) functions within the [[TeX]] publishing system. Here are some tips to working with the style file.
+
+===== Note Order =====
+The order in which the notes at the bottom of the page appear is dependent on how [[TeX]] reads in the styles in the style file. For example if the "Marker f" style is defined before the "Marker x" style, footnotes will be output before cross references on the bottom of the page. Change them around and the order will be reversed.

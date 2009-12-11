@@ -1,0 +1,8 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Fri, 11 Dec 2009 16:23:15 +0700
+Modification-Date: Fri, 11 Dec 2009 16:25:49 +0700
+
+====== Home ======
+
+All you ever needed to know about ptxplus and more! This is the central point of information for how to do a publishing project using this system. Here are the information resources available in the system. Press F9 to toggle the help selection list on the left side of the wiki browser.
