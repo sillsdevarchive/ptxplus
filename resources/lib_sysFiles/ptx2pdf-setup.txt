@@ -295,7 +295,13 @@
 %\OmitCallerInNote{f}
 
 % ParagraphedNotes{f|x} – Format the note class as a single
-% paragraph, with larger space between note items.
+% paragraph, with larger space between note items. The command
+% has to be repeated if more than one kind of note is going
+% to be paragraphed. For example:
+%	\ParagraphedNotes{f}
+%	\ParagraphedNotes{x}
+% would allow both footnotes and cross references to be
+% paragraphed.
 %\ParagraphedNotes{f}
 
 % footnoterule - To change or turn off footnote rule
