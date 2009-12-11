@@ -125,7 +125,7 @@ $(if $(1),$(firstword $(1)) $(call uniq,$(filter-out $(firstword $(1)),$(1))),)
 endef
 
 define matter_binding
-$(foreach v,$(call uniq,$($(1))), $(call periph_rules,$(v)))
+
 ifneq ($($(1)),)
 $(1)_PDF = $(PATH_PROCESS)/$(1).pdf
 $(PATH_PROCESS)/$(1).pdf : $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) $(DEPENDENT_FILE_LIST)
@@ -150,6 +150,8 @@ $(eval $(call matter_binding,MATTER_FRONT))
 # Back matter binding rules
 $(eval $(call matter_binding,MATTER_BACK))
 
+$(foreach v,$(call uniq,$(MATTER_COVER) $(MATTER_FRONT) $(MATTER_BACK)),$(eval $(call periph_rules,$(v))))
+
 # Produce all the outer cover material in one PDF file
 view-cover : $(MATTER_COVER_PDF)
 	@- $(CLOSEPDF)
@@ -167,6 +169,24 @@ view-front : $(MATTER_FRONT_PDF)
 view-back : $(MATTER_BACK_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
+
+# Clean up rules for peripheral matter
+
+# Remove the cover matter PDF file
+pdf-remove-cover :
+	rm -f $(MATTER_COVER_PDF)
+
+# Remove the front matter PDF file
+pdf-remove-front :
+	rm -f $(MATTER_FRONT_PDF)
+
+# Remove the back matter PDF file
+pdf-remove-back :
+	rm -f $(MATTER_BACK_PDF)
+
+
+
+
 
 # Make the content for a topical index from CSV data
 make-topic-index :

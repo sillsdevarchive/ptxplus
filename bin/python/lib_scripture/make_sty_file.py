@@ -55,8 +55,8 @@ class MakeStyleFile (object) :
 		# through those and collect all our tags.
 
 		processPath = log_manager._settings['Process']['Paths']['PATH_PROCESS']
-		otBookList = log_manager._settings['Process']['Binding']['MATTER_BOOKS_OT']
-		ntBookList = log_manager._settings['Process']['Binding']['MATTER_BOOKS_NT']
+		otBookList = log_manager._settings['Process']['Binding']['MATTER_OT']
+		ntBookList = log_manager._settings['Process']['Binding']['MATTER_NT']
 
 		for bn in (otBookList, ntBookList) :
 			bookList = bookList + os.getcwd() + "/" + processPath + "/" + bn + ".usfm, "

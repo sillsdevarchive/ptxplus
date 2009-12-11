@@ -64,11 +64,11 @@ class MakeTexControlFile (object) :
 		# Check for nt or ot and write out a ptxfile line for each
 		# book ID found. Otherwise just write out for a single book
 		if bookID.lower() == "ot" :
-			bookID = self._log_manager._settings['Process']['Binding']['MATTER_BOOKS_OT']
+			bookID = self._log_manager._settings['Process']['Binding']['MATTER_OT']
 		elif bookID.lower() == "nt" :
-			bookID = self._log_manager._settings['Process']['Binding']['MATTER_BOOKS_NT']
-		books = bookID.split()
-		for book in books :
+			bookID = self._log_manager._settings['Process']['Binding']['MATTER_NT']
+		componentScripture = bookID.split()
+		for book in componentScripture :
 			thisBook = pathToText + '/' + book.lower() + '.usfm'
 			bookInfo = self.parseThisBook(thisBook)
 			if oneChapOmmitRule == "true" and bookInfo['chapCount'] == 1 :

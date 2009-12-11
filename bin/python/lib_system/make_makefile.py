@@ -71,6 +71,9 @@ class MakeMakefile (object) :
 		editorBibleInfo = ""
 
 		# Add rules from the system that are not in the .conf files
+		# The order of the include is important. We include system_files.mk last
+		# so that all of the other rules are caught and can be expanded in that
+		# make file.
 		basePath = os.environ.get('PTXPLUS_BASE')
 		if self._log_manager._settings['General']['projectEditor'] == 'ptx' :
 			editorBibleInfo = "include " + basePath + "/bin/make/ptx_bible_info.mk\n"
@@ -82,10 +85,10 @@ class MakeMakefile (object) :
 		makefileFinal = "include " + basePath + "/bin/make/common_bible_info.mk\n" + \
 				editorBibleInfo + \
 				"include " + basePath + "/bin/make/periph_info.mk\n" + \
-				"include " + basePath + "/bin/make/system_files.mk\n" + \
 				"include " + basePath + "/bin/make/matter_books.mk\n" + \
 				"include " + basePath + "/bin/make/matter_maps.mk\n" + \
-				"include " + basePath + "/bin/make/matter_peripheral.mk\n"
+				"include " + basePath + "/bin/make/matter_peripheral.mk\n" + \
+				"include " + basePath + "/bin/make/system_files.mk\n"
 
 		# Output to the new makefile file
 		makefileObject.write(makefileHeader + makefileSettings + makefileFinal)

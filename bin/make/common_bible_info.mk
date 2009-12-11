@@ -4,35 +4,37 @@
 
 # History
 # 20080822 - djd - First working version
+# 20091211 - djd - Samantic change from book to component
 
 
 ###################### Start Bible Definitions #########################
 
 # Define OT books (39)
-OT_BOOKS=gen exo lev num deu jos jdg rut 1sa 2sa 1ki 2ki 1ch 2ch ezr neh \
+OT_COMPONENTS=gen exo lev num deu jos jdg rut 1sa 2sa 1ki 2ki 1ch 2ch ezr neh \
 est job psa pro ecc sng isa jer lam ezk dan hos jol amo oba jon mic nam hab \
 zep hag zec mal
 
 # Define NT books (27)
-NT_BOOKS=mat mrk luk jhn act rom 1co 2co gal eph php col 1th 2th 1ti 2ti \
+NT_COMPONENTS=mat mrk luk jhn act rom 1co 2co gal eph php col 1th 2th 1ti 2ti \
 tit phm heb jas 1pe 2pe 1jn 2jn 3jn jud rev
 
 # Define Deuterocanonical/Apocryphal (26)
-AP_BOOKS=tob jdt esg wis sir bar lje s3y sus bel 1ma 2ma 3ma 4ma 1es 2es man \
+AP_COMPONENTS=tob jdt esg wis sir bar lje s3y sus bel 1ma 2ma 3ma 4ma 1es 2es man \
 ps2 oda pss jsa jdb tbs sst dnt blt
 
 
-# Define all Bible books. Note these are used mainly in the BOOKS_TO_PROCESS
+# Define all Bible component groups (books). Note these are used mainly
+# in the COMPONENTS_TO_PROCESS
 # variable in the project.conf file
-BIBLE_BOOKS_ALL=OT_BOOKS NT_BOOKS AP_BOOKS
-BIBLE_BOOKS_CANON=OT_BOOKS NT_BOOKS
+BIBLE_COMPONENTS_ALL=OT_COMPONENTS NT_COMPONENTS AP_COMPONENTS
+BIBLE_COMPONENTS_CANON=OT_COMPONENTS NT_COMPONENTS
 
 
 
 ####################### Some Misc. Info ##########################
 # This is not in use right now but could be some day
 
-# Deuterocanonical/Apocryphal book codes
+# Deuterocanonical/Apocryphal component codes
 # TOB = Tobith
 # JDT = Judith
 # ESG = Esther (Greek)

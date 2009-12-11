@@ -28,7 +28,18 @@
 # 20090110 - djd - Added booklet binding
 # 20091210 - djd - Reorganized and changed names of component
 #		groups to be more consistant
+# 20091211 - djd - Did more adjustments on the rules. Also, had
+#		this file moved to the end of the include chain
+#		because some rules in this file were dependent
+#		on rules that had not been expanded yet.
 
+
+##############################################################
+#		Variables for some of the system matter
+##############################################################
+
+# This is the final output we want so we can name it here
+MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).pdf
 
 ##############################################################
 #               Rules for building and managing system files
@@ -100,7 +111,7 @@ view-book : $(MATTER_BOOK_PDF)
 ###############################################################
 
 # Remove the book PDF file
-book-clean :
+pdf-remove-book :
 	rm -f $(MATTER_BOOK_PDF)
 
 # Clean out the log files

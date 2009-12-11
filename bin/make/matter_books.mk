@@ -78,9 +78,9 @@ MATTER_NT_TEX=
 # ini under the [Preproces] section.
 
 # Define the main macro for what it takes to process an
-# individual book.
+# individual component.
 
-define book_rules
+define component_rules
 
 # This is the basic rule for auto-text-processing. To control processes
 # edit the project.conf file. This will automatically run the four
@@ -95,7 +95,7 @@ define book_rules
 # run any necessary text processes on the system source text as defined in
 # the project.conf file.
 ifeq ($(LOCKED),0)
-$(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
+$(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<' '$$@'
 	$(PY_PROCESS_SCRIPTURE_TEXT) CopyIntoSystem $(1) '$$<' '$$@'
@@ -104,13 +104,13 @@ else
 #	@echo File $(PATH_TEXTS)/$(1).usfm is locked
 endif
 
-# This enables us to do the preprocessing on a single book and view the log file
+# This enables us to do the preprocessing on a single component and view the log file
 # We will not do individual checks here as there can be a good number of them.
 # If we implement that it will be in a different control file to simplify things.
 # If we are checking text that means we are not sure about how good it is. That
 # being the case, we don't want this text in the system yet so the very first
 # thing we do is try to delete any existing copies from the source directory.
-preprocess-$(1) : $(PATH_SOURCE)/$($(1)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
+preprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
@@ -128,7 +128,7 @@ endif
 $(PATH_PROCESS)/$(1).tex :
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file $(1) 'Null' '$$@'
 
-# Process a single book and produce the final PDF. Special dependencies
+# Process a single component and produce the final PDF. Special dependencies
 # are set for the .adj and .piclist files in case they have been altered.
 $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1).usfm \
@@ -184,66 +184,68 @@ endef
 
 ####################### Start Main Process ###################
 
-# Build a TeX control file that will process the books in a publication
+# Build a TeX control file that will process the components
+# in a publication
 
-# Start with the OT but we don't want to do anything if there are no books to process
+# Start with the OT but we don't want to do anything if there
+# are no components to process
 ifneq ($(MATTER_OT),)
-# These build a rule (in memory) for this set of books
-$(foreach v,$(MATTER_OT), $(eval $(call book_rules,$(v))))
-MATTER_OT_PDF=$(PATH_PROCESS)/ot.pdf
-MATTER_OT_TEX=$(PATH_PROCESS)/ot.tex
+# These build a rule (in memory) for this set of components
+$(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
+MATTER_OT_PDF=$(PATH_PROCESS)/OT.pdf
+MATTER_OT_TEX=$(PATH_PROCESS)/OT.tex
 
 # Rule for building the TeX file for an entire publication
 # like NT, OT or Bible. This is done with a little Perl code
 # here. We may want to change this but as long as it works...
 $(MATTER_OT_TEX) : project.conf
-	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file ot 'Null' '$@'
+	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file OT 'Null' '$@'
 
 
 #	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_OT),$(PATH_TEXTS)/$(v).usfm) > $@
 
 # Render the entire OT
 $(MATTER_OT_PDF) : \
-	$(foreach v,$(filter $(OT_BOOKS),$(MATTER_OT)), \
+	$(foreach v,$(filter $(OT_COMPONENTS),$(MATTER_OT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
-	$(foreach v,$(filter-out $(OT_BOOKS),$(MATTER_OT)), \
+	$(foreach v,$(filter-out $(OT_COMPONENTS),$(MATTER_OT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
 	$(MATTER_OT_TEX)
-	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex ot.tex
+	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex OT.tex
 endif
 
 pdf-remove-ot :
 	rm -f $(MATTER_OT_PDF)
 
-# Moving along we will do the NT if there are any books listed in the project.conf file
+# Moving along we will do the NT if there are any components listed in the project.conf file
 ifneq ($(MATTER_NT),)
-# These build a rule (in memory) for this set of books
-$(foreach v,$(MATTER_NT), $(eval $(call book_rules,$(v))))
-MATTER_NT_PDF=$(PATH_PROCESS)/nt.pdf
-MATTER_NT_TEX=$(PATH_PROCESS)/nt.tex
+# These build a rule (in memory) for this set of components
+$(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
+MATTER_NT_PDF=$(PATH_PROCESS)/NT.pdf
+MATTER_NT_TEX=$(PATH_PROCESS)/NT.tex
 
-# Just like with the OT, this builds the .tex control file for all NT books
+# Just like with the OT, this builds the .tex control file for all NT components
 $(MATTER_NT_TEX) : project.conf
-	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file nt 'Null' '$@'
+	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file NT 'Null' '$@'
 
 #	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_NT),$(PATH_TEXTS)/$(v).usfm) > $@
 
 # Render the entire NT
 $(MATTER_NT_PDF) : \
-	$(foreach v,$(filter $(NT_BOOKS),$(MATTER_NT)), \
+	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
-	$(foreach v,$(filter-out $(NT_BOOKS),$(MATTER_NT)), \
+	$(foreach v,$(filter-out $(NT_COMPONENTS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
 	$(MATTER_NT_TEX)
-	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex nt.tex
+	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex NT.tex
 endif
 
 pdf-remove-nt :
 	rm -f $(MATTER_NT_PDF)
 
-# Do a book section and veiw the resulting output
+# Do a component section and veiw the resulting output
 view-ot : $(MATTER_OT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
@@ -253,15 +255,15 @@ view-nt : $(MATTER_NT_PDF)
 	@ $(VIEWPDF) $< &
 
 
-# Preproces all the books in a project then run whatever global processes
+# Preproces all the components in a project then run whatever global processes
 # needed like make-master-wordlist.
 preprocess-checks:
-	@echo Preprocess checking OT books:
-	@$(foreach v,$(MATTER_OT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
-	@echo Preprocess checking NT books:
-	@$(foreach v,$(MATTER_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_book)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@echo Preprocess checking OT components:
+	@$(foreach v,$(MATTER_OT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@echo Preprocess checking NT components:
+	@$(foreach v,$(MATTER_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
-# Manually create a master wordlist based on existing book
+# Manually create a master wordlist based on existing component
 # wordlists in the Reports file. Best to run this after
 # a preprocess-all command
 make-master-wordlist : preprocess-checks

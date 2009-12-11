@@ -65,12 +65,12 @@ bkid = ""
 if len(sys.argv) >= 2 :
 
 	# The second argv is normally the file name or book ID
-	books = tools.getSettingsObject()['Process']['Binding']['MATTER_BOOKS_OT']
-	books = books + tools.getSettingsObject()['Process']['Binding']['MATTER_BOOKS_NT']
-	books = books.split()
-	# This part only works if we are processing books
-	if len(books) > 0 :
-		for book in books :
+	componentScripture = tools.getSettingsObject()['Process']['Binding']['MATTER_OT']
+	componentScripture = componentScripture + tools.getSettingsObject()['Process']['Binding']['MATTER_NT']
+	componentScripture = componentScripture.split()
+	# This part only works if we are processing Scripture components (books with IDs)
+	if len(componentScripture) > 0 :
+		for book in componentScripture :
 			# We will lc that for consistency
 			if sys.argv[1].lower() == book.lower() :
 				bkid = sys.argv[1].lower()
