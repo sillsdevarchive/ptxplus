@@ -15,6 +15,7 @@
 # 20091201 - djd - Removed Preprocess menu item, added groups to the component list
 #        and a few other modifications for processing groups
 # 20091209 - djd - Added code for get-clip command
+# 20091214 - djd - Added some wordlist and hyphen list making commands
 
 ########################################################################################
 
@@ -70,7 +71,7 @@ class ConfigGUI (object) :
 			"on_b_note_clicked"                     : self.b_note_clicked,
 			"on_b_issue_clicked"                    : self.b_issue_clicked,
 			"on_b_backup_clicked"                   : self.b_backup_clicked,
-			"on_cb_components_changed"                   : self.cb_components_changed,
+			"on_cb_components_changed"              : self.cb_components_changed,
 			"on_menu_new_activate"                  : self.m_new,
 			"on_gtk-open_activate"                  : self.m_open,
 			"on_menu_import_activate"               : self.m_import,
@@ -79,9 +80,11 @@ class ConfigGUI (object) :
 			"on_menu_backup_activate"               : self.m_backup,
 			"on_menu_reload_activate"               : self.m_reload,
 			"on_menu_preprocess_activate"           : self.m_preprocess,
-			"on_menu_bind_activate"                 : self.m_bind,
-			"on_menu_bind_booklet_activate"         : self.m_bind_booklet,
-			"on_menu_bind_booklet_current_activate" : self.m_bind_booklet_current,
+			"on_menu_wordlist_activate"             : self.m_wordlist,
+			"on_menu_hyphenlist_activate"           : self.m_hyphenlist,
+#            "on_menu_bind_activate"                 : self.m_bind,
+#            "on_menu_bind_booklet_activate"         : self.m_bind_booklet,
+#            "on_menu_bind_booklet_current_activate" : self.m_bind_booklet_current,
 			"on_menu_reset_activate"                : self.m_reset,
 			"on_menu_clean_adj_all_activate"        : self.m_clean_adj_all,
 			"on_menu_clean_pic_all_activate"        : self.m_clean_pic_all,
@@ -494,14 +497,20 @@ class ConfigGUI (object) :
 	def m_reload (self, widget) :
 		self.init_dir(self.bkid)
 
-	def m_bind (self, widget) :
-		self.execute("ptxplus", "bind-all")
+#    def m_bind (self, widget) :
+#        self.execute("ptxplus", "bind-all")
 
-	def m_bind_booklet (self, widget) :
-		self.execute("ptxplus", "bind-booklet")
+#    def m_bind_booklet (self, widget) :
+#        self.execute("ptxplus", "bind-booklet")
 
-	def m_bind_booklet_current (self, widget) :
-		self.execute("ptxplus", "bind-booklet-" + self.bkid)
+#    def m_bind_booklet_current (self, widget) :
+#        self.execute("ptxplus", "bind-booklet-" + self.bkid)
+
+	def m_wordlist (self, widget) :
+		self.execute('ptxplus', 'make-master-wordlist')
+
+	def m_hyphenlist (self, widget) :
+		self.execute('ptxplus', 'force-make-hyphen-wordlist')
 
 	def m_remove_pdf (self, widget) :
 		self.execute("ptxplus", "pdf-remove")

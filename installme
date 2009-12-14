@@ -30,9 +30,15 @@ Again, in the terminal, update your package list and update your system with the
 	sudo apt-get update
 	sudo apt-get upgrade
 
-Next, in the terminal, you need to install all the necessary packages to run the ptxplus publishing system. Use this command and answer yes like above:
+Next, in the terminal, you need to install all the necessary packages to run the ptxplus publishing system. There are two categories, required and suggested. Use this command and answer yes like above:
 
-	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk libgtk2-spell-perl teckit mercurial meld tortoisehg tortoisehg-nautilus
+Required:
+
+	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk
+
+Suggested:
+
+	sudo apt-get install libgtk2-spell-perl libteckit-perl teckit mercurial meld tortoisehg tortoisehg-nautilus
 
 As of Ubuntu 9.10 (Karmic) these instructions will install a version of xetex (3.141592-2.2-0.996-patch2) that will handle most things. However, we recommend you install the latest version over the one you installed above. It will come from the packages.sil.org repository. You do not need to do anything special just use this command:
 

@@ -214,9 +214,11 @@ class MakeHyphenWordlist (object) :
 				# then decode to Unicode. That should keep things working
 				f = open(file_path, 'rb')
 
-#				# Do an encoding conversion if necessary
+				# Do an encoding conversion if necessary
 #				if self._encodingChain:
 #					sourceHyphenListObject = self._encodingChain.convert(f.read()).decode('utf-8').split('\n')
+
+				sourceHyphenListObject = f.read().decode('utf-8').split('\n')
 
 				# Push it into a dictionary w/o line endings
 				word_list = [l for l in (line.strip() for line in sourceHyphenListObject) if l]
