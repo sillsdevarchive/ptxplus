@@ -50,7 +50,7 @@ from error_manager import *
 
 # Instantiate classes
 tools			= Tools()
-error_manager	= ErrorManager()
+error_manager		= ErrorManager()
 log_manager		= LogManager()
 
 # We want to see one valid arguments given. However, that
@@ -200,6 +200,19 @@ elif command == "set-user" :
 			tools.setSystemUser(sys.argv[2])
 	except :
 		tools.userMessage('No user name given, try again.')
+
+
+#########################################################################################
+# Trying to set up a command that will link source files to the project source
+# folder from wherever they are located on the system.
+elif command == "link-source" :
+	# Link source files to Source folder
+	try :
+		if os.path.isdir(sys.argv[2]) == True :
+			os.symlink(sys.argv[2], '/home/dennis/Publishing/KYU-KALI/Source')
+	except :
+		tools.userMessage('Source path not valid')
+##########################################################################################
 
 elif command == "example" :
 	# This is a special instance of the import function to facilitate

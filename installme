@@ -116,7 +116,15 @@ This should complete the manual installation of ptxplus. Now you should be able 
 
 Go a head, give it a try.
 
-In a terminal, if you start it from the root of a project folder it should find the project.conf file and automatically load that project. Because a special Nautilus script was installed (above) You can start ptxplus with a right-click from the file browser.
+One system value that should be set is the user name. This is used for making log entires and such. To do this, at the command prompt type:
+
+	ptxplus set-user 'your name'
+
+Then, to check the user name type:
+
+	ptxplus user
+
+In a terminal, to start ptxplus on an existing project, start it from the root of a project folder. It will find the project.conf file and automatically load that project. Also, because a special Nautilus script was installed (above) You can start ptxplus with a right-click from the file browser.
 
 At this point you may need to load some projects on your local system or start a new project. To do this, start ptxplus and open the system help with Help->System Help. You can then look at the Repository section to get a better idea of how to get going.
 
