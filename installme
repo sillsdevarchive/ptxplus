@@ -1,6 +1,6 @@
 Manual installation instructions for the developer version of the ptxplus package
 	By Dennis Drescher (dennis_drescher@sil.org)
-	Last edited: 07/11/2009
+	Last edited: 14/12/2009
 
 
 These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently Karmic, 9.10). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
@@ -15,6 +15,7 @@ There are a number of packages that need to be installed for ptxplus to work. So
 Next, in gedit in the file you just opened, go to the bottom of the file and add these lines if they do not already exist in the file:
 
 	deb http://packages.sil.org/ubuntu karmic main
+	deb http://ppa.launchpad.net/mercurial-ppa/stable-snapshots/ubuntu karmic main
 	deb http://ppa.launchpad.net/mercurial-ppa/builddeps/ubuntu karmic main
 	deb http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu karmic main
 

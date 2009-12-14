@@ -26,6 +26,9 @@
 # 20081230 - djd - Changed over to work stand-alone instead
 #		of through version control.
 # 20090504 - djd - Added a filter for peripheral matter files
+# 20091214 - djd - Added a check for missing lib info. If not
+#		found then it is reported and the process is
+#		halted.
 
 
 #############################################################
@@ -122,6 +125,16 @@ class MakePiclistFile (object) :
 			the current book we are working with. It will then create
 			a piclist file for that book file so pdf2ptx can work with
 			it. We will do this one book at a time.'''
+
+		# First, do some tests and report any fatal errors we find here
+		# then quite right after
+
+		# This may not be a problem so we report it as a warning
+		# The test isn't too precise but if there are less than 5
+		# characters in the path/name, it's probably no good.'
+		if len(self._sourceIllustrationsLib) < 5 :
+			self._log_manager.log("WARN", "No valid illustration library was found in the project settings, so the process is being halted.")
+			return
 
 		if os.path.isfile(self._outputFile) :
 			# If the book piclist exists we will not go through with the process
