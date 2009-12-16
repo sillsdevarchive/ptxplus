@@ -105,7 +105,9 @@ log_manager	= LogManager()
 # Set some vars from the command arguments
 task		= sys.argv[1]
 bookID		= sys.argv[2].upper()
-inputFile	= os.getcwd() + "/" + sys.argv[3]
+#inputFile	= os.getcwd() + "/" + sys.argv[3]
+inputFile	= sys.argv[3]
+
 # We may not get a 4th argument so we have to be careful
 try :
 	outputFile = os.getcwd() + "/" + sys.argv[4]

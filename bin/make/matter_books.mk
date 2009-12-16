@@ -95,7 +95,7 @@ define component_rules
 # run any necessary text processes on the system source text as defined in
 # the project.conf file.
 ifeq ($(LOCKED),0)
-$(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
+$(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE_HOME)/$(PATH_SOURCE_FOLDER)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<' '$$@'
 	$(PY_PROCESS_SCRIPTURE_TEXT) CopyIntoSystem $(1) '$$<' '$$@'
@@ -110,7 +110,7 @@ endif
 # If we are checking text that means we are not sure about how good it is. That
 # being the case, we don't want this text in the system yet so the very first
 # thing we do is try to delete any existing copies from the source directory.
-preprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
+preprocess-$(1) : $(PATH_SOURCE_HOME)/$(PATH_SOURCE_FOLDER)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
 	rm -f $(PATH_TEXTS)/$(1).usfm
 	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
@@ -259,9 +259,9 @@ view-nt : $(MATTER_NT_PDF)
 # needed like make-master-wordlist.
 preprocess-checks:
 	@echo Preprocess checking OT components:
-	@$(foreach v,$(MATTER_OT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@$(foreach v,$(MATTER_OT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE_HOME)/$(PATH_SOURCE_FOLDER)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 	@echo Preprocess checking NT components:
-	@$(foreach v,$(MATTER_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@$(foreach v,$(MATTER_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE_HOME)/$(PATH_SOURCE_FOLDER)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
 # Manually create a master wordlist based on existing component
 # wordlists in the Reports file. Best to run this after

@@ -44,7 +44,6 @@ class MigrateMapFile (object) :
 		self._bookID = log_manager._currentTargetID
 		self._outputFile = log_manager._currentOutput
 		self._outFileObject = {}
-#		self._sourcePath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_SOURCE']
 
 
 	def main(self):

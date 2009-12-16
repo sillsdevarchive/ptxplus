@@ -77,6 +77,16 @@ class Tools (object) :
 			return self.getSystemSettingsObject()['System']['userName']
 
 
+	def getSystemSourceHomePath (self) :
+		'''Return the current system source path.'''
+
+		try :
+			return self.getSystemSettingsOverrideObject()['Process']['Paths']['PATH_SOURCE_HOME']
+
+		except :
+			return self.getSystemSettingsObject()['Process']['Paths']['PATH_SOURCE_HOME']
+
+
 	def getSettingsObject (self) :
 		'''Return a single settings object for use in normal processes.
 			This will pull in the project system and global override
@@ -196,6 +206,49 @@ class Tools (object) :
 
 		# Report what happened
 		self.userMessage('System user name set to: ' + self.getSystemUser())
+
+
+	def setSystemSourceHome (self, sourceHomePath) :
+		'''Set the path to project source files that the system will copy into
+			its text folder. This information is stored in the config override file'''
+
+		home = os.environ.get('HOME')
+		overrideFile = home + "/.config/ptxplus/override.conf"
+
+		try :
+			override = self.getSystemSettingsOverrideObject()
+			override['Process']['Paths']['PATH_SOURCE_HOME'] = sourceHomePath
+			override.write()
+		except :
+			# If we can't get the object then it probably isn't there, we'll
+			# go a head and make one, set the user name to default then write
+			# in the source path information we want.
+			if not os.path.isfile(overrideFile) :
+				self.makeUserOverrideFile()
+				object = codecs.open(overrideFile, "a", encoding='utf-8')
+				object.write('# System settings\n')
+				object.write('[System]' + '\n\n')
+				object.write('# The name of the person using this system.\n')
+				object.write('userName = \'Default User\'\n\n')
+				object.write('# Process information\n')
+				object.write('[Process]' + '\n\n')
+				object.write('# System Paths\n')
+				object.write('[[Paths]]' + '\n')
+				object.write('PATH_SOURCE_HOME = \'' + sourceHomePath + '\'\n\n')
+				object.close()
+				self.userMessage('System user name set to: Default User, you may want to change it to the right name with the command: ptxplus set-user\n')
+			else :
+				print "::::::::::::::::"
+				object = codecs.open(overrideFile, "a", encoding='utf-8')
+				object.write('\n# Process information\n')
+				object.write('[Process]' + '\n\n')
+				object.write('# System Paths\n')
+				object.write('[[Paths]]' + '\n')
+				object.write('PATH_SOURCE_HOME = \'' + sourceHomePath + '\'\n\n')
+				object.close()
+
+		# Report what happened
+		self.userMessage('System source path set to: ' + self.getSystemSourceHomePath())
 
 
 	def getScriptureFileID (self, pathPlusFileName, settings_project) :

@@ -201,18 +201,13 @@ elif command == "set-user" :
 	except :
 		tools.userMessage('No user name given, try again.')
 
-
-#########################################################################################
-# Trying to set up a command that will link source files to the project source
-# folder from wherever they are located on the system.
-elif command == "link-source" :
-	# Link source files to Source folder
+elif command == "set-source-home" :
+	# Set the source home folder
 	try :
-		if os.path.isdir(sys.argv[2]) == True :
-			os.symlink(sys.argv[2], '/home/dennis/Publishing/KYU-KALI/Source')
+		tools.setSystemSourceHome(sys.argv[2])
+
 	except :
-		tools.userMessage('Source path not valid')
-##########################################################################################
+		tools.userMessage('Problem setting source path, please try again.')
 
 elif command == "example" :
 	# This is a special instance of the import function to facilitate
