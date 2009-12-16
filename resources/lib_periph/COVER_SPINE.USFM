@@ -1,0 +1,11 @@
+\id OTH
+\ide UTF-8
+\periph Cover Spine
+\p
+\makedigitsother
+\hfil\XeTeXpdffile spine.pdf width 1in \hfil\par
+\spacer
+\spacer
+\spacer
+\spacer
+\hfil\XeTeXpicfile cross-2.png width 36pt \hfil\par

@@ -45,7 +45,7 @@ class MakeIntoEndNotes (object) :
 	def main (self, log_manager) :
 
 		self._settings = log_manager._settings
-		self._preripheralPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_PERIPH']
+		self._preripheralPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_TEXTS']
 		endnoteFile = self._preripheralPath + "/ENDNOTES.usfm"
 		bookFile = log_manager._currentOutput
 
