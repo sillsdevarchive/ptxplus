@@ -41,6 +41,8 @@
 # 20081230 - djd - Changed over to work stand-alone instead
 #		of through version control.
 # 20090504 - djd - Added a filter for peripheral matter files
+# 20091218 - djd - Changed file encoding to utf_8_sig to prevent
+#		BOM problems
 
 
 #############################################################
@@ -124,11 +126,11 @@ class MakeParaAdjustFile (object) :
 			return
 
 		# Otherwise we'll just continue on by opening up a new .adj file
-		outputObject = codecs.open(self._outputFile, "w", encoding='utf-8')
+		outputObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
 
 		# Open up our book file (Unicode encoded)  and suck in the
 		# entire body of text.
-		inputObject = codecs.open(self._inputFile, "r", encoding='utf-8')
+		inputObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
 
 		paragraph = "off"
 		verseCount = 0
