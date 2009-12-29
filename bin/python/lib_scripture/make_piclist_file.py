@@ -57,7 +57,7 @@ class MakePiclistFile (object) :
 		self._outputFile = self._inputFile + ".piclist"
 		self._outFileObject = {}
 		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
-		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE_HOME'] + "/" + self._settings['Process']['Paths']['PATH_SOURCE_FOLDER']
+		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
 		self._sourceIllustrationsLib = self._settings['General']['Resources']['Illustrations']['pathToIllustrationsLib'] + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsLib']
 		self._csvMasterFile = self._processIllustrationsPath + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsControlFile']
 		# Next pull in some default sizing params if they exist, if not use the default settings.

@@ -38,7 +38,7 @@ Required:
 
 Suggested:
 
-	sudo apt-get install libgtk2-spell-perl libteckit-perl teckit mercurial meld tortoisehg tortoisehg-nautilus
+	sudo apt-get install libgtk2-spell-perl libteckit-perl teckit mercurial meld tortoisehg tortoisehg-nautilus libfont-ttf-scripts-perl
 
 As of Ubuntu 9.10 (Karmic) these instructions will install a version of xetex (3.141592-2.2-0.996-patch2) that will handle most things. However, we recommend you install the latest version over the one you installed above. It will come from the packages.sil.org repository. You do not need to do anything special just use this command:
 

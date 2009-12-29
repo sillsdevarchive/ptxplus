@@ -49,7 +49,7 @@ class MakeMapFile (object) :
 
 		# Pull in all the relevant vars and settings
 		basePath = os.environ.get('PTXPLUS_BASE')
-		mapProject = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_MAPS']
+		mapProject = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_TEXTS']
 		mapSource = log_manager._settings['Process']['Paths']['PATH_MAPS_SOURCE']
 		mapSource = mapSource.replace( '$(PTXPLUS_BASE)', basePath)
 		colorMode = log_manager._settings['General']['MapProcesses']['mapColorMode']

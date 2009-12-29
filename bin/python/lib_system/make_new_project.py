@@ -62,14 +62,15 @@ tools = Tools()
 class MakeNewProject (object) :
 
 
-	def main (self, pathToProject) :
-		'''By simply using the tools.makeNecessaryFiles() function
-			we will create a new project.'''
+	def main (self, newFolderName) :
+		'''Create a new project at the specified path.'''
+
+		newProjectPath = os.path.abspath(newFolderName)
 
 		tools.makeNecessaryFiles()
 
 		# Tell the world what we did
-		tools.userMessage('Created new project at: ' + pathToProject)
+		tools.userMessage('Created new project at: ' + newProjectPath)
 
 
 # This starts the whole process going

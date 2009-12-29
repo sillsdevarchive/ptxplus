@@ -95,26 +95,27 @@ print "command = " + command
 
 
 def setupNewProject () :
-	'''Setup a new project.'''
+	'''Looks like we need to setup a new project. A new project will be
+		setup in the CWD. If that isn't right, oh well, the user should
+		pay more attention. :-)'''
 
-	if len(sys.argv) > 2 :
+# It would be good to get some input from the user on this.
+# However, the way the project manager works, the following
+# is not that useful so it is commented for now.
+	# Look for a project.conf file in the cwd. If there is none, ask
+	# if we need to create a new project.
+#	if tools.isProjectFolder() == False :
+#		newProjectpath = os.path.abspath(sys.argv[2])
+#		if tools.userConfirm("Would you like to start a new project. Create a new project here? " + newProjectpath) != True :
+#			return
+#		else :
+#			# Send out the make new project command
+#			mod = __import__('make_new_project')
+#			mod.doIt(newProjectpath)
 
-		# Let's see if a project already exists here
-		if tools.isProjectFolder() == False :
-			# Now we will set up the new project
-			mod = __import__('make_new_project')
-			mod.doIt(os.path.abspath(sys.argv[2]))
-		else :
-			tools.userMessage('Sorry, a project already exists here, aborting operation now.')
-			sys.exit()
-
-
-	# We should try to give a little more useful information here if possible
-	elif tools.userConfirm("Would you like to start a new project?") == True :
-		tools.userMessage('What fun! Could you please tell me what you want to call the project? (The project ID code, or the folder name if you prefer.) Try to keep it short, less than 15 characters if possible. Also, do not use spaces or weird characters please.')
-		projectID = tools.userInput('Enter your new Project ID here: ').upper()
-
-
+	# Send out the make new project command
+	mod = __import__('make_new_project')
+	mod.doIt(sys.argv[2])
 
 
 def restoreFromBackup () :

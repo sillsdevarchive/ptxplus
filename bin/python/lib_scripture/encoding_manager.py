@@ -57,7 +57,8 @@ class TxtconvChain(list):
 		"""convert the data by 'piping' it through the stack of engines.
 		   data must be of type str and not type unicode."""
 
-		return callout_to([os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh', '/dev/stdin','/dev/stdout'] + self, data)
+#		return callout_to([os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh', '/dev/stdin','/dev/stdout'] + self, data)
+		return childprocess([os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh', '/dev/stdin','/dev/stdout'] + self, data)
 
 
 

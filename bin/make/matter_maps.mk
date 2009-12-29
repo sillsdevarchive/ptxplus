@@ -74,39 +74,39 @@ define map_rules
 # script will see to it that there is a Maps folder and a csv
 # file for this map. It takes care of the copy process. It should
 # be able to do this and if it can't it should tell us why.
-$(PATH_MAPS)/$(1).svg :
-	@echo WARNING: Map: $(PATH_MAPS)/$(1).svg not found adding default to project.
-	@cp $(PATH_MAPS_SOURCE)/$(1).svg $(PATH_MAPS)/$(1).svg
+$(PATH_TEXTS)/$(1).svg :
+	@echo WARNING: Map: $(PATH_TEXTS)/$(1).svg not found adding default to project.
+	@cp $(PATH_MAPS_SOURCE)/$(1).svg $(PATH_TEXTS)/$(1).svg
 
 # Create a common project map translation file
-$(PATH_MAPS_PROJECT)/$(1).csv :
-	@echo WARNING: Map tranlation data: $(PATH_MAPS)/$(1).csv not found adding default to project.
-	@cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_MAPS_PROJECT)/$(1).csv
+$(PATH_SOURCE)/$(1).csv :
+	@echo WARNING: Map tranlation data: $(PATH_SOURCE)/$(1).csv not found adding default to project.
+	@cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_SOURCE)/$(1).csv
 
-# Migrate the common project map translation file to the Maps folder
-$(PATH_MAPS)/$(1).csv : $(PATH_MAPS_PROJECT)/$(1).csv
-	@echo INFO: Migrating data for: $(PATH_MAPS)/$(1).csv
-	@$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_MAPS_PROJECT)/$(1).csv $(PATH_MAPS)/$(1).csv
+# Migrate the common project map translation file to the Texts folder
+$(PATH_TEXTS)/$(1).csv : $(PATH_SOURCE)/$(1).csv
+	@echo INFO: Migrating data for: $(PATH_TEXTS)/$(1).csv
+	@$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_SOURCE)/$(1).csv $(PATH_TEXTS)/$(1).csv
 
 # Process the SVG file and edit it in Inkscape when it is done.
 # This must be done before the pdf conversion can be done.
-preprocess-$(1) : $(PATH_MAPS) $(PATH_MAPS)/$(1).svg $(PATH_MAPS)/$(1).csv $(PATH_MAPS)/styles.csv
-	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_MAPS)/$(1).svg
-	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_MAPS)/$(1).svg &
+preprocess-$(1) : $(PATH_TEXTS)/$(1).svg $(PATH_TEXTS)/$(1).csv $(PATH_TEXTS)/styles.csv
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1).svg
+	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1).svg &
 
 # Create the PDF version of the map
 # This will transform the svg file to pdf. However, if the preprocess has
 # not been run or failed, this process will fail too.
-$(PATH_MAPS)/$(1).pdf :
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_MAPS)/$(1).svg -A $(PATH_MAPS)/$(1).pdf
+$(PATH_PROCESS)/$(1).pdf :
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1).svg -A $(PATH_PROCESS)/$(1).pdf
 
 # Process the SVG file and view it in PDF when it is done. Note that this
 # process will fail if the preprocess has not been run first. The map making
 # process differs from typesetting so it has to be this way for now.
-view-$(1) :: $(PATH_MAPS)/$(1).pdf
+view-$(1) :: $(PATH_PROCESS)/$(1).pdf
 	@ $(VIEWPDF) $$< &
 
-link-$(1) :: $(PATH_MAPS)/$(1).pdf
+link-$(1) :: $(PATH_PROCESS)/$(1).pdf
 	@ rm $../$(PATH_PROCESS)/$(1).pdf &
 	@ ln -s ../$$< $(PATH_PROCESS)/$(1).pdf &
 
@@ -120,14 +120,10 @@ endef
 # First we need some rules to make sure the necessary files
 # are in the right places
 
-# Create a Maps folder if one isn't there already
-$(PATH_MAPS) :
-	@mkdir -p $(PATH_MAPS)
-
 # Move the styles.csv file over if it isn't there already
-$(PATH_MAPS)/styles.csv :
-	@echo WARNING: Map style data: $(PATH_MAPS)/styles.csv not found copying default.
-	@cp $(PATH_MAPS_SOURCE)/styles.csv $(PATH_MAPS)/styles.csv
+$(PATH_TEXTS)/styles.csv :
+	@echo WARNING: Map style data: $(PATH_TEXTS)/styles.csv not found copying default.
+	@cp $(PATH_MAPS_SOURCE)/styles.csv $(PATH_TEXTS)/styles.csv
 
 # This builds a rule (in memory) for all maps using the macro
 # above. These will be called below when we process the
@@ -138,11 +134,11 @@ $(foreach v,$(MATTER_MAPS), $(eval $(call map_rules,$(v))))
 ###############################################################
 
 ifneq ($(MATTER_MAPS),)
-MATTER_MAPS_PDF		= $(PATH_MAPS)/MATTER_MAPS.pdf
-MATTER_MAPS_TEX		= $(PATH_MAPS)/MATTER_MAPS.tex
+MATTER_MAPS_PDF		= $(PATH_PROCESS)/MATTER_MAPS.pdf
+MATTER_MAPS_TEX		= $(PATH_PROCESS)/MATTER_MAPS.tex
 
 # Create a TeX control file for building our book of maps
-$(MATTER_MAPS_TEX) : $(foreach v,$(MATTER_MAPS), $(PATH_MAPS)/$(v).pdf)
+$(MATTER_MAPS_TEX) : $(foreach v,$(MATTER_MAPS), $(PATH_PROCESS)/$(v).pdf)
 	@perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\includepdf{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_MAPS),$(v).pdf) > $@
 
 
@@ -156,4 +152,3 @@ endif
 view-maps : $(MATTER_MAPS_PDF)
 	@$(VIEWPDF) $< &
 
-link-maps : $(foreach v,$(MATTER_MAPS), link-$(v))

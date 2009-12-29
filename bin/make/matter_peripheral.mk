@@ -63,7 +63,7 @@ define periph_rules
 # perform them on specific kind of file taken from the \periph field.
 
 ifeq ($(LOCKED),0)
-$(PATH_TEXTS)/$(1) : $(PATH_PERIPH)/$(1)
+$(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 	@echo Regenerating $(PATH_TEXTS)/$(1)
 	@rm -f $(PATH_TEXTS)/$(1)
 	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<' '$$@'
@@ -73,7 +73,7 @@ endif
 
 # This enables us to do the preprocessing on a single peripheral item. Then it
 # will open the log file produced from the processes run.
-preprocess-$(1) : $(PATH_PERIPH)/$(1)
+preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 ifeq ($(LOCKED),0)
 	@echo Preprocessing $(1)
 	@rm -f $(PATH_TEXTS)/$(1)
@@ -102,9 +102,9 @@ $(PATH_PROCESS)/$(1).pdf : \
 
 # Each peripheral item needs a source but if it doesn't exist in the source folder
 # then we need to copy one in from the templates we have in the system.
-$(PATH_PERIPH)/$(1) :
-	@echo WARNING: Peripheral item: $(PATH_PERIPH)/$(1) missing adding template to project.
-	@cp $(PATH_PERIPH_SOURCE)/$(1) '$$@'
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) :
+	@echo WARNING: Peripheral item: $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) missing adding template to project.
+	@cp $(PATH_PERIPH_TEMPLATES)/$(1) '$$@'
 
 # Open the PDF file with reader
 view-$(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
@@ -190,4 +190,4 @@ pdf-remove-back :
 
 # Make the content for a topical index from CSV data
 make-topic-index :
-	@$(PY_PROCESS_SCRIPTURE_TEXT) make_topic_index_file 'NA' $(PATH_SOURCE)/TOPICAL_INDEX.CSV $(PATH_PERIPH)/TOPICAL_INDEX.USFM
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_topic_index_file 'NA' $(PATH_SOURCE)$(PATH_SOURCE_PERIPH)/TOPICAL_INDEX.CSV $(PATH_TEXTS)/TOPICAL_INDEX.USFM

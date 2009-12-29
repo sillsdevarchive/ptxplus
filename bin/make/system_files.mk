@@ -32,6 +32,7 @@
 #		this file moved to the end of the include chain
 #		because some rules in this file were dependent
 #		on rules that had not been expanded yet.
+# 20091223 - djd - Removed references to MAPS folder
 
 
 ##############################################################
@@ -135,17 +136,6 @@ process-clean :
 	rm -f $(PATH_PROCESS)/*.pdf
 	rm -f $(PATH_PROCESS)/*.PDF
 
-# Some TeX processing goes on in the Maps folder so we'll
-# clean that up too.
-maps-clean :
-	rm -f $(PATH_MAPS)/*.log
-	rm -f $(PATH_MAPS)/*.notepages
-	rm -f $(PATH_MAPS)/*.parlocs
-	rm -f $(PATH_MAPS)/*.delayed
-	rm -f $(PATH_MAPS)/*.tex
-	rm -f $(PATH_MAPS)/*.pdf
-	rm -f $(PATH_MAPS)/*.PDF
-
 # This will clean out all the generated in the texts folder.
 # Be very careful with this one! You don't want to lose the
 # work you put into your .piclist and .adj files. Hopefully
@@ -179,7 +169,6 @@ reset : book-clean \
 	adjfile-clean-all \
 	picfile-clean-all \
 	process-clean \
-	maps-clean \
 	reports-clean \
 	log-clean
 
@@ -231,5 +220,5 @@ illustrations :
 
 # This is for editing map data that is kept in the master csv file
 maps :
-	$(EDITCSV) $(PATH_MAPS)/maps_data.csv
+	$(EDITCSV) $(PATH_TEXTS)/maps_data.csv
 

@@ -272,6 +272,10 @@ class ConfigGUI (object) :
 		if self.usfm : self.usfm.write('')
 
 	def set_working_dir (self, isProject) :
+
+# I don't like the way this creates a folder when it doesn't find it. I hope
+# a different way can be found so the new project setup can be more interactive.
+
 		newdir = None
 		while not newdir :
 			if isProject :
@@ -305,6 +309,7 @@ class ConfigGUI (object) :
 			else :
 				try : os.makedirs(newdir)
 				except OSError : pass
+
 		self.chdir(newdir)
 
 	def chdir (self, newdir) :
