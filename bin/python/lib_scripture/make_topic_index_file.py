@@ -45,7 +45,7 @@ class MakeTopicIndexFile (object) :
 		self._log_manager = log_manager
 		self._log_manager._currentSubProcess = 'MakeTopicIndexFile'
 		self._csvInputFile = log_manager._currentInput
-		self._csvWorkFile = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_PERIPH'] + "/zzz_TEMP.CSV"
+		self._csvWorkFile = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_TEXTS'] + "/zzz_TEMP.CSV"
 		self._bookID = log_manager._currentTargetID
 		self._outputFile = log_manager._currentOutput
 		self._outFileObject = {}
