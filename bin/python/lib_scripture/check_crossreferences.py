@@ -27,6 +27,8 @@
 #		This script will not run without it because
 #		it handles all the parameters it needs.
 # 20090505 - djd - Added a filter for peripheral matter files
+# 20100104 - djd - Changed file encoding to utf_8_sig to prevent
+#		BOM problems
 
 
 #############################################################
@@ -66,7 +68,7 @@ class CheckCrossreferences (object) :
 			return
 
 		# Get our book object
-		bookObject = codecs.open(self._inputFile, "r", encoding='utf-8')
+		bookObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
 		crossrefListingFile = self._reportFilePath + "/" + self._tools.getScriptureFileID(self._inputFile, self._settings) + "-crossreferences.txt"
 		lineNumber = 0
 		crossRefNumber = 0
@@ -92,13 +94,21 @@ class CheckCrossreferences (object) :
 						crossRefNumber +=1
 						inCrossRef = "yes"
 						content = "\\" + self._markup_manager.getMarkerFromString(word) + " "
+						callerChar = words[wordCount]
 						# Now do a quick test on the crossRef caller
 						# Just so happens that wordCount is the right
 						# number of words in on the line to be able to
 						# grab the crossRef caller character if it is
 						# in the right place.
-						if words[wordCount] != ("+" or "-" or "?") :
-							self._log_manager.raiseErrorCount()
+						print callerChar
+#						if not words[wordCount] == ('+' or '-' or '?') :
+						if callerChar != '-' :
+							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "ERRR", "Line: " + str(lineNumber) + " The crossRef caller: " + words[wordCount] + " is not valid")
+
+						if callerChar != '+' :
+							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "ERRR", "Line: " + str(lineNumber) + " The crossRef caller: " + words[wordCount] + " is not valid")
+
+						if callerChar != '?' :
 							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "ERRR", "Line: " + str(lineNumber) + " The crossRef caller: " + words[wordCount] + " is not valid")
 
 						# Check to see if the \x is the first character, if it is we may have a problem.

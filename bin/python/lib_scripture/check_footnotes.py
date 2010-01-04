@@ -31,6 +31,8 @@
 #		it handles all the parameters it needs.
 # 20081216 - djd - Changed to work with new sfm parser.
 # 20090505 - djd - Added a filter for peripheral matter files
+# 20100104 - djd - Changed file encoding to utf_8_sig to prevent
+#		BOM problems
 
 
 #############################################################
@@ -72,7 +74,7 @@ class CheckFootnotes (object) :
 			return
 
 		# Get our book object
-		bookObject = codecs.open(self._inputFile, "r", encoding='utf-8')
+		bookObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
 		footnoteListingFile = self._reportFilePath + "/" + self._tools.getScriptureFileID(self._inputFile, self._settings) + "-footnotes.txt"
 		lineNumber = 0
 		footnoteNumber = 0

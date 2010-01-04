@@ -17,6 +17,8 @@
 
 # History:
 # 20080623 - djd - Initial draft
+# 20100104 - djd - Changed file encoding to utf_8_sig to prevent
+#		BOM problems
 
 
 #############################################################
@@ -48,7 +50,7 @@ class InsertFootnoteRefs (object) :
 	def main(self):
 
 		# Get our book object
-		bookObject = codecs.open(self.__inputFile, "r", encoding='utf-8')
+		bookObject = codecs.open(self.__inputFile, "r", encoding='utf_8_sig')
 
 		for line in bookObject :
 

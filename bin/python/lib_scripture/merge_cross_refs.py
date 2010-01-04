@@ -19,6 +19,8 @@
 # History:
 # 20081226 - djd - Initial draft
 # 20090831 - djd - Fixed init and log_manager bug
+# 20100104 - djd - Changed file encoding to utf_8_sig to prevent
+#		BOM problems
 
 
 #############################################################
@@ -39,7 +41,7 @@ class MergeCrossRefs (object) :
 		outputFile = self._log_manager._currentOutput
 
 		# Get our book object
-		bookObject = "".join(codecs.open(outputFile, "r", encoding='utf-8'))
+		bookObject = "".join(codecs.open(outputFile, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()
@@ -51,7 +53,7 @@ class MergeCrossRefs (object) :
 		# The whole idea of this module is to swap quotes but we need to be
 		# sure that an output file name exists.
 		if outputFile != "none" or outputFile != "" :
-			outputObject = codecs.open(outputFile, "w", encoding='utf-8')
+			outputObject = codecs.open(outputFile, "w", encoding='utf_8_sig')
 			outputObject.write(output)
 
 

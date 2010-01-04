@@ -20,6 +20,8 @@
 # 20081030 - djd - Added total dependence on log_manager.
 #		This script will not run without it because
 #		it handles all the parameters it needs.
+# 20100104 - djd - Changed file encoding to utf_8_sig to prevent
+#		BOM problems
 
 
 #############################################################
@@ -51,7 +53,7 @@ class InsertCrossreferenceRefs (object) :
 		self.logMessages()
 
 		# Get our book object
-		bookObject = codecs.open(self.__inputFile, "r", encoding='utf-8')
+		bookObject = codecs.open(self.__inputFile, "r", encoding='utf_8_sig')
 
 		for line in bookObject :
 

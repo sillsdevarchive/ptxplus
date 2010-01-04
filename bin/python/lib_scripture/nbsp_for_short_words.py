@@ -25,7 +25,8 @@
 #		counting
 # 20090911 - djd - Changed the process to work only with word
 #		lengths rather than specific words.
-
+# 20100104 - djd - Changed file encoding to utf_8_sig to prevent
+#		BOM problems
 
 #############################################################
 ######################### Shell Class #######################
@@ -57,7 +58,7 @@ class NBSPForShortWords (object) :
 			log_manager.log("ERRR", "This process is checked as true but the short word length is not set. Process aborted.")
 
 		# Get our book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()
@@ -71,7 +72,7 @@ class NBSPForShortWords (object) :
 
 
 		# Output the modified book file
-		newBookObject = codecs.open(bookFile, "w", encoding='utf-8')
+		newBookObject = codecs.open(bookFile, "w", encoding='utf_8_sig')
 		newBookObject.write(newBookOutput)
 		log_manager.log("INFO", "Replaced U+0020 with U+00A0 a total of " + str(handler._replacementCount) + " times")
 
