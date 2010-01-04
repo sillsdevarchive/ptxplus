@@ -45,7 +45,7 @@ class CheckBook (object) :
 
 
 		# Get our book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()

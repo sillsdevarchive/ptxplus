@@ -124,11 +124,11 @@ class MakeParaAdjustFile (object) :
 			return
 
 		# Otherwise we'll just continue on by opening up a new .adj file
-		outputObject = codecs.open(self._outputFile, "w", encoding='utf-8')
+		outputObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
 
 		# Open up our book file (Unicode encoded)  and suck in the
 		# entire body of text.
-		inputObject = codecs.open(self._inputFile, "r", encoding='utf-8')
+		inputObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
 
 		paragraph = "off"
 		verseCount = 0
