@@ -100,7 +100,7 @@ class CheckCrossreferences (object) :
 						# number of words in on the line to be able to
 						# grab the crossRef caller character if it is
 						# in the right place.
-						print callerChar
+#						print callerChar
 #						if not words[wordCount] == ('+' or '-' or '?') :
 						if callerChar != '-' :
 							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "ERRR", "Line: " + str(lineNumber) + " The crossRef caller: " + words[wordCount] + " is not valid")

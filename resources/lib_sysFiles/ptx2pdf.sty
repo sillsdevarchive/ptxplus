@@ -1,14 +1,10 @@
 # ptx2pdf.sty
 
-# The styles in this file over-ride those in the Paratext style sheet
-# named usfm.sty, this is the parent file for this one. The styles listed
-# in this file can contain extra commands not normally used in Paratext.
-# It is recomended that no changes be made to usfm.sty file but that
-# any over-rides be found here. See the documentation for more
-# information.
-# Please note that the override commands only need to contain the
-# parts of the original command that you wish to override. This will
-# save some space and time.
+# This file contains all the styles that will be used in a project.
+# To maintain control we only place the styles in this file that are
+# used in the project. The original definitions can be obtained
+# from the usfm.sty file that comes with Paratext, or it can be
+# downloaded from the Paratext website, if you have access.
 # ***************************************************************
 
 \Marker periph
@@ -18,6 +14,22 @@
 \TextType Other
 \TextProperties paragraph nonpublishable nonvernacular
 \FontSize 12
+
+# This is a customized footnote caller style. If you need this,
+# you can call this from the Marker f style with this command:
+#	\CallerStyle myFC
+# Note you will also want to include a \BaseLine <n> setting in
+# Marker f to adjust the vertical height.
+\Marker myFC
+\Description Footnote caller
+\TextType NoteText
+\StyleType Note
+\TextProperties publishable vernacular note
+\Italic
+\Bold
+\FontSize 10
+\Superscript
+\BaseLine 10pt
 
 
 # Paratext dosn't give you much to work with when it comes to periferal
