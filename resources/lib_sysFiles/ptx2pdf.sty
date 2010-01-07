@@ -36,8 +36,8 @@
 # material markup. Here are some suplemental markers.
 
 \Marker ct
-\Name ct - Cover Title - Major Title Level 1
-\Description The cover title of the publication (if single level)
+\Name ct - Cover Title
+\Description Title of the publication  (non-standard USFM)
 \OccursUnder id
 \Rank 3
 \TextProperties paragraph publishable vernacular level_1
@@ -51,7 +51,7 @@
 
 \Marker ct1
 \Name ct1 - Cover Title - Major Title Level 1
-\Description The cover title of the publication
+\Description Level 1 cover title of the publication  (non-standard USFM)
 \OccursUnder id
 \Rank 3
 \TextProperties paragraph publishable vernacular level_1
@@ -65,7 +65,7 @@
 
 \Marker ct2
 \Name ct2 - Cover Title - Major Title Level 2
-\Description The cover sub-title of the publication
+\Description Level 2 cover title of the publication  (non-standard USFM)
 \OccursUnder id
 \Rank 3
 \TextProperties paragraph publishable vernacular level_2
@@ -79,7 +79,7 @@
 
 \Marker ct3
 \Name ct3 - Cover Title - Major Title Level 3
-\Description The cover title of the publication (if single level)
+\Description Level 3 cover title of the publication  (non-standard USFM)
 \OccursUnder id
 \Rank 3
 \TextProperties paragraph publishable vernacular level_3
@@ -93,7 +93,7 @@
 
 \Marker spacer
 \Name spacer - Spacer Line
-\Description For adding extra space between titles lines
+\Description For adding extra space between titles lines (non-standard USFM)
 \OccursUnder id
 \Rank 3
 \TextType Title
@@ -102,21 +102,20 @@
 \SpaceBefore 52
 \SpaceAfter 52
 
-\Marker tah
-\Endmarker tah*
-\Name tah...tah* - Table of Contents header row style
-\Description A TOC header character style
-\TextProperties publishable vernacular
-\StyleType Character
-\FontSize 14
-\Bold
-\Italic
-
-\Marker tar
-\Endmarker tar*
-\Name tar...tar* - Table of Contents row style
-\Description A TOC row character style
+\Marker tblh
+\Endmarker tblh*
+\Name tblh...tblh* - Table header row style
+\Description A table header character style used in custom TeX macros (non-standard USFM)
 \TextProperties publishable vernacular
 \StyleType Character
 \FontSize 12
+\Bold
 \Italic
+
+\Marker tblr
+\Endmarker tblr*
+\Name tblr...tblr* - Table row style
+\Description A table row character style used in custom TeX macros (non-standard USFM)
+\TextProperties publishable vernacular
+\StyleType Character
+\FontSize 10

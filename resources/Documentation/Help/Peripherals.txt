@@ -1,3 +1,8 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Thu, 07 Jan 2010 15:08:17 +0700
+
 ====== Peripherals ======
 
 There are a number of different types of matter used in every Scripture publication. This page give information on the current procedure of how to do each one (if I've kept up with the documentation).
@@ -7,11 +12,15 @@ The production of the outer cover is somewhat separate from the rest of the publ
 
 To produce an entire cover file in one PDF file use:
 
-	ptxplus cover
+'''
+ptxplus cover
+'''
 
 To view individual elements of the cover use:
 
-	ptxplus view-<file_name>
+'''
+ptxplus view-<file_name>
+'''
 
 
 ===== Topical Index =====
@@ -23,3 +32,50 @@ That file should become the TOPICAL_INDEX.CSV file in your Source folder. Next y
 This will create the TOPICAL_INDEX.USFM file in the Peripherals folder. This is your working copy and all corrections are done on that file. However, if you wish to reuse this index for other publications you will want to be sure that your content corrections are made to the CSV file too in case it needs to be run against another project.
 
 When you have the SFM file in your Peripheral folder you can click the view button to process it and see it in its typeset form.
+
+===== Table of Contents =====
+To create a basic table of contents you will need to make a USFM file and embed some special markers that call on special [[TeX]] code that do the layout of the table. The embedded code needed for a basic two column table without a leader is this:
+
+'''
+\p
+'''
+
+'''
+\makedigitsother\catcode`{=1 \catcode`}=2
+\baselineskip=11.5pt
+\tbltwoheader{Cabu Ming}{Acuinah}
+\tbltworow{Athonah}{Atho}
+etc...
+\catcode`{=11\catcode`}=11\makedigitsletters
+'''
+
+For a three column leadered layout you would use this:
+
+'''
+\p
+\makedigitsother\catcode`{=1 \catcode`}=2
+\baselineskip=12pt
+\tblthreewlheader{Cabu Ming}{Acuinah}{Nambar}
+\tblthreewlrow{Mathai}{Mt}{.}{1}
+\tblthreewlrow{Marka}{Mk}{.}{20}
+etc...
+\catcode`{=11\catcode`}=11\makedigitsletters
+'''
+
+Inside the [[.tex]] file for the USFM file you have created some more code can go which will override the default settings and help you make fine adjustments. They are:
+
+'''
+\def\tblmarginright{0in}		% The width of the table's right margin
+\def\tblheaderspace{10pt}	% The space between the header and the first row
+\def\tblrowspace{8pt}		% The space between rows of the table
+\def\colpush{60mm}			% The amount to push the second, left Justified, col.
+'''
+
+If you are running a table with a leadered column you may need to add this to change the spacing on the leader dots:
+
+'''
+\def\leaderspace{0.4em}		% The space between the leader dots
+'''
+
+
+There are only two styles used on these simple tables. They can be found in the [[.sty]] file for the project. To adjust the header look for \tblh and for the row data find \tblr.
