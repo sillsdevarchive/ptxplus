@@ -1,0 +1,12 @@
+\id OTH
+\ide UTF-8
+\singlecolumn
+\periph Map Page
+\startmaps
+\makedigitsother%
+\catcode`{=1\catcode`}=2\catcode`#=6%
+\def\domap#1{\vbox to \the\textheight{\vfil\noindent\hfil\XeTeXpdffile #1 width \the\textwidth \hfil\par\vfil}\eject}%
+\domap{m001.pdf}
+\domap{m006.pdf}
+\domap{m008.pdf}
+\domap{m009.pdf}

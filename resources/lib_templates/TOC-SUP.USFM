@@ -1,0 +1,11 @@
+\id OTH
+\ide UTF-8
+\periph Table of Contents (Supplemental)
+\mt1 Old Testament Book Abbreviations
+\p
+\makedigitsother\catcode`{=1 \catcode`}=2
+\baselineskip=11.5pt
+\tbltwoheader{Genesis}{Gen}
+\tbltworow{Exodus}{Exo}
+\tbltworow{etc...}{etc}
+\catcode`{=11\catcode`}=11\makedigitsletters
