@@ -167,14 +167,17 @@ $(PATH_TEXTS)/$(1).usfm.adj :
 
 # Remove the PDF for this component only
 pdf-remove-$(1) :
+	@echo INFO: Removing file: $(PATH_PROCESS)/$(1).pdf
 	rm -f $(PATH_PROCESS)/$(1).pdf
 
 # Remove the adjustment file for this component only
 adjfile-remove-$(1) :
+	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).usfm.adj
 	rm -f $(PATH_TEXTS)/$(1).usfm.adj
 
 # Remove the picture placement file for this component only
 picfile-remove-$(1) :
+	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).usfm.piclist
 	rm -f $(PATH_TEXTS)/$(1).usfm.piclist
 
 
@@ -216,6 +219,7 @@ $(MATTER_OT_PDF) : \
 endif
 
 pdf-remove-ot :
+	@echo INFO: Removing file: $(MATTER_OT_PDF)
 	rm -f $(MATTER_OT_PDF)
 
 # Moving along we will do the NT if there are any components listed in the project.conf file
@@ -243,6 +247,7 @@ $(MATTER_NT_PDF) : \
 endif
 
 pdf-remove-nt :
+	@echo INFO: Removing file: $(MATTER_NT_PDF)
 	rm -f $(MATTER_NT_PDF)
 
 # Do a component section and veiw the resulting output

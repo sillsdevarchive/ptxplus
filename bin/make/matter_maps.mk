@@ -76,17 +76,17 @@ define map_rules
 # be able to do this and if it can't it should tell us why.
 $(PATH_TEXTS)/$(1).svg :
 	@echo WARNING: Map: $(PATH_TEXTS)/$(1).svg not found adding default to project.
-	@cp $(PATH_MAPS_SOURCE)/$(1).svg $(PATH_TEXTS)/$(1).svg
+	@cp $(PATH_MAP_TEMPLATES)/$(1).svg $(PATH_TEXTS)/$(1).svg
 
 # Create a common project map translation file
-$(PATH_SOURCE)/$(1).csv :
-	@echo WARNING: Map tranlation data: $(PATH_SOURCE)/$(1).csv not found adding default to project.
-	@cp $(PATH_MAPS_SOURCE)/$(1).csv $(PATH_SOURCE)/$(1).csv
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv :
+	@echo WARNING: Map tranlation data: $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv not found adding default to project.
+	@cp $(PATH_MAP_TEMPLATES)/$(1).csv $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv
 
 # Migrate the common project map translation file to the Texts folder
-$(PATH_TEXTS)/$(1).csv : $(PATH_SOURCE)/$(1).csv
+$(PATH_TEXTS)/$(1).csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv
 	@echo INFO: Migrating data for: $(PATH_TEXTS)/$(1).csv
-	@$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_SOURCE)/$(1).csv $(PATH_TEXTS)/$(1).csv
+	@$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv $(PATH_TEXTS)/$(1).csv
 
 # Process the SVG file and edit it in Inkscape when it is done.
 # This must be done before the pdf conversion can be done.
@@ -139,16 +139,27 @@ MATTER_MAPS_TEX		= $(PATH_PROCESS)/MATTER_MAPS.tex
 
 # Create a TeX control file for building our book of maps
 $(MATTER_MAPS_TEX) : $(foreach v,$(MATTER_MAPS), $(PATH_PROCESS)/$(v).pdf)
+	@echo INFO: Hi there, is this working?
 	@perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\includepdf{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_MAPS),$(v).pdf) > $@
 
 
 $(MATTER_MAPS_PDF) : $(MATTER_MAPS_TEX)
-	@cd $(PATH_MAPS) && $(TEX_INPUTS) xetex $(MATTER_MAPS_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(MATTER_MAPS_TEX)
 
 endif
 
 # This will call TeX to create a "book" of maps. The results will
 # be a PDF file that will be viewed in the PDF viewer.
 view-maps : $(MATTER_MAPS_PDF)
+	@echo INFO: Creating a single PDF file for all the maps.
 	@$(VIEWPDF) $< &
 
+# Remove the matter map file
+pdf-remove-maps :
+	@echo INFO: Removing file: $(MATTER_MAPS_PDF)
+	rm -f $(MATTER_MAPS_PDF)
+
+# We don't have a process for this yet but we need to cover it
+# incase someone clicks the button :-)
+preprocess-maps :
+	@echo WARNING: There is no check maps function in this mode.
