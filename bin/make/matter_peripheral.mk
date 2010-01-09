@@ -82,16 +82,33 @@ else
 	@echo Source locked: Will not preprocess file: $(1)
 endif
 
+# NOTE:
+# If a peripheral template file does not exist for a given object
+# in the template lib then one will need to be created manually
+# for the project. Unfortunatly, there is not clean way to do this
+# automatically. What is needed is a user template folder in
+# ~/.ptxplus where one could be made automatically. For now we
+# will just have to let the uggly error message be our guide.
+
+# Most front matter peripheral .tex files will have a dependency
+# on FRONT_MATTER.tex even if it doesn't there is a hard coded
+# dependency here that will be met if called on.
+$(PATH_PROCESS)/FRONT_MATTER.tex :
+	@cp $(PATH_TEMPLATES)/FRONT_MATTER.tex '$$@'
+
+# Most back matter peripheral .tex files will have a dependency
+# on BACK_MATTER.tex even if it doesn't there is a hard coded
+# dependency here that will be met if called on.
+$(PATH_PROCESS)/BACK_MATTER.tex :
+	@cp $(PATH_TEMPLATES)/BACK_MATTER.tex '$$@'
+
 # Output to the TeX control file (Do a little clean up first)
 # The ($(1)_TEXSPECIAL) below is a workaround to overcome a current
 # limitation with styles being applied to individual parts of a
 # publication. This will insert a specially defined var done in
 # the makefile.conf file.
-$(PATH_PROCESS)/$(1).tex :
-	@echo '\\input $(TEX_PTX2PDF)' >> $$@
-	@echo '\\input $(TEX_SETUP)' >> $$@
-	@echo '$($(1)_TEXSPECIAL) \\ptxfile{$(PATH_TEXTS)/$(1)}' >> $$@
-	@echo '\\bye' >> $$@
+$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BACK_MATTER.tex
+	@cp $(PATH_TEMPLATES)/$(1).tex '$$@'
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).pdf : \
@@ -104,7 +121,10 @@ $(PATH_PROCESS)/$(1).pdf : \
 # then we need to copy one in from the templates we have in the system.
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) :
 	@echo WARNING: Peripheral item: $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) missing adding template to project.
-	@cp $(PATH_PERIPH_TEMPLATES)/$(1) '$$@'
+	@cp $(PATH_TEMPLATES)/$(1) '$$@'
+
+
+
 
 # Open the PDF file with reader
 view-$(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
