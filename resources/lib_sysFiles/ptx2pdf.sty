@@ -7,6 +7,454 @@
 # downloaded from the Paratext website, if you have access.
 # ***************************************************************
 
+# File Identification
+
+\Marker id
+\Name id - File - Identification
+\Description File identification information (BOOKID, FILENAME, EDITOR, MODIFICATION DATE)
+\StyleType Paragraph
+\TextType Other
+\TextProperties paragraph nonpublishable nonvernacular book
+\FontSize 10
+
+\Marker ide
+\Name ide - File - Encoding
+\Description File encoding information
+\OccursUnder id
+\Rank 1
+\StyleType Paragraph
+\TextType Other
+\TextProperties paragraph nonpublishable nonvernacular
+\FontSize 10
+
+# Headers
+
+\Marker h
+\Name h - File - Header
+\Description Running header text for a book (basic)
+\OccursUnder id
+\Rank 1
+\TextType Other
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\FontSize 10
+\bold
+
+# Remarks and Comments
+
+\Marker rem
+\Name rem - File - Remark
+\Description Comments and remarks
+\OccursUnder id ide c
+\TextType Other
+\TextProperties paragraph nonpublishable nonvernacular
+\StyleType Paragraph
+\FontSize 10
+\Color 16711680
+
+
+# Introduction
+
+\Marker imt1
+\Name imt - Introduction - Major Title Level 1
+\Description Introduction major title, level 1 (if single level) (basic)
+\OccursUnder id
+\Rank 5
+\TextProperties paragraph publishable vernacular level_1
+\TextType Title
+\StyleType Paragraph
+\FontSize 11
+\Bold
+\Justification Center
+\SpaceBefore 8
+\SpaceAfter 3
+
+\Marker imt2
+\Name imt2 - Introduction - Major Title Level 2
+\Description Introduction major title, level 2
+\OccursUnder id
+\Rank 5
+\TextProperties paragraph publishable vernacular level_2
+\TextType Title
+\StyleType Paragraph
+\FontSize 10
+\Bold
+\Justification Left
+\SpaceBefore 6
+\SpaceAfter 3
+
+\Marker imt3
+\Name imt3 - Introduction - Major Title Level 3
+\Description Introduction major title, level 3
+\OccursUnder id
+\Rank 5
+\TextProperties paragraph publishable vernacular level_3
+\TextType Title
+\StyleType Paragraph
+\FontSize 8
+\Bold
+\Justification Left
+\FirstLineIndent 0
+\LeftMargin .25
+\RightMargin .25
+\SpaceBefore 2
+\SpaceAfter 2
+
+\Marker io1
+\Name io1 - Introduction - Outline Level 1
+\Description Introduction outline text, level 1 (if multiple levels) (basic)
+\OccursUnder id
+\Rank 6
+\TextType Other
+\TextProperties paragraph publishable vernacular level_1
+\StyleType paragraph
+\FontSize 10
+\LeftMargin .25
+\RightMargin .25
+
+\Marker ip
+\Name ip - Introduction - Paragraph
+\Description Introduction prose paragraph (basic)
+\OccursUnder id
+\Rank 6
+\TextType Other
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\Justification Justified
+\FirstLineIndent 0.125
+\FontSize 10
+\SpaceBefore 0
+\SpaceAfter 0
+
+\Marker im
+\Name im - Introduction - Paragraph - no first line indent
+\Description Introduction prose paragraph, with no first line indent (may occur after poetry)
+\OccursUnder id
+\Rank 6
+\TextType Other
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\FontSize 10
+
+\Marker ipi
+\Name ipi - Introduction - Indented Para - first line indent
+\Description Introduction prose paragraph, indented, with first line indent
+\OccursUnder id
+\Rank 6
+\TextType Other
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\FontSize 10
+\Justification Left
+\FirstLineIndent 0.125
+\LeftMargin .25
+\RightMargin .25
+
+\Marker iot
+\Name iot - Introduction - Outline Title
+\Description Introduction outline title (basic)
+\OccursUnder id
+\Rank 6
+\TextType Other
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\FontSize 10
+\Bold
+\Justification Center
+\SpaceBefore 8
+\SpaceAfter 4
+
+
+# Chapters and Verses
+
+\Marker c
+\Name c - Chapter Number
+\Description Chapter number (necessary for normal Paratext operation)
+\OccursUnder id
+\Rank 8
+\TextType ChapterNumber
+\TextProperties chapter
+\StyleType Paragraph
+\Bold
+\FontSize 18
+\SpaceBefore 8
+\SpaceAfter 4
+
+\Marker v
+\Name v - Verse Number
+\Description A verse number (Necessary for normal paratext operation) (basic)
+\OccursUnder li li1 li2 li3 li4 m mi nb p pc ph phi pi pi1 pi2 pi3 pr pmo pm pmc pmr q q1 q2 q3 q4 qc qr qm qm1 qm2 qm3 qm4 tc1 tc2 tc3 tc4 tcr1 tcr2 tcr3 tcr4 s3 d sp
+\TextType VerseNumber
+\TextProperties verse
+\StyleType Character
+\Bold
+\FontSize 7
+\NoSuperscript
+\BaseLine 10pt
+
+
+# Paragraphs
+
+\Marker p
+\Name p - Paragraph - Normal - First Line Indent
+\Description Paragraph text, with first line indent (basic)
+\OccursUnder c
+\Rank 4
+\TextType VerseText
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\FontSize 10
+\FirstLineIndent 0.125
+\SpaceBefore 0
+\SpaceAfter 0
+
+\Marker m
+\Name m - Paragraph - Margin - No First Line Indent
+\Description Paragraph text, with no first line indent (may occur after poetry) (basic)
+\OccursUnder c
+\Rank 4
+\TextType VerseText
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\FontSize 10
+\SpaceBefore 0
+\SpaceAfter 0
+
+\Marker pi
+\Name pi - Paragraph - Indented - Level 1 - First Line Indent
+\Description Paragraph text, level 1 indent (if sinlge level), with first line indent; often used for discourse (basic)
+\OccursUnder c
+\Rank 4
+\TextType VerseText
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\FontSize 10
+\LeftMargin 0.125
+\RightMargin 0.125
+\FirstLineIndent 0.125
+\SpaceBefore 0
+\SpaceAfter 0
+
+\Marker pc
+\Name pc - Paragraph - Centered (for Inscription)
+\Description Paragraph text, centered (for Inscription)
+\OccursUnder c
+\Rank 4
+\TextType VerseText
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\Justification Center
+\FontSize 10
+
+
+# Poetry
+
+\Marker q1
+\Name q1 - Poetry - Indent Level 1
+\Description Poetry text, level 1 indent (if multiple levels) (basic)
+\OccursUnder c
+\Rank 4
+\TextType VerseText
+\TextProperties paragraph publishable vernacular poetic level_1
+\StyleType Paragraph
+\FontSize 10
+\LeftMargin 0.125
+%\RightMargin 0.25
+\FirstLineIndent 0.125
+\SpaceBefore 0
+\SpaceAfter 0
+%\Justification Left
+%\FirstLineIndent -0.125
+
+
+# Lists
+
+\Marker li1
+\Name li - List Entry - Level 1
+\Description A list entry, level 1 (if single level)
+\OccursUnder c
+\Rank 4
+\TextType VerseText
+\TextProperties paragraph publishable vernacular
+\StyleType paragraph
+\FontSize 10
+\LeftMargin 0.25
+%\RightMargin 0.25
+\FirstLineIndent 0.125
+\SpaceBefore 0
+\SpaceAfter 0
+%\Justification Left
+
+
+# Titles & Headings
+
+\Marker mt
+\Name mt - Title - Major Title Level 1
+\Description The main title of the book (if single level)
+\OccursUnder id
+\Rank 3
+\TextProperties paragraph publishable vernacular level_1
+\TextType Title
+\StyleType Paragraph
+\FontSize 14
+\Bold
+\Justification Center
+\SpaceBefore 8
+\SpaceAfter 4
+
+\Marker mt1
+\Name mt1 - Title - Major Title Level 1
+\Description The main title of the book (if multiple levels) (basic)
+\OccursUnder id
+\Rank 3
+\TextProperties paragraph publishable vernacular level_1
+\TextType Title
+\StyleType Paragraph
+\FontSize 16
+\Bold
+\Justification Center
+\SpaceBefore 0
+\SpaceAfter 4
+
+\Marker mt2
+\Name mt2 - Title - Major Title Level 2
+\Description A secondary title usually occurring before the main title (basic)
+\OccursUnder id
+\Rank 3
+\TextProperties paragraph publishable vernacular level_2
+\TextType Title
+\StyleType Paragraph
+\FontSize 10
+\bold
+\Justification Center
+\SpaceAfter 2
+
+\Marker mt3
+\Name mt3 - Title - Major Title Level 3
+\Description A secondary title usually occurring before the main title (basic)
+\OccursUnder id
+\Rank 3
+\TextProperties paragraph publishable vernacular level_2
+\TextType Title
+\StyleType Paragraph
+\FontSize 14
+\Bold
+\Justification Center
+\SpaceAfter 12
+
+\Marker mt4
+\Name mt4 - Title - Major Title Level 4
+\Description A secondary title usually occurring before the main title (basic)
+\OccursUnder id
+\Rank 3
+\TextProperties paragraph publishable vernacular level_2
+\TextType Title
+\StyleType Paragraph
+\FontSize 11
+\Justification Center
+\SpaceAfter 2
+
+\Marker s1
+\Name s1 - Heading - Section Level 1
+\Description A section heading, level 1 (if multiple levels)
+\OccursUnder c
+\Rank 4
+\TextType Section
+\TextProperties paragraph publishable vernacular level_1
+\StyleType Paragraph
+\sethook{start}{s1}{\baselineskip=11pt \relax}
+\Justification Center
+\FontSize 9
+\SpaceBefore 6
+\SpaceAfter 0
+\Bold
+
+\Marker r
+\Name r - Heading - Parallel References
+\Description Parallel reference(s) (basic)
+\OccursUnder c s s1 s2 s3 s4
+\TextType Section
+\TextProperties paragraph publishable vernacular level_1
+\StyleType Paragraph
+\Justification Center
+\FontSize 8
+\SpaceBefore 0
+\SpaceAfter 0
+
+
+# Footnotes
+
+\Marker f
+\Endmarker f*
+\Name f...f* - Footnote
+\Description A Footnote text item (basic)
+\OccursUnder c li li1 li2 li3 li4 m mi nb p pc ph phi pi pi1 pi2 pi3 pr pmo pm pmc pmr q q1 q2 q3 q4 qc qr qm qm1 qm2 qm3 qs sp tc1 tc2 tc3 tc4 mt mt1 mt2 mt3 ms ms1 ms2 ms3 s s1 s2 s3 spd d ip
+\TextProperties publishable vernacular note
+\TextType NoteText
+\StyleType Note
+\FontSize 8
+\BaseLine 12pt
+
+\Marker fr
+\Endmarker fr*
+\Name fr - Footnote - Reference
+\Description The origin reference for the footnote (basic)
+\OccursUnder f fe
+\TextType Title
+\TextProperties publishable vernacular note
+\StyleType Character
+\FontSize 8
+\Bold
+
+\Marker ft
+\Endmarker ft*
+\Name ft - Footnote - Text
+\Description Footnote text, Protocanon (basic)
+\OccursUnder f fe
+\TextProperties publishable vernacular note
+\TextType NoteText
+\StyleType Character
+\FontSize 8
+
+
+# Character Markup
+
+\Marker it
+\Endmarker it*
+\Name it...it* - Character - Italic Text
+\Description A character style, use italic text
+\OccursUnder ip ipi im imi ili ili1 ili2 iex io1 io2 io3 io4 cd li li1 li2 li3 li4 m mi nb p pc ph phi pi pi1 pi2 pi3 pr pmo pm pmc pmr q q1 q2 q3 q4 qc qr qm qm1 qm2 qm3 sp tc1 tc2 tc3 tc4 ms ms1 ms2 s s1 s2 s3 spd d ip f fe NEST
+\TextProperties publishable vernacular
+\StyleType Character
+%\sethook{start}{it}{\latinsmalli}
+\Italic
+
+\Marker bd
+\Endmarker bd*
+\Name bd...bd* - Character - Bold Text
+\Description A character style, use bold text
+\OccursUnder ip ipi im imi ili ili1 ili2 iex io1 io2 io3 io4 cd li li1 li2 li3 li4 m mi nb p pc ph phi pi pi1 pi2 pi3 pr pmo pm pmc pmr q q1 q2 q3 q4 qc qr qm qm1 qm2 qm3 sp tc1 tc2 tc3 tc4 ms ms1 ms2 s s1 s2 s3 spd d ip f fe NEST
+\TextProperties publishable vernacular
+\StyleType Character
+\Bold
+
+
+# Special Features
+
+\Marker fig
+\Endmarker fig*
+\Name fig...fig* - Auxiliary - Figure/Illustration/Map
+\Description Illustration [Columns to span, height, filename, caption text]
+\OccursUnder li li1 li2 li3 li4 m mi nb p pc ph phi pi pi1 pi2 pi3 pr pmo pm pmc pmr q q1 q2 q3 q4 qc qr qm qm1 qm2 qm3 sp tc1 tc2 tc3 tc4 ms ms1 ms2 s s1 s2 s3 spd d ip
+\TextType Other
+\TextProperties paragraph publishable vernacular
+\StyleType Character
+\FontSize 8
+
+
+# Peripheral Materials
+# Content Division Marker
+
 \Marker periph
 \Name perif - File - Identification
 \Description To identify periferal book matter
@@ -15,29 +463,13 @@
 \TextProperties paragraph nonpublishable nonvernacular
 \FontSize 12
 
-# This is a customized footnote caller style. If you need this,
-# you can call this from the Marker f style with this command:
-#	\CallerStyle myFC
-# Note you will also want to include a \BaseLine <n> setting in
-# Marker f to adjust the vertical height.
-\Marker myFC
-\Description Footnote caller
-\TextType NoteText
-\StyleType Note
-\TextProperties publishable vernacular note
-\Italic
-\Bold
-\FontSize 10
-\Superscript
-\BaseLine 10pt
-
 
 # Paratext dosn't give you much to work with when it comes to periferal
 # material markup. Here are some suplemental markers.
 
 \Marker ct
-\Name ct - Cover Title
-\Description Title of the publication  (non-standard USFM)
+\Name ct - Cover Title - Major Title Level 1
+\Description The cover title of the publication (if single level)
 \OccursUnder id
 \Rank 3
 \TextProperties paragraph publishable vernacular level_1
@@ -51,35 +483,35 @@
 
 \Marker ct1
 \Name ct1 - Cover Title - Major Title Level 1
-\Description Level 1 cover title of the publication  (non-standard USFM)
+\Description The cover title of the publication
 \OccursUnder id
 \Rank 3
 \TextProperties paragraph publishable vernacular level_1
 \TextType Title
 \StyleType Paragraph
-\FontSize 32
+\FontSize 44
 \Bold
 \Justification Center
-\SpaceBefore 120
-\SpaceAfter 12
+\SpaceBefore 36
+\SpaceAfter 42
 
 \Marker ct2
 \Name ct2 - Cover Title - Major Title Level 2
-\Description Level 2 cover title of the publication  (non-standard USFM)
+\Description The cover sub-title of the publication
 \OccursUnder id
 \Rank 3
 \TextProperties paragraph publishable vernacular level_2
 \TextType Title
 \StyleType Paragraph
-\FontSize 24
-\Italic
+\FontSize 36
+\Bold
 \Justification Center
-\SpaceBefore 12
-\SpaceAfter 12
+\SpaceBefore 36
+\SpaceAfter 0
 
 \Marker ct3
 \Name ct3 - Cover Title - Major Title Level 3
-\Description Level 3 cover title of the publication  (non-standard USFM)
+\Description The cover title of the publication (if single level)
 \OccursUnder id
 \Rank 3
 \TextProperties paragraph publishable vernacular level_3
@@ -93,14 +525,24 @@
 
 \Marker spacer
 \Name spacer - Spacer Line
-\Description For adding extra space between titles lines (non-standard USFM)
+\Description For adding extra space between titles lines
 \OccursUnder id
 \Rank 3
 \TextType Title
 \StyleType Paragraph
 \FontSize 12
-\SpaceBefore 52
-\SpaceAfter 52
+\SpaceBefore 32
+\SpaceAfter 32
+
+\Marker ihr
+\Name Horizontal Rule
+\Description A special tag for inserting a horizontal rule
+\TextType Other
+\TextProperties paragraph publishable vernacular
+\StyleType Paragraph
+\sethook{before}{ihr}{\vrule width\textwidth height0.4pt}
+\FontSize 12
+\SpaceAfter 0
 
 \Marker tblh
 \Endmarker tblh*
