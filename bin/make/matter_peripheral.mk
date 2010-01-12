@@ -90,18 +90,6 @@ endif
 # ~/.ptxplus where one could be made automatically. For now we
 # will just have to let the uggly error message be our guide.
 
-# Most front matter peripheral .tex files will have a dependency
-# on FRONT_MATTER.tex even if it doesn't there is a hard coded
-# dependency here that will be met if called on.
-$(PATH_PROCESS)/FRONT_MATTER.tex :
-	@cp $(PATH_TEMPLATES)/FRONT_MATTER.tex '$$@'
-
-# Most back matter peripheral .tex files will have a dependency
-# on BACK_MATTER.tex even if it doesn't there is a hard coded
-# dependency here that will be met if called on.
-$(PATH_PROCESS)/BACK_MATTER.tex :
-	@cp $(PATH_TEMPLATES)/BACK_MATTER.tex '$$@'
-
 # Output to the TeX control file (Do a little clean up first)
 # The ($(1)_TEXSPECIAL) below is a workaround to overcome a current
 # limitation with styles being applied to individual parts of a
@@ -122,9 +110,6 @@ $(PATH_PROCESS)/$(1).pdf : \
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) :
 	@echo WARNING: Peripheral item: $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) missing adding template to project.
 	@cp $(PATH_TEMPLATES)/$(1) '$$@'
-
-
-
 
 # Open the PDF file with reader
 view-$(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
@@ -169,6 +154,18 @@ $(eval $(call matter_binding,MATTER_FRONT))
 
 # Back matter binding rules
 $(eval $(call matter_binding,MATTER_BACK))
+
+# Most front matter peripheral .tex files will have a dependency
+# on FRONT_MATTER.tex even if it doesn't there is a hard coded
+# dependency here that will be met if called on.
+$(PATH_PROCESS)/FRONT_MATTER.tex :
+	@cp $(PATH_TEMPLATES)/FRONT_MATTER.tex '$$@'
+
+# Most back matter peripheral .tex files will have a dependency
+# on BACK_MATTER.tex even if it doesn't there is a hard coded
+# dependency here that will be met if called on.
+$(PATH_PROCESS)/BACK_MATTER.tex :
+	@cp $(PATH_TEMPLATES)/BACK_MATTER.tex '$$@'
 
 $(foreach v,$(call uniq,$(MATTER_COVER) $(MATTER_FRONT) $(MATTER_BACK)),$(eval $(call periph_rules,$(v))))
 

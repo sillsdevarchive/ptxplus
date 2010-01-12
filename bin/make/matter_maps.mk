@@ -90,7 +90,7 @@ $(PATH_TEXTS)/$(1).csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv
 
 # Process the SVG file and edit it in Inkscape when it is done.
 # This must be done before the pdf conversion can be done.
-preprocess-$(1) : $(PATH_TEXTS)/$(1).svg $(PATH_TEXTS)/$(1).csv $(PATH_TEXTS)/styles.csv
+preprocess-$(1) : $(PATH_TEXTS)/$(1).svg $(PATH_TEXTS)/$(1).csv $(PATH_TEXTS)/map-styles.csv
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1).svg
 	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1).svg &
 
@@ -120,10 +120,10 @@ endef
 # First we need some rules to make sure the necessary files
 # are in the right places
 
-# Move the styles.csv file over if it isn't there already
-$(PATH_TEXTS)/styles.csv :
-	@echo WARNING: Map style data: $(PATH_TEXTS)/styles.csv not found copying default.
-	@cp $(PATH_MAPS_SOURCE)/styles.csv $(PATH_TEXTS)/styles.csv
+# Move the map-styles.csv file over if it isn't there already
+$(PATH_TEXTS)/map-styles.csv :
+	@echo WARNING: Map style data: $(PATH_TEXTS)/map-styles.csv not found copying default.
+	@cp $(PATH_MAPS_SOURCE)/map-styles.csv $(PATH_TEXTS)/map-styles.csv
 
 # This builds a rule (in memory) for all maps using the macro
 # above. These will be called below when we process the

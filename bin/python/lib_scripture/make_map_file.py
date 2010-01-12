@@ -50,14 +50,14 @@ class MakeMapFile (object) :
 		# Pull in all the relevant vars and settings
 		basePath = os.environ.get('PTXPLUS_BASE')
 		mapProject = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_TEXTS']
-		mapSource = log_manager._settings['Process']['Paths']['PATH_MAPS_SOURCE']
+		mapSource = log_manager._settings['Process']['Paths']['PATH_MAP_TEMPLATES']
 		mapSource = mapSource.replace( '$(PTXPLUS_BASE)', basePath)
 		colorMode = log_manager._settings['General']['MapProcesses']['mapColorMode']
 		inputFile = log_manager._currentInput
 		(head, tail) = os.path.split(inputFile)
 		csvFileName =  mapProject + "/" + tail.replace('.svg', '.csv')
-		csvStyleFileName = mapProject + "/styles.csv"
-		csvStyleFileSource = mapSource + "/styles.csv"
+		csvStyleFileName = mapProject + "/map-styles.csv"
+		csvStyleFileSource = mapSource + "/map-styles.csv"
 		svgSourceFile = mapSource + "/" + tail
 		csvSourceFile = mapSource + "/" + tail.replace('.svg', '.csv')
 		# This may be optional but we'll build a file name for it anyway
