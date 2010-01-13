@@ -27,16 +27,21 @@
    height="2179.1465"
    width="1302.592"
    y="9.7121859"
-   x="-19.559111" /><rect
+   x="-19.559111" />
+   
+<rect
    width="1244.2"
    height="2135.739"
    x="10.727845"
    y="37.702251"
    id="rect2566"
-   style="fill:#000000;fill-opacity:0" /><g
+   style="fill:#000000;fill-opacity:0" />
+   
+<g
    transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
    id="scale_bar">
-   <rect
+
+<rect
    width="34.467999"
    height="3.7709999"
    x="57.597"
@@ -84,74 +89,76 @@
    y1="108.068"
    x2="126.533"
    y2="108.068"
-   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007" /></g></g><text
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007" /></g></g>
+   
+<text
    x="129.96701"
    y="457.60275"
    id="Scale_K_Number_A"
-   style="font-size:23.60309792px;font-family:Arial">0</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">0</text>
 
 
 <text
    x="249.40062"
    y="457.60275"
    id="Scale_K_Number_B"
-   style="font-size:23.60309792px;font-family:Arial">20</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">20</text>
 
 
 <text
    x="375.91943"
    y="457.60275"
    id="Scale_K_Number_C"
-   style="font-size:23.60309792px;font-family:Arial">40</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">40</text>
 
 
 <text
    x="503.07843"
    y="457.60275"
    id="Scale_K_Number_D"
-   style="font-size:23.60309792px;font-family:Arial">60</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">60</text>
 
 
 <text
    x="271.79965"
    y="507.52002"
    id="Scale_K_DistanceKey"
-   style="font-size:23.60309792px;font-family:Arial">Kilometers</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Kilometers</text>
 
 
 <text
    x="128.24156"
    y="550.74268"
    id="Scale_M_Number_A"
-   style="font-size:23.60309792px;overflow:visible;font-family:Arial">0</text>
+   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">0</text>
 
 
 <text
    x="220.51982"
    y="550.74268"
    id="Scale_M_Number_B"
-   style="font-size:23.60309792px;overflow:visible;font-family:Arial">10</text>
+   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">10</text>
 
 
 <text
    x="319.88318"
    y="550.74268"
    id="Scale_M_Number_C"
-   style="font-size:23.60309792px;overflow:visible;font-family:Arial">20</text>
+   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">20</text>
 
 
 <text
    x="423.76611"
    y="550.74268"
    id="Scale_M_Number_D"
-   style="font-size:23.60309792px;overflow:visible;font-family:Arial">30</text>
+   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">30</text>
 
 
 <text
    x="254.55684"
    y="600.66864"
    id="Scale_M_DistanceKey"
-   style="font-size:23.60309792px;overflow:visible;font-family:Arial">Miles</text>
+   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">Miles</text>
 
 
 <image
@@ -179,263 +186,265 @@
    x="19"
    y="19"
    id="rect43"
-   style="fill:none;stroke:#000000;stroke-width:1.00010002;stroke-miterlimit:2.41420007" /></g><text
+   style="fill:none;stroke:#000000;stroke-width:1.00010002;stroke-miterlimit:2.41420007" /></g>
+   
+<text
    x="459.1254"
    y="236.58427"
    id="Title_Main"
-   style="font-size:47.20619583px;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial">The Holy Land in the Time of Jesus Christ</text>
+   style="fill:#ff0000;font-size:48px;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial">The Holy Land in the Time of Jesus Christ</text>
 
 
 <text
    x="667.98859"
    y="327.52463"
    id="City_Sidon"
-   style="font-size:12px;font-family:Arial">Sidon</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Sidon</text>
 
 
 <text
    x="1023.4918"
    y="389.25128"
    id="City_Damascus"
-   style="font-size:12px;font-family:Arial">Damascus</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Damascus</text>
 
 
 <text
    x="574.29535"
    y="525.11633"
    id="City_Tyre"
-   style="font-size:12px;font-family:Arial">Tyre</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Tyre</text>
 
 
 <text
    x="706.19012"
    y="762.84955"
    id="City_Chorazin"
-   style="font-size:12px;font-family:Arial">Chorazin</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Chorazin</text>
 
 
 <text
    x="695.90033"
    y="793.77399"
    id="City_Capernaum"
-   style="font-size:12px;font-family:Arial">Capernaum</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Capernaum</text>
 
 
 <text
    x="925.27661"
    y="789.3313"
    id="City_Bethsaida"
-   style="font-size:12px;font-family:Arial">Bethsaida</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Bethsaida</text>
 
 
 <text
    x="865.23468"
    y="890.8678"
    id="City_Tiberias"
-   style="font-size:12px;font-family:Arial">Tiberias</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Tiberias</text>
 
 
 <text
    x="700.78418"
    y="882.26166"
    id="City_Magadan"
-   style="font-size:12px;font-family:Arial">Magadan</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Magadan</text>
 
 
 <text
    x="723.85547"
    y="841.34332"
    id="City_Cana"
-   style="font-size:12px;font-family:Arial">Cana</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Cana</text>
 
 
 <text
    x="559.51703"
    y="922.43823"
    id="City_Nazareth"
-   style="font-size:12px;font-family:Arial">Nazareth</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Nazareth</text>
 
 
 <text
    x="758.94977"
    y="981.45038"
    id="City_Nain"
-   style="font-size:12px;font-family:Arial">Nain</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Nain</text>
 
 
 <text
    x="951.22662"
    y="943.42981"
    id="City_Gadara"
-   style="font-size:12px;font-family:Arial">Gadara</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Gadara</text>
 
 
 <text
    x="490.52145"
    y="1030.7653"
    id="City_Caesarea"
-   style="font-size:12px;font-family:Arial">Caesarea</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Caesarea</text>
 
 
 <text
    x="716.08636"
    y="1243.0729"
    id="City_Shechem"
-   style="font-size:12px;font-family:Arial">Shechem</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Shechem</text>
 
 
 <text
    x="571.71948"
    y="1264.7891"
    id="City_Sychar"
-   style="font-size:12px;font-family:Arial">Sychar</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Sychar</text>
 
 
 <text
    x="410.1864"
    y="1325.8611"
    id="City_Joppa"
-   style="font-size:12px;font-family:Arial">Joppa</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Joppa</text>
 
 
 <text
    x="530.03717"
    y="1373.1685"
    id="City_Arimathea"
-   style="font-size:12px;font-family:Arial">Arimathea</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Arimathea</text>
 
 
 <text
    x="413.78629"
    y="1506.2581"
    id="City_Emmaus"
-   style="font-size:12px;font-family:Arial">Emmaus</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Emmaus</text>
 
 
 <text
    x="696.22626"
    y="1487.8937"
    id="City_Jericho"
-   style="font-size:12px;font-family:Arial">Jericho</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Jericho</text>
 
 
 <text
    x="493.10287"
    y="1544.2611"
    id="City_Jerusalem"
-   style="font-size:12px;font-family:Arial">Jerusalem</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Jerusalem</text>
 
 
 <text
    x="715.69263"
    y="1533.1674"
    id="City_Bethphage"
-   style="font-size:12px;font-family:Arial">Bethphage</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Bethphage</text>
 
 
 <text
    x="706.33325"
    y="1570.6555"
    id="City_Bethany"
-   style="font-size:12px;font-family:Arial">Bethany</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Bethany</text>
 
 
 <text
    x="489.99866"
    y="1592.6858"
    id="City_Bethlehem"
-   style="font-size:12px;font-family:Arial">Bethlehem</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Bethlehem</text>
 
 
 <text
    x="217.55171"
    y="1718.7402"
    id="City_Gaza"
-   style="font-size:12px;font-family:Arial">Gaza</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Gaza</text>
 
 
 <text
    x="966.84766"
    y="549.08429"
    id="City_CaesareaPhilippi"
-   style="font-size:12px;font-family:Arial">Caesarea Philippi</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Caesarea Philippi</text>
 
 
 <text
    x="551.37402"
    y="1313.1787"
    id="Place_JacobsWell"
-   style="font-size:12px;font-family:Arial">Jacob's Well</text>
+   style="fill:#ff0000;font-size:36px;font-family:Arial">Jacob's Well</text>
 
 
 <text
    x="882.42426"
    y="823.98273"
    id="Water_SeaOfGalilee"
-   style="font-size:12px;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#333333;font-family:Arial">Sea of Galilee</text>
+   style="fill:#ff0000;font-size:42px;font-family:Arial">Sea of Galilee</text>
 
 
 <text
    x="74.478157"
    y="982.95282"
    id="Water_JordanRiver"
-   style="font-size:12px;fill:#333333;font-family:Arial">Jordan River</text>
+   style="fill:#ff0000;font-size:42px;font-family:Arial">Jordan River</text>
 
 
 <text
    x="168.14394"
    y="670.02368"
    id="Sea_MediterraneanSea"
-   style="font-size:39.33849716px;fill:#333333;font-family:Arial">Mediterranean Sea</text>
+   style="fill:#ff0000;font-size:42px;font-family:Arial">Mediterranean Sea</text>
 
 
 <text
    x="703.99933"
    y="1842.4683"
    id="Sea_DeadSea"
-   style="font-size:39.33849716px;fill:#333333;font-family:Arial">Dead Sea</text>
+   style="fill:#ff0000;font-size:42px;font-family:Arial">Dead Sea</text>
 
 
 <text
    x="533.75403"
    y="1182.3413"
    id="Region_Samaria"
-   style="font-size:47.20619583px;letter-spacing:3.67941141;fill:#333333;font-family:Arial">SAMARIA</text>
+   style="fill:#ff0000;font-size:52px;font-family:Arial">SAMARIA</text>
 
 
 <text
    x="487.55963"
    y="1673.8766"
    id="Region_Judea"
-   style="font-size:47.20619583px;letter-spacing:3.67941141;fill:#333333;font-family:Arial">JUDEA</text>
+   style="fill:#ff0000;font-size:52px;font-family:Arial">JUDEA</text>
 
 
 <text
    x="972.30365"
    y="951.91321"
    id="Region_Phoenicia"
-   style="font-size:47.20619583px;letter-spacing:3.67941141;fill:#333333;font-family:Arial">PHOENICIA</text>
+   style="fill:#ff0000;font-size:52px;font-family:Arial">PHOENICIA</text>
 
 
 <text
    x="1041.6411"
    y="1490.1143"
    id="Region_Syria"
-   style="font-size:47.20619583px;fill:#333333;font-family:Arial">SYRIA</text>
+   style="fill:#ff0000;font-size:52px;font-family:Arial">SYRIA</text>
 
 
 <text
    x="947.50372"
    y="649.23462"
    id="Region_Galilee"
-   style="font-size:47.20619583px;fill:#333333;font-family:Arial">GALILEE</text>
+   style="fill:#ff0000;font-size:52px;font-family:Arial">GALILEE</text>
 
 
 <text
    x="949.64746"
    y="176.06305"
    id="Region_Decapolis"
-   style="font-size:47.20619965px;fill:#333333;font-family:Arial">DECAPOLIS</text>
+   style="fill:#ff0000;font-size:52px;font-family:Arial">DECAPOLIS</text>
 
 
 <rect
