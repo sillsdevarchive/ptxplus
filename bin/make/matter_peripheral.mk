@@ -159,13 +159,13 @@ $(eval $(call matter_binding,MATTER_BACK))
 # on FRONT_MATTER.tex even if it doesn't there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/FRONT_MATTER.tex :
-	@cp $(PATH_TEMPLATES)/FRONT_MATTER.tex '$$@'
+	@cp $(PATH_TEMPLATES)/FRONT_MATTER.tex '$@'
 
 # Most back matter peripheral .tex files will have a dependency
 # on BACK_MATTER.tex even if it doesn't there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/BACK_MATTER.tex :
-	@cp $(PATH_TEMPLATES)/BACK_MATTER.tex '$$@'
+	@cp $(PATH_TEMPLATES)/BACK_MATTER.tex '$@'
 
 $(foreach v,$(call uniq,$(MATTER_COVER) $(MATTER_FRONT) $(MATTER_BACK)),$(eval $(call periph_rules,$(v))))
 

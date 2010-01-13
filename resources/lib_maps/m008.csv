@@ -37,9 +37,8 @@
 "City_Cnidus","Cnidus",
 "City_Patara","Patara",
 "City_Myra","Myra",
-"City_Malta","Malta",
 "City_Phoenix","Phoenix",
-"City_FairHavens","Fair Havens",
+"City_FairHavens","Fair Havens","A harbor on the island of Crete (Acts 27:8)"
 "City_Lasea","Lasea",
 "City_Salmone","Salmone",
 "City_Sidon","Sidon",
@@ -73,12 +72,13 @@
 "Region_Syria","SYRIA",
 "Region_Egypt","EGYPT",
 "Region_Arabia","ARABIA",
-"Island_Crete","Crete",
-"Island_Clauda","Clauda",
-"Island_Cyprus","Cyprus",
-"Island_Rhodes","Rhodes",
 "Island_Chios","Chios",
+"Island_Clauda","Clauda","An island near Crete (Acts 27:16)"
+"Island_Crete","Crete",
+"Island_Cyprus","Cyprus",
+"Island_Malta","Malta","Paul was ship is wrecked on Malta (Acts 27:14-44)"
 "Island_Patmos","Patmos",
+"Island_Rhodes","Rhodes",
 "Sea_BlackSea","BLACK SEA",
 "Sea_Mediterranean","MEDITERRANEAN SEA",
 "Scale_K_Number_A",0,
