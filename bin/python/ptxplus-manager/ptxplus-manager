@@ -480,7 +480,7 @@ class ConfigGUI (object) :
 ################################################################################
 
 	def m_archive (self, widget) :
-		fcd = gtk.FileChooserDialog("ptxplus: Archive File", None,
+		fcd = gtk.FileChooserDialog("ptxplus: Name Archive File", None,
 				gtk.FILE_CHOOSER_ACTION_SAVE,
 				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))

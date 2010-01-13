@@ -22,12 +22,12 @@
 
 
 <image
-   xlink:href="m006-bkgrnd-cl.png"
-   id="BackgroundImage"
-   height="2179.1465"
+   xlink:href="/home/dennis/Publishing/ZYP/LATN-NTA/Texts/m006-bkgrnd-cl.png"
+   x="-21.203154"
+   y="8.0681438"
    width="1302.592"
-   y="9.7121859"
-   x="-19.559111" />
+   height="2179.1465"
+   id="BackgroundImage" />
    
 <rect
    width="1244.2"
@@ -61,14 +61,14 @@
    style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.30500001;stroke-miterlimit:2.41420007" />
 
 <line
-   id="Inside_1_"
    clip-rule="evenodd"
+   id="Inside_1_"
    stroke-miterlimit="2.4142"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007"
    x1="23.256001"
-   y1="108.068"
    x2="57.723999"
-   y2="108.068"
-   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007" /></g>
+   y1="108.068"
+   y2="108.068" /></g>
 
 <g
    id="Right">
@@ -82,83 +82,103 @@
    style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.30500001;stroke-miterlimit:2.41420007" />
 
 <line
-   id="Inside"
    clip-rule="evenodd"
+   id="Inside"
    stroke-miterlimit="2.4142"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007"
    x1="92.064003"
-   y1="108.068"
    x2="126.533"
-   y2="108.068"
-   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007" /></g></g>
+   y1="108.068"
+   y2="108.068" /></g></g>
    
 <text
    x="129.96701"
    y="457.60275"
    id="Scale_K_Number_A"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">0</text>
+   style="font-size:22px;line-height:100%;font-family:Arial" />
+
+
 
 
 <text
    x="249.40062"
    y="457.60275"
    id="Scale_K_Number_B"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">20</text>
+   style="font-size:22px;line-height:100%;font-family:Arial" />
+
+
 
 
 <text
    x="375.91943"
    y="457.60275"
    id="Scale_K_Number_C"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">40</text>
+   style="font-size:22px;line-height:100%;font-family:Arial" />
+
+
 
 
 <text
    x="503.07843"
    y="457.60275"
    id="Scale_K_Number_D"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">60</text>
+   style="font-size:22px;line-height:100%;font-family:Arial" />
+
+
 
 
 <text
    x="271.79965"
    y="507.52002"
    id="Scale_K_DistanceKey"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Kilometers</text>
+   style="font-size:22px;line-height:100%;font-family:Arial" />
+
+
 
 
 <text
    x="128.24156"
    y="550.74268"
    id="Scale_M_Number_A"
-   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">0</text>
+   style="font-size:22px;line-height:100%;font-family:Arial">0</text>
+
+
 
 
 <text
    x="220.51982"
    y="550.74268"
    id="Scale_M_Number_B"
-   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">10</text>
+   style="font-size:22px;line-height:100%;font-family:Arial">12</text>
+
+
 
 
 <text
    x="319.88318"
    y="550.74268"
    id="Scale_M_Number_C"
-   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">20</text>
+   style="font-size:22px;line-height:100%;font-family:Arial">24</text>
+
+
 
 
 <text
    x="423.76611"
    y="550.74268"
    id="Scale_M_Number_D"
-   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">30</text>
+   style="font-size:22px;line-height:100%;font-family:Arial">36</text>
+
+
 
 
 <text
    x="254.55684"
    y="600.66864"
    id="Scale_M_DistanceKey"
-   style="fill:#ff0000;font-size:24px;overflow:visible;font-family:Arial">Miles</text>
+   style="font-size:22px;line-height:100%;font-family:Arial">khang</text>
+
+
 
 
 <image
@@ -192,259 +212,336 @@
    x="459.1254"
    y="236.58427"
    id="Title_Main"
-   style="fill:#ff0000;font-size:48px;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial">The Holy Land in the Time of Jesus Christ</text>
+   style="font-size:58px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial Bold">Zisu Khri Chai Raang Pathai</text>
+
+
 
 
 <text
-   x="667.98859"
-   y="327.52463"
+   x="654.83624"
+   y="286.42355"
    id="City_Sidon"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Sidon</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Sidon</text>
+
+
 
 
 <text
-   x="1023.4918"
-   y="389.25128"
+   x="970.88245"
+   y="392.53937"
    id="City_Damascus"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Damascus</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Damaska</text>
+
+
 
 
 <text
-   x="574.29535"
-   y="525.11633"
+   x="557.47302"
+   y="519.30396"
    id="City_Tyre"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Tyre</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Tair</text>
+
+
 
 
 <text
-   x="706.19012"
-   y="762.84955"
+   x="724.77295"
+   y="744.26672"
    id="City_Chorazin"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Chorazin</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Korazin</text>
+
+
 
 
 <text
-   x="695.90033"
-   y="793.77399"
+   x="671.12323"
+   y="787.57971"
    id="City_Capernaum"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Capernaum</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Kapernaum</text>
+
+
 
 
 <text
-   x="925.27661"
-   y="789.3313"
+   x="931.47089"
+   y="770.74847"
    id="City_Bethsaida"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Bethsaida</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Bethsaida</text>
+
+
 
 
 <text
-   x="865.23468"
-   y="890.8678"
+   x="883.8175"
+   y="897.06207"
    id="City_Tiberias"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Tiberias</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Tiberia</text>
+
+
 
 
 <text
-   x="700.78418"
-   y="882.26166"
+   x="689.65778"
+   y="896.55969"
    id="City_Magadan"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Magadan</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Magadan</text>
+
+
 
 
 <text
-   x="723.85547"
-   y="841.34332"
+   x="707.79694"
+   y="843.36926"
    id="City_Cana"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Cana</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Kana</text>
+
+
 
 
 <text
-   x="559.51703"
-   y="922.43823"
+   x="529.92426"
+   y="946.33508"
    id="City_Nazareth"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Nazareth</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Nazaret</text>
+
+
 
 
 <text
-   x="758.94977"
-   y="981.45038"
+   x="745.79742"
+   y="1001.2953"
    id="City_Nain"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Nain</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Nain</text>
+
+
 
 
 <text
-   x="951.22662"
-   y="943.42981"
+   x="928.21002"
+   y="956.20026"
    id="City_Gadara"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Gadara</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Gadara</text>
+
+
 
 
 <text
-   x="490.52145"
-   y="1030.7653"
+   x="464.98056"
+   y="1058.3322"
    id="City_Caesarea"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Caesarea</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Sisaria</text>
+
+
 
 
 <text
-   x="716.08636"
-   y="1243.0729"
+   x="697.50354"
+   y="1261.6559"
    id="City_Shechem"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Shechem</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Shekem</text>
+
+
 
 
 <text
-   x="571.71948"
-   y="1264.7891"
+   x="540.74811"
+   y="1295.7607"
    id="City_Sychar"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Sychar</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Saikar</text>
+
+
 
 
 <text
-   x="410.1864"
-   y="1325.8611"
+   x="373.02075"
+   y="1338.2498"
    id="City_Joppa"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Joppa</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Jopa</text>
+
+
 
 
 <text
-   x="530.03717"
-   y="1373.1685"
+   x="517.64862"
+   y="1404.1401"
    id="City_Arimathea"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Arimathea</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Arimathea</text>
+
+
 
 
 <text
-   x="413.78629"
-   y="1506.2581"
+   x="385.83755"
+   y="1527.6306"
    id="City_Emmaus"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Emmaus</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Emau</text>
+
+
 
 
 <text
-   x="696.22626"
-   y="1487.8937"
+   x="679.02203"
+   y="1522.0367"
    id="City_Jericho"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Jericho</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Jeriko</text>
+
+
 
 
 <text
-   x="493.10287"
-   y="1544.2611"
+   x="478.30649"
+   y="1575.4979"
    id="City_Jerusalem"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Jerusalem</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Jerusalem</text>
+
+
 
 
 <text
-   x="715.69263"
-   y="1533.1674"
+   x="698.8703"
+   y="1567.6923"
    id="City_Bethphage"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Bethphage</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Bethfes</text>
+
+
 
 
 <text
-   x="706.33325"
-   y="1570.6555"
+   x="694.44305"
+   y="1601.8923"
    id="City_Bethany"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Bethany</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Bethani</text>
+
+
 
 
 <text
-   x="489.99866"
-   y="1592.6858"
+   x="455.47375"
+   y="1633.7869"
    id="City_Bethlehem"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Bethlehem</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Bethlehem</text>
+
+
 
 
 <text
-   x="217.55171"
-   y="1718.7402"
+   x="198.96884"
+   y="1731.1289"
    id="City_Gaza"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Gaza</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Gaza</text>
+
+
 
 
 <text
-   x="966.84766"
-   y="549.08429"
+   x="963.55957"
+   y="532.64386"
    id="City_CaesareaPhilippi"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Caesarea Philippi</text>
+   style="font-size:36px;line-height:100%;font-family:Arial">Sisaria Filipi</text>
+
+
 
 
 <text
-   x="551.37402"
-   y="1313.1787"
+   x="702.62592"
+   y="1337.8394"
    id="Place_JacobsWell"
-   style="fill:#ff0000;font-size:36px;font-family:Arial">Jacob's Well</text>
+   style="font-size:32px;line-height:100%;font-family:Arial">Jacob Tuikho</text>
+
+
 
 
 <text
    x="882.42426"
    y="823.98273"
-   id="Water_SeaOfGalilee"
-   style="fill:#ff0000;font-size:42px;font-family:Arial">Sea of Galilee</text>
+   id="Lake_SeaOfGalilee"
+   style="font-size:32px;font-weight:bold;line-height:100%;fill:#000086;font-family:Arial Bold">Galili Rili</text>
+
+
 
 
 <text
-   x="74.478157"
-   y="982.95282"
-   id="Water_JordanRiver"
-   style="fill:#ff0000;font-size:42px;font-family:Arial">Jordan River</text>
+   x="-1201.9337"
+   y="960.15686"
+   transform="matrix(0.03509432,-0.999384,0.999384,0.03509432,0,0)"
+   id="River_JordanRiver"
+   style="font-size:30.97142982px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000086;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">Jordan Tuivaw</text>
+
+
 
 
 <text
-   x="168.14394"
-   y="670.02368"
+   x="-1030.901"
+   y="435.03629"
+   transform="matrix(0.21284596,-0.97708577,0.97708577,0.21284596,0,0)"
    id="Sea_MediterraneanSea"
-   style="fill:#ff0000;font-size:42px;font-family:Arial">Mediterranean Sea</text>
+   style="font-size:38px;font-weight:bold;line-height:100%;fill:#000086;font-family:Arial Bold">Mediterinian Rili</text>
+
+
 
 
 <text
-   x="703.99933"
-   y="1842.4683"
+   x="-1710.5117"
+   y="1147.2408"
+   transform="matrix(0.18330938,-0.98305527,0.98305527,0.18330938,0,0)"
    id="Sea_DeadSea"
-   style="fill:#ff0000;font-size:42px;font-family:Arial">Dead Sea</text>
+   style="font-size:38px;font-weight:bold;line-height:100%;fill:#000086;font-family:Arial Bold">Rili Thi</text>
+
+
 
 
 <text
    x="533.75403"
    y="1182.3413"
    id="Region_Samaria"
-   style="fill:#ff0000;font-size:52px;font-family:Arial">SAMARIA</text>
+   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Samaria</text>
+
+
 
 
 <text
-   x="487.55963"
-   y="1673.8766"
+   x="505.6441"
+   y="1739.755"
    id="Region_Judea"
-   style="fill:#ff0000;font-size:52px;font-family:Arial">JUDEA</text>
+   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Judia</text>
+
+
 
 
 <text
-   x="972.30365"
-   y="951.91321"
+   x="970.65961"
+   y="1060.42"
    id="Region_Phoenicia"
-   style="fill:#ff0000;font-size:52px;font-family:Arial">PHOENICIA</text>
+   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Fonisia</text>
+
+
 
 
 <text
    x="1041.6411"
    y="1490.1143"
    id="Region_Syria"
-   style="fill:#ff0000;font-size:52px;font-family:Arial">SYRIA</text>
+   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Siria</text>
+
+
 
 
 <text
    x="947.50372"
    y="649.23462"
    id="Region_Galilee"
-   style="fill:#ff0000;font-size:52px;font-family:Arial">GALILEE</text>
+   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Galili</text>
+
+
 
 
 <text
    x="949.64746"
    y="176.06305"
    id="Region_Decapolis"
-   style="fill:#ff0000;font-size:52px;font-family:Arial">DECAPOLIS</text>
+   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Dekapoli</text>
+
+
 
 
 <rect
@@ -458,7 +555,7 @@
    cy="384.00201"
    rx="1.779"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,59.121528,74.951548)"
    id="ellipse54"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="165.036"
@@ -500,7 +597,7 @@
    cy="336.82901"
    rx="1.78"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,21.955812,74.951548)"
    id="ellipse66"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="126.853"
@@ -535,7 +632,7 @@
    cy="257.32599"
    rx="1.781"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,34.344384,74.951548)"
    id="ellipse76"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="191.364"
@@ -556,21 +653,21 @@
    cy="205.75999"
    rx="1.779"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,46.732956,56.36869)"
    id="ellipse82"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="218.03101"
    cy="203.808"
    rx="1.78"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,71.5101,62.562976)"
    id="ellipse84"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="221.78999"
    cy="210.76401"
    rx="1.78"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,77.704386,68.757262)"
    id="ellipse86"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="242.10201"
@@ -584,42 +681,42 @@
    cy="192.004"
    rx="1.78"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,77.704386,50.174404)"
    id="ellipse90"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="226.63901"
    cy="192.85699"
    rx="1.781"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,77.704386,50.174404)"
    id="ellipse92"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="224.07001"
    cy="184.847"
    rx="1.781"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,77.704386,56.36869)"
    id="ellipse94"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="245.35699"
    cy="127.462"
    rx="1.781"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,66.461465,38.782614)"
    id="ellipse96"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="164.31"
    cy="120.504"
    rx="1.78"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,52.927242,37.785832)"
    id="ellipse98"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="194.804"
    cy="66.902"
    rx="1.78"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,59.121528,25.39726)"
    id="ellipse100"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><ellipse
    cx="309.061"
@@ -633,10 +730,10 @@
    cy="443.125"
    rx="1.781"
    ry="1.768"
-   transform="matrix(3.588646,0,0,3.7724729,46.732956,74.951548)"
+   transform="matrix(3.588646,0,0,3.7724729,34.344384,43.980118)"
    id="ellipse104"
    style="fill-rule:evenodd;stroke:#000000;stroke-width:0.21600001;stroke-miterlimit:2.41420007" /><path
-   d="M 810.30929,882.48331 C 823.97171,852.9604 823.97171,852.9604 823.97171,852.9604"
+   d="m 835.08645,870.09473 c 13.66242,-29.52291 13.66242,-29.52291 13.66242,-29.52291"
    id="path2464"
    style="fill:none;stroke:#000000;stroke-width:3.67941141px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" /><g
    transform="matrix(2.8884312,0,0,3.7724729,60.843326,170.44788)"
@@ -662,14 +759,14 @@
    style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.30500001;stroke-miterlimit:2.41420007" />
 
 <line
-   id="line2473"
    clip-rule="evenodd"
+   id="line2473"
    stroke-miterlimit="2.4142"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007"
    x1="23.256001"
-   y1="108.068"
    x2="57.723999"
-   y2="108.068"
-   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007" /></g>
+   y1="108.068"
+   y2="108.068" /></g>
 
 <g
    id="g2475">
@@ -683,14 +780,14 @@
    style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.30500001;stroke-miterlimit:2.41420007" />
 
 <line
-   id="line2479"
    clip-rule="evenodd"
+   id="line2479"
    stroke-miterlimit="2.4142"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007"
    x1="92.064003"
-   y1="108.068"
    x2="126.533"
-   y2="108.068"
-   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.40240002;stroke-miterlimit:2.41420007" /></g></g>
+   y1="108.068"
+   y2="108.068" /></g></g>
 
 
 </svg>

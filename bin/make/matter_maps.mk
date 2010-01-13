@@ -30,6 +30,8 @@
 #		files easier.
 # 20091201 - djd - Changed references for MAP_IDS to MATTER_MAPS to
 #		reflect changes in the rest of the system
+# 20100113 - djd - Added code for processing maps with seperate
+#		style files
 
 
 ##############################################################
@@ -74,41 +76,58 @@ define map_rules
 # script will see to it that there is a Maps folder and a csv
 # file for this map. It takes care of the copy process. It should
 # be able to do this and if it can't it should tell us why.
-$(PATH_TEXTS)/$(1).svg :
-	@echo WARNING: Map: $(PATH_TEXTS)/$(1).svg not found adding default to project.
-	@cp $(PATH_MAP_TEMPLATES)/$(1).svg $(PATH_TEXTS)/$(1).svg
+$(PATH_TEXTS)/$(1)-map.svg :
+	@echo WARNING: Map: $(PATH_TEXTS)/$(1)-map.svg not found adding default to project.
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-map.svg $(PATH_TEXTS)/$(1)-map.svg
 
-# Create a common project map translation file
-$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv :
-	@echo WARNING: Map tranlation data: $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv not found adding default to project.
-	@cp $(PATH_MAP_TEMPLATES)/$(1).csv $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv
+# Copy project map style file into project
+$(PATH_TEXTS)/$(1)-styles.csv :
+	@echo WARNING: Map style data: $(PATH_TEXTS)/$(1)-styles.csv not found adding default to project.
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-styles.csv $(PATH_TEXTS)/$(1)-styles.csv
+
+# Copy the map reference file to the peripheral-map source folder
+# This is for refering to when the map data is being translated
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png :
+	@echo INFO: Map reference file: $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png is being copied to project.
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-org.png $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
+
+# Create a common project map translation (data) file
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv :
+	@echo WARNING: Map tranlation data: $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv not found adding default to project.
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-data.csv $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
 
 # Migrate the common project map translation file to the Texts folder
-$(PATH_TEXTS)/$(1).csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv
-	@echo INFO: Migrating data for: $(PATH_TEXTS)/$(1).csv
-	@$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1).csv $(PATH_TEXTS)/$(1).csv
+# We keep a copy of this file where the source data is kept because
+# the translator needs access to these files to edit them.
+$(PATH_TEXTS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
+	@echo INFO: Migrating data for: $(PATH_TEXTS)/$(1)-data.csv
+	@$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv $(PATH_TEXTS)/$(1)-data.csv
 
 # Process the SVG file and edit it in Inkscape when it is done.
 # This must be done before the pdf conversion can be done.
-preprocess-$(1) : $(PATH_TEXTS)/$(1).svg $(PATH_TEXTS)/$(1).csv $(PATH_TEXTS)/map-styles.csv
-	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1).svg
-	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1).svg &
+preprocess-$(1) : \
+	$(PATH_TEXTS)/$(1)-map.svg \
+	$(PATH_TEXTS)/$(1)-data.csv \
+	$(PATH_TEXTS)/$(1)-styles.csv \
+	$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1)-map.svg
+	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1)-map.svg &
 
 # Create the PDF version of the map
 # This will transform the svg file to pdf. However, if the preprocess has
 # not been run or failed, this process will fail too.
-$(PATH_PROCESS)/$(1).pdf :
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1).svg -A $(PATH_PROCESS)/$(1).pdf
+$(PATH_PROCESS)/$(1)-map.pdf :
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1)-map.svg -A $(PATH_PROCESS)/$(1)-map.pdf
 
 # Process the SVG file and view it in PDF when it is done. Note that this
 # process will fail if the preprocess has not been run first. The map making
 # process differs from typesetting so it has to be this way for now.
-view-$(1) :: $(PATH_PROCESS)/$(1).pdf
+view-$(1) :: $(PATH_PROCESS)/$(1)-map.pdf
 	@ $(VIEWPDF) $$< &
 
-link-$(1) :: $(PATH_PROCESS)/$(1).pdf
-	@ rm $../$(PATH_PROCESS)/$(1).pdf &
-	@ ln -s ../$$< $(PATH_PROCESS)/$(1).pdf &
+link-$(1) :: $(PATH_PROCESS)/$(1)-map.pdf
+	@ rm $../$(PATH_PROCESS)/$(1)-map.pdf &
+	@ ln -s ../$$< $(PATH_PROCESS)/$(1)-map.pdf &
 
 
 endef
@@ -119,11 +138,6 @@ endef
 
 # First we need some rules to make sure the necessary files
 # are in the right places
-
-# Move the map-styles.csv file over if it isn't there already
-$(PATH_TEXTS)/map-styles.csv :
-	@echo WARNING: Map style data: $(PATH_TEXTS)/map-styles.csv not found copying default.
-	@cp $(PATH_MAPS_SOURCE)/map-styles.csv $(PATH_TEXTS)/map-styles.csv
 
 # This builds a rule (in memory) for all maps using the macro
 # above. These will be called below when we process the
@@ -138,9 +152,9 @@ MATTER_MAPS_PDF		= $(PATH_PROCESS)/MATTER_MAPS.pdf
 MATTER_MAPS_TEX		= $(PATH_PROCESS)/MATTER_MAPS.tex
 
 # Create a TeX control file for building our book of maps
-$(MATTER_MAPS_TEX) : $(foreach v,$(MATTER_MAPS), $(PATH_PROCESS)/$(v).pdf)
-	@echo INFO: Hi there, is this working?
-	@perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\includepdf{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_MAPS),$(v).pdf) > $@
+$(MATTER_MAPS_TEX) : $(foreach v,$(MATTER_MAPS), $(PATH_PROCESS)/$(v)-map.pdf)
+	@echo INFO: Creating the TeX control file: $(MATTER_MAPS_TEX)
+	@perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\includepdf{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_MAPS),$(v)-map.pdf) > $@
 
 
 $(MATTER_MAPS_PDF) : $(MATTER_MAPS_TEX)

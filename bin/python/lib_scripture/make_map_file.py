@@ -23,6 +23,8 @@
 #		problem in a copy routine
 # 20090914 - djd - Removed code that was duplicating makefile
 #		functions like creating the Maps folder, etc.
+# 20100113 - djd - Added code for processing maps with seperate
+#		style files
 
 
 #############################################################
@@ -50,26 +52,26 @@ class MakeMapFile (object) :
 		# Pull in all the relevant vars and settings
 		basePath = os.environ.get('PTXPLUS_BASE')
 		mapProject = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_TEXTS']
-		mapSource = log_manager._settings['Process']['Paths']['PATH_MAP_TEMPLATES']
-		mapSource = mapSource.replace( '$(PTXPLUS_BASE)', basePath)
+		mapTemplate = log_manager._settings['Process']['Paths']['PATH_MAP_TEMPLATES']
+		mapTemplate = mapTemplate.replace( '$(PTXPLUS_BASE)', basePath)
 		colorMode = log_manager._settings['General']['MapProcesses']['mapColorMode']
 		inputFile = log_manager._currentInput
 		(head, tail) = os.path.split(inputFile)
-		csvFileName =  mapProject + "/" + tail.replace('.svg', '.csv')
-		csvStyleFileName = mapProject + "/map-styles.csv"
-		csvStyleFileSource = mapSource + "/map-styles.csv"
-		svgSourceFile = mapSource + "/" + tail
-		csvSourceFile = mapSource + "/" + tail.replace('.svg', '.csv')
+		dataFileName =  mapProject + "/" + tail.replace('map.svg', 'data.csv')
+		styleFileName = mapProject + "/" + tail.replace('map.svg', 'styles.csv')
+		styleFileSource = mapTemplate + "/" + tail.replace('map.svg', 'styles.csv')
+		mapSourceFile = mapTemplate + "/" + tail
+		dataSourceFile = mapTemplate + "/" + tail.replace('.svg', 'data.csv')
 		# This may be optional but we'll build a file name for it anyway
 		# Where this falls down is when the illustration is greyscale but the project
 		# calls for color. The work-around for now is to make the svg file work with
 		# both kinds.
 		if colorMode == "true" :
-			mapBackgroundImageFile = tail.replace('.svg', '-bkgrnd-cl.png')
-			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-cl.png')
+			mapBackgroundImageFile = tail.replace('map.svg', 'bkgrnd-cl.png')
+			mapBackgroundImageFileSource = mapTemplate + "/" + tail.replace('map.svg', 'bkgrnd-cl.png')
 		else :
-			mapBackgroundImageFile = inputFile.replace('.svg', '-bkgrnd-gr.png')
-			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-gr.png')
+			mapBackgroundImageFile = inputFile.replace('map.svg', 'bkgrnd-gr.png')
+			mapBackgroundImageFileSource = mapTemplate + "/" + tail.replace('map.svg', 'bkgrnd-gr.png')
 
 		# Does this map need a background image, is it there?
 		if not os.path.isfile(mapBackgroundImageFile) :
@@ -93,11 +95,11 @@ class MakeMapFile (object) :
 
 
 		# Pull in the CSV map point data
-		csvMapData = file(csvFileName)
+		csvMapData = file(dataFileName)
 		mapData = reader(csvMapData, dialect = 'excel')
 
 		# Pull in the CSV style data
-		csvStyleData = file(csvStyleFileName)
+		csvStyleData = file(styleFileName)
 		styleData = reader(csvStyleData, dialect = 'excel')
 
 		# Gather the new map point data
@@ -109,7 +111,7 @@ class MakeMapFile (object) :
 		# Gather the new style data
 		styles = {}
 		for row in styleData:
-			if row[0] != "StyleName" :
+			if row and row[0] != "StyleName" :
 				styles[row[0]] = row[1]
 
 #####################################################################################

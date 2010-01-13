@@ -51,7 +51,7 @@ class ArchiveProject (object) :
 		projectID = tools.getProjectID()
 		projectPath = os.getcwd()
 		self.settings = tools.getSettingsObject()
-
+		print "File: " + filename
 		# Output an archive.conf file that contains all the current settings
 		# Though this is just a one-time operation it is easier to do it in tools
 		archiveConfObject = tools.getProjectSettingsObject()
@@ -64,11 +64,11 @@ class ArchiveProject (object) :
 		# get the source files as well as the project files
 		projHome, proj = os.path.split(projectPath)
 		os.chdir(projHome)
-		# Build a path to the archive folder default is ../Archive
+		# Build a path to the archive folder default is ../../Archive
 		# If it is not the default we'll assume the path is absolute
 		if filename == projectID :
 			archivePath = self.settings['General']['Archive']['archivePath']
-			if archivePath.find('..') > -1 :
+			if archivePath.find('../..') > -1 :
 				archivePath = os.getcwd() + '/Archive'
 			archiveFile = archivePath + "/" + projectID + ".tar.gz"
 			# Look and see if the Archive folder exists
