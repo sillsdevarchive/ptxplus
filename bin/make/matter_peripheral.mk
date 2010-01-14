@@ -24,6 +24,9 @@
 #		multiple scripts are used.
 # 20091201 - djd - Changed some process commands to be more in line
 #		with others
+# 20090114 - djd - Changed the process model of peripheral material
+#		so that now there is only one source and it is linked
+#		into the project. Much easier to maintian this way.
 
 ##############################################################
 #		Variables for peripheral matter
@@ -43,44 +46,23 @@ MATTER_BACK_PDF=
 
 define periph_rules
 
-# This is the basic rule for auto-text-processing. To control processes
-# edit the project.conf file. This will automatically run the four
-# phases of text processing. However, first it will delete any copies
-# in the system to avoid having bad data in the system. All problems with
-# the source must be fixed in the source, no where else. The first process
-# will be preprocess checks of the source text. Next it will run any custom
-# proecesses that are configured in the project.conf file. These could be
-# anything and may include copying text into the project, in which case
-# requires setting the CopyIntoSystem setting to false. After the custom
-# proecesses are run it will copy the text into the system and then it will
-# run any necessary text processes on the system source text as defined in
-# the project.conf file.
-#
-# A possible problem here is if the custom process was to be run on
-# a peripheral file that was meant for Scripture text and changes
-# were made that were not supposed to. We may need to add a little
-# switch at the start of each of the text processes that would only
-# perform them on specific kind of file taken from the \periph field.
-
-ifeq ($(LOCKED),0)
+# Peripheral material is unique to each project, as such, there only
+# needs to be one copy to make maintained simpler. With regular
+# content text changes may be made to the working copy that are not
+# made to the source. That is not the case with peripheral material.
+# The source is the same as the working copy. The source is kept
+# with in with the other source files so the translator has access
+# to it. Checks and processes on peripheral material are currently
+# done manually. This helps simplify the system and makes it more
+# reliable.
 $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
-	@echo Regenerating $(PATH_TEXTS)/$(1)
-	@rm -f $(PATH_TEXTS)/$(1)
-	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<' '$$@'
-	@$(PY_PROCESS_SCRIPTURE_TEXT) CopyIntoSystem $(1) '$$<' '$$@'
-	@$(PY_PROCESS_SCRIPTURE_TEXT) TextProcesses $(1) '$$@' '$$@'
-endif
+	@echo Linking project to peripheral source texts: $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1))
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)) $(PATH_TEXTS)/
 
-# This enables us to do the preprocessing on a single peripheral item. Then it
-# will open the log file produced from the processes run.
+# This enables us to do the preprocessing on a single peripheral item.
 preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
-ifeq ($(LOCKED),0)
 	@echo Preprocessing $(1)
-	@rm -f $(PATH_TEXTS)/$(1)
 	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
-else
-	@echo Source locked: Will not preprocess file: $(1)
-endif
 
 # NOTE:
 # If a peripheral template file does not exist for a given object
@@ -167,6 +149,9 @@ $(PATH_PROCESS)/FRONT_MATTER.tex :
 $(PATH_PROCESS)/BACK_MATTER.tex :
 	@cp $(PATH_TEMPLATES)/BACK_MATTER.tex '$@'
 
+# This calls all the automated rules defined above and does them
+# once on each file, even if the file is listed repeatedly in the
+# Binding list. This is what the uniq call is for.
 $(foreach v,$(call uniq,$(MATTER_COVER) $(MATTER_FRONT) $(MATTER_BACK)),$(eval $(call periph_rules,$(v))))
 
 # Produce all the outer cover material in one PDF file
@@ -202,9 +187,8 @@ pdf-remove-back :
 	rm -f $(MATTER_BACK_PDF)
 
 
-
-
-
 # Make the content for a topical index from CSV data
+# Not sure what the status on this call is. Does it
+# even work yet?
 make-topic-index :
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_topic_index_file 'NA' $(PATH_SOURCE)$(PATH_SOURCE_PERIPH)/TOPICAL_INDEX.CSV $(PATH_TEXTS)/TOPICAL_INDEX.USFM

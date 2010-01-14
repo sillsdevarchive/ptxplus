@@ -96,12 +96,22 @@ $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv :
 	@echo WARNING: Map tranlation data: $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv not found adding default to project.
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-data.csv $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
 
-# Migrate the common project map translation file to the Texts folder
-# We keep a copy of this file where the source data is kept because
-# the translator needs access to these files to edit them.
+# Link the project map data translation file to the Texts folder.
+# We link it to prevent changes from being made that might cause
+# confusion in the process. This way there is only one file to
+# manage. Previously, there was a process in place that would
+# convert the map label data in the CSV to a specified encoding.
+# This was for multi-script projects. This added complications to
+# the process that hindered efficient processing on non-multi-script
+# projects. Just for the record the command for this was:
+# migrate_map_file.py. This process has been deprecated for the most
+# part. For the rare multi-script project, a less automated means
+# will be needed to generate the original map label data.
+# BTW, we use readlink here to resolve the path so the ln will make
+# a successful link.
 $(PATH_TEXTS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
-	@echo INFO: Migrating data for: $(PATH_TEXTS)/$(1)-data.csv
-	@$(PY_PROCESS_SCRIPTURE_TEXT) migrate_map_file MAP $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv $(PATH_TEXTS)/$(1)-data.csv
+	@echo INFO: Linking data for: $(shell pwd)/$(PATH_TEXTS)/$(1)-data.csv
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv) $(PATH_TEXTS)/
 
 # Process the SVG file and edit it in Inkscape when it is done.
 # This must be done before the pdf conversion can be done.
@@ -124,10 +134,6 @@ $(PATH_PROCESS)/$(1)-map.pdf :
 # process differs from typesetting so it has to be this way for now.
 view-$(1) :: $(PATH_PROCESS)/$(1)-map.pdf
 	@ $(VIEWPDF) $$< &
-
-link-$(1) :: $(PATH_PROCESS)/$(1)-map.pdf
-	@ rm $../$(PATH_PROCESS)/$(1)-map.pdf &
-	@ ln -s ../$$< $(PATH_PROCESS)/$(1)-map.pdf &
 
 
 endef
