@@ -95,7 +95,7 @@
    x="129.96701"
    y="457.60275"
    id="Scale_K_Number_A"
-   style="font-size:22px;line-height:100%;font-family:Arial" />
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial" />
 
 
 
@@ -104,7 +104,7 @@
    x="249.40062"
    y="457.60275"
    id="Scale_K_Number_B"
-   style="font-size:22px;line-height:100%;font-family:Arial" />
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial" />
 
 
 
@@ -113,7 +113,7 @@
    x="375.91943"
    y="457.60275"
    id="Scale_K_Number_C"
-   style="font-size:22px;line-height:100%;font-family:Arial" />
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial" />
 
 
 
@@ -122,7 +122,7 @@
    x="503.07843"
    y="457.60275"
    id="Scale_K_Number_D"
-   style="font-size:22px;line-height:100%;font-family:Arial" />
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial" />
 
 
 
@@ -131,7 +131,7 @@
    x="271.79965"
    y="507.52002"
    id="Scale_K_DistanceKey"
-   style="font-size:22px;line-height:100%;font-family:Arial" />
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial" />
 
 
 
@@ -140,7 +140,7 @@
    x="128.24156"
    y="550.74268"
    id="Scale_M_Number_A"
-   style="font-size:22px;line-height:100%;font-family:Arial">0</text>
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial">0</text>
 
 
 
@@ -149,7 +149,7 @@
    x="220.51982"
    y="550.74268"
    id="Scale_M_Number_B"
-   style="font-size:22px;line-height:100%;font-family:Arial">12</text>
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial">12</text>
 
 
 
@@ -158,7 +158,7 @@
    x="319.88318"
    y="550.74268"
    id="Scale_M_Number_C"
-   style="font-size:22px;line-height:100%;font-family:Arial">24</text>
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial">24</text>
 
 
 
@@ -167,7 +167,7 @@
    x="423.76611"
    y="550.74268"
    id="Scale_M_Number_D"
-   style="font-size:22px;line-height:100%;font-family:Arial">36</text>
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial">36</text>
 
 
 
@@ -176,7 +176,7 @@
    x="254.55684"
    y="600.66864"
    id="Scale_M_DistanceKey"
-   style="font-size:22px;line-height:100%;font-family:Arial">khang</text>
+   style="fill:#ff0000;font-size:22px;line-height:100%;font-family:Arial">khang</text>
 
 
 
@@ -212,7 +212,7 @@
    x="459.1254"
    y="236.58427"
    id="Title_Main"
-   style="font-size:58px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial Bold">Zisu Khri Chai Raang Pathai</text>
+   style="fill:#ff0000;font-size:58px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial Bold">Zisu Khri Chai Raang Pathai</text>
 
 
 
@@ -221,7 +221,7 @@
    x="654.83624"
    y="286.42355"
    id="City_Sidon"
-   style="font-size:36px;line-height:100%;font-family:Arial">Sidon</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Sidon</text>
 
 
 
@@ -230,7 +230,7 @@
    x="970.88245"
    y="392.53937"
    id="City_Damascus"
-   style="font-size:36px;line-height:100%;font-family:Arial">Damaska</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Damaska</text>
 
 
 
@@ -239,7 +239,7 @@
    x="557.47302"
    y="519.30396"
    id="City_Tyre"
-   style="font-size:36px;line-height:100%;font-family:Arial">Tair</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Tair</text>
 
 
 
@@ -248,7 +248,7 @@
    x="724.77295"
    y="744.26672"
    id="City_Chorazin"
-   style="font-size:36px;line-height:100%;font-family:Arial">Korazin</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Korazin</text>
 
 
 
@@ -257,7 +257,7 @@
    x="671.12323"
    y="787.57971"
    id="City_Capernaum"
-   style="font-size:36px;line-height:100%;font-family:Arial">Kapernaum</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Kapernaum</text>
 
 
 
@@ -266,7 +266,7 @@
    x="931.47089"
    y="770.74847"
    id="City_Bethsaida"
-   style="font-size:36px;line-height:100%;font-family:Arial">Bethsaida</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Bethsaida</text>
 
 
 
@@ -275,7 +275,7 @@
    x="883.8175"
    y="897.06207"
    id="City_Tiberias"
-   style="font-size:36px;line-height:100%;font-family:Arial">Tiberia</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Tiberia</text>
 
 
 
@@ -284,7 +284,7 @@
    x="689.65778"
    y="896.55969"
    id="City_Magadan"
-   style="font-size:36px;line-height:100%;font-family:Arial">Magadan</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Magadan</text>
 
 
 
@@ -293,7 +293,7 @@
    x="707.79694"
    y="843.36926"
    id="City_Cana"
-   style="font-size:36px;line-height:100%;font-family:Arial">Kana</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Kana</text>
 
 
 
@@ -302,7 +302,7 @@
    x="529.92426"
    y="946.33508"
    id="City_Nazareth"
-   style="font-size:36px;line-height:100%;font-family:Arial">Nazaret</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Nazaret</text>
 
 
 
@@ -311,7 +311,7 @@
    x="745.79742"
    y="1001.2953"
    id="City_Nain"
-   style="font-size:36px;line-height:100%;font-family:Arial">Nain</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Nain</text>
 
 
 
@@ -320,7 +320,7 @@
    x="928.21002"
    y="956.20026"
    id="City_Gadara"
-   style="font-size:36px;line-height:100%;font-family:Arial">Gadara</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Gadara</text>
 
 
 
@@ -329,7 +329,7 @@
    x="464.98056"
    y="1058.3322"
    id="City_Caesarea"
-   style="font-size:36px;line-height:100%;font-family:Arial">Sisaria</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Sisaria</text>
 
 
 
@@ -338,7 +338,7 @@
    x="697.50354"
    y="1261.6559"
    id="City_Shechem"
-   style="font-size:36px;line-height:100%;font-family:Arial">Shekem</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Shekem</text>
 
 
 
@@ -347,7 +347,7 @@
    x="540.74811"
    y="1295.7607"
    id="City_Sychar"
-   style="font-size:36px;line-height:100%;font-family:Arial">Saikar</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Saikar</text>
 
 
 
@@ -356,7 +356,7 @@
    x="373.02075"
    y="1338.2498"
    id="City_Joppa"
-   style="font-size:36px;line-height:100%;font-family:Arial">Jopa</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Jopa</text>
 
 
 
@@ -365,7 +365,7 @@
    x="517.64862"
    y="1404.1401"
    id="City_Arimathea"
-   style="font-size:36px;line-height:100%;font-family:Arial">Arimathea</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Arimathea</text>
 
 
 
@@ -374,7 +374,7 @@
    x="385.83755"
    y="1527.6306"
    id="City_Emmaus"
-   style="font-size:36px;line-height:100%;font-family:Arial">Emau</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Emau</text>
 
 
 
@@ -383,7 +383,7 @@
    x="679.02203"
    y="1522.0367"
    id="City_Jericho"
-   style="font-size:36px;line-height:100%;font-family:Arial">Jeriko</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Jeriko</text>
 
 
 
@@ -392,7 +392,7 @@
    x="478.30649"
    y="1575.4979"
    id="City_Jerusalem"
-   style="font-size:36px;line-height:100%;font-family:Arial">Jerusalem</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Jerusalem</text>
 
 
 
@@ -401,7 +401,7 @@
    x="698.8703"
    y="1567.6923"
    id="City_Bethphage"
-   style="font-size:36px;line-height:100%;font-family:Arial">Bethfes</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Bethfes</text>
 
 
 
@@ -410,7 +410,7 @@
    x="694.44305"
    y="1601.8923"
    id="City_Bethany"
-   style="font-size:36px;line-height:100%;font-family:Arial">Bethani</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Bethani</text>
 
 
 
@@ -419,7 +419,7 @@
    x="455.47375"
    y="1633.7869"
    id="City_Bethlehem"
-   style="font-size:36px;line-height:100%;font-family:Arial">Bethlehem</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Bethlehem</text>
 
 
 
@@ -428,7 +428,7 @@
    x="198.96884"
    y="1731.1289"
    id="City_Gaza"
-   style="font-size:36px;line-height:100%;font-family:Arial">Gaza</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Gaza</text>
 
 
 
@@ -437,7 +437,7 @@
    x="963.55957"
    y="532.64386"
    id="City_CaesareaPhilippi"
-   style="font-size:36px;line-height:100%;font-family:Arial">Sisaria Filipi</text>
+   style="fill:#ff0000;font-size:36px;line-height:100%;font-family:Arial">Sisaria Filipi</text>
 
 
 
@@ -446,7 +446,7 @@
    x="702.62592"
    y="1337.8394"
    id="Place_JacobsWell"
-   style="font-size:32px;line-height:100%;font-family:Arial">Jacob Tuikho</text>
+   style="fill:#ff0000;font-size:32px;line-height:100%;font-family:Arial">Jacob Tuikho</text>
 
 
 
@@ -455,7 +455,7 @@
    x="882.42426"
    y="823.98273"
    id="Lake_SeaOfGalilee"
-   style="font-size:32px;font-weight:bold;line-height:100%;fill:#000086;font-family:Arial Bold">Galili Rili</text>
+   style="fill:#ff0000;font-size:32px;font-weight:bold;line-height:100%;font-family:Arial Bold">Galili Rili</text>
 
 
 
@@ -465,7 +465,7 @@
    y="960.15686"
    transform="matrix(0.03509432,-0.999384,0.999384,0.03509432,0,0)"
    id="River_JordanRiver"
-   style="font-size:30.97142982px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000086;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">Jordan Tuivaw</text>
+   style="fill:#ff0000;font-size:30.97142982px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000086;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">Jordan Tuivaw</text>
 
 
 
@@ -475,7 +475,7 @@
    y="435.03629"
    transform="matrix(0.21284596,-0.97708577,0.97708577,0.21284596,0,0)"
    id="Sea_MediterraneanSea"
-   style="font-size:38px;font-weight:bold;line-height:100%;fill:#000086;font-family:Arial Bold">Mediterinian Rili</text>
+   style="fill:#ff0000;font-size:38px;font-weight:bold;line-height:100%;font-family:Arial Bold">Mediterinian Rili</text>
 
 
 
@@ -485,7 +485,7 @@
    y="1147.2408"
    transform="matrix(0.18330938,-0.98305527,0.98305527,0.18330938,0,0)"
    id="Sea_DeadSea"
-   style="font-size:38px;font-weight:bold;line-height:100%;fill:#000086;font-family:Arial Bold">Rili Thi</text>
+   style="fill:#ff0000;font-size:38px;font-weight:bold;line-height:100%;font-family:Arial Bold">Rili Thi</text>
 
 
 
@@ -494,7 +494,7 @@
    x="533.75403"
    y="1182.3413"
    id="Region_Samaria"
-   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Samaria</text>
+   style="fill:#ff0000;font-size:48px;font-weight:bold;line-height:100%;font-family:Arial">Samaria</text>
 
 
 
@@ -503,7 +503,7 @@
    x="505.6441"
    y="1739.755"
    id="Region_Judea"
-   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Judia</text>
+   style="fill:#ff0000;font-size:48px;font-weight:bold;line-height:100%;font-family:Arial">Judia</text>
 
 
 
@@ -512,7 +512,7 @@
    x="970.65961"
    y="1060.42"
    id="Region_Phoenicia"
-   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Fonisia</text>
+   style="fill:#ff0000;font-size:48px;font-weight:bold;line-height:100%;font-family:Arial">Fonisia</text>
 
 
 
@@ -521,7 +521,7 @@
    x="1041.6411"
    y="1490.1143"
    id="Region_Syria"
-   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Siria</text>
+   style="fill:#ff0000;font-size:48px;font-weight:bold;line-height:100%;font-family:Arial">Siria</text>
 
 
 
@@ -530,7 +530,7 @@
    x="947.50372"
    y="649.23462"
    id="Region_Galilee"
-   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Galili</text>
+   style="fill:#ff0000;font-size:48px;font-weight:bold;line-height:100%;font-family:Arial">Galili</text>
 
 
 
@@ -539,7 +539,7 @@
    x="949.64746"
    y="176.06305"
    id="Region_Decapolis"
-   style="font-size:48px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">Dekapoli</text>
+   style="fill:#ff0000;font-size:48px;font-weight:bold;line-height:100%;font-family:Arial">Dekapoli</text>
 
 
 
