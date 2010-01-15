@@ -101,11 +101,13 @@
 
 
 
+
 <text
    x="249.40062"
    y="457.60208"
    id="Scale_K_Number_B"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">20</text>
+
 
 
 
@@ -121,11 +123,13 @@
 
 
 
+
 <text
    x="503.07843"
    y="457.60208"
    id="Scale_K_Number_D"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">60</text>
+
 
 
 
@@ -141,11 +145,13 @@
 
 
 
+
 <text
    x="128.24156"
    y="550.74274"
    id="Scale_M_Number_A"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">0</text>
+
 
 
 
@@ -161,11 +167,13 @@
 
 
 
+
 <text
    x="319.88318"
    y="550.74274"
    id="Scale_M_Number_C"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">20</text>
+
 
 
 
@@ -181,11 +189,13 @@
 
 
 
+
 <text
    x="254.55684"
    y="600.66461"
    id="Scale_M_DistanceKey"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">Miles</text>
+
 
 
 
@@ -228,11 +238,13 @@
 
 
 
+
 <text
    x="654.83624"
    y="286.42239"
    id="City_Sidon"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Sidon</text>
+
 
 
 
@@ -248,11 +260,13 @@
 
 
 
+
 <text
    x="557.47302"
-   y="519.30524"
+   y="506.91669"
    id="City_Tyre"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Tyre</text>
+
 
 
 
@@ -268,11 +282,13 @@
 
 
 
+
 <text
    x="671.12323"
    y="787.57867"
    id="City_Capernaum"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Capernaum</text>
+
 
 
 
@@ -288,11 +304,13 @@
 
 
 
+
 <text
    x="883.8175"
    y="897.06305"
    id="City_Tiberias"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Tiberias</text>
+
 
 
 
@@ -308,11 +326,13 @@
 
 
 
+
 <text
    x="707.79694"
    y="843.36774"
    id="City_Cana"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Cana</text>
+
 
 
 
@@ -328,11 +348,13 @@
 
 
 
+
 <text
    x="745.79742"
    y="1001.2896"
    id="City_Nain"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Nain</text>
+
 
 
 
@@ -348,11 +370,13 @@
 
 
 
+
 <text
    x="464.98056"
    y="1058.3286"
    id="City_Caesarea"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Caesarea</text>
+
 
 
 
@@ -368,11 +392,13 @@
 
 
 
+
 <text
    x="540.74811"
    y="1295.7583"
    id="City_Sychar"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Sychar</text>
+
 
 
 
@@ -388,11 +414,13 @@
 
 
 
+
 <text
    x="517.64862"
    y="1404.1411"
    id="City_Arimathea"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Arimathea</text>
+
 
 
 
@@ -408,11 +436,13 @@
 
 
 
+
 <text
    x="679.02203"
    y="1522.0317"
    id="City_Jericho"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Jericho</text>
+
 
 
 
@@ -428,11 +458,13 @@
 
 
 
+
 <text
    x="698.8703"
    y="1567.688"
    id="City_Bethphage"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Bathphage</text>
+
 
 
 
@@ -448,11 +480,13 @@
 
 
 
+
 <text
    x="455.47375"
    y="1633.7817"
    id="City_Bethlehem"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Bethlehem</text>
+
 
 
 
@@ -468,11 +502,13 @@
 
 
 
+
 <text
    x="963.55957"
    y="532.64117"
    id="City_CaesareaPhilippi"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Caesarea Philippi</text>
+
 
 
 
@@ -488,11 +524,13 @@
 
 
 
+
 <text
    x="882.42426"
    y="823.97711"
    id="Lake_SeaOfGalilee"
    style="font-size:32px;font-weight:bold;line-height:100%;fill:#ff0000;font-family:Arial Bold">Sea of Galilee</text>
+
 
 
 
@@ -509,12 +547,14 @@
 
 
 
+
 <text
    x="-1030.8983"
    y="435.03613"
    transform="matrix(0.21284596,-0.97708577,0.97708577,0.21284596,0,0)"
    id="Sea_MediterraneanSea"
    style="font-size:38px;font-weight:bold;line-height:100%;fill:#ff0000;font-family:Arial Bold">Mediterranean Sea</text>
+
 
 
 
@@ -531,11 +571,13 @@
 
 
 
+
 <text
    x="533.75403"
    y="1182.3364"
    id="Region_Samaria"
    style="font-size:48px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">SAMARIA</text>
+
 
 
 
@@ -551,9 +593,11 @@
 
 
 
+
 <text
-   x="970.65961"
-   y="1060.4146"
+   x="64.75618"
+   y="873.53607"
+   transform="matrix(0.49825776,-0.86702895,0.86702895,0.49825776,0,0)"
    id="Region_Phoenicia"
    style="font-size:48px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">PHOENICIA</text>
 
@@ -561,9 +605,11 @@
 
 
 
+
 <text
-   x="1041.6411"
-   y="1490.1099"
+   x="-73.534683"
+   y="1333.6132"
+   transform="matrix(0.46021401,-0.88780801,0.88780801,0.46021401,0,0)"
    id="Region_Syria"
    style="font-size:48px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">SYRIA</text>
 
@@ -571,9 +617,11 @@
 
 
 
+
 <text
-   x="947.50372"
-   y="649.23492"
+   x="-400.84439"
+   y="970.65039"
+   transform="matrix(0.52245856,-0.85266468,0.85266468,0.52245856,0,0)"
    id="Region_Galilee"
    style="font-size:48px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">GALILEE</text>
 
@@ -581,11 +629,14 @@
 
 
 
+
 <text
-   x="949.64746"
-   y="176.06303"
+   x="1407.021"
+   y="115.4456"
+   transform="matrix(0.73980703,0.67281911,-0.67281911,0.73980703,0,0)"
    id="Region_Decapolis"
    style="font-size:48px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">DECAPOLIS</text>
+
 
 
 

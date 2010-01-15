@@ -135,6 +135,10 @@ $(PATH_PROCESS)/$(1)-map.pdf :
 view-$(1) :: $(PATH_PROCESS)/$(1)-map.pdf
 	@ $(VIEWPDF) $$< &
 
+# Remove the current map PDF file
+pdf-remove-$(1) :
+	@echo Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
+	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
 
 endef
 
@@ -160,7 +164,7 @@ MATTER_MAPS_TEX		= $(PATH_PROCESS)/MATTER_MAPS.tex
 # Create a TeX control file for building our book of maps
 $(MATTER_MAPS_TEX) : $(foreach v,$(MATTER_MAPS), $(PATH_PROCESS)/$(v)-map.pdf)
 	@echo INFO: Creating the TeX control file: $(MATTER_MAPS_TEX)
-	@perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\includepdf{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_MAPS),$(v)-map.pdf) > $@
+	@perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n\\input BACK_MATTER.tex\n\\def\\TopMarginFactor{0.4}\n\\p\n"; for (@ARGV) {print "\\includepdf{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_MAPS),$(v)-map.pdf) > $@
 
 
 $(MATTER_MAPS_PDF) : $(MATTER_MAPS_TEX)
