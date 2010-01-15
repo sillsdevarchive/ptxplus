@@ -92,6 +92,20 @@ make-template :
 dev-update :
 	cd $(PTXPLUS_BASE) && hg pull -u ptxplus
 
+# Make links in Process folder for the draft watermark files
+# This is just a quick-and-dirty implementation. May need to be
+# made more elegant in the future.
+$(PATH_PROCESS)/DraftWatermark-50.pdf :
+	@echo Linking to watermark file image: $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-50.pdf) to $(PATH_PROCESS)/
+	@ln -sf $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-50.pdf) $(PATH_PROCESS)/
+
+$(PATH_PROCESS)/DraftWatermark-60.pdf :
+	@echo Linking to watermark file image: $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-60.pdf) to $(PATH_PROCESS)/
+	@ln -sf $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-60.pdf) $(PATH_PROCESS)/
+
+$(PATH_PROCESS)/DraftWatermark-A5.pdf :
+	@echo Linking to watermark file image: $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-A5.pdf) to $(PATH_PROCESS)/
+	@ln -sf $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-A5.pdf) $(PATH_PROCESS)/
 
 ###############################################################
 #		Final component binding rules
