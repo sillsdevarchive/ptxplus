@@ -26,6 +26,16 @@
    id="Guides"
    style="display:none">
 </g>
+
+<image
+   xlink:href="m009-bkgrnd-cl.png"
+   id="BackgroundImage"
+   height="229.6599"
+   width="337.54929"
+   y="38.009521"
+   x="37.266003" />
+   
+
 <polygon
    points="227.654,336.035 227.654,324.336 110.656,324.336 110.656,336.035 101.857,336.035 101.857,324.336 46.26,324.336 46.26,379.841 101.764,379.935 101.764,368.234 110.656,368.141 110.656,379.841 227.654,379.841 227.654,368.141 245.158,368.141 245.158,379.841 280.258,379.841 280.258,371.136 294.766,371.136 294.766,400.338 28.664,400.432 28.664,301.03 294.766,301.03 294.766,333.135 280.164,333.135 280.164,333.135 280.164,324.43 245.158,324.336 245.158,336.035 "
    transform="matrix(1.1839533,0,0,1.1839533,1.9509174,5.7976806)"
@@ -275,7 +285,6 @@
    id="Circle_5_"
    style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.28799999;stroke-miterlimit:2.41420007" />
 
-
    
 <g
    transform="matrix(1.1839533,0,0,1.1839533,1.9509174,5.7976806)"
@@ -317,162 +326,6 @@
    id="Circle_6_"
    style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.28799999;stroke-miterlimit:2.41420007" />
 
-
-
-<text
-   x="12.862892"
-   y="23.311041"
-   id="Title_Main"
-   style="font-size:20.72244644px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial">The Temple in the time of Jesus Christ</text>
-
-
-
-
-<text
-   x="233.13509"
-   y="345.34198"
-   id="Tag_1"
-   style="font-size:14.20743942px;font-family:Arial">1</text>
-
-
-
-
-<text
-   x="223.7583"
-   y="505.8208"
-   id="Tag_2"
-   style="font-size:14.20743942px;font-family:Arial">2</text>
-
-
-
-
-<text
-   x="135.32597"
-   y="506.59778"
-   id="Tag_3"
-   style="font-size:14.20743942px;font-family:Arial">3</text>
-
-
-
-
-<text
-   x="124.33866"
-   y="343.84122"
-   id="Tag_4"
-   style="font-size:14.20743942px;font-family:Arial">4</text>
-
-
-
-
-<text
-   x="16.931242"
-   y="389.89053"
-   id="Tag_5"
-   style="font-size:14.20743942px;font-family:Arial">5</text>
-
-
-
-
-<text
-   x="16.726654"
-   y="462.09085"
-   id="Tag_6"
-   style="font-size:14.20743942px;font-family:Arial">6</text>
-
-
-
-
-<text
-   x="115.23651"
-   y="568.94501"
-   id="Key_TableShowbread"
-   style="font-size:11.83953285px;font-family:Arial">1. The Table of Showbread</text>
-
-
-
-   
-<text
-   x="115.23651"
-   y="584.57458"
-   id="Key_Lampstand"
-   style="font-size:11.83953285px;font-family:Arial">2. The Lampstand</text>
-
-
-
-   
-<text
-   x="115.23651"
-   y="600.20184"
-   id="Key_AltarIncense"
-   style="font-size:11.83953285px;font-family:Arial">3. The Altar of Incense</text>
-
-
-
-   
-<text
-   x="115.23651"
-   y="615.8291"
-   id="Key_Curtain"
-   style="font-size:11.83953285px;font-family:Arial">4. The Curtain</text>
-
-
-
-   
-<text
-   x="115.23651"
-   y="631.45868"
-   id="Key_ArkCovenant"
-   style="font-size:11.83953285px;font-family:Arial">5. The Ark of the Covenant</text>
-
-
-
-   
-<text
-   x="115.23651"
-   y="647.08594"
-   id="Key_Cherubim"
-   style="font-size:11.83953285px;font-family:Arial">6. The Cherubim</text>
-
-
-
-
-<text
-   x="66.277061"
-   y="402.69434"
-   id="Label_HolyHolies"
-   style="font-size:11.83953285px;font-family:Arial">The Holy of Holies</text>
-
-
-
-
-<text
-   x="158.43161"
-   y="425.00909"
-   id="Label_HolyPlace"
-   style="font-size:11.83953285px;font-family:Arial">The Holy Place</text>
-
-
-
-
-<text
-   x="287.32529"
-   y="426.08667"
-   id="Label_Entrance"
-   style="font-size:11.83953285px;font-family:Arial">The Entrance</text>
-
-
-
-
-<text
-   x="133.26418"
-   y="298.57812"
-   id="Place_Temple"
-   style="font-size:16.95472908px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial">The Temple itself</text>
-
-
-
-
-
 <g
    transform="matrix(1.1839533,0,0,1.1839533,4.1813181,-3.9683223)"
    id="Pointer">
@@ -489,15 +342,113 @@
    style="fill:none;stroke:#000000;stroke-width:3.54809999;stroke-miterlimit:2.41420007" />
 	</g>
 
+<text
+   x="12.862892"
+   y="23.311041"
+   id="Title_Main"
+   style="fill:#ff0000;font-size:20px;font-family:Arial">The Temple in the time of Jesus Christ</text>
+
+<text
+   x="233.13509"
+   y="345.34198"
+   id="Tag_1"
+   style="fill:#ff0000;font-size:14.5px;font-family:Arial">1</text>
+
+<text
+   x="223.7583"
+   y="505.8208"
+   id="Tag_2"
+   style="fill:#ff0000;font-size:14.5px;font-family:Arial">2</text>
+
+<text
+   x="135.32597"
+   y="506.59778"
+   id="Tag_3"
+   style="fill:#ff0000;font-size:14.5px;font-family:Arial">3</text>
+
+<text
+   x="124.33866"
+   y="343.84122"
+   id="Tag_4"
+   style="fill:#ff0000;font-size:14.5px;font-family:Arial">4</text>
+
+<text
+   x="16.931242"
+   y="389.89053"
+   id="Tag_5"
+   style="fill:#ff0000;font-size:14.5px;font-family:Arial">5</text>
+
+<text
+   x="16.726654"
+   y="462.09085"
+   id="Tag_6"
+   style="fill:#ff0000;font-size:14.5px;font-family:Arial">6</text>
+
+<text
+   x="115.23651"
+   y="568.94501"
+   id="Key_TableShowbread"
+   style="fill:#ff0000;font-size:11.5px;font-family:Arial">1. The Table of Showbread</text>
 
    
+<text
+   x="115.23651"
+   y="584.57458"
+   id="Key_Lampstand"
+   style="fill:#ff0000;font-size:11.5px;font-family:Arial">2. The Lampstand</text>
 
-<image
-   xlink:href="m009-bkgrnd-cl.png"
-   id="image2544"
-   height="229.6599"
-   width="337.54929"
-   y="38.009521"
-   x="37.266003" />
    
+<text
+   x="115.23651"
+   y="600.20184"
+   id="Key_AltarIncense"
+   style="fill:#ff0000;font-size:11.5px;font-family:Arial">3. The Altar of Incense</text>
+
+   
+<text
+   x="115.23651"
+   y="615.8291"
+   id="Key_Curtain"
+   style="fill:#ff0000;font-size:11.5px;font-family:Arial">4. The Curtain</text>
+
+   
+<text
+   x="115.23651"
+   y="631.45868"
+   id="Key_ArkCovenant"
+   style="fill:#ff0000;font-size:11.5px;font-family:Arial">5. The Ark of the Covenant</text>
+
+   
+<text
+   x="115.23651"
+   y="647.08594"
+   id="Key_Cherubim"
+   style="fill:#ff0000;font-size:11.5px;font-family:Arial">6. The Cherubim</text>
+
+<text
+   x="66.277061"
+   y="402.69434"
+   id="Label_HolyHolies"
+   style="fill:#ff0000;font-size:11.5px;font-family:Arial">The Holy of Holies</text>
+
+<text
+   x="158.43161"
+   y="425.00909"
+   id="Label_HolyPlace"
+   style="fill:#ff0000;font-size:11.5px;font-family:Arial">The Holy Place</text>
+
+<text
+   x="287.32529"
+   y="426.08667"
+   id="Label_Entrance"
+   style="fill:#ff0000;font-size:11.5px;font-family:Arial">The Entrance</text>
+
+<text
+   x="133.26418"
+   y="298.57812"
+   id="Place_Temple"
+   style="fill:#ff0000;font-size:18px;font-family:Arial">The Temple itself</text>
+
+  
+
    </svg>
