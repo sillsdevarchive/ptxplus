@@ -25,6 +25,8 @@
 #		functions like creating the Maps folder, etc.
 # 20100113 - djd - Added code for processing maps with seperate
 #		style files
+# 20100116 - djd - Changed from over-writing the original svg
+#		file to creating a new seperate one.
 
 
 #############################################################
@@ -62,6 +64,7 @@ class MakeMapFile (object) :
 		styleFileSource = mapTemplate + "/" + tail.replace('map.svg', 'styles.csv')
 		mapSourceFile = mapTemplate + "/" + tail
 		dataSourceFile = mapTemplate + "/" + tail.replace('.svg', 'data.csv')
+		outputFile = mapProject + "/" + tail.replace('map.svg', 'map-post.svg')
 		# This may be optional but we'll build a file name for it anyway
 		# Where this falls down is when the illustration is greyscale but the project
 		# calls for color. The work-around for now is to make the svg file work with
@@ -85,7 +88,7 @@ class MakeMapFile (object) :
 # Another possible solution could be using a call from ElementTree called qname. This might help it
 # better keep track of namespaces and get the data needed in the righ place.
 
-		# Open and read XML file
+		# Open and read XML/SVG file
 		fhXML = file(inputFile)
 		txtXML = ''.join(fhXML)
 		fhXML.close
@@ -142,8 +145,8 @@ class MakeMapFile (object) :
 				if styles.has_key(temp) :
 					dXML[key].set('style', styles[temp])
 
-		# Overwrite the original SVG file with the new data
-		ElementTree(element = eXML).write(inputFile, encoding = 'UTF-8')
+		# Write the new data out to the new SVG file
+		ElementTree(element = eXML).write(outputFile, encoding = 'UTF-8')
 
 
 # This starts the whole process going

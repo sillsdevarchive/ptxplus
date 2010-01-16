@@ -32,34 +32,8 @@
 #		reflect changes in the rest of the system
 # 20100113 - djd - Added code for processing maps with seperate
 #		style files
-
-
-##############################################################
-#		Variables for peripheral matter
-##############################################################
-
-MATTER_MAPS_PDF		=
-MATTER_MAPS_TEX		=
-
-##############################################################
-#		Map ID mapping information
-##############################################################
-
-# Maps are a special process. Each one listed here is a specific map.
-# Definitions should be listed in the project.conf file
-title_map		= TITLE_MAP
-maps_map		= MAPS
-m001_map		= M001
-m002_map		= M002
-m003_map		= M003
-m004_map		= M004
-m005_map		= M005
-m006_map		= M006
-m007_map		= M007
-m008_map		= M008
-m009_map		= M009
-m010_map		= M010
-m011_map		= M011
+# 20100116 - djd - Did a virtual rewrite on the process. It is now
+#		more consistant with the rest of the processes.
 
 
 ##############################################################
@@ -76,11 +50,22 @@ define map_rules
 # script will see to it that there is a Maps folder and a csv
 # file for this map. It takes care of the copy process. It should
 # be able to do this and if it can't it should tell us why.
-$(PATH_TEXTS)/$(1)-map.svg :
+$(PATH_TEXTS)/$(1)-map.svg : \
+	$(PATH_TEXTS)/$(1)-data.csv \
+	$(PATH_TEXTS)/$(1)-styles.csv \
+	$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
 	@echo WARNING: Map: $(PATH_TEXTS)/$(1)-map.svg not found adding default to project.
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-map.svg $(PATH_TEXTS)/$(1)-map.svg
 
+$(PATH_TEXTS)/$(1)-map-post.svg : $(PATH_TEXTS)/$(1)-map.svg
+	@echo INFO: Merging map data and styles into $(shell readlink -f -- $(PATH_TEXTS)/$(1)-map-post.svg)
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1)-map.svg
+
 # Copy project map style file into project
+# Question: How would you prevent makefile from copying over the
+# the project style file if one already existed but the one in
+# the library has been updated. We don't want to blow away any
+# project data.
 $(PATH_TEXTS)/$(1)-styles.csv :
 	@echo WARNING: Map style data: $(PATH_TEXTS)/$(1)-styles.csv not found adding default to project.
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-styles.csv $(PATH_TEXTS)/$(1)-styles.csv
@@ -113,32 +98,96 @@ $(PATH_TEXTS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
 	@echo INFO: Linking data for: $(shell pwd)/$(PATH_TEXTS)/$(1)-data.csv
 	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv) $(PATH_TEXTS)/
 
-# Process the SVG file and edit it in Inkscape when it is done.
-# This must be done before the pdf conversion can be done.
-preprocess-$(1) : \
-	$(PATH_TEXTS)/$(1)-map.svg \
-	$(PATH_TEXTS)/$(1)-data.csv \
-	$(PATH_TEXTS)/$(1)-styles.csv \
-	$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
-	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1)-map.svg
-	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1)-map.svg &
+# Create the initial PDF version of the map
+# This will transform the svg file to the initial PDF file.
+# To typeset to to final form a second process must be run.
+# This is just the first step in the total process.
+# This process has a dependency on the map.svg file.
+# However, it is not explicitly stated in the rule because
+# there is an editing process that must take place between
+# the check and the view processes.
+$(PATH_PROCESS)/$(1)-map-pre.pdf : $(PATH_TEXTS)/$(1)-map-post.svg
+	@echo INFO: Creating: $(PATH_PROCESS)/$(1)-map-pre.pdf
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1)-map-post.svg -A $(PATH_PROCESS)/$(1)-map-pre.pdf
 
-# Create the PDF version of the map
-# This will transform the svg file to pdf. However, if the preprocess has
-# not been run or failed, this process will fail too.
-$(PATH_PROCESS)/$(1)-map.pdf :
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1)-map.svg -A $(PATH_PROCESS)/$(1)-map.pdf
+# When the View-Maps button is clicked this will create the
+# USFM file that will be called from the .tex file. One is
+# auto-created for each map that is to be processed.
+$(PATH_TEXTS)/$(1)-map.usfm : $(PATH_PROCESS)/$(1)-map-pre.pdf
+	@echo INFO: Creating: $(PATH_TEXTS)/$(1)-map.usfm
+	@echo \\id OTH > $$@
+	@echo \\ide UTF-8 >> $$@
+	@echo \\singlecolumn >> $$@
+	@echo \\periph Map Page >> $$@
+	@echo \\startmaps >> $$@
+	@echo '\\makedigitsother%' >> $$@
+	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
+	@echo '\\def\\domap#1{\\vbox to \\the\\textheight{\\vfil\\noindent\\hfil\\XeTeXpdffile #1 width \\the\\textwidth \\hfil\\par\\vfil}\\eject}%' >> $$@
+	@echo '\\catcode `@=12' >> $$@
+	@echo '\\domap{$(1)-map-pre.pdf}' >> $$@
+	@echo '\\bye' >> $$@
+
+# This is the .tex file that is necessary to process the
+# map .usfm file. This is created when the View-Maps button
+# is clicked. This is dependent on the .usfm file
+$(PATH_PROCESS)/$(1)-map.tex : $(PATH_TEXTS)/$(1)-map.usfm
+	@echo INFO: Creating: $(PATH_TEXTS)/$(1)-map.tex
+	@echo \\input $(TEX_PTX2PDF) > $$@
+	@echo \\input $(TEX_SETUP) >> $$@
+	@echo \\input BACK_MATTER.tex >> $$@
+	@echo \\def\\TopMarginFactor{0.4} >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map.usfm} >> $$@
+	@echo '\\bye' >> $$@
+
+# Create the typeset PDF version of the map
+# This is the second step for creating the final map file.
+# The rule here will call on TeX to process the map TeX file,
+# creating a final version of the map ready for the final
+# process, binding. This is dependent on the map.tex process.
+$(PATH_PROCESS)/$(1)-map.pdf : $(PATH_PROCESS)/$(1)-map.tex
+	@echo INFO: Creating: $(PATH_PROCESS)/$(1)-map.pdf
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map.tex
+
+# This will run all the preprocesses to the SVG file and
+# open it up in Inkscape (or any other designated SVG editor)
+# when the processes are done. When this is run it is
+# assumed that there is no need for the files that generated
+# after so they will be deleted. This is similar behavior
+# as with book file processing.
+# This should be done before the view process is done but
+# a dependency does exist that will enable everything to
+# be done with the view process, but it may not be pretty.
+preprocess-$(1) : $(PATH_TEXTS)/$(1)-map-post.svg
+	@rm -f $(PATH_PROCESS)/$(1)-map-pre.pdf
+	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
+	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1)-map-post.svg &
 
 # Process the SVG file and view it in PDF when it is done. Note that this
 # process will fail if the preprocess has not been run first. The map making
 # process differs from typesetting so it has to be this way for now.
 view-$(1) :: $(PATH_PROCESS)/$(1)-map.pdf
-	@ $(VIEWPDF) $$< &
+	@echo INFO: Creating final typeset map: $(PATH_PROCESS)/$(1)-map.pdf
+	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map.pdf &
 
 # Remove the current map PDF file
 pdf-remove-$(1) :
-	@echo Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
+	@echo WARNING: Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-pre.pdf) and $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
+	@rm -f $(PATH_PROCESS)/$(1)-map-pre.pdf
 	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
+
+# Edit the CSV data file
+edit-data-$(1) : $(PATH_TEXTS)/$(1)-data.csv
+	$(EDITCSV) $(PATH_TEXTS)/$(1)-data.csv
+
+# Edit the CSV style file
+edit-style-$(1) : $(PATH_TEXTS)/$(1)-styles.csv
+	$(EDITCSV) $(PATH_TEXTS)/$(1)-styles.csv
+
+# Delete (clean out) this set of files
+delete-$(1) :
+	@echo WARNING: Removing all the files for the $(1) map set
+	@rm -f $(PATH_PROCESS)/$(1)*
+	@rm -f $(PATH_TEXTS)/$(1)*
 
 endef
 
@@ -159,16 +208,12 @@ $(foreach v,$(MATTER_MAPS), $(eval $(call map_rules,$(v))))
 
 ifneq ($(MATTER_MAPS),)
 MATTER_MAPS_PDF		= $(PATH_PROCESS)/MATTER_MAPS.pdf
-MATTER_MAPS_TEX		= $(PATH_PROCESS)/MATTER_MAPS.tex
 
-# Create a TeX control file for building our book of maps
-$(MATTER_MAPS_TEX) : $(foreach v,$(MATTER_MAPS), $(PATH_PROCESS)/$(v)-map.pdf)
-	@echo INFO: Creating the TeX control file: $(MATTER_MAPS_TEX)
-	@perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n\\input BACK_MATTER.tex\n\\def\\TopMarginFactor{0.4}\n\\p\n"; for (@ARGV) {print "\\includepdf{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_MAPS),$(v)-map.pdf) > $@
-
-
-$(MATTER_MAPS_PDF) : $(MATTER_MAPS_TEX)
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(MATTER_MAPS_TEX)
+# For binding we will use pdftk to put together the
+# individual PDFs we created earlier in this process.
+$(MATTER_MAPS_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map.pdf)
+	@echo INFO: Creating the TeX control file: $(MATTER_MAPS_PDF)
+	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map.pdf) cat output $@
 
 endif
 
@@ -181,9 +226,17 @@ view-maps : $(MATTER_MAPS_PDF)
 # Remove the matter map file
 pdf-remove-maps :
 	@echo INFO: Removing file: $(MATTER_MAPS_PDF)
-	rm -f $(MATTER_MAPS_PDF)
+	@rm -f $(MATTER_MAPS_PDF)
 
-# We don't have a process for this yet but we need to cover it
-# incase someone clicks the button :-)
+# This kind of works. It will bring up a fresh version of all
+# the maps, one at a time. You have to close Inkscape on each
+# one before it will move on to the next.
 preprocess-maps :
-	@echo WARNING: There is no check maps function in this mode.
+	@echo INFO: Running the preprocess on all maps.
+	$(foreach v,$(MATTER_MAPS), $(shell make preprocess-$(v)))
+
+# Do a total reset of all the map files
+clean-maps :
+	@echo WARNING: All map have been deleted, Sorry if you did not mean to do this
+	$(foreach v,$(MATTER_MAPS), $(shell rm -f $(PATH_TEXTS)/$(v)* && rm -f $(PATH_PROCESS)/$(v)*))
+	@rm -f $(MATTER_MAPS_PDF)

@@ -232,7 +232,4 @@ configure :
 illustrations :
 	$(EDITCSV) $(ADMIN_ILLUSTRATIONS_CSV)
 
-# This is for editing map data that is kept in the master csv file
-maps :
-	$(EDITCSV) $(PATH_TEXTS)/maps_data.csv
 
