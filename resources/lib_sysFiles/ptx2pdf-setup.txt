@@ -60,7 +60,7 @@
 %	\PaperWidth=115mm	\PaperHeight=165mm
 % UBS Series 50
 %	\PaperWidth=120mm	\PaperHeight=180mm
-% UBS Series 60
+% UBS Series 60 (5.71" x 8.27")
 %	\PaperWidth=145mm	\PaperHeight=210mm
 % UBS Series 70
 %	\PaperWidth=162mm	\PaperHeight=220mm
