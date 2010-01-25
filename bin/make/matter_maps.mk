@@ -34,6 +34,8 @@
 #		style files
 # 20100116 - djd - Did a virtual rewrite on the process. It is now
 #		more consistant with the rest of the processes.
+# 20100125 - djd - Added ability to process map graphic files
+#		that have been created by an external process
 
 
 ##############################################################
@@ -44,6 +46,14 @@
 # we will define a rule group for maps.
 
 define map_rules
+
+# If the CREATE_MAP var is set to 0 this will enable the
+# first set of rules to be acted on which enable the automated
+# creation of SVG maps based on templates in the library.
+# Otherwise, there is a set of rules that enable the use of
+# existing maps that are kept in the Source/Maps-ID folder.
+
+ifeq ($(CREATE_MAP),0)
 
 # We're going to start the map build process like the Scripture
 # process, that's why there's a MAP for the ID. The make_map_file.py
@@ -187,6 +197,81 @@ delete-$(1) :
 	@rm -f $(PATH_PROCESS)/$(1)*
 	@rm -f $(PATH_TEXTS)/$(1)*
 
+else
+
+##########################################################################
+# This section contains rules for processing the maps manually.
+# In this senario it is assumed that the map graphic file is
+# in PNG format and ready to be placed on the page. The rules
+# here are written with that in mind.
+##########################################################################
+
+# Link the ready-made graphic file to the process folder. This is the
+# common place to find files like this.
+$(PATH_PROCESS)/$(1) :
+	@echo INFO: Linking file to: $(shell pwd)/$(PATH_PROCESS)/$(1)
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)) $(PATH_PROCESS)/
+
+# This is the .tex file that is necessary to process the
+# map .usfm file. This is created when the View-Maps button
+# is clicked. This has a dependency on BACK_MATTER.tex
+# which it calls from the matter_peripheral.mk rules file.
+$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/BACK_MATTER.tex
+	@echo INFO: Creating: $(PATH_TEXTS)/$(1).tex
+	@echo \\input $(TEX_PTX2PDF) > $$@
+	@echo \\input $(TEX_SETUP) >> $$@
+	@echo \\input BACK_MATTER.tex >> $$@
+	@echo '\\def\HeaderPosition{0}' >> $$@
+	@echo '\\def\FooterPosition{0}' >> $$@
+	@echo '% Change paper width for portrate or landscape adjust margins as needed' >> $$@
+	@echo '%\\PaperWidth=210mm' >> $$@
+	@echo '%\\PaperHeight=145mm' >> $$@
+	@echo '\\def\TopMarginFactor{0}' >> $$@
+	@echo '\\def\SideMarginFactor{0}' >> $$@
+	@echo '\\def\BottomMarginFactor{0}' >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1).usfm} >> $$@
+	@echo '\\bye' >> $$@
+
+# Create the USFM file for processing this map. The map file
+# is linked into the process here.
+$(PATH_TEXTS)/$(1).usfm : $(PATH_PROCESS)/$(1)
+	@echo INFO: Creating: $(PATH_TEXTS)/$(1).usfm
+	@echo \\id OTH > $$@
+	@echo \\ide UTF-8 >> $$@
+	@echo \\singlecolumn >> $$@
+	@echo \\periph Map Page >> $$@
+	@echo \\p >> $$@
+	@echo '\\makedigitsother' >> $$@
+	@echo '\\hfil\XeTeXpicfile $(1) width 300pt \hfil\par' >> $$@
+	@echo '\\makedigitsletters' >> $$@
+	@echo '\\bye' >> $$@
+
+# Render the resulting PDF file from the .tex and .usfm file.
+$(PATH_PROCESS)/$(1).pdf : \
+	$(PATH_TEXTS)/$(1).usfm \
+	$(PATH_PROCESS)/$(1).tex
+	@echo INFO: Creating: $(PATH_PROCESS)/$(1).pdf
+	@rm -f $(PATH_PROCESS)/$(1).pdf
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1).tex
+
+# View the resulting created PDF file for this map.
+view-$(1) : $(PATH_PROCESS)/$(1).pdf
+	@echo INFO: Viewing: $(PATH_TEXTS)/$(1).pdf
+	@ $(VIEWPDF) $(PATH_PROCESS)/$(1).pdf &
+
+# In this process this is not too useful. Let's try just telling
+# user to just use the view button
+preprocess-$(1) :
+	@echo INFO: This button does not do anything in this context. Use the View button and edit the $(PATH_TEXTS)/$(1).usfm and the $(PATH_PROCESS)/$(1).tex as necessary to get the desired results.
+
+# Remove the current map PDF file
+pdf-remove-$(1) :
+	@echo WARNING: Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1).pdf)
+	@rm -f $(PATH_PROCESS)/$(1).pdf
+
+endif
+
+
 endef
 
 ##############################################################
@@ -204,14 +289,30 @@ $(foreach v,$(MATTER_MAPS), $(eval $(call map_rules,$(v))))
 
 ###############################################################
 
+# If nothing is listed in the MATTER_MAPS binding list, we do not
+# bother doing anything.
 ifneq ($(MATTER_MAPS),)
 MATTER_MAPS_PDF		= $(PATH_PROCESS)/MATTER_MAPS.pdf
+
+# This first rule is for auto SVG processing
+ifeq ($(CREATE_MAP),0)
 
 # For binding we will use pdftk to put together the
 # individual PDFs we created earlier in this process.
 $(MATTER_MAPS_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map.pdf)
-	@echo INFO: Creating the TeX control file: $(MATTER_MAPS_PDF)
+	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_PDF)
 	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map.pdf) cat output $@
+
+else
+
+# This rule is for when the map file was a graphic created by an
+# outside process.
+
+$(MATTER_MAPS_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v).pdf)
+	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_PDF)
+	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v).pdf) cat output $@
+
+endif
 
 endif
 
