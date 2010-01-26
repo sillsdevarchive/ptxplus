@@ -256,7 +256,7 @@ $(PATH_PROCESS)/$(1).pdf : \
 
 # View the resulting created PDF file for this map.
 view-$(1) : $(PATH_PROCESS)/$(1).pdf
-	@echo INFO: Viewing: $(PATH_TEXTS)/$(1).pdf
+	@echo INFO: Viewing: $(PATH_PROCESS)/$(1).pdf
 	@ $(VIEWPDF) $(PATH_PROCESS)/$(1).pdf &
 
 # In this process this is not too useful. Let's try just telling

@@ -107,6 +107,49 @@ $(PATH_PROCESS)/DraftWatermark-A5.pdf :
 	@echo Linking to watermark file image: $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-A5.pdf) to $(PATH_PROCESS)/
 	@ln -sf $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-A5.pdf) $(PATH_PROCESS)/
 
+# The following rules will guide a process that will extract
+# recorded information about this project and output it in
+# a formated PDF document
+
+# Create the .pdf file
+$(PATH_PROCESS)/PROJECT_INFO.pdf : \
+	$(PATH_TEXTS)/PROJECT_INFO.usfm \
+	$(PATH_PROCESS)/PROJECT_INFO.tex
+	@echo INFO: Creating: $@
+	@rm -f $@
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/PROJECT_INFO.tex
+
+# Create the .tex file that drives the typesetting process
+# This has a dependency on FRONT_MATTER.tex which it calls from
+# the matter_peripheral.mk rules file.
+$(PATH_PROCESS)/PROJECT_INFO.tex : $(PATH_PROCESS)/FRONT_MATTER.tex
+	@echo INFO: Creating: $@
+	@echo \\input $(TEX_PTX2PDF) > $@
+	@echo \\input $(TEX_SETUP) >> $@
+	@echo \\input FRONT_MATTER.tex >> $@
+	@echo \\ptxfile{$(PATH_TEXTS)/PROJECT_INFO.usfm} >> $@
+	@echo '\\bye' >> $@
+
+# Create the .usfm file that contains the project information
+$(PATH_TEXTS)/PROJECT_INFO.usfm :
+	@echo INFO: Creating: $@
+	@$(PY_PROCESS_SCRIPTURE_TEXT) INFO make_project_info $@
+
+# Just in case we need this again
+#	@echo \\id OTH > $@
+#	@echo \\ide UTF-8 >> $@
+#	@echo \\singlecolumn >> $@
+#	@echo \\periph Project Info >> $@
+#	@echo \\p Here is some info on this project >> $@
+
+# @$(PY_PROCESS_SCRIPTURE_TEXT) make_project_info $(PATH_TEXTS)/PROJECT_INFO.usfm
+
+
+# View the results
+view-project-info : $(PATH_PROCESS)/PROJECT_INFO.pdf
+	@echo INFO: Viewing: $@
+	@ $(VIEWPDF) $@ &
+
 ###############################################################
 #		Final component binding rules
 ###############################################################
