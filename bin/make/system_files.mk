@@ -120,35 +120,23 @@ $(PATH_PROCESS)/PROJECT_INFO.pdf : \
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/PROJECT_INFO.tex
 
 # Create the .tex file that drives the typesetting process
-# This has a dependency on FRONT_MATTER.tex which it calls from
-# the matter_peripheral.mk rules file.
-$(PATH_PROCESS)/PROJECT_INFO.tex : $(PATH_PROCESS)/FRONT_MATTER.tex
+$(PATH_PROCESS)/PROJECT_INFO.tex :
 	@echo INFO: Creating: $@
 	@echo \\input $(TEX_PTX2PDF) > $@
 	@echo \\input $(TEX_SETUP) >> $@
-	@echo \\input FRONT_MATTER.tex >> $@
+	@echo \\BodyColumns=1 >> $@
 	@echo \\ptxfile{$(PATH_TEXTS)/PROJECT_INFO.usfm} >> $@
 	@echo '\\bye' >> $@
 
 # Create the .usfm file that contains the project information
-$(PATH_TEXTS)/PROJECT_INFO.usfm :
+$(PATH_TEXTS)/PROJECT_INFO.usfm : project.conf
 	@echo INFO: Creating: $@
-	@$(PY_PROCESS_SCRIPTURE_TEXT) INFO make_project_info $@
-
-# Just in case we need this again
-#	@echo \\id OTH > $@
-#	@echo \\ide UTF-8 >> $@
-#	@echo \\singlecolumn >> $@
-#	@echo \\periph Project Info >> $@
-#	@echo \\p Here is some info on this project >> $@
-
-# @$(PY_PROCESS_SCRIPTURE_TEXT) make_project_info $(PATH_TEXTS)/PROJECT_INFO.usfm
-
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_project_info INFO $@
 
 # View the results
 view-project-info : $(PATH_PROCESS)/PROJECT_INFO.pdf
-	@echo INFO: Viewing: $@
-	@ $(VIEWPDF) $@ &
+	@echo INFO: Viewing: $(PATH_PROCESS)/PROJECT_INFO.pdf
+	@ $(VIEWPDF) $(PATH_PROCESS)/PROJECT_INFO.pdf &
 
 ###############################################################
 #		Final component binding rules
