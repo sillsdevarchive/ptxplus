@@ -29,6 +29,7 @@ import sys, os, codecs
 # Import supporting local classes
 from tools import *
 tools = Tools()
+from configobj import ConfigObj
 
 
 class MakeProjectInfo (object) :
@@ -36,13 +37,43 @@ class MakeProjectInfo (object) :
 	def __init__(self, log_manager):
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
+		self._config = ConfigObj('project.conf')
 
 	def main (self) :
 		'''This is the main process function for generating the file.'''
 
+		# Set a couple vars here
+		projectInfo = ""
 
-		# Create the new makefile object (overwrite the old file)
-		makefileObject = codecs.open(self._inputFile, 'w', encoding='utf_8_sig')
+		# Create the new makefile object (overwrite the old file if needed)
+		fileObject = codecs.open(self._inputFile, 'w', encoding='utf_8_sig')
+
+		# Insert the basic SFMs for this file
+		fileHeader = "\\id OTH\n\\ide UTF-8\n\\periph Project Info\n\\mt1 Project Information\n\n"
+
+#		projectInfo = self._config['General']['ProjectInformation'].get('projectName')
+#		for i in self._config['General']['ProjectInformation'].inline_comments.iteritems() :
+#			projectInfo = projectInfo + '\\li Description: ' + i + '\n'
+
+		# Insert the project data
+		for key, value, in self._log_manager._settings['General']['ProjectInformation'].iteritems() :
+			comment = self._log_manager._settings['General']['ProjectInformation'].comments[key]
+			comment = comment[1].replace('# ', '')
+			projectInfo = projectInfo + '\\li ' + comment + ': \\hfill ' + value + '\n'
+
+
+#		projectInfo = self._config['General']['ProjectInformation']['copyrightYear'].comments
+
+
+		# Output to the new makefile file
+		fileObject.write(fileHeader + projectInfo)
+
+		fileObject.close()
+
+
+	def stuff (self) :
+
+		# A simple place holder for stuff not used yet
 
 		# Create the file elements
 		makefileHeader = "# Makefile\n\n# This is an auto-generated file, do not edit. Any necessary changes\n" + \
@@ -95,5 +126,6 @@ class MakeProjectInfo (object) :
 
 # This starts the whole process going
 def doIt(log_manager):
-	thisModule = MakeMakefile()
-	return thisModule.main(log_manager)
+
+	thisModule = MakeProjectInfo(log_manager)
+	return thisModule.main()
