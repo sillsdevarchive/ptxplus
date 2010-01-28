@@ -118,7 +118,7 @@ $(PATH_TEXTS)/$(1)-map.usfm :
 	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
 	@echo '\\def\\domap#1{\\vbox to \\the\\textheight{\\vfil\\noindent\\hfil\\XeTeXpdffile #1 width \\the\\textwidth \\hfil\\par\\vfil}\\eject}%' >> $$@
 	@echo '\\catcode `@=12' >> $$@
-	@echo '\\domap{$(1)-map-pre.pdf}' >> $$@
+	@echo '\\domap{$(1)-map.png}' >> $$@
 	@echo '\\bye' >> $$@
 
 # This is the .tex file that is necessary to process the
@@ -133,7 +133,7 @@ $(PATH_PROCESS)/$(1)-map.tex :
 	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map.usfm} >> $$@
 	@echo '\\bye' >> $$@
 
-# Create the initial PDF version of the map
+# Create the intermediate PNG version of the map
 # This will transform the svg file to the initial PDF file.
 # To typeset to to final form a second process must be run.
 # This is just the first step in the total process.
@@ -141,19 +141,19 @@ $(PATH_PROCESS)/$(1)-map.tex :
 # However, it is not explicitly stated in the rule because
 # there is an editing process that must take place between
 # the check and the view processes.
-$(PATH_PROCESS)/$(1)-map-pre.pdf : \
+$(PATH_PROCESS)/$(1)-map.png : \
 	$(PATH_PROCESS)/$(1)-map.tex \
 	$(PATH_TEXTS)/$(1)-map.usfm
 	@echo INFO: Creating: $$@
-	@rm -f $(PATH_PROCESS)/$(1)-map-pre.pdf
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1)-map-post.svg -A $$@
+	@rm -f $(PATH_PROCESS)/$(1)-map.png
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1)-map-post.svg -e $$@
 
 # Create the typeset PDF version of the map
 # This is the second step for creating the final map file.
 # The rule here will call on TeX to process the map TeX file,
 # creating a final version of the map ready for the final
-# process, binding. This is dependent on the map-pre.pdf process.
-$(PATH_PROCESS)/$(1)-map.pdf : $(PATH_PROCESS)/$(1)-map-pre.pdf
+# process, binding. This is dependent on the map.png process.
+$(PATH_PROCESS)/$(1)-map.pdf : $(PATH_PROCESS)/$(1)-map.png
 	@echo INFO: Creating: $$@
 	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map.tex
@@ -166,7 +166,7 @@ $(PATH_PROCESS)/$(1)-map.pdf : $(PATH_PROCESS)/$(1)-map-pre.pdf
 # as with book file processing.
 preprocess-$(1) : $(PATH_TEXTS)/$(1)-map-post.svg
 	@echo INFO: Creating or editing $(PATH_TEXTS)/$(1)-map-post.svg
-	@rm -f $(PATH_PROCESS)/$(1)-map-pre.pdf
+	@rm -f $(PATH_PROCESS)/$(1)-map.png
 	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
 	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1)-map-post.svg &
 
@@ -179,8 +179,8 @@ view-$(1) :: $(PATH_PROCESS)/$(1)-map.pdf
 
 # Remove the current map PDF file
 pdf-remove-$(1) :
-	@echo WARNING: Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-pre.pdf) and $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
-	@rm -f $(PATH_PROCESS)/$(1)-map-pre.pdf
+	@echo WARNING: Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.png) and $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
+	@rm -f $(PATH_PROCESS)/$(1)-map.png
 	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
 
 # Edit the CSV data file
