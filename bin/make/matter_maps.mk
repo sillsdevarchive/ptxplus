@@ -53,7 +53,7 @@ define map_rules
 # Otherwise, there is a set of rules that enable the use of
 # existing maps that are kept in the Source/Maps-ID folder.
 
-ifeq ($(CREATE_MAP),0)
+ifneq ($(CREATE_MAP),0)
 
 # We're going to start the map build process like the Scripture
 # process, that's why there's a MAP for the ID. The make_map_file.py
@@ -65,7 +65,7 @@ $(PATH_TEXTS)/$(1)-map.svg : \
 	$(PATH_TEXTS)/$(1)-styles.csv \
 	$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
 	@echo INFO: Map $(1): Adding necessary files to project
-	@cp $(PATH_MAP_TEMPLATES)/$(1)-map.svg $(PATH_TEXTS)/$(1)-map.svg
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-map.svg $$@
 
 $(PATH_TEXTS)/$(1)-map-post.svg : $(PATH_TEXTS)/$(1)-map.svg
 	@echo INFO: Merging map data and styles into $(shell readlink -f -- $(PATH_TEXTS)/$(1)-map-post.svg)
@@ -73,19 +73,19 @@ $(PATH_TEXTS)/$(1)-map-post.svg : $(PATH_TEXTS)/$(1)-map.svg
 
 # Copy project map style file into project
 $(PATH_TEXTS)/$(1)-styles.csv :
-	@echo WARNING: Map style data: $(PATH_TEXTS)/$(1)-styles.csv not found adding default to project.
-	@cp $(PATH_MAP_TEMPLATES)/$(1)-styles.csv $(PATH_TEXTS)/$(1)-styles.csv
+	@echo WARNING: Map style data: $$@ not found adding default to project.
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-styles.csv $$@
 
 # Copy the map reference file to the peripheral-map source folder
 # This is for refering to when the map data is being translated
 $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png :
-	@echo INFO: Map reference file: $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png is being copied to project.
-	@cp $(PATH_MAP_TEMPLATES)/$(1)-org.png $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
+	@echo INFO: Map reference file: $$@ is being copied to project.
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-org.png $$@
 
 # Create a common project map translation (data) file
 $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv :
-	@echo WARNING: Map tranlation data: $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv not found adding default to project.
-	@cp $(PATH_MAP_TEMPLATES)/$(1)-data.csv $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
+	@echo WARNING: Map tranlation data: $$@ not found adding default to project.
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-data.csv $$@
 
 # Link the project map data translation file to the Texts folder.
 # We link it to prevent changes from being made that might cause
@@ -101,14 +101,14 @@ $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv :
 # BTW, we use readlink here to resolve the path so the ln will make
 # a successful link.
 $(PATH_TEXTS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
-	@echo INFO: Linking data for: $(shell pwd)/$(PATH_TEXTS)/$(1)-data.csv
+	@echo INFO: Linking data for: $(shell pwd)/$$@
 	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv) $(PATH_TEXTS)/
 
 # When the View-Maps button is clicked this will create the
 # USFM file that will be called from the .tex file. One is
 # auto-created for each map that is to be processed.
 $(PATH_TEXTS)/$(1)-map.usfm :
-	@echo INFO: Creating: $(PATH_TEXTS)/$(1)-map.usfm
+	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
 	@echo \\singlecolumn >> $$@
@@ -125,7 +125,7 @@ $(PATH_TEXTS)/$(1)-map.usfm :
 # map .usfm file. This is created when the View-Maps button
 # is clicked. This is dependent on the .usfm file
 $(PATH_PROCESS)/$(1)-map.tex :
-	@echo INFO: Creating: $(PATH_TEXTS)/$(1)-map.tex
+	@echo INFO: Creating: $$@
 	@echo \\input $(TEX_PTX2PDF) > $$@
 	@echo \\input $(TEX_SETUP) >> $$@
 	@echo \\input BACK_MATTER.tex >> $$@
@@ -144,9 +144,9 @@ $(PATH_PROCESS)/$(1)-map.tex :
 $(PATH_PROCESS)/$(1)-map-pre.pdf : \
 	$(PATH_PROCESS)/$(1)-map.tex \
 	$(PATH_TEXTS)/$(1)-map.usfm
-	@echo INFO: Creating: $(PATH_PROCESS)/$(1)-map-pre.pdf
+	@echo INFO: Creating: $$@
 	@rm -f $(PATH_PROCESS)/$(1)-map-pre.pdf
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1)-map-post.svg -A $(PATH_PROCESS)/$(1)-map-pre.pdf
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1)-map-post.svg -A $$@
 
 # Create the typeset PDF version of the map
 # This is the second step for creating the final map file.
@@ -154,7 +154,7 @@ $(PATH_PROCESS)/$(1)-map-pre.pdf : \
 # creating a final version of the map ready for the final
 # process, binding. This is dependent on the map-pre.pdf process.
 $(PATH_PROCESS)/$(1)-map.pdf : $(PATH_PROCESS)/$(1)-map-pre.pdf
-	@echo INFO: Creating: $(PATH_PROCESS)/$(1)-map.pdf
+	@echo INFO: Creating: $$@
 	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map.tex
 
@@ -209,7 +209,7 @@ else
 # Link the ready-made graphic file to the process folder. This is the
 # common place to find files like this.
 $(PATH_PROCESS)/$(1) :
-	@echo INFO: Linking file to: $(shell pwd)/$(PATH_PROCESS)/$(1)
+	@echo INFO: Linking file to: $(shell pwd)/$$@
 	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)) $(PATH_PROCESS)/
 
 # This is the .tex file that is necessary to process the
@@ -217,7 +217,7 @@ $(PATH_PROCESS)/$(1) :
 # is clicked. This has a dependency on BACK_MATTER.tex
 # which it calls from the matter_peripheral.mk rules file.
 $(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/BACK_MATTER.tex
-	@echo INFO: Creating: $(PATH_TEXTS)/$(1).tex
+	@echo INFO: Creating: $$@
 	@echo \\input $(TEX_PTX2PDF) > $$@
 	@echo \\input $(TEX_SETUP) >> $$@
 	@echo \\input BACK_MATTER.tex >> $$@
@@ -235,7 +235,7 @@ $(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/BACK_MATTER.tex
 # Create the USFM file for processing this map. The map file
 # is linked into the process here.
 $(PATH_TEXTS)/$(1).usfm : $(PATH_PROCESS)/$(1)
-	@echo INFO: Creating: $(PATH_TEXTS)/$(1).usfm
+	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
 	@echo \\singlecolumn >> $$@
@@ -250,7 +250,7 @@ $(PATH_TEXTS)/$(1).usfm : $(PATH_PROCESS)/$(1)
 $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1).usfm \
 	$(PATH_PROCESS)/$(1).tex
-	@echo INFO: Creating: $(PATH_PROCESS)/$(1).pdf
+	@echo INFO: Creating: $$@
 	@rm -f $(PATH_PROCESS)/$(1).pdf
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1).tex
 
