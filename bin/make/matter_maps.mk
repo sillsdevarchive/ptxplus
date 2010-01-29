@@ -106,8 +106,9 @@ $(PATH_TEXTS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
 
 # When the View-Maps button is clicked this will create the
 # USFM file that will be called from the .tex file. One is
-# auto-created for each map that is to be processed.
-$(PATH_TEXTS)/$(1)-map.usfm :
+# auto-created for each map that is to be processed. This is
+# specifically for the RGB version of the map.
+$(PATH_TEXTS)/$(1)-map-page-rgb.usfm :
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
@@ -116,15 +117,15 @@ $(PATH_TEXTS)/$(1)-map.usfm :
 	@echo \\startmaps >> $$@
 	@echo '\\makedigitsother%' >> $$@
 	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
-	@echo '\\def\\domap#1{\\vbox to \\the\\textheight{\\vfil\\noindent\\hfil\\XeTeXpicfile #1 width \\the\\textwidth \\hfil\\par\\vfil}\\eject}%' >> $$@
+	@echo '\\def\\domap#1{\\vbox to \\the\\textheight{\\vfil\\noindent\\hfil\\XeTeXpdffile #1 width \\the\\textwidth \\hfil\\par\\vfil}\\eject}%' >> $$@
 	@echo '\\catcode `@=12' >> $$@
-	@echo '\\domap{$(1)-map.png}' >> $$@
+	@echo '\\domap{$(1)-map-rgb.pdf}' >> $$@
 	@echo '\\bye' >> $$@
 
 # When the cmyk-<mapID> command is given this will create the
 # USFM file that will be called from the cmyk.tex file. One is
 # auto-created for each map that is to be processed.
-$(PATH_TEXTS)/$(1)-map-cmyk.usfm :
+$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm :
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
@@ -133,106 +134,117 @@ $(PATH_TEXTS)/$(1)-map-cmyk.usfm :
 	@echo \\startmaps >> $$@
 	@echo '\\makedigitsother%' >> $$@
 	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
-	@echo '\\def\\domap#1{\\vbox to \\the\\textheight{\\vfil\\noindent\\hfil\\XeTeXpicfile #1 width \\the\\textwidth \\hfil\\par\\vfil}\\eject}%' >> $$@
+	@echo '\\def\\domap#1{\\vbox to \\the\\textheight{\\vfil\\noindent\\hfil\\XeTeXpdffile #1 width \\the\\textwidth \\hfil\\par\\vfil}\\eject}%' >> $$@
 	@echo '\\catcode `@=12' >> $$@
-	@echo '\\domap{$(1)-map-cmyk.png}' >> $$@
+	@echo '\\domap{$(1)-map-cmyk.pdf}' >> $$@
 	@echo '\\bye' >> $$@
 
 # This is the .tex file that is necessary to process the
 # map .usfm file. This is created when the View-Maps button
 # is clicked. This is dependent on the .usfm file
-$(PATH_PROCESS)/$(1)-map.tex :
+$(PATH_PROCESS)/$(1)-map-page-rgb.tex : $(PATH_PROCESS)/BACK_MATTER.tex
 	@echo INFO: Creating: $$@
 	@echo \\input $(TEX_PTX2PDF) > $$@
 	@echo \\input $(TEX_SETUP) >> $$@
 	@echo \\input BACK_MATTER.tex >> $$@
 	@echo \\def\\TopMarginFactor{0.4} >> $$@
-	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map.usfm} >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-rgb.usfm} >> $$@
 	@echo '\\bye' >> $$@
 
 # This is the .tex file that is necessary to process the
 # map cmyk.usfm file. This is created when the cmyk-<mapID>
 # command is given. This is dependent on the cmyk.usfm file
-$(PATH_PROCESS)/$(1)-map-cmyk.tex :
+$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : $(PATH_PROCESS)/BACK_MATTER.tex
 	@echo INFO: Creating: $$@
 	@echo \\input $(TEX_PTX2PDF) > $$@
 	@echo \\input $(TEX_SETUP) >> $$@
 	@echo \\input BACK_MATTER.tex >> $$@
 	@echo \\def\\TopMarginFactor{0.4} >> $$@
-	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-cmyk.usfm} >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm} >> $$@
 	@echo '\\bye' >> $$@
-
-# Create the intermediate PNG version of the map
-# This will transform the svg file to the initial PDF file.
-# To typeset to to final form a second process must be run.
-# This is just the first step in the total process.
-# This process has a dependency on the map.svg file.
-# However, it is not explicitly stated in the rule because
-# there is an editing process that must take place between
-# the check and the view processes.
-$(PATH_PROCESS)/$(1)-map.png : $(PATH_TEXTS)/$(1)-map-post.svg
-	@echo INFO: Creating: $$@
-	@rm -f $(PATH_PROCESS)/$(1)-map.png
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) -f $(PATH_TEXTS)/$(1)-map-post.svg -e $$@
-
-# This is the process for creating a CMYK version of the
-# current map. It uses ImageMagick for this.
-$(PATH_PROCESS)/$(1)-map-cmyk.png : $(PATH_PROCESS)/$(1)-map.png
-	@echo INFO: Creating: $$@
-	@convert png:$(PATH_PROCESS)/$(1)-map.png -profile '/usr/share/color/icc/sRGB.icm' -profile /usr/share/color/icc/ISOcoated.icc -compress zip -units PixelsPerInch -define pdf:use-cropbox=true png:$$@
 
 # Create the typeset PDF version of the map
 # This is the second step for creating the final map file.
 # The rule here will call on TeX to process the map TeX file,
 # creating a final version of the map ready for the final
 # process, binding. This is dependent on the map.png process.
-$(PATH_PROCESS)/$(1)-map.pdf : \
-	$(PATH_PROCESS)/$(1)-map.png \
-	$(PATH_PROCESS)/$(1)-map.tex \
-	$(PATH_TEXTS)/$(1)-map.usfm
+$(PATH_PROCESS)/$(1)-map-page-rgb.pdf : \
+	$(PATH_PROCESS)/$(1)-map-page-rgb.tex \
+	$(PATH_TEXTS)/$(1)-map-page-rgb.usfm \
+	$(PATH_PROCESS)/$(1)-map-rgb.pdf
 	@echo INFO: Creating: $$@
 	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map.tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-rgb.tex
 
 # This process creates a PDF of the CMYK PNG file that was
-# created in an earlier process.
-$(PATH_PROCESS)/$(1)-map-cmyk.pdf : \
-	$(PATH_PROCESS)/$(1)-map-cmyk.png \
-	$(PATH_PROCESS)/$(1)-map-cmyk.tex \
-	$(PATH_TEXTS)/$(1)-map-cmyk.usfm
+# created in an earlier process. The PNG file is an intermediat
+# step in the process.
+$(PATH_PROCESS)/$(1)-map-page-cmyk.pdf : \
+	$(PATH_PROCESS)/$(1)-map-cmyk.pdf \
+	$(PATH_PROCESS)/$(1)-map-page-cmyk.tex \
+	$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm
 	@echo INFO: Creating: $$@
-	@rm -f $(PATH_PROCESS)/$(1)-map-cmyk.pdf
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-cmyk.tex
+	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-cmyk.tex
+
+# Create the intermediate PDF version of the map
+# This will transform the svg file to the initial PDF file.
+# To typeset to to final form a second process must be run.
+# This is just the first step in the total process.
+# This process has a dependency on the map-post.svg file.
+$(PATH_PROCESS)/$(1)-map-rgb.pdf : $(PATH_TEXTS)/$(1)-map-post.svg
+	@echo INFO: Creating: $$@
+	@rm -f $(PATH_PROCESS)/$(1)-map-rgb.pdf
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_TEXTS)/$(1)-map-post.svg --export-pdf=$$@
+
+# Create the intermediate PNG file for the CMYK color space
+# conversion by ImageMagick. This is done this way because the
+# path out of Inkscape (which is what creates this file) is
+# better than trying to do it all with ImageMagick. We convert
+# SVG to PNG/RGB, then in the next step go PNG to PDF/CMYK.
+$(PATH_PROCESS)/$(1)-map-rgb.png : $(PATH_TEXTS)/$(1)-map-post.svg
+	@echo INFO: Creating: $$@
+	@rm -f $(PATH_PROCESS)/$(1)-map-rgb.png
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_TEXTS)/$(1)-map-post.svg --export-png=$$@
+
+# This is the process for creating a CMYK version of the
+# current map and outputs to PDF. It uses ImageMagick for this.
+# This is the second step of a two step process to get from
+# SVG/RGB to PDF/CMYK. The PNG file is an intermediate step
+# and has been created by Inkscape from the source SVG file.
+$(PATH_PROCESS)/$(1)-map-cmyk.pdf : $(PATH_PROCESS)/$(1)-map-rgb.png
+	@echo INFO: Creating: $$@
+	@convert png:$(PATH_PROCESS)/$(1)-map-rgb.png -profile '/usr/share/color/icc/sRGB.icm' -profile /usr/share/color/icc/ISOcoated.icc -compress zip -units PixelsPerInch -define pdf:use-cropbox=true pdf:$$@
 
 # This will run all the preprocesses to the SVG file and
 # open it up in Inkscape (or any other designated SVG editor)
 # when the processes are done. When this is run it is
 # assumed that there is no need for the files that generated
 # after so they will be deleted. This is similar behavior
-# as with book file processing.
+# as with book file processing. The default color space
+# output is RGB. A special command is availible for CMYK.
 preprocess-$(1) : $(PATH_TEXTS)/$(1)-map-post.svg
 	@echo INFO: Creating or editing $(PATH_TEXTS)/$(1)-map-post.svg
-	@rm -f $(PATH_PROCESS)/$(1)-map.png
-	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
+	@rm -f $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
 	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1)-map-post.svg &
 
 # Process the SVG file and view it in PDF when it is done. Note that this
 # process will fail if the preprocess has not been run first. The map making
 # process differs from typesetting so it has to be this way to protect data.
-view-$(1) : $(PATH_PROCESS)/$(1)-map.pdf
-	@echo INFO: Creating final typeset map: $(PATH_PROCESS)/$(1)-map.pdf
-	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map.pdf &
+view-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
+	@echo INFO: Creating final typeset map: $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
+	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-page-rgb.pdf &
 
 # Convert the intermediat PNG file to a CMYK color profile
-cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-cmyk.pdf
-	@echo INFO: Creating CMYK color profile map: $(PATH_PROCESS)/$(1)-map-cmyk.pdf
-	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-cmyk.pdf &
+cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
+	@echo INFO: Creating CMYK color profile map: $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
+	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf &
 
 # Remove the current map PDF file
 pdf-remove-$(1) :
-	@echo WARNING: Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.png) and $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
-	@rm -f $(PATH_PROCESS)/$(1)-map.png
-	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
+	@echo WARNING: Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-rgb.pdf) and $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
+	@rm -f $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
+	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
 
 # Edit the CSV data file
 edit-data-$(1) : $(PATH_TEXTS)/$(1)-data.csv
@@ -255,6 +267,12 @@ else
 # In this senario it is assumed that the map graphic file is
 # in PNG format and ready to be placed on the page. The rules
 # here are written with that in mind.
+##########################################################################
+
+# NOTE: We will need to add CMYK support as well to turn the PNG files
+# to PDF, then bring them into the file. Much the same as above. All the
+# file names will have to be changed to match the other section.
+
 ##########################################################################
 
 # Link the ready-made graphic file to the process folder. This is the

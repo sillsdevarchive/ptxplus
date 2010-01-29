@@ -30,6 +30,15 @@ Again, in the terminal, update your package list and update your system with the
 	sudo apt-get update
 	sudo apt-get upgrade
 
+A NOTE FOR KARMIC: Because of a bug in Inkscape 0.47~pre which was released with Karmic, you need to run an updated version that is found in the another PPA. Here are additional instructions for this. To install version 0.47 final in Ubuntu Karmic, you must add the following PPA:
+
+	sudo add-apt-repository ppa:ricotz/ppa
+
+Then upgrade Inkscape to the latest version:
+
+	sudo apt-get update && sudo apt-get upgrade
+
+
 Next, in the terminal, you need to install all the necessary packages to run the ptxplus publishing system. There are two categories, required and suggested. Use this command and answer yes like above:
 
 Required:

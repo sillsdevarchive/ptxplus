@@ -209,7 +209,7 @@ endif
 # Just in case, here is a clean_all rule. However, be very
 # when using it. It will wipe out all your previous work. This
 # is mainly for using when you want to start over on a project.
-reset : book-clean \
+reset : pdf-remove-book \
 	texts-clean \
 	adjfile-clean-all \
 	picfile-clean-all \
