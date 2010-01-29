@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Fri, 27 Nov 2009 09:54:56 +0700
+Modification-Date: Thu, 28 Jan 2010 15:18:56 +0700
 
 ====== Managing Maps ======
 The finer points of how to work with maps in ptxplus. Maps are really a part of the peripheral matter but since they require a significant amount of work they get their own page.
@@ -27,13 +27,34 @@ Producing a map, or set of maps, is a three step process.
 === Color Management ===
 Some printers require CMYK color space for the color material you give them. As the maps are generated with Inkscape, RGB is the default and there is no real CMYK output at this point.
 
-The way to fulfill this requirement is to take the PDF that you generated with the system and import it in the Gimp. The Gimp does a good job of importing PDF files. Use about 600 dpi as your desired output resolution. Once the import is done, use the Separate plugin to generate a CMYK file in the TIFF format.
+The way to fulfill this requirement is to take the PDF that you generated with the system and import it in the Gimp. The Gimp does a good job of importing PDF files. Use about 300 dpi as your desired output resolution. You may use a higher resolution but beware that the output file size may get rather large. Once the import is done, use the Separate plugin to generate a CMYK file in the TIFF format. The specific file you need to convert may vary but if you are using the auto-map-generation process look for <map ID>-map-pre.pdf
 
 The Separate plugin is included in an Ubuntu package called gimp-plugin-registry and icc-profiles. However, these packages do not come installed with a standard Gimp installation. You will need to install them if they are not already. (Remember to exit the Gimp first, then restart it when you are finished.) To install the gimp-plugin-registry and icc-profiles use the Synaptic package manager or, open a terminal and type the following line:
 
 	sudo apt-get install gimp-plugin-registry icc-profiles
 
-Use the Separate plugin to create a new image of the imported map. It will have four layers in it, one for each color. Next, use the Separate plugin to save the layered CMYK file into a merged CYMK TIFF file that is suitable for printing separations. **Note, do not use the File -> Save As dialog**, only the Separate plugin save dialog found in the same area you find the separate command. Also note, you cannot use any other format than TIFF. Save all your files in the Maps folder.
+Use the Separate plugin (Image -> Separate -> Separate) to create a new image of the imported map. It will have four layers in it, one for each color. There are several settings in the dialog to be concerned with. These seem to work for most jobs:
+
+'''
+Source color space: sRGB IEC61966-2.1
+	Check: Give priority to embedded profile
+Destination color space: Fogra27L CMYK Coated Press
+Rendering intent: Perceptual
+	Check: Use BPC algorithm
+	Check: Preserve pure black
+'''
+
+These settings should get the job done but you may want to adjust these settings if you are printing to non-coated paper.
+
+Next, use the PDF export feature of the Separate plugin (Image -> Separate -> CMYK Tiff 2 PDF...)  to export the newly created layered CMYK file into a merged CYMK PDF file that will be used by the system to create the final set. As with the conversion process, there are some choices to make in the dialog. These seem to work:
+
+CMYK Tiff Images: <mapID>-map-pre-CMYK.tif
+Compression: JPEG 95% Quality
+Resolution (dpi):
+Delete Images...:
+Start PDF Viewer...:
+
+**This needs a lot more work after the system has been reworked**
 
 Next, in the terminal located in the Maps folder, use the "convert" utility, which is part of [[ImageMagick]] package, to embed your new CMYK TIFF file into a PDF file. The command line would be something  like this:
 
