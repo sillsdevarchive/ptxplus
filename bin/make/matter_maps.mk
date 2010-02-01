@@ -169,9 +169,9 @@ $(PATH_PROCESS)/$(1)-map-page-cmyk.tex : $(PATH_PROCESS)/BACK_MATTER.tex
 # creating a final version of the map ready for the final
 # process, binding. This is dependent on the map.png process.
 $(PATH_PROCESS)/$(1)-map-page-rgb.pdf : \
+	$(PATH_PROCESS)/$(1)-map-rgb.pdf \
 	$(PATH_PROCESS)/$(1)-map-page-rgb.tex \
-	$(PATH_TEXTS)/$(1)-map-page-rgb.usfm \
-	$(PATH_PROCESS)/$(1)-map-rgb.pdf
+	$(PATH_TEXTS)/$(1)-map-page-rgb.usfm
 	@echo INFO: Creating: $$@
 	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-rgb.tex
@@ -251,14 +251,16 @@ edit-data-$(1) : $(PATH_TEXTS)/$(1)-data.csv
 	$(EDITCSV) $(PATH_TEXTS)/$(1)-data.csv
 
 # Edit the CSV style file
-edit-style-$(1) : $(PATH_TEXTS)/$(1)-styles.csv
+edit-styles-$(1) : $(PATH_TEXTS)/$(1)-styles.csv
 	$(EDITCSV) $(PATH_TEXTS)/$(1)-styles.csv
 
-# Delete (clean out) this set of files
-delete-$(1) :
-	@echo WARNING: Removing all the files for the $(1) map set
-	@rm -f $(PATH_PROCESS)/$(1)*
-	@rm -f $(PATH_TEXTS)/$(1)*
+# View the original model map
+view-model-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
+	$(VIEWIMG) $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
+
+# View the original SVG template map
+view-template-$(1) : $(PATH_TEXTS)/$(1)-map.svg
+	$(VIEWSVG) $(PATH_TEXTS)/$(1)-map.svg
 
 else
 
@@ -273,6 +275,8 @@ else
 # to PDF, then bring them into the file. Much the same as above. All the
 # file names will have to be changed to match the other section.
 
+# What we have here probably doesn't work at all
+
 ##########################################################################
 
 # Link the ready-made graphic file to the process folder. This is the
@@ -285,7 +289,7 @@ $(PATH_PROCESS)/$(1) :
 # map .usfm file. This is created when the View-Maps button
 # is clicked. This has a dependency on BACK_MATTER.tex
 # which it calls from the matter_peripheral.mk rules file.
-$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1)-map-rgb.tex : $(PATH_PROCESS)/BACK_MATTER.tex
 	@echo INFO: Creating: $$@
 	@echo \\input $(TEX_PTX2PDF) > $$@
 	@echo \\input $(TEX_SETUP) >> $$@
@@ -298,12 +302,12 @@ $(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/BACK_MATTER.tex
 	@echo '\\def\TopMarginFactor{0}' >> $$@
 	@echo '\\def\SideMarginFactor{0}' >> $$@
 	@echo '\\def\BottomMarginFactor{0}' >> $$@
-	@echo \\ptxfile{$(PATH_TEXTS)/$(1).usfm} >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-rgb.usfm} >> $$@
 	@echo '\\bye' >> $$@
 
 # Create the USFM file for processing this map. The map file
 # is linked into the process here.
-$(PATH_TEXTS)/$(1).usfm : $(PATH_PROCESS)/$(1)
+$(PATH_TEXTS)/$(1)-map-rgb.usfm : $(PATH_PROCESS)/$(1)
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
@@ -316,29 +320,36 @@ $(PATH_TEXTS)/$(1).usfm : $(PATH_PROCESS)/$(1)
 	@echo '\\bye' >> $$@
 
 # Render the resulting PDF file from the .tex and .usfm file.
-$(PATH_PROCESS)/$(1).pdf : \
-	$(PATH_TEXTS)/$(1).usfm \
-	$(PATH_PROCESS)/$(1).tex
+$(PATH_PROCESS)/$(1)-map-rgb.pdf : \
+	$(PATH_TEXTS)/$(1)-map-rgb.usfm \
+	$(PATH_PROCESS)/$(1)-map-rgb.tex
 	@echo INFO: Creating: $$@
-	@rm -f $(PATH_PROCESS)/$(1).pdf
+	@rm -f $(PATH_PROCESS)/$(1)-map-rgb.pdf
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1).tex
 
 # View the resulting created PDF file for this map.
-view-$(1) : $(PATH_PROCESS)/$(1).pdf
-	@echo INFO: Viewing: $(PATH_PROCESS)/$(1).pdf
-	@ $(VIEWPDF) $(PATH_PROCESS)/$(1).pdf &
+view-$(1) : $(PATH_PROCESS)/$(1)-map-rgb.pdf
+	@echo INFO: Viewing: $(PATH_PROCESS)/$(1)-map-rgb.pdf
+	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-rgb.pdf &
 
 # In this process this is not too useful. Let's try just telling
 # user to just use the view button
 preprocess-$(1) :
 	@echo INFO: This button does not do anything in this context. Use the View button and edit the $(PATH_TEXTS)/$(1).usfm and the $(PATH_PROCESS)/$(1).tex as necessary to get the desired results.
 
-# Remove the current map PDF file
-pdf-remove-$(1) :
-	@echo WARNING: Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1).pdf)
-	@rm -f $(PATH_PROCESS)/$(1).pdf
+# Convert this map ID to CMYK
+cmyk-$(1) :
+	@echo INFO: This feature has not been implemented in this mode.
 
 endif
+
+# Delete (clean out) this set of map files but do not delete the data
+# in the source folder. This is shared by both types of map processes.
+delete-$(1) :
+	@echo WARNING: Removing all the files for the $(1) map set
+	@rm -f $(PATH_PROCESS)/$(1)*
+	@rm -f $(PATH_TEXTS)/$(1)*
+
 
 
 endef
@@ -361,40 +372,52 @@ $(foreach v,$(MATTER_MAPS), $(eval $(call map_rules,$(v))))
 # If nothing is listed in the MATTER_MAPS binding list, we do not
 # bother doing anything.
 ifneq ($(MATTER_MAPS),)
-MATTER_MAPS_PDF		= $(PATH_PROCESS)/MATTER_MAPS.pdf
+MATTER_MAPS_RGB_PDF		= $(PATH_PROCESS)/MATTER_MAPS_RGB.pdf
+MATTER_MAPS_CMYK_PDF		= $(PATH_PROCESS)/MATTER_MAPS_CMYK.pdf
 
 # This first rule is for auto SVG processing
-ifeq ($(CREATE_MAP),0)
+ifneq ($(CREATE_MAP),0)
 
 # For binding we will use pdftk to put together the
 # individual PDFs we created earlier in this process.
-$(MATTER_MAPS_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map.pdf)
-	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_PDF)
-	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map.pdf) cat output $@
+# We need to do this for both RGB and CMYK files.
+$(MATTER_MAPS_RGB_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-rgb.pdf)
+	@echo INFO: Creating the bound PDF file for RGB maps: $(MATTER_MAPS_RGB_PDF)
+	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-rgb.pdf) cat output $@
+
+$(MATTER_MAPS_CMYK_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-cmyk.pdf)
+	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_CMYK_PDF)
+	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-cmyk.pdf) cat output $@
 
 else
 
 # This rule is for when the map file was a graphic created by an
 # outside process.
-
-$(MATTER_MAPS_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v).pdf)
-	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_PDF)
-	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v).pdf) cat output $@
+# Note this will need to be modified for CMYK output
+$(MATTER_MAPS_RGB_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-rgb.pdf)
+	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_RGB_PDF)
+	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-rgb.pdf) cat output $@
 
 endif
 
 endif
 
 # This will call TeX to create a "book" of maps. The results will
-# be a PDF file that will be viewed in the PDF viewer.
-view-maps : $(MATTER_MAPS_PDF)
-	@echo INFO: Creating a single PDF file for all the maps.
+# be a PDF file that will be viewed in the PDF viewer. This is done
+# seperately for RGB and CMYK maps
+view-rgb-maps : $(MATTER_MAPS_RGB_PDF)
+	@echo INFO: Creating a single PDF file for all the RGB maps.
 	@$(VIEWPDF) $< &
 
-# Remove the matter map file
-pdf-remove-maps :
-	@echo INFO: Removing file: $(MATTER_MAPS_PDF)
-	@rm -f $(MATTER_MAPS_PDF)
+view-cmyk-maps : $(MATTER_MAPS_CMYK_PDF)
+	@echo INFO: Creating a single PDF file for all the CMYK maps.
+	@$(VIEWPDF) $< &
+
+# Remove the matter map files (both RGB and CMYK)
+remove-maps :
+	@echo INFO: Removing file: $(MATTER_MAPS_RGB_PDF) and $(MATTER_MAPS_CMYK_PDF)
+	@rm -f $(MATTER_MAPS_RGB_PDF)
+	@rm -f $(MATTER_MAPS_CMYK_PDF)
 
 # This is not a wise thing to have so this command is disabled.
 # The reason is that when a user comes to this point they have
@@ -407,4 +430,5 @@ preprocess-maps :
 clean-maps :
 	@echo WARNING: All map have been deleted, Sorry if you did not mean to do this
 	$(foreach v,$(MATTER_MAPS), $(shell rm -f $(PATH_TEXTS)/$(v)* && rm -f $(PATH_PROCESS)/$(v)*))
-	@rm -f $(MATTER_MAPS_PDF)
+	@rm -f $(MATTER_MAPS_RGB_PDF)
+	@rm -f $(MATTER_MAPS_CMYK_PDF)
