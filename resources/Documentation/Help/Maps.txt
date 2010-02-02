@@ -1,16 +1,20 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Thu, 28 Jan 2010 15:18:56 +0700
+Modification-Date: Tue, 02 Feb 2010 11:15:15 +0700
 
 ====== Managing Maps ======
 The finer points of how to work with maps in ptxplus. Maps are really a part of the peripheral matter but since they require a significant amount of work they get their own page.
 
 === Summary ===
-Producing a map, or set of maps, is a three step process.
-1) Edit the project.conf maps_data.csv files
-2) Edit the project SVG map files
-3) Produce the PDF files and bind
+Producing a single map is a five step process.
+1) Edit the map translation data file
+2) Merge the map translation data with the map SVG template
+3) Edit the resulting SVG map file
+4) Create the PDF typeset page with the map on it.
+5) Adjust the map position on the page (if necessary) and re-typeset
+
+Once the individual maps have been produced and approved, they can be bound into one PDF file that is then delivered to the publisher. In addition to this, the color space information can be converted. The default color space is RGB but it can be easily converted to CMYK
 
 === Map Data ===
 <write>
@@ -25,7 +29,10 @@ Producing a map, or set of maps, is a three step process.
 <write>
 
 === Color Management ===
-Some printers require CMYK color space for the color material you give them. As the maps are generated with Inkscape, RGB is the default and there is no real CMYK output at this point.
+Some printers require CMYK color space for the color material you give them. As the maps are generated with Inkscape, RGB is the default and there is a separate process outside of Inkscape we use to convert them to CMYK.
+
+###############################
+This all needs to be rewritten...
 
 The way to fulfill this requirement is to take the PDF that you generated with the system and import it in the Gimp. The Gimp does a good job of importing PDF files. Use about 300 dpi as your desired output resolution. You may use a higher resolution but beware that the output file size may get rather large. Once the import is done, use the Separate plugin to generate a CMYK file in the TIFF format. The specific file you need to convert may vary but if you are using the auto-map-generation process look for <map ID>-map-pre.pdf
 
@@ -54,7 +61,6 @@ Resolution (dpi):
 Delete Images...:
 Start PDF Viewer...:
 
-**This needs a lot more work after the system has been reworked**
 
 Next, in the terminal located in the Maps folder, use the "convert" utility, which is part of [[ImageMagick]] package, to embed your new CMYK TIFF file into a PDF file. The command line would be something  like this:
 
@@ -66,6 +72,9 @@ Next, still in the terminal, link the new PDF files to the process directory wit
 	ln -sf [[../Maps/m006-CMYK.pdf]] .
 
 Now open up the MAPS.USFM file in your Text folder and edit the necessary lines so that it will now point to the new CMYK PDF files you have made. This will generate a new version of the MAPS.USFM.pdf file. Be sure to copy it into the deliverables folder and rename it to indicate that it contains content in the CMYK color space.
+
+###########################################
+
 
 === Map Templates ===
 Currently there are 11 map templates to choose from. Here is a brief description of each one:
