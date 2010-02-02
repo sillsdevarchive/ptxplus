@@ -419,6 +419,139 @@
 			  </widget>
 			</child>
 			<child>
+			  <widget class="GtkMenuItem" id="menu_maps">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Maps</property>
+				<child>
+				  <widget class="GtkMenu" id="maps">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_view_model">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">View the original map graphic</property>
+						<property name="label" translatable="yes">View Model</property>
+						<signal name="activate" handler="on_menu_map_view_model"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_edit_data">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Edit the map translation data</property>
+						<property name="label" translatable="yes">Edit Data</property>
+						<signal name="activate" handler="on_menu_map_edit_data"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_view_template">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">View the original map template</property>
+						<property name="label" translatable="yes">View Template</property>
+						<signal name="activate" handler="on_menu_map_view_template"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_edit_styles">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Edit the text styles for this map</property>
+						<property name="label" translatable="yes">Edit Styles</property>
+						<signal name="activate" handler="on_menu_map_edit_styles"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_merge_data">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Merge the map data with the SVG template</property>
+						<property name="label" translatable="yes">Merge Data</property>
+						<signal name="activate" handler="on_menu_map_merge_data"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_create_rgb_pdf">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Create an RGB/PDF version of the map</property>
+						<property name="label" translatable="yes">Create RGB PDF</property>
+						<signal name="activate" handler="on_menu_map_create_rgb"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_create_cmyk_pdf">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Create a CMYK/PDF version of this map</property>
+						<property name="label" translatable="yes">Create CMYK PDF</property>
+						<signal name="activate" handler="on_menu_map_create_cmyk"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_delete_current">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Delete the current set of project files for this map set</property>
+						<property name="label" translatable="yes">Delete Current</property>
+						<signal name="activate" handler="on_menu_map_delete_current"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem_maps1">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_bind_maps_rgb">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Bind project RGB maps together in one PDF file</property>
+						<property name="label" translatable="yes">Bind RGB Maps</property>
+						<signal name="activate" handler="on_menu_map_bind_maps_rgb"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_bind_maps_cmyk">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Bind project CMYK maps together in one PDF file</property>
+						<property name="label" translatable="yes">Bind CMYK Maps</property>
+						<signal name="activate" handler="on_menu_map_bind_maps_cmyk"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_remove_pdf">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Delete both RGB and CMYK bound map files</property>
+						<property name="label" translatable="yes">Remove PDF</property>
+						<signal name="activate" handler="on_menu_map_remove_pdf"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem_maps2">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_map_remove_all">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Remove all the files for all the maps (Caution!)</property>
+						<property name="label" translatable="yes">Remove Everything!</property>
+						<signal name="activate" handler="on_menu_map_remove_all"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+
+
+
+
+
+			<child>
 			  <widget class="GtkMenuItem" id="menu_help">
 				<property name="visible">True</property>
 				<property name="label" translatable="yes">_Help</property>

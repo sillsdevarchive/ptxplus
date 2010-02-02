@@ -110,6 +110,18 @@ class ConfigGUI (object) :
 			"on_menu_previous_tab_activate"         : self.m_previous_tab,
 			"on_checkmenu_wrap_activate"            : self.m_checkmenu_wrap,
 			"on_checkmenu_line_numbers_activate"    : self.m_checkmenu_line_numbers,
+			"on_menu_map_view_model"                : self.m_map_view_model,
+			"on_menu_map_edit_data"                 : self.m_map_edit_data,
+			"on_menu_map_view_template"             : self.m_map_view_template,
+			"on_menu_map_edit_styles"               : self.m_map_edit_styles,
+			"on_menu_map_merge_data"                : self.m_map_merge_data,
+			"on_menu_map_create_rgb"                : self.m_map_create_rgb,
+			"on_menu_map_create_cmyk"               : self.m_map_create_cmyk,
+			"on_menu_map_delete_current"            : self.m_map_delete_current,
+			"on_menu_map_bind_maps_rgb"             : self.m_map_bind_maps_rgb,
+			"on_menu_map_bind_maps_cmyk"            : self.m_map_bind_maps_cmyk,
+			"on_menu_map_remove_pdf"                : self.m_map_remove_pdf,
+			"on_menu_map_remove_all"                : self.m_map_remove_all
 		}
 		self.wTree.signal_autoconnect(dic)
 
@@ -502,15 +514,6 @@ class ConfigGUI (object) :
 	def m_reload (self, widget) :
 		self.init_dir(self.bkid)
 
-#    def m_bind (self, widget) :
-#        self.execute("ptxplus", "bind-all")
-
-#    def m_bind_booklet (self, widget) :
-#        self.execute("ptxplus", "bind-booklet")
-
-#    def m_bind_booklet_current (self, widget) :
-#        self.execute("ptxplus", "bind-booklet-" + self.bkid)
-
 	def m_wordlist (self, widget) :
 		self.execute('ptxplus', 'make-master-wordlist')
 
@@ -571,6 +574,43 @@ class ConfigGUI (object) :
 			entry.paste_clipboard()
 		elif isinstance(entry, gtk.TextView) :
 			entry.get_buffer().paste_clipboard(self.clipboard, None, entry.get_editable())
+
+	def m_map_view_model (self, widget) :
+		self.execute("ptxplus", "view-model-" + self.bkid)
+
+	def m_map_edit_data (self, widget) :
+		self.execute("ptxplus", "edit-data-" + self.bkid)
+
+	def m_map_view_template (self, widget) :
+		self.execute("ptxplus", "view-template-" + self.bkid)
+
+	def m_map_edit_styles (self, widget) :
+		self.execute("ptxplus", "edit-styles-" + self.bkid)
+
+	def m_map_merge_data (self, widget) :
+		self.execute("ptxplus", "preprocess-" + self.bkid)
+
+	def m_map_create_rgb (self, widget) :
+		self.execute("ptxplus", "view-" + self.bkid)
+
+	def m_map_create_cmyk (self, widget) :
+		self.execute("ptxplus", "cmyk-" + self.bkid)
+
+	def m_map_delete_current (self, widget) :
+		self.execute("ptxplus", "delete-" + self.bkid)
+
+	def m_map_bind_maps_rgb (self, widget) :
+		self.execute("ptxplus", "view-rgb-maps")
+
+	def m_map_bind_maps_cmyk (self, widget) :
+		self.execute("ptxplus", "view-cmyk-maps")
+
+	def m_map_remove_pdf (self, widget) :
+		self.execute("ptxplus", "remove-maps")
+
+	def m_map_remove_all (self, widget) :
+		self.execute("ptxplus", "clean-maps")
+
 
 class FindDialog (object) :
 	def __init__ (self, wTree, d_find, notebook, te_find):
