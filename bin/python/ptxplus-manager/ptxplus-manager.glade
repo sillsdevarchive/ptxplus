@@ -27,6 +27,7 @@
 						<property name="tooltip" translatable="yes">Create a new project</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_new_activate"/>
 					  </widget>
 					</child>
@@ -37,6 +38,7 @@
 						<property name="tooltip" translatable="yes">Open an existing project</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_gtk-open_activate"/>
 					  </widget>
 					</child>
@@ -78,24 +80,34 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_reload">
+					  <widget class="GtkImageMenuItem" id="menu_reload">
+						<property name="label" translatable="yes">Reload Settings</property>
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Reload project settings</property>
-						<property name="label" translatable="yes">Reload</property>
+						<property name="tooltip" translatable="yes">Reload project settings from the project.conf file</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_reload_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image7">
+							<property name="visible">True</property>
+							<property name="stock">gtk-refresh</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
 					  <widget class="GtkImageMenuItem" id="menu_reset">
-						<property name="label">Reset</property>
+						<property name="label">Reset Project</property>
 						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
 						<property name="tooltip" translatable="yes">Remove all auto-generated project material (Be very careful!)</property>
 						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_reset_activate"/>
 						<child internal-child="image">
 						  <widget class="GtkImage" id="image1">
 							<property name="visible">True</property>
-							<property name="stock">gtk-clear</property>
+							<property name="stock">gtk-dialog-warning</property>
 						  </widget>
 						</child>
 					  </widget>
@@ -107,6 +119,7 @@
 						<property name="tooltip" translatable="yes">Quite ptxplus manager</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_quit_activate"/>
 					  </widget>
 					</child>
@@ -130,6 +143,7 @@
 						<property name="tooltip" translatable="yes">Cut selected object</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_cut_activate"/>
 					  </widget>
 					</child>
@@ -140,6 +154,7 @@
 						<property name="tooltip" translatable="yes">Copy selected object</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_copy_activate"/>
 					  </widget>
 					</child>
@@ -164,6 +179,7 @@
 						<property name="visible">True</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_find_activate"/>
 					  </widget>
 					</child>
@@ -188,6 +204,7 @@
 						<property name="sensitive">False</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_undo_activate"/>
 						<accelerator key="z" signal="activate" modifiers="GDK_CONTROL_MASK"/>
 					  </widget>
@@ -199,6 +216,7 @@
 						<property name="sensitive">False</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_redo_activate"/>
 						<accelerator key="z" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
 					  </widget>
@@ -210,16 +228,17 @@
 					</child>
 					<child>
 					  <widget class="GtkImageMenuItem" id="menu_getclip">
-						<property name="label" translatable="yes">Get Encoding</property>
+						<property name="label">Get Encoding</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Grab character encoding codes from memory</property>
 						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_getclip_activate"/>
 						<accelerator key="e" signal="activate" modifiers="GDK_CONTROL_MASK"/>
 						<child internal-child="image">
 						  <widget class="GtkImage" id="image6">
 							<property name="visible">True</property>
-							<property name="stock">gtk-missing-image</property>
+							<property name="stock">gtk-info</property>
 						  </widget>
 						</child>
 					  </widget>
@@ -335,11 +354,19 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_remove_piclist_current">
+					  <widget class="GtkImageMenuItem" id="menu_remove_piclist_current">
+						<property name="label" translatable="yes">Remove Pictures</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove the illustrations list file for this component</property>
-						<property name="label" translatable="yes">Remove Pictures</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_remove_pic_current_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image8">
+							<property name="visible">True</property>
+							<property name="stock">gtk-clear</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -348,6 +375,7 @@
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove all the illustrations list files for this publication</property>
 						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_clean_pic_all_activate"/>
 						<child internal-child="image">
 						  <widget class="GtkImage" id="image3">
@@ -364,15 +392,16 @@
 					</child>
 					<child>
 					  <widget class="GtkImageMenuItem" id="menu_remove_adj">
-						<property name="label">Remove Adjustments (current)</property>
+						<property name="label">Clear Adjustments</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove the current adjustment list file</property>
 						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_remove_adj_current_activate"/>
 						<child internal-child="image">
 						  <widget class="GtkImage" id="image4">
 							<property name="visible">True</property>
-							<property name="stock">gtk-dialog-warning</property>
+							<property name="stock">gtk-clear</property>
 						  </widget>
 						</child>
 					  </widget>
@@ -383,6 +412,7 @@
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove all the adjustment list files for this publication</property>
 						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_clean_adj_all_activate"/>
 						<child internal-child="image">
 						  <widget class="GtkImage" id="image5">
@@ -488,12 +518,19 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_delete_current">
+					  <widget class="GtkImageMenuItem" id="menu_map_delete_current">
+						<property name="label">Reset Map</property>
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
 						<property name="tooltip" translatable="yes">Delete the current set of project files for this map set</property>
-						<property name="label" translatable="yes">Delete Current</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_map_delete_current"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image101">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -534,23 +571,25 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_remove_all">
-						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Remove all the files for all the maps (Caution!)</property>
+					  <widget class="GtkImageMenuItem" id="menu_map_remove_all">
 						<property name="label" translatable="yes">Remove Everything!</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove all the files for all the maps (Caution!)</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_map_remove_all"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image102">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 				  </widget>
 				</child>
 			  </widget>
 			</child>
-
-
-
-
-
 			<child>
 			  <widget class="GtkMenuItem" id="menu_help">
 				<property name="visible">True</property>
@@ -566,6 +605,7 @@
 						<property name="tooltip" translatable="yes">Pull up system help wiki</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_help_activate"/>
 					  </widget>
 					</child>
@@ -575,11 +615,12 @@
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Work with an example project</property>
 						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_example_activate"/>
 						<child internal-child="image">
 						  <widget class="GtkImage" id="image2">
 							<property name="visible">True</property>
-							<property name="stock">gtk-dialog-warning</property>
+							<property name="stock">gtk-execute</property>
 						  </widget>
 						</child>
 					  </widget>
@@ -591,6 +632,7 @@
 						<property name="tooltip" translatable="yes">About XeTeX-ptxplus Manager</property>
 						<property name="use_underline">True</property>
 						<property name="use_stock">True</property>
+						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_about_activate"/>
 					  </widget>
 					</child>
@@ -674,7 +716,7 @@
 					</child>
 					<child>
 					  <widget class="GtkButton" id="b_reload">
-						<property name="label" translatable="yes">_Reload</property>
+						<property name="label" translatable="yes">_Reload Settings</property>
 						<property name="visible">True</property>
 						<property name="can_focus">True</property>
 						<property name="receives_default">True</property>
