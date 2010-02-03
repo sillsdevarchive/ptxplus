@@ -5,11 +5,11 @@ Maintainer: Martin Hosken <martin_hosken@sil.org>
 Build-Depends: debhelper (>= 4.1.0)
 Standards-Version: 3.7.2
 
-# NOTE: Before we run this again we need to add dependencies for ImageMagick, and icc color profiles
+# NOTE: We need to add a "suggests" catagory for remcomended programs
 
 Package: xetex-ptxplus
 Architecture: all
-Depends: texlive-xetex-snapshot, python (>= 2.5), python-htmlgen, python-configobj, python-mako, evince, inkscape, zim, graphviz, python-gtk2 (>= 2.12), python-vte, python-gtksourceview2, pdftk, libgtk2-spell-perl, teckit
+Depends: texlive-xetex-snapshot, python (>= 2.5), python-htmlgen, python-configobj, python-mako, evince, inkscape, zim, icc-profiles, imagemagick, graphviz, python-gtk2 (>= 2.12), python-vte, python-gtksourceview2, pdftk, libgtk2-spell-perl, teckit
 Description: A Scripture publication management system for XeTeX
  XeTeX-ptxplus is designed to manage the process of typesetting Scripture
  text by tracking project settings and specifications and creating the

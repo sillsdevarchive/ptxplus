@@ -53,6 +53,17 @@ class MakeMakefile (object) :
 		# As there are sub-sections we will add them to the settings object one
 		# at after another. There's probably a better way to do this but not today ;-)
 		makefileSettings = ""
+
+		# First grab some individual settings we need in the makefile
+		cMapVal = self._log_manager._settings['General']['MapProcesses']['CREATE_MAP']
+		makefileSettings = makefileSettings + 'CREATE_MAP' + "=" + cMapVal + "\n"
+
+		rgbPath = self._log_manager._settings['General']['MapProcesses']['RGB_PROFILE']
+		makefileSettings = makefileSettings + 'RGB_PROFILE' + "=" + rgbPath + "\n"
+
+		cmykPath = self._log_manager._settings['General']['MapProcesses']['CMYK_PROFILE']
+		makefileSettings = makefileSettings + 'CMYK_PROFILE' + "=" + cmykPath + "\n"
+
 		for key, value, in self._log_manager._settings['Process']['General'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
