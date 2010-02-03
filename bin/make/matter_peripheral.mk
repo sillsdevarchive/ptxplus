@@ -27,6 +27,9 @@
 # 20090114 - djd - Changed the process model of peripheral material
 #		so that now there is only one source and it is linked
 #		into the project. Much easier to maintian this way.
+# 20100203 - djd - Added the ability to create peripheral files
+#		on the fly so there doesn't need to be a copy of
+#		it in the ptxplus template lib
 
 ##############################################################
 #		Variables for peripheral matter
@@ -59,26 +62,39 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 	@echo Linking project to peripheral source texts: $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1))
 	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)) $(PATH_TEXTS)/
 
-# This enables us to do the preprocessing on a single peripheral item.
-preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
-	@echo Preprocessing $(1)
-	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
-
-# NOTE:
-# If a peripheral template file does not exist for a given object
-# in the template lib then one will need to be created manually
-# for the project. Unfortunatly, there is not clean way to do this
-# automatically. What is needed is a user template folder in
-# ~/.ptxplus where one could be made automatically. For now we
-# will just have to let the uggly error message be our guide.
-
-# Output to the TeX control file (Do a little clean up first)
-# The ($(1)_TEXSPECIAL) below is a workaround to overcome a current
-# limitation with styles being applied to individual parts of a
-# publication. This will insert a specially defined var done in
-# the makefile.conf file.
-$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BACK_MATTER.tex
+# Each peripheral item needs a source but if it doesn't exist in the source folder
+# then we need to copy one in from the templates we have in the system.
+# However, if it does not exist there either we will need to make one.
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) :
+ifeq (1, $(shell [ -f $(PATH_TEMPLATES)/$(1) ] ) )
+	@echo Copying into project from: $(PATH_TEMPLATES)/$(1)
 	@cp $(PATH_TEMPLATES)/$(1).tex '$$@'
+else
+	@echo Could not find: $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
+	@echo Creating this file:
+	@echo Caution, you will need to edit it
+	@echo \\id OTH > $$@
+	@echo \\ide UTF-8 >> $$@
+	@echo \\periph \<Fill in page type here\> >> $$@
+	@echo \\p This is a auto created page found at: $$@ >> $$@
+	@echo \\p Please edit as needed. >> $$@
+endif
+
+# Output to the TeX control file. If one doesn't exist in the lib
+# create a custom one that will need to be edited by the user.
+$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BACK_MATTER.tex
+ifeq (1, $(shell [ -f $(PATH_TEMPLATES)/$(1).tex ] ) )
+	@echo Copying into project: $(PATH_TEMPLATES)/$(1).tex
+	@cp $(PATH_TEMPLATES)/$(1).tex '$$@'
+else
+	@echo Could not find: $(PATH_TEMPLATES)/$(1).tex
+	@echo Creating one, you will need to edit it!
+	@echo \\input $(TEX_PTX2PDF) > $$@
+	@echo \\input $(TEX_SETUP) >> $$@
+	@echo \\input FRONT_MATTER.tex >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1)} >> $$@
+	@echo '\\bye' >> $$@
+endif
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).pdf : \
@@ -87,16 +103,15 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(DEPENDENT_FILE_LIST)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 
-# Each peripheral item needs a source but if it doesn't exist in the source folder
-# then we need to copy one in from the templates we have in the system.
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) :
-	@echo WARNING: Peripheral item: $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) missing adding template to project.
-	@cp $(PATH_TEMPLATES)/$(1) '$$@'
-
 # Open the PDF file with reader
 view-$(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $$< &
+
+# This enables us to do the preprocessing on a single peripheral item.
+preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
+	@echo Preprocessing $(1)
+	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
 
 # Do not open the PDF file with reader
 $(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
