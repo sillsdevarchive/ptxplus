@@ -58,35 +58,51 @@ define periph_rules
 # to it. Checks and processes on peripheral material are currently
 # done manually. This helps simplify the system and makes it more
 # reliable.
-$(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
-	@echo Linking project to peripheral source texts: $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1))
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)) $(PATH_TEXTS)/
 
-# Each peripheral item needs a source but if it doesn't exist in the source folder
-# then we need to copy one in from the templates we have in the system.
-# However, if it does not exist there either we will need to make one.
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) :
-ifeq (1, $(shell [ -f $(PATH_TEMPLATES)/$(1) ] ) )
-	@echo Copying into project from: $(PATH_TEMPLATES)/$(1)
-	@cp $(PATH_TEMPLATES)/$(1).tex '$$@'
-else
-	@echo Could not find: $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
-	@echo Creating this file:
-	@echo Caution, you will need to edit it
-	@echo \\id OTH > $$@
-	@echo \\ide UTF-8 >> $$@
-	@echo \\periph \<Fill in page type here\> >> $$@
-	@echo \\p This is a auto created page found at: $$@ >> $$@
-	@echo \\p Please edit as needed. >> $$@
-endif
+####################################################################
+#             We need to evaluate the other places where
+#             The $$(shell readlink -f -- $$<) is used
+#             There needs to be $$ not just $ in front
+#             of them!
+####################################################################
+
+$(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
+	@echo Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
+	ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
+
+# Create the project peripheral source folder if one doesn't exist.
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) :
+	@echo Creating the project peripheral source folder
+	@mkdir $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+
+# Create the peripheral file by copying in the template. But if
+# the template files doesn't exsit, then create a dummy one to
+# serve as a placeholder. This is done by using the "test" conditional
+# statement below. Note the line concatanation. This needs to be
+# exicuted as one long line.
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+	@if test -r $(PATH_TEMPLATES)/$(1); then \
+	echo Copying into project from: $(PATH_TEMPLATES)/$(1); \
+	cp $(PATH_TEMPLATES)/$(1) '$$@'; \
+	else \
+	echo Could not find: $$@; \
+	echo Creating this file:; \
+	echo Caution, you will need to edit it; \
+	echo \\id OTH > $$@; \
+	echo \\ide UTF-8 >> $$@; \
+	echo \\periph \<Fill in page type here\> >> $$@; \
+	echo \\p This is a auto created page found at: $$@ >> $$@; \
+	echo \\p Please edit as needed. >> $$@; \
+	fi
+
+#########################################################################
+#               The rules below for the .tex file need to be
+#               the same as for the source file above.
+#########################################################################
 
 # Output to the TeX control file. If one doesn't exist in the lib
 # create a custom one that will need to be edited by the user.
-$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BACK_MATTER.tex
-ifeq (1, $(shell [ -f $(PATH_TEMPLATES)/$(1).tex ] ) )
-	@echo Copying into project: $(PATH_TEMPLATES)/$(1).tex
-	@cp $(PATH_TEMPLATES)/$(1).tex '$$@'
-else
+$(PATH_TEMPLATES)/$(1).tex :
 	@echo Could not find: $(PATH_TEMPLATES)/$(1).tex
 	@echo Creating one, you will need to edit it!
 	@echo \\input $(TEX_PTX2PDF) > $$@
@@ -94,7 +110,18 @@ else
 	@echo \\input FRONT_MATTER.tex >> $$@
 	@echo \\ptxfile{$(PATH_TEXTS)/$(1)} >> $$@
 	@echo '\\bye' >> $$@
-endif
+
+# This .tex file also generally has some dependencies on the
+# FRONT/BACK_MATTER.tex files so we add them here.
+$(PATH_PROCESS)/$(1).tex : \
+	$(PATH_PROCESS)/FRONT_MATTER.tex \
+	$(PATH_PROCESS)/BACK_MATTER.tex \
+	$(PATH_TEMPLATES)/$(1).tex
+	@echo Copying into project: $(PATH_TEMPLATES)/$(1).tex
+	@cp $(PATH_TEMPLATES)/$(1).tex '$$@'
+
+###########################################################################
+
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).pdf : \
