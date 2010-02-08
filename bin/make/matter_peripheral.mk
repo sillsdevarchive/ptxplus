@@ -59,13 +59,6 @@ define periph_rules
 # done manually. This helps simplify the system and makes it more
 # reliable.
 
-####################################################################
-#             We need to evaluate the other places where
-#             The $$(shell readlink -f -- $$<) is used
-#             There needs to be $$ not just $ in front
-#             of them!
-####################################################################
-
 $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 	@echo Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
 	ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
@@ -80,25 +73,25 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) :
 # serve as a placeholder. This is done by using the "test" conditional
 # statement below. Note the line concatanation. This needs to be
 # exicuted as one long line.
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+# NOTE: the use of the "|" in the dependency list. The pipe enables makefile
+# to check on the dependent target, in this case a directory, but
+# the current target doesn't have to be rebuilt if it has not changed.
+# This is very important here because a directory will always be
+# changing.
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
 	@if test -r $(PATH_TEMPLATES)/$(1); then \
-	echo Copying into project from: $(PATH_TEMPLATES)/$(1); \
-	cp $(PATH_TEMPLATES)/$(1) '$$@'; \
+		echo Copying into project from: $(PATH_TEMPLATES)/$(1); \
+		cp $(PATH_TEMPLATES)/$(1) '$$@'; \
 	else \
-	echo Could not find: $$@; \
-	echo Creating this file:; \
-	echo Caution, you will need to edit it; \
-	echo \\id OTH > $$@; \
-	echo \\ide UTF-8 >> $$@; \
-	echo \\periph \<Fill in page type here\> >> $$@; \
-	echo \\p This is a auto created page found at: $$@ >> $$@; \
-	echo \\p Please edit as needed. >> $$@; \
+		echo Could not find: $$@; \
+		echo Creating this file:; \
+		echo Caution, you will need to edit it; \
+		echo \\id OTH >> $$@; \
+		echo \\ide UTF-8 >> $$@; \
+		echo \\periph \<Fill in page type here\> >> $$@; \
+		echo \\p This is a auto created page found at: $$@ >> $$@; \
+		echo \\p Please edit as needed. >> $$@; \
 	fi
-
-#########################################################################
-#               The rules below for the .tex file need to be
-#               the same as for the source file above.
-#########################################################################
 
 # Output to the TeX control file. If one doesn't exist in the lib
 # create a custom one that will need to be edited by the user.
@@ -113,15 +106,20 @@ $(PATH_TEMPLATES)/$(1).tex :
 
 # This .tex file also generally has some dependencies on the
 # FRONT/BACK_MATTER.tex files so we add them here.
-$(PATH_PROCESS)/$(1).tex : \
-	$(PATH_PROCESS)/FRONT_MATTER.tex \
-	$(PATH_PROCESS)/BACK_MATTER.tex \
-	$(PATH_TEMPLATES)/$(1).tex
-	@echo Copying into project: $(PATH_TEMPLATES)/$(1).tex
-	@cp $(PATH_TEMPLATES)/$(1).tex '$$@'
-
-###########################################################################
-
+$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BACK_MATTER.tex
+	@if test -r $(PATH_TEMPLATES)/$(1).tex; then \
+		echo Copying into project from: $(PATH_TEMPLATES)/$(1).tex; \
+		cp $(PATH_TEMPLATES)/$(1).tex '$$@'; \
+	else \
+		echo Could not find: $$@; \
+		echo Creating this file:; \
+		echo Caution, you will need to edit it; \
+		echo \\input $(TEX_PTX2PDF) >> $$@; \
+		echo \\input $(TEX_SETUP) >> $$@; \
+		echo \\input FRONT_MATTER.tex >> $$@; \
+		echo \\ptxfile{$(PATH_TEXTS)/$(1)} >> $$@; \
+		echo '\\bye' >> $$@; \
+	fi
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).pdf : \

@@ -70,7 +70,7 @@ $(PATH_TEXTS)/$(1)-map.svg : \
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-map.svg $$@
 
 $(PATH_TEXTS)/$(1)-map-post.svg : $(PATH_TEXTS)/$(1)-map.svg
-	@echo INFO: Merging map data and styles into $(shell readlink -f -- $(PATH_TEXTS)/$(1)-map-post.svg)
+	@echo INFO: Merging map data and styles into $$(shell readlink -f -- $(PATH_TEXTS)/$(1)-map-post.svg)
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1)-map.svg $$@
 
 # Copy project map style file into project
@@ -103,8 +103,8 @@ $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv :
 # BTW, we use readlink here to resolve the path so the ln will make
 # a successful link.
 $(PATH_TEXTS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
-	@echo INFO: Linking data for: $(shell pwd)/$$@
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv) $(PATH_TEXTS)/
+	@echo INFO: Linking data for: $$(shell pwd)/$$@
+	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv) $(PATH_TEXTS)/
 
 # When the View-Maps button is clicked this will create the
 # USFM file that will be called from the .tex file. One is
@@ -244,7 +244,7 @@ cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
 
 # Remove the current map PDF file
 pdf-remove-$(1) :
-	@echo WARNING: Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-rgb.pdf) and $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
+	@echo WARNING: Removing: $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-rgb.pdf) and $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
 	@rm -f $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
 	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
 
@@ -278,7 +278,7 @@ else
 # common place to find files like this.
 $(PATH_PROCESS)/$(1)-map-rgb.png : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)
 	@echo INFO: Linking file to: $(shell pwd)/$$@
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)) $$@
+	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)) $$@
 
 # Create a CMYK PDF version of the graphic file in the process folder for
 # creating the final typeset page version. It is obviously dependent on
@@ -391,7 +391,7 @@ cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
 
 # Remove the current map PDF file
 pdf-remove-$(1) :
-	@echo WARNING: Removing: $(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf)
+	@echo WARNING: Removing: $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf)
 	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
 
 # Edit the CSV data file
@@ -461,15 +461,6 @@ $(MATTER_MAPS_CMYK_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-pa
 	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_CMYK_PDF)
 	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-cmyk.pdf) cat output $@
 
-#else
-
-## This rule is for when the map file was a graphic created by an
-## outside process.
-#$(MATTER_MAPS_RGB_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-rgb.pdf)
-#	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_RGB_PDF)
-#	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-rgb.pdf) cat output $@
-
-#endif
 
 endif
 
@@ -490,12 +481,15 @@ remove-maps :
 	@rm -f $(MATTER_MAPS_RGB_PDF)
 	@rm -f $(MATTER_MAPS_CMYK_PDF)
 
-# This is not a wise thing to have so this command is disabled.
-# The reason is that when a user comes to this point they have
-# already preprocessed their map files and this would destroy
-# their work.
+# As there can be confusion using the buttons for this kind of
+# processing we are going to steer the user to the Maps menu
+# for any of the processes they may need to use. With the following
+# two commands we will disable the buttons when working on maps.
+view-maps :
+	@echo WARNING: This command is not available in this mode. Please use the commands on the Maps menu for all map processes.
+
 preprocess-maps :
-	@echo WARNING: This command is not available. Please run the preprocess on the maps individually.
+	@echo WARNING: This command is not available in this mode. Please use the commands on the Maps menu for all map processes.
 
 # Do a total reset of all the map files
 clean-maps :
