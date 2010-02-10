@@ -74,17 +74,11 @@
    id="Title_Main"
    style="font-size:56px;fill:#ff0000;font-family:Arial Bold">World</text>
 
-
-
-
 <text
    x="1687.7117"
    y="1013.613"
    id="Continent_Australia"
    style="font-size:40px;fill:#ff0000;font-family:Arial Bold">AUSTRALIA</text>
-
-
-
 
 <text
    x="1624.9818"
@@ -92,17 +86,11 @@
    id="Continent_Asia"
    style="font-size:40px;fill:#ff0000;font-family:Arial Bold">ASIA</text>
 
-
-
-
 <text
    x="1022.4269"
    y="677.42157"
    id="Continent_Africa"
    style="font-size:40px;fill:#ff0000;font-family:Arial Bold">AFRICA</text>
-
-
-
 
 <text
    x="1124.2223"
@@ -110,25 +98,40 @@
    id="Continent_Europe"
    style="font-size:40px;fill:#ff0000;font-family:Arial Bold">EUROPE</text>
 
-
-
-
 <text
    x="578.40887"
    y="831.30829"
    id="Continent_SouthAmerica"
-   style="font-size:40px;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial Bold">SOUTH AMERICA</text>
-
-
-
+   style="font-size:40px;fill:#ff0000;font-family:Arial Bold">SOUTH AMERICA</text>
 
 <text
    x="320.09912"
    y="412.8161"
    id="Continent_NorthAmerica"
-   style="font-size:40px;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial Bold">NORTH AMERICA</text>
+   style="font-size:40px;fill:#ff0000;font-family:Arial Bold">NORTH AMERICA</text>
 
+<text
+   x="75.320869"
+   y="755.46008"
+   id="Ocean_Pacific_A"
+   style="font-size:40px;fill:#ff0000;font-family:Arial Bold">Pacific Ocean</text>
 
+<text
+   x="618.52429"
+   y="527.13428"
+   id="Ocean_Atlantic"
+   style="font-size:40px;fill:#ff0000;font-family:Arial Bold">Atlantic Ocean</text>
 
+<text
+   x="1339.2474"
+   y="806.04156"
+   id="Ocean_Indian"
+   style="font-size:40px;fill:#ff0000;font-family:Arial Bold">Indian Ocean</text>
+
+<text
+   x="1882.8909"
+   y="623.10046"
+   id="Ocean_Pacific_B"
+   style="font-size:40px;fill:#ff0000;font-family:Arial Bold">Pacific Ocean</text>
 
 </svg>
