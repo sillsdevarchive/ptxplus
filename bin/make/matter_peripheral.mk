@@ -235,7 +235,44 @@ pdf-remove-back :
 
 # Auto TOC creation rules
 
-#$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/ : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) $(PATH_TEXTS)/auto-toc.usfm
+# XeTeX will create the auto-toc.usfm file when it processes the file
+# but in case it is not there we need create one so this process
+# does not fail
+$(PATH_PROCESS)/auto-toc.usfm :
+	@echo INFO: Creating $@
+	@touch $@
+
+# Create the TOC USFM file. This file must be created from
+# the auto-toc.usfm file that comes from XeTeX
+# for now we'll just copy it in for testing and dev
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC.USFM : | \
+	$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) \
+	$(PATH_PROCESS)/TOC.USFM.tex \
+	$(PATH_PROCESS)/FRONT_MATTER.tex \
+	$(PATH_PROCESS)/auto-toc.usfm
+	@echo Copying into project from: $(PATH_TEXTS)/auto-toc.usfm
+	@cp $(PATH_PROCESS)/auto-toc.usfm $@
+
+# Link the TOC.USFM to the Texts folder
+$(PATH_TEXTS)/TOC.USFM : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC.USFM
+	@echo Linking project to peripheral source texts: $(shell readlink -f -- $@)
+	ln -sf $(shell readlink -f -- $<) $(PATH_TEXTS)/
+
+# Go get the .tex file from the template lib if needed
+$(PATH_PROCESS)TOC.USFM.tex :
+	@echo Copying into project from: $(PATH_TEMPLATES)/TOC.USFM.tex
+	@cp $(PATH_TEMPLATES)/TOC.USFM.tex $@
+
+# Create the final TOC PDF
+$(PATH_PROCESS)/TOC.pdf : \
+	$(PATH_PROCESS)/TOC.USFM.tex \
+	$(DEPENDENT_FILE_LIST)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/TOC.USFM.tex
+
+# Open the PDF file with reader
+view-$(1) : $(PATH_PROCESS)/TOC.pdf
+	@- $(CLOSEPDF)
+	@ $(VIEWPDF) $< &
 
 ##################################################################
 
