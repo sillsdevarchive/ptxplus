@@ -63,11 +63,6 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 	@echo Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
 	ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
 
-# Create the project peripheral source folder if one doesn't exist.
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) :
-	@echo Creating the project peripheral source folder
-	@mkdir $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
-
 # Create the peripheral file by copying in the template. But if
 # the template files doesn't exsit, then create a dummy one to
 # serve as a placeholder. This is done by using the "test" conditional
@@ -95,18 +90,20 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIP
 
 # Output to the TeX control file. If one doesn't exist in the lib
 # create a custom one that will need to be edited by the user.
-$(PATH_TEMPLATES)/$(1).tex :
-	@echo Could not find: $(PATH_TEMPLATES)/$(1).tex
-	@echo Creating one, you will need to edit it!
-	@echo \\input $(TEX_PTX2PDF) > $$@
-	@echo \\input $(TEX_SETUP) >> $$@
-	@echo \\input FRONT_MATTER.tex >> $$@
-	@echo \\ptxfile{$(PATH_TEXTS)/$(1)} >> $$@
-	@echo '\\bye' >> $$@
+#$(PATH_TEMPLATES)/$(1).tex :
+#	@echo Could not find: $(PATH_TEMPLATES)/$(1).tex
+#	@echo Creating one, you will need to edit it!
+#	@echo \\input $(TEX_PTX2PDF) > $$@
+#	@echo \\input $(TEX_SETUP) >> $$@
+#	@echo \\input FRONT_MATTER.tex >> $$@
+#	@echo \\ptxfile{$(PATH_TEXTS)/$(1)} >> $$@
+#	@echo '\\bye' >> $$@
 
 # This .tex file also generally has some dependencies on the
-# FRONT/BACK_MATTER.tex files so we add them here.
-$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BACK_MATTER.tex
+# FRONT/BACK_MATTER.tex files so we add them here. However, we
+# will use the "|" (pipe) trick to prevent any updating in case
+# the file already exists.
+$(PATH_PROCESS)/$(1).tex : | $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BACK_MATTER.tex
 	@if test -r $(PATH_TEMPLATES)/$(1).tex; then \
 		echo Copying into project from: $(PATH_TEMPLATES)/$(1).tex; \
 		cp $(PATH_TEMPLATES)/$(1).tex '$$@'; \
@@ -117,6 +114,7 @@ $(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BACK
 		echo \\input $(TEX_PTX2PDF) >> $$@; \
 		echo \\input $(TEX_SETUP) >> $$@; \
 		echo \\input FRONT_MATTER.tex >> $$@; \
+		echo %\\input FRONT_MATTER.tex >> $$@; \
 		echo \\ptxfile{$(PATH_TEXTS)/$(1)} >> $$@; \
 		echo '\\bye' >> $$@; \
 	fi
@@ -166,6 +164,12 @@ endef
 ##############################################################
 
 # This builds a rule (in memory) for these sets of files
+
+# Other rules will depend on this to create the project
+# peripheral source folder if one doesn't exist.
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) :
+	@echo Creating the project peripheral source folder
+	@mkdir $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
 
 
 # Cover matter binding rules
@@ -225,6 +229,11 @@ pdf-remove-front :
 # Remove the back matter PDF file
 pdf-remove-back :
 	rm -f $(MATTER_BACK_PDF)
+
+# Auto TOC creation rules
+
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/ : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) $(PATH_TEXTS)/auto-toc.usfm
+
 
 
 # Make the content for a topical index from CSV data
