@@ -230,9 +230,14 @@ pdf-remove-front :
 pdf-remove-back :
 	rm -f $(MATTER_BACK_PDF)
 
+##################################################################
+# In proess here
+
 # Auto TOC creation rules
 
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/ : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) $(PATH_TEXTS)/auto-toc.usfm
+#$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/ : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) $(PATH_TEXTS)/auto-toc.usfm
+
+##################################################################
 
 
 
