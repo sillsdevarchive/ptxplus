@@ -30,6 +30,8 @@
 # 20100203 - djd - Added the ability to create peripheral files
 #		on the fly so there doesn't need to be a copy of
 #		it in the ptxplus template lib
+# 20100212 - djd - Added style override files for peripheral matter.
+# 20100212 - djd - Started adding custom TOC generation rules
 
 ##############################################################
 #		Variables for peripheral matter
@@ -88,22 +90,14 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIP
 		echo \\p Please edit as needed. >> $$@; \
 	fi
 
-# Output to the TeX control file. If one doesn't exist in the lib
-# create a custom one that will need to be edited by the user.
-#$(PATH_TEMPLATES)/$(1).tex :
-#	@echo Could not find: $(PATH_TEMPLATES)/$(1).tex
-#	@echo Creating one, you will need to edit it!
-#	@echo \\input $(TEX_PTX2PDF) > $$@
-#	@echo \\input $(TEX_SETUP) >> $$@
-#	@echo \\input FRONT_MATTER.tex >> $$@
-#	@echo \\ptxfile{$(PATH_TEXTS)/$(1)} >> $$@
-#	@echo '\\bye' >> $$@
-
 # This .tex file also generally has some dependencies on the
 # FRONT/BACK_MATTER.tex files so we add them here. However, we
 # will use the "|" (pipe) trick to prevent any updating in case
 # the file already exists.
-$(PATH_PROCESS)/$(1).tex : | $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1).tex : | \
+	$(PATH_PROCESS)/$(1).sty \
+	$(PATH_PROCESS)/FRONT_MATTER.tex \
+	$(PATH_PROCESS)/BACK_MATTER.tex
 	@if test -r $(PATH_TEMPLATES)/$(1).tex; then \
 		echo Copying into project from: $(PATH_TEMPLATES)/$(1).tex; \
 		cp $(PATH_TEMPLATES)/$(1).tex '$$@'; \
@@ -113,16 +107,30 @@ $(PATH_PROCESS)/$(1).tex : | $(PATH_PROCESS)/FRONT_MATTER.tex $(PATH_PROCESS)/BA
 		echo Caution, you will need to edit it; \
 		echo \\input $(TEX_PTX2PDF) >> $$@; \
 		echo \\input $(TEX_SETUP) >> $$@; \
+		echo \\stylesheet{$(1).sty} >> $$@; \
 		echo \\input FRONT_MATTER.tex >> $$@; \
 		echo %\\input FRONT_MATTER.tex >> $$@; \
 		echo \\ptxfile{$(PATH_TEXTS)/$(1)} >> $$@; \
 		echo '\\bye' >> $$@; \
 	fi
 
+# The rule to create the override style sheet.
+$(PATH_PROCESS)/$(1).sty :
+	@if test -r $(PATH_TEMPLATES)/$(1).sty; then \
+		echo Copying into project from: $(PATH_TEMPLATES)/$(1).sty; \
+		cp $(PATH_TEMPLATES)/$(1).sty '$$@'; \
+	else \
+		echo Could not find: $$@; \
+		echo Creating this file:; \
+		echo Caution, you will need to edit it; \
+		echo \# Override PTX style sheet for $(PATH_TEXTS)/$(1), edit as needed >> $$@; \
+	fi
+
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1) \
 	$(PATH_PROCESS)/$(1).tex \
+	$(PATH_PROCESS)/$(1).sty \
 	$(DEPENDENT_FILE_LIST)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 
