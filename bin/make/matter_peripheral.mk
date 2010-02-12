@@ -245,7 +245,14 @@ pdf-remove-back :
 
 # XeTeX will create the auto-toc.usfm file when it processes the file
 # but in case it is not there we need create one so this process
-# does not fail
+# does not fail.
+# Note: there is one big weakness to this approch. If a seperate
+# TOC is needed for an NT and OT, this will not do that. It only
+# does one at a time and overwrites the previous one so if you ran
+# the NT, then ran the OT, the second would overwrite the first.
+# To work around the problem the user needs to run one at a time.
+# Then they will need to rename the file for the section it is
+# for. Then they can attach the files to the binding list.
 $(PATH_PROCESS)/auto-toc.usfm :
 	@echo INFO: Creating $@
 	@touch $@
@@ -256,6 +263,7 @@ $(PATH_PROCESS)/auto-toc.usfm :
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC.USFM : | \
 	$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) \
 	$(PATH_PROCESS)/TOC.USFM.tex \
+	$(PATH_PROCESS)/TOC.USFM.sty \
 	$(PATH_PROCESS)/FRONT_MATTER.tex \
 	$(PATH_PROCESS)/auto-toc.usfm
 	@echo Copying into project from: $(PATH_TEXTS)/auto-toc.usfm
@@ -270,6 +278,18 @@ $(PATH_TEXTS)/TOC.USFM : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC.USFM
 $(PATH_PROCESS)TOC.USFM.tex :
 	@echo Copying into project from: $(PATH_TEMPLATES)/TOC.USFM.tex
 	@cp $(PATH_TEMPLATES)/TOC.USFM.tex $@
+
+# Make the .sty override file for the TOC
+$(PATH_PROCESS)TOC.USFM.sty :
+	@if test -r $(PATH_TEMPLATES)/TOC.USFM.sty; then \
+		echo Copying into project from: $(PATH_TEMPLATES)/TOC.USFM.sty; \
+		cp $(PATH_TEMPLATES)/TOC.USFM.sty '$@'; \
+	else \
+		echo Could not find: $@; \
+		echo Creating this file:; \
+		echo Caution, you will need to edit it; \
+		echo \# Override PTX style sheet for $(PATH_TEXTS)/TOC.USFM, edit as needed >> $@; \
+	fi
 
 # Create the final TOC PDF
 $(PATH_PROCESS)/TOC.pdf : \
