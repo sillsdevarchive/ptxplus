@@ -17,6 +17,7 @@
 
 # History:
 # 20090209 - djd - Initial draft
+# 20100212 - djd - Add auto-TOC code
 
 
 #############################################################
@@ -52,6 +53,7 @@ class MakeTexControlFile (object) :
 		pathToText = os.getcwd() + "/Texts"
 		texMacros = log_manager._settings['Process']['TeX']['TEX_PTX2PDF']
 		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['TeX']['TEX_SETUP']
+		tocTitle = log_manager._settings['Process']['TOC']['MainTitle']
 
 		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
 		texControlObject = codecs.open(texControlFile, "w", encoding='utf-8')
@@ -65,8 +67,15 @@ class MakeTexControlFile (object) :
 		# book ID found. Otherwise just write out for a single book
 		if bookID.lower() == "ot" :
 			bookID = self._log_manager._settings['Process']['Binding']['MATTER_OT']
+			tocFile = log_manager._settings['Process']['TOC']['FileName'] + "-ot.usfm"
 		elif bookID.lower() == "nt" :
 			bookID = self._log_manager._settings['Process']['Binding']['MATTER_NT']
+			tocFile = log_manager._settings['Process']['TOC']['FileName'] + "-nt.usfm"
+
+		# Here we will add some custom commands for things that we
+		# need more contextual control over.
+		texControlObject.write('\\GenerateTOC[' + tocTitle + ']{' + tocFile + '}\n')
+
 		componentScripture = bookID.split()
 		for book in componentScripture :
 			thisBook = pathToText + '/' + book.lower() + '.usfm'

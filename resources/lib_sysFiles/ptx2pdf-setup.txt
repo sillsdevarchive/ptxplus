@@ -421,18 +421,6 @@
 % to be made around there if you are using marginal verses
 
 
-%%%%%%%%%%%%%%%%%%%%% TOC Generation %%%%%%%%%%%%%%%%%%%%%%
-
-% GenerateTOC -The following command will auto-generate a
-% TOC file in the Process folder. The information found
-% in that file can then be used to build the final TOC file.
-\GenerateTOC[Table of Contents]{toc-auto.usfm}
-
-% As for how to generate the final TOC, that process is
-% under heavy development yet. It is fairly manual right
-% now and not documented very well.
-
-
 %%%%%%%%%%%%%%%%%%%%%%%  Extra Tweaks %%%%%%%%%%%%%%%%%%%%%%
 
 % In a perfect world none of these would be needed but when

@@ -3,8 +3,48 @@
 \input FRONT_MATTER.tex
 \def\TopMarginFactor{1.5}
 \def\SideMarginFactor{1}
+
+%%%%%%%%%%%%%%%%%%%%% TOC Generation %%%%%%%%%%%%%%%%%%%%%%
+
+% The following code controls the layout of the TOC file
+% This code can be addjusted to get the right look to your
+% TOC. You can also adjust the \tah and \tar styles found
+% in the .sty file. The functions that are embedded in the
+% TOC file are:
+%	\tocheader{lable1}{label3}
+%	\tocrow{val1}{val3}
+% Unfortunatly this is only a two column table. More code
+% is needed for other layouts like a three column
+
+\catcode`@=11
+\def\makedigitsother{\m@kedigitsother}
+\def\makedigitsletters{\m@kedigitsletters}
+% These are custom settings that can go in the .tex file to
+% adjust elements on the page
+\def\myleader{.}
+\def\leaderspace{0.5em}
 \def\tblmarginright{0in}	% The width of the table's right margin
 \def\tblheaderspace{10pt}	% The space between the header and the first row
 \def\tblrowspace{6.5pt}		% The space between rows of the table
+
+\def\tblmarginright{0in}
+\def\tblheaderspace{1pt}
+\def\tblrowspace{10pt}
+
+% Macro code for leadered two colum layout:
+\newdimen\tocheaderlabel
+\def\tocheader#1#2{\parfillskip=\tblmarginright\tah #1\tah*\hfil
+  \setbox0=\hbox{\tah #2\tah*}\tocheaderlabel=\wd0\box0\par\vskip \tblrowspace}
+\def\tocrow#1#2{\parskip=\tblheaderspace\parfillskip=\tblmarginright\noindent\tar #1\tar*%
+  \quad\leaders\hbox to \leaderspace{\hss\myleader\hss}\hfill\hbox to \tocheaderlabel{%
+  \hfil\tar #2\tar*}\par%
+\baselineskip=16pt}
+
+\def\tirow#1#2#3{\parskip=\tblheaderspace\parfillskip=\tblmarginright\noindent\hbox to \tocheaderlabel{\tar #1\tar*\hss\relax}%
+  \quad\tar #2\tar*
+  \quad\tar #3\tar*\par}
+
+\catcode `@=12
+
 \ptxfile{Texts/TOC.USFM}
 \bye
