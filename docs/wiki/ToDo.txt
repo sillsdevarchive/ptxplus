@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
+Modification-Date: Fri, 12 Feb 2010 16:04:38 +0700
+
+====== ToDo ======
+
+Here we will collect a list of things that need doing. Hopefully we can keep them up. If they are a big task then it would be good to create a separate page and link to this one.
+
+===== pdf2ptx Work =====
+
+==== Page Number Control ====
+There needs to be better control of page numbers on peripheral material. Right now it is necessary to insert a "dummy" \v in an introduction section to get the page number to appear on the second page of a section.

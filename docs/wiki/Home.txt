@@ -1,6 +1,12 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Fri, 12 Feb 2010 16:01:03 +0700
+
 ====== Home ======
 
 Welcome to ptxplus, a Scripture publishing management system. This is the development wiki where we keep all the notes concerning development issues.
 
 The general log is found on the [[Log]] page
 For bugs and problems go to [[Issues]]
+If you are looking for somethign to do, go to the [[ToDo]] page
