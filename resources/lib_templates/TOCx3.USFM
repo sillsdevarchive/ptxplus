@@ -1,0 +1,12 @@
+\id OTH
+\ide UTF-8
+\periph Table of Contents
+\mt1 Table of Contents
+\p
+\makedigitsother\catcode`{=1 \catcode`}=2
+\baselineskip=12pt
+\tblthreewlheader{Book Name}{Abr.}{Page}
+\tblthreewlrow{Matthew}{Mt}{1}
+\tblthreewlrow{Mark}{Mk}{57}
+\tblthreewlrow{etc}{--}{nn}
+\catcode`{=11\catcode`}=11\makedigitsletters
