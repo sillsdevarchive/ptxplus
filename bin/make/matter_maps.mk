@@ -69,7 +69,7 @@ $(PATH_TEXTS)/$(1)-map.svg : \
 	@echo INFO: Map $(1): Adding necessary files to project
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-map.svg $$@
 
-$(PATH_TEXTS)/$(1)-map-post.svg : $(PATH_TEXTS)/$(1)-map.svg
+$(PATH_TEXTS)/$(1)-map-post.svg : | $(PATH_TEXTS)/$(1)-map.svg
 	@echo INFO: Merging map data and styles into $$(shell readlink -f -- $(PATH_TEXTS)/$(1)-map-post.svg)
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1)-map.svg $$@
 
@@ -144,7 +144,7 @@ $(PATH_TEXTS)/$(1)-map-page-cmyk.usfm :
 # This is the .tex file that is necessary to process the
 # map .usfm file. This is created when the View-Maps button
 # is clicked. This is dependent on the .usfm file
-$(PATH_PROCESS)/$(1)-map-page-rgb.tex : $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
 	@echo INFO: Creating: $$@
 	@echo \\input $(TEX_PTX2PDF) > $$@
 	@echo \\input $(TEX_SETUP) >> $$@
@@ -156,7 +156,7 @@ $(PATH_PROCESS)/$(1)-map-page-rgb.tex : $(PATH_PROCESS)/BACK_MATTER.tex
 # This is the .tex file that is necessary to process the
 # map cmyk.usfm file. This is created when the cmyk-<mapID>
 # command is given. This is dependent on the cmyk.usfm file
-$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
 	@echo INFO: Creating: $$@
 	@echo \\input $(TEX_PTX2PDF) > $$@
 	@echo \\input $(TEX_SETUP) >> $$@
@@ -294,7 +294,7 @@ $(PATH_PROCESS)/$(1)-map-cmyk.pdf : $(PATH_PROCESS)/$(1)-map-rgb.png
 # map .rgb.usfm file. This is created when the View-Maps button
 # is clicked. This has a dependency on BACK_MATTER.tex
 # which it calls from the matter_peripheral.mk rules file.
-$(PATH_PROCESS)/$(1)-map-page-rgb.tex : $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
 	@echo INFO: Creating: $$@
 	@echo \\input $(TEX_PTX2PDF) > $$@
 	@echo \\input $(TEX_SETUP) >> $$@
@@ -314,7 +314,7 @@ $(PATH_PROCESS)/$(1)-map-page-rgb.tex : $(PATH_PROCESS)/BACK_MATTER.tex
 # map .cmyk.usfm file. This is created when the View-Maps button
 # is clicked. This has a dependency on BACK_MATTER.tex
 # which it calls from the matter_peripheral.mk rules file.
-$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
 	@echo INFO: Creating: $$@
 	@echo \\input $(TEX_PTX2PDF) > $$@
 	@echo \\input $(TEX_SETUP) >> $$@
@@ -332,7 +332,7 @@ $(PATH_PROCESS)/$(1)-map-page-cmyk.tex : $(PATH_PROCESS)/BACK_MATTER.tex
 
 # Create the rgb.USFM file for processing this map. The map file
 # is linked into the process here.
-$(PATH_TEXTS)/$(1)-map-page-rgb.usfm : $(PATH_PROCESS)/$(1)-map-rgb.png
+$(PATH_TEXTS)/$(1)-map-page-rgb.usfm : | $(PATH_PROCESS)/$(1)-map-rgb.png
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
@@ -346,7 +346,7 @@ $(PATH_TEXTS)/$(1)-map-page-rgb.usfm : $(PATH_PROCESS)/$(1)-map-rgb.png
 
 # Create the cmyk.USFM file for processing this map. The map file
 # is linked into the process here.
-$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm : $(PATH_PROCESS)/$(1)-map-cmyk.pdf
+$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm : | $(PATH_PROCESS)/$(1)-map-cmyk.pdf
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
