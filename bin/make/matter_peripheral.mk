@@ -111,6 +111,10 @@ $(PATH_PROCESS)/$(1).tex : | \
 		echo \\stylesheet{$(1).sty} >> $$@; \
 		echo \\input FRONT_MATTER.tex >> $$@; \
 		echo %\\input BACK_MATTER.tex >> $$@; \
+		echo %\\catcode\`@=11 >> $$@; \
+		echo %\\def\makedigitsother{\m@kedigitsother} >> $$@; \
+		echo %\\def\makedigitsletters{\m@kedigitsletters} >> $$@; \
+		echo %\\catcode \`@=12 >> $$@; \
 		echo \\ptxfile{$(PATH_TEXTS)/$(1)} >> $$@; \
 		echo '\\bye' >> $$@; \
 	fi

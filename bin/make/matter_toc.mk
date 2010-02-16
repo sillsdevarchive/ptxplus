@@ -38,9 +38,7 @@ ifneq ($(MATTER_NT),)
 
 # Create a simulated auto-toc-nt.usfm if XeTeX has not done it
 # already. For now we just bring in a dummy file from templates
-$(PATH_PROCESS)/auto-toc-nt.usfm :
-	@echo INFO: Creating $@
-	cp $(PATH_TEMPLATES)/TOCx3.USFM '$@'; \
+$(PATH_PROCESS)/auto-toc-nt.usfm : $(MATTER_NT_PDF)
 
 # Create the TOC-NT USFM file. This file must be created
 # from the auto-toc-nt.usfm file that comes from XeTeX
@@ -70,19 +68,17 @@ $(PATH_PROCESS)/TOC-NT.tex :
 # Create the final TOC-NT PDF
 $(PATH_PROCESS)/TOC-NT.pdf : \
 	$(PATH_TEXTS)/TOC-NT.usfm \
-	$(PATH_PROCESS)/TOC.sty \
 	$(PATH_PROCESS)/TOC.tex \
-	$(PATH_PROCESS)/TOC-NT.tex \
+	$(PATH_PROCESS)/TOC.sty \
 	$(DEPENDENT_FILE_LIST)
 	@echo Starting TeX processing
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/TOC-NT.tex
 
-
 # Open the TOC-NT PDF file with reader
 view-toc-nt : $(PATH_PROCESS)/TOC-NT.pdf
-	@echo Creating and viewing the NT TOC file now
-#	@- $(CLOSEPDF)
-#	@ $(VIEWPDF) $< &
+	@echo Creating and viewing: $(PATH_PROCESS)/TOC-NT.pdf
+	@- $(CLOSEPDF)
+	@ $(VIEWPDF) $< &
 
 endif
 
@@ -91,9 +87,7 @@ endif
 ################################################################
 
 ifneq ($(MATTER_OT),)
-$(PATH_PROCESS)/auto-toc-ot.usfm :
-	@echo INFO: Creating $@
-	@touch $@
+$(PATH_PROCESS)/auto-toc-ot.usfm : $(MATTER_OT_PDF)
 
 # Create the TOC-OT USFM file. This file must be created
 # from the auto-toc-ot.usfm file that comes from XeTeX
@@ -116,17 +110,13 @@ $(PATH_TEXTS)/TOC-OT.usfm : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-OT.usfm
 # TOC.tex is also shared with TOC-OT.tex.
 $(PATH_PROCESS)/TOC-OT.tex :
 	@echo Creating file: $@
-	@echo \\input $(TEX_PTX2PDF) >> $@
-	@echo \\input $(TEX_SETUP) >> $@
-	@echo \\input FRONT_MATTER.tex >> $@
-	@echo \\stylesheet{$(PATH_PROCESS)/TOC.sty} >> $@
+	@echo \\input TOC.tex >> $@
 	@echo \\ptxfile{$(PATH_TEXTS)/TOC-OT.usfm} >> $@
 	@echo '\\bye' >> $@
 
 # Create the final TOC-OT PDF
 $(PATH_PROCESS)/TOC-OT.pdf : \
 	$(PATH_TEXTS)/TOC-OT.usfm \
-	$(PATH_PROCESS)/TOC-OT.tex \
 	$(PATH_PROCESS)/TOC.tex \
 	$(PATH_PROCESS)/TOC.sty \
 	$(DEPENDENT_FILE_LIST)
@@ -134,7 +124,7 @@ $(PATH_PROCESS)/TOC-OT.pdf : \
 
 # Open the TOC-NT PDF file with reader
 view-toc-ot : $(PATH_PROCESS)/TOC-OT.pdf
-	@echo Creating and viewing the OT TOC file now
+	@echo Creating and viewing: $(PATH_PROCESS)/TOC-OT.pdf
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 

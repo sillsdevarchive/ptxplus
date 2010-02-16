@@ -4,7 +4,6 @@
 \mt1 Table of Contents
 \p
 \makedigitsother\catcode`{=1 \catcode`}=2
-\baselineskip=12pt
 \tbltwowlheader{Book Name}{Page}
 \tbltwowlrow{Matthew}{1}
 \tbltwowlrow{Mark}{57}

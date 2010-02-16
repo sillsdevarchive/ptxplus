@@ -244,7 +244,7 @@ $(MATTER_NT_PDF) : \
 	$(DEPENDENT_FILE_LIST) \
 	$(MATTER_NT_TEX)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex NT.tex
-	test-def
+
 endif
 
 pdf-remove-nt :

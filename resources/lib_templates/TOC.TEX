@@ -28,31 +28,32 @@
 
 % These are custom settings that can go in the .tex file to
 % adjust elements on the page
-\def\myleader{.}
-\def\leaderspace{0.6em}
+\def\myleader{.}		% The leader character
+\def\leaderspace{0.6em}		% The space between the leader characters
 \def\tblmarginright{0in}	% The width of the table's right margin
-\def\tblheaderspace{10pt}	% The space between the header and the first row
-\def\tblrowspace{6pt}		% The space between rows of the table
+\def\tblheaderspace{4pt}	% The space between the header and the first row
+\def\tblrowspace{4pt}		% The space between rows of the table
+\def\tblthreewcolmngap{.75in}	% The space between col 1 & 2 on a three col table
+
 
 % Macro code for leadered two colum layout:
 \newdimen\tbltwowllabel
 \def\tbltwowlheader#1#2{\parfillskip=\tblmarginright\toch #1\toch*\hfil
-  \setbox0=\hbox{\toch #2\toch*}\tbltwowllabel=\wd0\box0\par\vskip \tblrowspace}
-\def\tbltwowlrow#1#2{\parskip=\tblheaderspace\parfillskip=\tblmarginright\noindent\tocbn #1\tocbn*%
+  \setbox0=\hbox{\toch #2\toch*}\tbltwowllabel=\wd0\box0\par\vskip \tblheaderspace}
+
+\def\tbltwowlrow#1#2{\parskip=\tblrowspace\parfillskip=\tblmarginright\noindent\tocbn #1\tocbn*%
   \quad\leaders\hbox to \leaderspace{\hss\myleader\hss}\hfill\hbox to \tbltwowllabel{%
-  \hfil\tocpg #2\tocpg*}\par%
-\baselineskip=\tblrowspace}
+  \hfil\tocpg #2\tocpg*}\par}%
 
 % Macro code for leadered three colum layout:
 \newdimen\tblthreewllabel
 \def\tblthreewlheader#1#2#3{\parfillskip=\tblmarginright\setbox0\hbox{\toch #1\toch*\relax}\tblthreewllabel=\wd0
-  \noindent\box0\quad\toch #2\toch*\hfil\toch #3\toch*\par\vskip \tblheaderspace}
+  \noindent\box0\hskip\tblthreewcolmngap\toch #2\toch*\hfil\toch #3\toch*\par\vskip \tblheaderspace}
+
 \def\tblthreewlrow#1#2#3{\parskip=\tblrowspace\parfillskip=\tblmarginright\noindent\hbox to \tblthreewllabel{\tocbn #1\tocbn*\hss\relax}%
-  \quad\tocba #2\tocba*
-  \quad\leaders\hbox to \leaderspace{\hss\myleader\hss}\hfil
-  \quad\tocpg #3\tocpg*\par%
-\baselineskip=\tblrowspace}
+  \hskip\tblthreewcolmngap\tocba #2\tocba*
+  \leaders\hbox to \leaderspace{\hss\tocbn \myleader\tocbn*\hss}\hfil
+  \enskip\tocpg #3\tocpg*\par}%
 
 \catcode `@=12
 
-\bye

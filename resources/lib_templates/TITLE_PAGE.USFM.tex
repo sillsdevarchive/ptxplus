@@ -1,5 +1,9 @@
 \input paratext2.tex
 \input ptx2pdf-setup.txt
 \input FRONT_MATTER.tex
+\catcode`@=11
+\def\makedigitsother{\m@kedigitsother}
+\def\makedigitsletters{\m@kedigitsletters}
+\catcode `@=12
  \ptxfile{Texts/TITLE_PAGE.USFM}
 \bye
