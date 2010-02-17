@@ -94,7 +94,13 @@ dev-update :
 
 # Make links in Process folder for the draft watermark files
 # This is just a quick-and-dirty implementation. May need to be
-# made more elegant in the future.
+# made more elegant in the future. This counts on the files
+# being in the Illustrations folder in the first place.
+# That should happen when the project is created. If for some
+# reason they are not there they need to copied in from:
+#	ptxplus/resources/lib_sysFiles/Illustrations
+# This could be automated but a better way to handle this
+# whole process needs to be found and implemented.
 $(PATH_PROCESS)/DraftWatermark-50.pdf :
 	@echo Linking to watermark file image: $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-50.pdf) to $(PATH_PROCESS)/
 	@ln -sf $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-50.pdf) $(PATH_PROCESS)/

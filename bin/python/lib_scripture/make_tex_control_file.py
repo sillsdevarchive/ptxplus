@@ -65,6 +65,7 @@ class MakeTexControlFile (object) :
 		# shortcut to indicate which one we are looking for.
 		# Check for nt or ot and write out a ptxfile line for each
 		# book ID found. Otherwise just write out for a single book
+		tocFile = ""
 		if bookID.lower() == "ot" :
 			bookID = self._log_manager._settings['Process']['Binding']['MATTER_OT']
 			tocFile = log_manager._settings['Process']['TOC']['FileName'] + "-ot.usfm"
@@ -74,7 +75,10 @@ class MakeTexControlFile (object) :
 
 		# Here we will add some custom commands for things that we
 		# need more contextual control over.
-		texControlObject.write('\\GenerateTOC[' + tocTitle + ']{' + tocFile + '}\n')
+
+		# First off, if a file name for the TOC is found, write it out
+		if tocFile != "" :
+			texControlObject.write('\\GenerateTOC[' + tocTitle + ']{' + tocFile + '}\n')
 
 		componentScripture = bookID.split()
 		for book in componentScripture :

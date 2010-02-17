@@ -125,7 +125,11 @@ endif
 
 # TeX control - Call the TeX control file creation script which will
 # create a TeX control file on the fly.
-$(PATH_PROCESS)/$(1).tex :
+# Just in case we will throw in the watermark pages here too.
+$(PATH_PROCESS)/$(1).tex : \
+	$(PATH_PROCESS)/DraftWatermark-60.pdf \
+	$(PATH_PROCESS)/DraftWatermark-50.pdf \
+	$(PATH_PROCESS)/DraftWatermark-A5.pdf
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file $(1) 'Null' '$$@'
 
 # Process a single component and produce the final PDF. Special dependencies
@@ -201,7 +205,12 @@ MATTER_OT_TEX=$(PATH_PROCESS)/OT.tex
 # Rule for building the TeX file for an entire publication
 # like NT, OT or Bible. This is done with a little Perl code
 # here. We may want to change this but as long as it works...
-$(MATTER_OT_TEX) : project.conf
+# Also, I will throw in the watermark pages (this needs to be changed!)
+$(MATTER_OT_TEX) : \
+	$(PATH_PROCESS)/DraftWatermark-60.pdf \
+	$(PATH_PROCESS)/DraftWatermark-50.pdf \
+	$(PATH_PROCESS)/DraftWatermark-A5.pdf \
+	project.conf
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file OT 'Null' '$@'
 
 
@@ -222,15 +231,22 @@ pdf-remove-ot :
 	@echo INFO: Removing file: $(MATTER_OT_PDF)
 	rm -f $(MATTER_OT_PDF)
 
-# Moving along we will do the NT if there are any components listed in the project.conf file
+# Moving along we will do the NT if there are any components
+# listed in the project.conf file
 ifneq ($(MATTER_NT),)
 # These build a rule (in memory) for this set of components
 $(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
 MATTER_NT_PDF=$(PATH_PROCESS)/NT.pdf
 MATTER_NT_TEX=$(PATH_PROCESS)/NT.tex
 
-# Just like with the OT, this builds the .tex control file for all NT components
-$(MATTER_NT_TEX) : project.conf
+# Just like with the OT, this builds the .tex control file
+# for all NT components.
+# Also, I will throw in the watermark pages (this needs to be changed!)
+$(MATTER_NT_TEX) : \
+	$(PATH_PROCESS)/DraftWatermark-60.pdf \
+	$(PATH_PROCESS)/DraftWatermark-50.pdf \
+	$(PATH_PROCESS)/DraftWatermark-A5.pdf \
+	project.conf
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file NT 'Null' '$@'
 
 #	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_NT),$(PATH_TEXTS)/$(v).usfm) > $@
