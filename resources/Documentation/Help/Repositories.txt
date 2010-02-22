@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Sat, 07 Nov 2009 19:58:21 +0700
+Modification-Date: Fri, 19 Feb 2010 09:52:47 +0700
 
 ====== Repositories ======
 
@@ -73,3 +73,13 @@ You might have a problem with getting settings to work in TortoiseHG that involv
 
 	http://code.google.com/p/iniparse/
 
+**Backing out of a mistake**
+There is a way to back out of a situation where you might have committed too much material, i.e. large PDF files. By using HG Transplant and Strip you can move the committed work you need to save to another part of the branch, then use Strip to remove the part you don't need. To enable these modules you need to add them to your [[hgrc]] file with:
+
+[extensions]
+hgext.mq =
+transplant=
+
+**NOTE: **Move (copy out) all important files from affected areas of the project so if any are deleted that are needed, they will not be lost.
+
+More info at: http://mercurial.selenic.com/wiki/Strip and http://mercurial.selenic.com/wiki/TransplantExtension Read the documentation for the right syntax as this has to be done at the command line. Be careful when you are doing this!
