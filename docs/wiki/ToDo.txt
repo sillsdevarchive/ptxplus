@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
-Modification-Date: Wed, 17 Feb 2010 21:14:22 +0700
+Modification-Date: Wed, 24 Feb 2010 16:54:54 +0700
 
 ====== ToDo ======
 
@@ -23,7 +23,12 @@ Come up with a way to process the TOC separately for the NT and OT. And while we
 **Draft mode**
 Typically, when drafting a project, crop marks are used and the word "Draft" is watermarked on the page. We need to have some kind of "mode" that will automatically do the right thing for the publication when in Draft mode (or not). It might be that the best way would be to have separate settings for the draft watermark and the crop marks and then just turn them both on when it is needed that way. More thought needs to go into this.
 
-===== Templates Needed =====
+===== Templates =====
 
 **COVER_SPINE.USFM/TEX**
 This template exists but it needs to be modified with some [[TeX]] code that will allow you to paste in the text you want on the spine of the cover. Then when it is processed, it will turn the text the right way. After that you could control the size of the text and the horizontal and vertical positions from the [[.tex]] file. This would greatly simplify making the cover spine page.
+
+===== Maps =====
+
+**m008**
+This map needs to be adjusted so it can be split down the middle easier. It might be necessary to create an m008a and m008b at some point but this is the first step toward that.
