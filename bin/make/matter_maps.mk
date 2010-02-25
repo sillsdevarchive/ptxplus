@@ -80,12 +80,12 @@ $(PATH_TEXTS)/$(1)-styles.csv :
 
 # Copy the map reference file to the peripheral-map source folder
 # This is for refering to when the map data is being translated
-$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png :
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
 	@echo INFO: Map reference file: $$@ is being copied to project.
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-org.png $$@
 
 # Create a common project map translation (data) file
-$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv :
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
 	@echo WARNING: Map tranlation data: $$@ not found adding default to project.
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-data.csv $$@
 
@@ -119,10 +119,7 @@ $(PATH_TEXTS)/$(1)-map-page-rgb.usfm :
 	@echo \\startmaps >> $$@
 	@echo '\\makedigitsother%' >> $$@
 	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
-	@echo '\\def\\domap#1{\\vbox to \\the\\textheight{\\vfil\\noindent\\hfil\\XeTeXpdffile #1 width \\the\\textwidth \\hfil\\par\\vfil}\\eject}%' >> $$@
-	@echo '\\catcode `@=12' >> $$@
 	@echo '\\domap{$(1)-map-rgb.pdf}' >> $$@
-	@echo '\\bye' >> $$@
 
 # When the cmyk-<mapID> command is given this will create the
 # USFM file that will be called from the cmyk.tex file. One is
@@ -136,19 +133,15 @@ $(PATH_TEXTS)/$(1)-map-page-cmyk.usfm :
 	@echo \\startmaps >> $$@
 	@echo '\\makedigitsother%' >> $$@
 	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
-	@echo '\\def\\domap#1{\\vbox to \\the\\textheight{\\vfil\\noindent\\hfil\\XeTeXpdffile #1 width \\the\\textwidth \\hfil\\par\\vfil}\\eject}%' >> $$@
-	@echo '\\catcode `@=12' >> $$@
 	@echo '\\domap{$(1)-map-cmyk.pdf}' >> $$@
-	@echo '\\bye' >> $$@
+	@echo '\\catcode`{=11\\catcode`}=11\\makedigitsletters' >> $$@
 
 # This is the .tex file that is necessary to process the
 # map .usfm file. This is created when the View-Maps button
 # is clicked. This is dependent on the .usfm file
-$(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCESS)/MAPS.sty
 	@echo INFO: Creating: $$@
-	@echo \\input $(TEX_PTX2PDF) > $$@
-	@echo \\input $(TEX_SETUP) >> $$@
-	@echo \\input BACK_MATTER.tex >> $$@
+	@echo \\input MAPS.tex >> $$@
 	@echo \\def\\TopMarginFactor{0.4} >> $$@
 	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-rgb.usfm} >> $$@
 	@echo '\\bye' >> $$@
@@ -156,11 +149,9 @@ $(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
 # This is the .tex file that is necessary to process the
 # map cmyk.usfm file. This is created when the cmyk-<mapID>
 # command is given. This is dependent on the cmyk.usfm file
-$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCESS)/MAPS.sty
 	@echo INFO: Creating: $$@
-	@echo \\input $(TEX_PTX2PDF) > $$@
-	@echo \\input $(TEX_SETUP) >> $$@
-	@echo \\input BACK_MATTER.tex >> $$@
+	@echo \\input MAPS.tex >> $$@
 	@echo \\def\\TopMarginFactor{0.4} >> $$@
 	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm} >> $$@
 	@echo '\\bye' >> $$@
@@ -292,13 +283,11 @@ $(PATH_PROCESS)/$(1)-map-cmyk.pdf : $(PATH_PROCESS)/$(1)-map-rgb.png
 
 # This is the rgb.tex file that is necessary to process the
 # map .rgb.usfm file. This is created when the View-Maps button
-# is clicked. This has a dependency on BACK_MATTER.tex
+# is clicked. This has a dependency on MAPS.tex
 # which it calls from the matter_peripheral.mk rules file.
-$(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCESS)/MAPS.sty
 	@echo INFO: Creating: $$@
-	@echo \\input $(TEX_PTX2PDF) > $$@
-	@echo \\input $(TEX_SETUP) >> $$@
-	@echo \\input BACK_MATTER.tex >> $$@
+	@echo \\input MAPS.tex >> $$@
 	@echo '\\def\HeaderPosition{0}' >> $$@
 	@echo '\\def\FooterPosition{0}' >> $$@
 	@echo '% Change paper width for portrate or landscape adjust margins as needed' >> $$@
@@ -312,13 +301,11 @@ $(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
 
 # This is the cmyk.tex file that is necessary to process the
 # map .cmyk.usfm file. This is created when the View-Maps button
-# is clicked. This has a dependency on BACK_MATTER.tex
+# is clicked. This has a dependency on MAPS.tex
 # which it calls from the matter_peripheral.mk rules file.
-$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/BACK_MATTER.tex
+$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCESS)/MAPS.sty
 	@echo INFO: Creating: $$@
-	@echo \\input $(TEX_PTX2PDF) > $$@
-	@echo \\input $(TEX_SETUP) >> $$@
-	@echo \\input BACK_MATTER.tex >> $$@
+	@echo \\input MAPS.tex >> $$@
 	@echo '\\def\HeaderPosition{0}' >> $$@
 	@echo '\\def\FooterPosition{0}' >> $$@
 	@echo '% Change paper width for portrate or landscape adjust margins as needed' >> $$@
@@ -342,7 +329,6 @@ $(PATH_TEXTS)/$(1)-map-page-rgb.usfm : | $(PATH_PROCESS)/$(1)-map-rgb.png
 	@echo '\\makedigitsother' >> $$@
 	@echo '\\hfil\XeTeXpicfile $(1)-map-rgb.png width 300pt \hfil\par' >> $$@
 	@echo '\\makedigitsletters' >> $$@
-	@echo '\\bye' >> $$@
 
 # Create the cmyk.USFM file for processing this map. The map file
 # is linked into the process here.
@@ -356,7 +342,6 @@ $(PATH_TEXTS)/$(1)-map-page-cmyk.usfm : | $(PATH_PROCESS)/$(1)-map-cmyk.pdf
 	@echo '\\makedigitsother' >> $$@
 	@echo '\\hfil\XeTeXpdffile $(1)-map-cmyk.pdf width 300pt \hfil\par' >> $$@
 	@echo '\\makedigitsletters' >> $$@
-	@echo '\\bye' >> $$@
 
 # Render the resulting PDF file from the rgb.tex and rgb.usfm file.
 $(PATH_PROCESS)/$(1)-map-page-rgb.pdf : \
@@ -461,6 +446,20 @@ $(MATTER_MAPS_CMYK_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-pa
 	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_CMYK_PDF)
 	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-cmyk.pdf) cat output $@
 
+# Create the Maps source folder
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS) :
+	@echo INFO: Creating folder: $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
+	@mkdir $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
+
+# Copy in the MAPS.tex file
+$(PATH_PROCESS)/MAPS.tex :
+	@echo INFO: Creating file: $@
+	@cp $(PATH_TEMPLATES)/MAPS.tex '$@'
+
+# Copy in the MAPS.sty file
+$(PATH_PROCESS)/MAPS.sty :
+	@echo INFO: Creating file: $@
+	@cp $(PATH_TEMPLATES)/MAPS.sty '$@'
 
 endif
 
@@ -495,5 +494,7 @@ preprocess-maps :
 clean-maps :
 	@echo WARNING: All map have been deleted, Sorry if you did not mean to do this
 	$(foreach v,$(MATTER_MAPS), $(shell rm -f $(PATH_TEXTS)/$(v)* && rm -f $(PATH_PROCESS)/$(v)*))
+	@rm -f $(PATH_PROCESS)/MAPS.tex
+	@rm -f $(PATH_PROCESS)/MAPS.sty
 	@rm -f $(MATTER_MAPS_RGB_PDF)
 	@rm -f $(MATTER_MAPS_CMYK_PDF)

@@ -15,13 +15,13 @@
 # Go get the .tex file from the template lib if needed
 $(PATH_PROCESS)/TOC.tex :
 	@echo Copying into project from: $(PATH_TEMPLATES)/TOC.tex
-	@cp $(PATH_TEMPLATES)/TOC.TEX $@
+	@cp $(PATH_TEMPLATES)/TOC.tex $@
 
 # Make the .sty override file for the TOC
 $(PATH_PROCESS)/TOC.sty :
-	@if test -r $(PATH_TEMPLATES)/TOC.STY; then \
-		echo Copying into project from: $(PATH_TEMPLATES)/TOC.STY; \
-		cp $(PATH_TEMPLATES)/TOC.STY '$@'; \
+	@if test -r $(PATH_TEMPLATES)/TOC.sty; then \
+		echo Copying into project from: $(PATH_TEMPLATES)/TOC.sty; \
+		cp $(PATH_TEMPLATES)/TOC.sty '$@'; \
 	else \
 		echo Could not find: $@; \
 		echo Creating this file:; \
