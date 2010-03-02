@@ -80,12 +80,12 @@ $(PATH_TEXTS)/$(1)-styles.csv :
 
 # Copy the map reference file to the peripheral-map source folder
 # This is for refering to when the map data is being translated
-$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png : | $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
 	@echo INFO: Map reference file: $$@ is being copied to project.
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-org.png $$@
 
 # Create a common project map translation (data) file
-$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv : | $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
 	@echo WARNING: Map tranlation data: $$@ not found adding default to project.
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-data.csv $$@
 
@@ -102,7 +102,7 @@ $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_
 # will be needed to generate the original map label data.
 # BTW, we use readlink here to resolve the path so the ln will make
 # a successful link.
-$(PATH_TEXTS)/$(1)-data.csv : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
+$(PATH_TEXTS)/$(1)-data.csv : | $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
 	@echo INFO: Linking data for: $$(shell pwd)/$$@
 	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv) $(PATH_TEXTS)/
 
