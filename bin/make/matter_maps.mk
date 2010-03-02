@@ -162,6 +162,7 @@ $(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCE
 # process, binding. This is dependent on the map.png process.
 $(PATH_PROCESS)/$(1)-map-page-rgb.pdf : \
 	$(PATH_PROCESS)/$(1)-map-rgb.pdf \
+	$(PATH_PROCESS)/MAPS.tex \
 	$(PATH_PROCESS)/$(1)-map-page-rgb.tex \
 	$(PATH_TEXTS)/$(1)-map-page-rgb.usfm
 	@echo INFO: Creating: $$@
@@ -173,6 +174,7 @@ $(PATH_PROCESS)/$(1)-map-page-rgb.pdf : \
 # step in the process.
 $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf : \
 	$(PATH_PROCESS)/$(1)-map-cmyk.pdf \
+	$(PATH_PROCESS)/MAPS.tex \
 	$(PATH_PROCESS)/$(1)-map-page-cmyk.tex \
 	$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm
 	@echo INFO: Creating: $$@
