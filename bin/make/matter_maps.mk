@@ -117,8 +117,8 @@ $(PATH_TEXTS)/$(1)-map-page-rgb.usfm :
 	@echo \\singlecolumn >> $$@
 	@echo \\periph Map Page >> $$@
 	@echo \\startmaps >> $$@
-	@echo '\\makedigitsother%' >> $$@
-	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
+	@echo '\\makedigitsother' >> $$@
+	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6' >> $$@
 	@echo '\\domap{$(1)-map-rgb.pdf}' >> $$@
 
 # When the cmyk-<mapID> command is given this will create the
@@ -131,10 +131,9 @@ $(PATH_TEXTS)/$(1)-map-page-cmyk.usfm :
 	@echo \\singlecolumn >> $$@
 	@echo \\periph Map Page >> $$@
 	@echo \\startmaps >> $$@
-	@echo '\\makedigitsother%' >> $$@
-	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
+	@echo '\\makedigitsother' >> $$@
+	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6' >> $$@
 	@echo '\\domap{$(1)-map-cmyk.pdf}' >> $$@
-	@echo '\\catcode`{=11\\catcode`}=11\\makedigitsletters' >> $$@
 
 # This is the .tex file that is necessary to process the
 # map .usfm file. This is created when the View-Maps button

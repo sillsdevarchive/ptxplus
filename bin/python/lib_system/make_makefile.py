@@ -100,6 +100,7 @@ class MakeMakefile (object) :
 				"include " + basePath + "/bin/make/matter_maps.mk\n" + \
 				"include " + basePath + "/bin/make/matter_peripheral.mk\n" + \
 				"include " + basePath + "/bin/make/matter_toc.mk\n" + \
+				"include " + basePath + "/bin/make/system_hyphenation.mk\n" + \
 				"include " + basePath + "/bin/make/system_files.mk\n"
 
 		# Output to the new makefile file

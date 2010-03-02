@@ -54,6 +54,7 @@
 # 20091202 - djd - Changed the output names for NT and OT processing
 # 20091210 - djd - Changed some more names to make things more
 #		consistant for component processing
+# 20100301 - djd - Moved out hyphenation file creation rules
 
 
 ##############################################################
@@ -138,9 +139,7 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1).usfm \
 	$(PATH_TEXTS)/$(1).usfm.adj \
 	$(PATH_TEXTS)/$(1).usfm.piclist \
-	$(PATH_PROCESS)/$(1).tex \
-	$(TEX_HYPHENATION_FILE) \
-	$(DEPENDENT_FILE_LIST)
+	$(PATH_PROCESS)/$(1).tex | $(DEPENDENT_FILE_LIST)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 #	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
 #	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
@@ -285,34 +284,13 @@ preprocess-checks: preprocess-ot preprocess-nt
 # These are to augment the individual book commands set above for instances
 # when a specific group is being checked. (More may need to be added)
 preprocess-ot :
-	@echo Preprocess checking OT components:
+	@echo INFO: Preprocess checking OT components:
 	@$(foreach v,$(MATTER_OT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
 preprocess-nt :
-	@echo Preprocess checking NT components:
+	@echo INFO: Preprocess checking NT components:
 	@$(foreach v,$(MATTER_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
 
-# Manually create a master wordlist based on existing component
-# wordlists in the Reports file. Best to run this after
-# a preprocess-all command
-make-master-wordlist : preprocess-checks
-	@echo Creating a new master word list
-	@$(PY_RUN_SYSTEM_PROCESS) make_master_wordlist
-
-# Manually create the hyphenation word list file
-$(newHyphenationFile) : $(PATH_HYPHENATION) make-master-wordlist
-	@echo Creating a new hyphenation word list
-	@$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
-
-# Manually create the hyphenation word list file
-force-make-hyphen-wordlist : $(PATH_HYPHENATION) make-master-wordlist
-	@echo Creating a new hyphenation word list
-	@$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
-
-# This enables all the preprocessing to be done in one command
-preprocess: force-make-hyphen-wordlist
-	@echo Completed preprocessing steps
-
-.PHONY: view-ot view-nt preprocess make-hyphen-wordlist make-master-wordlist preprocess-checks
+.PHONY: view-ot view-nt preprocess-checks
 
