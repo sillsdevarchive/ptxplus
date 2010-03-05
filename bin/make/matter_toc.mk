@@ -38,7 +38,7 @@ ifneq ($(MATTER_NT),)
 
 # Create a simulated auto-toc-nt.usfm if XeTeX has not done it
 # already. For now we just bring in a dummy file from templates
-$(PATH_PROCESS)/auto-toc-nt.usfm : $(MATTER_NT_PDF)
+$(PATH_PROCESS)/auto-toc-nt.usfm : | $(MATTER_NT_PDF)
 
 # Create the TOC-NT USFM file. This file must be created
 # from the auto-toc-nt.usfm file that comes from XeTeX
