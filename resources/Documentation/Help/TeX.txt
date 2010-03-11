@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Wed, 11 Nov 2009 09:38:39 +0700
+Modification-Date: Thu, 11 Mar 2010 16:35:13 +0700
 
 ====== TeX ======
 
@@ -22,6 +22,7 @@ This is not recommended but if you need to insert raw [[TeX]] code inside a USFM
 	\makedigitsletters\catcode`{=11\catcode`}=11
 
 In this example we are trying to put some extra vertical space between lines or a section. This is not plain TeX, however, because it relies on two external macro calls from the setup file. (At some point I would like to replace this example with a fully plain [[TeX]] one.)
+
 
 ===== Notes on hyphenation =====
 Hyphenation is an important issue in any publication. Here are some notes on various hyphenation problems that can be encountered.
@@ -61,7 +62,7 @@ and you should be good to go.
 ==== \lccode ====
 At this time, not everything is fully understood about hyphenation in TeX. What we do know now is that when it works, it looks great, when it doesn't work, it looks ugly. There's much to learn about this from the [[TeX]] book in Appendix H (pg. 448-455) and other places in the book.
 
-As we are not yet running under a rules-based system, which would be nice to do at some point, we use the exceptions list to drive our hyphenation process in TeX. This works, but is not optimal. One thing that is necessary in using the exceptions list is to set the llcode. When using some Unicode fonts it is sometimes necessary to set the \lccode for those characters which would be normally set to '0'. (See the TeX book pg. 41 & 345 for more details.)
+As we are not yet running under a rules-based system, which would be nice to do at some point, we use the exceptions list to drive our hyphenation process in TeX. This works, but is not optimal. One thing that is necessary in using the exceptions list is to set the lccode. When using some Unicode fonts it is sometimes necessary to set the \lccode for those characters which would be normally set to '0'. (See the TeX book pg. 41 & 345 for more details.)
 
 Sometimes you have a large range of codes to cover so for this reason we put the list in a file in your Hyphenation directory called "lccodelist.txt". The make_tex_hyphenation.py process will find it and insert them into your project hyphenation next time it builds it. The codes should be entered into that file like this:
 

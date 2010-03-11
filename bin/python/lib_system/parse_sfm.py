@@ -249,7 +249,7 @@ class Parser (object) :
 
 	def start (self, tag, text, info) :
 		word = re.compile(r'(?s)^\s*(\S+)')
-		print tag, text
+# debug point	print tag, text
 		if info[1].isNum :
 			m = word.search(text)
 			firstword = m.group(1)

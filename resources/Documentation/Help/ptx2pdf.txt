@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Thu, 11 Mar 2010 14:37:10 +0700
+Modification-Date: Thu, 11 Mar 2010 14:55:14 +0700
+
+====== Ptx2pdf ======
+
+This page contains information on finer points of the ptx2pdf macro package
+
+==== Hanging Verse Numbers ====
+For poetry sometimes the client will want the verse number flushed left against the margin. These are some clues as to what you might do to make this happen:
+
+In your setup file add: \def\HangVerseAlignMarker{qv}
+
+Make a new style:
+\Marker qv
+\LeftMargin .1
+
+There is more that needs to be described here but it will need to be done by someone who has actually done it. Sorry if this doesn't help you.

@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
-Modification-Date: Wed, 24 Feb 2010 16:54:54 +0700
+Modification-Date: Thu, 11 Mar 2010 09:57:38 +0700
 
 ====== ToDo ======
 
@@ -28,7 +28,18 @@ Typically, when drafting a project, crop marks are used and the word "Draft" is 
 **COVER_SPINE.USFM/TEX**
 This template exists but it needs to be modified with some [[TeX]] code that will allow you to paste in the text you want on the spine of the cover. Then when it is processed, it will turn the text the right way. After that you could control the size of the text and the horizontal and vertical positions from the [[.tex]] file. This would greatly simplify making the cover spine page.
 
+To do this, it looks like we may need to get a [[LaTeX]] module that supports text rotation and integrate it into the system. It may not be easy.
+
 ===== Maps =====
 
+**All Map Backgrounds**
+The backgrounds need to be redone so that the maximum resolution is used. Also, they need to be properly sized. The optimal map size seems to be 120 x 200 mm. The border needs to be about 1-1.5 pts~.
+
+**CMYK Color Conversion**
+Fix the problem that we currently have with there being CMY outlines where there needs to only be black (K) or perhaps some kind of gray if possible for text to maintain hinting effects. The problem seems to be with [[ImageMagick]]. Hopefully there will be some command line settings that will remove this CMY "ghosting". The best solution would be a proper export from Inkscape.
+
+**Gray-Scale Conversion**
+Using either either Inkscape or [[ImageMagick]], deploy a process that will output to a proper gray-scale paged image that can be bound with other RGB or CMYK pages. This should prevent "fuzzyness" from printing with color. If the image is an imitation gray-scale made from CMYK it could go fuzzy if there isn't good plate alignment on the press.
+
 **m008**
-This map needs to be adjusted so it can be split down the middle easier. It might be necessary to create an m008a and m008b at some point but this is the first step toward that.
+This map needs to be adjusted so it can be split down the middle easier. It might be necessary to create an m008a and m008b at some point but this is the first step toward that. (this may not be that useful, more testing needs to be done.)

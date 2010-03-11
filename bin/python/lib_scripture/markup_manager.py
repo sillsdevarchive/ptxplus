@@ -222,6 +222,7 @@ class MarkupManager (object) :
 		# This prevents blank lines from giving us a problem
 		if len(wordsInLine) > 0 :
 			# Get the Book ID if its there
+			print line
 			if wordsInLine[0] == "\\" + self.__dict__['fileIdentification'] :
 				self._fileIdentification = wordsInLine[1]
 				# Set the chapter number back to 0 (just in case)
@@ -594,4 +595,3 @@ class MarkupManager (object) :
 
 		# Not written yet
 		return False
-
