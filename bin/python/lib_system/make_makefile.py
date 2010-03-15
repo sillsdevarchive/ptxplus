@@ -43,7 +43,10 @@ class MakeMakefile (object) :
 		self._log_manager = log_manager
 
 		# Create the new makefile object (overwrite the old file)
-		makefileObject = codecs.open('Makefile', 'w', encoding='utf_8_sig')
+		# Note here about encoding. If you use utf_8_sig rather than
+		# just utf-8 it will put a BOM in the file. This seems to make
+		# Make choke. Keeping with just utf-8 seems to fix it.
+		makefileObject = codecs.open('Makefile', 'w', encoding='utf-8')
 
 		# Create the file elements
 		makefileHeader = "# Makefile\n\n# This is an auto-generated file, do not edit. Any necessary changes\n" + \
