@@ -51,7 +51,7 @@ class InsertChapterLabel (object) :
 			return
 
 		# Get our book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()
@@ -63,7 +63,7 @@ class InsertChapterLabel (object) :
 		newBookOutput = parser.transduce(bookObject)
 
 		# Output the modified book file
-		newBookObject = codecs.open(bookFile, "w", encoding='utf-8')
+		newBookObject = codecs.open(bookFile, "w", encoding='utf_8_sig')
 		newBookObject.write(newBookOutput)
 
 		if myHandler._inserted == True :

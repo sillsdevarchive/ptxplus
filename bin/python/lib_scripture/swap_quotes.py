@@ -41,7 +41,7 @@ class SwapQuotes (object) :
 
 		outputFile = log_manager._currentOutput
 		# Get our book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()
@@ -55,7 +55,7 @@ class SwapQuotes (object) :
 		# The whole idea of this module is to swap quotes but we need to be
 		# sure that an output file name exists.
 		if outputFile != "none" or outputFile != "" :
-			outputObject = codecs.open(outputFile, "w", encoding='utf-8')
+			outputObject = codecs.open(outputFile, "w", encoding='utf_8_sig')
 			outputObject.write(output)
 
 

@@ -288,20 +288,6 @@
 
 # Titles & Headings
 
-\Marker mt
-\Name mt - Title - Major Title Level 1
-\Description The main title of the book (if single level)
-\OccursUnder id
-\Rank 3
-\TextProperties paragraph publishable vernacular level_1
-\TextType Title
-\StyleType Paragraph
-\FontSize 14
-\Bold
-\Justification Center
-\SpaceBefore 8
-\SpaceAfter 4
-
 \Marker mt1
 \Name mt1 - Title - Major Title Level 1
 \Description The main title of the book (if multiple levels) (basic)
@@ -362,7 +348,7 @@
 \TextType Section
 \TextProperties paragraph publishable vernacular level_1
 \StyleType Paragraph
-\sethook{start}{s1}{\baselineskip=11pt \relax}
+%\sethook{start}{s1}{\baselineskip=11pt \relax}
 \Justification Center
 \FontSize 9
 \SpaceBefore 6
@@ -393,7 +379,7 @@
 \TextType NoteText
 \StyleType Note
 \FontSize 8
-\BaseLine 12pt
+%\CallerStyle myFC
 
 \Marker fr
 \Endmarker fr*
@@ -415,6 +401,17 @@
 \TextType NoteText
 \StyleType Character
 \FontSize 8
+
+%\Marker myFC
+%\Description Footnote caller adjustments for getting callers to behave
+%\TextType NoteText
+%\StyleType Note
+%\TextProperties publishable vernacular note
+%\Italic
+%\Bold
+%\FontSize 10
+%\Superscript
+%\BaseLine 10pt
 
 
 # Character Markup

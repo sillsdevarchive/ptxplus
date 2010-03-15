@@ -222,7 +222,7 @@ class MarkupManager (object) :
 		# This prevents blank lines from giving us a problem
 		if len(wordsInLine) > 0 :
 			# Get the Book ID if its there
-			print line
+# Debug point		print line
 			if wordsInLine[0] == "\\" + self.__dict__['fileIdentification'] :
 				self._fileIdentification = wordsInLine[1]
 				# Set the chapter number back to 0 (just in case)
@@ -566,7 +566,7 @@ class MarkupManager (object) :
 		'''Only find the book ID in an USFM file. This is for special
 			one-off kind of processes.'''
 
-		bookObject = codecs.open(inputFile, "r", encoding='utf-8')
+		bookObject = codecs.open(inputFile, "r", encoding='utf_8_sig')
 
 		for line in bookObject :
 

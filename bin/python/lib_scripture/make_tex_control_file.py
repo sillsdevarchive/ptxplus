@@ -56,7 +56,7 @@ class MakeTexControlFile (object) :
 		tocTitle = log_manager._settings['Process']['TOC']['MainTitle']
 
 		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
-		texControlObject = codecs.open(texControlFile, "w", encoding='utf-8')
+		texControlObject = codecs.open(texControlFile, "w", encoding='utf_8_sig')
 		texControlObject.write('\\input ' + texMacros + '\n')
 		texControlObject.write('\\input ' + setupFile + '\n')
 
@@ -97,7 +97,7 @@ class MakeTexControlFile (object) :
 		'''Parse a specific book based on ID then return relevant info.'''
 
 		# Get our current book object
-		bookObject = "".join(codecs.open(book, "r", encoding='utf-8'))
+		bookObject = "".join(codecs.open(book, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()

@@ -188,7 +188,7 @@ class MakePiclistFile (object) :
 
 			# Now we need output anything we might have collected. If nothing was
 			# found, just an empty file will be put out.
-			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf-8')
+			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
 			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
 			self._outFileObject.writelines(self.collectPicLine(*line) + '\n' for line in inFileData)
 

@@ -136,7 +136,7 @@ class CheckCrossreferences (object) :
 
 		# Output crossreferences for inspection if there were any
 		if crossrefLines != "" :
-			crossrefListingObject = codecs.open(crossrefListingFile, "w", encoding='utf-8')
+			crossrefListingObject = codecs.open(crossrefListingFile, "w", encoding='utf_8_sig')
 			crossrefListingObject.write(crossrefLines)
 			crossrefListingObject.close()
 

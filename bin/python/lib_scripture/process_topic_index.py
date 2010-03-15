@@ -39,7 +39,7 @@ class ProcessTopicIndex (object) :
 		newIndexFile = log_manager._currentOutput
 
 		# Get our book object
-		indexObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+		indexObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()
@@ -50,7 +50,7 @@ class ProcessTopicIndex (object) :
 		newIndexOutput = parser.transduce(indexObject)
 
 		# Output the modified book file
-		newBookObject = codecs.open(newIndexFile, "w", encoding='utf-8')
+		newBookObject = codecs.open(newIndexFile, "w", encoding='utf_8_sig')
 		newBookObject.write(newIndexOutput)
 
 

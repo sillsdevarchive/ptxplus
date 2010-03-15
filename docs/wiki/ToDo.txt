@@ -1,11 +1,16 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
-Modification-Date: Thu, 11 Mar 2010 09:57:38 +0700
+Modification-Date: Mon, 15 Mar 2010 20:38:14 +0630
 
 ====== ToDo ======
 
 Here we will collect a list of things that need doing. Hopefully we can keep them up. If they are a big task then it would be good to create a separate page and link to this one.
+
+===== Encoding =====
+
+**Project Startup**
+There needs to be a way to deal with non-Unicode data on project startup. The way the system works now, it needs to have all text in Unicode. If it isn't checks that are performed on the text before it is imported into the project (at which time it could be converted) fail because the Python scripts fail. We either need to draw a hard-line on not accepting non-Unicode text, or we need to be able to do conversions to the text before it is checked. Both have their pros and cons.
 
 ===== pdf2ptx Work =====
 

@@ -139,7 +139,7 @@ class CheckFootnotes (object) :
 				os.mkdir(self._reportFilePath)
 
 			# Now write out the file
-			footnoteListingObject = codecs.open(footnoteListingFile, "w", encoding='utf-8')
+			footnoteListingObject = codecs.open(footnoteListingFile, "w", encoding='utf_8_sig')
 			footnoteListingObject.write(footnoteLines)
 			footnoteListingObject.close()
 

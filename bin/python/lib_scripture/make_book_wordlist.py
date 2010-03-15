@@ -93,7 +93,9 @@ class MakeBookWordlist (object) :
 #			log_manager.log("DBUG", 'make_book_wordlist: Postconversion length %d' % len(filter(bool, handler._wordlist)))
 
 		# Get our current book object
-		bookObject = childprocess(encoder).decode('utf-8') if encoder else codecs.open(inputFile, "r", encoding='utf-8').read()
+#		bookObject = childprocess(encoder).decode('utf-8') if encoder else codecs.open(inputFile, "r", encoding='utf-8').read()
+# This encoding change needs testing
+		bookObject = childprocess(encoder).decode('utf-8') if encoder else codecs.open(inputFile, "r", encoding='utf_8_sig').read()
 
 		# Load in the sfm parser
 		parser = parse_sfm.Parser()

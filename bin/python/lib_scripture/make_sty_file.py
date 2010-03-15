@@ -65,7 +65,7 @@ class MakeStyleFile (object) :
 		#for book in bookList :
 
 			# Get our book object
-			#bookObject = "".join(codecs.open(book, "r", encoding='utf-8'))
+			#bookObject = "".join(codecs.open(book, "r", encoding='utf_8_sig'))
 			# The parser needs to acumulate the sfms as it goes
 			# through each book
 			#inventoryObject = sfmParser.parse(bookObject)
@@ -80,7 +80,7 @@ class MakeStyleFile (object) :
 
 
 		# Output the new style file
-		#newStyleObject = codecs.open(newStyleFile, "w", encoding='utf-8')
+		#newStyleObject = codecs.open(newStyleFile, "w", encoding='utf_8_sig')
 		#newStyleFile.write(newStyleObject)
 
 

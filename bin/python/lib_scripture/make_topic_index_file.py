@@ -87,7 +87,7 @@ class MakeTopicIndexFile (object) :
 			csv_records = list(csv.reader(open(self._csvWorkFile), dialect=csv.excel))
 			# Now we need output anything we might have collected. If nothing was
 			# found, just output the header.
-			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf-8')
+			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
 			self._outFileObject.write(headerInfo)
 			self._outFileObject.write(recordsToUSFM(USFMTags, csv_records))
 			self._log_manager.log("DBUG", "Created file and wrote out to: " + self._outputFile)
