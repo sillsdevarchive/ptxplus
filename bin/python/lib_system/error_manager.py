@@ -65,7 +65,7 @@ class ErrorManager (object) :
 
 		count = 0
 		if os.path.isfile(self._errorLogFile) :
-			fileObject = codecs.open(self._errorLogFile, "r", encoding='utf-8')
+			fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8_sig')
 			for line in fileObject :
 				if line.find("ERRR") > 0 :
 					count +=1
@@ -86,7 +86,7 @@ class ErrorManager (object) :
 
 		if os.path.isfile(self._errorLogFile) == True :
 			try :
-				fileObject = codecs.open(self._errorLogFile, "r", encoding='utf-8')
+				fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8_sig')
 				errrOutput = "\nErrors found: \n"
 				warnOutput = "\nWarnings found: \n"
 				for line in fileObject :
@@ -122,9 +122,9 @@ class ErrorManager (object) :
 		'''Record an error report line to the error log object.'''
 
 		if os.path.isfile(self._errorLogFile) == True :
-			errorWriteObject = codecs.open(self._errorLogFile, "a", encoding='utf-8')
+			errorWriteObject = codecs.open(self._errorLogFile, "a", encoding='utf_8_sig')
 		else :
-			errorWriteObject = codecs.open(self._errorLogFile, "w", encoding='utf-8')
+			errorWriteObject = codecs.open(self._errorLogFile, "w", encoding='utf_8_sig')
 
 		errorWriteObject.write(event + '\n')
 		errorWriteObject.close()

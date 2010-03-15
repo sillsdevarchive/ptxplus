@@ -66,7 +66,7 @@ class WriteToWiki (object) :
 			print "Writing about file."
 			settings = tools.getSystemSettings()
 			aboutText = settings['System']['aboutText']
-			object = codecs.open(wikiFile, "w", encoding='utf-8')
+			object = codecs.open(wikiFile, "w", encoding='utf_8_sig')
 			object.write('=About: ptxplus=\n')
 			object.write('Version ' + '\n\n')
 			object.write(aboutText)

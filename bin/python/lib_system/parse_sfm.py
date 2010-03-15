@@ -20,7 +20,7 @@
 # import parse_sfm
 # class MyClass (object) :
 #	def myFunction (self, ) :
-#		bookObject = "".join(codecs.open(inputFile, "r", encoding='utf-8'))
+#		bookObject = "".join(codecs.open(inputFile, "r", encoding='utf_8_sig'))
 #		parser = SFM.Parser()
 #		parser.transduce(bookObject)
 

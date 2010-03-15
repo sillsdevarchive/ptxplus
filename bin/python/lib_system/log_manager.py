@@ -280,9 +280,9 @@ class LogManager (object) :
 
 			# Close process log
 			if os.path.isfile(self._processLogFile) == True :
-				processWriteObject = codecs.open(self._processLogFile, "a", encoding='utf-8')
+				processWriteObject = codecs.open(self._processLogFile, "a", encoding='utf_8_sig')
 			else :
-				processWriteObject = codecs.open(self._processLogFile, "w", encoding='utf-8')
+				processWriteObject = codecs.open(self._processLogFile, "w", encoding='utf_8_sig')
 
 			for line in self._processLogObject :
 				processWriteObject.write(line)

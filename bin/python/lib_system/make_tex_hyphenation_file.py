@@ -72,7 +72,7 @@ class MakeTexHyphenationFile (object) :
 ###########################################################################
 
 			# Make the TeX hyphen file
-			tex_hypens_out = codecs.open(texHyphenFileName, "w", encoding='utf-8')
+			tex_hypens_out = codecs.open(texHyphenFileName, "w", encoding='utf_8_sig')
 			# Make header line
 			tex_hypens_out.write(
 				"% hyphenation.tex\n"

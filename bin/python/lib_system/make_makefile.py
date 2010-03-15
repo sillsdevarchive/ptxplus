@@ -43,7 +43,7 @@ class MakeMakefile (object) :
 		self._log_manager = log_manager
 
 		# Create the new makefile object (overwrite the old file)
-		makefileObject = codecs.open('Makefile', 'w', encoding='utf-8')
+		makefileObject = codecs.open('Makefile', 'w', encoding='utf_8_sig')
 
 		# Create the file elements
 		makefileHeader = "# Makefile\n\n# This is an auto-generated file, do not edit. Any necessary changes\n" + \
