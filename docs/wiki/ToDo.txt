@@ -1,11 +1,30 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
-Modification-Date: Mon, 15 Mar 2010 20:38:14 +0630
+Modification-Date: Wed, 17 Mar 2010 10:39:01 +0630
 
 ====== ToDo ======
 
 Here we will collect a list of things that need doing. Hopefully we can keep them up. If they are a big task then it would be good to create a separate page and link to this one.
+
+===== Checks =====
+
+**ID Check**
+Need to have an ID check. Make sure that the code in the \id conforms to standard, i.e. uc and 3 known characters
+
+**Fix Quote Checker**
+Seems to be a problem sometimes with the quote checker not seeing two double open quotes in succession.
+
+**Duplicated Output on Footnote Checks**
+Seems to be outputting a duplicated message on problems in footnotes. They seem to be found in checkbook and then reported again in checkfootnote. Checkfootnote may not be needed as the SFM parser might be getting the error instead.
+
+**Pre-Pub Checking Tool**
+It would be nice if we packaged up all the checks we have developed independently of the ptxplus system and give them to end users to run on their texts and give them a report of potential problems they might have. It could report things like:
+* Non-conformance to USFM standard
+* Potential excessively long paragraphs
+* Punctuation errors, quotes out of sync or on the wrong side of the sentence punctuation, etc.
+
+This tool could also help with conversion to XML formats as well.
 
 ===== Encoding =====
 
