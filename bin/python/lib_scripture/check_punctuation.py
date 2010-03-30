@@ -88,6 +88,9 @@ class CheckPunctuation (object) :
 			else :
 				postChar = ""
 
+# Working in this area to try to fix problem with punctuation following an inline marker not being seen
+
+
 			# Is there word-final at the beginning of the string?
 			if preChar == "" :
 				# Check for an exception to this if the preceeding text was marked up with special formating

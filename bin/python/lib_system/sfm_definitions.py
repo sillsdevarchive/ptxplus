@@ -33,13 +33,13 @@ def init_usfm () :
 		'id'		: ['isNonV', 'isNonPub'],
 		'ide'		: ['isNonV', 'isNonPub'],
 		'rem'		: ['isNonV', 'isNonPub'],
-		'c'			: ['isNum'],
-		'v'			: ['isNum', 'isChar'],
+		'c'		: ['isNum'],
+		'v'		: ['isNum', 'isChar'],
 		'va'		: ['isEnd', 'isChar', 'isInline'],
 		'vp'		: ['isEnd', 'isChar', 'isInline'],
 		'qs'		: ['isEnd', 'isChar', 'isInline'],
 		'qac'		: ['isEnd', 'isChar', 'isInline'],
-		'f'			: ['isEnd', 'isChar', 'isNote', 'isNonPub', 'isInline'],
+		'f'		: ['isEnd', 'isChar', 'isNote', 'isNonPub', 'isInline'],
 		'fe'		: ['isEnd', 'isChar', 'isNote', 'isInline'],
 		'fr'		: ['isChar', 'isNote', 'isInline', 'isRef'],
 		'fk'		: ['isChar', 'isNote', 'isInline'],
@@ -51,7 +51,7 @@ def init_usfm () :
 		'fv'		: ['isChar', 'isNote', 'isInline'],
 		'fdc'		: ['isEnd', 'isChar', 'isNote', 'isInline'],
 		'fm'		: ['isEnd', 'isChar', 'isNote', 'isInline'],
-		'x'			: ['isEnd', 'isChar', 'isNote', 'isNonPub', 'isInline'],
+		'x'		: ['isEnd', 'isChar', 'isNote', 'isNonPub', 'isInline'],
 		'xo'		: ['isChar', 'isNote', 'isInline', 'isRef'],
 		'xt'		: ['isChar', 'isNote', 'isInline'],
 		'xk'		: ['isChar', 'isNote', 'isInline'],
@@ -62,9 +62,9 @@ def init_usfm () :
 		'tl'		: ['isEnd', 'isChar', 'isInline'],
 		'dc'		: ['isEnd', 'isChar', 'isInline'],
 		'bk'		: ['isEnd', 'isChar', 'isInline'],
-		'sig'		: ['isEnd', 'isChar', 'isInline'],
-		'pn'		: ['isEnd', 'isChar', 'isInline'],
-		'k'			: ['isEnd', 'isChar', 'isInline'],
+		'sig'		: ['isEnd', 'isChar', 'isInline', 'isFormat'],
+		'pn'		: ['isEnd', 'isChar', 'isInline', 'isFormat'],
+		'k'		: ['isEnd', 'isChar', 'isInline', 'isFormat'],
 		'sls'		: ['isEnd', 'isChar', 'isInline'],
 		'add'		: ['isEnd', 'isChar', 'isInline'],
 		'ord'		: ['isEnd', 'isChar', 'isInline'],
@@ -76,7 +76,7 @@ def init_usfm () :
 		'sc'		: ['isEnd', 'isChar', 'isInline'],
 		'pb'		: ['isEmpty'],
 		'pro'		: ['isEnd', 'isNonPub', 'isChar', 'isInline'],
-		'w'			: ['isEnd', 'isChar', 'isInline'],
+		'w'		: ['isEnd', 'isChar', 'isInline'],
 		'wg'		: ['isEnd', 'isChar', 'isInline'],
 		'wh'		: ['isEnd', 'isChar', 'isInline'],
 		'wj'		: ['isEnd', 'isChar', 'isInline'],
@@ -95,8 +95,8 @@ def init_usfm () :
 	# Note: we may need to split some of these out to their own
 	# section at some point
 	paraInfo = {
-		'p'			: ['isPara', 'isChar'],
-		'm'			: ['isPara', 'isChar'],
+		'p'		: ['isPara', 'isChar'],
+		'm'		: ['isPara', 'isChar'],
 		'pmo'		: ['isPara', 'isChar'],
 		'pm'		: ['isPara', 'isChar'],
 		'pmc'		: ['isPara', 'isChar'],
@@ -106,7 +106,7 @@ def init_usfm () :
 		'cls'		: ['isPara', 'isChar'],
 		'pc'		: ['isPara', 'isChar'],
 		'pr'		: ['isPara', 'isChar'],
-		'b'			: ['isPara', 'isChar']
+		'b'		: ['isPara', 'isChar']
 	}
 
 	# Add the above normal para attributes to the SFM tuple list
@@ -155,7 +155,7 @@ def init_usfm () :
 		for n in range(1, 4) :
 			res[k + str(n)] = parse.SFM(['isEnd', 'isChar'])
 
-	# Supplemental, non-USFM markup used in peripheral material
+	# Supplemental, "private use" non-USFM markup that could be used
 	for k in ('ct') :
 		for n in range(1, 4) :
 			res[k + str(n)] = parse.SFM(['isPara', 'isTitle', 'isChar'])
@@ -163,6 +163,8 @@ def init_usfm () :
 	res['spacer'] = parse.SFM(['isFormat'])
 	res['tah'] = parse.SFM(['isEnd', 'isChar', 'isInline', 'isFormat'])
 	res['tar'] = parse.SFM(['isEnd', 'isChar', 'isInline', 'isFormat'])
+	res['z_pn'] = parse.SFM(['isEnd', 'isChar', 'isInline', 'isFormat'])
+	res['z_pg'] = parse.SFM(['isEnd', 'isChar', 'isInline', 'isFormat'])
 
 	return res
 
