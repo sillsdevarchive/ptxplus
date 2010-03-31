@@ -88,16 +88,14 @@ class CheckPunctuation (object) :
 			else :
 				postChar = ""
 
-# Working in this area to try to fix problem with punctuation following an inline marker not being seen
-
-
 			# Is there word-final at the beginning of the string?
 			if preChar == "" :
 				# Check for an exception to this if the preceeding text was marked up with special formating
 				if text[0] == thisPunct and len(text) > 1 and not lastCloseTagInfo.isFormat :
 					self._log_manager.log("ERRR", "Word-final punctuation character found at the beginning of a string. Character: [" + thisPunct + "]")
-				# In this case there was only one character found and it was punctuation. Proabably not good
-				elif len(text) == 1 :
+				# In this case there was only one character found and it was punctuation
+				# and we found it after an inline marker. Proabably not a good thing.
+				elif len(text) == 1 and not lastCloseTagInfo.isFormat :
 					self._log_manager.log("ERRR", "Lone word-final punctuation character found. Character: [" + thisPunct + "]")
 
 			# Can't have any spaces before word-final punctuation
