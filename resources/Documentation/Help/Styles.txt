@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 11 Dec 2009 16:18:39 +0700
-Modification-Date: Mon, 04 Jan 2010 14:17:01 +0700
+Modification-Date: Fri, 09 Apr 2010 19:50:57 +0700
 
 ====== Styles ======
 
@@ -18,3 +18,8 @@ To invoke the small caps feature (which is implemented as an [[OpenType]] featur
 	\FontName "[../Fonts/CharisSIL/CharisSILR.ttf]:+smcp"
 
 Remember that this will only work with a font that has this feature added to the font. If you are using a font other than Charis that has the small caps feature, you may need to consult the documentation for the right syntax for evoking that particular feature.
+
+===== Selah and \qs =====
+It should be possible to get the 'Selah' of Psalms, marked up as \qs selah\qs* to become right justified with the following hook. The assumption is the \ps always occurs at the end of a paragraph (marked with \q or similar). This hook for the \qs style should work:
+
+	\sethook{before}{qs}{\hfill\null\nobreak\hfill}
