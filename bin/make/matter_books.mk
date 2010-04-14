@@ -55,6 +55,8 @@
 # 20091210 - djd - Changed some more names to make things more
 #		consistant for component processing
 # 20100301 - djd - Moved out hyphenation file creation rules
+# 20100414 - djd - Changed the way illustrations are handled and
+#		added some more echo INFO statements
 
 
 ##############################################################
@@ -163,7 +165,7 @@ $(1) : $(PATH_PROCESS)/$(1).pdf
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
 # this rule will create a piclist file for the book being processed
-$(PATH_TEXTS)/$(1).usfm.piclist : | $(PATH_SOURCE)/captions.csv $(PATH_ILLUSTRATIONS)/captions.csv
+$(PATH_TEXTS)/$(1).usfm.piclist : | $(PATH_SOURCE)/captions.csv
 ifneq ($(PATH_ILLUSTRATIONS_LIB),)
 	@echo INFO: Creating illustrations list file: $$@
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
@@ -209,14 +211,6 @@ $(PATH_SOURCE)/captions.csv :
 ifneq ($(PATH_ILLUSTRATIONS_LIB),)
 	@echo INFO: Copying captions.csv to $(PATH_SOURCE)
 	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/captions.csv $@
-endif
-
-# Link the captions file if not there already (if illustrations
-# are being used)
-$(PATH_ILLUSTRATIONS)/captions.csv :
-ifneq ($(PATH_ILLUSTRATIONS_LIB),)
-	@echo INFO: Linking captions file to $(PATH_ILLUSTRATIONS)
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/captions.csv) $@
 endif
 
 # Start with the OT but we don't want to do anything if there

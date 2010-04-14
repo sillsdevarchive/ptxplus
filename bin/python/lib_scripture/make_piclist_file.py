@@ -70,8 +70,11 @@ class MakePiclistFile (object) :
 			return
 
 		self._outFileObject = {}
-		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
 		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
+		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
+
+		# This is the project captions file that is created by this process
+		self._projectIllustrationsCaptions = self._processIllustrationsPath + "/captions.csv"
 
 		self._sourceIllustrationsCaptions = self._sourcePath + "/captions.csv"
 		# Check to see if the captions file exists. If it doesn't we're all done for now
@@ -137,8 +140,12 @@ class MakePiclistFile (object) :
 			is that all the pictures we work with are in PNG format'''
 
 		# Build the file names
-		source = self._sourceIllustrationsLib + "/" + fileID + ".png"
+		source = self._sourceIllustrationsLibPath + "/" + fileID + ".png"
 		target = self._processIllustrationsPath + "/" + fileID + ".png"
+
+		# Sanity test
+		if not os.path.isfile(source) :
+			self._log_manager.log("ERRR", "The file: " + source + " was not found.")
 		# Check to see if the file is there or not. We don't want to copy
 		# one in if one exists already.
 		if not os.path.isfile(target) :
@@ -155,15 +162,20 @@ class MakePiclistFile (object) :
 			currently being processed.'''
 
 		# Assumption: If a custom encoding process exists, we process
-		# However, it should be noted that at this time this has not
-		# been tested and probably doesn't work at all because these
-		# encoding transformation processes are complex, more work is
-		# needed in this area
+		# the captions.csv file in the source folder and deposit the
+		# results in the Illustrations folder in the project. If an
+		# encoding process is not required, then we will just copy
+		# the captions.csv file directly, trusting that it is ready
+		# to be used.
+		# However, it should be noted that at this time the encoding
+		# conversion aspect of this has not been tested and probably
+		# doesn't work at all because these encoding transformation
+		# processes are complex, more work is needed in this area
 		chain = self._settings['Encoding']['Processing']['customEncodingProcess']
 		if chain != "" :
 			mod = __import__("transformCSV")
 			# We'll give the source, target, encoding chain and field to transform
-			res = mod.doIt(self._csvSourceFile, self._sourceIllustrationsCaptions, chain, 8)
+			res = mod.doIt(self._projectIllustrationsCaptions, self._sourceIllustrationsCaptions, chain, 8)
 			if res != None :
 				self._log_manager.log("ERRR", res)
 				return
@@ -172,7 +184,7 @@ class MakePiclistFile (object) :
 
 		# If there is no encoding chain a simple file copy will do
 		else :
-			x = shutil.copy(self._csvSourceFile, self._sourceIllustrationsCaptions)
+			x = shutil.copy(self._sourceIllustrationsCaptions, self._projectIllustrationsCaptions)
 			self._log_manager.log("INFO", "The " + self._sourceIllustrationsCaptions + " has been copied from the Source folder.")
 
 
@@ -180,14 +192,14 @@ class MakePiclistFile (object) :
 		# The assumption here is that the encoding of the pieces of the csv are
 		# what they need to be.
 		inFileData = filter(lambda l: l[1]==self._bookID,
-					csv.reader(open(self._sourceIllustrationsCaptions), dialect=csv.excel))
+					csv.reader(open(self._projectIllustrationsCaptions), dialect=csv.excel))
 		# Right here we will sort the list by BCV. This should prevent unsorted
 		# data from getting out into the piclist.
 		inFileData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
 		# Do not process unless we are in the right book and the
 		# illustration is tagged to be used (True or False)
 		for line in inFileData :
-			self.processIllustration(line[4])
+			self.processIllustration(line[0])
 
 		# Now we need output anything we might have collected. If nothing was
 		# found, just an empty file will be put out.
