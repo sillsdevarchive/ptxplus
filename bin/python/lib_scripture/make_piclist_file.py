@@ -29,6 +29,9 @@
 # 20091214 - djd - Added a check for missing lib info. If not
 #		found then it is reported and the process is
 #		halted.
+# 20100414 - djd - Changed the way process works by adding a
+#		lib data file and limiting the project file to
+#		only containing caption and location info.
 
 
 #############################################################
@@ -152,6 +155,10 @@ class MakePiclistFile (object) :
 			currently being processed.'''
 
 		# Assumption: If a custom encoding process exists, we process
+		# However, it should be noted that at this time this has not
+		# been tested and probably doesn't work at all because these
+		# encoding transformation processes are complex, more work is
+		# needed in this area
 		chain = self._settings['Encoding']['Processing']['customEncodingProcess']
 		if chain != "" :
 			mod = __import__("transformCSV")
@@ -173,7 +180,7 @@ class MakePiclistFile (object) :
 		# The assumption here is that the encoding of the pieces of the csv are
 		# what they need to be.
 		inFileData = filter(lambda l: l[1]==self._bookID,
-					csv.reader(open(self._csvMasterFile), dialect=csv.excel))
+					csv.reader(open(self._sourceIllustrationsCaptions), dialect=csv.excel))
 		# Right here we will sort the list by BCV. This should prevent unsorted
 		# data from getting out into the piclist.
 		inFileData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
