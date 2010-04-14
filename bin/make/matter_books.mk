@@ -97,10 +97,11 @@ define component_rules
 # the project.conf file.
 ifeq ($(LOCKED),0)
 $(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
-	rm -f $(PATH_TEXTS)/$(1).usfm
-	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<' '$$@'
-	$(PY_PROCESS_SCRIPTURE_TEXT) CopyIntoSystem $(1) '$$<' '$$@'
-	$(PY_PROCESS_SCRIPTURE_TEXT) TextProcesses $(1) '$$@' '$$@'
+	@echo INFO: Auto-preprocessing: $$< and creating $$@
+	@rm -f $(PATH_TEXTS)/$(1).usfm
+	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<' '$$@'
+	@$(PY_PROCESS_SCRIPTURE_TEXT) CopyIntoSystem $(1) '$$<' '$$@'
+	@$(PY_PROCESS_SCRIPTURE_TEXT) TextProcesses $(1) '$$@' '$$@'
 else
 #	@echo File $(PATH_TEXTS)/$(1).usfm is locked
 endif
@@ -113,8 +114,9 @@ endif
 # thing we do is try to delete any existing copies from the source directory.
 preprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
-	rm -f $(PATH_TEXTS)/$(1).usfm
-	$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
+	@echo INFO: Removing $(PATH_TEXTS)/$(1).usfm and error checking '$$<'
+	@rm -f $(PATH_TEXTS)/$(1).usfm
+	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
 endif
 
 #################################
@@ -131,7 +133,8 @@ $(PATH_PROCESS)/$(1).tex : \
 	$(PATH_PROCESS)/DraftWatermark-60.pdf \
 	$(PATH_PROCESS)/DraftWatermark-50.pdf \
 	$(PATH_PROCESS)/DraftWatermark-A5.pdf
-	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file $(1) 'Null' '$$@'
+	@echo INFO: Creating book control file: $$@
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file $(1) 'Null' '$$@'
 
 # Process a single component and produce the final PDF. Special dependencies
 # are set for the .adj and .piclist files in case they have been altered.
@@ -140,7 +143,8 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1).usfm.adj \
 	$(PATH_TEXTS)/$(1).usfm.piclist \
 	$(PATH_PROCESS)/$(1).tex | $(DEPENDENT_FILE_LIST)
-	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
+	@echo INFO: Creating book PDF file: $$@
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 #	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
 #	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
 
@@ -156,32 +160,34 @@ edit-$(1) : $(PATH_TEXTS)/$(1).usfm
 # Shortcut to open the PDF file
 $(1) : $(PATH_PROCESS)/$(1).pdf
 
-# Make illustrations file manualy
-make-picfile-$(1) :
-	$(PY_PROCESS_SCRIPTURE_TEXT) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
-
-# Make illustrations file automatically
-$(PATH_TEXTS)/$(1).usfm.piclist :
-	$(PY_PROCESS_SCRIPTURE_TEXT) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
+# Make illustrations file if illustrations are used in this pub
+# If there is a path/file listed in the illustrationsLib field
+# this rule will create a piclist file for the book being processed
+$(PATH_TEXTS)/$(1).usfm.piclist : | $(PATH_SOURCE)/captions.csv $(PATH_ILLUSTRATIONS)/captions.csv
+ifneq ($(PATH_ILLUSTRATIONS_LIB),)
+	@echo INFO: Creating illustrations list file: $$@
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
+endif
 
 # Make adjustment file
 $(PATH_TEXTS)/$(1).usfm.adj :
-	$(PY_PROCESS_SCRIPTURE_TEXT) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).usfm
+	@echo INFO: Creating the adjustments file: $$@
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).usfm
 
 # Remove the PDF for this component only
 pdf-remove-$(1) :
 	@echo INFO: Removing file: $(PATH_PROCESS)/$(1).pdf
-	rm -f $(PATH_PROCESS)/$(1).pdf
+	@rm -f $(PATH_PROCESS)/$(1).pdf
 
 # Remove the adjustment file for this component only
 adjfile-remove-$(1) :
 	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).usfm.adj
-	rm -f $(PATH_TEXTS)/$(1).usfm.adj
+	@rm -f $(PATH_TEXTS)/$(1).usfm.adj
 
 # Remove the picture placement file for this component only
 picfile-remove-$(1) :
 	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).usfm.piclist
-	rm -f $(PATH_TEXTS)/$(1).usfm.piclist
+	@rm -f $(PATH_TEXTS)/$(1).usfm.piclist
 
 
 endef
@@ -192,6 +198,26 @@ endef
 
 # Build a TeX control file that will process the components
 # in a publication
+
+# In case makefile needs things in order, we will put some
+# dependent rules here before we hit the main component_rules
+# building rule
+
+# Create the captions file if illustrations are used in this
+# project
+$(PATH_SOURCE)/captions.csv :
+ifneq ($(PATH_ILLUSTRATIONS_LIB),)
+	@echo INFO: Copying captions.csv to $(PATH_SOURCE)
+	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/captions.csv $@
+endif
+
+# Link the captions file if not there already (if illustrations
+# are being used)
+$(PATH_ILLUSTRATIONS)/captions.csv :
+ifneq ($(PATH_ILLUSTRATIONS_LIB),)
+	@echo INFO: Linking captions file to $(PATH_ILLUSTRATIONS)
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/captions.csv) $@
+endif
 
 # Start with the OT but we don't want to do anything if there
 # are no components to process

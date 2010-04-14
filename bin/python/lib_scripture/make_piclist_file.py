@@ -46,26 +46,54 @@ tools = Tools()
 
 class MakePiclistFile (object) :
 
-	# Intitate the whole class
+	# Intitate the whole class and do some checks to see if we can continue or not
 	def __init__(self, log_manager) :
 
 		self._settings = log_manager._settings
 		self._log_manager = log_manager
 		self._log_manager._currentSubProcess = 'MakePiclistFile'
-		self._inputFile = log_manager._currentInput
 		self._bookID = log_manager._currentTargetID
+
+		# If the file belongs to the peripheral mater we will not go through with the process
+		self._inputFile = log_manager._currentInput
+		if tools.isPeripheralMatter(self._inputFile) :
+			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
+			return
+
 		self._outputFile = self._inputFile + ".piclist"
+		# See if the output file already exists. if it doese, then we stop here
+		if os.path.isfile(self._outputFile) :
+			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted to prevent data loss.")
+			return
+
 		self._outFileObject = {}
 		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
 		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
-		self._sourceIllustrationsLib = self._settings['General']['Resources']['Illustrations']['pathToIllustrationsLib'] + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsLib']
-		self._csvMasterFile = self._processIllustrationsPath + "/" + self._settings['General']['Resources']['Illustrations']['illustrationsControlFile']
+
+		self._sourceIllustrationsCaptions = self._sourcePath + "/captions.csv"
+		# Check to see if the captions file exists. If it doesn't we're all done for now
+		if not os.path.isfile(self._sourceIllustrationsCaptions) :
+			self._log_manager.log("ERROR", "The illustration caption file (" + self._sourceIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
+			return
+
+		self._sourceIllustrationsLibPath = self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_LIB']
+		# Check to see if the captions file exists. If it doesn't we're all done for now
+		if not os.path.isdir(self._sourceIllustrationsLibPath) :
+			self._log_manager.log("ERROR", "The illustration library (" + self._sourceIllustrationsLibPath + ") is not where the project config file says it is. This process cannot work without it.")
+			return
+
+		(head, tail) = os.path.split(self._sourceIllustrationsLibPath)
+		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + tail + "_data.csv"
+		# Check to see if the data file exists. If it doesn't we're all done for now
+		if not os.path.isfile(self._sourceIllustrationsLibData) :
+			self._log_manager.log("ERROR", "The illustration data file (" + self._sourceIllustrationsLibData + ") is missing from the library. This process cannot work without it.")
+			return
+
 		# Next pull in some default sizing params if they exist, if not use the default settings.
 		self._texsize = self._settings['General']['Resources']['Illustrations'].get('size','col')
 		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position','tl')
 		self._texscale = self._settings['General']['Resources']['Illustrations'].get('scale',1.0)
-		(head, tail) = os.path.split(self._csvMasterFile)
-		self._csvSourceFile = self._sourcePath + "/" + tail
+
 		self._errors = 0
 
 
@@ -117,86 +145,54 @@ class MakePiclistFile (object) :
 
 
 	def main(self):
-		'''We will open up our master piclist file which should be Unicode
-			encoded and in CSV format. If that file doesn't exsist
-			then we need to gracefully stop at that point. This will
-			prevent other processes from crashing. We will go through
-			the master piclist file and look for book IDs that match
-			the current book we are working with. It will then create
-			a piclist file for that book file so pdf2ptx can work with
-			it. We will do this one book at a time.'''
+		'''We will open up our captions file which should be Unicode
+			encoded and in CSV format. The illustration IDs will
+			be matched from that file with the lib data file and
+			will create a piclist file for the book that is
+			currently being processed.'''
 
-		# First, do some tests and report any fatal errors we find here
-		# then quite right after
+		# Assumption: If a custom encoding process exists, we process
+		chain = self._settings['Encoding']['Processing']['customEncodingProcess']
+		if chain != "" :
+			mod = __import__("transformCSV")
+			# We'll give the source, target, encoding chain and field to transform
+			res = mod.doIt(self._csvSourceFile, self._sourceIllustrationsCaptions, chain, 8)
+			if res != None :
+				self._log_manager.log("ERRR", res)
+				return
+			else :
+				self._log_manager.log("INFO", "The " + self._sourceIllustrationsCaptions + " has been copied from the Source folder with an encoding tranformation on the caption field.")
 
-		# This may not be a problem so we report it as a warning
-		# The test isn't too precise but if there are less than 5
-		# characters in the path/name, it's probably no good.'
-		if len(self._sourceIllustrationsLib) < 5 :
-			self._log_manager.log("WARN", "No valid illustration library was found in the project settings, so the process is being halted.")
-			return
-
-		if os.path.isfile(self._outputFile) :
-			# If the book piclist exists we will not go through with the process
-			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted.")
-
-		elif tools.isPeripheralMatter(self._inputFile) :
-			# If the file belongs to the peripheral mater we will not go through with the process
-			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
-
+		# If there is no encoding chain a simple file copy will do
 		else :
-			# Otherwise we will create a new book piclist file
-			if not os.path.isfile(self._csvMasterFile) :
-				# If it doesn't exist that isn't necessarily a problem.
-				# First we'll go look for a source file and if we find it
-				# we'll copy it into the Illustrations folder and process
-				# it as needed. If we don't find one we'll just output
-				# a warning to the log and exit gracefully.
-
-				# Is there a source file of the same name in the Source folder?
-				if os.path.isfile(self._csvSourceFile) :
-					# Assumption: If encoding chain exists, we process
-					chain = self._settings['Encoding']['Processing']['encodingChain']
-					if chain != "" :
-						mod = __import__("transformCSV")
-						# We'll give the source, target, encoding chain and field to transform
-						res = mod.doIt(self._csvSourceFile, self._csvMasterFile, chain, 8)
-						if res != None :
-							self._log_manager.log("ERRR", res)
-							return
-						else :
-							self._log_manager.log("INFO", "The " + self._csvMasterFile + " has been copied from the Source folder with an encoding tranformation on the caption field.")
-
-					# If there is no encoding chain a simple file copy will do
-					else :
-						x = shutil.copy(self._csvSourceFile, self._csvMasterFile)
-						self._log_manager.log("INFO", "The " + self._csvMasterFile + " has been copied from the Source folder.")
+			x = shutil.copy(self._csvSourceFile, self._sourceIllustrationsCaptions)
+			self._log_manager.log("INFO", "The " + self._sourceIllustrationsCaptions + " has been copied from the Source folder.")
 
 
-			# If we didn't bail out right above, we'll go ahead and open the data file
-			# The assumption here is that the encoding of the pieces of the csv are
-			# what they need to be.
-			inFileData = filter(lambda l: l[1]==self._bookID,
-						csv.reader(open(self._csvMasterFile), dialect=csv.excel))
-			# Right here we will sort the list by BCV. This should prevent unsorted
-			# data from getting out into the piclist.
-			inFileData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
-			# Do not process unless we are in the right book and the
-			# illustration is tagged to be used (True or False)
-			for line in inFileData :
-				self.processIllustration(line[4])
+		# If we didn't bail out right above, we'll go ahead and open the data file
+		# The assumption here is that the encoding of the pieces of the csv are
+		# what they need to be.
+		inFileData = filter(lambda l: l[1]==self._bookID,
+					csv.reader(open(self._csvMasterFile), dialect=csv.excel))
+		# Right here we will sort the list by BCV. This should prevent unsorted
+		# data from getting out into the piclist.
+		inFileData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
+		# Do not process unless we are in the right book and the
+		# illustration is tagged to be used (True or False)
+		for line in inFileData :
+			self.processIllustration(line[4])
 
-			# Now we need output anything we might have collected. If nothing was
-			# found, just an empty file will be put out.
-			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
-			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
-			self._outFileObject.writelines(self.collectPicLine(*line) + '\n' for line in inFileData)
+		# Now we need output anything we might have collected. If nothing was
+		# found, just an empty file will be put out.
+		self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
+		self._log_manager.log("DBUG", "Created file: " + self._outputFile)
+		self._outFileObject.writelines(self.collectPicLine(*line) + '\n' for line in inFileData)
 
-			# Close the piclist file
-			self._outFileObject.close()
+		# Close the piclist file
+		self._outFileObject.close()
 
-			# Tell the world what we did
-			self._log_manager.log("INFO", "We processed " + str(len(inFileData)) + " illustration line(s) for: " + self._bookID)
+		# Tell the world what we did
+		self._log_manager.log("INFO", "We processed " + str(len(inFileData)) + " illustration line(s) for: " + self._bookID)
 
 
 
