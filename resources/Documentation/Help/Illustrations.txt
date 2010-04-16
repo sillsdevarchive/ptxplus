@@ -1,0 +1,35 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Fri, 16 Apr 2010 17:17:15 +0700
+Modification-Date: Fri, 16 Apr 2010 21:10:46 +0700
+
+====== Illustrations ======
+
+Inserting illustrations into books that are being typeset is currently being done automatically only. The process goes basically like this.
+
+First, there needs to be a valid illustrations library that contains a valid data file that enables automated parts of the process. The path to the library goes in the project.conf file. In the Config tab of ptxplus, go to Process -> Paths -> PATH_ILLUSTRATIONS_LIB and set the path to where the library is. For portability, use a relitive path like this:
+
+	[[../../_resources/lib_illustrations/Knowles-600]]
+
+Once the path is set the system will know that illustrations are to be used. The first time it is run it will create the captions.csv file in the Source folder. It will contain one illustration for an example. This file needs to be edited by the content editor (translator). It can be edited in a plain text editor or opened in a spreadsheet program like Calc. A separate row needs to be made for each illustration. The heading row should make it apparent what each field needs to be. Make sure the illustration ID is entered correctly or the process will fail.
+
+When the captions.csv file is completed, on the next run, it will be copied into the project Illustrations folder. If this is part of a multi-script project and any encoding transformations are needed, they will be made during the copy process. (in theory :-)
+
+ptxplus will process the captions.csv file and add information taken from the data file from the illustration library. It will create one [[.piclist]] file in the Texts folder for each book in the project that needs an illustration in it and is correctly entered in the captions.csv file. If there are no illustrations entered for a book, no [[.piclist]] file is created for that book. An example of a [[.piclist]] file for the book of Luke would be: luk.usfm.piclist
+
+For every book that has a [[.piclist]] file there is a line for each illustration. The format of that line is created specifically for use with the ptxplus macros. The illustration line syntax is as follows:
+
+	bid_c.v_|fileName|size (col/span)|location (b/t+l/r)|scale (1.0)|Copyright|Caption|ref
+
+The "|" character is used as a divider between fields. The definition of each field is as follows:
+
+* bid_c.v_ = Taken from the captions.csv file. The book ID combined with chapter and verse numbers. Chapter and verse must be separated with a period "." and there must be a space before and after.
+* fileName = The file name is taken from the illustrations data
+* size (col/span) = This is set in the project.conf file via the ptxplus interface. For two column format you use "col" to keep the illustration in the column. To span the columns use "span".
+* location (b/t +l/r) = The default is set with ptxplus too. This determines the position on the page. Using "t" or "b" determines the top or the bottom of the page. The "l" and "r" is for left and right column if a two column layout. This parameter is not necessary for single column layout.
+* scale (1.0) = Also set in ptxplus, this determines the size of the illustration. Whereas 1.0 is 100% and 0.5 would be 50% and so on.
+* Copyright = The copyright information is taken from the illustrations data.
+* Caption = The caption information is taken from captions.csv file.
+ref = This is generated from information in the captions.csv file. (I really don't know why it is included but that's what the specs call for.)
+
+Each of these settings can be edited once file has been generated. If any changes are made down-stream, no changes will be made in the .piclist file. This file must either be edited manually or deleted and then regenerated. The file can be removed through the ptxplus interface under the Process menu. You can remove the [[.piclist]] file for the current book or all the [[.piclist]] files for the entire project.

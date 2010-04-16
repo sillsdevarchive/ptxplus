@@ -40,108 +40,95 @@
 # Firstly, import all the standard Python modules we need for
 # this process
 
-import os, sys, codecs, csv, shutil
+import os, sys, codecs, csv, shutil, pdb
 from operator import itemgetter
 
 # Import supporting local classes
 from tools import *
 tools = Tools()
 
-class MakePiclistFile (object) :
 
-	# Intitate the whole class and do some checks to see if we can continue or not
+class MakePiclistFile (object) :
+	'''This class will create a .piclist file from a captions and data file for
+		a set of illustrations.'''
+
 	def __init__(self, log_manager) :
+		'''Intitate everything we need for this class here.'''
 
 		self._settings = log_manager._settings
 		self._log_manager = log_manager
 		self._log_manager._currentSubProcess = 'MakePiclistFile'
 		self._bookID = log_manager._currentTargetID
 
-		# If the file belongs to the peripheral mater we will not go through with the process
-		self._inputFile = log_manager._currentInput
-		if tools.isPeripheralMatter(self._inputFile) :
-			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
-			return
-
-		self._outputFile = self._inputFile + ".piclist"
-		# See if the output file already exists. if it doese, then we stop here
-		if os.path.isfile(self._outputFile) :
-			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted to prevent data loss.")
-			return
-
-		self._outFileObject = {}
-		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
-		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
-
-		# This is the project captions file that is created by this process
-		self._projectIllustrationsCaptions = self._processIllustrationsPath + "/captions.csv"
-
-		self._sourceIllustrationsCaptions = self._sourcePath + "/captions.csv"
-		# Check to see if the captions file exists. If it doesn't we're all done for now
-		if not os.path.isfile(self._sourceIllustrationsCaptions) :
-			self._log_manager.log("ERROR", "The illustration caption file (" + self._sourceIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
-			return
-
-		self._sourceIllustrationsLibPath = self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_LIB']
-		# Check to see if the captions file exists. If it doesn't we're all done for now
-		if not os.path.isdir(self._sourceIllustrationsLibPath) :
-			self._log_manager.log("ERROR", "The illustration library (" + self._sourceIllustrationsLibPath + ") is not where the project config file says it is. This process cannot work without it.")
-			return
-
-		(head, tail) = os.path.split(self._sourceIllustrationsLibPath)
-		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + tail + "_data.csv"
-		# Check to see if the data file exists. If it doesn't we're all done for now
-		if not os.path.isfile(self._sourceIllustrationsLibData) :
-			self._log_manager.log("ERROR", "The illustration data file (" + self._sourceIllustrationsLibData + ") is missing from the library. This process cannot work without it.")
-			return
-
-		# Next pull in some default sizing params if they exist, if not use the default settings.
+		# Pull in some default sizing params if they exist, if not use the default settings.
 		self._texsize = self._settings['General']['Resources']['Illustrations'].get('size','col')
 		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position','tl')
 		self._texscale = self._settings['General']['Resources']['Illustrations'].get('scale',1.0)
+		self._inputFile = log_manager._currentInput
+		self._outputFile = self._inputFile + ".piclist"
+		self._outFileObject = {}
+		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
+		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
+		self._sourceIllustrationsLibPath = self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_LIB']
+		(head, tail) = os.path.split(self._sourceIllustrationsLibPath)
+		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + tail + "_data.csv"
+		self._sourceIllustrationsCaptions = self._sourcePath + "/captions.csv"
+		self._projectIllustrationsCaptions = self._processIllustrationsPath + "/captions.csv"
+
+		# Pull in the library data file using the CSVtoDict class in tools
+		self._libData = CSVtoDict(self._sourceIllustrationsLibData)
 
 		self._errors = 0
 
 
-	def collectPicLine (self, use, bid, cn, vn, fid, ils, cr, cp, tr, altr) :
+	def collectPicLine (self, illID, bookID, chapNum, verseNum, eCap, vCap) :
 		'''Collect and format an illustration description line. The incoming
-			file will not have all the information we need so we'll make
-			some things up here and use them as defaults. The format goes
+			file will not have all the information we need so we'll get
+			some things from the illustration lib. The output format goes
 			like this:
-				bid c.v |fileName|span|b/t|Copyright|Caption|
+				bid_c.v_|fileName|size (col/span)|location (b/t+l/r)|scale (1.0)|Copyright|Caption|ref
 
 			Note the space after the v, that needs to be there or TeX
-			will choke. The caption field "cp" contains the English
-			version of the caption. Next to that goes the translation
-			field "tr" which holds the vernacular version of the
-			caption field.
+			will choke. In the incoming arguments, the caption field
+			"eCap" contains the English version of the caption. Next
+			to that goes the translation field "vCap" which holds the
+			vernacular version of the caption field.'''
 
-			The use field allows us to regulate the use of the whole
-			row (record). That gets translated to the switch field.'''
+		# Build the cv ref
+		ref = chapNum + "." + verseNum
 
-		# Assuming png we'll add that here
-		fileName = fid + ".png"
-		# Is this an illustration that we'll be using?
-		switch = ""
-		if use.upper() != "TRUE" :
-			switch = "%"
+		# Get the file name from the illustration data
+		def_fileName = "FILE NAME MISSING!"
+		fileName = self._libData[illID].get('FileName', def_fileName)
 
-		caption = cp
-		if tr != "" :
-			caption = tr
+		# Get the copyright information from the illustration data
+		def_copyright = "COPYRIGHT INFORMATION IS MISSING!"
+		copyright = self._libData[illID].get('Copyright', def_copyright)
 
-		line = switch + bid + " " + cn + "." + vn + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + str(self._texscale) + "|" + cr + "|" + caption + "|"
+		# Build the caption
+		caption = eCap
+		if vCap != "" :
+			caption = vCap
+
+		line = bookID + " " + ref + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + \
+				str(self._texscale) + "|" + copyright + "|" + caption + "|" + ref
 		self._log_manager.log("DBUG", "Collected: " + line)
+
+		# We're done return the results
 		return line
 
-	def processIllustration (self, fileID) :
+
+	def processIllustration (self, illID) :
 		'''This is just a generalized illustration processing function.
-			More will need to be done as this matures. The first assumption
-			is that all the pictures we work with are in PNG format'''
+			More will need to be done as this matures.'''
+
+		# Get the file name from the illustration data
+		def_fileName = "FILE NAME MISSING!"
+		fileName = self._libData[illID].get('FileName', def_fileName)
 
 		# Build the file names
-		source = self._sourceIllustrationsLibPath + "/" + fileID + ".png"
-		target = self._processIllustrationsPath + "/" + fileID + ".png"
+		source = self._sourceIllustrationsLibPath + "/" + fileName
+		target = self._processIllustrationsPath + "/" + fileName
 
 		# Sanity test
 		if not os.path.isfile(source) :
@@ -160,6 +147,29 @@ class MakePiclistFile (object) :
 			be matched from that file with the lib data file and
 			will create a piclist file for the book that is
 			currently being processed.'''
+
+		# Before we start we need to be sure our init succeeded so
+		# we will run some tests here.
+
+		# See if the output file already exists. if it doese, then we stop here
+		if os.path.isfile(self._outputFile) :
+			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted to prevent data loss.")
+			return
+
+		# Check to see if the captions file exists. If it doesn't we're all done for now
+		if not os.path.isfile(self._sourceIllustrationsCaptions) :
+			self._log_manager.log("ERRR", "The illustration caption file (" + self._sourceIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
+			return
+
+		# Check to see if the path to the illustrations lib is good. If it doesn't we're done
+		if not os.path.isdir(self._sourceIllustrationsLibPath) :
+			self._log_manager.log("ERRR", "The path to the illustrations library (" + self._sourceIllustrationsLibPath + ") does not seem to be correct. This process cannot work without it.")
+			return
+
+		# Check to see if the data file exists. If it doesn't we're done because we need that too
+		if not os.path.isfile(self._sourceIllustrationsLibData) :
+			self._log_manager.log("ERRR", "The illustration data file (" + self._sourceIllustrationsLibData + ") seems to be missing from the library. This process cannot work without it.")
+			return
 
 		# Assumption: If a custom encoding process exists, we process
 		# the captions.csv file in the source folder and deposit the
@@ -180,12 +190,12 @@ class MakePiclistFile (object) :
 				self._log_manager.log("ERRR", res)
 				return
 			else :
-				self._log_manager.log("INFO", "The " + self._sourceIllustrationsCaptions + " has been copied from the Source folder with an encoding tranformation on the caption field.")
+				self._log_manager.log("INFO", "The " + self._sourceIllustrationsCaptions + " has been copied to the project Illustrations folder with an encoding tranformation on the caption field.")
 
 		# If there is no encoding chain a simple file copy will do
 		else :
 			x = shutil.copy(self._sourceIllustrationsCaptions, self._projectIllustrationsCaptions)
-			self._log_manager.log("INFO", "The " + self._sourceIllustrationsCaptions + " has been copied from the Source folder.")
+			self._log_manager.log("INFO", "The " + self._sourceIllustrationsCaptions + " has been copied to the project Illustrations folder.")
 
 
 		# If we didn't bail out right above, we'll go ahead and open the data file
@@ -196,22 +206,26 @@ class MakePiclistFile (object) :
 		# Right here we will sort the list by BCV. This should prevent unsorted
 		# data from getting out into the piclist.
 		inFileData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
-		# Do not process unless we are in the right book and the
-		# illustration is tagged to be used (True or False)
+		# Do not process unless we are in the right book and
+		# keep track of the hits for this book
+		hits = 0
 		for line in inFileData :
-			self.processIllustration(line[0])
+			if self._bookID.upper() == line[1].upper() :
+				hits +=1
+				self.processIllustration(line[0])
 
 		# Now we need output anything we might have collected. If nothing was
 		# found, just an empty file will be put out.
-		self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
-		self._log_manager.log("DBUG", "Created file: " + self._outputFile)
-		self._outFileObject.writelines(self.collectPicLine(*line) + '\n' for line in inFileData)
+		if hits > 0 :
+			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
+			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
+			self._outFileObject.writelines(self.collectPicLine(*line) + '\n' for line in inFileData)
 
-		# Close the piclist file
-		self._outFileObject.close()
+			# Close the piclist file
+			self._outFileObject.close()
 
 		# Tell the world what we did
-		self._log_manager.log("INFO", "We processed " + str(len(inFileData)) + " illustration line(s) for: " + self._bookID)
+		self._log_manager.log("INFO", "We processed " + str(hits) + " illustration line(s) for: " + self._bookID)
 
 
 

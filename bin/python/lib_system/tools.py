@@ -20,6 +20,7 @@
 # 20081023 - djd - Refactor project.conf structure changes
 # 20081028 - djd - Moved localiseFontsConf to font_manager.py
 # 20091009 - te - Added "No Context" return to getSliceOfText()
+# 20100416 - djd - Added CSVtoDict class written by te.
 
 
 #############################################################
@@ -27,13 +28,14 @@
 #############################################################
 # Firstly, import all the modules we need for this process
 
-import re, os, shutil, codecs
+import re, os, shutil, codecs, csv
 from configobj import ConfigObj
 from datetime import *
 
-
 class Tools (object) :
-
+	'''This class contains a bunch of misc. functions that work with
+		ptxplus. If something can be used cross-scripts, it ends
+		up here.'''
 
 	def makeNecessaryFiles (self) :
 		'''Create all the necessary files and folders for a project.
@@ -348,16 +350,19 @@ class Tools (object) :
 
 		return ok
 
-	def isPeripheralMatter (self, fileName) :
-		'''Check to see if this file (from wherever) exists in the Peripheral folder.
-			return True if it does.'''
+############ This is no longer needed but it might throw errors in other places. We'll keep it here until everything is cleanded up.
 
-		(head, tail) = os.path.split(fileName)
-		path = os.getcwd() + "/Peripheral"
-		target = path + "/" + tail
-		if os.path.isfile(target) :
-			return True
+#	def isPeripheralMatter (self, fileName) :
+#		'''Check to see if this file (from wherever) exists in the Peripheral folder.
+#			return True if it does.'''
+#
+#		(head, tail) = os.path.split(fileName)
+#		path = os.getcwd() + "/Peripheral"
+#		target = path + "/" + tail
+#		if os.path.isfile(target) :
+#			return True
 
+###################################################################################################################
 
 	def userConfirm (self, msg) :
 		'''Ask the user to confirm something.'''
@@ -621,3 +626,15 @@ class Tools (object) :
 			return "NO CONTEXT"
 		else :
 			return text[left:right]
+
+class CSVtoDict(dict):
+	'''This class provides a service which will convert a proper CSV file
+		that uses the excel dialect and has a header row, into a
+		dictionary object. The default record is ID but it can be
+		changed to whatever is needed by passing a different value
+		for recordkey.'''
+
+	def __init__(self, csv_file_path, recordkey='ID'):
+		csvs = csv.DictReader(open(csv_file_path), dialect=csv.excel)
+		records = list((row.pop(recordkey),row) for row in csvs)
+		return super(CSVtoDict, self).__init__(records)

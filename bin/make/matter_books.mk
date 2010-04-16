@@ -213,6 +213,7 @@ ifneq ($(PATH_ILLUSTRATIONS_LIB),)
 	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/captions.csv $@
 endif
 
+
 # Start with the OT but we don't want to do anything if there
 # are no components to process
 ifneq ($(MATTER_OT),)
