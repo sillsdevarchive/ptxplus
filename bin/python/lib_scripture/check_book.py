@@ -39,9 +39,12 @@ class CheckBook (object) :
 	def main (self, log_manager) :
 
 		# Filter out any peripheral files now
-		if tools.isPeripheralMatter(log_manager._currentInput) :
-
-			return
+		# Note that the isPeripheralMatter() function is now
+		# disabled. Do we really need to do this check anyway?
+		# Let's go away and think about it
+#		if tools.isPeripheralMatter(log_manager._currentInput) :
+#
+#			return
 
 
 		# Get our book object

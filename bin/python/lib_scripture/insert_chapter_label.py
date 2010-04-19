@@ -46,9 +46,12 @@ class InsertChapterLabel (object) :
 		bookFile = log_manager._currentOutput
 
 		# Filter out any peripheral files now
-		if tools.isPeripheralMatter(log_manager._currentInput) :
-
-			return
+		# Note that the isPeripheralMatter() function is now
+		# disabled. Do we really need to do this check anyway?
+		# Let's go away and think about it
+#		if tools.isPeripheralMatter(log_manager._currentInput) :
+#
+#			return
 
 		# Get our book object
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))

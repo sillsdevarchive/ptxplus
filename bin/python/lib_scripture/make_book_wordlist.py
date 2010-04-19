@@ -67,8 +67,11 @@ class MakeBookWordlist (object) :
 		# when it is called to work on peripheral matter. At this time we
 		# don't want to go there. So, we will filter out peripheral material
 		# here by bailing out at this point.
-		if tools.isPeripheralMatter(inputFile) :
-			return
+		# Note that the isPeripheralMatter() function is now
+		# disabled. Do we really need to do this check anyway?
+		# Let's go away and think about it
+#		if tools.isPeripheralMatter(inputFile) :
+#			return
 
 		# Make our Report folder if it isn't there
 		if not os.path.isdir(reportPath) :
