@@ -115,13 +115,16 @@ class MakeParaAdjustFile (object) :
 
 			return
 
-		if tools.isPeripheralMatter(self._inputFile) :
-			# If the parent file belongs to the peripheral mater we will
-			# not go through with the process
-
-			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
-
-			return
+		# Note that the isPeripheralMatter() function is now
+		# disabled. Do we really need to do this check anyway?
+		# Let's go away and think about it
+#		if tools.isPeripheralMatter(self._inputFile) :
+#			# If the parent file belongs to the peripheral mater we will
+#			# not go through with the process
+#
+#			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
+#
+#			return
 
 		# Otherwise we'll just continue on by opening up a new .adj file
 		outputObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
