@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Fri, 11 Dec 2009 16:18:39 +0700
-Modification-Date: Fri, 09 Apr 2010 19:50:57 +0700
+Modification-Date: Fri, 23 Apr 2010 11:18:18 +0700
 
 ====== Styles ======
 
@@ -23,3 +23,10 @@ Remember that this will only work with a font that has this feature added to the
 It should be possible to get the 'Selah' of Psalms, marked up as \qs selah\qs* to become right justified with the following hook. The assumption is the \ps always occurs at the end of a paragraph (marked with \q or similar). This hook for the \qs style should work:
 
 	\sethook{before}{qs}{\hfill\null\nobreak\hfill}
+
+===== Overriding Typeface Styles =====
+If you are using custom style files that are dependent on a parent style file, you might find it necessary to override the typeface style. For example, if you had the typeface set to bold but you wanted to override with italic, you might find that in the end you will end up with bold-italic. To overcome this, you can simply slip a "Regular" in the override style and then follow it with bold. The override would look something like this:
+
+	\Marker s2
+	\Regular
+	\Bold

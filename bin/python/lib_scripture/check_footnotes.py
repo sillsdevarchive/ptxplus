@@ -69,9 +69,12 @@ class CheckFootnotes (object) :
 		footnoteLines = ""
 
 		# Filter out any peripheral files now
-		if tools.isPeripheralMatter(self._inputFile) :
-
-			return
+		# Note that the isPeripheralMatter() function is now
+		# disabled. Do we really need to do this check anyway?
+		# Let's go away and think about it
+#		if tools.isPeripheralMatter(self._inputFile) :
+#
+#			return
 
 		# Get our book object
 		bookObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')

@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Unknown
-Modification-Date: Fri, 16 Oct 2009 15:08:47 +0700
+Modification-Date: Fri, 23 Apr 2010 13:07:42 +0700
 
 ====== Hyphenation ======
 
@@ -37,3 +37,28 @@ It should be noted that the order of the vowels is important. If the [aeiou] is 
 Write more here...
 
 *****Outline the basic procedure with the commands needed to make it happen. Remember that the project needs to be reset and the source must be in its final form before an accurate word list can be generated.
+
+==== \lccode ====
+At this time, not everything is fully understood about hyphenation in TeX. What we do know now is that when it works, it looks great, when it doesn't work, it looks ugly. There's much to learn about this from the [[TeX]] book in Appendix H (pg. 448-455) and other places in the book.
+
+As we are not yet running under a rules-based system, which would be nice to do at some point, we use the exceptions list to drive our hyphenation process in TeX. This works, but is not optimal. One thing that is necessary in using the exceptions list is to set the lccode. When using some Unicode fonts it is sometimes necessary to set the \lccode for those characters which would be normally set to '0'. (See the TeX book pg. 41 & 345 for more details.)
+
+Sometimes you have a large range of codes to cover so for this reason we put the list in a file in your Hyphenation directory called "lccodelist.txt". The make_tex_hyphenation.py process will find it and insert them into your project hyphenation next time it builds it. The codes should be entered into that file like this:
+
+	\lccode"1000="1000
+	\lccode"1001="1001
+	...
+
+If you have a whole bunch of characters to cover you may want to automate the process with this nifty line of Perl code by Martin Hosken:
+
+	perl -e 'for (0x1000..0x109F) { printf "\\lccode \"%X = \"%X\n", $_, $_}' >lccodelist.txt
+
+Adjust for your situation.
+
+The above code will generate a blind list of \lccodes but you may want something more precise. Though not tested, this Perl code, also by Martin should give you an exact list of \ccodes for your project:
+
+	perl -CSD -ne 'foreach(split("")){$c{$_}++}; END {print join("\n", map {sprintf("\\lcode \"%04X = \"%04X", ord($_), ord($_))} sort keys %c)}' wordlist.txt > lccodelist.txt
+
+Again, adjust for your project.
+
+**One last note**, it is important and very necessary that you define non-word-forming characters in the lccode list. They need to be set to "0". If you do not, [[TeX]] will look for words that contain them and when it doesn't find one it will not bother to hyphenate the word, even though it is in the exceptions list. When you start a new project an lccodelist.txt file should have been copied into the Hyphenation folder. It should contain definitions for all the non-word-forming characters such as punctuation. However, you may need to add to it additional characters found in your orthography that are used for punctuation and such.
