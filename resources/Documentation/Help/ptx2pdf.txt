@@ -1,11 +1,16 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Thu, 11 Mar 2010 14:37:10 +0700
-Modification-Date: Thu, 11 Mar 2010 14:55:14 +0700
+Modification-Date: Tue, 27 Apr 2010 07:17:58 +0700
 
 ====== Ptx2pdf ======
 
 This page contains information on finer points of the ptx2pdf macro package
+
+If what you need is not on this page you might want to check out the iCap ptx2pdf forum page. It has lots of useful information on using the ptx2pdf macros. However, remember that some features of ptxplus will not be covered there as they are not part of the original ptx2pdf macro package. The iCap ptx2pdf forum can be found here:
+
+http://wiki.ubs-icap.org/Resources/Documentation/ptx2pdf/
+
 
 ==== Hanging Verse Numbers ====
 For poetry sometimes the client will want the verse number flushed left against the margin. These are some clues as to what you might do to make this happen:
