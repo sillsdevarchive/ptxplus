@@ -1,9 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Wed, 28 Apr 2010 16:13:37 +0700
+
 ====== Scripture Processing ======
 
 All you need to know about processing Scripture files in ptxplus.
 
 ===== Preprocess Checking =====
-
 Before text can be processed by the system it needs to go through a number of pre-process checks. The checks in ptxplus are written in Python. Other scripting languages can be used but they will have to wrapped in a Python script to be available to the system.
 
 There is one kind of master check called check_book.py which connects to a number of checking modules. These are considered to be fundamental checks that every SFM file should undergo. Right now it handles basic SFM checking, punctuation checks and quote checks. More may be added in the future. If you find a certain check that you consider to be fundamental is not included, please let us know and we'll add it. Likewise, if you see a particular problem being missed by the checks we want to know about that too.
@@ -23,7 +27,6 @@ my_own_check    =    'false'
 Once the project.conf file has been edited ptxplus will be ready to execute the module you have written that is located in the lib_scripture folder. To learn how to write custom checks it would be a good idea to look at pre-existing checks and see how they use the infrastructure that is in place in the system for reporting and file management. It can save you lots of time.
 
 ===== Copy Into System =====
-
 In this section we control the copying of the source text into the system after it has been checked. Normally the default on this setting, copy_from_source, is true but if for some reason you need to prevent it from happening you can change it to false. BTW, copy_from_source is also the Python module name. The default setting for the copyCommand is "cp [inFile] [outFile]". This is just a simple system copy command.
 
 However, you can do more at this point in the process than copy files, you can also modify this command to do things like an encoding conversion. In stead of using the default setting like above you could do something like this:
@@ -32,9 +35,25 @@ However, you can do more at this point in the process than copy files, you can a
 This would perform an encoding conversion and deposit the results in the Texts folder ready for further processing. Just like the copy command only the text encoding has been changed along the way. Any number of changes like this could be done at this point.
 
 ===== Text Processes =====
-
 Text processes are fun! Here you get to manipulate the text to make things turn out the way you want. The reason you can do this is because it happens to the text that has been copied into the system, not the source text. If you mess up, it's no problem because no harm has come to the source text. We never want to touch the source text.
 
 At some point you may need to write your own text process to accomplish something that others my not have encountered. Hooking custom text processes into the system works just like text pre-processes. The only difference is that you edit the project.conf file in the [TextProcesses] section. Otherwise it's the same. Please see the notes above on that.
 
 Also, like with writing any process in ptxplus, it is good to know what's available to you in the libraries and how to use the logging and file handling services. Again, the best way to learn is to reverse-engineer existing scripts.
+
+==== Command-line Code ====
+Some times, if it is only a one-off procedure, it might be just as well to do it from the command-line. Here are some examples of text checking and manipulation. However, be sure you have a backup of your data somewhere handy before you start because using wrong syntax on one of these procedures will destroy your data. Also be sure to thoroughly test after doing any of these global kind of data transformations.
+
+=== Looking For Things ===
+To simply find something in a set of data files this is handy:
+
+	grep '\\[^[:space:]]*\\' *
+
+This will report every line from every file that contains a \ followed by some text, but not a space, then a trailing \ and highlight them in read. This was used to find an instance where two closing markers were found together with no space in between them, such as: \ft*\f
+
+=== Changing Things ===
+To do a mass string conversion (be very careful) Perl can be your friend. Use:
+
+	perl -i -pe 's/(\\\S+)\\/$1 \\/g' *
+
+This will (should) insert a space between two closing markers. Again, be careful as this could mess up other parts of your text that you do not expect. Be sure to test afterwards.

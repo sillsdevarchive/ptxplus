@@ -1,22 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.26
+Creation-Date: Unknown
+Modification-Date: Wed, 28 Apr 2010 15:53:17 +0700
+
 ====== Procedure Guidelines ======
 
 This section (page) attempts to capture the entire process of creating a Bible (in the physical sense). Beginning with the completion of translation checking and continuing through project archival, this section will outline all the steps necessary in the context of ptxplus to put a PDF version of the publication  into the hands of the printers.
 
 ===== Project Setup =====
-
 Basic procedure for setting up a publishing project.
-=====
 
-Translation Approval =====
-
+==== Translation Approval ====
 Outline what a project that is ready for publishing looks like.
-=====
-Mechanical Checks =====
 
-Go over the mechanical checks that most
-=====
-Format Development =====
+==== Mechanical Checks ====
+Go over the mechanical checks that are most common.
 
+==== Format Development ====
 The necessary steps to develop a suitable format for a Scripture publication aimed at a specific audience.
 
 Focus should be given to:
@@ -30,10 +30,9 @@ Focus should be given to:
 7) Other?
 
 Testing...
-=====
 
-Compiling Peripheral Matter =====
 
+==== Compiling Peripheral Matter ====
 How to pull together the necessary peripheral matter of a Scripture publication.
 
 * Copyright page
@@ -41,9 +40,9 @@ How to pull together the necessary peripheral matter of a Scripture publication.
 * Maps
 * Glossary
 * Index
-=====
-Compositing =====
 
+
+==== Compositing ====
 Compositing is the process putting the components of a publication into their final resting place. This process, performed by the compositor (also known as the typesetter), goes right down to the character level. When complete, the translator, referred to here as the client (which could include a designee), agrees that the publication is ready for print.
 
 ==== Freezing the Text ====
@@ -70,7 +69,6 @@ If there are any problems with the text at this point the compositor will be req
 
 ==== Publishing/Printing ====
 When the client is satisfied with contents and quality of the final form of the publication it will be turned over to the publishing entity for processing it in that stage of the process.
-=====
-Project Archive =====
 
+==== Project Archive ====
 The publishing specialist is responsible for this final phase of the publishing process...
