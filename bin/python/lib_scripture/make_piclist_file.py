@@ -68,6 +68,10 @@ class MakePiclistFile (object) :
 		self._outputFile = self._inputFile + ".piclist"
 		self._outFileObject = {}
 		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
+
+# Need to work here and figure out what happens in this script and the makefile
+
+		self._sharedIllustrationsPath = self._sourcePath + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_SHARED']
 		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
 		self._sourceIllustrationsLibPath = self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_LIB']
 		(head, tail) = os.path.split(self._sourceIllustrationsLibPath)
@@ -77,6 +81,7 @@ class MakePiclistFile (object) :
 
 		# Pull in the library data file using the CSVtoDict class in tools
 		self._libData = CSVtoDict(self._sourceIllustrationsLibData)
+#		self._libData = CSVtoDict('/home/dennis/Publishing/_resources/lib_illustrations/Knowles-600/Knowles-data.csv')
 
 		self._errors = 0
 
@@ -118,9 +123,17 @@ class MakePiclistFile (object) :
 		return line
 
 
-	def processIllustration (self, illID) :
+	def processIllustrationFile (self, illID) :
 		'''This is just a generalized illustration processing function.
-			More will need to be done as this matures.'''
+			The file name is pulled from the libData dictionary.
+			If that fails, this all falls apart and an error is given.
+			It will handle copying and linking processes for a
+			single illustration file. The source comes from a
+			resource lib that is present in the system. The target
+			file is in the source folder so it can be shared across
+			projects. The link file is located in the Illustrations
+			folder and points back to the shared folder in the
+			source area.'''
 
 		# Get the file name from the illustration data
 		def_fileName = "FILE NAME MISSING!"
@@ -128,7 +141,8 @@ class MakePiclistFile (object) :
 
 		# Build the file names
 		source = self._sourceIllustrationsLibPath + "/" + fileName
-		target = self._processIllustrationsPath + "/" + fileName
+		target = self._sharedIllustrationsPath + "/" + fileName
+		link = self._processIllustrationsPath + "/" + fileName
 
 		# Sanity test
 		if not os.path.isfile(source) :
@@ -139,6 +153,12 @@ class MakePiclistFile (object) :
 			# Copy the picture file from the source to the target location
 			shutil.copy(source, target)
 			self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
+			# Use os.symlink(source, link_name) to make a symbolic link
+			# from the target to the Illstrations folder we will do
+			# that every time an illustration is copied into the
+			# shared folder.
+			if not os.symlink(target, link) :
+				self._log_manager.log("ERRR", "The file: " + target + " could not be linked to: " + link)
 
 
 	def main(self):
@@ -181,7 +201,8 @@ class MakePiclistFile (object) :
 		# conversion aspect of this has not been tested and probably
 		# doesn't work at all because these encoding transformation
 		# processes are complex, more work is needed in this area
-		chain = self._settings['Encoding']['Processing']['customEncodingProcess']
+#		chain = self._settings['Encoding']['Processing']['customEncodingProcess']
+		chain = ""
 		if chain != "" :
 			mod = __import__("transformCSV")
 			# We'll give the source, target, encoding chain and field to transform
@@ -212,7 +233,8 @@ class MakePiclistFile (object) :
 		for line in inFileData :
 			if self._bookID.upper() == line[1].upper() :
 				hits +=1
-				self.processIllustration(line[0])
+				# If this next process fails, should we stop here? Hmmm...
+				self.processIllustrationFile(line[0])
 
 		# Now we need output anything we might have collected. If nothing was
 		# found, just an empty file will be put out.

@@ -33,6 +33,7 @@
 #		because some rules in this file were dependent
 #		on rules that had not been expanded yet.
 # 20091223 - djd - Removed references to MAPS folder
+# 20100507 - djd - Moved out rules for illustration creation
 
 
 ##############################################################
@@ -57,14 +58,6 @@ $(PATH_PROCESS)/.stamp :
 update :
 	$(PY_RUN_SYSTEM_PROCESS) update_project_settings
 
-# If, for some odd reason the Illustrations folder is not in
-# the right place we'll put one where it is supposed to be found.
-$(PATH_ILLUSTRATIONS) :
-	mkdir -p $(PATH_ILLUSTRATIONS)
-
-# Make an illustrations.csv file if needed.
-$(ADMIN_ILLUSTRATIONS_CSV) : $(PATH_ILLUSTRATIONS)
-	cp $(ADMIN_ILLUSTRATIONS_CSV_SOURCE) $(ADMIN_ILLUSTRATIONS_CSV)
 
 # Make a project.sty file (when needed)
 make-styles :
