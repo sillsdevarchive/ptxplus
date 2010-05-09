@@ -70,14 +70,14 @@ class MakePiclistFile (object) :
 		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
 
 # Need to work here and figure out what happens in this script and the makefile
-
+		self._captionsFileName = self._settings['Process']['Paths']['PROJECT_CAPTIONS']
 		self._sharedIllustrationsPath = self._sourcePath + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_SHARED']
-		self._processIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
+		self._projectIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
 		self._sourceIllustrationsLibPath = self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_LIB']
 		(head, tail) = os.path.split(self._sourceIllustrationsLibPath)
 		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + tail + "_data.csv"
-		self._sourceIllustrationsCaptions = self._sourcePath + "/captions.csv"
-		self._projectIllustrationsCaptions = self._processIllustrationsPath + "/captions.csv"
+		self._sharedIllustrationsCaptions = self._sharedIllustrationsPath + "/captions.csv"
+		self._projectIllustrationsCaptions = self._projectIllustrationsPath + "/captions.csv"
 
 		# Pull in the library data file using the CSVtoDict class in tools
 		self._libData = CSVtoDict(self._sourceIllustrationsLibData)
@@ -177,8 +177,8 @@ class MakePiclistFile (object) :
 			return
 
 		# Check to see if the captions file exists. If it doesn't we're all done for now
-		if not os.path.isfile(self._sourceIllustrationsCaptions) :
-			self._log_manager.log("ERRR", "The illustration caption file (" + self._sourceIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
+		if not os.path.isfile(self._sharedIllustrationsCaptions) :
+			self._log_manager.log("ERRR", "The illustration caption file (" + self._sharedIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
 			return
 
 		# Check to see if the path to the illustrations lib is good. If it doesn't we're done
@@ -206,17 +206,17 @@ class MakePiclistFile (object) :
 		if chain != "" :
 			mod = __import__("transformCSV")
 			# We'll give the source, target, encoding chain and field to transform
-			res = mod.doIt(self._projectIllustrationsCaptions, self._sourceIllustrationsCaptions, chain, 8)
+			res = mod.doIt(self._projectIllustrationsCaptions, self._sharedIllustrationsCaptions, chain, 8)
 			if res != None :
 				self._log_manager.log("ERRR", res)
 				return
 			else :
-				self._log_manager.log("INFO", "The " + self._sourceIllustrationsCaptions + " has been copied to the project Illustrations folder with an encoding tranformation on the caption field.")
+				self._log_manager.log("INFO", "The " + self._sharedIllustrationsCaptions + " has been copied to the project Illustrations folder with an encoding tranformation on the caption field.")
 
 		# If there is no encoding chain a simple file copy will do
 		else :
-			x = shutil.copy(self._sourceIllustrationsCaptions, self._projectIllustrationsCaptions)
-			self._log_manager.log("INFO", "The " + self._sourceIllustrationsCaptions + " has been copied to the project Illustrations folder.")
+			x = shutil.copy(self._sharedIllustrationsCaptions, self._projectIllustrationsCaptions)
+			self._log_manager.log("INFO", "The " + self._sharedIllustrationsCaptions + " has been copied to the project Illustrations folder.")
 
 
 		# If we didn't bail out right above, we'll go ahead and open the data file
