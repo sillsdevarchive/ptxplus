@@ -32,6 +32,9 @@
 # 20100414 - djd - Changed the way process works by adding a
 #		lib data file and limiting the project file to
 #		only containing caption and location info.
+# 20100512 - djd - Changes to the caption copy process and
+#		illustration handling. There is now linking
+#		from a shared folder to the project.
 
 
 #############################################################
@@ -64,16 +67,17 @@ class MakePiclistFile (object) :
 		self._texsize = self._settings['General']['Resources']['Illustrations'].get('size','col')
 		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position','tl')
 		self._texscale = self._settings['General']['Resources']['Illustrations'].get('scale',1.0)
+		self._chpVerSep = self._settings['General']['Resources']['Illustrations'].get('chpVerSep',':')
+		self._captionProcessing = self._settings['General']['Resources']['Illustrations'].get('captionProcessing','')
 		self._inputFile = log_manager._currentInput
 		self._outputFile = self._inputFile + ".piclist"
 		self._outFileObject = {}
 		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
 
-# Need to work here and figure out what happens in this script and the makefile
 		self._captionsFileName = self._settings['Process']['Paths']['PROJECT_CAPTIONS']
-		self._sharedIllustrationsPath = self._sourcePath + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_SHARED']
+		self._sharedIllustrationsPath = os.path.abspath(self._sourcePath + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_SHARED'])
 		self._projectIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
-		self._sourceIllustrationsLibPath = self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_LIB']
+		self._sourceIllustrationsLibPath = os.path.abspath(self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_LIB'])
 		(head, tail) = os.path.split(self._sourceIllustrationsLibPath)
 		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + tail + "_data.csv"
 		self._sharedIllustrationsCaptions = self._sharedIllustrationsPath + "/captions.csv"
@@ -81,7 +85,6 @@ class MakePiclistFile (object) :
 
 		# Pull in the library data file using the CSVtoDict class in tools
 		self._libData = CSVtoDict(self._sourceIllustrationsLibData)
-#		self._libData = CSVtoDict('/home/dennis/Publishing/_resources/lib_illustrations/Knowles-600/Knowles-data.csv')
 
 		self._errors = 0
 
@@ -99,8 +102,11 @@ class MakePiclistFile (object) :
 			to that goes the translation field "vCap" which holds the
 			vernacular version of the caption field.'''
 
+		# Build the cv location ref (it must be in this format to work)
+		loc = chapNum + "." + verseNum
+
 		# Build the cv ref
-		ref = chapNum + "." + verseNum
+		ref = chapNum + self._chpVerSep + verseNum
 
 		# Get the file name from the illustration data
 		def_fileName = "FILE NAME MISSING!"
@@ -115,7 +121,7 @@ class MakePiclistFile (object) :
 		if vCap != "" :
 			caption = vCap
 
-		line = bookID + " " + ref + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + \
+		line = bookID + " " + loc + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + \
 				str(self._texscale) + "|" + copyright + "|" + caption + "|" + ref
 		self._log_manager.log("DBUG", "Collected: " + line)
 
@@ -139,25 +145,33 @@ class MakePiclistFile (object) :
 		def_fileName = "FILE NAME MISSING!"
 		fileName = self._libData[illID].get('FileName', def_fileName)
 
-		# Build the file names
+		# Build the file names, they should be all absolute paths
 		source = self._sourceIllustrationsLibPath + "/" + fileName
 		target = self._sharedIllustrationsPath + "/" + fileName
-		link = self._processIllustrationsPath + "/" + fileName
+		link = self._projectIllustrationsPath + "/" + fileName
 
-		# Sanity test
+		# Sanity test, we want to throw an error if the source
+		# file isn't there
 		if not os.path.isfile(source) :
 			self._log_manager.log("ERRR", "The file: " + source + " was not found.")
-		# Check to see if the file is there or not. We don't want to copy
-		# one in if one exists already.
+
+		# Copy the picture file from the source to the target location
+		# if it doesn't exist there already
 		if not os.path.isfile(target) :
-			# Copy the picture file from the source to the target location
-			shutil.copy(source, target)
-			self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
-			# Use os.symlink(source, link_name) to make a symbolic link
-			# from the target to the Illstrations folder we will do
-			# that every time an illustration is copied into the
-			# shared folder.
-			if not os.symlink(target, link) :
+			if shutil.copy(source, target) :
+				self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
+			else :
+				self._log_manager.log("ERRR", "Failed to copy from: " + source + " ---To:--> " + target)
+
+		# We don't want to store illustraton files in the project
+		# so we will use os.symlink(source, link_name) to make a
+		# symbolic link from the target to the Illstrations folder
+		# We will check to see if this needs to be done every time
+		# this function is called
+		if not os.path.exists(link) :
+			if os.symlink(target, link) :
+				self._log_manager.log("DBUG", "Linked: " + target + " ---To:--> to: " + link)
+			else :
 				self._log_manager.log("ERRR", "The file: " + target + " could not be linked to: " + link)
 
 
@@ -171,12 +185,13 @@ class MakePiclistFile (object) :
 		# Before we start we need to be sure our init succeeded so
 		# we will run some tests here.
 
-		# See if the output file already exists. if it doese, then we stop here
+		# See if the output file already exists. if it does, then we stop here
 		if os.path.isfile(self._outputFile) :
 			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted to prevent data loss.")
 			return
 
-		# Check to see if the captions file exists. If it doesn't we're all done for now
+		# Check to see if the captions file exists in the share folder
+		# if it doesn't we're all done for now
 		if not os.path.isfile(self._sharedIllustrationsCaptions) :
 			self._log_manager.log("ERRR", "The illustration caption file (" + self._sharedIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
 			return
@@ -191,33 +206,19 @@ class MakePiclistFile (object) :
 			self._log_manager.log("ERRR", "The illustration data file (" + self._sourceIllustrationsLibData + ") seems to be missing from the library. This process cannot work without it.")
 			return
 
-		# Assumption: If a custom encoding process exists, we process
-		# the captions.csv file in the source folder and deposit the
-		# results in the Illustrations folder in the project. If an
-		# encoding process is not required, then we will just copy
-		# the captions.csv file directly, trusting that it is ready
-		# to be used.
-		# However, it should be noted that at this time the encoding
-		# conversion aspect of this has not been tested and probably
-		# doesn't work at all because these encoding transformation
-		# processes are complex, more work is needed in this area
-#		chain = self._settings['Encoding']['Processing']['customEncodingProcess']
-		chain = ""
-		if chain != "" :
-			mod = __import__("transformCSV")
-			# We'll give the source, target, encoding chain and field to transform
-			res = mod.doIt(self._projectIllustrationsCaptions, self._sharedIllustrationsCaptions, chain, 8)
-			if res != None :
-				self._log_manager.log("ERRR", res)
-				return
+		# Project captions file will be copied into the project here rather
+		# than with Makefile. This is because encoding transformations may
+		# be needed.
+		if not os.path.exists(self._projectIllustrationsCaptions) :
+			# This is compleatly untested at this point. I am just
+			# going to put a raw system call here and hope that
+			# whatever gets passed to it works. We'll see how it
+			# goes and I'm sure we'll be revisiting this later.
+			if self._captionProcessing != "" :
+				os.system(self._captionProcessing)
 			else :
-				self._log_manager.log("INFO", "The " + self._sharedIllustrationsCaptions + " has been copied to the project Illustrations folder with an encoding tranformation on the caption field.")
-
-		# If there is no encoding chain a simple file copy will do
-		else :
-			x = shutil.copy(self._sharedIllustrationsCaptions, self._projectIllustrationsCaptions)
-			self._log_manager.log("INFO", "The " + self._sharedIllustrationsCaptions + " has been copied to the project Illustrations folder.")
-
+				x = shutil.copy(self._sharedIllustrationsCaptions, self._projectIllustrationsCaptions)
+				self._log_manager.log("INFO", "The " + self._sharedIllustrationsCaptions + " has been copied to the project Illustrations folder.")
 
 		# If we didn't bail out right above, we'll go ahead and open the data file
 		# The assumption here is that the encoding of the pieces of the csv are

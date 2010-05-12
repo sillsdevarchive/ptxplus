@@ -240,7 +240,6 @@ class Tools (object) :
 				object.close()
 				self.userMessage('System user name set to: Default User, you may want to change it to the right name with the command: ptxplus set-user\n')
 			else :
-				print "::::::::::::::::"
 				object = codecs.open(overrideFile, "a", encoding='utf_8_sig')
 				object.write('\n# Process information\n')
 				object.write('[Process]' + '\n\n')

@@ -57,7 +57,7 @@
 # 20100301 - djd - Moved out hyphenation file creation rules
 # 20100414 - djd - Changed the way illustrations are handled and
 #		added some more echo INFO statements
-# 20100507 - djd - Moved out illustration creation rules
+# 20100512 - djd - More changes to illustration handling
 
 
 ##############################################################
@@ -172,10 +172,10 @@ $(PATH_TEXTS)/$(1).usfm.adj :
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
 # this rule will create a piclist file for the book being processed.
-# Also, through the make_piclist_file.py script it will do the
-# illustration file copy and linking operations. It is easier
-# to do that in that context than in the Makefile context.
-$(PATH_TEXTS)/$(1).usfm.piclist : | $(PATH_ILLUSTRATIONS)/$(PROJECT_CAPTIONS)
+# Also, the make_piclist_file.py script it will do the illustration
+# file copy and linking operations. It is easier to do that in that
+# context than in the Makefile context.
+$(PATH_TEXTS)/$(1).usfm.piclist : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS)
 ifneq ($(PATH_ILLUSTRATIONS_LIB),)
 	@echo INFO: Creating illustrations list file: $$@
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
@@ -317,7 +317,7 @@ preprocess-nt :
 
 # If, for some odd reason the Illustrations folder is not in
 # the right place we'll put one where it is supposed to be found.
-$(PATH_ILLUSTRATIONS) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+$(PATH_ILLUSTRATIONS) :
 	@echo INFO: Creating $@
 	mkdir -p $@
 
@@ -326,22 +326,26 @@ $(PATH_ILLUSTRATIONS) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
 # in the publication. We may need to remove that to use this
 # folder for other types of graphics used in multiple projects
 # under the same language grouping.
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) :
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) : | $(PATH_ILLUSTRATIONS)
 	@echo INFO: Creating $@
 	mkdir -p $@
 
 # Copy into place the captions.csv file that goes in the
-# shared folder if needed.
+# shared folder if needed. Also, since the new captions file
+# is probably different from the one in the project, we will
+# delete that one right now, for better or worse.
 $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
 ifneq ($(PATH_ILLUSTRATIONS_LIB),)
+	@echo INFO: Removing file: $(PATH_ILLUSTRATIONS)/$(PROJECT_CAPTIONS)
+	@rm -f $(PATH_ILLUSTRATIONS)/$(PROJECT_CAPTIONS)
 	@echo INFO: Copying $(PATH_RESOURCES_ILLUSTRATIONS)/$(PROJECT_CAPTIONS) to $@
 	cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(PROJECT_CAPTIONS) $@
 endif
 
 # Copy (or maybe link) the captions file into the project Illustrations
 # folder used in this project
-$(PATH_ILLUSTRATIONS)/$(PROJECT_CAPTIONS) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS)
-ifneq ($(PATH_ILLUSTRATIONS_LIB),)
-	@echo INFO: Copying $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS) to $@
-	@cp $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS) $@
-endif
+#$(PATH_ILLUSTRATIONS)/$(PROJECT_CAPTIONS) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS)
+#ifneq ($(PATH_ILLUSTRATIONS_LIB),)
+#	@echo INFO: Copying $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS) to $@
+#	@cp $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS) $@
+#endif
