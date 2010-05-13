@@ -442,6 +442,7 @@
 						<property name="tooltip" translatable="yes">Remove the PDF file for this component</property>
 						<property name="label" translatable="yes">Remove PDF (Current)</property>
 						<signal name="activate" handler="on_menu_remove_pdf_current_activate"/>
+						<accelerator key="Delete" signal="activate" modifiers="GDK_SHIFT_MASK"/>
 					  </widget>
 					</child>
 				  </widget>

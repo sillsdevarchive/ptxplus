@@ -68,6 +68,7 @@ class MakePiclistFile (object) :
 		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position','tl')
 		self._texscale = self._settings['General']['Resources']['Illustrations'].get('scale',1.0)
 		self._chpVerSep = self._settings['General']['Resources']['Illustrations'].get('chpVerSep',':')
+		self._captionRef = self._settings['General']['Resources']['Illustrations'].get('captionRef','true')
 		self._captionProcessing = self._settings['General']['Resources']['Illustrations'].get('captionProcessing','')
 		self._inputFile = log_manager._currentInput
 		self._outputFile = self._inputFile + ".piclist"
@@ -105,8 +106,12 @@ class MakePiclistFile (object) :
 		# Build the cv location ref (it must be in this format to work)
 		loc = chapNum + "." + verseNum
 
-		# Build the cv ref
-		ref = chapNum + self._chpVerSep + verseNum
+		# Build the cv ref if it is wanted. Otherwise keep the ref string
+		# empty so ptx2pdf leave it out
+		if self._captionRef.lower() == 'true' :
+			ref = chapNum + self._chpVerSep + verseNum
+		else :
+			ref = ''
 
 		# Get the file name from the illustration data
 		def_fileName = "FILE NAME MISSING!"
