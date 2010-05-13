@@ -62,6 +62,8 @@ define periph_rules
 # done manually. This helps simplify the system and makes it more
 # reliable.
 
+# This rule simply links everything in the source peripheral folder
+# to the project Texts folder
 $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 	@echo Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
 	ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
@@ -76,7 +78,9 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 # the current target doesn't have to be rebuilt if it has not changed.
 # This is very important here because a directory will always be
 # changing.
+ifneq ($(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm)
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+		build-TOC-NT.usfm
 	@if test -r $(PATH_TEMPLATES)/$(1); then \
 		echo Copying into project from: $(PATH_TEMPLATES)/$(1); \
 		cp $(PATH_TEMPLATES)/$(1) '$$@'; \
@@ -90,6 +94,7 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIP
 		echo \\p This is a auto created page found at: $$@ >> $$@; \
 		echo \\p Please edit as needed. >> $$@; \
 	fi
+endif
 
 # This .tex file also generally has some dependencies on the
 # FRONT/BACK_MATTER.tex files so we add them here. However, we
@@ -106,8 +111,8 @@ $(PATH_PROCESS)/$(1).tex : | \
 		echo Could not find: $$@; \
 		echo Creating this file:; \
 		echo Caution, you will need to edit it; \
-		echo '\\input $(TEX_PTX2PDF)' >> $$@; \
-		echo '\\input $(TEX_SETUP)' >> $$@; \
+		echo '\\input $(FILE_TEX_MACRO)' >> $$@; \
+		echo '\\input $(FILE_TEX_SETUP)' >> $$@; \
 		echo '\\stylesheet{$(1).sty}' >> $$@; \
 		echo '\\input FRONT_MATTER.tex' >> $$@; \
 		echo '%\\input BACK_MATTER.tex' >> $$@; \

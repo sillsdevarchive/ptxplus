@@ -41,7 +41,7 @@ class MakeStyleFile (object) :
 
 		inventoryObject = []
 		# This is the style file we will write to
-		styleFile = log_manager._settings['Process']['TeX']['TEX_STYLE']
+		styleFile = log_manager._settings['Process']['Files']['FILE_TEX_STYLE']
 
 		# Load in the parser
 		#sfmParser = parse_sfm.Parser()

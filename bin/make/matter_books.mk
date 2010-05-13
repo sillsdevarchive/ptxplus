@@ -70,6 +70,25 @@ MATTER_OT_TEX=
 MATTER_NT_PDF=
 MATTER_NT_TEX=
 
+# Build the dependent file listing here. This will include
+# file paths and names we build here and the list we bring in
+# from the project config file. This needs to be loaded early
+# in the process. If this rules file ever needs to be moved
+# down the chain this might have to move, or be put in a
+# seperate file.
+DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
+	$(FILE_PROJECT_CONF) \
+	$(FILE_TEX_SETUP) \
+	$(FILE_TEX_STYLE) \
+	$(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) \
+	$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) \
+	$(PATH_PROCESS)/.stamp \
+	$(PATH_PROCESS)/DraftWatermark-60.pdf \
+	$(PATH_PROCESS)/DraftWatermark-50.pdf \
+	$(PATH_PROCESS)/DraftWatermark-A5.pdf
+
+project.conf :
+	@echo xxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ##############################################################
 #		Rules for publication Scripture content
@@ -175,11 +194,13 @@ $(PATH_TEXTS)/$(1).usfm.adj :
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
-$(PATH_TEXTS)/$(1).usfm.piclist : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS)
+$(PATH_TEXTS)/$(1).usfm.piclist : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifneq ($(PATH_ILLUSTRATIONS_LIB),)
 	@echo INFO: Creating illustrations list file: $$@
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
 endif
+
+# Rules for cleaning up content process files
 
 # Remove the PDF for this component only
 pdf-remove-$(1) :
@@ -196,7 +217,6 @@ picfile-remove-$(1) :
 	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).usfm.piclist
 	@rm -f $(PATH_TEXTS)/$(1).usfm.piclist
 
-
 endef
 
 ######################## End Main Macro ######################
@@ -212,6 +232,7 @@ endef
 
 # Start with the OT but we don't want to do anything if there
 # are no components to process
+
 ifneq ($(MATTER_OT),)
 # These build a rule (in memory) for this set of components
 $(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
@@ -226,16 +247,14 @@ $(MATTER_OT_TEX) : \
 	$(PATH_PROCESS)/DraftWatermark-60.pdf \
 	$(PATH_PROCESS)/DraftWatermark-50.pdf \
 	$(PATH_PROCESS)/DraftWatermark-A5.pdf \
-	project.conf
+	$(FILE_PROJECT_CONF)
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file OT 'Null' '$@'
 
-
-#	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_OT),$(PATH_TEXTS)/$(v).usfm) > $@
 
 # Render the entire OT
 $(MATTER_OT_PDF) : \
 	$(foreach v,$(filter $(OT_COMPONENTS),$(MATTER_OT)), \
-	$(PATH_TEXTS)/$(v).usfm) \
+	$(PATH_TEXTS)/$(v).usfm)
 	$(foreach v,$(filter-out $(OT_COMPONENTS),$(MATTER_OT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
@@ -262,15 +281,13 @@ $(MATTER_NT_TEX) : \
 	$(PATH_PROCESS)/DraftWatermark-60.pdf \
 	$(PATH_PROCESS)/DraftWatermark-50.pdf \
 	$(PATH_PROCESS)/DraftWatermark-A5.pdf \
-	project.conf
+	$(FILE_PROJECT_CONF)
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file NT 'Null' '$@'
-
-#	perl -e 'print "\\input $(TEX_PTX2PDF)\n\\input $(TEX_SETUP)\n"; for (@ARGV) {print "\\ptxfile{$$_}\n"}; print "\n\\bye\n"' $(foreach v,$(MATTER_NT),$(PATH_TEXTS)/$(v).usfm) > $@
 
 # Render the entire NT
 $(MATTER_NT_PDF) : \
 	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
-	$(PATH_TEXTS)/$(v).usfm) \
+	$(PATH_TEXTS)/$(v).usfm)
 	$(foreach v,$(filter-out $(NT_COMPONENTS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
@@ -308,8 +325,11 @@ preprocess-nt :
 	@echo INFO: Preprocess checking NT components:
 	@$(foreach v,$(MATTER_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
+# Having these here enable rules to call other rules
+.PHONY: view-ot view-nt preprocess-checks $(FILE_TEX_SETUP)
 
-.PHONY: view-ot view-nt preprocess-checks
+#$(FILE_PROJECT_CONF) :
+#	@echo INFO: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ##############################################################
 #               Rules for handling illustrations material
@@ -334,18 +354,22 @@ $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) : | $(PATH_ILLUSTRATIONS)
 # shared folder if needed. Also, since the new captions file
 # is probably different from the one in the project, we will
 # delete that one right now, for better or worse.
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
 ifneq ($(PATH_ILLUSTRATIONS_LIB),)
-	@echo INFO: Removing file: $(PATH_ILLUSTRATIONS)/$(PROJECT_CAPTIONS)
-	@rm -f $(PATH_ILLUSTRATIONS)/$(PROJECT_CAPTIONS)
-	@echo INFO: Copying $(PATH_RESOURCES_ILLUSTRATIONS)/$(PROJECT_CAPTIONS) to $@
-	cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(PROJECT_CAPTIONS) $@
+	@echo INFO: Removing file: $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
+	@rm -f $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
+	@echo INFO: Copying $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) to $@
+	cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) $@
 endif
 
-# Copy (or maybe link) the captions file into the project Illustrations
-# folder used in this project
-#$(PATH_ILLUSTRATIONS)/$(PROJECT_CAPTIONS) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS)
+# Note: The following rule is here as a reminder. The project captions.csv
+# file is created during make_piclist_file process which is done in the
+# $(PATH_TEXTS)/$(1).usfm.piclist rule. The issue is that if this file
+# is removed or deleted it cannot be remade on its own. This can cause an
+# error in certain situations. This part of the make_piclist_file process
+# might need to be done alone to avoid this if ever becomes a real problem.
+#$(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS)
 #ifneq ($(PATH_ILLUSTRATIONS_LIB),)
-#	@echo INFO: Copying $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS) to $@
-#	@cp $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(PROJECT_CAPTIONS) $@
+#	@echo INFO: Copying $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) to $@
+#	@cp $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) $@
 #endif

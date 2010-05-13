@@ -22,7 +22,7 @@ make-tex-hyphens :
 
 # Create a TeX hyphenation rules file based on what is in the
 # project.conf file
-$(TEX_HYPHENATION_FILE) : $(newHyphenationFile)
+$(FILE_TEX_HYPHENATION) : $(newHyphenationFile)
 	$(PY_RUN_SYSTEM_PROCESS) make_tex_hyphenation_file
 
 # Manually create a master wordlist based on existing component

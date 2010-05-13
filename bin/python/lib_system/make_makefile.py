@@ -20,6 +20,7 @@
 # 20081028 - djd - Removed system logging, messages only now
 # 20090218 - djd - Added system logging access as other like
 #		processes needed it too
+# 20100513 - djd - Added key/value harvesting for Process::Files
 
 
 #############################################################
@@ -73,6 +74,9 @@ class MakeMakefile (object) :
 		for key, value, in self._log_manager._settings['Process']['Paths'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
+		for key, value, in self._log_manager._settings['Process']['Files'].iteritems() :
+			makefileSettings = makefileSettings + key + "=" + value + "\n"
+
 		for key, value, in self._log_manager._settings['Process']['TeX'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
@@ -100,9 +104,9 @@ class MakeMakefile (object) :
 				editorBibleInfo + \
 				"include " + basePath + "/bin/make/periph_info.mk\n" + \
 				"include " + basePath + "/bin/make/matter_books.mk\n" + \
-				"include " + basePath + "/bin/make/matter_maps.mk\n" + \
 				"include " + basePath + "/bin/make/matter_peripheral.mk\n" + \
 				"include " + basePath + "/bin/make/matter_toc.mk\n" + \
+				"include " + basePath + "/bin/make/matter_maps.mk\n" + \
 				"include " + basePath + "/bin/make/system_hyphenation.mk\n" + \
 				"include " + basePath + "/bin/make/system_files.mk\n"
 

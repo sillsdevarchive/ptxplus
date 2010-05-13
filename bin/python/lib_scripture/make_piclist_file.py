@@ -74,15 +74,14 @@ class MakePiclistFile (object) :
 		self._outputFile = self._inputFile + ".piclist"
 		self._outFileObject = {}
 		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
-
-		self._captionsFileName = self._settings['Process']['Paths']['PROJECT_CAPTIONS']
+		self._captionsFileName = self._settings['Process']['Files']['FILE_ILLUSTRATION_CAPTIONS']
+		self._sourceIllustrationsLibDataFileName = self._settings['Process']['Files']['FILE_ILLUSTRATION_DATA']
 		self._sharedIllustrationsPath = os.path.abspath(self._sourcePath + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_SHARED'])
 		self._projectIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
 		self._sourceIllustrationsLibPath = os.path.abspath(self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_LIB'])
-		(head, tail) = os.path.split(self._sourceIllustrationsLibPath)
-		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + tail + "_data.csv"
-		self._sharedIllustrationsCaptions = self._sharedIllustrationsPath + "/captions.csv"
-		self._projectIllustrationsCaptions = self._projectIllustrationsPath + "/captions.csv"
+		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + self._sourceIllustrationsLibDataFileName
+		self._sharedIllustrationsCaptions = self._sharedIllustrationsPath + "/" + self._captionsFileName
+		self._projectIllustrationsCaptions = self._projectIllustrationsPath + "/" + self._captionsFileName
 
 		# Pull in the library data file using the CSVtoDict class in tools
 		self._libData = CSVtoDict(self._sourceIllustrationsLibData)

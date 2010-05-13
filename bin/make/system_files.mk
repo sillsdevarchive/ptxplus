@@ -108,8 +108,8 @@ $(PATH_PROCESS)/PROJECT_INFO.pdf : \
 # Create the .tex file that drives the typesetting process
 $(PATH_PROCESS)/PROJECT_INFO.tex :
 	@echo INFO: Creating: $@
-	@echo \\input $(TEX_PTX2PDF) > $@
-	@echo \\input $(TEX_SETUP) >> $@
+	@echo \\input $(FILE_TEX_MACRO) > $@
+	@echo \\input $(FILE_TEX_SETUP) >> $@
 	@echo \\BodyColumns=1 >> $@
 	@echo \\ptxfile{$(PATH_TEXTS)/PROJECT_INFO.usfm} >> $@
 	@echo '\\bye' >> $@
@@ -157,13 +157,16 @@ reports-clean :
 	rm -f $(PATH_REPORTS)/*.html
 	rm -f $(PATH_REPORTS)/*.csv
 
+# Illustration folder clean up. Just take out the linked PNG files
+illustrations-clean :
+	rm -f $(PATH_ILLUSTRATIONS)/*.png
+
 # Just in case we need to clean up to have a fresh start
 process-clean :
 	rm -f $(PATH_PROCESS)/*.log
 	rm -f $(PATH_PROCESS)/*.notepages
 	rm -f $(PATH_PROCESS)/*.parlocs
 	rm -f $(PATH_PROCESS)/*.delayed
-	rm -f $(PATH_PROCESS)/*.tex
 	rm -f $(PATH_PROCESS)/*.pdf
 	rm -f $(PATH_PROCESS)/*.PDF
 
@@ -199,6 +202,7 @@ reset : pdf-remove-book \
 	texts-clean \
 	adjfile-clean-all \
 	picfile-clean-all \
+	illustrations-clean \
 	process-clean \
 	reports-clean \
 	log-clean

@@ -52,10 +52,12 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm : | \
 	@echo Copying into project from: $(PATH_TEXTS)/auto-toc-nt.usfm
 	@cp $(PATH_PROCESS)/auto-toc-nt.usfm $@
 
+# Note: this is deprecated because it is handled in the matter_perripheral.mk
+# in the $(PATH_TEXTS)/$(1) rule. I will leave it here for a while as a reminder
 # Link the TOC-NT.usfm to the Texts folder
-$(PATH_TEXTS)/TOC-NT.usfm : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm
-	@echo Linking project to peripheral source texts: $(shell readlink -f -- $@)
-	ln -sf $(shell readlink -f -- $<) $(PATH_TEXTS)/
+#$(PATH_TEXTS)/TOC-NT.usfm : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm
+#	@echo Linking project to peripheral source texts: $(shell readlink -f -- $@)
+#	ln -sf $(shell readlink -f -- $<) $(PATH_TEXTS)/
 
 # Creating the TOC-NT.tex file that links to the main TOC.tex file
 # TOC.tex is also shared with TOC-OT.tex.
@@ -136,10 +138,3 @@ endif
 
 
 
-define test-def
-# Just process the TOC this rule will be called from
-# the process NT or OT
-process-toc : $(PATH_PROCESS)/TOC.pdf
-	@echo Creating the TOC file now (but it will not view)
-
-endef

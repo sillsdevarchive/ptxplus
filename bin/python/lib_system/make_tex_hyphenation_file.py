@@ -45,9 +45,9 @@ class MakeTexHyphenationFile (object) :
 		hyphenPath = settings['Process']['Paths']['PATH_HYPHENATION']
 
 		# Set the output file name and the wordlist file name
-		texHyphenFileName = hyphenPath + "/hyphenation.tex"
-		wordListFileName =  hyphenPath + "/hyphenation.txt"
-		lcCodeListFileName = hyphenPath + "/lccodelist.txt"
+		texHyphenFileName = hyphenPath + settings['Process']['Files']['FILE_HYPHENATION_TEX']
+		wordListFileName =  hyphenPath + settings['Process']['Files']['FILE_HYPHENATION_TXT']
+		lcCodeListFileName = hyphenPath + settings['Process']['Files']['FILE_LCCODELIST_TXT']
 
 		# If we see that the texHyphenFile exists we will abort
 		# That file needs to be manually removed to avoid problems

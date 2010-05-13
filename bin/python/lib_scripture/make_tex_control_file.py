@@ -51,8 +51,8 @@ class MakeTexControlFile (object) :
 
 		# Build some paths and file names
 		pathToText = os.getcwd() + "/Texts"
-		texMacros = log_manager._settings['Process']['TeX']['TEX_PTX2PDF']
-		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['TeX']['TEX_SETUP']
+		texMacros = log_manager._settings['Process']['Files']['FILE_TEX_MACRO']
+		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
 		tocTitle = log_manager._settings['Process']['TOC']['MainTitle']
 
 		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
@@ -68,10 +68,10 @@ class MakeTexControlFile (object) :
 		tocFile = ""
 		if bookID.lower() == "ot" :
 			bookID = self._log_manager._settings['Process']['Binding']['MATTER_OT']
-			tocFile = log_manager._settings['Process']['TOC']['FileName'] + "-ot.usfm"
+			tocFile = log_manager._settings['Process']['Files']['FILE_AUTO_TOC'] + "-ot.usfm"
 		elif bookID.lower() == "nt" :
 			bookID = self._log_manager._settings['Process']['Binding']['MATTER_NT']
-			tocFile = log_manager._settings['Process']['TOC']['FileName'] + "-nt.usfm"
+			tocFile = log_manager._settings['Process']['Files']['FILE_AUTO_TOC'] + "-nt.usfm"
 
 		# Here we will add some custom commands for things that we
 		# need more contextual control over.
