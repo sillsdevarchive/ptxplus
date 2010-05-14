@@ -44,8 +44,6 @@ class MakeTocFile (object) :
 		self._log_manager = log_manager
 		self._log_manager._currentSubProcess = 'MakeTocFile'
 		self._texTocFile = log_manager._currentInput
-		self._mainTitle = self._settings['Process']['TOC'].get('mainTitle','Table of Contents')
-		self._columnFormat = self._settings['Process']['TOC'].get('columnFormat','twoColumnLeadered')
 		self._bookID = log_manager._currentTargetID
 		self._outputFile = log_manager._currentOutput
 		self._outFileObject = {}
@@ -59,11 +57,20 @@ class MakeTocFile (object) :
 			then we need to gracefully stop at that point. This will
 			prevent other processes from crashing.'''
 
-		if not os.path.isfile(self._texTocFile) :
+		mainTitle = self._settings['Process']['TOC'].get('mainTitle','Table of Contents')
+		columnFormat = self._settings['Process']['TOC'].get('columnFormat','twoColumnLeadered')
+		inputRowMarker = self._settings['Process']['TOC'].get('inputRowMarker','tr')
+		inputColOne = self._settings['Process']['TOC'].get('inputColOne','tc1')
+		inputColTwo = self._settings['Process']['TOC'].get('inputColOne','tc2')
+		inputColThree = self._settings['Process']['TOC'].get('inputColOne','tc3')
+
+		if os.path.isfile(self._texTocFile) :
+			inFileObject = codecs.open(self._texTocFile, "r", encoding='utf_8_sig')
+		else :
 			# If we don't have a SFM toc input file we're done now.
 			self._log_manager.log("ERRR", "The [" + self._texTocFile + "] file does not exist so the process has been halted.")
 
-		elif os.path.isfile(self._outputFile) :
+		if os.path.isfile(self._outputFile) :
 			# If the output file exists we will not go through with the process
 			# The user will need to manually verify and delete the file if
 			# that is warrented before this process can be run again. This is
@@ -77,16 +84,24 @@ class MakeTocFile (object) :
 			# These tags are hard-coded tags and we are trying to repurpose the USFM
 			# introduction tags. If there are conflicts between this and the introduction
 			# texts we may need to introduce special new tags.
-			USFMTags = ['\\imt1', '\\imt2', '\\imt3', '\\imi']
+#			USFMTags = ['\\imt1', '\\imt2', '\\imt3', '\\imi']
+
 			# Creage header information for this sfm file
 			headerInfo = "\\id OTH\n" + \
 				"\\ide UTF-8\n" + \
 				"\\periph " + self._bookID + "\n" + \
-				"\\mt1 " + self._mainTitle + "\n" + \
+				"\\mt1 " + mainTitle + "\n" + \
 				"\\p \n" + \
-				"\\makedigitsother\catcode`{=1 \catcode`}=2\n" + \
+				"\\makedigitsother\\catcode`{=1 \\catcode`}=2\n" + \
 				"\\baselineskip=12pt\n"
 
+			content = ""
+			for row in inFileObject :
+				row = row.split()
+				if row[0] == "\\" + inputRowMarker :
+					content = content + row[2] + "\n"
+
+			footerInfo = "\\catcode`{=11\\catcode`}=11\\makedigitsletters\n"
 
 			# If we didn't bail out right above, we'll go ahead and open the data file
 			# The assumption here is that the encoding of the pieces of the csv are
@@ -96,8 +111,9 @@ class MakeTocFile (object) :
 			# found, just output the header.
 			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
 			self._outFileObject.write(headerInfo)
-#			self._outFileObject.write(recordsToUSFM(USFMTags, csv_records))
-#			self._log_manager.log("DBUG", "Created file and wrote out to: " + self._outputFile)
+			self._outFileObject.write(content)
+			self._outFileObject.write(footerInfo)
+			self._log_manager.log("DBUG", "Created file and wrote out to: " + self._outputFile)
 
 			# Close the piclist file
 			self._outFileObject.close()
