@@ -50,10 +50,9 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm : | \
 	$(PATH_PROCESS)/FRONT_MATTER.tex \
 	$(PATH_PROCESS)/auto-toc-nt.usfm
 	@echo Creating TOC from: $(PATH_TEXTS)/auto-toc-nt.usfm
-	@cp $(PATH_PROCESS)/auto-toc-nt.usfm $@
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_toc_file "TOC" $(PATH_PROCESS)/auto-toc-nt.usfm $@
 
-#	@$(PY_PROCESS_SCRIPTURE_TEXT) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
-
+#	@cp $(PATH_PROCESS)/auto-toc-nt.usfm $@
 
 # Note: this is deprecated because it is handled in the matter_perripheral.mk
 # in the $(PATH_TEXTS)/$(1) rule. I will leave it here for a while as a reminder

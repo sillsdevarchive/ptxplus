@@ -53,7 +53,7 @@ class MakeTexControlFile (object) :
 		pathToText = os.getcwd() + "/Texts"
 		texMacros = log_manager._settings['Process']['Files']['FILE_TEX_MACRO']
 		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
-		tocTitle = log_manager._settings['Process']['TOC']['MainTitle']
+		tocTitle = log_manager._settings['Process']['TOC']['mainTitle']
 
 		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
 		texControlObject = codecs.open(texControlFile, "w", encoding='utf_8_sig')
