@@ -145,7 +145,7 @@ $(PATH_PROCESS)/$(1).pdf : \
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 
 # Open the PDF file with reader
-view-$(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
+view-$(1) : $(PATH_PROCESS)/$(1).pdf
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $$< &
 

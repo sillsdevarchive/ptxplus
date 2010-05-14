@@ -77,18 +77,16 @@ MATTER_NT_TEX=
 # down the chain this might have to move, or be put in a
 # seperate file.
 DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
-	$(FILE_PROJECT_CONF) \
-	$(FILE_TEX_SETUP) \
-	$(FILE_TEX_STYLE) \
-	$(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) \
-	$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) \
-	$(PATH_PROCESS)/.stamp \
-	$(PATH_PROCESS)/DraftWatermark-60.pdf \
-	$(PATH_PROCESS)/DraftWatermark-50.pdf \
-	$(PATH_PROCESS)/DraftWatermark-A5.pdf
+  $(FILE_PROJECT_CONF) \
+  $(FILE_TEX_SETUP) \
+  $(FILE_TEX_STYLE) \
+  $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) \
+  $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) \
+  $(PATH_PROCESS)/.stamp \
+  $(PATH_PROCESS)/DraftWatermark-60.pdf \
+  $(PATH_PROCESS)/DraftWatermark-50.pdf \
+  $(PATH_PROCESS)/DraftWatermark-A5.pdf
 
-project.conf :
-	@echo xxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ##############################################################
 #		Rules for publication Scripture content
@@ -254,7 +252,7 @@ $(MATTER_OT_TEX) : \
 # Render the entire OT
 $(MATTER_OT_PDF) : \
 	$(foreach v,$(filter $(OT_COMPONENTS),$(MATTER_OT)), \
-	$(PATH_TEXTS)/$(v).usfm)
+	$(PATH_TEXTS)/$(v).usfm) \
 	$(foreach v,$(filter-out $(OT_COMPONENTS),$(MATTER_OT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
@@ -265,6 +263,7 @@ endif
 pdf-remove-ot :
 	@echo INFO: Removing file: $(MATTER_OT_PDF)
 	rm -f $(MATTER_OT_PDF)
+
 
 # Moving along we will do the NT if there are any components
 # listed in the project.conf file
@@ -287,10 +286,9 @@ $(MATTER_NT_TEX) : \
 # Render the entire NT
 $(MATTER_NT_PDF) : \
 	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
-	$(PATH_TEXTS)/$(v).usfm)
+	$(PATH_TEXTS)/$(v).usfm) \
 	$(foreach v,$(filter-out $(NT_COMPONENTS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
-	$(DEPENDENT_FILE_LIST) \
 	$(MATTER_NT_TEX)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex NT.tex
 
@@ -326,10 +324,8 @@ preprocess-nt :
 	@$(foreach v,$(MATTER_NT), $(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
 # Having these here enable rules to call other rules
-.PHONY: view-ot view-nt preprocess-checks $(FILE_TEX_SETUP)
+.PHONY: view-ot view-nt preprocess-checks
 
-#$(FILE_PROJECT_CONF) :
-#	@echo INFO: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ##############################################################
 #               Rules for handling illustrations material
