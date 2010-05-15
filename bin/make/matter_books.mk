@@ -286,8 +286,6 @@ $(MATTER_NT_TEX) : \
 # Render the entire NT
 $(MATTER_NT_PDF) : \
 	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
-	$(PATH_TEXTS)/$(v).usfm.piclist \
-	$(PATH_TEXTS)/$(v).usfm.adj \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(foreach v,$(filter-out $(NT_COMPONENTS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm.piclist \

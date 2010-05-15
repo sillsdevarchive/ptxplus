@@ -57,12 +57,32 @@ class MakeTocFile (object) :
 			then we need to gracefully stop at that point. This will
 			prevent other processes from crashing.'''
 
+		# Collect the settings we need
 		mainTitle = self._settings['Process']['TOC'].get('mainTitle','Table of Contents')
+		headerRowBookTitle = self._settings['Process']['TOC'].get('headerRowBookTitle','tr')
+		headerRowBookAbbr = self._settings['Process']['TOC'].get('headerRowBookAbbr','tr')
+		headerRowPageNum = self._settings['Process']['TOC'].get('headerRowPageNum','tr')
 		columnFormat = self._settings['Process']['TOC'].get('columnFormat','twoColumnLeadered')
 		inputRowMarker = self._settings['Process']['TOC'].get('inputRowMarker','tr')
 		inputColOne = self._settings['Process']['TOC'].get('inputColOne','tc1')
-		inputColTwo = self._settings['Process']['TOC'].get('inputColOne','tc2')
-		inputColThree = self._settings['Process']['TOC'].get('inputColOne','tc3')
+		inputColTwo = self._settings['Process']['TOC'].get('inputColTwo','tcr2')
+		inputColThree = self._settings['Process']['TOC'].get('inputColThree','tcr3')
+
+		# Build some vars in context
+		tocRowFormatMarker = ''
+		tocHeaderRow = ''
+
+		if columnFormat == 'twoColumnLeadered' :
+			tocRowFormatMarker = '\\tbltwowlrow'
+			# While we are here build the header row
+			tocHeaderRow = "\\tbltwowlheader{" + headerRowBookTitle + "}{" + headerRowPageNum + "}" + "\n"
+		elif columnFormat == 'threeColumnLeadered' :
+			tocRowFormatMarker = '\\tblthreewlrow'
+			# Build the header row
+			tocHeaderRow = "\\tblthreewlheader{" + headerRowBookTitle + "}{" + headerRowBookAbbr + "}{" + headerRowPageNum + "}" + "\n"
+		else :
+			self._log_manager.log("ERRR", "Improper TOC format given in project.conf file. It is not supported by this process")
+
 
 		if os.path.isfile(self._texTocFile) :
 			inFileObject = codecs.open(self._texTocFile, "r", encoding='utf_8_sig')
@@ -81,11 +101,6 @@ class MakeTocFile (object) :
 
 			# Everything is in place and we can move forward now
 
-			# These tags are hard-coded tags and we are trying to repurpose the USFM
-			# introduction tags. If there are conflicts between this and the introduction
-			# texts we may need to introduce special new tags.
-#			USFMTags = ['\\imt1', '\\imt2', '\\imt3', '\\imi']
-
 			# Creage header information for this sfm file
 			headerInfo = "\\id OTH\n" + \
 				"\\ide UTF-8\n" + \
@@ -97,16 +112,17 @@ class MakeTocFile (object) :
 
 			content = ""
 			for row in inFileObject :
-				row = row.split()
-				if row[0] == "\\" + inputRowMarker :
-					content = content + row[2] + "\n"
+				row = row.split('\\')
+
+# Add some format handling so 2 and 3 cols can be supported
+
+				if row[1].strip() == inputRowMarker :
+					bookName = row[2].replace(inputColOne, '').strip()
+					pageNum = row[3].replace(inputColTwo, '').strip()
+					content = content + tocRowFormatMarker + "{" + bookName + "}{" + pageNum + "}" + "\n"
 
 			footerInfo = "\\catcode`{=11\\catcode`}=11\\makedigitsletters\n"
 
-			# If we didn't bail out right above, we'll go ahead and open the data file
-			# The assumption here is that the encoding of the pieces of the csv are
-			# what they need to be.
-#			csv_records = list(csv.reader(open(self._csvWorkFile), dialect=csv.excel))
 			# Now we need output anything we might have collected. If nothing was
 			# found, just output the header.
 			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
@@ -117,24 +133,6 @@ class MakeTocFile (object) :
 
 			# Close the piclist file
 			self._outFileObject.close()
-
-#			# Delete the temp CSV working file
-#			if os.remove(self._csvWorkFile) == None :
-#				self._log_manager.log("DBUG", "Removed file: " + self._csvWorkFile)
-
-
-
-#def recordsToUSFM(tags, records) :
-#	'''Process each field in a record and add an SFM tag to it.
-#		if the field is empty do not output. Return a string.'''
-#
-#	usfm = []
-#	for rec in records:
-#		usfm.extend(map(lambda t,v: t + ' ' + v + '\n' if v else '', tags, rec))
-#	# Turn the list into a string
-#	return "".join(usfm)
-
-
 
 
 
