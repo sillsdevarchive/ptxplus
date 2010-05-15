@@ -82,13 +82,14 @@ class MakeTocFile (object) :
 			tocHeaderRow = "\\tblthreewlheader{" + headerRowBookTitle + "}{" + headerRowBookAbbr + "}{" + headerRowPageNum + "}" + "\n"
 		else :
 			self._log_manager.log("ERRR", "Improper TOC format given in project.conf file. It is not supported by this process")
-
+			return
 
 		if os.path.isfile(self._texTocFile) :
 			inFileObject = codecs.open(self._texTocFile, "r", encoding='utf_8_sig')
 		else :
 			# If we don't have a SFM toc input file we're done now.
 			self._log_manager.log("ERRR", "The [" + self._texTocFile + "] file does not exist so the process has been halted.")
+			return
 
 		if os.path.isfile(self._outputFile) :
 			# If the output file exists we will not go through with the process
@@ -101,26 +102,36 @@ class MakeTocFile (object) :
 
 			# Everything is in place and we can move forward now
 
-			# Creage header information for this sfm file
+			# Create header information for this sfm file
 			headerInfo = "\\id OTH\n" + \
 				"\\ide UTF-8\n" + \
 				"\\periph " + self._bookID + "\n" + \
 				"\\mt1 " + mainTitle + "\n" + \
 				"\\p \n" + \
 				"\\makedigitsother\\catcode`{=1 \\catcode`}=2\n" + \
-				"\\baselineskip=12pt\n"
+				"\\baselineskip=12pt\n" + \
+				tocHeaderRow
 
+			# Create the toc content from the input file
 			content = ""
 			for row in inFileObject :
 				row = row.split('\\')
-
-# Add some format handling so 2 and 3 cols can be supported
-
 				if row[1].strip() == inputRowMarker :
-					bookName = row[2].replace(inputColOne, '').strip()
-					pageNum = row[3].replace(inputColTwo, '').strip()
-					content = content + tocRowFormatMarker + "{" + bookName + "}{" + pageNum + "}" + "\n"
+					if columnFormat == 'twoColumnLeadered' :
+						bookName = row[2].replace(inputColOne, '').strip()
+						pageNum = row[3].replace(inputColTwo, '').strip()
+						content = content + tocRowFormatMarker + "{" + bookName + "}{" + pageNum + "}" + "\n"
+# This next elif is not tested, take this out when it is
+					elif columnFormat == 'tblthreewlrow' :
+						bookName = row[2].replace(inputColOne, '').strip()
+						bookAbbr = row[3].replace(inputColTwo, '').strip()
+						pageNum = row[4].replace(inputColThree, '').strip()
+						content = content + tocRowFormatMarker + "{" + bookName + "}{" + bookAbbr + "}{" + pageNum + "}" + "\n"
+					else :
+						self._log_manager.log("ERRR", "The [" + columnFormat + "] is not a valid format so the process has been halted.")
+						return
 
+			# Build the toc file footer
 			footerInfo = "\\catcode`{=11\\catcode`}=11\\makedigitsletters\n"
 
 			# Now we need output anything we might have collected. If nothing was

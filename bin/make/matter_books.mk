@@ -254,6 +254,8 @@ $(MATTER_OT_PDF) : \
 	$(foreach v,$(filter $(OT_COMPONENTS),$(MATTER_OT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(foreach v,$(filter-out $(OT_COMPONENTS),$(MATTER_OT)), \
+	$(PATH_TEXTS)/$(v).usfm.piclist \
+	$(PATH_TEXTS)/$(v).usfm.adj \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
 	$(MATTER_OT_TEX)
