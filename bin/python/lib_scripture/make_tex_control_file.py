@@ -49,16 +49,32 @@ class MakeTexControlFile (object) :
 		except :
 			oneChapOmmitRule = "false"
 
+# Use the .get() extention on all these settings so a default can be set
+
 		# Build some paths and file names
-		pathToText = os.getcwd() + "/Texts"
+		pathToText = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_TEXTS']
+		pathToHyphen = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
 		texMacros = log_manager._settings['Process']['Files']['FILE_TEX_MACRO']
+		useHyphenation = log_manager._settings['Process']['Hyphenation']['useHyphenation']
 		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
+		styleFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_STYLE']
+		hyphenFile = pathToHyphen + "/" + log_manager._settings['Process']['Files']['FILE_HYPHENATION_TEX']
+		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse']['useMarginalVerses']
+		marginalVerses = log_manager._settings['Process']['Files']['FILE_MARGINAL_VERSES']
 		tocTitle = log_manager._settings['Process']['TOC']['mainTitle']
 
 		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
 		texControlObject = codecs.open(texControlFile, "w", encoding='utf_8_sig')
 		texControlObject.write('\\input ' + texMacros + '\n')
 		texControlObject.write('\\input ' + setupFile + '\n')
+		texControlObject.write('\\stylesheet{' + styleFile + '}\n')
+		# Hyphenation is optional
+		if useHyphenation.lower() == 'true' :
+			texControlObject.write('\\input ' + hyphenFile + '\n')
+		# Other options that can be added in the file
+		# Note that order is important, though not fully understood :-)
+		if useMarginalVerses.lower() == 'true' :
+			texControlObject.write('\\input ' + marginalVerses + '\n')
 
 		# Passing in all the book IDs is problematic we can get that
 		# information from the .config file so we'll use a syntax
