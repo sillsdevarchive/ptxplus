@@ -82,10 +82,8 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
   $(FILE_TEX_STYLE) \
   $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) \
   $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) \
-  $(PATH_PROCESS)/.stamp \
-  $(PATH_PROCESS)/DraftWatermark-60.pdf \
-  $(PATH_PROCESS)/DraftWatermark-50.pdf \
-  $(PATH_PROCESS)/DraftWatermark-A5.pdf
+  $(PATH_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) \
+  $(PATH_PROCESS)/.stamp
 
 
 ##############################################################
@@ -149,10 +147,7 @@ endif
 # TeX control - Call the TeX control file creation script which will
 # create a TeX control file on the fly.
 # Just in case we will throw in the watermark pages here too.
-$(PATH_PROCESS)/$(1).tex : \
-	$(PATH_PROCESS)/DraftWatermark-60.pdf \
-	$(PATH_PROCESS)/DraftWatermark-50.pdf \
-	$(PATH_PROCESS)/DraftWatermark-A5.pdf
+$(PATH_PROCESS)/$(1).tex :
 	@echo INFO: Creating book control file: $$@
 	@$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file $(1) 'Null' '$$@'
 
@@ -173,6 +168,11 @@ $(PATH_PROCESS)/$(1).pdf : \
 view-$(1) : $(PATH_PROCESS)/$(1).pdf
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $$< &
+
+# Add a water mark to the page
+watermark-$(1) :
+	@echo INFO: Adding watermark to ouput
+	@pdftk $(PATH_PROCESS)/$(1).pdf background $(PATH_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) output $(PATH_PROCESS)/$(1).pdf
 
 # Open the SFM file with the text editor
 edit-$(1) : $(PATH_TEXTS)/$(1).usfm
@@ -241,11 +241,7 @@ MATTER_OT_TEX=$(PATH_PROCESS)/OT.tex
 # like NT, OT or Bible. This is done with a little Perl code
 # here. We may want to change this but as long as it works...
 # Also, I will throw in the watermark pages (this needs to be changed!)
-$(MATTER_OT_TEX) : \
-	$(PATH_PROCESS)/DraftWatermark-60.pdf \
-	$(PATH_PROCESS)/DraftWatermark-50.pdf \
-	$(PATH_PROCESS)/DraftWatermark-A5.pdf \
-	$(FILE_PROJECT_CONF)
+$(MATTER_OT_TEX) : $(FILE_PROJECT_CONF)
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file OT 'Null' '$@'
 
 
@@ -278,11 +274,7 @@ MATTER_NT_TEX=$(PATH_PROCESS)/NT.tex
 # Just like with the OT, this builds the .tex control file
 # for all NT components.
 # Also, I will throw in the watermark pages (this needs to be changed!)
-$(MATTER_NT_TEX) : \
-	$(PATH_PROCESS)/DraftWatermark-60.pdf \
-	$(PATH_PROCESS)/DraftWatermark-50.pdf \
-	$(PATH_PROCESS)/DraftWatermark-A5.pdf \
-	$(FILE_PROJECT_CONF)
+$(MATTER_NT_TEX) : $(FILE_PROJECT_CONF)
 	$(PY_PROCESS_SCRIPTURE_TEXT) make_tex_control_file NT 'Null' '$@'
 
 # Render the entire NT

@@ -42,6 +42,21 @@ class MakeTexControlFile (object) :
 		bookID = log_manager._currentTargetID
 		log_manager._currentSubProcess = 'MkContFile'
 
+
+# Use the .get() extention on all these settings so a default can be set
+
+		# Build some paths, file names and settings
+		pathToText = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_TEXTS']
+		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
+		pathToHyphen = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
+		useHyphenation = log_manager._settings['Process']['Hyphenation']['useHyphenation']
+		hyphenFile = pathToHyphen + "/" + log_manager._settings['Process']['Files']['FILE_HYPHENATION_TEX']
+		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse']['useMarginalVerses']
+		marginalVerses = log_manager._settings['Process']['Files']['FILE_MARGINAL_VERSES']
+
+#######################################################################################################
+# we need some kind of test to see if this is a control file for Scripture so we can build contextually
+
 		# Look for settings to apply, not all of them will be
 		# usable in every case
 		try :
@@ -49,26 +64,14 @@ class MakeTexControlFile (object) :
 		except :
 			oneChapOmmitRule = "false"
 
-# Use the .get() extention on all these settings so a default can be set
-
-		# Build some paths and file names
-		pathToText = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_TEXTS']
-		pathToHyphen = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
-		texMacros = log_manager._settings['Process']['Files']['FILE_TEX_MACRO']
-		useHyphenation = log_manager._settings['Process']['Hyphenation']['useHyphenation']
-		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
-		styleFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_STYLE']
-		hyphenFile = pathToHyphen + "/" + log_manager._settings['Process']['Files']['FILE_HYPHENATION_TEX']
-		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse']['useMarginalVerses']
-		marginalVerses = log_manager._settings['Process']['Files']['FILE_MARGINAL_VERSES']
-		tocTitle = log_manager._settings['Process']['TOC']['mainTitle']
-
 		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
 		texControlObject = codecs.open(texControlFile, "w", encoding='utf_8_sig')
-		texControlObject.write('\\input ' + texMacros + '\n')
+
+		# Read in all the global settings
 		texControlObject.write('\\input ' + setupFile + '\n')
-		texControlObject.write('\\stylesheet{' + styleFile + '}\n')
-		# Hyphenation is optional
+
+		# Hyphenation is optional project-wide. There may be some objects that
+		# need it and others that do not. That is why it is here at the object level.
 		if useHyphenation.lower() == 'true' :
 			texControlObject.write('\\input ' + hyphenFile + '\n')
 		# Other options that can be added in the file

@@ -72,26 +72,26 @@ make-template :
 dev-update :
 	cd $(PTXPLUS_BASE) && hg pull -u ptxplus
 
-# Make links in Process folder for the draft watermark files
-# This is just a quick-and-dirty implementation. May need to be
-# made more elegant in the future. This counts on the files
-# being in the Illustrations folder in the first place.
-# That should happen when the project is created. If for some
-# reason they are not there they need to copied in from:
-#	ptxplus/resources/lib_sysFiles/Illustrations
-# This could be automated but a better way to handle this
-# whole process needs to be found and implemented.
-$(PATH_PROCESS)/DraftWatermark-50.pdf :
-	@echo Linking to watermark file image: $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-50.pdf) to $(PATH_PROCESS)/
-	@ln -sf $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-50.pdf) $(PATH_PROCESS)/
+# Make links in Illustrations folder for the draft watermark
+# files. The original default will be copied in from the
+# system to the SharedIllustrations folder, then linked
+# to the Illustrations folder. There is also provision for
+# a custom watermark file to be used as well. The user
+# will need to manually copy that into the SharedIllustrations
+# or else we will get a nasty error.
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_DEFAULT_WATERMARK) :
+	@echo copying default watermark file: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) to $@
+	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) $@
 
-$(PATH_PROCESS)/DraftWatermark-60.pdf :
-	@echo Linking to watermark file image: $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-60.pdf) to $(PATH_PROCESS)/
-	@ln -sf $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-60.pdf) $(PATH_PROCESS)/
+$(PATH_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_DEFAULT_WATERMARK)
+	@echo Linking default watermark file: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_DEFAULT_WATERMARK) to $@
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_DEFAULT_WATERMARK)) $@
 
-$(PATH_PROCESS)/DraftWatermark-A5.pdf :
-	@echo Linking to watermark file image: $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-A5.pdf) to $(PATH_PROCESS)/
-	@ln -sf $(shell readlink -f -- $(PATH_ILLUSTRATIONS)/DraftWatermark-A5.pdf) $(PATH_PROCESS)/
+ifneq ($(FILE_CUSTOM_WATERMARK),)
+$(PATH_ILLUSTRATIONS)/$(FILE_CUSTOM_WATERMARK) :
+	@echo Linking custom watermark file: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_CUSTOM_WATERMARK) to $@
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_CUSTOM_WATERMARK)) $@
+endif
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
@@ -248,9 +248,5 @@ about :
 # To edit the project.conf file
 configure :
 	$(EDITCONF) project.conf ptx2pdf-setup.txt ptx2pdf.sty &
-
-# To see/edit our illustrations for this project
-illustrations :
-	$(EDITCSV) $(ADMIN_ILLUSTRATIONS_CSV)
 
 

@@ -36,32 +36,37 @@ class MakeTexSettings (object) :
 
 
 	def main (self, log_manager) :
-		'''This is the main process function for generating the makefile.'''
+		'''This is the main process function for generating the TeX setup file.
+			Some of the settings will be found in the control file as they need
+			to be associated with the object that is being processed.'''
 
-		self._log_manager = log_manager
+		log_manager = log_manager
+		log_manager._currentSubProcess = 'MkTexSettings'
 
-		# Create the new TeX settings object (overwrite the old file)
-		settingsFileObject = codecs.open('tex_settings.txt', 'w', encoding='utf_8_sig')
+		# Pull in global settings
+# Use the .get() extention on all these settings so a default can be set
+
+		# Build some paths and file names
+		texMacros = log_manager._settings['Process']['Files']['FILE_TEX_MACRO']
+		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
+		styleFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_STYLE']
+		customSetup = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP_CUSTOM']
+		tocTitle = log_manager._settings['Process']['TOC']['mainTitle']
 
 		# Create the file header
 		header = "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
-				"% should be made to the project.conf file.\n\n"
+				"% should be made to the project.conf file or the custom TeX setup file.\n\n"
 
-		# Pull in settings stored in the Process section of the project.conf object
-		# As there are sub-sections we will add them to the settings object one
-		# at after another. There's probably a better way to do this but not today ;-)
-		settings = ""
-
-		# First grab some individual settings we need to insert
-#		cMapVal = self._log_manager._settings['General']['MapProcesses']['CREATE_MAP']
-#		makefileSettings = makefileSettings + 'CREATE_MAP' + "=" + cMapVal + "\n"
-
-		# Create the file footer (the things that go at the end)
-		footer = "% Import custom project settings from secondary settings file.\n" + \
-				"\\input ptx2pdf-setup.txt"
 
 		# Output to the new makefile file
-		settingsFileObject.write(header + settings + footer)
+		# Create the new TeX settings object (overwrite the old file)
+		settingsFileObject = codecs.open(setupFile, 'w', encoding='utf_8_sig')
+		settingsFileObject.write(header)
+		settingsFileObject.write('\\input ' + texMacros + '\n')
+		# Now put out the custom macro file path (this may need to be moved)
+		settingsFileObject.write('\\input ' + customSetup + '\n')
+		# Add the global style sheet
+		settingsFileObject.write('\\stylesheet{' + styleFile + '}\n')
 		settingsFileObject.close()
 
 
