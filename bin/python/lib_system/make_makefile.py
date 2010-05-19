@@ -59,14 +59,20 @@ class MakeMakefile (object) :
 		makefileSettings = ""
 
 		# First grab some individual settings we need in the makefile
-		cMapVal = self._log_manager._settings['General']['MapProcesses']['CREATE_MAP']
+		cMapVal = self._log_manager._settings['General']['MapProcesses'].get('CREATE_MAP',0)
 		makefileSettings = makefileSettings + 'CREATE_MAP' + "=" + cMapVal + "\n"
 
-		rgbPath = self._log_manager._settings['General']['MapProcesses']['RGB_PROFILE']
+		rgbPath = self._log_manager._settings['General']['MapProcesses'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
 		makefileSettings = makefileSettings + 'RGB_PROFILE' + "=" + rgbPath + "\n"
 
-		cmykPath = self._log_manager._settings['General']['MapProcesses']['CMYK_PROFILE']
+		cmykPath = self._log_manager._settings['General']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
 		makefileSettings = makefileSettings + 'CMYK_PROFILE' + "=" + cmykPath + "\n"
+
+		watermark = self._log_manager._settings['Format']['PageLayout'].get('WATERMARK','true')
+		makefileSettings = makefileSettings + 'WATERMARK' + "=" + watermark + "\n"
+
+		cropmarks = self._log_manager._settings['Format']['PageLayout'].get('CROPMARKS','true')
+		makefileSettings = makefileSettings + 'CROPMARKS' + "=" + cropmarks + "\n"
 
 		for key, value, in self._log_manager._settings['Process']['General'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"

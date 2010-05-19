@@ -49,6 +49,30 @@ class MakeTexSettings (object) :
 		customSetup = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP_CUSTOM', 'custom-tex.txt')
 		styleFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_STYLE', 'project.sty')
 
+		# Bring in page format settings
+		cropmarks = log_manager._settings['Format']['PageLayout'].get('CROPMARKS', 'true')
+		pageHeight = log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
+		pageWidth = log_manager._settings['Format']['PageLayout'].get('pageWidth', '148mm')
+\endbooknoejecttrue (endBookNoEject)
+# Columns
+\TitleColumns=1
+\IntroColumns=1
+\BodyColumns=2
+\def\ColumnGutterFactor{15}
+\ColumnGutterRuletrue
+\ColumnGutterRuleSkip=4pt
+# Margins
+\MarginUnit=12mm
+\def\TopMarginFactor{1.75}
+\def\BottomMarginFactor{0} - if set to 0 it will not show up in the output
+\def\SideMarginFactor{1.0}
+\BindingGutter=12mm
+\BindingGuttertrue (useBindingGutter)
+# HeaderFooter
+\def\HeaderPosition{.75}
+\def\FooterPosition{.5}
+
+
 		# Create the file header
 		header = "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
 				"% should be made to the project.conf file or the custom TeX setup file.\n\n"
@@ -58,9 +82,20 @@ class MakeTexSettings (object) :
 		# Create the new TeX settings object (overwrite the old file)
 		settingsFileObject = codecs.open(setupFile, 'w', encoding='utf_8_sig')
 		settingsFileObject.write(header)
+		# This connects the system with the ptx2pdf macros
 		settingsFileObject.write('\\input ' + texMacros + '\n')
+		# Add page format settings
+		settingsFileObject.write('\\PaperHeight=' + pageHeight + '\n')
+		settingsFileObject.write('\\PaperWidth=' + pageWidth + '\n')
+
+
+
 		# Now put out the custom macro file path (this may need to be moved)
 		settingsFileObject.write('\\input ' + customSetup + '\n')
+		# Add some format features here
+		if cropmarks.lower() == 'true' :
+			settingsFileObject.write('\\CropMarkstrue\n')
+
 		# Add the global style sheet
 		settingsFileObject.write('\\stylesheet{' + styleFile + '}\n')
 		settingsFileObject.close()

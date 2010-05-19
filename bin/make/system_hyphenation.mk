@@ -6,6 +6,7 @@
 # History:
 
 # 20100301 - djd - Migrated rules from other files into this one
+# 20100519 - djd - Fixed some file name problems
 
 
 ##############################################################
@@ -22,7 +23,7 @@ make-tex-hyphens :
 
 # Create a TeX hyphenation rules file based on what is in the
 # project.conf file
-$(FILE_TEX_HYPHENATION) : $(newHyphenationFile)
+$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT)
 	$(PY_RUN_SYSTEM_PROCESS) make_tex_hyphenation_file
 
 # Manually create a master wordlist based on existing component
@@ -43,14 +44,9 @@ make-master-wordlist : preprocess-checks
 
 # Manually create the hyphenation file if none exists but
 # do not overwrite any existing ones.
-$(newHyphenationFile) :
+$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT) :
 	@echo INFO: Creating $@
 	@touch $@
-
-# Manually create the hyphenation word list file
-#$(newHyphenationFile) : $(PATH_HYPHENATION) make-master-wordlist
-#	@echo Creating a new hyphenation word list
-#	@$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
 
 # Manually create the hyphenation word list file
 force-make-hyphen-wordlist : $(PATH_HYPHENATION) make-master-wordlist

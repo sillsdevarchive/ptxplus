@@ -79,19 +79,13 @@ dev-update :
 # a custom watermark file to be used as well. The user
 # will need to manually copy that into the SharedIllustrations
 # or else we will get a nasty error.
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_DEFAULT_WATERMARK) :
-	@echo copying default watermark file: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) to $@
-	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) $@
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) :
+	@echo copying default watermark file: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) to $@
+	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) $@
 
-$(PATH_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_DEFAULT_WATERMARK)
-	@echo Linking default watermark file: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_DEFAULT_WATERMARK) to $@
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_DEFAULT_WATERMARK)) $@
-
-ifneq ($(FILE_CUSTOM_WATERMARK),)
-$(PATH_ILLUSTRATIONS)/$(FILE_CUSTOM_WATERMARK) :
-	@echo Linking custom watermark file: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_CUSTOM_WATERMARK) to $@
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_CUSTOM_WATERMARK)) $@
-endif
+$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
+	@echo Linking default watermark file: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) to $@
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)) $@
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in

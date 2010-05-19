@@ -22,6 +22,7 @@
 # 20090901 - te - Reorganized script and solidified the output
 #		also took out some config settings that seem
 #		redundant now
+# 20100519 - djd - Fix some bad paths
 
 
 #############################################################
@@ -42,12 +43,12 @@ class MakeTexHyphenationFile (object) :
 
 	def main (self, log_manager) :
 		settings = tools.getSettingsObject()
-		hyphenPath = settings['Process']['Paths']['PATH_HYPHENATION']
+		hyphenPath = settings['Process']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
 
 		# Set the output file name and the wordlist file name
-		texHyphenFileName = hyphenPath + settings['Process']['Files']['FILE_HYPHENATION_TEX']
-		wordListFileName =  hyphenPath + settings['Process']['Files']['FILE_HYPHENATION_TXT']
-		lcCodeListFileName = hyphenPath + settings['Process']['Files']['FILE_LCCODELIST_TXT']
+		texHyphenFileName = hyphenPath + '/' + settings['Process']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
+		wordListFileName =  hyphenPath + '/' + settings['Process']['Files'].get('FILE_HYPHENATION_TXT', 'hyphenation.txt')
+		lcCodeListFileName = hyphenPath + '/' + settings['Process']['Files'].get('FILE_LCCODELIST_TXT', 'lccodelist.txt')
 
 		# If we see that the texHyphenFile exists we will abort
 		# That file needs to be manually removed to avoid problems

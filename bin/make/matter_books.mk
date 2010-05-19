@@ -82,7 +82,7 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
   $(FILE_TEX_STYLE) \
   $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) \
   $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) \
-  $(PATH_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) \
+  $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) \
   $(PATH_PROCESS)/.stamp
 
 
@@ -167,12 +167,13 @@ $(PATH_PROCESS)/$(1).pdf : \
 # Open the PDF file with reader
 view-$(1) : $(PATH_PROCESS)/$(1).pdf
 	@- $(CLOSEPDF)
+	@if [ $(WATERMARK) = "true" ] ; then \
+		echo INFO: Adding watermark to ouput: $(PATH_PROCESS)/$(1).pdf; \
+		pdftk $(PATH_PROCESS)/$(1).pdf background $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
+		cp $(PATH_PROCESS)/tmp.pdf $(PATH_PROCESS)/$(1).pdf; \
+		rm -f $(PATH_PROCESS)/tmp.pdf; \
+	fi
 	@ $(VIEWPDF) $$< &
-
-# Add a water mark to the page
-watermark-$(1) :
-	@echo INFO: Adding watermark to ouput
-	@pdftk $(PATH_PROCESS)/$(1).pdf background $(PATH_ILLUSTRATIONS)/$(FILE_DEFAULT_WATERMARK) output $(PATH_PROCESS)/$(1).pdf
 
 # Open the SFM file with the text editor
 edit-$(1) : $(PATH_TEXTS)/$(1).usfm

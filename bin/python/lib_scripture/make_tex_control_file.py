@@ -48,6 +48,7 @@ class MakeTexControlFile (object) :
 		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', 'auto-tex.txt')
 		hyphenFile = pathToHyphen + "/" + log_manager._settings['Process']['Files'].get('FILE_HYPHENATION_TEX', '')
 		marginalVerses = log_manager._settings['Process']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
+\columnshift=15pt
 		useHyphenation = log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
 		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
 		tocTitle = log_manager._settings['Process']['TOC'].get('mainTitle', 'Table of Contents')
@@ -76,6 +77,7 @@ class MakeTexControlFile (object) :
 		# Note that order is important, though not fully understood :-)
 		if useMarginalVerses.lower() == 'true' :
 			texControlObject.write('\\input ' + marginalVerses + '\n')
+			texControlObject.write('\\input ' + \columnshift=15pt
 
 		# Passing in all the book IDs is problematic we can get that
 		# information from the .config file so we'll use a syntax
