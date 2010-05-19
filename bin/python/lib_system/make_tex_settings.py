@@ -43,15 +43,11 @@ class MakeTexSettings (object) :
 		log_manager = log_manager
 		log_manager._currentSubProcess = 'MkTexSettings'
 
-		# Pull in global settings
-# Use the .get() extention on all these settings so a default can be set
-
 		# Build some paths and file names
-		texMacros = log_manager._settings['Process']['Files']['FILE_TEX_MACRO']
-		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
-		styleFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_STYLE']
-		customSetup = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP_CUSTOM']
-		tocTitle = log_manager._settings['Process']['TOC']['mainTitle']
+		texMacros = log_manager._settings['Process']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
+		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', 'auto-tex.txt')
+		customSetup = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP_CUSTOM', 'custom-tex.txt')
+		styleFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_STYLE', 'project.sty')
 
 		# Create the file header
 		header = "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \

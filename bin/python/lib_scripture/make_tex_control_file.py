@@ -42,17 +42,15 @@ class MakeTexControlFile (object) :
 		bookID = log_manager._currentTargetID
 		log_manager._currentSubProcess = 'MkContFile'
 
-
-# Use the .get() extention on all these settings so a default can be set
-
 		# Build some paths, file names and settings
-		pathToText = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_TEXTS']
-		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
-		pathToHyphen = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_HYPHENATION']
-		useHyphenation = log_manager._settings['Process']['Hyphenation']['useHyphenation']
-		hyphenFile = pathToHyphen + "/" + log_manager._settings['Process']['Files']['FILE_HYPHENATION_TEX']
-		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse']['useMarginalVerses']
-		marginalVerses = log_manager._settings['Process']['Files']['FILE_MARGINAL_VERSES']
+		pathToText = os.getcwd() + "/" + log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
+		pathToHyphen = os.getcwd() + "/" + log_manager._settings['Process']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
+		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', 'auto-tex.txt')
+		hyphenFile = pathToHyphen + "/" + log_manager._settings['Process']['Files'].get('FILE_HYPHENATION_TEX', '')
+		marginalVerses = log_manager._settings['Process']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
+		useHyphenation = log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
+		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
+		tocTitle = log_manager._settings['Process']['TOC'].get('mainTitle', 'Table of Contents')
 
 #######################################################################################################
 # we need some kind of test to see if this is a control file for Scripture so we can build contextually
