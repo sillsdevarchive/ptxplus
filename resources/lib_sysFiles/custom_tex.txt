@@ -1,0 +1,130 @@
+% custom_tex.txt
+%
+% Custom TeX setup file for the ptx2pdf macro package.
+% This file is loaded in after the auto_tex.txt settings
+% file is compleated loading.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%  Extra Tweaks %%%%%%%%%%%%%%%%%%%%%%
+
+% In a perfect world none of these would be needed but when
+% your publication throws you a curve, perhaps one of these
+% work-arounds might help you do what you want to do.
+
+%%%%% Additional Marginal Verse Settings
+% For marginal verse output we need to insert this right here.
+% This should be temporary. It allows one stylesheet to undo
+% superscript in a previous one It needs to go right here to
+% keep everything else working
+%
+% This is needed to turn off superscript in the override stylesheet
+%\catcode`\@=11
+%\def\NoSuperscript  {\defp@ram{superscript}{false}}
+%\catcode`\@=12
+%
+% In the override stylesheet (to follow) we need this to be
+% inserted for \v:
+% \Marker v
+% \sethook{start}{v}{\kern-3sp}
+% \FontSize 8
+% \Bold
+% \NoSuperscript
+
+
+% To adjust the size of the page number in the header or footer
+% use the following code. Adjust font name and size as necessary.
+%\font\mysmallfont="[../Fonts/CharisSIL/CharisSILB.ttf]" at 10pt
+%\def\pagenumber{{\mysmallfont \folio}}
+
+% This will output only the book name in the header that is
+% found in \h. (This should be added to ptx2pdf.)
+\catcode`\@=11
+\def\bookname{\x@\extr@ctfirst\p@gefirstmark\relax\@book}
+\catcode`\@=12
+
+%%%%% Character Kerning
+% Add some space between quote marks that are together.
+%\quotekernamount = 0.1em
+
+%%%%% Substituting Characters
+% Some times, when a character does not exist in a font
+% you can substitute from another if no special rendering
+% is needed. This code will do that. Uncomment and modify
+% as needed. This will put more cwi in your life :-)
+%\font\cwi="[../Fonts/Padauk/Padauk.ttf]" at 10pt
+%\catcode"A92E=\active				% Make U+A92E an active character
+%\def^^^^a92e{\leavevmode{\cwi\char"A92E}}	% Define it to print itself  in \cwi
+
+%%%%% Non-standard Spaces
+% Some publications may use non-standard (U+0020) between words.
+% But TeX (and XeTeX) will treat spaces other than U+0020 as
+% non-breaking which messes up your justification. This is a
+% work around to force TeX to break and stretch words with
+% another space character in a controled way.
+%\catcode"2009=13
+%\def^^^^2009{\hskip .2em plus.1em minus.1em\relax}
+
+% There always seems to be problems with extra space between
+% the section heading and the top of the column when the
+% section head is at the top of the column. To take up the
+% slack this code will usually help. Any adjustments needed
+% should be done in the .sty and \VerticalSpaceFactor.
+% Trying to adjust this code doesn't seem to make any dif.
+\catcode`\@=11
+\def\gridb@x#1{%
+ \setbox0=\ifgridp@c\vbox{\box#1}\else\killd@scenders#1\fi%
+ \dimen2=\ht0 \advance\dimen2 by \dp0
+ \dimen0=\baselineskip \vskip\baselineskip
+ \ifgridp@c\line{}\nobreak\fi % otherwise first \line in loop won't get any baselineskip
+							  % when doing a picture box, because it's not part of the
+							  % current page
+ \loop \ifdim\dimen0<\dimen2
+   \advance\dimen0 by \baselineskip
+	\line{}\nobreak \repeat
+ \setbox0=\vbox to 0pt{\kern-\ht0\unvbox0}
+ \unvbox0 \nobreak
+}
+\catcode`\@=12
+
+
+%%%%% Page Size
+
+% This is controled from the project.conf file. However,
+% as there is a wide range of paper sizes, we will store
+% that information here (for now).
+
+% Page/Paper Dimensions - Trimmed
+% ISO A4 (default)
+%	\PaperWidth=210mm	\PaperHeight=297mm	% 8.27 X 11.69 in.
+% ISO B4
+%	\PaperWidth=250mm	\PaperHeight=353mm	% 9.84 X 13.90 in.
+% ISO A5
+%	\PaperWidth=148mm	\PaperHeight=210mm	% 5.83 X 8.27 in.
+% ISO B5
+%	\PaperWidth=176mm	\PaperHeight=250mm	% 6.93 X 9.84 in.
+% ISO A6
+%	\PaperWidth=105mm	\PaperHeight=148mm	% 4.13 X 5.83 in.
+% ISO B6
+%	\PaperWidth=125mm	\PaperHeight=176mm	% 4.92 X 6.93 in.
+% UBS Series 20
+%	\PaperWidth=93mm	\PaperHeight=127mm
+% UBS Series 30
+%	\PaperWidth=100mm	\PaperHeight=145mm
+% UBS Series 40
+%	\PaperWidth=115mm	\PaperHeight=165mm
+% UBS Series 50
+%	\PaperWidth=120mm	\PaperHeight=180mm
+% UBS Series 60 (5.71" x 8.27")
+%	\PaperWidth=145mm	\PaperHeight=210mm
+% UBS Series 70
+%	\PaperWidth=162mm	\PaperHeight=220mm
+% UBS Series 80
+%	\PaperWidth=172mm	\PaperHeight=235mm
+% UBS Series 90
+%	\PaperWidth=210mm	\PaperHeight=295mm
+% GPS typical size (5.25" x 8.25")
+%	\PaperWidth=133mm	\PaperHeight=210mm
+% GPS large size (5.8" x 8.7")
+%	\PaperWidth=147mm	\PaperHeight=221mm
