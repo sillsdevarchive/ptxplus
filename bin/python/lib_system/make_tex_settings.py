@@ -71,6 +71,11 @@ class MakeTexSettings (object) :
 # HeaderFooter
 \def\HeaderPosition{.75}
 \def\FooterPosition{.5}
+# Fonts
+\def\regular{"[../Fonts/CharisSIL/CharisSILR.ttf]/GR"}
+\def\bold{"[../Fonts/CharisSIL/CharisSILB.ttf]/GR"}
+\def\italic{"[../Fonts/CharisSIL/CharisSILI.ttf]/GR"}
+\def\bolditalic{"[../Fonts/CharisSIL/CharisSILBI.ttf]/GR"}
 
 
 		# Create the file header
@@ -82,7 +87,7 @@ class MakeTexSettings (object) :
 		# Create the new TeX settings object (overwrite the old file)
 		settingsFileObject = codecs.open(setupFile, 'w', encoding='utf_8_sig')
 		settingsFileObject.write(header)
-		# This connects the system with the ptx2pdf macros
+		# This connects the system with the custom macro code
 		settingsFileObject.write('\\input ' + texMacros + '\n')
 		# Add page format settings
 		settingsFileObject.write('\\PaperHeight=' + pageHeight + '\n')
