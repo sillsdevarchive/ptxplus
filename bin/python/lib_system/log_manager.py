@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.5
 # -*- coding: utf-8 -*-
 # version: 20080529
 # By Dennis Drescher (dennis_drescher at sil.org)
