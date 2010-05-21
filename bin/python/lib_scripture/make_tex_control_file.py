@@ -48,7 +48,11 @@ class MakeTexControlFile (object) :
 		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', 'auto-tex.txt')
 		hyphenFile = pathToHyphen + "/" + log_manager._settings['Process']['Files'].get('FILE_HYPHENATION_TEX', '')
 		marginalVerses = log_manager._settings['Process']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
+
 \columnshift=15pt
+\def\PageBorder{tuborder.pdf scaled 825} (usePageBorder / pageBorderScale)
+
+
 		useHyphenation = log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
 		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
 		tocTitle = log_manager._settings['Process']['TOC'].get('mainTitle', 'Table of Contents')
