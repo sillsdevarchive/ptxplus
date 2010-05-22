@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Thu, 11 Mar 2010 14:37:10 +0700
-Modification-Date: Tue, 27 Apr 2010 07:17:58 +0700
+Modification-Date: Sat, 22 May 2010 15:46:33 +0700
 
 ====== Ptx2pdf ======
 
@@ -22,3 +22,15 @@ Make a new style:
 \LeftMargin .1
 
 There is more that needs to be described here but it will need to be done by someone who has actually done it. Sorry if this doesn't help you.
+
+==== Title Page Page Numbers ====
+For some audiences, it is helpful to have a page number on the first page. For newer readers it makes better sense to have the TOC pointing to a real number on the page. However, the title page could be on odd or even page depending on where it lands when it is typeset. To ensure that the page number ends up in the right place some extra testing code can be entered in the field that normally contains the key word for the running footer or header. For example, if you wanted to have the page number on the outside of the title page, the header, this would work:
+
+\def\RHtitleleft{\ifodd\pageno\empty\else\pagenumber\fi}
+\def\RHtitlecenter{\empty}
+\def\RHtitleright{\ifodd\pageno\pagenumber\else\empty\fi}
+
+Similar code could be applied to the footer as well.
+
+==== Footnote Handling Tweaks ====
+To adjust the vertical line spacing for footnotes add "\BaseLine 10pt" (or whatever pt size it needs to be) to the \f marker in the .sty file. the same would work for cross references (\x).

@@ -1,19 +1,14 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Mon, 09 Nov 2009 11:14:24 +0700
-Modification-Date: Mon, 09 Nov 2009 11:37:14 +0700
+Modification-Date: Sat, 22 May 2010 15:26:29 +0700
 
 ====== Project Setup ======
 
 This page covers initial project setup.
 
 ===== Source Text =====
-The Source folder inside the project contains all the source files for a given project. They are read-only files. No editing should be done on these files by the publishing specialist, only the author. However, the files in this folder do not have to actually reside in the folder. For some projects, the source text will be shared by a number of other publishing projects. In cases like this, it is best to link the source text to the project's Source folder. In your terminal located inside the project Source folder a command like this will enable you to link files from an external source:
-
-	ln -sf [[../../Text/*name.USFM]] .
-
-The -s is for symbolic link, the -f forces an overwrite if a previous existing link is found. The '.' at the end indicates to put them in the current directory.
-
+The Source folder inside the language folder (ISO 639-3 lanaguage code) contains all the source text files for a given project. They are read-only files. No editing should be done on these files by the publishing specialist, only the author. However, the files in this folder do not have to actually reside in the folder. For some projects, the source text will be shared by a number of other publishing projects.
 
 
 We need much more setup information written here...

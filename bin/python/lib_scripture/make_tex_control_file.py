@@ -51,6 +51,53 @@ class MakeTexControlFile (object) :
 
 \columnshift=15pt
 \def\PageBorder{tuborder.pdf scaled 825} (usePageBorder / pageBorderScale)
+useRunningHeaderRule
+\RHruleposition=6pt (runningHeaderRulePosition)
+\VerseRefstrue (verseRefs)
+\OmitChapterNumberRHtrue (omitChapterNumber)
+\def\RHtitleleft{\empty} (runningHeaderTitleLeft)
+\def\RHtitlecenter{\empty} (runningHeaderTitleCenter)
+\def\RHtitleright{\empty} (runningHeaderTitleRight)
+\def\RHoddleft{\empty} (runningHeaderOddLeft)
+\def\RHoddcenter{\pagenumber} (runningHeaderOddCenter)
+\def\RHoddright{\rangeref} (runningHeaderOddRight)
+\def\RHevenleft{\rangeref} (runningHeaderEvenLeft)
+\def\RHevencenter{\pagenumber} (runningHeaderOddCenter)
+\def\RHevenright{\empty} (runningHeaderEvenRight)
+\def\RFtitleleft{\empty} (runningFooterTitleLeft)
+\def\RFtitlecenter{\empty} (runningFooterTitleCenter)
+\def\RFtitleright{\empty} (runningFooterTitleRight)
+\def\RFoddleft{\empty} (runningFooterOddLeft)
+\def\RFoddcenter{\empty} (runningFooterOddCenter)
+\def\RFoddright{\empty} (runningFooterOddRight)
+\def\RFevenleft{\empty} (runningFooterEvenLeft)
+\def\RFevencenter{\empty} (runningFooterEvenCenter)
+\def\RFevenright{\empty} (runningFooterEvenRight)
+
+# Footnote settings
+%\AutoCallerStartChar{}
+%\AutoCallerNumChars{}
+%\AutoCallers{f}{\kern0.2em*\kern0.4em}
+%\NumericCallers{x}
+%\PageResetCallers{x}
+%\OmitCallerInNote{f}
+%\ParagraphedNotes{f}
+%\def\footnoterule{}
+
+% Footnote caller kerning - To adjust space around the
+% footnote caller use the following code Adjust the kern
+% amounts as necessary
+%\let\OriginalGetCaller=\getcaller
+%\def\getcaller#1#2{%
+%  \kern0.2em\OriginalGetCaller{#1}{#2}\kern0.4em}
+
+% Inter Note Skip - Adjust the horizontal space between footnotes,
+% both paragraphed and non-paragraphed
+\catcode`\@=11
+  \intern@teskip=10pt
+\catcode`\@=12
+
+\def\internotepenalty{9999}
 
 
 		useHyphenation = log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
