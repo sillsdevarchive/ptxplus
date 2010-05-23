@@ -82,8 +82,8 @@ useRunningHeaderRule
 \def\RFevenright{\empty} (runningFooterEvenRight)
 
 # Footnote settings
-\AutoCallerStartChar{} ()
-\AutoCallerNumChars{} ()
+\AutoCallerStartChar{97} (autoCallerStartChar)
+\AutoCallerNumChars{26} (autoCallerNumChars)
 \AutoCallers{f}{\kern0.2em*\kern0.4em} ()
 \NumericCallers{x} ()
 \PageResetCallers{x} ()
