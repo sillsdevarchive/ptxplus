@@ -54,7 +54,14 @@ class MakeTexControlFile (object) :
 useRunningHeaderRule
 \RHruleposition=6pt (runningHeaderRulePosition)
 \VerseRefstrue (verseRefs)
+\def\ChapterVerseSeparator{\kern.02em:\kern.02em} (chapterVerseSeparator)
 \OmitChapterNumberRHtrue (omitChapterNumber)
+\OmitVerseNumberOnetrue (omitVerseNumberOne)
+\def\AfterVerseSpaceFactor{2} (afterVerseSpaceFactor)
+\def\AfterChapterSpaceFactor{3} (afterChapterSpaceFactor)
+\IndentAfterHeadingtrue (removeIndentAfterHeading = false)
+\def\AdornVerseNumber#1{(#1)} (adornVerseNumber = false)
+
 \def\RHtitleleft{\empty} (runningHeaderTitleLeft)
 \def\RHtitlecenter{\empty} (runningHeaderTitleCenter)
 \def\RHtitleright{\empty} (runningHeaderTitleRight)
@@ -75,21 +82,21 @@ useRunningHeaderRule
 \def\RFevenright{\empty} (runningFooterEvenRight)
 
 # Footnote settings
-%\AutoCallerStartChar{}
-%\AutoCallerNumChars{}
-%\AutoCallers{f}{\kern0.2em*\kern0.4em}
-%\NumericCallers{x}
-%\PageResetCallers{x}
-%\OmitCallerInNote{f}
-%\ParagraphedNotes{f}
-%\def\footnoterule{}
+\AutoCallerStartChar{} ()
+\AutoCallerNumChars{} ()
+\AutoCallers{f}{\kern0.2em*\kern0.4em} ()
+\NumericCallers{x} ()
+\PageResetCallers{x} ()
+\OmitCallerInNote{f} ()
+\ParagraphedNotes{f} ()
+\def\footnoterule{} ()
 
 % Footnote caller kerning - To adjust space around the
 % footnote caller use the following code Adjust the kern
 % amounts as necessary
-%\let\OriginalGetCaller=\getcaller
-%\def\getcaller#1#2{%
-%  \kern0.2em\OriginalGetCaller{#1}{#2}\kern0.4em}
+\let\OriginalGetCaller=\getcaller
+\def\getcaller#1#2{%
+  \kern0.2em\OriginalGetCaller{#1}{#2}\kern0.4em}
 
 % Inter Note Skip - Adjust the horizontal space between footnotes,
 % both paragraphed and non-paragraphed
@@ -97,22 +104,18 @@ useRunningHeaderRule
   \intern@teskip=10pt
 \catcode`\@=12
 
+# Hyphenation
 \def\internotepenalty{9999}
 
 
 		useHyphenation = log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
 		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
 		tocTitle = log_manager._settings['Process']['TOC'].get('mainTitle', 'Table of Contents')
+		oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('shortBookChapterOmit', 'true')
+		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
 
 #######################################################################################################
 # we need some kind of test to see if this is a control file for Scripture so we can build contextually
-
-		# Look for settings to apply, not all of them will be
-		# usable in every case
-		try :
-			oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse']['shortBookChapterOmit']
-		except :
-			oneChapOmmitRule = "false"
 
 		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
 		texControlObject = codecs.open(texControlFile, "w", encoding='utf_8_sig')
@@ -150,11 +153,17 @@ useRunningHeaderRule
 		if tocFile != "" :
 			texControlObject.write('\\GenerateTOC[' + tocTitle + ']{' + tocFile + '}\n')
 
+		# This will apply the \OmitChapterNumbertrue to only the books
+		# that consist of one chapter. Or, if the omitAllChapterNumbers
+		# setting is true, it takes the chapter numbers out of all books.
+		# To be safe, it turns it off after the book is processed so it
+		# will not affect the next book being processed. This is the last
+		# write to the output file.
 		componentScripture = bookID.split()
 		for book in componentScripture :
 			thisBook = pathToText + '/' + book.lower() + '.usfm'
 			bookInfo = self.parseThisBook(thisBook)
-			if oneChapOmmitRule == "true" and bookInfo['chapCount'] == 1 :
+			if oneChapOmmitRule == 'true' and bookInfo['chapCount'] == 1 or omitAllChapterNumbers == 'true':
 				texControlObject.write('\\OmitChapterNumbertrue\n')
 				texControlObject.write('\\ptxfile{' + thisBook + '}\n')
 				texControlObject.write('\\OmitChapterNumberfalse\n')
@@ -162,6 +171,7 @@ useRunningHeaderRule
 				texControlObject.write('\\ptxfile{' + thisBook + '}\n')
 		texControlObject.write('\\bye\n')
 		texControlObject.close()
+
 
 	def parseThisBook (self, book) :
 		'''Parse a specific book based on ID then return relevant info.'''

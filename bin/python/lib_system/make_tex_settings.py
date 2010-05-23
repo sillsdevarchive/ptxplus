@@ -76,7 +76,10 @@ class MakeTexSettings (object) :
 \def\bold{"[../Fonts/CharisSIL/CharisSILB.ttf]/GR"}
 \def\italic{"[../Fonts/CharisSIL/CharisSILI.ttf]/GR"}
 \def\bolditalic{"[../Fonts/CharisSIL/CharisSILBI.ttf]/GR"}
+# Paths
+\PicPath={Illustrations/} (PATH_ILLUSTRATIONS)
 
+\FigurePlaceholderstrue (useFigurePlaceholders)
 
 		# Create the file header
 		header = "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \

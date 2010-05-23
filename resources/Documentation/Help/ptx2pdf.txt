@@ -1,7 +1,7 @@
 Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.26
 Creation-Date: Thu, 11 Mar 2010 14:37:10 +0700
-Modification-Date: Sat, 22 May 2010 15:46:33 +0700
+Modification-Date: Sat, 22 May 2010 21:37:07 +0700
 
 ====== Ptx2pdf ======
 
@@ -34,3 +34,6 @@ Similar code could be applied to the footer as well.
 
 ==== Footnote Handling Tweaks ====
 To adjust the vertical line spacing for footnotes add "\BaseLine 10pt" (or whatever pt size it needs to be) to the \f marker in the .sty file. the same would work for cross references (\x).
+
+==== Flying Verse Numbers ====
+To set the vertical distance between verse numbers when using flying verse numbers. You need to insert in the [[.sty]] this command in the verse marker: \BaseLine 10pt This can help prevent clashing when using number systems in which the character baseline can vary from number to number. The default behavior is to use the font size. If this is too close you will want to change the number as desired.
