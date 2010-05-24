@@ -76,6 +76,7 @@ class MakeTexSettings (object) :
 \def\bold{"[../Fonts/CharisSIL/CharisSILB.ttf]/GR"}
 \def\italic{"[../Fonts/CharisSIL/CharisSILI.ttf]/GR"}
 \def\bolditalic{"[../Fonts/CharisSIL/CharisSILBI.ttf]/GR"}
+\tracinglostchars=1 ()
 # Paths
 \PicPath={Illustrations/} (PATH_ILLUSTRATIONS)
 

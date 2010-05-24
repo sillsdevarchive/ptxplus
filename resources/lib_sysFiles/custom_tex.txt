@@ -32,7 +32,7 @@
 % \Bold
 % \NoSuperscript
 
-
+%%%%% Header output
 % To adjust the size of the page number in the header or footer
 % use the following code. Adjust font name and size as necessary.
 %\font\mysmallfont="[../Fonts/CharisSIL/CharisSILB.ttf]" at 10pt
@@ -44,7 +44,28 @@
 \def\bookname{\x@\extr@ctfirst\p@gefirstmark\relax\@book}
 \catcode`\@=12
 
-%%%%% Character Kerning
+%%%%% Footnote tweaks
+% Footnote caller kerning - To adjust space around the
+% footnote caller use the following code Adjust the kern
+% amounts as necessary
+\let\OriginalGetCaller=\getcaller
+\def\getcaller#1#2{%
+  \kern0.2em\OriginalGetCaller{#1}{#2}\kern0.4em}
+
+% Inter Note Skip - Adjust the horizontal space between footnotes,
+% both paragraphed and non-paragraphed
+\catcode`\@=11
+  \intern@teskip=10pt
+\catcode`\@=12
+
+% Inter-note Penalty - Control the amount of "tension" between
+% parts of a footnote to help control line breaking. If you
+% use the highest setting, 10000, it will never break. A lower
+% setting, like 9999, will lossen it up. Default is 9999.
+\def\internotepenalty{9999}
+
+
+%%%%% Quote Character Kerning
 % Add some space between quote marks that are together.
 %\quotekernamount = 0.1em
 
@@ -66,6 +87,7 @@
 %\catcode"2009=13
 %\def^^^^2009{\hskip .2em plus.1em minus.1em\relax}
 
+%%%%% Heading space
 % There always seems to be problems with extra space between
 % the section heading and the top of the column when the
 % section head is at the top of the column. To take up the
@@ -87,7 +109,6 @@
  \unvbox0 \nobreak
 }
 \catcode`\@=12
-
 
 %%%%% Page Size
 

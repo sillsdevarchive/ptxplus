@@ -82,31 +82,21 @@ useRunningHeaderRule
 \def\RFevenright{\empty} (runningFooterEvenRight)
 
 # Footnote settings
+\AutoCallers{f}{\kern0.2em*\kern0.4em} (autoCallers) (if this, don't use some other things)
 \AutoCallerStartChar{97} (autoCallerStartChar)
 \AutoCallerNumChars{26} (autoCallerNumChars)
-\AutoCallers{f}{\kern0.2em*\kern0.4em} ()
-\NumericCallers{x} ()
-\PageResetCallers{x} ()
-\OmitCallerInNote{f} ()
-\ParagraphedNotes{f} ()
-\def\footnoterule{} ()
+\NumericCallers{f} (useNumericCallersFootnotes)
+\NumericCallers{x} (useNumericCallersCrossRefs)
+\PageResetCallers{f} (pageResetCallersFootnotes)
+\PageResetCallers{x} (pageResetCallersCrossRefs)
+\OmitCallerInNote{f} (omitCallerInFootnote)
+\OmitCallerInNote{x} (omitCallerInCrossRefs)
+\ParagraphedNotes{f} (paragraphedFootnotes)
+\ParagraphedNotes{x} (paragraphedCrossRefs)
+\def\footnoterule{} (footnoteRule)
 
-% Footnote caller kerning - To adjust space around the
-% footnote caller use the following code Adjust the kern
-% amounts as necessary
-\let\OriginalGetCaller=\getcaller
-\def\getcaller#1#2{%
-  \kern0.2em\OriginalGetCaller{#1}{#2}\kern0.4em}
-
-% Inter Note Skip - Adjust the horizontal space between footnotes,
-% both paragraphed and non-paragraphed
-\catcode`\@=11
-  \intern@teskip=10pt
-\catcode`\@=12
-
-# Hyphenation
-\def\internotepenalty{9999}
-
+\JustifyParsfalse (justifyPars)
+\RTLtrue (rightToLeft)
 
 		useHyphenation = log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
 		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
