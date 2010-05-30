@@ -110,6 +110,20 @@
 }
 \catcode`\@=12
 
+%%%%% Get Rid of Over Full Warnings
+% Surpress (if necessary) the vbox over full warning when
+% when line spacing gets tight. If you use it edit the pt
+% according to what you need. Keep in mind that you might
+% be able to prevent an overful \vbox by changing your top
+% and/or bottom margins.
+%\vfuzz = 2.5pt
+
+%%%%% Get Rid of Uggly Black Boxes
+% This might help prevent the black boxes from appearing
+% at the end of some lines if that is a problem. Edit as
+% needed.
+%\hfuzz=0.75pt
+
 %%%%% Page Size
 
 % This is controled from the project.conf file. However,

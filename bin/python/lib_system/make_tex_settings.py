@@ -76,7 +76,11 @@ class MakeTexSettings (object) :
 \def\bold{"[../Fonts/CharisSIL/CharisSILB.ttf]/GR"}
 \def\italic{"[../Fonts/CharisSIL/CharisSILI.ttf]/GR"}
 \def\bolditalic{"[../Fonts/CharisSIL/CharisSILBI.ttf]/GR"}
-\tracinglostchars=1 ()
+\tracinglostchars=1 (tracingLostCharacters)
+\FontSizeUnit=1pt (fontSizeUnit)
+\def\LineSpacingFactor{1.1} (lineSpacingFactor)
+\def\VerticalSpaceFactor{1} (verticalSpaceFactor)
+\XeTeXlinebreaklocale "G" (xetexLineBreakLocale - false)
 # Paths
 \PicPath={Illustrations/} (PATH_ILLUSTRATIONS)
 
