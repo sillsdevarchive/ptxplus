@@ -207,25 +207,31 @@ class MakeTexControlFile (object) :
 
 		# Footnote settings
 		# If we use Autocallers we need to leave out some other things and vise versa
-		if autoCallers.lower() == 'true' :
+		if autoCallers != '' :
+			footnoteSettings = footnoteSettings + '\\AutoCallers{f}{\kern0.2em*\kern0.4em} (autoCallers) (if this, don't use some other things)
 
 		else :
+			footnoteSettings = footnoteSettings + '\\def\\AutoCallerStartChar{' + autoCallerStartChar + '}\n'
+			footnoteSettings = footnoteSettings + '\\def\\AutoCallerNumChars{' + autoCallerNumChars + '}\n'
+			if useNumericCallersFootnotes.lower() == 'true' :
+				footnoteSettings = footnoteSettings + '\\NumericCallers{f}\n'
+			if useNumericCallersCrossRefs.lower() == 'true' :
+				footnoteSettings = footnoteSettings + '\\NumericCallers{x}\n'
+			if pageResetCallersFootnotes.lower() == 'true' :
+				footnoteSettings = footnoteSettings + '\\PageResetCallers{f}\n'
+			if pageResetCallersCrossRefs.lower() == 'true' :
+				footnoteSettings = footnoteSettings + '\\PageResetCallers{x}\n'
+
+		if footnoteRule.lower() == 'true' :
+			footnoteSettings = footnoteSettings + '\\def\\footnoterule{}\n'
 
 
 		footnoteSettings = footnoteSettings +
 
-*\AutoCallers{f}{\kern0.2em*\kern0.4em} (autoCallers) (if this, don't use some other things)
-*\AutoCallerStartChar{97} (autoCallerStartChar)
-*\AutoCallerNumChars{26} (autoCallerNumChars)
-*\NumericCallers{f} (useNumericCallersFootnotes)
-*\NumericCallers{x} (useNumericCallersCrossRefs)
-*\PageResetCallers{f} (pageResetCallersFootnotes)
-*\PageResetCallers{x} (pageResetCallersCrossRefs)
 *\OmitCallerInNote{f} (omitCallerInFootnote)
 *\OmitCallerInNote{x} (omitCallerInCrossRefs)
 *\ParagraphedNotes{f} (paragraphedFootnotes)
 *\ParagraphedNotes{x} (paragraphedCrossRefs)
-*\def\footnoterule{} (footnoteRule = true)
 
 		# General settings
 *\JustifyParsfalse (justifyPars = true)
