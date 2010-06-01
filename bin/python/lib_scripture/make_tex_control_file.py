@@ -58,6 +58,7 @@ class MakeTexControlFile (object) :
 		# Format -> PageLayout
 		usePageBorder = log_manager._settings['Format']['PageLayout'].get('usePageBorder', 'false')
 		pageBorderScale = log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
+		pageBorderFile = log_manager._settings['Process']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
 		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
 		oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('shortBookChapterOmit', 'true')
 		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
@@ -75,6 +76,7 @@ class MakeTexControlFile (object) :
 		removeIndentAfterHeading = log_manager._settings['Format']['Scripture'][''].get('removeIndentAfterHeading', 'false')
 		adornVerseNumber = log_manager._settings['Format']['Scripture'][''].get('adornVerseNumber', 'false')
 
+		# Running Header
 		runningHeaderTitleLeft = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleLeft', 'empty')
 		runningHeaderTitleCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleCenter', 'empty')
 		runningHeaderTitleRight = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleRight', 'empty')
@@ -94,6 +96,7 @@ class MakeTexControlFile (object) :
 		runningFooterEvenCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenCenter', 'empty')
 		runningFooterEvenRight = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenRight', 'empty')
 
+		# Footnotes
 		autoCallers = log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallers', '*')
 		autoCallerStartChar = log_manager._settings['Format']['Scripture'][''].get('autoCallerStartChar', '97')
 		autoCallerNumChars = log_manager._settings['Format']['Scripture'][''].get('autoCallerNumChars', '26')
@@ -109,101 +112,125 @@ class MakeTexControlFile (object) :
 		justifyPars = log_manager._settings['Format']['Scripture'][''].get('justifyPars', 'true')
 		rightToLeft = log_manager._settings['Format']['Scripture'][''].get('rightToLeft', 'false')
 
+		# Generate a TOC file name.
+		tocFile = ''
+		if bookID.lower() == 'nt' :
+			bookID = self._log_manager._settings['Process']['Binding']['MATTER_OT']
+			tocFile = log_manager._settings['Process']['Files']['FILE_AUTO_TOC'] + '-ot.usfm'
+		elif bookID.lower() == 'nt' :
+			bookID = self._log_manager._settings['Process']['Binding']['MATTER_NT']
+			tocFile = log_manager._settings['Process']['Files']['FILE_AUTO_TOC'] + '-nt.usfm'
 
 #######################################################################################################
+# Build each area of the output individually
+
 # we need some kind of test to see if this is a control file for Scripture so we can build contextually
 
-		# Output the bookWordlist to the bookWordlist file (we'll overwrite the existing one)
-		texControlObject = codecs.open(texControlFile, "w", encoding='utf_8_sig')
+		# These are the strings we will fill:
+		fileHeaderText = ''
+		fileInput = ''
+		verseChapterSettings = ''
+		headerSettings = ''
+		footerSettings = ''
+		footnoteSettings = ''
+		generalSettings = ''
 
-		# Read in all the global settings
-		texControlObject.write('\\input ' + setupFile + '\n')
+
+		# The file header telling users not to touch it
+		fileHeaderText = "This is the " + texControlFile + " and it is auto generated. If you know what's good for you, don't edit it!\n\n"
+
+		# FileInput section
+		fileInput = '\\input ' + setupFile + '\n'
 
 		# Hyphenation is optional project-wide. There may be some objects that
 		# need it and others that do not. That is why it is here at the object level.
 		if useHyphenation.lower() == 'true' :
-			texControlObject.write('\\input ' + hyphenFile + '\n')
-		# Other options that can be added in the file
-		# Note that order is important, though not fully understood :-)
+			fileInput = fileInput + '\\input ' + hyphenFile + '\n'
+
+		# Will we use marginal verses?
 		if useMarginalVerses.lower() == 'true' :
-			texControlObject.write('\\input ' + marginalVerses + '\n')
-			texControlObject.write('\\input ' + \columnshift=15pt
-
-		# Passing in all the book IDs is problematic we can get that
-		# information from the .config file so we'll use a syntax
-		# shortcut to indicate which one we are looking for.
-		# Check for nt or ot and write out a ptxfile line for each
-		# book ID found. Otherwise just write out for a single book
-		tocFile = ""
-		if bookID.lower() == "ot" :
-			bookID = self._log_manager._settings['Process']['Binding']['MATTER_OT']
-			tocFile = log_manager._settings['Process']['Files']['FILE_AUTO_TOC'] + "-ot.usfm"
-		elif bookID.lower() == "nt" :
-			bookID = self._log_manager._settings['Process']['Binding']['MATTER_NT']
-			tocFile = log_manager._settings['Process']['Files']['FILE_AUTO_TOC'] + "-nt.usfm"
-
-		# Here we will add some custom commands for things that we
-		# need more contextual control over.
+			fileInput = fileInput + '\\input ' + marginalVerses + '\n'
+			fileInput = fileInput + '\\columnshift=' + columnshift + '\n'
 
 		# First off, if a file name for the TOC is found, write it out
 		if tocFile != "" :
-			texControlObject.write('\\GenerateTOC[' + tocTitle + ']{' + tocFile + '}\n')
+			fileInput = fileInput + '\\GenerateTOC[' + tocTitle + ']{' + tocFile + '}\n'
 
-#######################################################################################
+		# Do we want a page border?
+		if usePageBorder.lower() == 'true' :
+			fileInput = fileInput + '\\def\\PageBorder{' + pageBorderFile + ' scaled ' + pageBorderScale + '}\n'
 
-*\columnshift=15pt (columnshift)
-*\def\PageBorder{tuborder.pdf scaled 825} (usePageBorder / pageBorderScale)
-*useRunningHeaderRule (false)
-*\RHruleposition=6pt (runningHeaderRulePosition)
-*\VerseRefstrue (verseRefs = false)
-*\def\ChapterVerseSeparator{\kern.02em:\kern.02em} (chapterVerseSeparator)
-*\OmitChapterNumberRHtrue (omitChapterNumber = false)
-*\OmitVerseNumberOnetrue (omitVerseNumberOne = true)
-*\def\AfterVerseSpaceFactor{2} (afterVerseSpaceFactor)
-*\def\AfterChapterSpaceFactor{3} (afterChapterSpaceFactor)
-*\IndentAfterHeadingtrue (removeIndentAfterHeading = false)
-*\def\AdornVerseNumber#1{(#1)} (adornVerseNumber = false)
+		# Verse/chapter settings
+		if verseRefs.lower() == 'true' :
+			verseChapterSettings = verseChapterSettings + '\\VerseRefstrue\n'
 
-*\def\RHtitleleft{\empty} (runningHeaderTitleLeft)
-*\def\RHtitlecenter{\empty} (runningHeaderTitleCenter)
-*\def\RHtitleright{\empty} (runningHeaderTitleRight)
-*\def\RHoddleft{\empty} (runningHeaderOddLeft)
-*\def\RHoddcenter{\pagenumber} (runningHeaderOddCenter)
-*\def\RHoddright{\rangeref} (runningHeaderOddRight)
-*\def\RHevenleft{\rangeref} (runningHeaderEvenLeft)
-*\def\RHevencenter{\pagenumber} (runningHeaderOddCenter)
-*\def\RHevenright{\empty} (runningHeaderEvenRight)
+		if omitChapterNumber.lower() == 'true' :
+			verseChapterSettings = verseChapterSettings + '\\OmitChapterNumberRHtrue\n'
 
-*\def\RFtitleleft{\empty} (runningFooterTitleLeft)
-*\def\RFtitlecenter{\empty} (runningFooterTitleCenter)
-*\def\RFtitleright{\empty} (runningFooterTitleRight)
-*\def\RFoddleft{\empty} (runningFooterOddLeft)
-*\def\RFoddcenter{\empty} (runningFooterOddCenter)
-*\def\RFoddright{\empty} (runningFooterOddRight)
-*\def\RFevenleft{\empty} (runningFooterEvenLeft)
-*\def\RFevencenter{\empty} (runningFooterEvenCenter)
-*\def\RFevenright{\empty} (runningFooterEvenRight)
+		if omitVerseNumberOne.lower() == 'true' :
+			verseChapterSettings = verseChapterSettings + '\\OmitVerseNumberOnetrue\n'
+
+		if removeIndentAfterHeading.lower() == 'true' :
+			verseChapterSettings = verseChapterSettings + '\\IndentAfterHeadingtrue\n'
+
+		if adornVerseNumber.lower() == 'true' :
+			verseChapterSettings = verseChapterSettings + '\\def\AdornVerseNumber#1{(#1)}\n'
+
+		verseChapterSettings = verseChapterSettings + '\\def\ChapterVerseSeparator{' + chapterVerseSeparator + '}\n'
+		verseChapterSettings = verseChapterSettings + '\\def\AfterVerseSpaceFactor{' + afterVerseSpaceFactor + '}\n'
+		verseChapterSettings = verseChapterSettings + '\\def\AfterChapterSpaceFactor{' + afterChapterSpaceFactor + '}\n'
+
+		# Header settings
+		if useRunningHeaderRule.lower() == 'true' :
+			headerSettings = headerSettings + '\\RHruleposition=' + runningHeaderRulePosition + '\n'
+
+		headerSettings = headerSettings + '\\def\\RHtitleleft{\\' + runningHeaderTitleLeft + '}\n'
+		headerSettings = headerSettings + '\\def\\RHtitlecenter{\\' + runningHeaderTitleCenter + '}\n'
+		headerSettings = headerSettings + '\\def\\RHtitleright{\\' + runningHeaderTitleRight + '}\n'
+		headerSettings = headerSettings + '\\def\\RHoddleft{\\' + runningHeaderOddLeft + '}\n'
+		headerSettings = headerSettings + '\\def\\RHoddcenter{\\' + runningHeaderOddCenter + '}\n'
+		headerSettings = headerSettings + '\\def\\RHoddright{\\' + runningHeaderOddRight + '}\n'
+		headerSettings = headerSettings + '\\def\\RHevenleft{\\' + runningHeaderEvenLeft + '}\n'
+		headerSettings = headerSettings + '\\def\\RHevencenter{\\' + runningHeaderOddCenter + '}\n'
+		headerSettings = headerSettings + '\\def\\RHevenright{\\' + runningHeaderEvenRight + '}\n'
+
+		# Footer settings
+		footerSettings = footerSettings + '\\def\\RFtitleleft{\\' + runningFooterTitleLeft + '}\n'
+		footerSettings = footerSettings + '\\def\\RFtitlecenter{\\' + runningFooterTitleCenter + '}\n'
+		footerSettings = footerSettings + '\\def\\RFtitleright{\\' + runningFooterTitleRight + '}\n'
+		footerSettings = footerSettings + '\\def\\RFoddleft{\\' + runningFooterOddLeft + '}\n'
+		footerSettings = footerSettings + '\\def\\RFoddcenter{\\' + runningFooterOddCenter + '}\n'
+		footerSettings = footerSettings + '\\def\\RFoddright{\\' + runningFooterOddRight + '}\n'
+		footerSettings = footerSettings + '\\def\\RFevenleft{\\' + runningFooterEvenLeft + '}\n'
+		footerSettings = footerSettings + '\\def\\RFevencenter{\\' + runningFooterEvenCenter + '}\n'
+		footerSettings = footerSettings + '\\def\\RFevenright{\\' + runningFooterEvenRight + '}\n'
+
+		# Footnote settings
+		# If we use Autocallers we need to leave out some other things and vise versa
+		if autoCallers.lower() == 'true' :
+
+		else :
+
+
+		footnoteSettings = footnoteSettings +
 
 *\AutoCallers{f}{\kern0.2em*\kern0.4em} (autoCallers) (if this, don't use some other things)
 *\AutoCallerStartChar{97} (autoCallerStartChar)
 *\AutoCallerNumChars{26} (autoCallerNumChars)
 *\NumericCallers{f} (useNumericCallersFootnotes)
 *\NumericCallers{x} (useNumericCallersCrossRefs)
-
-# Footnote settings
 *\PageResetCallers{f} (pageResetCallersFootnotes)
 *\PageResetCallers{x} (pageResetCallersCrossRefs)
 *\OmitCallerInNote{f} (omitCallerInFootnote)
 *\OmitCallerInNote{x} (omitCallerInCrossRefs)
 *\ParagraphedNotes{f} (paragraphedFootnotes)
 *\ParagraphedNotes{x} (paragraphedCrossRefs)
-
 *\def\footnoterule{} (footnoteRule = true)
 
+		# General settings
 *\JustifyParsfalse (justifyPars = true)
 *\RTLtrue (rightToLeft)
 
-#######################################################################################
 		# This will apply the \OmitChapterNumbertrue to only the books
 		# that consist of one chapter. Or, if the omitAllChapterNumbers
 		# setting is true, it takes the chapter numbers out of all books.
@@ -215,11 +242,24 @@ class MakeTexControlFile (object) :
 			thisBook = pathToText + '/' + book.lower() + '.usfm'
 			bookInfo = self.parseThisBook(thisBook)
 			if oneChapOmmitRule == 'true' and bookInfo['chapCount'] == 1 or omitAllChapterNumbers == 'true':
-				texControlObject.write('\\OmitChapterNumbertrue\n')
-				texControlObject.write('\\ptxfile{' + thisBook + '}\n')
-				texControlObject.write('\\OmitChapterNumberfalse\n')
+				generalSettings = generalSettings + '\\OmitChapterNumbertrue\n'
+				generalSettings = generalSettings + '\\ptxfile{' + thisBook + '}\n'
+				generalSettings = generalSettings + '\\OmitChapterNumberfalse\n'
 			else :
-				texControlObject.write('\\ptxfile{' + thisBook + '}\n')
+				generalSettings = generalSettings + '\\ptxfile{' + thisBook + '}\n'
+
+#######################################################################################
+		# Write out each element concatenated together here in one string
+		# This will allow us to change the order as that can be important in
+		# TeX control files
+		texControlObject = codecs.open(texControlFile, "w", encoding='utf_8_sig')
+		texControlObject.write(	fileHeaderText + \
+					fileInput + \
+					verseChapterSettings + \
+					headerSettings + \
+					footerSettings + \
+					footnoteSettings + \
+					generalSettings)
 		texControlObject.write('\\bye\n')
 		texControlObject.close()
 
