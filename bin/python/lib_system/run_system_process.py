@@ -69,13 +69,21 @@ sys.path.append(basePath + '/bin/python')
 sys.path.append(basePath + '/bin/python/lib_system')
 sys.path.append(basePath + '/bin/python/lib_scripture')
 
-# All we should need to get things going is the projectID
-task		= sys.argv[1]
-# We may not get a 2nd or 3rd argument so we have to be careful
+# In many cases, all we should need to get things going is the
+# module name (task). Other arguments may follow though.
+try :
+	task		= sys.argv[1]
+except :
+	tools.userMessage("process_text.py: Cannot run the process because no module (task) has been specified.")
+	return
+
+# We may not need a 2nd or 3rd argument. It depends on what
+# process is going to be run, so we have to be careful.
 try :
 	inputFile	= os.getcwd() + "/" + sys.argv[2]
 except :
 	inputFile = "none"
+
 try :
 	outputFile = os.getcwd() + "/" + sys.argv[3]
 except :
