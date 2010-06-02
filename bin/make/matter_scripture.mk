@@ -179,6 +179,11 @@ endef
 # dependent rules here before we hit the main component_rules
 # building rule
 
+# Create the master shared settings file for this Scripture
+# project.
+$(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file 'Null' '$@'
+
 # Start with the OT but we don't want to do anything if there
 # are no components to process
 
@@ -196,7 +201,7 @@ MATTER_OT_TEX=$(PATH_PROCESS)/OT.tex
 # here. We may want to change this but as long as it works...
 # Also, I will throw in the watermark pages (this needs to be changed!)
 $(MATTER_OT_TEX) : $(FILE_PROJECT_CONF)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file OT 'Null' '$@'
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file 'Null' '$@'
 
 #####################################################################################
 
@@ -209,7 +214,8 @@ $(MATTER_OT_PDF) : \
 	$(PATH_TEXTS)/$(v).usfm.adj \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
-	$(MATTER_OT_TEX)
+	$(MATTER_OT_TEX) \
+	$(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex OT.tex
 endif
 
@@ -230,7 +236,7 @@ MATTER_NT_TEX=$(PATH_PROCESS)/NT.tex
 # for all NT components.
 # Also, I will throw in the watermark pages (this needs to be changed!)
 $(MATTER_NT_TEX) : $(FILE_PROJECT_CONF)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file NT 'Null' '$@'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file 'Null' '$@'
 
 # Render the entire NT
 $(MATTER_NT_PDF) : \
@@ -240,7 +246,8 @@ $(MATTER_NT_PDF) : \
 	$(PATH_TEXTS)/$(v).usfm.piclist \
 	$(PATH_TEXTS)/$(v).usfm.adj \
 	$(PATH_TEXTS)/$(v).usfm) \
-	$(MATTER_NT_TEX)
+	$(MATTER_NT_TEX) \
+	$(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex NT.tex
 
 endif

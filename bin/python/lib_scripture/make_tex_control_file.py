@@ -41,6 +41,135 @@ class MakeTexControlFile (object) :
 		texControlFile = log_manager._currentOutput
 		bookID = log_manager._currentTargetID
 		log_manager._currentSubProcess = 'MkContFile'
+		fileName =
+
+		# Decide which file we are needing to make, then direct it to
+		# the right function.
+		if something :
+
+			makeTheSettingsFile(fileName)
+
+		elif somethingelse :
+
+			makeTheContentSettingsFile(fileName)
+
+		else :
+
+			makeTheControlFile(fileName)
+
+
+	def makeTheContentSettingsFile (self, fileName) :
+		'''For specific types of content in a project we will construct
+			a central settings file that will be shared by other
+			objects in that same part of the publication.'''
+
+		# Ship the results, change order as needed
+		orderedContents = 	fileHeaderText + \
+					fileInput + \
+					verseChapterSettings + \
+					headerSettings + \
+					footerSettings + \
+					footnoteSettings + \
+					generalSettings) + \
+					'\\bye\n'
+
+		self.writeOutTheFile(fileName, orderedContents)
+
+
+	def makeTheSettingsFile (self, fileName) :
+		'''This will create the global settings file that other control
+			files will link to. This setting file will contain
+			settings that are universal to the project. Settings
+			for specific parts of the project are found in setup
+			files that are made by the makeTheContentSettingsFile()
+			elsewhere in this module.'''
+
+		# Build some paths and file names
+		texMacros = log_manager._settings['Process']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
+		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', 'auto-tex.txt')
+		customSetup = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP_CUSTOM', 'custom-tex.txt')
+		styleFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_STYLE', 'project.sty')
+
+		# Bring in page format settings
+		cropmarks = log_manager._settings['Format']['PageLayout'].get('CROPMARKS', 'true')
+		pageHeight = log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
+		pageWidth = log_manager._settings['Format']['PageLayout'].get('pageWidth', '148mm')
+\endbooknoejecttrue (endBookNoEject)
+# Columns
+\TitleColumns=1
+\IntroColumns=1
+\BodyColumns=2
+\def\ColumnGutterFactor{15}
+\ColumnGutterRuletrue
+\ColumnGutterRuleSkip=4pt
+# Margins
+\MarginUnit=12mm
+\def\TopMarginFactor{1.75}
+\def\BottomMarginFactor{0} - if set to 0 it will not show up in the output
+\def\SideMarginFactor{1.0}
+\BindingGutter=12mm
+\BindingGuttertrue (useBindingGutter)
+# HeaderFooter
+\def\HeaderPosition{.75}
+\def\FooterPosition{.5}
+# Fonts
+\def\regular{"[../Fonts/CharisSIL/CharisSILR.ttf]/GR"}
+\def\bold{"[../Fonts/CharisSIL/CharisSILB.ttf]/GR"}
+\def\italic{"[../Fonts/CharisSIL/CharisSILI.ttf]/GR"}
+\def\bolditalic{"[../Fonts/CharisSIL/CharisSILBI.ttf]/GR"}
+\tracinglostchars=1 (tracingLostCharacters)
+\FontSizeUnit=1pt (fontSizeUnit)
+\def\LineSpacingFactor{1.1} (lineSpacingFactor)
+\def\VerticalSpaceFactor{1} (verticalSpaceFactor)
+\XeTeXlinebreaklocale "G" (xetexLineBreakLocale - false)
+# Paths
+\PicPath={Illustrations/} (PATH_ILLUSTRATIONS)
+
+\FigurePlaceholderstrue (useFigurePlaceholders)
+
+		# Create the file header
+		header = "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
+				"% should be made to the project.conf file or the custom TeX setup file.\n\n"
+
+
+		# Output to the new makefile file
+		# Create the new TeX settings object (overwrite the old file)
+		settingsFileObject = codecs.open(setupFile, 'w', encoding='utf_8_sig')
+		settingsFileObject.write(header)
+		# This connects the system with the custom macro code
+		settingsFileObject.write('\\input ' + texMacros + '\n')
+		# Add page format settings
+		settingsFileObject.write('\\PaperHeight=' + pageHeight + '\n')
+		settingsFileObject.write('\\PaperWidth=' + pageWidth + '\n')
+
+
+
+		# Now put out the custom macro file path (this may need to be moved)
+		settingsFileObject.write('\\input ' + customSetup + '\n')
+		# Add some format features here
+		if cropmarks.lower() == 'true' :
+			settingsFileObject.write('\\CropMarkstrue\n')
+
+		# Add the global style sheet
+		settingsFileObject.write('\\stylesheet{' + styleFile + '}\n')
+		settingsFileObject.close()
+
+		# Ship the results, change order as needed
+		orderedContents = 	fileHeaderText + \
+					fileInput + \
+					verseChapterSettings + \
+					headerSettings + \
+					footerSettings + \
+					footnoteSettings + \
+					generalSettings) + \
+					'\\bye\n'
+
+		self.writeOutTheFile(fileName, orderedContents)
+
+
+#########################################################################################
+
+	def makeTheControlFile (self, fileName) :
 
 		# Build some paths, file names and settings. We will
 		# pickup the settings blindly here and apply them
@@ -254,21 +383,26 @@ class MakeTexControlFile (object) :
 			else :
 				generalSettings = generalSettings + '\\ptxfile{' + thisBook + '}\n'
 
-#######################################################################################
-		# Write out each element concatenated together here in one string
-		# This will allow us to change the order as that can be important in
-		# TeX control files
-		texControlObject = codecs.open(texControlFile, "w", encoding='utf_8_sig')
-		texControlObject.write(	fileHeaderText + \
+		# Ship the results, change order as needed
+		orderedContents = 	fileHeaderText + \
 					fileInput + \
 					verseChapterSettings + \
 					headerSettings + \
 					footerSettings + \
 					footnoteSettings + \
-					generalSettings)
-		texControlObject.write('\\bye\n')
-		texControlObject.close()
+					generalSettings) + \
+					'\\bye\n'
 
+		self.writeOutTheFile(fileName, orderedContents)
+
+
+
+	def writeOutTheFile (self, fileName, contents) :
+		'''Write out the file.'''
+
+		texControlObject = codecs.open(fileName, "w", encoding='utf_8_sig')
+		texControlObject.write(contents)
+		texControlObject.close()
 
 	def parseThisBook (self, book) :
 		'''Parse a specific book based on ID then return relevant info.'''
