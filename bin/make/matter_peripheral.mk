@@ -33,15 +33,13 @@
 # 20100212 - djd - Added style override files for peripheral matter.
 # 20100212 - djd - Started adding custom TOC generation rules
 # 20100213 - djd - Moved the TOC rules to a seperate file
+# 20100603 - djd - Added TeX control file auto build process
 
 ##############################################################
 #		Variables for peripheral matter
 ##############################################################
 
-# Set the default to nothing here
-MATTER_FRONT_PDF=
-MATTER_BACK_PDF=
-
+# Are there any?
 
 ##############################################################
 #		General rules for all peripheral matter
@@ -99,30 +97,14 @@ endif
 # This .tex file also generally has some dependencies on the
 # FRONT/BACK_MATTER.tex files so we add them here. However, we
 # will use the "|" (pipe) trick to prevent any updating in case
-# the file already exists.
+# the file already exists. Also, at this point, we are not
+# passing any IDs or flags through. We will try to make this
+# control file by context in the script.
 $(PATH_PROCESS)/$(1).tex : | \
 	$(PATH_PROCESS)/$(1).sty \
-	$(PATH_PROCESS)/FRONT_MATTER.tex \
-	$(PATH_PROCESS)/BACK_MATTER.tex
-	@if test -r $(PATH_TEMPLATES)/$(1).tex; then \
-		echo Copying into project from: $(PATH_TEMPLATES)/$(1).tex; \
-		cp $(PATH_TEMPLATES)/$(1).tex '$$@'; \
-	else \
-		echo Could not find: $$@; \
-		echo Creating this file:; \
-		echo Caution, you will need to edit it; \
-		echo '\\input $(FILE_TEX_MACRO)' >> $$@; \
-		echo '\\input $(FILE_TEX_SETUP)' >> $$@; \
-		echo '\\stylesheet{$(1).sty}' >> $$@; \
-		echo '\\input FRONT_MATTER.tex' >> $$@; \
-		echo '%\\input BACK_MATTER.tex' >> $$@; \
-		echo '%\\catcode\`@=11' >> $$@; \
-		echo '%\\def\makedigitsother{\m@kedigitsother}' >> $$@; \
-		echo '%\\def\makedigitsletters{\m@kedigitsletters}' >> $$@; \
-		echo '%\\catcode \`@=12' >> $$@; \
-		echo '\\ptxfile{$(PATH_TEXTS)/$(1)}' >> $$@; \
-		echo '\\bye' >> $$@; \
-	fi
+	$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
+	$(PATH_PROCESS)/$(FILE_TEX_BACK)
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file $(1) '$@' ''
 
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).sty :
@@ -152,7 +134,7 @@ view-$(1) : $(PATH_PROCESS)/$(1).pdf
 # This enables us to do the preprocessing on a single peripheral item.
 preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 	@echo Preprocessing $(1)
-	@$(PY_PROCESS_SCRIPTURE_TEXT) PreprocessChecks $(1) '$$<'
+	@$(PY_RUN_TEXT_PROCESS) PreprocessChecks $(1) '$$<'
 
 # Do not open the PDF file with reader
 $(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
@@ -200,16 +182,16 @@ $(eval $(call matter_binding,MATTER_FRONT))
 $(eval $(call matter_binding,MATTER_BACK))
 
 # Most front matter peripheral .tex files will have a dependency
-# on FRONT_MATTER.tex even if it doesn't there is a hard coded
+# on $(FILE_TEX_FRONT) even if it doesn't, there is a hard coded
 # dependency here that will be met if called on.
-$(PATH_PROCESS)/FRONT_MATTER.tex :
-	@cp $(PATH_TEMPLATES)/FRONT_MATTER.tex '$@'
+$(PATH_PROCESS)/$(FILE_TEX_FRONT) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' $@' 'front'
 
 # Most back matter peripheral .tex files will have a dependency
 # on BACK_MATTER.tex even if it doesn't there is a hard coded
 # dependency here that will be met if called on.
-$(PATH_PROCESS)/BACK_MATTER.tex :
-	@cp $(PATH_TEMPLATES)/BACK_MATTER.tex '$@'
+$(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' $@' 'back'
 
 # This calls all the automated rules defined above and does them
 # once on each file, even if the file is listed repeatedly in the
@@ -254,4 +236,4 @@ pdf-remove-back :
 # Not sure what the status on this call is. Does it
 # even work yet?
 make-topic-index :
-	@$(PY_PROCESS_SCRIPTURE_TEXT) make_topic_index_file 'NA' $(PATH_SOURCE)$(PATH_SOURCE_PERIPH)/TOPICAL_INDEX.CSV $(PATH_TEXTS)/TOPICAL_INDEX.USFM
+	@$(PY_RUN_TEXT_PROCESS) make_topic_index_file 'NA' $(PATH_SOURCE)$(PATH_SOURCE_PERIPH)/TOPICAL_INDEX.CSV $(PATH_TEXTS)/TOPICAL_INDEX.USFM

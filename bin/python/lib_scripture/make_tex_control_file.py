@@ -10,14 +10,36 @@
 ################ Description/Documentation ##################
 #############################################################
 
-# Generate a TeX control file for Scripture processing. This
-# is designed to work with individual control files or will
-# create a control file for processing a number of book files.
+# Generate a TeX control file for Scripture processing. The
+# data for this proccess is all kept in the project.conf file.
+# There are 4 types of TeX control (setup) files needed.
+#
+#   1) The first one is the common global settins file that
+#      controls the parameters for the publication like fonts
+#      and page size.
+#
+#   2) The second is the main control file for each type of
+#      text such as front matter, back matter and main
+#      contents. This will contain settings for each of these
+#      types of text and control things like columns, verse
+#      number formats, etc.
+#
+#   3) The third type is the custom control file which contains
+#      settings and macros for the project. This file can be
+#      used to override settings in the first two if necessary
+#      but that is not recomended.
+#
+#   4) The fourth type is the control file for the specific
+#      object that is being typeset. This is a simple file
+#      that contains links to the other three types of
+#      control files. Except for the custom control file,
+#      all are auto generated and should not be edited for any
+#      reason.
 
 
 # History:
 # 20090209 - djd - Initial draft
-# 20100212 - djd - Add auto-TOC code
+# 20100212 - djd - Add in auto-TOC code
 
 
 #############################################################
@@ -37,46 +59,90 @@ class MakeTexControlFile (object) :
 
 	def main (self, log_manager) :
 
-		self._log_manager = log_manager
-		texControlFile = log_manager._currentOutput
-		bookID = log_manager._currentTargetID
 		log_manager._currentSubProcess = 'MkContFile'
-		fileName =
+		self._log_manager = log_manager
+		self._outputFileName = log_manger._currentOutput
+		self._inputFileName = log_manager._currentInput
+		# Note we get the value from the input file field
+		self._contextFlag = log_manager._optionalPassedVariable
+		self._flags = ('front', 'bible', 'back')
+		self._publicationType = log_manager._publicationType
+		self._contextBibleFileName = log_manager._settings['Process']['Files']['FILE_TEX_BIBLE']
+		texSettings = log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
 
-		# Decide which file we are needing to make, then direct it to
-		# the right function.
-		if something :
+		if self._publicationType.lower() == 'scripture' :
 
-			makeTheSettingsFile(fileName)
+			# Decide which file we are needing to make, then direct it to
+			# the right function.
+			if texSettings == self._outputFileName :
+				# This is the project-wide setup file
+				makeTheSettingsFile()
 
-		elif somethingelse :
+			elif self._contextFlag in self._flags :
+				# This contains TeX settings information for text to
+				# be processed in specific contexts.
+				makeTheContextSettingsFile()
 
-			makeTheContentSettingsFile(fileName)
+			else :
+				# This is the control file that links the object
+				# to the other settings files
+				makeTheControlFile()
 
 		else :
+			log_manager.log("ERRR", "Publication type: " + self._publicationType + " is unknown. Process halted.")
 
-			makeTheControlFile(fileName)
+#########################################################################################
+
+	def makeTheControlFile (self) :
+		'''This is the control file for a specific object that we
+			will be typesetting. This contains pointers to the
+			other control files that contain the settings
+			TeX will work with and it may contain specific
+			instructions for this object that can be added
+			in an automated way.'''
+
+		settings = '\\input ' + self._outputFileName + '\n'
+		# Make a link to the override stylesheet
+		settings = settings + '\\stylesheet{' + self._inputFileName + '.sty}\n'
+
+		# Being passed here means the contextFlag was not empty. That
+		# being the case, it must be a scripture book. Otherwise, it is
+		# a peripheral control file.
+		if self._contextFlag != '' :
+
+			settings = settings + '\\input ' + self._contextBibleFileName + '\n'
+
+			# Since we were passed here it is assmumed that the context
+			# flag will contain a book ID, not a context marker. We will
+			# make a list of them here but the list may contain only one
+			# book ID.
+			componentScripture = self._contextFlag.split()
+
+			# This will apply the \OmitChapterNumbertrue to only the books
+			# that consist of one chapter. Or, if the omitAllChapterNumbers
+			# setting is true, it takes the chapter numbers out of all books.
+			# To be safe, it turns it off after the book is processed so it
+			# will not affect the next book being processed. This is the last
+			# write to the output file.
+			for book in componentScripture :
+				thisBook = pathToText + '/' + book.lower() + '.usfm'
+				bookInfo = self.parseThisBook(thisBook)
+				if oneChapOmmitRule == 'true' and bookInfo['chapCount'] == 1 or omitAllChapterNumbers == 'true':
+					settings = settings + '\\OmitChapterNumbertrue\n'
+					settings = settings + '\\ptxfile{' + thisBook + '}\n'
+					settings = settings + '\\OmitChapterNumberfalse\n'
+				else :
+					settings = settings + '\\ptxfile{' + thisBook + '}\n'
+		else :
 
 
-	def makeTheContentSettingsFile (self, fileName) :
-		'''For specific types of content in a project we will construct
-			a central settings file that will be shared by other
-			objects in that same part of the publication.'''
 
 		# Ship the results, change order as needed
-		orderedContents = 	fileHeaderText + \
-					fileInput + \
-					verseChapterSettings + \
-					headerSettings + \
-					footerSettings + \
-					footnoteSettings + \
-					generalSettings) + \
-					'\\bye\n'
+		self.writeOutTheFile(self._outputFileName, settings + '\\bye\n')
 
-		self.writeOutTheFile(fileName, orderedContents)
+#########################################################################################
 
-
-	def makeTheSettingsFile (self, fileName) :
+	def makeTheSettingsFile (self) :
 		'''This will create the global settings file that other control
 			files will link to. This setting file will contain
 			settings that are universal to the project. Settings
@@ -164,12 +230,15 @@ class MakeTexControlFile (object) :
 					generalSettings) + \
 					'\\bye\n'
 
-		self.writeOutTheFile(fileName, orderedContents)
+		self.writeOutTheFile(orderedContents)
 
 
 #########################################################################################
 
-	def makeTheControlFile (self, fileName) :
+	def makeTheContextSettingsFile (self) :
+		'''For each context that we render text in we need to tell TeX
+			what the settings are for that context. This is a context
+			sensitive settings file output routine.'''
 
 		# Build some paths, file names and settings. We will
 		# pickup the settings blindly here and apply them
@@ -250,12 +319,7 @@ class MakeTexControlFile (object) :
 			bookID = self._log_manager._settings['Process']['Binding']['MATTER_NT']
 			tocFile = log_manager._settings['Process']['Files']['FILE_AUTO_TOC'] + '-nt.usfm'
 
-#######################################################################################################
-# Build each area of the output individually
-
-# we need some kind of test to see if this is a control file for Scripture so we can build contextually
-
-		# These are the strings we will fill:
+		# Build our output - These are the strings we will fill:
 		fileHeaderText = ''
 		fileInput = ''
 		verseChapterSettings = ''
@@ -266,7 +330,7 @@ class MakeTexControlFile (object) :
 
 
 		# The file header telling users not to touch it
-		fileHeaderText = "This is the " + texControlFile + " and it is auto generated. If you know what's good for you, don't edit it!\n\n"
+		fileHeaderText = "This is the " + self._texControlFile + " and it is auto generated. If you know what's good for you, don't edit it!\n\n"
 
 		# FileInput section
 		fileInput = '\\input ' + setupFile + '\n'
@@ -366,22 +430,6 @@ class MakeTexControlFile (object) :
 *\JustifyParsfalse (justifyPars = true)
 *\RTLtrue (rightToLeft)
 
-		# This will apply the \OmitChapterNumbertrue to only the books
-		# that consist of one chapter. Or, if the omitAllChapterNumbers
-		# setting is true, it takes the chapter numbers out of all books.
-		# To be safe, it turns it off after the book is processed so it
-		# will not affect the next book being processed. This is the last
-		# write to the output file.
-		componentScripture = bookID.split()
-		for book in componentScripture :
-			thisBook = pathToText + '/' + book.lower() + '.usfm'
-			bookInfo = self.parseThisBook(thisBook)
-			if oneChapOmmitRule == 'true' and bookInfo['chapCount'] == 1 or omitAllChapterNumbers == 'true':
-				generalSettings = generalSettings + '\\OmitChapterNumbertrue\n'
-				generalSettings = generalSettings + '\\ptxfile{' + thisBook + '}\n'
-				generalSettings = generalSettings + '\\OmitChapterNumberfalse\n'
-			else :
-				generalSettings = generalSettings + '\\ptxfile{' + thisBook + '}\n'
 
 		# Ship the results, change order as needed
 		orderedContents = 	fileHeaderText + \
@@ -393,14 +441,14 @@ class MakeTexControlFile (object) :
 					generalSettings) + \
 					'\\bye\n'
 
-		self.writeOutTheFile(fileName, orderedContents)
+		self.writeOutTheFile(orderedContents)
 
 
 
-	def writeOutTheFile (self, fileName, contents) :
+	def writeOutTheFile (self, contents) :
 		'''Write out the file.'''
 
-		texControlObject = codecs.open(fileName, "w", encoding='utf_8_sig')
+		texControlObject = codecs.open(self._outputFileName, "w", encoding='utf_8_sig')
 		texControlObject.write(contents)
 		texControlObject.close()
 

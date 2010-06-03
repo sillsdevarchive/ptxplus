@@ -13,12 +13,6 @@
 #		Variales for Middle Matter
 ##############################################################
 
-# Do a blank setting on the following
-MATTER_OT_PDF=
-MATTER_OT_TEX=
-MATTER_NT_PDF=
-MATTER_NT_TEX=
-
 # Build the dependent file listing here. This will include
 # file paths and names we build here and the list we bring in
 # from the project config file. This needs to be loaded early
@@ -94,12 +88,15 @@ endif
 # why so I had to remove it for now.
 #################################
 
-# TeX control - Call the TeX control file creation script which will
-# create a TeX control file on the fly.
-# Just in case we will throw in the watermark pages here too.
+# Call the TeX control file creation script
+# In this context using PY_RUN_SYSTEM_PROCESS we use the
+# input file name var as a way to pass the type of control
+# file we are making. However, in this instance, we keep it
+# so the script knows it is a simple control file that
+# contains very few, if any, settings.
 $(PATH_PROCESS)/$(1).tex :
 	@echo INFO: Creating book control file: $$@
-	@$(PY_RUN_TEXT_PROCESS) make_tex_control_file $(1) 'Null' '$$@'
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file $(1) '$$@'
 
 # Process a single component and produce the final PDF. Special dependencies
 # are set for the .adj and .piclist files in case they have been altered.
@@ -108,7 +105,8 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1).usfm \
 	$(PATH_TEXTS)/$(1).usfm.adj \
 	$(PATH_TEXTS)/$(1).usfm.piclist \
-	$(PATH_PROCESS)/$(1).tex | $(DEPENDENT_FILE_LIST)
+	$(PATH_PROCESS)/$(1).tex \
+	$(PATH_PROCESS)/$(FILE_TEX_SETUP) | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $$@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 #	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
@@ -179,10 +177,21 @@ endef
 # dependent rules here before we hit the main component_rules
 # building rule
 
-# Create the master shared settings file for this Scripture
-# project.
+# Create the main settings file for this Scripture project.
+# This will contain publication format settings. Context
+# specific settings are kept in the bible_settings.txt file.
+# In this context using PY_RUN_SYSTEM_PROCESS we use the
+# optional passed var as a way to pass the type of control
+# file we are making. In this instance, we use "project"
+# because the script will know by the flag name exactly what
+# it is and what goes in it.
 $(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file 'Null' '$@'
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'project'
+
+# Rule for building the TeX settings file that is used in a
+# specific context.
+$(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(FILE_PROJECT_CONF)
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' $@' 'bible'
 
 # Start with the OT but we don't want to do anything if there
 # are no components to process
@@ -190,23 +199,9 @@ $(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
 ifneq ($(MATTER_OT),)
 # These build a rule (in memory) for this set of components
 $(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
-MATTER_OT_PDF=$(PATH_PROCESS)/OT.pdf
-MATTER_OT_TEX=$(PATH_PROCESS)/OT.tex
-
-###################################################################################################
-# Ok, we need to think about what .tex files we are pointing things to
-
-# Rule for building the TeX file for an entire publication
-# like NT, OT or Bible. This is done with a little Perl code
-# here. We may want to change this but as long as it works...
-# Also, I will throw in the watermark pages (this needs to be changed!)
-$(MATTER_OT_TEX) : $(FILE_PROJECT_CONF)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file 'Null' '$@'
-
-#####################################################################################
 
 # Render the entire OT
-$(MATTER_OT_PDF) : \
+$(FILE_MATTER_OT_PDF) : \
 	$(foreach v,$(filter $(OT_COMPONENTS),$(MATTER_OT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(foreach v,$(filter-out $(OT_COMPONENTS),$(MATTER_OT)), \
@@ -214,14 +209,14 @@ $(MATTER_OT_PDF) : \
 	$(PATH_TEXTS)/$(v).usfm.adj \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(DEPENDENT_FILE_LIST) \
-	$(MATTER_OT_TEX) \
+	$(MATTER_TEX_BIBLE) \
 	$(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex OT.tex
 endif
 
 pdf-remove-ot :
-	@echo INFO: Removing file: $(MATTER_OT_PDF)
-	rm -f $(MATTER_OT_PDF)
+	@echo INFO: Removing file: $(FILE_MATTER_OT_PDF)
+	rm -f $(FILE_MATTER_OT_PDF)
 
 
 # Moving along we will do the NT if there are any components
@@ -229,39 +224,31 @@ pdf-remove-ot :
 ifneq ($(MATTER_NT),)
 # These build a rule (in memory) for this set of components
 $(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
-MATTER_NT_PDF=$(PATH_PROCESS)/NT.pdf
-MATTER_NT_TEX=$(PATH_PROCESS)/NT.tex
-
-# Just like with the OT, this builds the .tex control file
-# for all NT components.
-# Also, I will throw in the watermark pages (this needs to be changed!)
-$(MATTER_NT_TEX) : $(FILE_PROJECT_CONF)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file 'Null' '$@'
 
 # Render the entire NT
-$(MATTER_NT_PDF) : \
+$(FILE_MATTER_NT_PDF) : \
 	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(foreach v,$(filter-out $(NT_COMPONENTS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm.piclist \
 	$(PATH_TEXTS)/$(v).usfm.adj \
 	$(PATH_TEXTS)/$(v).usfm) \
-	$(MATTER_NT_TEX) \
+	$(MATTER_TEX_BIBLE) \
 	$(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex NT.tex
 
 endif
 
 pdf-remove-nt :
-	@echo INFO: Removing file: $(MATTER_NT_PDF)
-	rm -f $(MATTER_NT_PDF)
+	@echo INFO: Removing file: $(FILE_MATTER_NT_PDF)
+	rm -f $(FILE_MATTER_NT_PDF)
 
 # Do a component section and veiw the resulting output
-view-ot : $(MATTER_OT_PDF)
+view-ot : $(FILE_MATTER_OT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
-view-nt : $(MATTER_NT_PDF)
+view-nt : $(FILE_MATTER_NT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 

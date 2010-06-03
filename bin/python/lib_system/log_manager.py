@@ -51,6 +51,7 @@ class LogManager (object) :
 		self._logProcessID = ""
 		self._processLogFile = ""
 		self._processLogObject = []
+		self._publicationType = ""
 		self._currentProcess = ""
 		self._currentSubProcess = ""
 		self._currentTargetID = ""
@@ -63,19 +64,22 @@ class LogManager (object) :
 		self._currentContext = ""
 		self._errorCount = 0
 		self._warningCount = 0
+		self._optionalPassedVariable = ''
 
 
-	def initializeLog (self, processToRun, targetID, inputFile, outputFile) :
+	def initializeLog (self, processToRun, targetID, inputFile, outputFile, optVar) :
 		'''This will intialize the session logs. There are two logs that will be written to
 			one is the system log and the other is the project log. Both are/will be located
 			in the project Log folder.'''
 
 		# Set up for this session
 		self._logFolder = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_LOG']
+		self._publicationType = self._settings['Format']['PublicationType']
 		self._currentProcess = processToRun
 		self._currentTargetID = targetID
 		self._currentInput = inputFile
 		self._currentOutput = outputFile
+		self._optionalPassedVariable = optVar
 
 		# When are we doing this?
 		date_time, secs = str(datetime.now()).split(".")
@@ -83,7 +87,7 @@ class LogManager (object) :
 		# Who's doing this
 		userName = tools.getSystemUser()
 
-		# Don't bing any errors or warnings
+		# Don't bring in any errors or warnings
 		self._errorCount = 0
 		self._warningCount = 0
 
@@ -98,6 +102,7 @@ class LogManager (object) :
 		self._processLogObject.append("File = " + self._currentInput + "\n")
 		self._processLogObject.append("Book ID = " + self._currentTargetID + "\n")
 		self._processLogObject.append("Process = " + processToRun.upper() + "\n")
+		self._processLogObject.append("Publication Type = " + self._publicationType + "\n")
 		self._processLogObject.append("User = " + userName + "\n")
 		self._processLogObject.append("Date/Time = " + date_time + "\n")
 

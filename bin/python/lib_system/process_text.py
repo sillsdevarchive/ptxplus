@@ -110,12 +110,20 @@ except :
 	tools.userMessage("process_text.py: Cannot run the process because no input file has been specified.")
 	return
 
-# We may not get a 4th argument so we have to be careful
+# We may not get a 4th or 5th argument so we have to be careful
 try :
 	outputFile = os.getcwd() + "/" + sys.argv[4]
 
 except :
-	outputFile = "none"
+	outputFile = Null
+
+# While we are at it, check in case an optionl var was passed
+# This can be supported
+try :
+	optionalPassedVariable = sys.argv[5]
+except :
+	optionalPassedVariable = Null
+
 
 # Set some other vars here
 settings_project = tools.getProjectSettingsObject()
@@ -127,13 +135,14 @@ class RunProcesses (object) :
 		one at a time as defined in the project.ini file.'''
 
 	# Intitate the child classes.
-	def __init__(self, log_manager, task, typeID, inputFile, outputFile) :
+	def __init__(self, log_manager, task, typeID, inputFile, outputFile, optionalPassedVariable) :
 
 		self._settings = log_manager._settings
 		self._task = task
+		self._typeID = typeID
 		self._inputFile = inputFile
 		self._outputFile = outputFile
-		self._typeID = typeID
+		self._optionalPassedVariable = optionalPassedVariable
 
 
 	def main (self) :
@@ -180,7 +189,7 @@ class RunProcesses (object) :
 		if log_manager.reachedErrorLimit() != True :
 
 			# Initialize the log manager to do its thing
-			log_manager.initializeLog(moduleName, typeID, self._inputFile, self._outputFile)
+			log_manager.initializeLog(moduleName, typeID, self._inputFile, self._outputFile, self._optionalPassedVariable)
 
 			# This will dynamically import the module
 			# This will work because all the right paths have

@@ -77,17 +77,22 @@ except :
 	tools.userMessage("process_text.py: Cannot run the process because no module (task) has been specified.")
 	return
 
-# We may not need a 2nd or 3rd argument. It depends on what
+# We may not need a 2nd 3rd or 4th argument. It depends on what
 # process is going to be run, so we have to be careful.
 try :
 	inputFile	= os.getcwd() + "/" + sys.argv[2]
 except :
-	inputFile = "none"
+	inputFile = Null
 
 try :
 	outputFile = os.getcwd() + "/" + sys.argv[3]
 except :
-	outputFile = "none"
+	outputFile = Null
+
+try :
+	optionalPassedVariable = sys.argv[4]
+except :
+	optionalPassedVariable = Null
 
 
 
@@ -107,7 +112,7 @@ class RunProcess (object) :
 		# Initialize the log manager to do its thing. However, as
 		# this is a system process we don't book ID and may not
 		# even have input or output.
-		log_manager.initializeLog(task, "NA", inputFile, outputFile)
+		log_manager.initializeLog(task, "NA", inputFile, outputFile, optionalPassedVariable)
 
 		# This will dynamically import the module
 		# This will work because all the right paths have
