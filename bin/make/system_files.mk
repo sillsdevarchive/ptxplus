@@ -47,6 +47,13 @@ MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).pdf
 #               Rules for building and managing system files
 ##############################################################
 
+# Rule to make the project source folder. Of cource, if the user
+# changes the name of the source folder after it might get
+# confusing but that is more of a procedural problem.
+$(PATH_SOURCE) :
+	@echo INFO: Creating folder: $(PATH_SOURCE)
+	mkdir -p $(PATH_SOURCE)
+
 # In case the process folder isn't there (because of archive)
 # This should be in the dependent file list.
 $(PATH_PROCESS)/.stamp :

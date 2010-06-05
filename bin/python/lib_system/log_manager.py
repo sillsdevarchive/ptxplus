@@ -73,8 +73,8 @@ class LogManager (object) :
 			in the project Log folder.'''
 
 		# Set up for this session
-		self._logFolder = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_LOG']
-		self._publicationType = self._settings['Format']['PublicationType']
+		self._logFolder = os.getcwd() + "/" + self._settings['Process']['Paths'].get('PATH_LOG', 'Log')
+		self._publicationType = self._settings['Format'].get('publicationType', 'scripture')
 		self._currentProcess = processToRun
 		self._currentTargetID = targetID
 		self._currentInput = inputFile

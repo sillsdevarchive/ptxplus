@@ -21,7 +21,6 @@
 # seperate file.
 DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
   $(FILE_PROJECT_CONF) \
-  $(PATH_PROCESS)/$(FILE_TEX_SETUP) \
   $(FILE_TEX_CUSTOM) \
   $(FILE_TEX_STYLE) \
   $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) \
@@ -88,15 +87,11 @@ endif
 # why so I had to remove it for now.
 #################################
 
-# Call the TeX control file creation script
-# In this context using PY_RUN_SYSTEM_PROCESS we use the
-# input file name var as a way to pass the type of control
-# file we are making. However, in this instance, we keep it
-# so the script knows it is a simple control file that
-# contains very few, if any, settings.
-$(PATH_PROCESS)/$(1).tex :
+# Call the TeX control file creation script to create a simple
+# control file that will link to the other settings
+$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating book control file: $$@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file $(1) '$$@'
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$$@' '$(1)'
 
 # Process a single component and produce the final PDF. Special dependencies
 # are set for the .adj and .piclist files in case they have been altered.
@@ -105,8 +100,7 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1).usfm \
 	$(PATH_TEXTS)/$(1).usfm.adj \
 	$(PATH_TEXTS)/$(1).usfm.piclist \
-	$(PATH_PROCESS)/$(1).tex \
-	$(PATH_PROCESS)/$(FILE_TEX_SETUP) | $(DEPENDENT_FILE_LIST)
+	$(PATH_PROCESS)/$(1).tex | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $$@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 #	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
@@ -190,8 +184,8 @@ $(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
 
 # Rule for building the TeX settings file that is used in a
 # specific context.
-$(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(FILE_PROJECT_CONF)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' $@' 'bible'
+$(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP) $(FILE_PROJECT_CONF)
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'bible'
 
 # Start with the OT but we don't want to do anything if there
 # are no components to process
@@ -199,6 +193,13 @@ $(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(FILE_PROJECT_CONF)
 ifneq ($(MATTER_OT),)
 # These build a rule (in memory) for this set of components
 $(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
+
+# A rule for creating the TeX control file for when the
+# entire OT is being typeset.
+$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : \
+	$(FILE_PROJECT_CONF) \
+	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'otc'
 
 # Render the entire OT
 $(FILE_MATTER_OT_PDF) : \
@@ -208,9 +209,8 @@ $(FILE_MATTER_OT_PDF) : \
 	$(PATH_TEXTS)/$(v).usfm.piclist \
 	$(PATH_TEXTS)/$(v).usfm.adj \
 	$(PATH_TEXTS)/$(v).usfm) \
-	$(DEPENDENT_FILE_LIST) \
-	$(MATTER_TEX_BIBLE) \
-	$(PATH_PROCESS)/$(FILE_TEX_SETUP)
+	$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) \
+	$(DEPENDENT_FILE_LIST)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex OT.tex
 endif
 
@@ -225,6 +225,13 @@ ifneq ($(MATTER_NT),)
 # These build a rule (in memory) for this set of components
 $(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
 
+# A rule for creating the TeX control file for when the
+# entire OT is being typeset.
+$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : \
+	$(FILE_PROJECT_CONF) \
+	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'ntc'
+
 # Render the entire NT
 $(FILE_MATTER_NT_PDF) : \
 	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
@@ -233,8 +240,8 @@ $(FILE_MATTER_NT_PDF) : \
 	$(PATH_TEXTS)/$(v).usfm.piclist \
 	$(PATH_TEXTS)/$(v).usfm.adj \
 	$(PATH_TEXTS)/$(v).usfm) \
-	$(MATTER_TEX_BIBLE) \
-	$(PATH_PROCESS)/$(FILE_TEX_SETUP)
+	$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) \
+	$(DEPENDENT_FILE_LIST)
 	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex NT.tex
 
 endif

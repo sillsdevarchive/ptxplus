@@ -35,6 +35,7 @@
 #      control files. Except for the custom control file,
 #      all are auto generated and should not be edited for any
 #      reason.
+# BTW, this will only work with the ptx2pdf macro package.
 
 
 # History:
@@ -58,38 +59,50 @@ tools = Tools()
 class MakeTexControlFile (object) :
 
 	def main (self, log_manager) :
+		'''This part is all about direction. In this function we will figure out
+			what kind of settings file needs to be made and then call the
+			right function to do it.'''
 
-		log_manager._currentSubProcess = 'MkContFile'
+		log_manager._currentSubProcess = 'MkTexContFile'
 		self._log_manager = log_manager
-		self._outputFileName = log_manger._currentOutput
-		self._inputFileName = log_manager._currentInput
+		self._outputFile = log_manager._currentOutput
+		self._inputFile = log_manager._currentInput
+		self._cvSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_COVER', '.cover_settings.txt')
+		self._fmSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_FRONT', '.front_settings.txt')
+		self._biSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_BIBLE', '.bible_settings.txt')
+		self._bmSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_BACK', '.back_settings.txt')
+		self._cmSettingsFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_CUSTOM', 'custom-tex.txt')
+		self._txSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', '.setup_tex.txt')
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
 		self._flags = ('front', 'bible', 'back')
+		self._frontMatter = log_manager._settings['Process']['Binding']['MATTER_FRONT'].split()
+		self._backMatter = log_manager._settings['Process']['Binding']['MATTER_BACK'].split()
 		self._publicationType = log_manager._publicationType
-		self._contextBibleFileName = log_manager._settings['Process']['Files']['FILE_TEX_BIBLE']
-		texSettings = log_manager._settings['Process']['Files']['FILE_TEX_SETUP']
+		self._pathToText = os.getcwd() + "/" + log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
 
 		if self._publicationType.lower() == 'scripture' :
 
 			# Decide which file we are needing to make, then direct it to
 			# the right function.
-			if texSettings == self._outputFileName :
-				# This is the project-wide setup file
-				makeTheSettingsFile()
+			if self._txSettingsFile == self._outputFile :
+				# This is the project-wide setup file that contains
+				# general project parameters
+				self.makeTheSettingsFile()
 
 			elif self._contextFlag in self._flags :
 				# This contains TeX settings information for text to
 				# be processed in specific contexts.
-				makeTheContextSettingsFile()
+				self.makeTheContextSettingsFile()
 
 			else :
 				# This is the control file that links the object
 				# to the other settings files
-				makeTheControlFile()
+				self.makeTheControlFile()
 
 		else :
-			log_manager.log("ERRR", "Publication type: " + self._publicationType + " is unknown. Process halted.")
+			self._log_manager.log("ERRR", "Publication type: " + self._publicationType + " is unknown. Process halted.")
+			return
 
 #########################################################################################
 
@@ -101,16 +114,25 @@ class MakeTexControlFile (object) :
 			instructions for this object that can be added
 			in an automated way.'''
 
-		settings = '\\input ' + self._outputFileName + '\n'
-		# Make a link to the override stylesheet
-		settings = settings + '\\stylesheet{' + self._inputFileName + '.sty}\n'
+		# All local control files will link to the main settings file
+		settings = '\\input ' + self._txSettingsFile + '\n'
+
+		# Now link to the custom settings file. As this can override some
+		# settings it seems that it would be best for it to come near the end
+		# of the initialization process. The control file would be the best
+		# place to bing it in.
+		settings = settings + '\\input ' + self._cmSettingsFile + '\n'
+
+		# Make a link to the local override stylesheet. This file can override
+		# styles that were introduced in the main setup file
+		settings = settings + '\\stylesheet{' + self._inputFile + '.sty}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
 		# a peripheral control file.
 		if self._contextFlag != '' :
 
-			settings = settings + '\\input ' + self._contextBibleFileName + '\n'
+			settings = settings + '\\input ' + self._biSettingsFile + '\n'
 
 			# Since we were passed here it is assmumed that the context
 			# flag will contain a book ID, not a context marker. We will
@@ -125,20 +147,36 @@ class MakeTexControlFile (object) :
 			# will not affect the next book being processed. This is the last
 			# write to the output file.
 			for book in componentScripture :
-				thisBook = pathToText + '/' + book.lower() + '.usfm'
+				# The file(s) we need to point to in this instance are not
+				# found in the inputFile, we have to generate them here.
+				thisBook = self._pathToText + '/' + book.lower() + '.usfm'
 				bookInfo = self.parseThisBook(thisBook)
 				if oneChapOmmitRule == 'true' and bookInfo['chapCount'] == 1 or omitAllChapterNumbers == 'true':
 					settings = settings + '\\OmitChapterNumbertrue\n'
 					settings = settings + '\\ptxfile{' + thisBook + '}\n'
 					settings = settings + '\\OmitChapterNumberfalse\n'
 				else :
-					settings = settings + '\\ptxfile{' + thisBook + '}\n'
+					settings = settings + '\\ptxfile{' + self._outputFile + '}\n'
+
+		# If there was no context flag at all that means it has to be peripheral
+		# matter. But is is front or back matter. we'll need to test to see
 		else :
+			if self._inputFile in self._frontMatter :
+				settings = settings + '\\input ' + self._fmSettingsFile + '\n'
 
+			elif self._inputFile in self._backMatter :
+				settings = settings + '\\input ' + self._bmSettingsFile + '\n'
 
+			else :
+				self._log_manager.log("ERRR", "This module thinks that: " + self._inputFile + " part of the peripheral matter but it cannot find it on either the front or back matter binding lists. Process halted.")
+				return
+
+			# For peripheral matter we do not have to generate the name like
+			# with Scripture books
+			settings = settings + '\\ptxfile{' + self._inputFile + '}\n'
 
 		# Ship the results, change order as needed
-		self.writeOutTheFile(self._outputFileName, settings + '\\bye\n')
+		self.writeOutTheFile(self._outputFile, settings + '\\bye\n')
 
 #########################################################################################
 
@@ -152,82 +190,98 @@ class MakeTexControlFile (object) :
 
 		# Build some paths and file names
 		texMacros = log_manager._settings['Process']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
-		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', 'auto-tex.txt')
-		customSetup = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP_CUSTOM', 'custom-tex.txt')
 		styleFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_STYLE', 'project.sty')
-
 		# Bring in page format settings
 		cropmarks = log_manager._settings['Format']['PageLayout'].get('CROPMARKS', 'true')
 		pageHeight = log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
 		pageWidth = log_manager._settings['Format']['PageLayout'].get('pageWidth', '148mm')
-\endbooknoejecttrue (endBookNoEject)
-# Columns
-\TitleColumns=1
-\IntroColumns=1
-\BodyColumns=2
-\def\ColumnGutterFactor{15}
-\ColumnGutterRuletrue
-\ColumnGutterRuleSkip=4pt
-# Margins
-\MarginUnit=12mm
-\def\TopMarginFactor{1.75}
-\def\BottomMarginFactor{0} - if set to 0 it will not show up in the output
-\def\SideMarginFactor{1.0}
-\BindingGutter=12mm
-\BindingGuttertrue (useBindingGutter)
-# HeaderFooter
-\def\HeaderPosition{.75}
-\def\FooterPosition{.5}
-# Fonts
-\def\regular{"[../Fonts/CharisSIL/CharisSILR.ttf]/GR"}
-\def\bold{"[../Fonts/CharisSIL/CharisSILB.ttf]/GR"}
-\def\italic{"[../Fonts/CharisSIL/CharisSILI.ttf]/GR"}
-\def\bolditalic{"[../Fonts/CharisSIL/CharisSILBI.ttf]/GR"}
-\tracinglostchars=1 (tracingLostCharacters)
-\FontSizeUnit=1pt (fontSizeUnit)
-\def\LineSpacingFactor{1.1} (lineSpacingFactor)
-\def\VerticalSpaceFactor{1} (verticalSpaceFactor)
-\XeTeXlinebreaklocale "G" (xetexLineBreakLocale - false)
-# Paths
-\PicPath={Illustrations/} (PATH_ILLUSTRATIONS)
+		endBookNoEject = log_manager._settings['Format']['Scripture']['Columns'].get('endBookNoEject', 'false')
+		titleColumns = log_manager._settings['Format']['Scripture']['Columns'].get('titleColumns', '1')
+		introColumns = log_manager._settings['Format']['Scripture']['Columns'].get('introColumns', '1')
+		bodyColumns = log_manager._settings['Format']['Scripture']['Columns'].get('bodyColumns', '2')
+		columnGutterFactor = log_manager._settings['Format']['Scripture']['Columns'].get('columnGutterFactor', '15')
+		columnGutterRule = log_manager._settings['Format']['Scripture']['Columns'].get('columnGutterRule', 'false')
+		columnGutterRuleSkip = log_manager._settings['Format']['Scripture']['Columns'].get('columnGutterRuleSkip', '4')
+		# Margins
+		marginUnit = log_manager._settings['Format']['Scripture']['Margins'].get('marginUnit', '12')
+		topMarginFactor = log_manager._settings['Format']['Scripture']['Margins'].get('topMarginFactor', '1.0')
+		bottomMarginFactor = log_manager._settings['Format']['Scripture']['Margins'].get('bottomMarginFactor', '0')
+		sideMarginFactor = log_manager._settings['Format']['Scripture']['Margins'].get('sideMarginFactor', '0.7')
+		useBindingGutter = log_manager._settings['Format']['Scripture']['Margins'].get('useBindingGutter', 'false')
+		bindingGutter = log_manager._settings['Format']['Scripture']['Margins'].get('bindingGutter', '12')
+		# Header/Footer
+		headerPosition = log_manager._settings['Format']['Scripture']['HeaderFooter'].get('headerPosition', '0.5')
+		footerPosition = log_manager._settings['Format']['Scripture']['HeaderFooter'].get('footerPosition', '0.5')
+		# Fonts and text
+		xetexLineBreakLocale = log_manager._settings['Format']['Fonts'].get('xetexLineBreakLocale', 'false')
+		fontDefRegular = log_manager._settings['Format']['Fonts'].get('fontDefRegular', '[../Fonts/GenBkBas/GenBkBasR.ttf]/GR')
+		fontDefBold = log_manager._settings['Format']['Fonts'].get('fontDefBold', '[../Fonts/GenBkBas/GenBkBasB.ttf]/GR')
+		fontDefItalic = log_manager._settings['Format']['Fonts'].get('fontDefItalic', '[../Fonts/GenBkBas/GenBkBasI.ttf]/GR')
+		fontDefBoldItalic = log_manager._settings['Format']['Fonts'].get('fontDefBoldItalic', '[../Fonts/GenBkBas/GenBkBasBI.ttf]/GR')
+		tracingLostCharacters = log_manager._settings['Format']['Fonts'].get('tracingLostCharacters', 'false')
+		fontSizeUnit = log_manager._settings['Format']['Fonts'].get('fontSizeUnit', '1')
+		lineSpacingFactor = log_manager._settings['Format']['Fonts'].get('lineSpacingFactor', '1.1')
+		verticalSpaceFactor = log_manager._settings['Format']['Fonts'].get('verticalSpaceFactor', '1')
 
-\FigurePlaceholderstrue (useFigurePlaceholders)
+		# Build our output - These are the strings we will fill:
+		fileHeaderText = ''
+		fileInput = ''
+		formatSettings = ''
+		headerFooterSettings = ''
+		fontSettings = ''
 
 		# Create the file header
-		header = "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
-				"% should be made to the project.conf file or the custom TeX setup file.\n\n"
-
-
-		# Output to the new makefile file
-		# Create the new TeX settings object (overwrite the old file)
-		settingsFileObject = codecs.open(setupFile, 'w', encoding='utf_8_sig')
-		settingsFileObject.write(header)
-		# This connects the system with the custom macro code
-		settingsFileObject.write('\\input ' + texMacros + '\n')
-		# Add page format settings
-		settingsFileObject.write('\\PaperHeight=' + pageHeight + '\n')
-		settingsFileObject.write('\\PaperWidth=' + pageWidth + '\n')
-
-
-
-		# Now put out the custom macro file path (this may need to be moved)
-		settingsFileObject.write('\\input ' + customSetup + '\n')
-		# Add some format features here
-		if cropmarks.lower() == 'true' :
-			settingsFileObject.write('\\CropMarkstrue\n')
-
+		fileHeaderText =	"% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
+					"% should be made to the project.conf file or the custom TeX setup file.\n\n"
+		# Make all the file input settings here
+		fileInput = '\\input ' + texMacros + '\n'
 		# Add the global style sheet
-		settingsFileObject.write('\\stylesheet{' + styleFile + '}\n')
-		settingsFileObject.close()
+		fileInput = fileInput + '\\stylesheet{' + styleFile + '}\n'
+		# Add format settings
+		formatSettings + '\\PaperHeight=' + pageHeight + '\n'
+		formatSettings = formatSettings + '\\PaperWidth=' + pageWidth + '\n'
+		if cropmarks.lower() == 'true' :
+			formatSettings = formatSettings + '\\CropMarkstrue\n'
+		if endBookNoEject.lower() == 'true' :
+			formatSettings = formatSettings + '\\endbooknoejecttrue\n'
+		# Columns
+		formatSettings = formatSettings + '\\TitleColumns=' + titleColumns + '\n'
+		formatSettings = formatSettings + '\\IntroColumns=' + introColumns + '\n'
+		formatSettings = formatSettings + '\\BodyColumns=' + bodyColumns + '\n'
+		formatSettings = formatSettings + '\\def\ColumnGutterFactor{' + columnGutterFactor + '}\n'
+		if columnGutterRule.lower() == 'true' :
+			formatSettings = formatSettings + '\\ColumnGutterRuletrue\n'
+		formatSettings = formatSettings + '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + '\n'
+		# Margins
+		formatSettings = formatSettings + '\\MarginUnit=' + marginUnit + '\n'
+		formatSettings = formatSettings + '\\def\TopMarginFactor{' + topMarginFactor + '}\n'
+		formatSettings = formatSettings + '\\def\BottomMarginFactor{' + bottomMarginFactor + '}\n'
+		formatSettings = formatSettings + '\\def\SideMarginFactor{' + sideMarginFactor + '}\n'
+		formatSettings = formatSettings + '\\BindingGutter=' + bindingGutter + '}\n'
+		if useBindingGutter.lower() == 'true' :
+			formatSettings = formatSettings + '\\BindingGuttertrue\n'
+		# HeaderFooter
+		headerFooterSettings = headerFooterSettings + '\\def\HeaderPosition{' + headerPosition + '}\n'
+		headerFooterSettings = headerFooterSettings + '\\def\FooterPosition{' + footerPosition + '}\n'
+		# Fonts
+		if xetexLineBreakLocale.lower() == 'true' :
+			fontSettings = fontSettings + '\\XeTeXlinebreaklocale "G"\n'
+		fontSettings = fontSettings + '\\def\regular{' + fontDefRegular + '}\n'
+		fontSettings = fontSettings + '\\def\bold{' + fontDefBold + '}\n'
+		fontSettings = fontSettings + '\\def\italic{' + fontDefItalic + '}\n'
+		fontSettings = fontSettings + '\\def\bolditalic{' + fontDefBoldItalic + '}\n'
+		if tracingLostCharacters.lower() == 'true' :
+			fontSettings = fontSettings + '\\tracinglostchars=1\n'
+		fontSettings = fontSettings + '\\FontSizeUnit=' + fontSizeUnit + '\n'
+		fontSettings = fontSettings + '\\def\LineSpacingFactor{' + lineSpacingFactor + '}\n'
+		fontSettings = fontSettings + '\\def\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
 
 		# Ship the results, change order as needed
 		orderedContents = 	fileHeaderText + \
 					fileInput + \
-					verseChapterSettings + \
-					headerSettings + \
-					footerSettings + \
-					footnoteSettings + \
-					generalSettings) + \
+					formatSettings + \
+					headerFooterSettings + \
+					fontSettings + \
 					'\\bye\n'
 
 		self.writeOutTheFile(orderedContents)
@@ -245,14 +299,15 @@ class MakeTexControlFile (object) :
 		# below depending on the context
 
 		# Process
-		pathToText = os.getcwd() + "/" + log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
 		pathToHyphen = os.getcwd() + "/" + log_manager._settings['Process']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
-		setupFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', 'auto-tex.txt')
+		pathToIllustrations = os.getcwd() + "/" + log_manager._settings['Process']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
 		hyphenFile = pathToHyphen + "/" + log_manager._settings['Process']['Files'].get('FILE_HYPHENATION_TEX', '')
 		marginalVerses = log_manager._settings['Process']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
 		useHyphenation = log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
+		useFigurePlaceholders = log_manager._settings['Format']['Scripture']['Illustrations'].get('useFigurePlaceholders', 'true')
+		autoTocFile = log_manager._settings['Process']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
+		generateTOC = log_manager._settings['Process']['TOC'].get('generateTOC', 'true')
 		tocTitle = log_manager._settings['Process']['TOC'].get('mainTitle', 'Table of Contents')
-
 		# Format -> PageLayout
 		usePageBorder = log_manager._settings['Format']['PageLayout'].get('usePageBorder', 'false')
 		pageBorderScale = log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
@@ -260,7 +315,6 @@ class MakeTexControlFile (object) :
 		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
 		oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('shortBookChapterOmit', 'true')
 		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
-
 		# Format -> Scripture
 		columnshift = log_manager._settings['Format']['Scripture']['Columns'].get('columnshift', '15')
 		useRunningHeaderRule = log_manager._settings['Format']['Scripture']['HeaderFooter'].get('useRunningHeaderRule', 'false')
@@ -273,7 +327,6 @@ class MakeTexControlFile (object) :
 		afterChapterSpaceFactor = log_manager._settings['Format']['Scripture'][''].get('afterChapterSpaceFactor', '3')
 		removeIndentAfterHeading = log_manager._settings['Format']['Scripture'][''].get('removeIndentAfterHeading', 'false')
 		adornVerseNumber = log_manager._settings['Format']['Scripture'][''].get('adornVerseNumber', 'false')
-
 		# Running Header
 		runningHeaderTitleLeft = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleLeft', 'empty')
 		runningHeaderTitleCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleCenter', 'empty')
@@ -293,7 +346,6 @@ class MakeTexControlFile (object) :
 		runningFooterEvenLeft = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenLeft', 'empty')
 		runningFooterEvenCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenCenter', 'empty')
 		runningFooterEvenRight = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenRight', 'empty')
-
 		# Footnotes
 		autoCallers = log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallers', '*')
 		autoCallerStartChar = log_manager._settings['Format']['Scripture'][''].get('autoCallerStartChar', '97')
@@ -310,15 +362,6 @@ class MakeTexControlFile (object) :
 		justifyPars = log_manager._settings['Format']['Scripture'][''].get('justifyPars', 'true')
 		rightToLeft = log_manager._settings['Format']['Scripture'][''].get('rightToLeft', 'false')
 
-		# Generate a TOC file name.
-		tocFile = ''
-		if bookID.lower() == 'nt' :
-			bookID = self._log_manager._settings['Process']['Binding']['MATTER_OT']
-			tocFile = log_manager._settings['Process']['Files']['FILE_AUTO_TOC'] + '-ot.usfm'
-		elif bookID.lower() == 'nt' :
-			bookID = self._log_manager._settings['Process']['Binding']['MATTER_NT']
-			tocFile = log_manager._settings['Process']['Files']['FILE_AUTO_TOC'] + '-nt.usfm'
-
 		# Build our output - These are the strings we will fill:
 		fileHeaderText = ''
 		fileInput = ''
@@ -328,108 +371,111 @@ class MakeTexControlFile (object) :
 		footnoteSettings = ''
 		generalSettings = ''
 
+		# Set some context sensitive things here
+		# Note that for now, we are going to put header and footer settings
+		# only in the 'bible' context.
+		if self._contextFlag.lower() == 'cover' :
+			fileName = self._cvSettingsFile
+		elif self._contextFlag.lower() == 'front' :
+			fileName = self._fmSettingsFile
+		elif self._contextFlag.lower() == 'bible' :
+			fileName = self._biSettingsFile
+			# Will we use marginal verses?
+			if useMarginalVerses.lower() == 'true' :
+				fileInput = fileInput + '\\input ' + marginalVerses + '\n'
+				fileInput = fileInput + '\\columnshift=' + columnshift + '\n'
+			# First off, if a file name for the TOC is found, write it out
+			if generateTOC == 'true' :
+				fileInput = fileInput + '\\GenerateTOC[' + tocTitle + ']{' + autoTocFile + '}\n'
+			# Do we want a page border?
+			if usePageBorder.lower() == 'true' :
+				fileInput = fileInput + '\\def\\PageBorder{' + pageBorderFile + ' scaled ' + pageBorderScale + '}\n'
+			# Verse/chapter settings
+			if verseRefs.lower() == 'true' :
+				verseChapterSettings = verseChapterSettings + '\\VerseRefstrue\n'
+			if omitChapterNumber.lower() == 'true' :
+				verseChapterSettings = verseChapterSettings + '\\OmitChapterNumberRHtrue\n'
+			if omitVerseNumberOne.lower() == 'true' :
+				verseChapterSettings = verseChapterSettings + '\\OmitVerseNumberOnetrue\n'
+			if removeIndentAfterHeading.lower() == 'true' :
+				verseChapterSettings = verseChapterSettings + '\\IndentAfterHeadingtrue\n'
+			if adornVerseNumber.lower() == 'true' :
+				verseChapterSettings = verseChapterSettings + '\\def\AdornVerseNumber#1{(#1)}\n'
+			verseChapterSettings = verseChapterSettings + '\\def\ChapterVerseSeparator{' + chapterVerseSeparator + '}\n'
+			verseChapterSettings = verseChapterSettings + '\\def\AfterVerseSpaceFactor{' + afterVerseSpaceFactor + '}\n'
+			verseChapterSettings = verseChapterSettings + '\\def\AfterChapterSpaceFactor{' + afterChapterSpaceFactor + '}\n'
+			# Header settings
+			if useRunningHeaderRule.lower() == 'true' :
+				headerSettings = headerSettings + '\\RHruleposition=' + runningHeaderRulePosition + '\n'
+			headerSettings = headerSettings + '\\def\\RHtitleleft{\\' + runningHeaderTitleLeft + '}\n'
+			headerSettings = headerSettings + '\\def\\RHtitlecenter{\\' + runningHeaderTitleCenter + '}\n'
+			headerSettings = headerSettings + '\\def\\RHtitleright{\\' + runningHeaderTitleRight + '}\n'
+			headerSettings = headerSettings + '\\def\\RHoddleft{\\' + runningHeaderOddLeft + '}\n'
+			headerSettings = headerSettings + '\\def\\RHoddcenter{\\' + runningHeaderOddCenter + '}\n'
+			headerSettings = headerSettings + '\\def\\RHoddright{\\' + runningHeaderOddRight + '}\n'
+			headerSettings = headerSettings + '\\def\\RHevenleft{\\' + runningHeaderEvenLeft + '}\n'
+			headerSettings = headerSettings + '\\def\\RHevencenter{\\' + runningHeaderOddCenter + '}\n'
+			headerSettings = headerSettings + '\\def\\RHevenright{\\' + runningHeaderEvenRight + '}\n'
+			# Footer settings
+			footerSettings = footerSettings + '\\def\\RFtitleleft{\\' + runningFooterTitleLeft + '}\n'
+			footerSettings = footerSettings + '\\def\\RFtitlecenter{\\' + runningFooterTitleCenter + '}\n'
+			footerSettings = footerSettings + '\\def\\RFtitleright{\\' + runningFooterTitleRight + '}\n'
+			footerSettings = footerSettings + '\\def\\RFoddleft{\\' + runningFooterOddLeft + '}\n'
+			footerSettings = footerSettings + '\\def\\RFoddcenter{\\' + runningFooterOddCenter + '}\n'
+			footerSettings = footerSettings + '\\def\\RFoddright{\\' + runningFooterOddRight + '}\n'
+			footerSettings = footerSettings + '\\def\\RFevenleft{\\' + runningFooterEvenLeft + '}\n'
+			footerSettings = footerSettings + '\\def\\RFevencenter{\\' + runningFooterEvenCenter + '}\n'
+			footerSettings = footerSettings + '\\def\\RFevenright{\\' + runningFooterEvenRight + '}\n'
+			# Hyphenation is optional project-wide so we will put it here. However, this
+			# means there will not be any hyphenation on any non-Scripture objects. We might
+			# need to rethink this.
+			if useHyphenation.lower() == 'true' :
+				fileInput = fileInput + '\\input ' + hyphenFile + '\n'
+			# Footnote settings
+			# If we use Autocallers we need to leave out some other things and vise versa
+			if useAutoCallers == 'true' :
+				footnoteSettings = footnoteSettings + '\\AutoCallers{f}{' + autoCallerCharFn + '}\n'
+				footnoteSettings = footnoteSettings + '\\AutoCallers{x}{' + autoCallerCharCr + '}\n'
+			else :
+				footnoteSettings = footnoteSettings + '\\def\\AutoCallerStartChar{' + autoCallerStartChar + '}\n'
+				footnoteSettings = footnoteSettings + '\\def\\AutoCallerNumChars{' + autoCallerNumChars + '}\n'
+				if useNumericCallersFootnotes.lower() == 'true' :
+					footnoteSettings = footnoteSettings + '\\NumericCallers{f}\n'
+				if useNumericCallersCrossRefs.lower() == 'true' :
+					footnoteSettings = footnoteSettings + '\\NumericCallers{x}\n'
+				if pageResetCallersFootnotes.lower() == 'true' :
+					footnoteSettings = footnoteSettings + '\\PageResetCallers{f}\n'
+				if pageResetCallersCrossRefs.lower() == 'true' :
+					footnoteSettings = footnoteSettings + '\\PageResetCallers{x}\n'
+			if footnoteRule.lower() == 'true' :
+				footnoteSettings = footnoteSettings + '\\def\\footnoterule{}\n'
+			if omitCallerInFootnote.lower() == 'true' :
+				footnoteSettings = footnoteSettings + '\\OmitCallerInNote{f}\n'
+			if omitCallerInCrossRefs.lower() == 'true' :
+				footnoteSettings = footnoteSettings + '\\OmitCallerInNote{x}\n'
+			if paragraphedFootnotes.lower() == 'true' :
+				footnoteSettings = footnoteSettings + '\\ParagraphedNotes{f}\n'
+			if paragraphedCrossRefs.lower() == 'true' :
+				footnoteSettings = footnoteSettings + '\\ParagraphedNotes{x}\n'
+
+
+		elif self._contextFlag.lower == 'back' :
+			fileName = self._bmSettingsFile
+		else :
+			# If we can't figure out what this is we have a system level bug and we might as well quite here
+			self._log_manager.log("ERRR", "The context flag: " + self._contextFlag + " is not recognized by the system. Process halted.")
+			return
 
 		# The file header telling users not to touch it
-		fileHeaderText = "This is the " + self._texControlFile + " and it is auto generated. If you know what's good for you, don't edit it!\n\n"
-
-		# FileInput section
-		fileInput = '\\input ' + setupFile + '\n'
-
-		# Hyphenation is optional project-wide. There may be some objects that
-		# need it and others that do not. That is why it is here at the object level.
-		if useHyphenation.lower() == 'true' :
-			fileInput = fileInput + '\\input ' + hyphenFile + '\n'
-
-		# Will we use marginal verses?
-		if useMarginalVerses.lower() == 'true' :
-			fileInput = fileInput + '\\input ' + marginalVerses + '\n'
-			fileInput = fileInput + '\\columnshift=' + columnshift + '\n'
-
-		# First off, if a file name for the TOC is found, write it out
-		if tocFile != "" :
-			fileInput = fileInput + '\\GenerateTOC[' + tocTitle + ']{' + tocFile + '}\n'
-
-		# Do we want a page border?
-		if usePageBorder.lower() == 'true' :
-			fileInput = fileInput + '\\def\\PageBorder{' + pageBorderFile + ' scaled ' + pageBorderScale + '}\n'
-
-		# Verse/chapter settings
-		if verseRefs.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\VerseRefstrue\n'
-
-		if omitChapterNumber.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\OmitChapterNumberRHtrue\n'
-
-		if omitVerseNumberOne.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\OmitVerseNumberOnetrue\n'
-
-		if removeIndentAfterHeading.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\IndentAfterHeadingtrue\n'
-
-		if adornVerseNumber.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\def\AdornVerseNumber#1{(#1)}\n'
-
-		verseChapterSettings = verseChapterSettings + '\\def\ChapterVerseSeparator{' + chapterVerseSeparator + '}\n'
-		verseChapterSettings = verseChapterSettings + '\\def\AfterVerseSpaceFactor{' + afterVerseSpaceFactor + '}\n'
-		verseChapterSettings = verseChapterSettings + '\\def\AfterChapterSpaceFactor{' + afterChapterSpaceFactor + '}\n'
-
-		# Header settings
-		if useRunningHeaderRule.lower() == 'true' :
-			headerSettings = headerSettings + '\\RHruleposition=' + runningHeaderRulePosition + '\n'
-
-		headerSettings = headerSettings + '\\def\\RHtitleleft{\\' + runningHeaderTitleLeft + '}\n'
-		headerSettings = headerSettings + '\\def\\RHtitlecenter{\\' + runningHeaderTitleCenter + '}\n'
-		headerSettings = headerSettings + '\\def\\RHtitleright{\\' + runningHeaderTitleRight + '}\n'
-		headerSettings = headerSettings + '\\def\\RHoddleft{\\' + runningHeaderOddLeft + '}\n'
-		headerSettings = headerSettings + '\\def\\RHoddcenter{\\' + runningHeaderOddCenter + '}\n'
-		headerSettings = headerSettings + '\\def\\RHoddright{\\' + runningHeaderOddRight + '}\n'
-		headerSettings = headerSettings + '\\def\\RHevenleft{\\' + runningHeaderEvenLeft + '}\n'
-		headerSettings = headerSettings + '\\def\\RHevencenter{\\' + runningHeaderOddCenter + '}\n'
-		headerSettings = headerSettings + '\\def\\RHevenright{\\' + runningHeaderEvenRight + '}\n'
-
-		# Footer settings
-		footerSettings = footerSettings + '\\def\\RFtitleleft{\\' + runningFooterTitleLeft + '}\n'
-		footerSettings = footerSettings + '\\def\\RFtitlecenter{\\' + runningFooterTitleCenter + '}\n'
-		footerSettings = footerSettings + '\\def\\RFtitleright{\\' + runningFooterTitleRight + '}\n'
-		footerSettings = footerSettings + '\\def\\RFoddleft{\\' + runningFooterOddLeft + '}\n'
-		footerSettings = footerSettings + '\\def\\RFoddcenter{\\' + runningFooterOddCenter + '}\n'
-		footerSettings = footerSettings + '\\def\\RFoddright{\\' + runningFooterOddRight + '}\n'
-		footerSettings = footerSettings + '\\def\\RFevenleft{\\' + runningFooterEvenLeft + '}\n'
-		footerSettings = footerSettings + '\\def\\RFevencenter{\\' + runningFooterEvenCenter + '}\n'
-		footerSettings = footerSettings + '\\def\\RFevenright{\\' + runningFooterEvenRight + '}\n'
-
-		# Footnote settings
-		# If we use Autocallers we need to leave out some other things and vise versa
-		if autoCallers != '' :
-			footnoteSettings = footnoteSettings + '\\AutoCallers{f}{\kern0.2em*\kern0.4em} (autoCallers) (if this, don't use some other things)
-
-		else :
-			footnoteSettings = footnoteSettings + '\\def\\AutoCallerStartChar{' + autoCallerStartChar + '}\n'
-			footnoteSettings = footnoteSettings + '\\def\\AutoCallerNumChars{' + autoCallerNumChars + '}\n'
-			if useNumericCallersFootnotes.lower() == 'true' :
-				footnoteSettings = footnoteSettings + '\\NumericCallers{f}\n'
-			if useNumericCallersCrossRefs.lower() == 'true' :
-				footnoteSettings = footnoteSettings + '\\NumericCallers{x}\n'
-			if pageResetCallersFootnotes.lower() == 'true' :
-				footnoteSettings = footnoteSettings + '\\PageResetCallers{f}\n'
-			if pageResetCallersCrossRefs.lower() == 'true' :
-				footnoteSettings = footnoteSettings + '\\PageResetCallers{x}\n'
-
-		if footnoteRule.lower() == 'true' :
-			footnoteSettings = footnoteSettings + '\\def\\footnoterule{}\n'
-
-
-		footnoteSettings = footnoteSettings +
-
-*\OmitCallerInNote{f} (omitCallerInFootnote)
-*\OmitCallerInNote{x} (omitCallerInCrossRefs)
-*\ParagraphedNotes{f} (paragraphedFootnotes)
-*\ParagraphedNotes{x} (paragraphedCrossRefs)
+		fileHeaderText = '% File: ' + fileName + '\n\n' + \
+			'% This file is auto generated. If you know what is good for you, will not edit it!\n\n'
 
 		# General settings
-*\JustifyParsfalse (justifyPars = true)
-*\RTLtrue (rightToLeft)
+		if justifyPars.lower() == 'false' :
+			generalSettings = generalSettings + '\\JustifyParsfalse\n'
 
+		if rightToLeft.lower() == 'true' :
+			generalSettings = generalSettings + '\\RTLtrue\n'
 
 		# Ship the results, change order as needed
 		orderedContents = 	fileHeaderText + \
@@ -438,17 +484,18 @@ class MakeTexControlFile (object) :
 					headerSettings + \
 					footerSettings + \
 					footnoteSettings + \
-					generalSettings) + \
+					generalSettings + \
 					'\\bye\n'
 
 		self.writeOutTheFile(orderedContents)
 
 
+#########################################################################################
 
 	def writeOutTheFile (self, contents) :
 		'''Write out the file.'''
 
-		texControlObject = codecs.open(self._outputFileName, "w", encoding='utf_8_sig')
+		texControlObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
 		texControlObject.write(contents)
 		texControlObject.close()
 
@@ -473,6 +520,7 @@ class MakeTexControlFile (object) :
 		info['chapCount'] = handler._chapCount
 
 		return info
+
 
 class MakeTexControlFileHandler (parse_sfm.Handler) :
 	'''This class replaces the Handler class in the parse_sfm module.'''
@@ -534,4 +582,5 @@ class MakeTexControlFileHandler (parse_sfm.Handler) :
 def doIt (log_manager) :
 
 	thisModule = MakeTexControlFile()
+
 	return thisModule.main(log_manager)

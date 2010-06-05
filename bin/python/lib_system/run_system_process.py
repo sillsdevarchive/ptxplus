@@ -75,7 +75,7 @@ try :
 	task		= sys.argv[1]
 except :
 	tools.userMessage("process_text.py: Cannot run the process because no module (task) has been specified.")
-	return
+	sys.exit(1)
 
 # We may not need a 2nd 3rd or 4th argument. It depends on what
 # process is going to be run, so we have to be careful.

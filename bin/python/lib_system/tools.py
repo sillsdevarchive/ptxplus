@@ -121,7 +121,6 @@ class Tools (object) :
 			except :
 				project.merge(sysObj)
 
-
 			return project
 		else :
 			# If no project settings file exists just use the

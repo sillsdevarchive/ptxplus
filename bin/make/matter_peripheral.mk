@@ -78,7 +78,6 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 # changing.
 ifneq ($(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm)
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
-		build-TOC-NT.usfm
 	@if test -r $(PATH_TEMPLATES)/$(1); then \
 		echo Copying into project from: $(PATH_TEMPLATES)/$(1); \
 		cp $(PATH_TEMPLATES)/$(1) '$$@'; \
@@ -167,7 +166,7 @@ endef
 
 # Other rules will depend on this to create the project
 # peripheral source folder if one doesn't exist.
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) :
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) : | $(PATH_SOURCE)
 	@echo Creating the project peripheral source folder
 	@mkdir $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
 

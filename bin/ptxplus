@@ -250,6 +250,7 @@ else :
 			tools.userMessage('Sorry, that command cannot be used in this location.')
 
 		else :
+
 			# So, it looks like we are going to do some work on the project so we
 			# should do some tests and even automatic repairs and updates.
 
@@ -272,15 +273,19 @@ else :
 
 			# Look for all the global processes that need to be run
 			try :
+
 				for key, value in tools.getSettingsObject()['General']['GlobalProcesses'].iteritems() :
 
 					# Initialize the log manager to do its thing. However, as
 					# this is a system process we don't book ID and may not
 					# even have input or output.
-					log_manager.initializeLog(key, "NA", "", "")
+					try :
+						log_manager.initializeLog(key, "NA", "", "", "")
+					except :
+						tools.userMessage('Error: Failed to initialize process log.')
 
 					# Run any that are set to "true"
-					if value == "true" :
+					if value.lower() == "true" :
 						try :
 							module = __import__(key, globals(), locals(), [])
 							module.doIt(log_manager)
