@@ -80,12 +80,12 @@ except :
 # We may not need a 2nd 3rd or 4th argument. It depends on what
 # process is going to be run, so we have to be careful.
 try :
-	inputFile	= os.getcwd() + "/" + sys.argv[2]
+	inputFile	= sys.argv[2]
 except :
 	inputFile = Null
 
 try :
-	outputFile = os.getcwd() + "/" + sys.argv[3]
+	outputFile = sys.argv[3]
 except :
 	outputFile = Null
 
@@ -109,10 +109,18 @@ class RunProcess (object) :
 		# been defined earlier.
 		module = __import__(task, globals(), locals(), [])
 
+		# Make an ID marker flag for the process from the optionalPassedVariable
+		# hopefully this will not get us in trouble. This var should be
+		# used for flagging and not much more.
+		if optionalPassedVariable != '' :
+			flag = optionalPassedVariable
+		else :
+			flag = 'NA'
+
 		# Initialize the log manager to do its thing. However, as
 		# this is a system process we don't book ID and may not
 		# even have input or output.
-		log_manager.initializeLog(task, "NA", inputFile, outputFile, optionalPassedVariable)
+		log_manager.initializeLog(task, flag, inputFile, outputFile, optionalPassedVariable)
 
 		# This will dynamically import the module
 		# This will work because all the right paths have

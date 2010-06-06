@@ -64,7 +64,7 @@ define periph_rules
 # to the project Texts folder
 $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 	@echo Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
-	ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
+	@ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
 
 # Create the peripheral file by copying in the template. But if
 # the template files doesn't exsit, then create a dummy one to
@@ -94,16 +94,19 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIP
 endif
 
 # This .tex file also generally has some dependencies on the
-# FRONT/BACK_MATTER.tex files so we add them here. However, we
-# will use the "|" (pipe) trick to prevent any updating in case
-# the file already exists. Also, at this point, we are not
+# COVER/FRONT/BACK_MATTER.tex files so we add them here. However,
+# we will use the "|" (pipe) trick to prevent any updating in
+# case the file already exists. Also, at this point, we are not
 # passing any IDs or flags through. We will try to make this
 # control file by context in the script.
 $(PATH_PROCESS)/$(1).tex : | \
 	$(PATH_PROCESS)/$(1).sty \
+	$(PATH_PROCESS)/$(FILE_TEX_SETUP) \
+	$(PATH_PROCESS)/$(FILE_TEX_COVER) \
 	$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
 	$(PATH_PROCESS)/$(FILE_TEX_BACK)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file $(1) '$@' ''
+	@echo INFO: Creating: $$@
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '$(1)' '$$@' 'periph'
 
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).sty :
@@ -140,7 +143,8 @@ $(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
 
 # Remove the PDF file for this source file
 pdf-remove-$(1) :
-	rm -f $(PATH_PROCESS)/$(1).pdf
+	@echo INFO: Removing $$@
+	@rm -f $(PATH_PROCESS)/$(1).pdf
 
 endef
 
@@ -153,7 +157,7 @@ define matter_binding
 ifneq ($($(1)),)
 $(1)_PDF = $(PATH_PROCESS)/$(1).pdf
 $(PATH_PROCESS)/$(1).pdf : $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) $(DEPENDENT_FILE_LIST)
-	pdftk $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) cat output $$@
+	@pdftk $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) cat output $$@
 endif
 endef
 
@@ -180,17 +184,27 @@ $(eval $(call matter_binding,MATTER_FRONT))
 # Back matter binding rules
 $(eval $(call matter_binding,MATTER_BACK))
 
+# This makes a simple TeX settings file for the cover. This may
+# not really be needed but it seems to be the best way to handle
+# this proceedure and remain consistant with the rest of the
+# processes.
+$(PATH_PROCESS)/$(FILE_TEX_COVER) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
+	@echo INFO: Creating: $@
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'cover'
+
 # Most front matter peripheral .tex files will have a dependency
 # on $(FILE_TEX_FRONT) even if it doesn't, there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/$(FILE_TEX_FRONT) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' $@' 'front'
+	@echo INFO: Creating: $@
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'front'
 
 # Most back matter peripheral .tex files will have a dependency
 # on BACK_MATTER.tex even if it doesn't there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' $@' 'back'
+	@echo INFO: Creating: $@
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'back'
 
 # This calls all the automated rules defined above and does them
 # once on each file, even if the file is listed repeatedly in the
@@ -219,15 +233,18 @@ view-back : $(MATTER_BACK_PDF)
 
 # Remove the cover matter PDF file
 pdf-remove-cover :
-	rm -f $(MATTER_COVER_PDF)
+	@echo INFO: Removing: $(MATTER_COVER_PDF)
+	@rm -f $(MATTER_COVER_PDF)
 
 # Remove the front matter PDF file
 pdf-remove-front :
-	rm -f $(MATTER_FRONT_PDF)
+	@echo INFO: Removing: $(MATTER_FRONT_PDF)
+	@rm -f $(MATTER_FRONT_PDF)
 
 # Remove the back matter PDF file
 pdf-remove-back :
-	rm -f $(MATTER_BACK_PDF)
+	@echo INFO: Removing: $(MATTER_BACK_PDF)
+	@rm -f $(MATTER_BACK_PDF)
 
 
 

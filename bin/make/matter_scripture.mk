@@ -20,13 +20,7 @@
 # down the chain this might have to move, or be put in a
 # seperate file.
 DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
-  $(FILE_PROJECT_CONF) \
-  $(FILE_TEX_CUSTOM) \
-  $(FILE_TEX_STYLE) \
-  $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) \
-  $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) \
-  $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) \
-  $(PATH_PROCESS)/.stamp
+  $(FILE_PROJECT_CONF)
 
 
 ##############################################################
@@ -89,9 +83,9 @@ endif
 
 # Call the TeX control file creation script to create a simple
 # control file that will link to the other settings
-$(PATH_PROCESS)/$(1).tex : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+$(PATH_PROCESS)/$(1).usfm.tex : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating book control file: $$@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$$@' '$(1)'
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '$(1)' '$$@' '$(1)'
 
 # Process a single component and produce the final PDF. Special dependencies
 # are set for the .adj and .piclist files in case they have been altered.
@@ -180,12 +174,14 @@ endef
 # because the script will know by the flag name exactly what
 # it is and what goes in it.
 $(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'project'
+	@echo INFO: Creating: $@
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'project'
 
 # Rule for building the TeX settings file that is used in a
 # specific context.
 $(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP) $(FILE_PROJECT_CONF)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'bible'
+	@echo INFO: Creating: $@
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'bible'
 
 # Start with the OT but we don't want to do anything if there
 # are no components to process
@@ -199,7 +195,8 @@ $(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
 $(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'otc'
+	@echo INFO: Creating: $@
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'otc'
 
 # Render the entire OT
 $(FILE_MATTER_OT_PDF) : \
@@ -211,12 +208,13 @@ $(FILE_MATTER_OT_PDF) : \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) \
 	$(DEPENDENT_FILE_LIST)
-	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex OT.tex
+	@echo INFO: Creating: $@
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex OT.tex
 endif
 
 pdf-remove-ot :
 	@echo INFO: Removing file: $(FILE_MATTER_OT_PDF)
-	rm -f $(FILE_MATTER_OT_PDF)
+	@rm -f $(FILE_MATTER_OT_PDF)
 
 
 # Moving along we will do the NT if there are any components
@@ -230,7 +228,8 @@ $(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
 $(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'ntc'
+	@echo INFO: Creating: $@
+	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'ntc'
 
 # Render the entire NT
 $(FILE_MATTER_NT_PDF) : \
@@ -242,13 +241,14 @@ $(FILE_MATTER_NT_PDF) : \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) \
 	$(DEPENDENT_FILE_LIST)
-	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex NT.tex
+	@echo INFO: Creating: $@
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex NT.tex
 
 endif
 
 pdf-remove-nt :
 	@echo INFO: Removing file: $(FILE_MATTER_NT_PDF)
-	rm -f $(FILE_MATTER_NT_PDF)
+	@rm -f $(FILE_MATTER_NT_PDF)
 
 # Do a component section and veiw the resulting output
 view-ot : $(FILE_MATTER_OT_PDF)
@@ -287,7 +287,7 @@ preprocess-nt :
 # the right place we'll put one where it is supposed to be found.
 $(PATH_ILLUSTRATIONS) :
 	@echo INFO: Creating $@
-	mkdir -p $@
+	@mkdir -p $@
 
 # Rules for making the shared illustrations folder in the source
 # folder. Right now this is dependent on illustrations being used
@@ -296,7 +296,7 @@ $(PATH_ILLUSTRATIONS) :
 # under the same language grouping.
 $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) : | $(PATH_ILLUSTRATIONS)
 	@echo INFO: Creating $@
-	mkdir -p $@
+	@mkdir -p $@
 
 # Copy into place the captions.csv file that goes in the
 # shared folder if needed. Also, since the new captions file
@@ -306,8 +306,8 @@ $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(
 ifneq ($(PATH_ILLUSTRATIONS_LIB),)
 	@echo INFO: Removing file: $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
 	@rm -f $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
-	@echo INFO: Copying $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) to $@
-	cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) $@
+	@echo INFO: Copying $@ to $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
+	@cp $@ $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
 endif
 
 # Note: The following rule is here as a reminder. The project captions.csv

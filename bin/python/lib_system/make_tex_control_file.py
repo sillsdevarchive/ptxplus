@@ -67,30 +67,33 @@ class MakeTexControlFile (object) :
 		self._log_manager = log_manager
 		self._outputFile = log_manager._currentOutput
 		self._inputFile = log_manager._currentInput
-		self._cvSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_COVER', '.cover_settings.txt')
-		self._fmSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_FRONT', '.front_settings.txt')
-		self._biSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_BIBLE', '.bible_settings.txt')
-		self._bmSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_BACK', '.back_settings.txt')
-		self._cmSettingsFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_CUSTOM', 'custom-tex.txt')
-		self._txSettingsFile = log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', '.setup_tex.txt')
+		self._texMacros = self._log_manager._settings['Process']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
+		self._cvSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_COVER', '.cover_settings.txt')
+		self._fmSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_FRONT', '.front_settings.txt')
+		self._biSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_BIBLE', '.bible_settings.txt')
+		self._bmSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_BACK', '.back_settings.txt')
+		self._cmSettingsFile = os.getcwd() + "/" + self._log_manager._settings['Process']['Files'].get('FILE_TEX_CUSTOM', 'custom-tex.txt')
+		self._txSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', '.setup_tex.txt')
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
-		self._flags = ('front', 'bible', 'back')
-		self._frontMatter = log_manager._settings['Process']['Binding']['MATTER_FRONT'].split()
-		self._backMatter = log_manager._settings['Process']['Binding']['MATTER_BACK'].split()
+		self._flags = ('project', 'cover', 'front', 'bible', 'back', 'otc', 'ntc', 'periph')
+		self._frontMatter = self._log_manager._settings['Process']['Binding']['MATTER_FRONT'].split()
+		self._backMatter = self._log_manager._settings['Process']['Binding']['MATTER_BACK'].split()
+		self._coverMatter = self._log_manager._settings['Process']['Binding']['MATTER_COVER'].split()
 		self._publicationType = log_manager._publicationType
-		self._pathToText = os.getcwd() + "/" + log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
+		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
+		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_PROCESS', 'Process')
 
 		if self._publicationType.lower() == 'scripture' :
-
 			# Decide which file we are needing to make, then direct it to
 			# the right function.
-			if self._txSettingsFile == self._outputFile :
+
+			if self._txSettingsFile in self._outputFile.split('/') :
 				# This is the project-wide setup file that contains
 				# general project parameters
 				self.makeTheSettingsFile()
 
-			elif self._contextFlag in self._flags :
+			elif self._contextFlag in self._flags and self._contextFlag != 'periph' :
 				# This contains TeX settings information for text to
 				# be processed in specific contexts.
 				self.makeTheContextSettingsFile()
@@ -114,8 +117,11 @@ class MakeTexControlFile (object) :
 			instructions for this object that can be added
 			in an automated way.'''
 
+		# Input the main macro set here in the control file
+		settings = '\\input ' + self._texMacros + '\n'
+
 		# All local control files will link to the main settings file
-		settings = '\\input ' + self._txSettingsFile + '\n'
+		settings = settings + '\\input ' + self._txSettingsFile + '\n'
 
 		# Now link to the custom settings file. As this can override some
 		# settings it seems that it would be best for it to come near the end
@@ -125,13 +131,14 @@ class MakeTexControlFile (object) :
 
 		# Make a link to the local override stylesheet. This file can override
 		# styles that were introduced in the main setup file
-		settings = settings + '\\stylesheet{' + self._inputFile + '.sty}\n'
+		settings = settings + '\\stylesheet{' + self._pathToProcess + '/' + self._inputFile + '.sty}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
 		# a peripheral control file.
-		if self._contextFlag != '' :
-
+#		if self._contextFlag != '' and self._contextFlag not in self._flags :
+		if self._contextFlag not in self._flags :
+			print self._contextFlag, self._flags
 			settings = settings + '\\input ' + self._biSettingsFile + '\n'
 
 			# Since we were passed here it is assmumed that the context
@@ -161,22 +168,28 @@ class MakeTexControlFile (object) :
 		# If there was no context flag at all that means it has to be peripheral
 		# matter. But is is front or back matter. we'll need to test to see
 		else :
-			if self._inputFile in self._frontMatter :
+			if self._inputFile.split('/')[-1] in self._frontMatter :
 				settings = settings + '\\input ' + self._fmSettingsFile + '\n'
 
-			elif self._inputFile in self._backMatter :
+			elif self._inputFile.split('/')[-1] in self._backMatter :
 				settings = settings + '\\input ' + self._bmSettingsFile + '\n'
 
+			elif self._inputFile.split('/')[-1] in self._coverMatter :
+				settings = settings + '\\input ' + self._cvSettingsFile + '\n'
+
 			else :
-				self._log_manager.log("ERRR", "This module thinks that: " + self._inputFile + " part of the peripheral matter but it cannot find it on either the front or back matter binding lists. Process halted.")
+				self._log_manager.log("ERRR", "This module thinks that: " + self._inputFile + " part of the peripheral matter but it cannot find it on either the cover, front or back matter binding lists. Process halted.")
 				return
 
 			# For peripheral matter we do not have to generate the name like
 			# with Scripture books
-			settings = settings + '\\ptxfile{' + self._inputFile + '}\n'
+			settings = settings + '\\ptxfile{' + self._pathToText + '/' + self._inputFile + '}\n'
+
+		# Combine the results
+		settings = settings + '\\bye\n'
 
 		# Ship the results, change order as needed
-		self.writeOutTheFile(self._outputFile, settings + '\\bye\n')
+		self.writeOutTheFile(settings)
 
 #########################################################################################
 
@@ -189,39 +202,38 @@ class MakeTexControlFile (object) :
 			elsewhere in this module.'''
 
 		# Build some paths and file names
-		texMacros = log_manager._settings['Process']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
-		styleFile = os.getcwd() + "/" + log_manager._settings['Process']['Files'].get('FILE_TEX_STYLE', 'project.sty')
+		styleFile = os.getcwd() + "/" + self._log_manager._settings['Process']['Files'].get('FILE_TEX_STYLE', 'ptx2pdf.sty')
 		# Bring in page format settings
-		cropmarks = log_manager._settings['Format']['PageLayout'].get('CROPMARKS', 'true')
-		pageHeight = log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
-		pageWidth = log_manager._settings['Format']['PageLayout'].get('pageWidth', '148mm')
-		endBookNoEject = log_manager._settings['Format']['Scripture']['Columns'].get('endBookNoEject', 'false')
-		titleColumns = log_manager._settings['Format']['Scripture']['Columns'].get('titleColumns', '1')
-		introColumns = log_manager._settings['Format']['Scripture']['Columns'].get('introColumns', '1')
-		bodyColumns = log_manager._settings['Format']['Scripture']['Columns'].get('bodyColumns', '2')
-		columnGutterFactor = log_manager._settings['Format']['Scripture']['Columns'].get('columnGutterFactor', '15')
-		columnGutterRule = log_manager._settings['Format']['Scripture']['Columns'].get('columnGutterRule', 'false')
-		columnGutterRuleSkip = log_manager._settings['Format']['Scripture']['Columns'].get('columnGutterRuleSkip', '4')
+		cropmarks = self._log_manager._settings['Format']['PageLayout'].get('CROPMARKS', 'true')
+		pageHeight = self._log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
+		pageWidth = self._log_manager._settings['Format']['PageLayout'].get('pageWidth', '148mm')
+		endBookNoEject = self._log_manager._settings['Format']['Scripture']['Columns'].get('endBookNoEject', 'false')
+		titleColumns = self._log_manager._settings['Format']['Scripture']['Columns'].get('titleColumns', '1')
+		introColumns = self._log_manager._settings['Format']['Scripture']['Columns'].get('introColumns', '1')
+		bodyColumns = self._log_manager._settings['Format']['Scripture']['Columns'].get('bodyColumns', '2')
+		columnGutterFactor = self._log_manager._settings['Format']['Scripture']['Columns'].get('columnGutterFactor', '15')
+		columnGutterRule = self._log_manager._settings['Format']['Scripture']['Columns'].get('columnGutterRule', 'false')
+		columnGutterRuleSkip = self._log_manager._settings['Format']['Scripture']['Columns'].get('columnGutterRuleSkip', '4')
 		# Margins
-		marginUnit = log_manager._settings['Format']['Scripture']['Margins'].get('marginUnit', '12')
-		topMarginFactor = log_manager._settings['Format']['Scripture']['Margins'].get('topMarginFactor', '1.0')
-		bottomMarginFactor = log_manager._settings['Format']['Scripture']['Margins'].get('bottomMarginFactor', '0')
-		sideMarginFactor = log_manager._settings['Format']['Scripture']['Margins'].get('sideMarginFactor', '0.7')
-		useBindingGutter = log_manager._settings['Format']['Scripture']['Margins'].get('useBindingGutter', 'false')
-		bindingGutter = log_manager._settings['Format']['Scripture']['Margins'].get('bindingGutter', '12')
+		marginUnit = self._log_manager._settings['Format']['Scripture']['Margins'].get('marginUnit', '12')
+		topMarginFactor = self._log_manager._settings['Format']['Scripture']['Margins'].get('topMarginFactor', '1.0')
+		bottomMarginFactor = self._log_manager._settings['Format']['Scripture']['Margins'].get('bottomMarginFactor', '0')
+		sideMarginFactor = self._log_manager._settings['Format']['Scripture']['Margins'].get('sideMarginFactor', '0.7')
+		useBindingGutter = self._log_manager._settings['Format']['Scripture']['Margins'].get('useBindingGutter', 'false')
+		bindingGutter = self._log_manager._settings['Format']['Scripture']['Margins'].get('bindingGutter', '12mm')
 		# Header/Footer
-		headerPosition = log_manager._settings['Format']['Scripture']['HeaderFooter'].get('headerPosition', '0.5')
-		footerPosition = log_manager._settings['Format']['Scripture']['HeaderFooter'].get('footerPosition', '0.5')
+		headerPosition = self._log_manager._settings['Format']['Scripture']['HeaderFooter'].get('headerPosition', '0.5')
+		footerPosition = self._log_manager._settings['Format']['Scripture']['HeaderFooter'].get('footerPosition', '0.5')
 		# Fonts and text
-		xetexLineBreakLocale = log_manager._settings['Format']['Fonts'].get('xetexLineBreakLocale', 'false')
-		fontDefRegular = log_manager._settings['Format']['Fonts'].get('fontDefRegular', '[../Fonts/GenBkBas/GenBkBasR.ttf]/GR')
-		fontDefBold = log_manager._settings['Format']['Fonts'].get('fontDefBold', '[../Fonts/GenBkBas/GenBkBasB.ttf]/GR')
-		fontDefItalic = log_manager._settings['Format']['Fonts'].get('fontDefItalic', '[../Fonts/GenBkBas/GenBkBasI.ttf]/GR')
-		fontDefBoldItalic = log_manager._settings['Format']['Fonts'].get('fontDefBoldItalic', '[../Fonts/GenBkBas/GenBkBasBI.ttf]/GR')
-		tracingLostCharacters = log_manager._settings['Format']['Fonts'].get('tracingLostCharacters', 'false')
-		fontSizeUnit = log_manager._settings['Format']['Fonts'].get('fontSizeUnit', '1')
-		lineSpacingFactor = log_manager._settings['Format']['Fonts'].get('lineSpacingFactor', '1.1')
-		verticalSpaceFactor = log_manager._settings['Format']['Fonts'].get('verticalSpaceFactor', '1')
+		xetexLineBreakLocale = self._log_manager._settings['Format']['Fonts'].get('xetexLineBreakLocale', 'false')
+		fontDefRegular = self._log_manager._settings['Format']['Fonts'].get('fontDefRegular', '[../Fonts/GenBkBas/GenBkBasR.ttf]/GR')
+		fontDefBold = self._log_manager._settings['Format']['Fonts'].get('fontDefBold', '[../Fonts/GenBkBas/GenBkBasB.ttf]/GR')
+		fontDefItalic = self._log_manager._settings['Format']['Fonts'].get('fontDefItalic', '[../Fonts/GenBkBas/GenBkBasI.ttf]/GR')
+		fontDefBoldItalic = self._log_manager._settings['Format']['Fonts'].get('fontDefBoldItalic', '[../Fonts/GenBkBas/GenBkBasBI.ttf]/GR')
+		tracingLostCharacters = self._log_manager._settings['Format']['Fonts'].get('tracingLostCharacters', 'false')
+		fontSizeUnit = self._log_manager._settings['Format']['Fonts'].get('fontSizeUnit', '1')
+		lineSpacingFactor = self._log_manager._settings['Format']['Fonts'].get('lineSpacingFactor', '1.1')
+		verticalSpaceFactor = self._log_manager._settings['Format']['Fonts'].get('verticalSpaceFactor', '1')
 
 		# Build our output - These are the strings we will fill:
 		fileHeaderText = ''
@@ -233,12 +245,10 @@ class MakeTexControlFile (object) :
 		# Create the file header
 		fileHeaderText =	"% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
 					"% should be made to the project.conf file or the custom TeX setup file.\n\n"
-		# Make all the file input settings here
-		fileInput = '\\input ' + texMacros + '\n'
 		# Add the global style sheet
 		fileInput = fileInput + '\\stylesheet{' + styleFile + '}\n'
 		# Add format settings
-		formatSettings + '\\PaperHeight=' + pageHeight + '\n'
+		formatSettings = '\\PaperHeight=' + pageHeight + '\n'
 		formatSettings = formatSettings + '\\PaperWidth=' + pageWidth + '\n'
 		if cropmarks.lower() == 'true' :
 			formatSettings = formatSettings + '\\CropMarkstrue\n'
@@ -248,33 +258,33 @@ class MakeTexControlFile (object) :
 		formatSettings = formatSettings + '\\TitleColumns=' + titleColumns + '\n'
 		formatSettings = formatSettings + '\\IntroColumns=' + introColumns + '\n'
 		formatSettings = formatSettings + '\\BodyColumns=' + bodyColumns + '\n'
-		formatSettings = formatSettings + '\\def\ColumnGutterFactor{' + columnGutterFactor + '}\n'
+		formatSettings = formatSettings + '\\def\\ColumnGutterFactor{' + columnGutterFactor + '}\n'
 		if columnGutterRule.lower() == 'true' :
 			formatSettings = formatSettings + '\\ColumnGutterRuletrue\n'
 		formatSettings = formatSettings + '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + '\n'
 		# Margins
 		formatSettings = formatSettings + '\\MarginUnit=' + marginUnit + '\n'
-		formatSettings = formatSettings + '\\def\TopMarginFactor{' + topMarginFactor + '}\n'
-		formatSettings = formatSettings + '\\def\BottomMarginFactor{' + bottomMarginFactor + '}\n'
-		formatSettings = formatSettings + '\\def\SideMarginFactor{' + sideMarginFactor + '}\n'
-		formatSettings = formatSettings + '\\BindingGutter=' + bindingGutter + '}\n'
+		formatSettings = formatSettings + '\\def\\TopMarginFactor{' + topMarginFactor + '}\n'
+		formatSettings = formatSettings + '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
+		formatSettings = formatSettings + '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
+		formatSettings = formatSettings + '\\BindingGutter=' + bindingGutter + '\n'
 		if useBindingGutter.lower() == 'true' :
 			formatSettings = formatSettings + '\\BindingGuttertrue\n'
 		# HeaderFooter
-		headerFooterSettings = headerFooterSettings + '\\def\HeaderPosition{' + headerPosition + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\FooterPosition{' + footerPosition + '}\n'
+		headerFooterSettings = headerFooterSettings + '\\def\\HeaderPosition{' + headerPosition + '}\n'
+		headerFooterSettings = headerFooterSettings + '\\def\\FooterPosition{' + footerPosition + '}\n'
 		# Fonts
 		if xetexLineBreakLocale.lower() == 'true' :
-			fontSettings = fontSettings + '\\XeTeXlinebreaklocale "G"\n'
-		fontSettings = fontSettings + '\\def\regular{' + fontDefRegular + '}\n'
-		fontSettings = fontSettings + '\\def\bold{' + fontDefBold + '}\n'
-		fontSettings = fontSettings + '\\def\italic{' + fontDefItalic + '}\n'
-		fontSettings = fontSettings + '\\def\bolditalic{' + fontDefBoldItalic + '}\n'
+			fontSettings = fontSettings + '\\XeTeXlinebreaklocale \"G\"\n'
+		fontSettings = fontSettings + '\\def\\regular{\"' + fontDefRegular + '\"}\n'
+		fontSettings = fontSettings + '\\def\\bold{\"' + fontDefBold + '\"}\n'
+		fontSettings = fontSettings + '\\def\\italic{\"' + fontDefItalic + '\"}\n'
+		fontSettings = fontSettings + '\\def\\bolditalic{\"' + fontDefBoldItalic + '\"}\n'
 		if tracingLostCharacters.lower() == 'true' :
 			fontSettings = fontSettings + '\\tracinglostchars=1\n'
 		fontSettings = fontSettings + '\\FontSizeUnit=' + fontSizeUnit + '\n'
-		fontSettings = fontSettings + '\\def\LineSpacingFactor{' + lineSpacingFactor + '}\n'
-		fontSettings = fontSettings + '\\def\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
+		fontSettings = fontSettings + '\\def\\LineSpacingFactor{' + lineSpacingFactor + '}\n'
+		fontSettings = fontSettings + '\\def\\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
 
 		# Ship the results, change order as needed
 		orderedContents = 	fileHeaderText + \
@@ -282,7 +292,7 @@ class MakeTexControlFile (object) :
 					formatSettings + \
 					headerFooterSettings + \
 					fontSettings + \
-					'\\bye\n'
+					'\n'
 
 		self.writeOutTheFile(orderedContents)
 
@@ -299,68 +309,68 @@ class MakeTexControlFile (object) :
 		# below depending on the context
 
 		# Process
-		pathToHyphen = os.getcwd() + "/" + log_manager._settings['Process']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
-		pathToIllustrations = os.getcwd() + "/" + log_manager._settings['Process']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
-		hyphenFile = pathToHyphen + "/" + log_manager._settings['Process']['Files'].get('FILE_HYPHENATION_TEX', '')
-		marginalVerses = log_manager._settings['Process']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
-		useHyphenation = log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
-		useFigurePlaceholders = log_manager._settings['Format']['Scripture']['Illustrations'].get('useFigurePlaceholders', 'true')
-		autoTocFile = log_manager._settings['Process']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
-		generateTOC = log_manager._settings['Process']['TOC'].get('generateTOC', 'true')
-		tocTitle = log_manager._settings['Process']['TOC'].get('mainTitle', 'Table of Contents')
+		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
+		pathToIllustrations = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
+		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['Process']['Files'].get('FILE_HYPHENATION_TEX', '')
+		marginalVerses = self._log_manager._settings['Process']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
+		useHyphenation = self._log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
+		useFigurePlaceholders = self._log_manager._settings['Format']['Scripture']['Illustrations'].get('useFigurePlaceholders', 'true')
+		autoTocFile = self._log_manager._settings['Process']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
+		generateTOC = self._log_manager._settings['Process']['TOC'].get('generateTOC', 'true')
+		tocTitle = self._log_manager._settings['Process']['TOC'].get('mainTitle', 'Table of Contents')
 		# Format -> PageLayout
-		usePageBorder = log_manager._settings['Format']['PageLayout'].get('usePageBorder', 'false')
-		pageBorderScale = log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
-		pageBorderFile = log_manager._settings['Process']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
-		useMarginalVerses = log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
+		usePageBorder = self._log_manager._settings['Format']['PageLayout'].get('usePageBorder', 'false')
+		pageBorderScale = self._log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
+		pageBorderFile = self._log_manager._settings['Process']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
+		useMarginalVerses = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
 		oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('shortBookChapterOmit', 'true')
 		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
 		# Format -> Scripture
-		columnshift = log_manager._settings['Format']['Scripture']['Columns'].get('columnshift', '15')
-		useRunningHeaderRule = log_manager._settings['Format']['Scripture']['HeaderFooter'].get('useRunningHeaderRule', 'false')
-		runningHeaderRulePosition = log_manager._settings['Format']['Scripture']['HeaderFooter'].get('runningHeaderRulePosition', '6')
-		verseRefs = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('verseRefs', 'false')
-		chapterVerseSeparator = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('chapterVerseSeparator', ':')
-		omitChapterNumber = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('omitChapterNumber', 'false')
-		omitVerseNumberOne = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('omitVerseNumberOne', 'true')
-		afterVerseSpaceFactor = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('afterVerseSpaceFactor', '2')
-		afterChapterSpaceFactor = log_manager._settings['Format']['Scripture'][''].get('afterChapterSpaceFactor', '3')
-		removeIndentAfterHeading = log_manager._settings['Format']['Scripture'][''].get('removeIndentAfterHeading', 'false')
-		adornVerseNumber = log_manager._settings['Format']['Scripture'][''].get('adornVerseNumber', 'false')
+		columnshift = self._log_manager._settings['Format']['Scripture']['Columns'].get('columnshift', '15')
+		useRunningHeaderRule = self._log_manager._settings['Format']['Scripture']['HeaderFooter'].get('useRunningHeaderRule', 'false')
+		runningHeaderRulePosition = self._log_manager._settings['Format']['Scripture']['HeaderFooter'].get('runningHeaderRulePosition', '6')
+		verseRefs = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('verseRefs', 'false')
+		chapterVerseSeparator = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('chapterVerseSeparator', ':')
+		omitChapterNumber = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('omitChapterNumber', 'false')
+		omitVerseNumberOne = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('omitVerseNumberOne', 'true')
+		afterVerseSpaceFactor = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('afterVerseSpaceFactor', '2')
+		afterChapterSpaceFactor = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('afterChapterSpaceFactor', '3')
+		removeIndentAfterHeading = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('removeIndentAfterHeading', 'false')
+		adornVerseNumber = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('adornVerseNumber', 'false')
 		# Running Header
-		runningHeaderTitleLeft = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleLeft', 'empty')
-		runningHeaderTitleCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleCenter', 'empty')
-		runningHeaderTitleRight = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleRight', 'empty')
-		runningHeaderOddLeft = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderOddLeft', 'empty')
-		runningHeaderOddCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderOddCenter', 'pagenumber')
-		runningHeaderOddRight = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderOddRight', 'rangeref')
-		runningHeaderEvenLeft = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderEvenLeft', 'rangeref')
-		runningHeaderOddCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderOddCenter', 'pagenumber')
-		runningHeaderEvenRight = log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderEvenRight', 'empty')
-		runningFooterTitleLeft = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterTitleLeft', 'empty')
-		runningFooterTitleCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterTitleCenter', 'empty')
-		runningFooterTitleRight = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterTitleRight', 'empty')
-		runningFooterOddLeft = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterOddLeft', 'empty')
-		runningFooterOddCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterOddCenter', 'empty')
-		runningFooterOddRight = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterOddRight', 'empty')
-		runningFooterEvenLeft = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenLeft', 'empty')
-		runningFooterEvenCenter = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenCenter', 'empty')
-		runningFooterEvenRight = log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenRight', 'empty')
+		runningHeaderTitleLeft = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleLeft', 'empty')
+		runningHeaderTitleCenter = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleCenter', 'empty')
+		runningHeaderTitleRight = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderTitleRight', 'empty')
+		runningHeaderOddLeft = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderOddLeft', 'empty')
+		runningHeaderOddCenter = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderOddCenter', 'pagenumber')
+		runningHeaderOddRight = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderOddRight', 'rangeref')
+		runningHeaderEvenLeft = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderEvenLeft', 'rangeref')
+		runningHeaderOddCenter = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderOddCenter', 'pagenumber')
+		runningHeaderEvenRight = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['HeaderContent'].get('runningHeaderEvenRight', 'empty')
+		runningFooterTitleLeft = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterTitleLeft', 'empty')
+		runningFooterTitleCenter = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterTitleCenter', 'empty')
+		runningFooterTitleRight = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterTitleRight', 'empty')
+		runningFooterOddLeft = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterOddLeft', 'empty')
+		runningFooterOddCenter = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterOddCenter', 'empty')
+		runningFooterOddRight = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterOddRight', 'empty')
+		runningFooterEvenLeft = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenLeft', 'empty')
+		runningFooterEvenCenter = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenCenter', 'empty')
+		runningFooterEvenRight = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenRight', 'empty')
 		# Footnotes
-		autoCallers = log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallers', '*')
-		autoCallerStartChar = log_manager._settings['Format']['Scripture'][''].get('autoCallerStartChar', '97')
-		autoCallerNumChars = log_manager._settings['Format']['Scripture'][''].get('autoCallerNumChars', '26')
-		useNumericCallersFootnotes = log_manager._settings['Format']['Scripture'][''].get('useNumericCallersFootnotes', 'false')
-		useNumericCallersCrossRefs = log_manager._settings['Format']['Scripture'][''].get('useNumericCallersCrossRefs', 'false')
-		pageResetCallersFootnotes = log_manager._settings['Format']['Scripture'][''].get('pageResetCallersFootnotes', 'false')
-		pageResetCallersCrossRefs = log_manager._settings['Format']['Scripture'][''].get('pageResetCallersCrossRefs', 'false')
-		omitCallerInFootnote = log_manager._settings['Format']['Scripture'][''].get('omitCallerInFootnote', 'false')
-		omitCallerInCrossRefs = log_manager._settings['Format']['Scripture'][''].get('omitCallerInCrossRefs', 'false')
-		paragraphedFootnotes = log_manager._settings['Format']['Scripture'][''].get('paragraphedFootnotes', 'false')
-		paragraphedCrossRefs = log_manager._settings['Format']['Scripture'][''].get('paragraphedCrossRefs', 'false')
-		footnoteRule = log_manager._settings['Format']['Scripture'][''].get('footnoteRule', 'true')
-		justifyPars = log_manager._settings['Format']['Scripture'][''].get('justifyPars', 'true')
-		rightToLeft = log_manager._settings['Format']['Scripture'][''].get('rightToLeft', 'false')
+		autoCallers = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallers', '*')
+		autoCallerStartChar = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallerStartChar', '97')
+		autoCallerNumChars = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallerNumChars', '26')
+		useNumericCallersFootnotes = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('useNumericCallersFootnotes', 'false')
+		useNumericCallersCrossRefs = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('useNumericCallersCrossRefs', 'false')
+		pageResetCallersFootnotes = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('pageResetCallersFootnotes', 'false')
+		pageResetCallersCrossRefs = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('pageResetCallersCrossRefs', 'false')
+		omitCallerInFootnote = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('omitCallerInFootnote', 'false')
+		omitCallerInCrossRefs = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('omitCallerInCrossRefs', 'false')
+		paragraphedFootnotes = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('paragraphedFootnotes', 'false')
+		paragraphedCrossRefs = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('paragraphedCrossRefs', 'false')
+		footnoteRule = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('footnoteRule', 'true')
+		justifyPars = self._log_manager._settings['Format']['Scripture']['TextElements'].get('justifyPars', 'true')
+		rightToLeft = self._log_manager._settings['Format']['Scripture']['TextElements'].get('rightToLeft', 'false')
 
 		# Build our output - These are the strings we will fill:
 		fileHeaderText = ''
@@ -378,6 +388,8 @@ class MakeTexControlFile (object) :
 			fileName = self._cvSettingsFile
 		elif self._contextFlag.lower() == 'front' :
 			fileName = self._fmSettingsFile
+		elif self._contextFlag.lower() == 'back' :
+			fileName = self._bmSettingsFile
 		elif self._contextFlag.lower() == 'bible' :
 			fileName = self._biSettingsFile
 			# Will we use marginal verses?
@@ -400,10 +412,10 @@ class MakeTexControlFile (object) :
 			if removeIndentAfterHeading.lower() == 'true' :
 				verseChapterSettings = verseChapterSettings + '\\IndentAfterHeadingtrue\n'
 			if adornVerseNumber.lower() == 'true' :
-				verseChapterSettings = verseChapterSettings + '\\def\AdornVerseNumber#1{(#1)}\n'
-			verseChapterSettings = verseChapterSettings + '\\def\ChapterVerseSeparator{' + chapterVerseSeparator + '}\n'
-			verseChapterSettings = verseChapterSettings + '\\def\AfterVerseSpaceFactor{' + afterVerseSpaceFactor + '}\n'
-			verseChapterSettings = verseChapterSettings + '\\def\AfterChapterSpaceFactor{' + afterChapterSpaceFactor + '}\n'
+				verseChapterSettings = verseChapterSettings + '\\def\\AdornVerseNumber#1{(#1)}\n'
+			verseChapterSettings = verseChapterSettings + '\\def\\ChapterVerseSeparator{' + chapterVerseSeparator + '}\n'
+			verseChapterSettings = verseChapterSettings + '\\def\\AfterVerseSpaceFactor{' + afterVerseSpaceFactor + '}\n'
+			verseChapterSettings = verseChapterSettings + '\\def\\AfterChapterSpaceFactor{' + afterChapterSpaceFactor + '}\n'
 			# Header settings
 			if useRunningHeaderRule.lower() == 'true' :
 				headerSettings = headerSettings + '\\RHruleposition=' + runningHeaderRulePosition + '\n'
@@ -458,9 +470,6 @@ class MakeTexControlFile (object) :
 			if paragraphedCrossRefs.lower() == 'true' :
 				footnoteSettings = footnoteSettings + '\\ParagraphedNotes{x}\n'
 
-
-		elif self._contextFlag.lower == 'back' :
-			fileName = self._bmSettingsFile
 		else :
 			# If we can't figure out what this is we have a system level bug and we might as well quite here
 			self._log_manager.log("ERRR", "The context flag: " + self._contextFlag + " is not recognized by the system. Process halted.")
@@ -485,7 +494,7 @@ class MakeTexControlFile (object) :
 					footerSettings + \
 					footnoteSettings + \
 					generalSettings + \
-					'\\bye\n'
+					'\n'
 
 		self.writeOutTheFile(orderedContents)
 
@@ -498,6 +507,7 @@ class MakeTexControlFile (object) :
 		texControlObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
 		texControlObject.write(contents)
 		texControlObject.close()
+		self._log_manager.log("DBUG", "Wrote out the file: " + self._outputFile)
 
 	def parseThisBook (self, book) :
 		'''Parse a specific book based on ID then return relevant info.'''
