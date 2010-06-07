@@ -128,10 +128,18 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(DEPENDENT_FILE_LIST)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 
-# Open the PDF file with reader
+# Open the PDF file with reader - Add a watermark if needed
 view-$(1) : $(PATH_PROCESS)/$(1).pdf
 	@- $(CLOSEPDF)
+	@if [ $(WATERMARK) = "true" ] ; then \
+		echo INFO: Adding watermark to ouput: $(PATH_PROCESS)/$(1).pdf; \
+		pdftk $(PATH_PROCESS)/$(1).pdf background $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
+		cp $(PATH_PROCESS)/tmp.pdf $(PATH_PROCESS)/$(1).pdf; \
+		rm -f $(PATH_PROCESS)/tmp.pdf; \
+	fi
 	@ $(VIEWPDF) $$< &
+
+
 
 # This enables us to do the preprocessing on a single peripheral item.
 preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)

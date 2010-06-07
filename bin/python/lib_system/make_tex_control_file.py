@@ -261,15 +261,15 @@ class MakeTexControlFile (object) :
 		formatSettings = formatSettings + '\\def\\ColumnGutterFactor{' + columnGutterFactor + '}\n'
 		if columnGutterRule.lower() == 'true' :
 			formatSettings = formatSettings + '\\ColumnGutterRuletrue\n'
-		formatSettings = formatSettings + '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + '\n'
+		formatSettings = formatSettings + '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + 'pt\n'
 		# Margins
 		formatSettings = formatSettings + '\\MarginUnit=' + marginUnit + '\n'
 		formatSettings = formatSettings + '\\def\\TopMarginFactor{' + topMarginFactor + '}\n'
 		formatSettings = formatSettings + '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
 		formatSettings = formatSettings + '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
-		formatSettings = formatSettings + '\\BindingGutter=' + bindingGutter + '\n'
 		if useBindingGutter.lower() == 'true' :
 			formatSettings = formatSettings + '\\BindingGuttertrue\n'
+			formatSettings = formatSettings + '\\BindingGutter=' + bindingGutter + '\n'
 		# HeaderFooter
 		headerFooterSettings = headerFooterSettings + '\\def\\HeaderPosition{' + headerPosition + '}\n'
 		headerFooterSettings = headerFooterSettings + '\\def\\FooterPosition{' + footerPosition + '}\n'
@@ -282,7 +282,7 @@ class MakeTexControlFile (object) :
 		fontSettings = fontSettings + '\\def\\bolditalic{\"' + fontDefBoldItalic + '\"}\n'
 		if tracingLostCharacters.lower() == 'true' :
 			fontSettings = fontSettings + '\\tracinglostchars=1\n'
-		fontSettings = fontSettings + '\\FontSizeUnit=' + fontSizeUnit + '\n'
+		fontSettings = fontSettings + '\\FontSizeUnit=' + fontSizeUnit + 'pt\n'
 		fontSettings = fontSettings + '\\def\\LineSpacingFactor{' + lineSpacingFactor + '}\n'
 		fontSettings = fontSettings + '\\def\\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
 
@@ -386,16 +386,40 @@ class MakeTexControlFile (object) :
 		# only in the 'bible' context.
 		if self._contextFlag.lower() == 'cover' :
 			fileName = self._cvSettingsFile
+			# There is not much to a cover file but we know that we
+			# need to turn off all the header and footer output
+			headerSettings = headerSettings + '\\def\\RHtitleleft{\\empty}\n'
+			headerSettings = headerSettings + '\\def\\RHtitlecenter{\\empty}\n'
+			headerSettings = headerSettings + '\\def\\RHtitleright{\\empty}\n'
+			headerSettings = headerSettings + '\\def\\RHoddleft{\\empty}\n'
+			headerSettings = headerSettings + '\\def\\RHoddcenter{\\empty}\n'
+			headerSettings = headerSettings + '\\def\\RHoddright{\\empty}\n'
+			headerSettings = headerSettings + '\\def\\RHevenleft{\\empty}\n'
+			headerSettings = headerSettings + '\\def\\RHevencenter{\\empty}\n'
+			headerSettings = headerSettings + '\\def\\RHevenright{\\empty}\n'
+			# Footer settings
+			footerSettings = footerSettings + '\\def\\RFtitleleft{\\empty}\n'
+			footerSettings = footerSettings + '\\def\\RFtitlecenter{\\empty}\n'
+			footerSettings = footerSettings + '\\def\\RFtitleright{\\empty}\n'
+			footerSettings = footerSettings + '\\def\\RFoddleft{\\empty}\n'
+			footerSettings = footerSettings + '\\def\\RFoddcenter{\\empty}\n'
+			footerSettings = footerSettings + '\\def\\RFoddright{\\empty}\n'
+			footerSettings = footerSettings + '\\def\\RFevenleft{\\empty}\n'
+			footerSettings = footerSettings + '\\def\\RFevencenter{\\empty}\n'
+			footerSettings = footerSettings + '\\def\\RFevenright{\\empty}\n'
+
 		elif self._contextFlag.lower() == 'front' :
 			fileName = self._fmSettingsFile
+
 		elif self._contextFlag.lower() == 'back' :
 			fileName = self._bmSettingsFile
+
 		elif self._contextFlag.lower() == 'bible' :
 			fileName = self._biSettingsFile
 			# Will we use marginal verses?
 			if useMarginalVerses.lower() == 'true' :
 				fileInput = fileInput + '\\input ' + marginalVerses + '\n'
-				fileInput = fileInput + '\\columnshift=' + columnshift + '\n'
+				fileInput = fileInput + '\\columnshift=' + columnshift + 'pt\n'
 			# First off, if a file name for the TOC is found, write it out
 			if generateTOC == 'true' :
 				fileInput = fileInput + '\\GenerateTOC[' + tocTitle + ']{' + autoTocFile + '}\n'

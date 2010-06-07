@@ -20,6 +20,7 @@
 # down the chain this might have to move, or be put in a
 # seperate file.
 DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
+  $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) \
   $(FILE_PROJECT_CONF)
 
 
@@ -38,6 +39,25 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
 
 define component_rules
 
+# Define our source file rule here. The idea is we do not want the
+# user to come up cold when he selects a file for processing if
+# that file is not there. Rather a dummy file will be created
+# telling them the file is missing.
+$(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) : | $(PATH_SOURCE)
+	@if test -r $($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); then \
+		echo Copying into project from: $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); \
+		cp $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) '$$@'; \
+	else \
+		echo Could not find: $$@; \
+		echo Creating this file:; \
+		echo Caution, you will need to edit it; \
+		echo \\id OTH >> $$@; \
+		echo \\ide UTF-8 >> $$@; \
+		echo \\periph \<Fill in page type here\> >> $$@; \
+		echo \\p This is a auto created page found at: $$@ >> $$@; \
+		echo \\p Please edit as needed. >> $$@; \
+	fi
+
 # This is the basic rule for auto-text-processing. To control processes
 # edit the project.conf file. This will automatically run the four
 # phases of text processing. However, first it will delete any copies
@@ -51,7 +71,7 @@ define component_rules
 # run any necessary text processes on the system source text as defined in
 # the project.conf file.
 ifeq ($(LOCKED),0)
-$(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
+$(PATH_TEXTS)/$(1).usfm :
 	@echo INFO: Auto-preprocessing: $$< and creating $$@
 	@rm -f $(PATH_TEXTS)/$(1).usfm
 	@$(PY_RUN_TEXT_PROCESS) PreprocessChecks $(1) '$$<' '$$@'
@@ -282,21 +302,6 @@ preprocess-nt :
 ##############################################################
 #               Rules for handling illustrations material
 ##############################################################
-
-# If, for some odd reason the Illustrations folder is not in
-# the right place we'll put one where it is supposed to be found.
-$(PATH_ILLUSTRATIONS) :
-	@echo INFO: Creating $@
-	@mkdir -p $@
-
-# Rules for making the shared illustrations folder in the source
-# folder. Right now this is dependent on illustrations being used
-# in the publication. We may need to remove that to use this
-# folder for other types of graphics used in multiple projects
-# under the same language grouping.
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) : | $(PATH_ILLUSTRATIONS)
-	@echo INFO: Creating $@
-	@mkdir -p $@
 
 # Copy into place the captions.csv file that goes in the
 # shared folder if needed. Also, since the new captions file
