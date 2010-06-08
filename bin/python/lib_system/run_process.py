@@ -107,6 +107,7 @@ class RunProcess (object) :
 			metaTask = task
 			taskList = log_manager._settings['Process']['Processes'][metaTask]
 			for thisTask in taskList :
+				print taskList, thisTask, "nnnnnnnnnnnnnnnnnnnnnnn"
 				self.runIt(thisTask)
 
 		# If it is not a meta task then it must be a single one

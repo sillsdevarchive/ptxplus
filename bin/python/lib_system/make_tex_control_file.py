@@ -138,7 +138,7 @@ class MakeTexControlFile (object) :
 
 		# Make a link to the local override stylesheet. This file can override
 		# styles that were introduced in the main setup file
-		settings = settings + '\\stylesheet{' + os.getcwd() + "/" + self._inputFile + '.sty}\n'
+		settings = settings + '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.sty}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
@@ -147,10 +147,10 @@ class MakeTexControlFile (object) :
 
 			settings = settings + '\\input ' + self._biSettingsFile + '\n'
 
-		# Hyphenation is optional project-wide so we will put it here. However,
-		# we might need to rethink this.
-		if useHyphenation.lower() == 'true' :
-			settings = settings + '\\input ' + hyphenFile + '\n'
+			# Hyphenation is optional project-wide so we will put it here. However,
+			# we might need to rethink this.
+			if useHyphenation.lower() == 'true' :
+				settings = settings + '\\input ' + hyphenFile + '\n'
 
 			# Since we were passed here it is assmumed that the context
 			# flag will contain a book ID, not a context marker. We will

@@ -105,7 +105,7 @@ endif
 # control file that will link to the other settings
 $(PATH_PROCESS)/$(1).usfm.tex : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating book control file: $$@
-	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(PATH_PROCESS)/$(1).usfm' '$$@' '$(1)'
+	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).usfm' '$$@' '$(1)'
 
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).usfm.sty :
