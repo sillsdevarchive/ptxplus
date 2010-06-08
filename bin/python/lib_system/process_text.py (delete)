@@ -97,32 +97,32 @@ try :
 	task		= sys.argv[1]
 except :
 	tools.userMessage("process_text.py: Cannot run the process because no module (task) has been specified.")
-	return
+	exit(1)
 
 try :
 	typeID		= sys.argv[2].upper()
 except :
-	typeID		= Null
+	typeID		= ""
 
 try :
 	inputFile	= sys.argv[3]
 except :
 	tools.userMessage("process_text.py: Cannot run the process because no input file has been specified.")
-	return
+	exit(1)
 
 # We may not get a 4th or 5th argument so we have to be careful
 try :
 	outputFile = os.getcwd() + "/" + sys.argv[4]
 
 except :
-	outputFile = Null
+	outputFile = ""
 
 # While we are at it, check in case an optionl var was passed
 # This can be supported
 try :
 	optionalPassedVariable = sys.argv[5]
 except :
-	optionalPassedVariable = Null
+	optionalPassedVariable = ""
 
 
 # Set some other vars here
@@ -222,5 +222,5 @@ class RunProcesses (object) :
 
 
 # Run the process called on
-runClass = RunProcesses(log_manager, task, typeID, inputFile, outputFile)
+runClass = RunProcesses(log_manager, task, typeID, inputFile, outputFile, optionalPassedVariable)
 runClass.main()

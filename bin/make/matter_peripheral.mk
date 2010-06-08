@@ -106,7 +106,7 @@ $(PATH_PROCESS)/$(1).tex : | \
 	$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
 	$(PATH_PROCESS)/$(FILE_TEX_BACK)
 	@echo INFO: Creating: $$@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '$(1)' '$$@' 'periph'
+	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '' '$$@' 'periph'
 
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).sty :
@@ -144,7 +144,7 @@ view-$(1) : $(PATH_PROCESS)/$(1).pdf
 # This enables us to do the preprocessing on a single peripheral item.
 preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 	@echo Preprocessing $(1)
-	@$(PY_RUN_TEXT_PROCESS) PreprocessChecks $(1) '$$<'
+	@$(PY_RUN_PROCESS) PreprocessChecks $(1) '$$<'
 
 # Do not open the PDF file with reader
 $(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
@@ -182,6 +182,9 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) : | $(PATH_SOURCE)
 	@echo Creating the project peripheral source folder
 	@mkdir $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
 
+$(eval $(echo,$(v)))
+
+#$(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
 
 # Cover matter binding rules
 $(eval $(call matter_binding,MATTER_COVER))
@@ -192,72 +195,5 @@ $(eval $(call matter_binding,MATTER_FRONT))
 # Back matter binding rules
 $(eval $(call matter_binding,MATTER_BACK))
 
-# This makes a simple TeX settings file for the cover. This may
-# not really be needed but it seems to be the best way to handle
-# this proceedure and remain consistant with the rest of the
-# processes.
-$(PATH_PROCESS)/$(FILE_TEX_COVER) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
-	@echo INFO: Creating: $@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'cover'
-
-# Most front matter peripheral .tex files will have a dependency
-# on $(FILE_TEX_FRONT) even if it doesn't, there is a hard coded
-# dependency here that will be met if called on.
-$(PATH_PROCESS)/$(FILE_TEX_FRONT) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
-	@echo INFO: Creating: $@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'front'
-
-# Most back matter peripheral .tex files will have a dependency
-# on BACK_MATTER.tex even if it doesn't there is a hard coded
-# dependency here that will be met if called on.
-$(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
-	@echo INFO: Creating: $@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'back'
-
-# This calls all the automated rules defined above and does them
-# once on each file, even if the file is listed repeatedly in the
-# Binding list. This is what the uniq call is for.
-$(foreach v,$(call uniq,$(MATTER_COVER) $(MATTER_FRONT) $(MATTER_BACK)),$(eval $(call periph_rules,$(v))))
-
-# Produce all the outer cover material in one PDF file
-view-cover : $(MATTER_COVER_PDF)
-	@- $(CLOSEPDF)
-	@ $(VIEWPDF) $< &
-
-# To produce individual elements of the outer cover just
-# use: ptxplus view-<file_name>
-
-# Produce just the font matter (bound)
-view-front : $(MATTER_FRONT_PDF)
-	@- $(CLOSEPDF)
-	@ $(VIEWPDF) $< &
-
-# Produce just the back matter (bound)
-view-back : $(MATTER_BACK_PDF)
-	@- $(CLOSEPDF)
-	@ $(VIEWPDF) $< &
-
-# Clean up rules for peripheral matter
-
-# Remove the cover matter PDF file
-pdf-remove-cover :
-	@echo INFO: Removing: $(MATTER_COVER_PDF)
-	@rm -f $(MATTER_COVER_PDF)
-
-# Remove the front matter PDF file
-pdf-remove-front :
-	@echo INFO: Removing: $(MATTER_FRONT_PDF)
-	@rm -f $(MATTER_FRONT_PDF)
-
-# Remove the back matter PDF file
-pdf-remove-back :
-	@echo INFO: Removing: $(MATTER_BACK_PDF)
-	@rm -f $(MATTER_BACK_PDF)
 
 
-
-# Make the content for a topical index from CSV data
-# Not sure what the status on this call is. Does it
-# even work yet?
-make-topic-index :
-	@$(PY_RUN_TEXT_PROCESS) make_topic_index_file 'NA' $(PATH_SOURCE)$(PATH_SOURCE_PERIPH)/TOPICAL_INDEX.CSV $(PATH_TEXTS)/TOPICAL_INDEX.USFM

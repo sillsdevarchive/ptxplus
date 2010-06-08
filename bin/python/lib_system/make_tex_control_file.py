@@ -117,6 +117,13 @@ class MakeTexControlFile (object) :
 			instructions for this object that can be added
 			in an automated way.'''
 
+		# Get a couple settings
+		oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('shortBookChapterOmit', 'true')
+		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
+		useHyphenation = self._log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
+		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
+		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['Process']['Files'].get('FILE_HYPHENATION_TEX', '')
+
 		# Input the main macro set here in the control file
 		settings = '\\input ' + self._texMacros + '\n'
 
@@ -131,15 +138,19 @@ class MakeTexControlFile (object) :
 
 		# Make a link to the local override stylesheet. This file can override
 		# styles that were introduced in the main setup file
-		settings = settings + '\\stylesheet{' + self._pathToProcess + '/' + self._inputFile + '.sty}\n'
+		settings = settings + '\\stylesheet{' + os.getcwd() + "/" + self._inputFile + '.sty}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
 		# a peripheral control file.
-#		if self._contextFlag != '' and self._contextFlag not in self._flags :
 		if self._contextFlag not in self._flags :
-			print self._contextFlag, self._flags
+
 			settings = settings + '\\input ' + self._biSettingsFile + '\n'
+
+		# Hyphenation is optional project-wide so we will put it here. However,
+		# we might need to rethink this.
+		if useHyphenation.lower() == 'true' :
+			settings = settings + '\\input ' + hyphenFile + '\n'
 
 			# Since we were passed here it is assmumed that the context
 			# flag will contain a book ID, not a context marker. We will
@@ -163,7 +174,7 @@ class MakeTexControlFile (object) :
 					settings = settings + '\\ptxfile{' + thisBook + '}\n'
 					settings = settings + '\\OmitChapterNumberfalse\n'
 				else :
-					settings = settings + '\\ptxfile{' + self._outputFile + '}\n'
+					settings = settings + '\\ptxfile{' + thisBook + '}\n'
 
 		# If there was no context flag at all that means it has to be peripheral
 		# matter. But is is front or back matter. we'll need to test to see
@@ -309,11 +320,8 @@ class MakeTexControlFile (object) :
 		# below depending on the context
 
 		# Process
-		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
 		pathToIllustrations = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
-		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['Process']['Files'].get('FILE_HYPHENATION_TEX', '')
 		marginalVerses = self._log_manager._settings['Process']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
-		useHyphenation = self._log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
 		useFigurePlaceholders = self._log_manager._settings['Format']['Scripture']['Illustrations'].get('useFigurePlaceholders', 'true')
 		autoTocFile = self._log_manager._settings['Process']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
 		generateTOC = self._log_manager._settings['Process']['TOC'].get('generateTOC', 'true')
@@ -323,8 +331,6 @@ class MakeTexControlFile (object) :
 		pageBorderScale = self._log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
 		pageBorderFile = self._log_manager._settings['Process']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
 		useMarginalVerses = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
-		oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('shortBookChapterOmit', 'true')
-		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
 		# Format -> Scripture
 		columnshift = self._log_manager._settings['Format']['Scripture']['Columns'].get('columnshift', '15')
 		useRunningHeaderRule = self._log_manager._settings['Format']['Scripture']['HeaderFooter'].get('useRunningHeaderRule', 'false')
@@ -357,7 +363,9 @@ class MakeTexControlFile (object) :
 		runningFooterEvenCenter = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenCenter', 'empty')
 		runningFooterEvenRight = self._log_manager._settings['Format']['Scripture']['HeaderFooter']['FooterContent'].get('runningFooterEvenRight', 'empty')
 		# Footnotes
-		autoCallers = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallers', '*')
+		useAutoCallers = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('useAutoCallers', '*')
+		autoCallerCharFn = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallerCharFn', '*')
+		autoCallerCharCr = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallerCharCr', '*')
 		autoCallerStartChar = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallerStartChar', '97')
 		autoCallerNumChars = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('autoCallerNumChars', '26')
 		useNumericCallersFootnotes = self._log_manager._settings['Format']['Scripture']['Footnotes'].get('useNumericCallersFootnotes', 'false')
@@ -462,11 +470,6 @@ class MakeTexControlFile (object) :
 			footerSettings = footerSettings + '\\def\\RFevenleft{\\' + runningFooterEvenLeft + '}\n'
 			footerSettings = footerSettings + '\\def\\RFevencenter{\\' + runningFooterEvenCenter + '}\n'
 			footerSettings = footerSettings + '\\def\\RFevenright{\\' + runningFooterEvenRight + '}\n'
-			# Hyphenation is optional project-wide so we will put it here. However, this
-			# means there will not be any hyphenation on any non-Scripture objects. We might
-			# need to rethink this.
-			if useHyphenation.lower() == 'true' :
-				fileInput = fileInput + '\\input ' + hyphenFile + '\n'
 			# Footnote settings
 			# If we use Autocallers we need to leave out some other things and vise versa
 			if useAutoCallers == 'true' :

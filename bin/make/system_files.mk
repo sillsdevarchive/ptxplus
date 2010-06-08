@@ -63,16 +63,16 @@ $(PATH_PROCESS)/.stamp :
 # Update a project.conf file so system improvements can be
 # pulled into existing projects.
 update :
-	$(PY_RUN_SYSTEM_PROCESS) update_project_settings
+	$(PY_RUN_PROCESS) update_project_settings
 
 
 # Make a project.sty file (when needed)
 make-styles :
-	$(PY_RUN_SYSTEM_PROCESS) make_sty_file
+	$(PY_RUN_PROCESS) make_sty_file
 
 # Make a template from the current state of the project
 make-template :
-	$(PY_RUN_SYSTEM_PROCESS) make_template
+	$(PY_RUN_PROCESS) make_template
 
 # Update a developer version of ptxplus
 # This assumes you have Mercurial installed and setup
@@ -130,15 +130,6 @@ $(PATH_PROCESS)/PROJECT_INFO.tex :
 	@echo \\ptxfile{$(PATH_TEXTS)/PROJECT_INFO.usfm} >> $@
 	@echo '\\bye' >> $@
 
-# Create the .usfm file that contains the project information
-$(PATH_TEXTS)/PROJECT_INFO.usfm : project.conf
-	@echo INFO: Creating: $@
-	@$(PY_PROCESS_SCRIPTURE_TEXT) make_project_info INFO $@
-
-# View the results
-view-project-info : $(PATH_PROCESS)/PROJECT_INFO.pdf
-	@echo INFO: Viewing: $(PATH_PROCESS)/PROJECT_INFO.pdf
-	@ $(VIEWPDF) $(PATH_PROCESS)/PROJECT_INFO.pdf &
 
 ###############################################################
 #		Final component binding rules

@@ -19,19 +19,19 @@ $(PATH_HYPHENATION) :
 
 # Manually create the TeX hyphenation file
 make-tex-hyphens :
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_hyphenation_file
+	$(PY_RUN_PROCESS) make_tex_hyphenation_file
 
 # Create a TeX hyphenation rules file based on what is in the
 # project.conf file
 $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT)
-	$(PY_RUN_SYSTEM_PROCESS) make_tex_hyphenation_file
+	$(PY_RUN_PROCESS) make_tex_hyphenation_file
 
 # Manually create a master wordlist based on existing component
 # wordlists in the Reports file. Best to run this after
 # a preprocess-all command
 make-master-wordlist : preprocess-checks
 	@echo INFO: Creating a new master word list
-	@$(PY_RUN_SYSTEM_PROCESS) make_master_wordlist
+	@$(PY_RUN_PROCESS) make_master_wordlist
 
 #############################################################################
 # Not sure what is happening here, lost track of what I was doing - djd
@@ -43,7 +43,9 @@ make-master-wordlist : preprocess-checks
 # with other commands in this section (I think)
 
 # Manually create the hyphenation file if none exists but
-# do not overwrite any existing ones.
+# do not overwrite any existing ones. This is the file that
+# is combined with the lccode.txt file to make the hyphenation.tex
+# that the system ues.
 $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT) :
 	@echo INFO: Creating $@
 	@touch $@
@@ -51,7 +53,7 @@ $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT) :
 # Manually create the hyphenation word list file
 force-make-hyphen-wordlist : $(PATH_HYPHENATION) make-master-wordlist
 	@echo Creating a new hyphenation word list
-	@$(PY_RUN_SYSTEM_PROCESS) make_hyphen_wordlist
+	@$(PY_RUN_PROCESS) make_hyphen_wordlist
 
 #############################################################################
 

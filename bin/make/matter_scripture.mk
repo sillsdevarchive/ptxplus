@@ -44,7 +44,7 @@ define component_rules
 # that file is not there. Rather a dummy file will be created
 # telling them the file is missing.
 $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) : | $(PATH_SOURCE)
-	@if test -r $($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); then \
+	@if test -r $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); then \
 		echo Copying into project from: $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); \
 		cp $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) '$$@'; \
 	else \
@@ -71,12 +71,12 @@ $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
 # run any necessary text processes on the system source text as defined in
 # the project.conf file.
 ifeq ($(LOCKED),0)
-$(PATH_TEXTS)/$(1).usfm :
+$(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
 	@echo INFO: Auto-preprocessing: $$< and creating $$@
 	@rm -f $(PATH_TEXTS)/$(1).usfm
-	@$(PY_RUN_TEXT_PROCESS) PreprocessChecks $(1) '$$<' '$$@'
-	@$(PY_RUN_TEXT_PROCESS) CopyIntoSystem $(1) '$$<' '$$@'
-	@$(PY_RUN_TEXT_PROCESS) TextProcesses $(1) '$$@' '$$@'
+	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<' '$$@'
+	@$(PY_RUN_PROCESS) copyIntoSystem $(1) '$$<' '$$@'
+	@$(PY_RUN_PROCESS) textProcesses $(1) '$$@' '$$@'
 else
 #	@echo File $(PATH_TEXTS)/$(1).usfm is locked
 endif
@@ -91,7 +91,7 @@ preprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME
 ifeq ($(LOCKED),0)
 	@echo INFO: Removing $(PATH_TEXTS)/$(1).usfm and error checking '$$<'
 	@rm -f $(PATH_TEXTS)/$(1).usfm
-	@$(PY_RUN_TEXT_PROCESS) PreprocessChecks $(1) '$$<'
+	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<'
 endif
 
 #################################
@@ -105,7 +105,12 @@ endif
 # control file that will link to the other settings
 $(PATH_PROCESS)/$(1).usfm.tex : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating book control file: $$@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '$(1)' '$$@' '$(1)'
+	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(PATH_PROCESS)/$(1).usfm' '$$@' '$(1)'
+
+# The rule to create the override style sheet.
+$(PATH_PROCESS)/$(1).usfm.sty :
+	@echo INFO: Creating: $$@
+	@echo \# Override PTX style sheet for $(1).usfm, edit as needed >> $$@
 
 # Process a single component and produce the final PDF. Special dependencies
 # are set for the .adj and .piclist files in case they have been altered.
@@ -114,9 +119,10 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_TEXTS)/$(1).usfm \
 	$(PATH_TEXTS)/$(1).usfm.adj \
 	$(PATH_TEXTS)/$(1).usfm.piclist \
-	$(PATH_PROCESS)/$(1).tex | $(DEPENDENT_FILE_LIST)
+	$(PATH_PROCESS)/$(1).usfm.tex \
+	$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) | $(PATH_PROCESS)/$(1).usfm.sty $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).usfm.tex
 #	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
 #	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
 
@@ -141,7 +147,7 @@ $(1) : $(PATH_PROCESS)/$(1).pdf
 # Make adjustment file
 $(PATH_TEXTS)/$(1).usfm.adj :
 	@echo INFO: Creating the adjustments file: $$@
-	@$(PY_RUN_TEXT_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).usfm
+	@$(PY_RUN_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).usfm
 
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
@@ -152,7 +158,7 @@ $(PATH_TEXTS)/$(1).usfm.adj :
 $(PATH_TEXTS)/$(1).usfm.piclist : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifneq ($(PATH_ILLUSTRATIONS_LIB),)
 	@echo INFO: Creating illustrations list file: $$@
-	@$(PY_RUN_TEXT_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
+	@$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
 endif
 
 # Rules for cleaning up content process files
@@ -188,20 +194,20 @@ endef
 # Create the main settings file for this Scripture project.
 # This will contain publication format settings. Context
 # specific settings are kept in the bible_settings.txt file.
-# In this context using PY_RUN_SYSTEM_PROCESS we use the
+# In this context using PY_RUN_PROCESS we use the
 # optional passed var as a way to pass the type of control
 # file we are making. In this instance, we use "project"
 # because the script will know by the flag name exactly what
 # it is and what goes in it.
 $(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'project'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'project'
 
 # Rule for building the TeX settings file that is used in a
 # specific context.
 $(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP) $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'bible'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'bible'
 
 # Start with the OT but we don't want to do anything if there
 # are no components to process
@@ -216,7 +222,7 @@ $(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'otc'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' '$@' 'otc'
 
 # Render the entire OT
 $(FILE_MATTER_OT_PDF) : \
@@ -249,7 +255,7 @@ $(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_SYSTEM_PROCESS) make_tex_control_file '' '$@' 'ntc'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' '$@' 'ntc'
 
 # Render the entire NT
 $(FILE_MATTER_NT_PDF) : \
@@ -289,11 +295,11 @@ preprocess-checks: preprocess-ot preprocess-nt
 # when a specific group is being checked. (More may need to be added)
 preprocess-ot :
 	@echo INFO: Preprocess checking OT components:
-	@$(foreach v,$(MATTER_OT), $(PY_RUN_TEXT_PROCESS) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@$(foreach v,$(MATTER_OT), $(PY_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
 preprocess-nt :
 	@echo INFO: Preprocess checking NT components:
-	@$(foreach v,$(MATTER_NT), $(PY_RUN_TEXT_PROCESS) PreprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@$(foreach v,$(MATTER_NT), $(PY_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
 
 # Having these here enable rules to call other rules
 .PHONY: view-ot view-nt preprocess-checks
