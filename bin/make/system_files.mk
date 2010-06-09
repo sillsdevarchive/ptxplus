@@ -85,29 +85,24 @@ $(PATH_ILLUSTRATIONS) :
 	@echo INFO: Creating $@
 	@mkdir -p $@
 
-# Rules for making the shared illustrations folder in the source
-# folder. Right now this is dependent on illustrations being used
-# in the publication. We may need to remove that to use this
-# folder for other types of graphics used in multiple projects
-# under the same language grouping.
+# This is the main rule for copying all the shared illustration
+# material like logos, watermarks, etc. First we will make the
+# folder, then we will copy everthing into it.
 $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) : | $(PATH_ILLUSTRATIONS)
 	@echo INFO: Creating $@
 	@mkdir -p $@
-
-# Make links in Illustrations folder for the draft watermark
-# files. The original default will be copied in from the
-# system to the SharedIllustrations folder, then linked
-# to the Illustrations folder. There is also provision for
-# a custom watermark file to be used as well. The user
-# will need to manually copy that into the SharedIllustrations
-# or else we will get a nasty error.
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
-	@echo copying default watermark file: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) to $@
-	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) $@
-
-$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
-	@echo Linking default watermark file: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) to $@
+	@echo Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
+	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
+	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) to $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK)
 	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)) $@
+	@echo Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)
+	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)
+	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM) to $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)) $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
+	@echo Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)
+	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)
+	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE) to $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)) $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in

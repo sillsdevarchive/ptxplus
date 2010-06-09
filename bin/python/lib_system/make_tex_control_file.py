@@ -83,6 +83,14 @@ class MakeTexControlFile (object) :
 		self._publicationType = log_manager._publicationType
 		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
 		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_PROCESS', 'Process')
+		# Some lists
+		self._headerPositions = ['RHtitleleft', 'RHtitlecenter', 'RHtitleright', \
+						'RHoddleft', 'RHoddcenter', 'RHoddright', \
+						'RHevenleft', 'RHevencenter', 'RHevenright']
+		self._footerPositions = ['RFtitleleft', 'RFtitlecenter', 'RFtitleright', \
+						'RFoddleft', 'RFoddcenter', 'RFoddright', \
+						'RFevenleft', 'RFevencenter', 'RFevenright']
+
 
 		if self._publicationType.lower() == 'scripture' :
 			# Decide which file we are needing to make, then direct it to
@@ -396,31 +404,18 @@ class MakeTexControlFile (object) :
 			fileName = self._cvSettingsFile
 			# There is not much to a cover file but we know that we
 			# need to turn off all the header and footer output
-			headerSettings = headerSettings + '\\def\\RHtitleleft{\\empty}\n'
-			headerSettings = headerSettings + '\\def\\RHtitlecenter{\\empty}\n'
-			headerSettings = headerSettings + '\\def\\RHtitleright{\\empty}\n'
-			headerSettings = headerSettings + '\\def\\RHoddleft{\\empty}\n'
-			headerSettings = headerSettings + '\\def\\RHoddcenter{\\empty}\n'
-			headerSettings = headerSettings + '\\def\\RHoddright{\\empty}\n'
-			headerSettings = headerSettings + '\\def\\RHevenleft{\\empty}\n'
-			headerSettings = headerSettings + '\\def\\RHevencenter{\\empty}\n'
-			headerSettings = headerSettings + '\\def\\RHevenright{\\empty}\n'
-			# Footer settings
-			footerSettings = footerSettings + '\\def\\RFtitleleft{\\empty}\n'
-			footerSettings = footerSettings + '\\def\\RFtitlecenter{\\empty}\n'
-			footerSettings = footerSettings + '\\def\\RFtitleright{\\empty}\n'
-			footerSettings = footerSettings + '\\def\\RFoddleft{\\empty}\n'
-			footerSettings = footerSettings + '\\def\\RFoddcenter{\\empty}\n'
-			footerSettings = footerSettings + '\\def\\RFoddright{\\empty}\n'
-			footerSettings = footerSettings + '\\def\\RFevenleft{\\empty}\n'
-			footerSettings = footerSettings + '\\def\\RFevencenter{\\empty}\n'
-			footerSettings = footerSettings + '\\def\\RFevenright{\\empty}\n'
+			headerSettings = headerSettings + self.RemovePageNumbers(self._headerPositions)
+			footerSettings = footerSettings + self.RemovePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'front' :
 			fileName = self._fmSettingsFile
+			headerSettings = headerSettings + self.RemovePageNumbers(self._headerPositions)
+			footerSettings = footerSettings + self.RemovePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'back' :
 			fileName = self._bmSettingsFile
+			headerSettings = headerSettings + self.RemovePageNumbers(self._headerPositions)
+			footerSettings = footerSettings + self.RemovePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'bible' :
 			fileName = self._biSettingsFile
@@ -527,6 +522,17 @@ class MakeTexControlFile (object) :
 
 
 #########################################################################################
+
+	def RemovePageNumbers (self, positions) :
+		'''This will simply return a list of page header or footer
+			positions with \empty in them this takes out page
+			numbers on peripheral matter pages.'''
+
+		texCode = ''
+		for place in positions :
+			texCode = texCode + '\\def\\' + place + '{\\empty}\n'
+
+		return texCode
 
 	def writeOutTheFile (self, contents) :
 		'''Write out the file.'''

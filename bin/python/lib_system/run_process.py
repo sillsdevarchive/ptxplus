@@ -98,6 +98,7 @@ class RunProcess (object) :
 		# Make a list that contains all the metaProcesses
 		metaTaskList = []
 		taskList = []
+		import pdb; pdb.set_trace()
 		metaTaskList = log_manager._settings['Process']['Processes']['metaProcesses']
 
 		# if this is a meta task then we need to process it as
@@ -107,7 +108,6 @@ class RunProcess (object) :
 			metaTask = task
 			taskList = log_manager._settings['Process']['Processes'][metaTask]
 			for thisTask in taskList :
-				print taskList, thisTask, "nnnnnnnnnnnnnnnnnnnnnnn"
 				self.runIt(thisTask)
 
 		# If it is not a meta task then it must be a single one

@@ -673,9 +673,17 @@ class FindDialog (object) :
 
 
 
+class configlist(list):
+		def __new__(cls,*args,**kwds):
+				return super(configlist,cls).__new__(cls,*args,**kwds)
+
+		def __str__(self):
+				return ', '.join(self)
+
 class ConfigEditor (object) :
 
 	def __init__ (self, filename, wTree, sname, kname) :
+		import gobject
 		self.wTree = wTree
 		self.sections_tv = wTree.get_widget(sname)
 		cell = gtk.CellRendererText()
@@ -692,7 +700,7 @@ class ConfigEditor (object) :
 			self.keys_tc.append(gtk.TreeViewColumn(cell_data_names[i], cell))
 			self.keys_tc[i].set_cell_data_func(cell, cell_data_funcs[i])
 			self.keys_tv.append_column(self.keys_tc[i])
-		self.keys_ts = gtk.ListStore(str, str)
+		self.keys_ts = gtk.ListStore(str, gobject.TYPE_PYOBJECT)
 		self.keys_tv.set_model(self.keys_ts)
 		self.keys_tv.connect('cursor-changed', self.select_key)
 		self.keys_tv.connect("row-activated", self.active_row)
@@ -775,7 +783,7 @@ class ConfigEditor (object) :
 		for k in section.keys() :
 			v = section[k]
 			if isinstance(v, list) :
-				self.keys_ts.append([k, ", ".join(v)])
+				self.keys_ts.append([k, configlist(v)])
 			elif not isinstance(v, (dict, tuple)) :
 				self.keys_ts.append([k, v])
 
@@ -788,15 +796,19 @@ class ConfigEditor (object) :
 				self.desc_l.set_markup(self.parse(self.sections_curr.comments[key]))
 
 	def active_row (self, widget, path, column) :
-		self.entry_type.set_text("String")
-		self.entry_name.set_text(self.keys_ts[path][0])
-		self.entry_value.set_text(self.keys_ts[path][1])
+		k,v = self.keys_ts[path]
+		self.entry_name.set_text(k)
+		self.entry_type.set_text("List" if isinstance(v, list) else "String")
+		self.entry_value.set_text(str(v))
 		self.wTree.get_widget("bt_apply_entry").connect("clicked", self.entry_apply)
 		self.wTree.get_widget("bt_cancel_entry").connect("clicked", self.entry_cancel)
 		self.entry_w.show()
 
 	def entry_apply (self, widget) :
-		self.sections_curr[self.entry_name.get_text()] = self.entry_value.get_text()
+		value = self.entry_value.get_text().strip()
+		if self.entry_type.get_text() == "List":
+				value = filter(bool, (v.strip() for v in value.split(',')))
+		self.sections_curr[self.entry_name.get_text()] = value
 		self.keys_fill(self.sections_curr)
 		self.save()
 

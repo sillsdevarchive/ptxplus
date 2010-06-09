@@ -20,7 +20,7 @@
 # down the chain this might have to move, or be put in a
 # seperate file.
 DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
-  $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) \
+  $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) \
   $(FILE_PROJECT_CONF)
 
 
@@ -115,7 +115,7 @@ $(PATH_PROCESS)/$(1).usfm.sty :
 # Process a single component and produce the final PDF. Special dependencies
 # are set for the .adj and .piclist files in case they have been altered.
 # The .piclist file is created in the content_illustrations.mk rules file.
-$(PATH_PROCESS)/$(1).pdf : \
+$(PATH_PROCESS)/$(1).usfm.pdf : \
 	$(PATH_TEXTS)/$(1).usfm \
 	$(PATH_TEXTS)/$(1).usfm.adj \
 	$(PATH_TEXTS)/$(1).usfm.piclist \
@@ -127,12 +127,12 @@ $(PATH_PROCESS)/$(1).pdf : \
 #	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
 
 # Open the PDF file with reader
-view-$(1) : $(PATH_PROCESS)/$(1).pdf
+view-$(1) : $(PATH_PROCESS)/$(1).usfm.pdf
 	@- $(CLOSEPDF)
 	@if [ $(WATERMARK) = "true" ] ; then \
-		echo INFO: Adding watermark to ouput: $(PATH_PROCESS)/$(1).pdf; \
-		pdftk $(PATH_PROCESS)/$(1).pdf background $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
-		cp $(PATH_PROCESS)/tmp.pdf $(PATH_PROCESS)/$(1).pdf; \
+		echo INFO: Adding watermark to ouput: $(PATH_PROCESS)/$(1).usfm.pdf; \
+		pdftk $(PATH_PROCESS)/$(1).usfm.pdf background $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
+		cp $(PATH_PROCESS)/tmp.pdf $(PATH_PROCESS)/$(1).usfm.pdf; \
 		rm -f $(PATH_PROCESS)/tmp.pdf; \
 	fi
 	@ $(VIEWPDF) $$< &
