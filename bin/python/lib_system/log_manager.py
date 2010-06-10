@@ -19,7 +19,7 @@
 # 20081023 - djd - Refactor project.conf structure changes
 # 20081028 - djd - Removed error handling from this class
 # 20081030 - djd - Added handling of input and output file
-#		information in the log object
+#        information in the log object
 # 20081119 - djd - Removed error count from output
 
 

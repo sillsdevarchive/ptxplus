@@ -16,7 +16,7 @@
 # History:
 # 20080626 - djd - Initial draft
 # 20081022 - djd - Folded the config files together and
-#		changed the routines here to reflect that
+#        changed the routines here to reflect that
 # 20081023 - djd - Refactor project.conf structure changes
 # 20081028 - djd - Moved localiseFontsConf to font_manager.py
 # 20091009 - te - Added "No Context" return to getSliceOfText()
@@ -257,8 +257,8 @@ class Tools (object) :
 			file name.'''
 
 		path, file = pathPlusFileName.rsplit("/", 1)
-		nameSourceOriginal = settings_project['Process']['General']['NAME_SOURCE_ORIGINAL']
-		nameSourceExtention = settings_project['Process']['General']['NAME_SOURCE_EXTENSION']
+		nameSourceOriginal = settings_project['System']['General']['NAME_SOURCE_ORIGINAL']
+		nameSourceExtention = settings_project['System']['General']['NAME_SOURCE_EXTENSION']
 		file = file.replace(nameSourceOriginal + "." + nameSourceExtention, "")
 		return file
 
@@ -266,7 +266,7 @@ class Tools (object) :
 	def getProjectID (self) :
 		'''Get the project ID from the project.conf file.'''
 
-		return self.getProjectSettingsObject()['General']['ProjectInformation']['projectID']
+		return self.getProjectSettingsObject()['Project']['ProjectInformation']['projectID']
 
 
 	def inProject (self) :
@@ -286,7 +286,7 @@ class Tools (object) :
 		settings = self.getSettingsObject()
 		# For the location we use whatever the makefile.conf file has
 		# whether it is abs or relative. Note, we use abs in archive_project.py
-		backupFilePath = settings['General']['Backup']['backupPath']
+		backupFilePath = settings['System']['Backup']['backupPath']
 		backupFile = backupFilePath + "/Backup.tar.gz"
 
 		if os.path.isfile(backupFile) == True :
@@ -350,15 +350,15 @@ class Tools (object) :
 
 ############ This is no longer needed but it might throw errors in other places. We'll keep it here until everything is cleanded up.
 
-#	def isPeripheralMatter (self, fileName) :
-#		'''Check to see if this file (from wherever) exists in the Peripheral folder.
-#			return True if it does.'''
+#    def isPeripheralMatter (self, fileName) :
+#        '''Check to see if this file (from wherever) exists in the Peripheral folder.
+#            return True if it does.'''
 #
-#		(head, tail) = os.path.split(fileName)
-#		path = os.getcwd() + "/Peripheral"
-#		target = path + "/" + tail
-#		if os.path.isfile(target) :
-#			return True
+#        (head, tail) = os.path.split(fileName)
+#        path = os.getcwd() + "/Peripheral"
+#        target = path + "/" + tail
+#        if os.path.isfile(target) :
+#            return True
 
 ###################################################################################################################
 
@@ -398,7 +398,7 @@ class Tools (object) :
 
 		# Get any special makefile params for debugging
 		try :
-			params = self.getSettingsObject()['General']['Logging']['makeFileParams']
+			params = self.getSettingsObject()['System']['Logging']['makeFileParams']
 
 			# Build the command
 			sysCommand = "make " + params + " " + command
@@ -540,7 +540,7 @@ class Tools (object) :
 		return text[0]
 
 
-	def walk(self, top, topdown=True, onerror=None):
+	 def walk(self, top, topdown=True, onerror=None):
 		'''Directory tree generator. This was blatantly ripped off
 			from os.py. However, the islink function was removed
 			to enable walking a tree with links.'''
@@ -636,3 +636,5 @@ class CSVtoDict(dict):
 		csvs = csv.DictReader(open(csv_file_path), dialect=csv.excel)
 		records = list((row.pop(recordkey),row) for row in csvs)
 		return super(CSVtoDict, self).__init__(records)
+
+

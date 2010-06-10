@@ -16,6 +16,8 @@
 #        and a few other modifications for processing groups
 # 20091209 - djd - Added code for get-clip command
 # 20091214 - djd - Added some wordlist and hyphen list making commands
+# 20100609 - djd - Fixed a problem with list values that only have one element
+#        being messed up when saved by the UI. Thanks TimE
 
 ########################################################################################
 
@@ -191,7 +193,7 @@ class ConfigGUI (object) :
 		self.fonts = FileEditor('ptx2pdf-fonts.txt', self.tv_fonts, self.language_manager.get_language("latex"))
 
 		try :
-			title = self.ceditor.config['General']['ProjectInformation'].get('projectName')
+			title = self.ceditor.config['Project']['ProjectInformation'].get('projectName')
 		except :
 			title = os.getcwd()
 
@@ -205,7 +207,7 @@ class ConfigGUI (object) :
 		# Here we grab the binding group names for building our component and group list
 		# To avoid duplicates in the list we use a set() to keep track of the components
 		# If one already exists it will not add it to the list.
-		self.process_groups = self.ceditor.config['Process']['Binding']
+		self.process_groups = self.ceditor.config['System']['Binding']
 
 		for group in self.process_groups :
 			for item in self.process_groups.get(group).split() :
@@ -221,7 +223,7 @@ class ConfigGUI (object) :
 		# We want the groups last so we process them again here, this time
 		# grabbing only the group name tacking that on to the end of the list
 		for group in self.process_groups :
-			items = self.ceditor.config['Process']['Binding'][group]
+			items = self.ceditor.config['System']['Binding'][group]
 			if len(items) > 0 :
 				gName = self.getGroupName(group)
 				self.cs_components.append([gName.lower()])

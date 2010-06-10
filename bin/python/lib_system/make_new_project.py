@@ -22,26 +22,26 @@
 # 20080508 - djd - Initial draft
 # 20080514 - djd - Added three-level project support
 # 20080523 - djd - Moved location of default_settings ini files
-#		Also changed to use script code for second
-#		level description.
+#        Also changed to use script code for second
+#        level description.
 # 20080608 - djd - Added a help command system to remind the
-#		user of what commands are availible, also
-#		added a copy of defaul settings to make setup
-#		easier.
+#        user of what commands are availible, also
+#        added a copy of defaul settings to make setup
+#        easier.
 # 20080611 - djd - Moved to Python folder. This will now be
-#		called from the typeset script only.
+#        called from the typeset script only.
 # 20080627 - djd - Moved to the lib_system folder.
 # 20080704 - djd - Moved make_tex_hyphenation_file and
-#		make_process_instructions_file out to the
-#		makefile system.
+#        make_process_instructions_file out to the
+#        makefile system.
 # 20080801 - djd - Added version stamping for the project.ini
-#		files to prevent running processes on project
-#		data without updating the project.ini file.
+#        files to prevent running processes on project
+#        data without updating the project.ini file.
 # 20081028 - djd - Removed system logging, messages only now
 # 20081111 - djd - Changed to using the makeNecessaryFiles()
-#		function to create a basic project. This is
-#		much simpler and will help things stay more
-#		consistant.
+#        function to create a basic project. This is
+#        much simpler and will help things stay more
+#        consistant.
 
 #############################################################
 ######################### Load Modules ######################
@@ -78,3 +78,4 @@ def doIt(pathToProject) :
 
 	thisModule = MakeNewProject()
 	return thisModule.main(pathToProject)
+
