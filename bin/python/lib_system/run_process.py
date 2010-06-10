@@ -28,13 +28,36 @@
 
 import os, sys
 
+# Next is a work around for an internal encoding problem. At
+# some point the python scripts get confused and start seeing
+# the world as ASCI. This messes everything up and give an
+# error like:
+#    UnicodeWarning: Unicode equal comparison failed to
+#    convert both arguments to Unicode - interpreting them
+#    as being unequal
+# or
+#    UnicodeDecodeError: 'ascii' codec can't decode byte
+#    0xe2 in position 0: ordinal not in range(128)
+#
+# Regardless of which one you get or perhaps some others,
+# everything grinds to a halt. The following code seems to
+# work around the problem:
+
+# Turns out this is a real hack and we have tried to implement
+# a real solution by adding an encoding setting in the ConfigObj()
+# calls we make. That is where it has actually been breaking.
+# I will comment this for now and it can be taken out later
+# after testing show that this approch works.
+#reload(sys)
+#sys.setdefaultencoding("utf-8")
+
 # Import supporting local classes
 from tools import *
 from log_manager import *
 
 # Instantiate local classes
-tools		= Tools()
-log_manager	= LogManager()
+tools        = Tools()
+log_manager    = LogManager()
 
 basePath = os.environ.get('PTXPLUS_BASE')
 if not basePath :
@@ -48,7 +71,7 @@ sys.path.append(basePath + '/bin/python/lib_scripture')
 # First position in the command line arg. is the task.
 # We have to have that or the process fails
 try :
-	task			= sys.argv[1]
+	task            = sys.argv[1]
 except :
 	tools.userMessage("process_text.py: Cannot run the process because no module (task) has been specified.")
 	sys.exit(1)
@@ -56,30 +79,30 @@ except :
 # Second position we add the file ID here so we can
 # track what we are working on if we need to.
 try :
-	typeID			= sys.argv[2]
+	typeID            = sys.argv[2]
 except :
-	typeID			= "NA"
+	typeID            = "NA"
 
 # In the third arg we have the input file name.
 # There may be cases where this is not needed but
 # this position always refers to the input file.
 try :
-	inputFile		= sys.argv[3]
+	inputFile        = sys.argv[3]
 except :
-	inputFile		= ""
+	inputFile        = ""
 
 # Forth position we have the output file, just like the
 try :
 	outputFile = sys.argv[4]
 except :
-	outputFile		= ""
+	outputFile        = ""
 
 # We will use the fifth position to pass whatever else
 # we might need to pass to the process.
 try :
 	optionalPassedVariable = sys.argv[5]
 except :
-	optionalPassedVariable	= ""
+	optionalPassedVariable    = ""
 
 
 class RunProcess (object) :
@@ -98,7 +121,6 @@ class RunProcess (object) :
 		# Make a list that contains all the metaProcesses
 		metaTaskList = []
 		taskList = []
-		import pdb; pdb.set_trace()
 		metaTaskList = log_manager._settings['Process']['Processes']['metaProcesses']
 
 		# if this is a meta task then we need to process it as

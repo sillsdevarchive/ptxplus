@@ -19,7 +19,7 @@
 # 20080613 - djd - Initial draft
 # 20081023 - djd - Refactor project.conf structure changes
 # 20081028 - djd - Removed system logging. Only using
-#		process logging now.
+#        process logging now.
 
 
 #############################################################
@@ -49,9 +49,9 @@ from log_manager import *
 from error_manager import *
 
 # Instantiate classes
-tools			= Tools()
-error_manager		= ErrorManager()
-log_manager		= LogManager()
+tools            = Tools()
+error_manager        = ErrorManager()
+log_manager        = LogManager()
 
 # We want to see one valid arguments given. However, that
 # may not happen so this script is all about testing the
@@ -104,14 +104,14 @@ def setupNewProject () :
 # is not that useful so it is commented for now.
 	# Look for a project.conf file in the cwd. If there is none, ask
 	# if we need to create a new project.
-#	if tools.isProjectFolder() == False :
-#		newProjectpath = os.path.abspath(sys.argv[2])
-#		if tools.userConfirm("Would you like to start a new project. Create a new project here? " + newProjectpath) != True :
-#			return
-#		else :
-#			# Send out the make new project command
-#			mod = __import__('make_new_project')
-#			mod.doIt(newProjectpath)
+#    if tools.isProjectFolder() == False :
+#        newProjectpath = os.path.abspath(sys.argv[2])
+#        if tools.userConfirm("Would you like to start a new project. Create a new project here? " + newProjectpath) != True :
+#            return
+#        else :
+#            # Send out the make new project command
+#            mod = __import__('make_new_project')
+#            mod.doIt(newProjectpath)
 
 	# Send out the make new project command
 	mod = __import__('make_new_project')
@@ -263,7 +263,7 @@ else :
 
 			# Next look to see if the fonts.conf file needs localizing
 			from font_manager import *
-			font_manager	= FontManager()
+			font_manager    = FontManager()
 			font_manager.localiseFontsConf()
 
 			# There are a number of processes we may want to run before we want to

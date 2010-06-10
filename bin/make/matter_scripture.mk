@@ -6,11 +6,11 @@
 # History:
 
 # 20100602 - djd - Initial version created from code in
-#		matter_books.mk file.
+#        matter_books.mk file.
 
 
 ##############################################################
-#		Variales for Middle Matter
+#        Variales for Middle Matter
 ##############################################################
 
 # Build the dependent file listing here. This will include
@@ -20,12 +20,14 @@
 # down the chain this might have to move, or be put in a
 # seperate file.
 DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
-  $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) \
+  $(PATH_PROCESS)/$(FILE_WATERMARK) \
+  $(PATH_PROCESS)/$(FILE_LOGO_BSM) \
+  $(PATH_PROCESS)/$(FILE_LOGO_CFE) \
   $(FILE_PROJECT_CONF)
 
 
 ##############################################################
-#		Rules for publication Scripture content
+#        Rules for publication Scripture content
 ##############################################################
 
 # Before we can typeset we have to copy the source text
@@ -78,7 +80,7 @@ $(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL
 	@$(PY_RUN_PROCESS) copyIntoSystem $(1) '$$<' '$$@'
 	@$(PY_RUN_PROCESS) textProcesses $(1) '$$@' '$$@'
 else
-#	@echo File $(PATH_TEXTS)/$(1).usfm is locked
+#    @echo File $(PATH_TEXTS)/$(1).usfm is locked
 endif
 
 # This enables us to do the preprocessing on a single component and view the log file
@@ -123,15 +125,15 @@ $(PATH_PROCESS)/$(1).usfm.pdf : \
 	$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) | $(PATH_PROCESS)/$(1).usfm.sty $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $$@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).usfm.tex
-#	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
-#	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
+#    cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
+#    cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
 
 # Open the PDF file with reader
 view-$(1) : $(PATH_PROCESS)/$(1).usfm.pdf
 	@- $(CLOSEPDF)
 	@if [ $(WATERMARK) = "true" ] ; then \
 		echo INFO: Adding watermark to ouput: $(PATH_PROCESS)/$(1).usfm.pdf; \
-		pdftk $(PATH_PROCESS)/$(1).usfm.pdf background $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
+		pdftk $(PATH_PROCESS)/$(1).usfm.pdf background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
 		cp $(PATH_PROCESS)/tmp.pdf $(PATH_PROCESS)/$(1).usfm.pdf; \
 		rm -f $(PATH_PROCESS)/tmp.pdf; \
 	fi
@@ -329,6 +331,6 @@ endif
 # might need to be done alone to avoid this if ever becomes a real problem.
 #$(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS)
 #ifneq ($(PATH_ILLUSTRATIONS_LIB),)
-#	@echo INFO: Copying $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) to $@
-#	@cp $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) $@
+#    @echo INFO: Copying $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) to $@
+#    @cp $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) $@
 #endif

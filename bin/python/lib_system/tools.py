@@ -139,7 +139,7 @@ class Tools (object) :
 			contains the system settings.'''
 
 		# There should always be a conf file here
-		return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/ptxplus.conf")
+		return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/ptxplus.conf", encoding='utf-8')
 
 
 	def getProjectSettingsObject (self) :
@@ -147,7 +147,7 @@ class Tools (object) :
 
 		if os.path.isfile(os.getcwd() + "/project.conf") :
 			# Load in the settings from our project
-			return ConfigObj(os.getcwd() + "/project.conf")
+			return ConfigObj(os.getcwd() + "/project.conf", encoding='utf-8')
 
 
 	def getProjectDefaultSettingsObject (self) :
@@ -156,7 +156,7 @@ class Tools (object) :
 		defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/project.conf"
 		if os.path.isfile(defaultFile) :
 			# Load in the settings from our default project.conf file
-			return ConfigObj(defaultFile)
+			return ConfigObj(defaultFile, encoding='utf-8')
 
 	def getSystemSettingsOverrideObject (self) :
 		'''If it exists, return an object which contains the system override
@@ -166,7 +166,7 @@ class Tools (object) :
 		overrideFile = home + "/.config/ptxplus/override.conf"
 
 		if os.path.isfile(overrideFile) == True :
-			return ConfigObj(overrideFile)
+			return ConfigObj(overrideFile, encoding='utf-8')
 
 
 	def makeUserOverrideFile (self) :

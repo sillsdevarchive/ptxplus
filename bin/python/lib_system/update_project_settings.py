@@ -78,7 +78,7 @@ class UpdateProjectSettings (object) :
 			bakSettingsProjectFile = "project.conf~"
 			settingsProjectFile = "project.conf"
 			shutil.copy(settingsProjectFile, bakSettingsProjectFile)
-			oldSettings = ConfigObj(bakSettingsProjectFile)
+			oldSettings = ConfigObj(bakSettingsProjectFile,encoding='utf-8')
 
 			# Get the system defaul project.conf file
 			systemProjectConfFile = basePath + "/resources/lib_sysFiles/project.conf"
@@ -90,7 +90,7 @@ class UpdateProjectSettings (object) :
 				# Copy into the project folder
 				shutil.copy(systemProjectConfFile, tempMasterConfFile)
 				# Load in the object
-				masterSettings = ConfigObj(tempMasterConfFile)
+				masterSettings = ConfigObj(tempMasterConfFile,encoding='utf-8')
 
 				# Now we will do a simple merge and overwrite the users projet \
 				# settings over our copy of the new settings

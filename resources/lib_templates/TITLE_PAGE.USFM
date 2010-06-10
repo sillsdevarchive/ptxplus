@@ -3,5 +3,8 @@
 \periph Title Page
 \mt1 New Testament
 \mt2 For You to Read
-\para
-\noindent\hfil THE UNITED BIBLE SOCIETIES \hfil
+\par
+\makedigitsother
+\hfil \XeTeXpicfile cfe_logo.png width 80pt \hfil \par%
+\makedigitsletters
+\sls \hfil Christian Far East Ministry \hfil\sls*

@@ -37,7 +37,7 @@ class MakeProjectInfo (object) :
 	def __init__(self, log_manager):
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
-		self._config = ConfigObj('project.conf')
+		self._config = ConfigObj('project.conf',encoding="utf-8")
 
 	def main (self) :
 		'''This is the main process function for generating the file.'''

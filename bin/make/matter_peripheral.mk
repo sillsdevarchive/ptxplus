@@ -17,32 +17,32 @@
 # History:
 
 # 20080725 - djd - Initial draft version. Moved all the code from the
-#		now deprecated matter_front.mk, matter_back.mk
-#		and matter_maps.mk
+#        now deprecated matter_front.mk, matter_back.mk
+#        and matter_maps.mk
 # 20081010 - djd - Removed the -$(NAME_SOURCE_ORIGINAL) porton of
-#		the names to avoid problems in projects where
-#		multiple scripts are used.
+#        the names to avoid problems in projects where
+#        multiple scripts are used.
 # 20091201 - djd - Changed some process commands to be more in line
-#		with others
+#        with others
 # 20090114 - djd - Changed the process model of peripheral material
-#		so that now there is only one source and it is linked
-#		into the project. Much easier to maintian this way.
+#        so that now there is only one source and it is linked
+#        into the project. Much easier to maintian this way.
 # 20100203 - djd - Added the ability to create peripheral files
-#		on the fly so there doesn't need to be a copy of
-#		it in the ptxplus template lib
+#        on the fly so there doesn't need to be a copy of
+#        it in the ptxplus template lib
 # 20100212 - djd - Added style override files for peripheral matter.
 # 20100212 - djd - Started adding custom TOC generation rules
 # 20100213 - djd - Moved the TOC rules to a seperate file
 # 20100603 - djd - Added TeX control file auto build process
 
 ##############################################################
-#		Variables for peripheral matter
+#        Variables for peripheral matter
 ##############################################################
 
 # Are there any?
 
 ##############################################################
-#		General rules for all peripheral matter
+#        General rules for all peripheral matter
 ##############################################################
 
 # Define the main macro rule group for what it takes to process
@@ -133,7 +133,7 @@ view-$(1) : $(PATH_PROCESS)/$(1).pdf
 	@- $(CLOSEPDF)
 	@if [ $(WATERMARK) = "true" ] ; then \
 		echo INFO: Adding watermark to ouput: $(PATH_PROCESS)/$(1).pdf; \
-		pdftk $(PATH_PROCESS)/$(1).pdf background $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
+		pdftk $(PATH_PROCESS)/$(1).pdf background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
 		cp $(PATH_PROCESS)/tmp.pdf $(PATH_PROCESS)/$(1).pdf; \
 		rm -f $(PATH_PROCESS)/tmp.pdf; \
 	fi
@@ -171,7 +171,7 @@ endef
 
 
 ##############################################################
-#		Main processing rules
+#        Main processing rules
 ##############################################################
 
 # This builds a rule (in memory) for these sets of files

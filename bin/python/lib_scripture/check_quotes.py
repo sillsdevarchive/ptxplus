@@ -17,11 +17,11 @@
 # History:
 # 20080729 - djd - Initial draft
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 # 20081207 - djd - Changed the script to work independent
-#		from the quote_manager but is still under
-#		the check_book
+#        from the quote_manager but is still under
+#        the check_book
 
 
 #############################################################
@@ -65,10 +65,10 @@ class CheckQuotes (object) :
 		else :
 			self._possessiveMarkers = False
 
-		self._dumbContraction = unicode(self._settings['Encoding']['Punctuation']['Quotation']['DumbQuotes']['contractionMarker'])
-		self._smartContraction = unicode(self._settings['Encoding']['Punctuation']['Quotation']['SmartQuotes']['contractionMarker'])
-		self._dumbPossessive = unicode(self._settings['Encoding']['Punctuation']['Quotation']['DumbQuotes']['possessiveMarker'])
-		self._smartPossessive = unicode(self._settings['Encoding']['Punctuation']['Quotation']['SmartQuotes']['possessiveMarker'])
+		self._dumbContraction = self._settings['Encoding']['Punctuation']['Quotation']['DumbQuotes']['contractionMarker']
+		self._smartContraction = self._settings['Encoding']['Punctuation']['Quotation']['SmartQuotes']['contractionMarker']
+		self._dumbPossessive = self._settings['Encoding']['Punctuation']['Quotation']['DumbQuotes']['possessiveMarker']
+		self._smartPossessive = self._settings['Encoding']['Punctuation']['Quotation']['SmartQuotes']['possessiveMarker']
 		if self._settings['General']['TextFeatures']['dumbQuotes'] == "true" :
 			self._currentQuoteSystem = "DumbQuotes"
 			self._contractionChar = self._dumbContraction
@@ -240,7 +240,7 @@ class CheckQuotes (object) :
 					# to test. The same condition could occur in a long string but this will miss it.
 					if len(text) < 5 and match.start() == 0 and text.find('\n') > 1 :
 						self._log_manager.log("WARN", "Close quote found at the end of the line, but it may be out of place, please verify. Quote found: [" + thisQuote + "]")
-#					elif text[0] == thisQuote :
+#                    elif text[0] == thisQuote :
 					elif text[0] == thisQuote and lastInfo.isNote :
 						# This might be ok if it is a bracket instead of a quote marker
 						if self._closeToOpenBrackets.has_key(thisQuote) :
@@ -417,3 +417,4 @@ def doIt (log_manager):
 
 	thisModule = CheckQuotes(log_manager)
 	return thisModule
+

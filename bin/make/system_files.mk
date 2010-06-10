@@ -14,30 +14,30 @@
 # 20080504 - djd - Added a bulk copy rule for all admin files
 # 20080514 - djd - Added support for 3 level projects
 # 20080517 - djd - Removed rule for making process_instructions
-#		This is now handled by make_new_project.py
+#        This is now handled by make_new_project.py
 # 20080627 - djd - Channeled some processes through the system
-#		processing command
+#        processing command
 # 20080726 - djd - Moved folder create rules to this file
 # 20080807 - djd - Moved several rules out for new system
-#		organization
+#        organization
 # 20080809 - djd - Removed all system level rules as they are
-#		now being handled by the Python scripts.
+#        now being handled by the Python scripts.
 # 20080906 - djd - Took out the cleaning rules for source text
 # 20080926 - djd - Added Wiki information management rules
 # 20081004 - djd - Added project conf files editing rule
 # 20090110 - djd - Added booklet binding
 # 20091210 - djd - Reorganized and changed names of component
-#		groups to be more consistant
+#        groups to be more consistant
 # 20091211 - djd - Did more adjustments on the rules. Also, had
-#		this file moved to the end of the include chain
-#		because some rules in this file were dependent
-#		on rules that had not been expanded yet.
+#        this file moved to the end of the include chain
+#        because some rules in this file were dependent
+#        on rules that had not been expanded yet.
 # 20091223 - djd - Removed references to MAPS folder
 # 20100507 - djd - Moved out rules for illustration creation
 
 
 ##############################################################
-#		Variables for some of the system matter
+#        Variables for some of the system matter
 ##############################################################
 
 # This is the final output we want so we can name it here
@@ -91,18 +91,24 @@ $(PATH_ILLUSTRATIONS) :
 $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) : | $(PATH_ILLUSTRATIONS)
 	@echo INFO: Creating $@
 	@mkdir -p $@
+
+$(PATH_PROCESS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
 	@echo Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
 	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
-	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) to $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK)
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)) $@
+	@echo Linking: $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) to $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK)
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE))/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) $(PATH_PROCESS)/$(FILE_WATERMARK)
+
+$(PATH_PROCESS)/$(FILE_LOGO_BSM) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
 	@echo Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)
 	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)
-	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM) to $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)) $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
+	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM) to $(PATH_PROCESS)/$(FILE_LOGO_BSM)
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE))/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM) $(PATH_PROCESS)/$(FILE_LOGO_BSM)
+
+$(PATH_PROCESS)/$(FILE_LOGO_CFE) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
 	@echo Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)
 	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)
-	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE) to $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)) $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
+	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE) to $(PATH_PROCESS)/$(FILE_LOGO_CFE)
+	@ln -sf $(shell readlink -f -- $(PATH_SOURCE))/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE) $(PATH_PROCESS)/$(FILE_LOGO_CFE)
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
@@ -127,7 +133,7 @@ $(PATH_PROCESS)/PROJECT_INFO.tex :
 
 
 ###############################################################
-#		Final component binding rules
+#        Final component binding rules
 ###############################################################
 
 # This is the main rule for the entire Bible
@@ -141,7 +147,7 @@ view-book : $(MATTER_BOOK_PDF)
 
 
 ###############################################################
-#		Clean up files
+#        Clean up files
 ###############################################################
 
 # Remove the book PDF file
@@ -211,7 +217,7 @@ reset : pdf-remove-book \
 
 
 ###############################################################
-#		Manage Project Information
+#        Manage Project Information
 ###############################################################
 
 # If for some reason the Wiki doesn't exist for this project

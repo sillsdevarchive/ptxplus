@@ -714,7 +714,7 @@ class ConfigEditor (object) :
 		self.new_config(filename)
 
 	def new_config (self, filename) :
-		self.config = ConfigObj(filename)
+		self.config = ConfigObj(filename,encoding='utf-8')
 		self.sections_ts = gtk.TreeStore(str)
 		self.pathtree = list()
 		self.sections_parents = {id(self.config) : None}
