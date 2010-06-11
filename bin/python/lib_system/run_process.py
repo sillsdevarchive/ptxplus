@@ -48,8 +48,8 @@ import os, sys
 # calls we make. That is where it has actually been breaking.
 # I will comment this for now and it can be taken out later
 # after testing show that this approch works.
-#reload(sys)
-#sys.setdefaultencoding("utf-8")
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 # Import supporting local classes
 from tools import *
@@ -121,14 +121,14 @@ class RunProcess (object) :
 		# Make a list that contains all the metaProcesses
 		metaTaskList = []
 		taskList = []
-		metaTaskList = log_manager._settings['Process']['Processes']['metaProcesses']
+		metaTaskList = log_manager._settings['System']['TextProcesses']['metaProcesses']
 
 		# if this is a meta task then we need to process it as
 		# if there are multiple sub-tasks within even though
 		# there may only be one
 		if task in metaTaskList :
 			metaTask = task
-			taskList = log_manager._settings['Process']['Processes'][metaTask]
+			taskList = log_manager._settings['System']['TextProcesses'][metaTask]
 			for thisTask in taskList :
 				self.runIt(thisTask)
 

@@ -40,7 +40,7 @@ class CheckPunctuation (object) :
 
 		# Build a regular expression for punctuation checking
 		punctChars = ""
-		for k, v, in self._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
+		for k, v, in self._settings['System']['Encoding']['Punctuation']['WordFinal'].iteritems() :
 			if v != "" :
 				punctChars = punctChars + v + "|"
 		punctChars = '[' + punctChars.rstrip('|') + ']'
@@ -131,7 +131,7 @@ class PunctuationContextHandler (parse_sfm.Handler) :
 
 		# Track the location
 		self._log_manager.setLocation(self._book, tag, num)
-#		print 'start\ttag=%s\tinfo=%r\tnum="%s"\tprefix="%s"' % (tag.ljust(8), info, num.strip(), prefix.strip())
+#        print 'start\ttag=%s\tinfo=%r\tnum="%s"\tprefix="%s"' % (tag.ljust(8), info, num.strip(), prefix.strip())
 		# Return the tag we are currently, adjust for verse numbers
 		if num == "" :
 			return "\\" + tag
@@ -142,7 +142,7 @@ class PunctuationContextHandler (parse_sfm.Handler) :
 	def text (self, text, tag, info) :
 		'''This function allows us to harvest the text from a given text element. This will
 			be used to check for quotes.'''
-#		print 'text\ttag=%s\tinfo=%r\ttext="%s"' % (tag.ljust(8) ,info, text.strip()[0:8])
+#        print 'text\ttag=%s\tinfo=%r\ttext="%s"' % (tag.ljust(8) ,info, text.strip()[0:8])
 		# Get the book id for setting our location in start()
 		if tag == 'id' :
 			self._book = text
@@ -156,7 +156,7 @@ class PunctuationContextHandler (parse_sfm.Handler) :
 	def end (self, tag, ctag, info) :
 		'''This function tells us when an element is closed. We will
 			use this to mark the end of events.'''
-#		print 'end\ttag=%s\tinfo=%r\tctag=%s' % (tag.ljust(8), info, ctag.ljust(8))
+#        print 'end\ttag=%s\tinfo=%r\tctag=%s' % (tag.ljust(8), info, ctag.ljust(8))
 		# Is this a real closing tag?
 
 		# Keep track of the last closing tag and it's info
@@ -179,3 +179,4 @@ def doIt (log_manager) :
 
 	thisModule = CheckPunctuation(log_manager)
 	return thisModule
+

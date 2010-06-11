@@ -22,24 +22,24 @@
 
 # History:
 # 20080331 - djd - Added check for \f in loc var. This may
-#		need to be expanded to cover other problems
-#		that arise.
+#        need to be expanded to cover other problems
+#        that arise.
 # 20080403 - djd - Split the configuration vars into two files
-#		for better management of vars.
+#        for better management of vars.
 # 20080403 - djd - added parameter in the config_proj file
-#		for setting the length of paragraphs we count.
+#        for setting the length of paragraphs we count.
 # 20080429 - djd - eliminated config_proj and config_gen,
-#		condensed to just config to simplify
+#        condensed to just config to simplify
 # 20080601 - djd - Changed this script to work as a class so
-#		it can be called and logged easier.
+#        it can be called and logged easier.
 # 20080626 - djd - Reworked to be called by the process_
-#		scripture_text.py and newer logging system.
+#        scripture_text.py and newer logging system.
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 # 20081230 - djd - Changed over to work stand-alone instead
-#		of through version control.
+#        of through version control.
 # 20090504 - djd - Added a filter for peripheral matter files
 
 
@@ -70,10 +70,10 @@ class MakeParaAdjustFile (object) :
 		self._bookID = log_manager._currentTargetID
 		self._adjustLinesWritten = 0
 		self._poetryMarkers = {}
-		for k, v, in self._settings['Markup']['Poetry'].iteritems() :
+		for k, v, in self._settings['System']['Markup']['Poetry'].iteritems() :
 			self._poetryMarkers[k] = v
 		self._paragraphMarkers = {}
-		for k, v, in self._settings['Markup']['Paragraphs'].iteritems() :
+		for k, v, in self._settings['System']['Markup']['Paragraphs'].iteritems() :
 			self._paragraphMarkers[k] = v
 
 
@@ -100,9 +100,9 @@ class MakeParaAdjustFile (object) :
 
 		# Pull in any settings that we need from the project INI file
 		# You may need to use int() to be sure numbers work right
-		adjustParaLength = int(self._settings['TeX']['AdjustParagraph']['adjustParaLength'])
-		verseNumberMarker = "\\" + self._settings['Markup']['ChaptersVerses']['verseNumber']
-		footnoteOpenMarker = "\\" + self._settings['Markup']['Footnotes']['footnoteOpenMarker']
+		adjustParaLength = int(self._settings['System']['TextProcesses']['AdjustParagraph']['adjustParaLength'])
+		verseNumberMarker = "\\" + self._settings['System']['Markup']['ChaptersVerses']['verseNumber']
+		footnoteOpenMarker = "\\" + self._settings['System']['Markup']['Footnotes']['footnoteOpenMarker']
 
 		if os.path.isfile(self._outputFile) :
 			# If it exists that may be a problem as we don't want to
@@ -118,13 +118,13 @@ class MakeParaAdjustFile (object) :
 		# Note that the isPeripheralMatter() function is now
 		# disabled. Do we really need to do this check anyway?
 		# Let's go away and think about it
-#		if tools.isPeripheralMatter(self._inputFile) :
-#			# If the parent file belongs to the peripheral mater we will
-#			# not go through with the process
+#        if tools.isPeripheralMatter(self._inputFile) :
+#            # If the parent file belongs to the peripheral mater we will
+#            # not go through with the process
 #
-#			self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
+#            self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
 #
-#			return
+#            return
 
 		# Otherwise we'll just continue on by opening up a new .adj file
 		outputObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
@@ -193,24 +193,24 @@ class MakeParaAdjustFile (object) :
 
 			# We'll just go one level deep on poetry (\q should be \q1)
 			if len(wordsInLine) > 0 :
-				if wordsInLine[0]	== "\\" + self._paragraphMarkers['paragraphNormal'] or \
-					wordsInLine[0]	== "\\" + self._paragraphMarkers['paragraphLeft'] or \
-					wordsInLine[0]	== "\\" + self._poetryMarkers['poeticLineOne'] :
-					paragraph	 = "on"
+				if wordsInLine[0]    == "\\" + self._paragraphMarkers['paragraphNormal'] or \
+					wordsInLine[0]    == "\\" + self._paragraphMarkers['paragraphLeft'] or \
+					wordsInLine[0]    == "\\" + self._poetryMarkers['poeticLineOne'] :
+					paragraph     = "on"
 
 					if self._markup_manager._footnote_tracker.hasFootnoteOpenMarkerInLine(line) == True :
 
 						footnoteCount +=1
 
 					wordCount += len(wordsInLine)
-					if wordsInLine[0]	== "\\" + self._paragraphMarkers['paragraphNormal'] :
-						paragraphType	 = self._paragraphMarkers['paragraphNormal']
-					elif wordsInLine[0]	== "\\" + self._paragraphMarkers['paragraphLeft'] :
-						paragraphType	 = self._paragraphMarkers['paragraphLeft']
-					elif wordsInLine[0]	== "\\" + self._poetryMarkers['poeticLineOne'] :
-						paragraphType	 = self._poetryMarkers['poeticLineOne']
+					if wordsInLine[0]    == "\\" + self._paragraphMarkers['paragraphNormal'] :
+						paragraphType     = self._paragraphMarkers['paragraphNormal']
+					elif wordsInLine[0]    == "\\" + self._paragraphMarkers['paragraphLeft'] :
+						paragraphType     = self._paragraphMarkers['paragraphLeft']
+					elif wordsInLine[0]    == "\\" + self._poetryMarkers['poeticLineOne'] :
+						paragraphType     = self._poetryMarkers['poeticLineOne']
 					else :
-						paragraphType	 = "##"
+						paragraphType     = "##"
 					continue
 
 

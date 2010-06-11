@@ -526,7 +526,7 @@ class Tools (object) :
 			and most spaces in the text. Expects that existing line
 			breaks are linux style newlines (\n).'''
 
-		def func(line, word):
+		def func(line, word) :
 			nextword = word.split("\n", 1)[0]
 			n = len(line) - line.rfind('\n') - 1 + len(nextword)
 			if n >= width:
@@ -540,7 +540,7 @@ class Tools (object) :
 		return text[0]
 
 
-	 def walk(self, top, topdown=True, onerror=None):
+	def walk(self, top, topdown=True, onerror=None) :
 		'''Directory tree generator. This was blatantly ripped off
 			from os.py. However, the islink function was removed
 			to enable walking a tree with links.'''

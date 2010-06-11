@@ -16,22 +16,22 @@
 # History:
 # 20080519 - djd - Initial draft
 # 20080531 - djd - Changed to a class and moved to run through
-#		the process_scripture_text.py script
+#        the process_scripture_text.py script
 # 20080627 - djd - Updated some of the initiation used tools
-#		class to do this
+#        class to do this
 # 20080731 - djd - Fixed a file name problem due to a system
-#		file name change for periperal files.
+#        file name change for periperal files.
 # 20080821 - djd - Make changes to reflect the implementation
-#		of flat file management (linear ouput processing)
+#        of flat file management (linear ouput processing)
 # 20080826 - djd - Changed the copy command to be one that
-#		comes from the project.conf file. This allows
-#		us to customize it for encoding conversions.
+#        comes from the project.conf file. This allows
+#        us to customize it for encoding conversions.
 # 20081020 - djd - Added a sanity check on the copy and fix
-#		some bugs.
+#        some bugs.
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 
 
 #############################################################
@@ -58,9 +58,9 @@ class CopyFromSource (object) :
 		outputFile =  log_manager._currentOutput
 
 		# Pull in the command from the project.conf file
-		copyCommand = settings['General']['CopyIntoSystem']['copyCommand']
-		reencodingRequired = settings['General']['CopyIntoSystem']['reencodingRequired']
-		customEncodingProcess = settings['Encoding']['Processing']['customEncodingProcess']
+		copyCommand = settings['System']['TextProcesses']['CopyIntoSystem']['copyCommand']
+		reencodingRequired = settings['System']['TextProcesses']['CopyIntoSystem']['reencodingRequired']
+		customEncodingProcess = settings['System']['General']['customEncodingProcess']
 		if reencodingRequired == 'true' :
 			copyCommand = customEncodingProcess
 			# Now, if it no command is found...
@@ -92,3 +92,4 @@ def doIt(log_manager):
 
 	thisModule = CopyFromSource()
 	return thisModule.main(log_manager)
+

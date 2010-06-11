@@ -67,19 +67,19 @@ class MakeTexControlFile (object) :
 		self._log_manager = log_manager
 		self._outputFile = log_manager._currentOutput
 		self._inputFile = log_manager._currentInput
-		self._texMacros = self._log_manager._settings['Process']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
-		self._cvSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_COVER', '.cover_settings.txt')
-		self._fmSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_FRONT', '.front_settings.txt')
-		self._biSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_BIBLE', '.bible_settings.txt')
-		self._bmSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_BACK', '.back_settings.txt')
-		self._cmSettingsFile = os.getcwd() + "/" + self._log_manager._settings['Process']['Files'].get('FILE_TEX_CUSTOM', 'custom-tex.txt')
-		self._txSettingsFile = self._log_manager._settings['Process']['Files'].get('FILE_TEX_SETUP', '.setup_tex.txt')
+		self._texMacros = self._log_manager._settings['System']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
+		self._cvSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_COVER', '.cover_settings.txt')
+		self._fmSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_FRONT', '.front_settings.txt')
+		self._biSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_BIBLE', '.bible_settings.txt')
+		self._bmSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_BACK', '.back_settings.txt')
+		self._cmSettingsFile = os.getcwd() + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_CUSTOM', 'custom-tex.txt')
+		self._txSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_SETUP', '.setup_tex.txt')
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
 		self._flags = ('project', 'cover', 'front', 'bible', 'back', 'otc', 'ntc', 'periph')
-		self._frontMatter = self._log_manager._settings['Process']['Binding']['MATTER_FRONT'].split()
-		self._backMatter = self._log_manager._settings['Process']['Binding']['MATTER_BACK'].split()
-		self._coverMatter = self._log_manager._settings['Process']['Binding']['MATTER_COVER'].split()
+		self._frontMatter = self._log_manager._settings['System']['Binding']['MATTER_FRONT'].split()
+		self._backMatter = self._log_manager._settings['System']['Binding']['MATTER_BACK'].split()
+		self._coverMatter = self._log_manager._settings['System']['Binding']['MATTER_COVER'].split()
 		self._publicationType = log_manager._publicationType
 		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
 		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_PROCESS', 'Process')
@@ -128,9 +128,9 @@ class MakeTexControlFile (object) :
 		# Get a couple settings
 		oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('shortBookChapterOmit', 'true')
 		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
-		useHyphenation = self._log_manager._settings['Process']['Hyphenation'].get('useHyphenation', 'true')
-		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
-		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['Process']['Files'].get('FILE_HYPHENATION_TEX', '')
+		useHyphenation = self._log_manager._settings['System']['Hyphenation'].get('useHyphenation', 'true')
+		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
+		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files'].get('FILE_HYPHENATION_TEX', '')
 
 		# Input the main macro set here in the control file
 		settings = '\\input ' + self._texMacros + '\n'
@@ -221,7 +221,7 @@ class MakeTexControlFile (object) :
 			elsewhere in this module.'''
 
 		# Build some paths and file names
-		styleFile = os.getcwd() + "/" + self._log_manager._settings['Process']['Files'].get('FILE_TEX_STYLE', 'ptx2pdf.sty')
+		styleFile = os.getcwd() + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_STYLE', 'ptx2pdf.sty')
 		# Bring in page format settings
 		cropmarks = self._log_manager._settings['Format']['PageLayout'].get('CROPMARKS', 'true')
 		pageHeight = self._log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
@@ -328,16 +328,16 @@ class MakeTexControlFile (object) :
 		# below depending on the context
 
 		# Process
-		pathToIllustrations = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
-		marginalVerses = self._log_manager._settings['Process']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
+		pathToIllustrations = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
+		marginalVerses = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
 		useFigurePlaceholders = self._log_manager._settings['Format']['Scripture']['Illustrations'].get('useFigurePlaceholders', 'true')
-		autoTocFile = self._log_manager._settings['Process']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
-		generateTOC = self._log_manager._settings['Process']['TOC'].get('generateTOC', 'true')
-		tocTitle = self._log_manager._settings['Process']['TOC'].get('mainTitle', 'Table of Contents')
+		autoTocFile = self._log_manager._settings['System']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
+		generateTOC = self._log_manager._settings['System']['TOC'].get('generateTOC', 'true')
+		tocTitle = self._log_manager._settings['System']['TOC'].get('mainTitle', 'Table of Contents')
 		# Format -> PageLayout
 		usePageBorder = self._log_manager._settings['Format']['PageLayout'].get('usePageBorder', 'false')
 		pageBorderScale = self._log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
-		pageBorderFile = self._log_manager._settings['Process']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
+		pageBorderFile = self._log_manager._settings['System']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
 		useMarginalVerses = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
 		# Format -> Scripture
 		columnshift = self._log_manager._settings['Format']['Scripture']['Columns'].get('columnshift', '15')

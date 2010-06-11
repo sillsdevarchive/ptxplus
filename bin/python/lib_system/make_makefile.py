@@ -59,13 +59,13 @@ class MakeMakefile (object) :
 		makefileSettings = ""
 
 		# First grab some individual settings we need in the makefile
-		cMapVal = self._log_manager._settings['General']['MapProcesses'].get('CREATE_MAP',0)
+		cMapVal = self._log_manager._settings['System']['MapProcesses'].get('CREATE_MAP',0)
 		makefileSettings = makefileSettings + 'CREATE_MAP' + "=" + cMapVal + "\n"
 
-		rgbPath = self._log_manager._settings['General']['MapProcesses'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
+		rgbPath = self._log_manager._settings['System']['MapProcesses'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
 		makefileSettings = makefileSettings + 'RGB_PROFILE' + "=" + rgbPath + "\n"
 
-		cmykPath = self._log_manager._settings['General']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
+		cmykPath = self._log_manager._settings['System']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
 		makefileSettings = makefileSettings + 'CMYK_PROFILE' + "=" + cmykPath + "\n"
 
 		watermark = self._log_manager._settings['Format']['PageLayout'].get('WATERMARK','true')
@@ -74,22 +74,22 @@ class MakeMakefile (object) :
 		cropmarks = self._log_manager._settings['Format']['PageLayout'].get('CROPMARKS','true')
 		makefileSettings = makefileSettings + 'CROPMARKS' + "=" + cropmarks + "\n"
 
-		for key, value, in self._log_manager._settings['Process']['General'].iteritems() :
+		for key, value, in self._log_manager._settings['System']['General'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in self._log_manager._settings['Process']['Paths'].iteritems() :
+		for key, value, in self._log_manager._settings['System']['Paths'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in self._log_manager._settings['Process']['Files'].iteritems() :
+		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in self._log_manager._settings['Process']['TeX'].iteritems() :
+		for key, value, in self._log_manager._settings['System']['TeX'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in self._log_manager._settings['Process']['Binding'].iteritems() :
+		for key, value, in self._log_manager._settings['System']['Binding'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in self._log_manager._settings['Process']['HelperCommands'].iteritems() :
+		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
 		editorBibleInfo = ""
@@ -99,11 +99,11 @@ class MakeMakefile (object) :
 		# so that all of the other rules are caught and can be expanded in that
 		# make file.
 		basePath = os.environ.get('PTXPLUS_BASE')
-		if self._log_manager._settings['General']['projectEditor'] == 'ptx' :
+		if self._log_manager._settings['System']['General']['projectEditor'] == 'ptx' :
 			editorBibleInfo = "include " + basePath + "/bin/make/ptx_bible_info.mk\n"
-		elif self._log_manager._settings['General']['projectEditor'] == 'be' :
+		elif self._log_manager._settings['System']['General']['projectEditor'] == 'be' :
 			editorBibleInfo = "include " + basePath + "/bin/make/be_bible_info.mk\n"
-		elif self._log_manager._settings['General']['projectEditor'] == 'te' :
+		elif self._log_manager._settings['System']['General']['projectEditor'] == 'te' :
 			editorBibleInfo = "include " + basePath + "/bin/make/te_bible_info.mk\n"
 
 		makefileFinal = "include " + basePath + "/bin/make/common_bible_info.mk\n" + \

@@ -17,11 +17,11 @@
 # 20080526 - djd - Initial draft
 # 20080609 - djd - Changed reference to master.ini file
 # 20080623 - djd - Refined the names of the files so they
-#		better reflect the language they are using.
+#        better reflect the language they are using.
 # 20081028 - djd - Removed system logging, messages only now
 # 20090901 - te - Reorganized script and solidified the output
-#		also took out some config settings that seem
-#		redundant now
+#        also took out some config settings that seem
+#        redundant now
 # 20100519 - djd - Fix some bad paths
 
 
@@ -43,12 +43,12 @@ class MakeTexHyphenationFile (object) :
 
 	def main (self, log_manager) :
 		settings = tools.getSettingsObject()
-		hyphenPath = settings['Process']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
+		hyphenPath = settings['System']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
 
 		# Set the output file name and the wordlist file name
-		texHyphenFileName = hyphenPath + '/' + settings['Process']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
-		wordListFileName =  hyphenPath + '/' + settings['Process']['Files'].get('FILE_HYPHENATION_TXT', 'hyphenation.txt')
-		lcCodeListFileName = hyphenPath + '/' + settings['Process']['Files'].get('FILE_LCCODELIST_TXT', 'lccodelist.txt')
+		texHyphenFileName = hyphenPath + '/' + settings['System']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
+		wordListFileName =  hyphenPath + '/' + settings['System']['Files'].get('FILE_HYPHENATION_TXT', 'hyphenation.txt')
+		lcCodeListFileName = hyphenPath + '/' + settings['System']['Files'].get('FILE_LCCODELIST_TXT', 'lccodelist.txt')
 
 		# If we see that the texHyphenFile exists we will abort
 		# That file needs to be manually removed to avoid problems
@@ -60,9 +60,9 @@ class MakeTexHyphenationFile (object) :
 
 ################ Something is wrong with this next line ###################
 
-#			word_list_in = codecs.open(wordListFileName,
-#				mode='r' if os.path.isfile(wordListFileName) else 'rw',
-#				encoding='utf_8_sig')
+#            word_list_in = codecs.open(wordListFileName,
+#                mode='r' if os.path.isfile(wordListFileName) else 'rw',
+#                encoding='utf_8_sig')
 
 # This seems to at least work but it isn't as pretty
 			if not os.path.isfile(wordListFileName) :
@@ -81,7 +81,7 @@ class MakeTexHyphenationFile (object) :
 				"% Please refer to the documentation for details on how to make changes.\n\n")
 
 			# Pickup our settings
-			settingsToGet = settings['TeX']['Hyphenation']
+			settingsToGet = settings['System']['Hyphenation']['MakeTeXHyphenationFile']
 			tex_hypens_out.writelines(v+'\n' for v in settingsToGet.values())
 
 			# It may be necessary to have an lcCodeList included. These codes are
@@ -106,7 +106,7 @@ class MakeTexHyphenationFile (object) :
 
 # This starts the whole process going
 def doIt(log_manager):
-#	import pdb
+#    import pdb
 	thisModule = MakeTexHyphenationFile()
 	return thisModule.main(log_manager)
-#	return pdb.run(thisModule.main, log_manager)
+#    return pdb.run(thisModule.main, log_manager)

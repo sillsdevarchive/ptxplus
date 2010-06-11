@@ -16,14 +16,14 @@
 # History:
 # 20080704 - djd - Initial draft
 # 20080801 - djd - Fixed bug in hasWordFinalLast() and
-#		hasWordFinalFirst()
+#        hasWordFinalFirst()
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081103 - djd - Added hasBracketOpenInLine() and
-#		hasBracketCloseInLine()
+#        hasBracketCloseInLine()
 # 20090324 - djd - Added the txtconv class that was written
-#		by Tim Eves
+#        by Tim Eves
 # 20091009 - te - Added childprocess() to help with piping
-#		processes
+#        processes
 
 
 #############################################################
@@ -57,7 +57,7 @@ class TxtconvChain(list):
 		"""convert the data by 'piping' it through the stack of engines.
 		   data must be of type str and not type unicode."""
 
-#		return callout_to([os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh', '/dev/stdin','/dev/stdout'] + self, data)
+#        return callout_to([os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh', '/dev/stdin','/dev/stdout'] + self, data)
 		return childprocess([os.environ.get('PTXPLUS_BASE') + '/bin/sh/multi-txtconv.sh', '/dev/stdin','/dev/stdout'] + self, data)
 
 
@@ -79,7 +79,7 @@ class EncodingManager (object) :
 		self._nonWordCharsMap = {}
 		# Find out what kind of quote system we use
 		# Define some dictionaries we'll use
-		if settings['General']['TextFeatures']['dumbQuotes'] == "true" :
+		if settings['System']['TextFeatures']['dumbQuotes'] == "true" :
 			self._currentQuoteSystem = "DumbQuotes"
 		else :
 			self._currentQuoteSystem = "SmartQuotes"
@@ -93,21 +93,21 @@ class EncodingManager (object) :
 
 		# Look to see if any checking needs to be done for a second
 		# number encoding that could be used in xrefs and footnotes
-		zero = settings['Encoding']['Numbers']['whereIsZero']
+		zero = settings['System']['Encoding']['Numbers']['whereIsZero']
 		if zero != '' and zero != ' ' :
 			numRange = '[0-9' + tools.makeUnicodeNumberRange(zero) + ']+'
 		else :
 			numRange = '[0-9]+'
 
 		# Build the regex for testing for references, and it works like this:
-		#	(\(|\[)?	First, match on ( or [ (optional)
-		#	numRange	Match on numbers 0-9 and optional second set of numbers
-		#	[:.]		Match on : or .
-		#	numRange	Match on numbers 0-9 and optional second set of numbers
-		#	(-,' + numRange + '([:.]' + numRange + ')?)?
-		#			Optional match on - or , and a number range
-		#			look for an optional : or . as well followed by number range
-		#	(\)|\])?	Finally, match on ] or ) (optional)
+		#    (\(|\[)?    First, match on ( or [ (optional)
+		#    numRange    Match on numbers 0-9 and optional second set of numbers
+		#    [:.]        Match on : or .
+		#    numRange    Match on numbers 0-9 and optional second set of numbers
+		#    (-,' + numRange + '([:.]' + numRange + ')?)?
+		#            Optional match on - or , and a number range
+		#            look for an optional : or . as well followed by number range
+		#    (\)|\])?    Finally, match on ] or ) (optional)
 		self._basicNumRefTest = re.compile('(\(|\[)?' + numRange + '[:.]' + numRange + '(-,' + numRange + '([:.]' + numRange + ')?)?(\)|\])?')
 		self._basicNumTest = re.compile( numRange )
 
@@ -117,20 +117,20 @@ class EncodingManager (object) :
 		# Simple test to see if this is an email address
 		self._emailAddressTest = re.compile('@')
 		# Build a dictionary of valid bracket related key/value pairs
-		for k, v, in self._settings['Encoding']['Punctuation']['Brackets'].iteritems() :
+		for k, v, in self._settings['System']['Encoding']['Punctuation']['Brackets'].iteritems() :
 			if k != "bracketMarkerPairs" :
 				if v != '' :
 					self._brackets[k] = v
 					# Add any relevant characters to our nonWordChars dict
 					self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 		# Build a dictionary of valid word-final related key/value pairs
-		for k, v, in self._settings['Encoding']['Punctuation']['WordFinal'].iteritems() :
+		for k, v, in self._settings['System']['Encoding']['Punctuation']['WordFinal'].iteritems() :
 			if v != '' :
 				self._wordFinal[k] = v
 				# Add any relevant characters to our nonWordChars dict
 				self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 		# Build a dictionary of quotation related key/value pairs for whatever the specific quote system is
-		for k, v, in self._settings['Encoding']['Punctuation']['Quotation'][self._currentQuoteSystem].iteritems() :
+		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation'][self._currentQuoteSystem].iteritems() :
 			if v != '' :
 				self._quotation[k] = v
 				# Add any relevant characters to our nonWordChars dict
@@ -138,15 +138,15 @@ class EncodingManager (object) :
 				if len(v) == 1 :
 					self._nonWordCharsMap[ord(v)] = None
 		# Build a dictionary of quotation related key/value pairs for dumb quotes
-		for k, v, in self._settings['Encoding']['Punctuation']['Quotation']['DumbQuotes'].iteritems() :
+		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation']['DumbQuotes'].iteritems() :
 			if v != '' :
 				self._quotationDumb[k] = v
 		# Build a dictionary of quotation related key/value pairs for smart quotes
-		for k, v, in self._settings['Encoding']['Punctuation']['Quotation']['SmartQuotes'].iteritems() :
+		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation']['SmartQuotes'].iteritems() :
 			if v != '' :
 				self._quotationSmart[k] = v
 		# Build a dictionary of "other" punctuation related key/value pairs
-		for k, v, in self._settings['Encoding']['Punctuation']['Other'].iteritems() :
+		for k, v, in self._settings['System']['Encoding']['Punctuation']['Other'].iteritems() :
 			if v != '' :
 				self._otherPunctuation[k] = v
 
@@ -517,7 +517,7 @@ class EncodingManager (object) :
 		found = False
 		for key in self._wordFinal.keys() :
 			if self.hasCharacterStart(string, self._wordFinal[key]) == True :
-#				print string
+#                print string
 				found = True
 
 		return found
@@ -542,9 +542,9 @@ class EncodingManager (object) :
 		found = False
 		continous = 0
 		for key in self._wordFinal.keys() :
-#			print '[' + self._wordFinal[key] + ']+'
-#			test = re.compile('[' + self._wordFinal[key] + self._wordFinal[key] + ']+')
-#			test = re.compile('\.{2,}')
+#            print '[' + self._wordFinal[key] + ']+'
+#            test = re.compile('[' + self._wordFinal[key] + self._wordFinal[key] + ']+')
+#            test = re.compile('\.{2,}')
 			# Do the test
 			if len(word.split(self._wordFinal[key])) > 2 :
 				for char in word :
@@ -642,3 +642,4 @@ class EncodingManager (object) :
 			return True
 		else :
 			return False
+

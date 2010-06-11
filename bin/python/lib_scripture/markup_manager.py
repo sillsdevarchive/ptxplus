@@ -18,7 +18,7 @@
 # 20080623 - djd - Initial draft
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081031 - djd - Added: hasValidClosingMarker(), hasClosingMarkerLast(),
-#		and hasClosingMarker().
+#        and hasClosingMarker().
 
 
 #############################################################
@@ -43,7 +43,7 @@ class FootnoteTracker (object) :
 		self._footnoteStatus = "off"
 		self._footnoteMarkers = {}
 		# Build a dictionary of valid footnote related key/value pairs
-		for k, v, in self._settings_project['Markup']['Footnotes'].iteritems() :
+		for k, v, in self._settings_project['System']['Markup']['Footnotes'].iteritems() :
 			self._footnoteMarkers[k] = v
 
 
@@ -112,7 +112,7 @@ class CrossReferenceTracker (object) :
 		self._settings_project = settings_project
 		self._crossReferenceStatus = "off"
 		self._crossRefMarkers = {}
-		for k, v, in self._settings_project['Markup']['CrossRefereces'].iteritems() :
+		for k, v, in self._settings_project['System']['Markup']['CrossRefereces'].iteritems() :
 			self._crossRefMarkers[k] = v
 
 
@@ -189,15 +189,15 @@ class MarkupManager (object) :
 		# Pushing the dynamic vars in __dict__ allows them to be persistant.
 		# However, we might want to look at using a regular dictionary object
 		# to do this same thing. It is a bit dodgy using __dict__.
-		for k, v, in self._settings_project['Markup']['Identification'].iteritems() :
+		for k, v, in self._settings_project['System']['Markup']['Identification'].iteritems() :
 			self.__dict__[k] = v
-		for k, v, in self._settings_project['Markup']['ChaptersVerses'].iteritems() :
+		for k, v, in self._settings_project['System']['Markup']['ChaptersVerses'].iteritems() :
 			self.__dict__[k] = v
-		for k, v, in self._settings_project['Markup']['USFMAllMarkers'].iteritems() :
+		for k, v, in self._settings_project['System']['Markup']['USFMAllMarkers'].iteritems() :
 			self._allUSFM += v
 
 		# As these are already in list form we will take them like this
-		self._allParagraph = self._settings_project['Markup']['USFMAllMarkers']['paragraphs']
+		self._allParagraph = self._settings_project['System']['Markup']['USFMAllMarkers']['paragraphs']
 
 
 	def setLocation (self, word, char) :
@@ -222,7 +222,7 @@ class MarkupManager (object) :
 		# This prevents blank lines from giving us a problem
 		if len(wordsInLine) > 0 :
 			# Get the Book ID if its there
-# Debug point		print line
+# Debug point        print line
 			if wordsInLine[0] == "\\" + self.__dict__['fileIdentification'] :
 				self._fileIdentification = wordsInLine[1]
 				# Set the chapter number back to 0 (just in case)
@@ -390,9 +390,9 @@ class MarkupManager (object) :
 			closing marker any place in the string.'''
 
 		# Build the rexep, it works something like this:
-		#	^.*\\		= Group(0) - Match any characters on the front of the string up to a \
-		#	([\w]+)		= Group(1) - Match any number of characters (normally 1-4 characters)
-		#	[^/]*$		= Group(2) - Ignore everything to the end of the string
+		#    ^.*\\        = Group(0) - Match any characters on the front of the string up to a \
+		#    ([\w]+)        = Group(1) - Match any number of characters (normally 1-4 characters)
+		#    [^/]*$        = Group(2) - Ignore everything to the end of the string
 		test = re.compile('^.*\\\\([\w]+)[^/]*$')
 
 		# Do the test
@@ -424,9 +424,9 @@ class MarkupManager (object) :
 		if self.hasValidOpeningMarker(string) == True :
 			# Now see if it is at the end of the string
 			# Build the rexep, it works something like this:
-			#	^.*\\		= Match any characters on the front of the string up to a \
-			#	[\w]+		= Match any number of characters (normally 1-4 characters)
-			#	$		= Nothing should follow
+			#    ^.*\\        = Match any characters on the front of the string up to a \
+			#    [\w]+        = Match any number of characters (normally 1-4 characters)
+			#    $        = Nothing should follow
 			test = re.compile('^.*\\\\[\w]+$')
 			# Do the test
 			if test.match(string) == None :
@@ -443,10 +443,10 @@ class MarkupManager (object) :
 			closing marker any place in the string.'''
 
 		# Build the rexep, it works something like this:
-		#	^.*\\		= Group(0) - Match any characters on the front of the string up to a \
-		#	([\w]+)		= Group(1) - Match any number of characters (normally 1-4 characters)
-		#	([*])		= Group(2) - Match and asterisk only
-		#	[^/]*$		= Group(3) - Ignore everything to the end of the string
+		#    ^.*\\        = Group(0) - Match any characters on the front of the string up to a \
+		#    ([\w]+)        = Group(1) - Match any number of characters (normally 1-4 characters)
+		#    ([*])        = Group(2) - Match and asterisk only
+		#    [^/]*$        = Group(3) - Ignore everything to the end of the string
 		test = re.compile('^.*\\\\([\w]+)([*])[^/]*$')
 
 		# Do the test
@@ -480,10 +480,10 @@ class MarkupManager (object) :
 		if self.hasValidClosingMarker(string) == True :
 			# Now see if it is at the end of the string
 			# Build the rexep, it works something like this:
-			#	^.*\\		= Match any characters on the front of the string up to a \
-			#	[\w]+		= Match any number of characters (normally 1-4 characters)
-			#	[*]		= Match and asterisk only
-			#	$		= Nothing should follow
+			#    ^.*\\        = Match any characters on the front of the string up to a \
+			#    [\w]+        = Match any number of characters (normally 1-4 characters)
+			#    [*]        = Match and asterisk only
+			#    $        = Nothing should follow
 			test = re.compile('^.*\\\\[\w]+[*]$')
 			# Do the test
 			if test.match(string) == None :
@@ -542,10 +542,10 @@ class MarkupManager (object) :
 			of marker. It will return only True or False'''
 
 		# Build the rexep, it works something like this:
-		#	^.*\\		= Group(0) - Match any characters on the front of the string up to a \
-		#	([\w]+)		= Group(1) - Match any number of characters (normally 1-4 characters)
-		#	([*])		= Group(2) - Match and asterisk only
-		#	[^/]*$		= Group(3) - Ignore everything to the end of the string
+		#    ^.*\\        = Group(0) - Match any characters on the front of the string up to a \
+		#    ([\w]+)        = Group(1) - Match any number of characters (normally 1-4 characters)
+		#    ([*])        = Group(2) - Match and asterisk only
+		#    [^/]*$        = Group(3) - Ignore everything to the end of the string
 		test = re.compile('^.*\\\\[\w]+([*]?)$')
 
 		# Do the test

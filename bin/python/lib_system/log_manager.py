@@ -73,7 +73,7 @@ class LogManager (object) :
 			in the project Log folder.'''
 
 		# Set up for this session
-		self._logFolder = os.getcwd() + "/" + self._settings['Process']['Paths'].get('PATH_LOG', 'Log')
+		self._logFolder = os.getcwd() + "/" + self._settings['System']['Paths'].get('PATH_LOG', 'Log')
 		self._publicationType = self._settings['Format'].get('publicationType', 'scripture')
 		self._currentProcess = processToRun
 		self._currentTargetID = targetID
@@ -138,7 +138,7 @@ class LogManager (object) :
 
 		# If for some reason we fail to find a logModeProject setting we will default to debug output
 		try :
-			if self._settings != None and self._settings['General']['Logging']['logModeProject'] == "debug" :
+			if self._settings != None and self._settings['System']['Logging']['logModeProject'] == "debug" :
 				tools.userMessage(entryType + ": " + event)
 		except :
 			tools.userMessage(entryType + ": " + event)
@@ -230,7 +230,7 @@ class LogManager (object) :
 
 		# If for some reason we fail to find a logModeProject setting we will default to debug output
 		try :
-			if self._settings != None and self._settings['General']['Logging']['logModeProject'] == "debug" :
+			if self._settings != None and self._settings['System']['Logging']['logModeProject'] == "debug" :
 				tools.userMessage(entryType + ": " + event)
 		except :
 			tools.userMessage(entryType + ": " + event)
@@ -262,7 +262,7 @@ class LogManager (object) :
 		'''A simple test to see if we have reached the number of errors
 			allowed by the system. If we have, kill the process now.'''
 
-		errorLimit = int(self._settings['General']['Logging']['errorLimit'])
+		errorLimit = int(self._settings['System']['Logging']['errorLimit'])
 		# 0 (zero) means infinite errors allowed. Check for anything else
 		if errorLimit != 0 :
 			# If we have reached the limit let's stop here.

@@ -42,9 +42,9 @@ class CheckBook (object) :
 		# Note that the isPeripheralMatter() function is now
 		# disabled. Do we really need to do this check anyway?
 		# Let's go away and think about it
-#		if tools.isPeripheralMatter(log_manager._currentInput) :
+#        if tools.isPeripheralMatter(log_manager._currentInput) :
 #
-#			return
+#            return
 
 
 		# Get our book object
@@ -70,8 +70,8 @@ class CheckBook (object) :
 		parser.parse(bookObject)
 
 		# Other checks that could be supported would be:
-		#	Footnotes
-		#	Cross References
+		#    Footnotes
+		#    Cross References
 
 
 # This starts the whole process going
@@ -79,3 +79,4 @@ def doIt (log_manager):
 
 	thisModule = CheckBook()
 	return thisModule.main(log_manager)
+

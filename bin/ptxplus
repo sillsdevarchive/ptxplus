@@ -65,8 +65,8 @@ bkid = ""
 if len(sys.argv) >= 2 :
 
 	# The second argv is normally the file name or book ID
-	componentScripture = tools.getSettingsObject()['Process']['Binding']['MATTER_OT']
-	componentScripture = componentScripture + tools.getSettingsObject()['Process']['Binding']['MATTER_NT']
+	componentScripture = tools.getSettingsObject()['System']['Binding']['MATTER_OT']
+	componentScripture = componentScripture + tools.getSettingsObject()['System']['Binding']['MATTER_NT']
 	componentScripture = componentScripture.split()
 	# This part only works if we are processing Scripture components (books with IDs)
 	if len(componentScripture) > 0 :
@@ -274,7 +274,7 @@ else :
 			# Look for all the global processes that need to be run
 			try :
 
-				for key, value in tools.getSettingsObject()['General']['GlobalProcesses'].iteritems() :
+				for key, value in tools.getSettingsObject()['System']['GlobalProcesses'].iteritems() :
 
 					# Initialize the log manager to do its thing. However, as
 					# this is a system process we don't book ID and may not
