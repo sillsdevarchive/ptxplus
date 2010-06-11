@@ -105,7 +105,7 @@ class UpdateProjectSettings (object) :
 				tools.userMessage("Info: Version numbers did not match, project was updated from: " + curVer + " to: " + masterSettings['System']['General']['systemVersion'])
 				return True
 		else :
-			tools.userMessage("Info: Version numbers between the system and the project matched. Project was not updated.")
+#            tools.userMessage("Info: Version numbers between the system and the project matched. Project was not updated.")
 			return False
 
 

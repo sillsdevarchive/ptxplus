@@ -166,6 +166,12 @@ class MakeTexControlFile (object) :
 			# book ID.
 			componentScripture = self._contextFlag.split()
 
+
+
+#####################################################################################################################
+
+# Need to work on this part so that multiple books can be processed.
+
 			# This will apply the \OmitChapterNumbertrue to only the books
 			# that consist of one chapter. Or, if the omitAllChapterNumbers
 			# setting is true, it takes the chapter numbers out of all books.
@@ -183,6 +189,11 @@ class MakeTexControlFile (object) :
 					settings = settings + '\\OmitChapterNumberfalse\n'
 				else :
 					settings = settings + '\\ptxfile{' + thisBook + '}\n'
+
+
+#####################################################################################################################
+
+
 
 		# If there was no context flag at all that means it has to be peripheral
 		# matter. But is is front or back matter. we'll need to test to see
@@ -262,7 +273,7 @@ class MakeTexControlFile (object) :
 		fontSettings = ''
 
 		# Create the file header
-		fileHeaderText =	"% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
+		fileHeaderText =    "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
 					"% should be made to the project.conf file or the custom TeX setup file.\n\n"
 		# Add the global style sheet
 		fileInput = fileInput + '\\stylesheet{' + styleFile + '}\n'
@@ -306,7 +317,7 @@ class MakeTexControlFile (object) :
 		fontSettings = fontSettings + '\\def\\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
 
 		# Ship the results, change order as needed
-		orderedContents = 	fileHeaderText + \
+		orderedContents =     fileHeaderText + \
 					fileInput + \
 					formatSettings + \
 					headerFooterSettings + \
@@ -509,7 +520,7 @@ class MakeTexControlFile (object) :
 			generalSettings = generalSettings + '\\RTLtrue\n'
 
 		# Ship the results, change order as needed
-		orderedContents = 	fileHeaderText + \
+		orderedContents =     fileHeaderText + \
 					fileInput + \
 					verseChapterSettings + \
 					headerSettings + \
@@ -627,3 +638,5 @@ def doIt (log_manager) :
 	thisModule = MakeTexControlFile()
 
 	return thisModule.main(log_manager)
+
+

@@ -131,12 +131,7 @@ $(PATH_PROCESS)/$(1).pdf : \
 # Open the PDF file with reader - Add a watermark if needed
 view-$(1) : $(PATH_PROCESS)/$(1).pdf
 	@- $(CLOSEPDF)
-	@if [ $(WATERMARK) = "true" ] ; then \
-		echo INFO: Adding watermark to ouput: $(PATH_PROCESS)/$(1).pdf; \
-		pdftk $(PATH_PROCESS)/$(1).pdf background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
-		cp $(PATH_PROCESS)/tmp.pdf $(PATH_PROCESS)/$(1).pdf; \
-		rm -f $(PATH_PROCESS)/tmp.pdf; \
-	fi
+	@ $(call watermark,$$<)
 	@ $(VIEWPDF) $$< &
 
 
@@ -168,6 +163,7 @@ $(PATH_PROCESS)/$(1).pdf : $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) $(DEPEN
 	@pdftk $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) cat output $$@
 endif
 endef
+
 
 
 ##############################################################
@@ -222,6 +218,7 @@ $(foreach v,$(call uniq,$(MATTER_COVER) $(MATTER_FRONT) $(MATTER_BACK)),$(eval $
 # Produce all the outer cover material in one PDF file
 view-cover : $(MATTER_COVER_PDF)
 	@- $(CLOSEPDF)
+	@ $(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 # To produce individual elements of the outer cover just
@@ -230,11 +227,13 @@ view-cover : $(MATTER_COVER_PDF)
 # Produce just the font matter (bound)
 view-front : $(MATTER_FRONT_PDF)
 	@- $(CLOSEPDF)
+	@ $(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 # Produce just the back matter (bound)
 view-back : $(MATTER_BACK_PDF)
 	@- $(CLOSEPDF)
+	@ $(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 # Clean up rules for peripheral matter

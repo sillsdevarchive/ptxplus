@@ -131,12 +131,7 @@ $(PATH_PROCESS)/$(1).usfm.pdf : \
 # Open the PDF file with reader
 view-$(1) : $(PATH_PROCESS)/$(1).usfm.pdf
 	@- $(CLOSEPDF)
-	@if [ $(WATERMARK) = "true" ] ; then \
-		echo INFO: Adding watermark to ouput: $(PATH_PROCESS)/$(1).usfm.pdf; \
-		pdftk $(PATH_PROCESS)/$(1).usfm.pdf background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
-		cp $(PATH_PROCESS)/tmp.pdf $(PATH_PROCESS)/$(1).usfm.pdf; \
-		rm -f $(PATH_PROCESS)/tmp.pdf; \
-	fi
+	@ $(call watermark,$$<)
 	@ $(VIEWPDF) $$< &
 
 # Open the SFM file with the text editor
@@ -224,7 +219,7 @@ $(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '$@' 'otc'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'otc'
 
 # Render the entire OT
 $(FILE_MATTER_OT_PDF) : \
@@ -257,7 +252,7 @@ $(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '$@' 'ntc'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'ntc'
 
 # Render the entire NT
 $(FILE_MATTER_NT_PDF) : \
@@ -281,10 +276,12 @@ pdf-remove-nt :
 # Do a component section and veiw the resulting output
 view-ot : $(FILE_MATTER_OT_PDF)
 	@- $(CLOSEPDF)
+	@ $(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 view-nt : $(FILE_MATTER_NT_PDF)
 	@- $(CLOSEPDF)
+	@ $(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 
