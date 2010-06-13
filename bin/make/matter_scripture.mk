@@ -23,6 +23,7 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
   $(PATH_PROCESS)/$(FILE_WATERMARK) \
   $(PATH_PROCESS)/$(FILE_LOGO_BSM) \
   $(PATH_PROCESS)/$(FILE_LOGO_CFE) \
+  $(PATH_PROCESS)/$(FILE_PAGE_BORDER) \
   $(FILE_PROJECT_CONF)
 
 
@@ -53,11 +54,10 @@ $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
 		echo Could not find: $$@; \
 		echo Creating this file:; \
 		echo Caution, you will need to edit it; \
-		echo \\id OTH >> $$@; \
+		echo \\id $(1) >> $$@; \
 		echo \\ide UTF-8 >> $$@; \
-		echo \\periph \<Fill in page type here\> >> $$@; \
-		echo \\p This is a auto created page found at: $$@ >> $$@; \
-		echo \\p Please edit as needed. >> $$@; \
+		echo \\p This is an auto created page found at: $$@ >> $$@; \
+		echo \\p Please replace this with a valid USFM file to continue the proecess. >> $$@; \
 	fi
 
 # This is the basic rule for auto-text-processing. To control processes
@@ -206,6 +206,18 @@ $(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP) $(FILE_PRO
 	@echo INFO: Creating: $@
 	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'bible'
 
+# Rule to create the primary style file for the project. There
+# will be lots of other secondary override stylesheets that
+# are associated with specific objects but this is the "mother"
+# style file.
+$(PATH_PROCESS)/$(FILE_TEX_STYLE) :
+	@echo INFO: Creating: $@
+	@cp $(PATH_RESOURCES_PROCESS)/$(FILE_TEX_STYLE) @$
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Make the custom file here too!
+
+
 # Start with the OT but we don't want to do anything if there
 # are no components to process
 
@@ -219,7 +231,19 @@ $(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'otc'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' 'ot' '$@' 'otc'
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# The rule to create the override style sheet.
+$(PATH_PROCESS)/$(1).usfm.sty :
+	@echo INFO: Creating: $$@
+	@echo \# Override PTX style sheet for $(1).usfm, edit as needed >> $$@
+
+
+
+
 
 # Render the entire OT
 $(FILE_MATTER_OT_PDF) : \
@@ -232,7 +256,7 @@ $(FILE_MATTER_OT_PDF) : \
 	$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) \
 	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex OT.tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(FILE_MATTER_OT_TEX)
 endif
 
 pdf-remove-ot :
@@ -252,7 +276,19 @@ $(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'ntc'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' 'nt' '$@' 'ntc'
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# The rule to create the override style sheet.
+$(PATH_PROCESS)/$(1).usfm.sty :
+	@echo INFO: Creating: $$@
+	@echo \# Override PTX style sheet for $(1).usfm, edit as needed >> $$@
+
+
+
+
 
 # Render the entire NT
 $(FILE_MATTER_NT_PDF) : \
@@ -265,7 +301,7 @@ $(FILE_MATTER_NT_PDF) : \
 	$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) \
 	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex NT.tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(FILE_MATTER_NT_TEX)
 
 endif
 

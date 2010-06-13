@@ -80,9 +80,10 @@ class MakeTexHyphenationFile (object) :
 				"% This is an auto-generated hyphenation rules file for this project.\n"
 				"% Please refer to the documentation for details on how to make changes.\n\n")
 
-			# Pickup our settings
-			settingsToGet = settings['System']['Hyphenation']['MakeTeXHyphenationFile']
-			tex_hypens_out.writelines(v+'\n' for v in settingsToGet.values())
+#            This doesn't seem to belong here and it doesn't really work right, test before deleting
+#            # Pickup our settings
+#            settingsToGet = settings['System']['Hyphenation']['MakeTeXHyphenationFile']
+#            tex_hypens_out.writelines(v+'\n' for v in settingsToGet.values())
 
 			# It may be necessary to have an lcCodeList included. These codes are
 			# kept in an external file normally kept in the project hyphenation folder.

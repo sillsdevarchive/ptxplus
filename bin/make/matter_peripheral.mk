@@ -63,7 +63,7 @@ define periph_rules
 # This rule simply links everything in the source peripheral folder
 # to the project Texts folder
 $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
-	@echo Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
+	@echo INFO: Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
 	@ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
 
 # Create the peripheral file by copying in the template. But if
@@ -79,12 +79,12 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 ifneq ($(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm)
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
 	@if test -r $(PATH_TEMPLATES)/$(1); then \
-		echo Copying into project from: $(PATH_TEMPLATES)/$(1); \
+		echo INFO: Copying  $$@ into project from: $(PATH_TEMPLATES)/$(1); \
 		cp $(PATH_TEMPLATES)/$(1) '$$@'; \
 	else \
-		echo Could not find: $$@; \
-		echo Creating this file:; \
-		echo Caution, you will need to edit it; \
+		echo INFO: Could not find: $$@; \
+		echo INFO: Creating: $$@; \
+		echo INFO: Caution, you may need to edit it; \
 		echo \\id OTH >> $$@; \
 		echo \\ide UTF-8 >> $$@; \
 		echo \\periph \<Fill in page type here\> >> $$@; \
@@ -111,12 +111,12 @@ $(PATH_PROCESS)/$(1).tex : | \
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).sty :
 	@if test -r $(PATH_TEMPLATES)/$(1).sty; then \
-		echo Copying into project from: $(PATH_TEMPLATES)/$(1).sty; \
+		echo INFO: Copying $$@ into project from: $(PATH_TEMPLATES)/$(1).sty; \
 		cp $(PATH_TEMPLATES)/$(1).sty '$$@'; \
 	else \
-		echo Could not find: $$@; \
-		echo Creating this file:; \
-		echo Caution, you will need to edit it; \
+		echo INFO: Could not find: $$@; \
+		echo INFO: Creating: $$@; \
+		echo INFO: To change any styles relevate to the $(PATH_TEXTS)/$(1) object, you will need to edit it; \
 		echo \# Override PTX style sheet for $(PATH_TEXTS)/$(1), edit as needed >> $$@; \
 	fi
 
@@ -126,6 +126,7 @@ $(PATH_PROCESS)/$(1).pdf : \
 	$(PATH_PROCESS)/$(1).tex \
 	$(PATH_PROCESS)/$(1).sty \
 	$(DEPENDENT_FILE_LIST)
+	@echo INFO: Creating: $$@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
 
 # Open the PDF file with reader - Add a watermark if needed
@@ -138,7 +139,7 @@ view-$(1) : $(PATH_PROCESS)/$(1).pdf
 
 # This enables us to do the preprocessing on a single peripheral item.
 preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
-	@echo Preprocessing $(1)
+	@echo INFO: Preprocessing $(1)
 	@$(PY_RUN_PROCESS) PreprocessChecks $(1) '$$<'
 
 # Do not open the PDF file with reader
@@ -148,15 +149,16 @@ $(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
 pdf-remove-$(1) :
 	@echo INFO: Removing $$@
 	@rm -f $(PATH_PROCESS)/$(1).pdf
-
 endef
 
+# Filter out repeat instances of peripheral matter, like
+# blank pages which need to be listed multiple times
 define uniq
 $(if $(1),$(firstword $(1)) $(call uniq,$(filter-out $(firstword $(1)),$(1))),)
 endef
 
+# Bind all the matter for a given set
 define matter_binding
-
 ifneq ($($(1)),)
 $(1)_PDF = $(PATH_PROCESS)/$(1).pdf
 $(PATH_PROCESS)/$(1).pdf : $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) $(DEPENDENT_FILE_LIST)
@@ -175,8 +177,7 @@ endef
 # Other rules will depend on this to create the project
 # peripheral source folder if one doesn't exist.
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) : | $(PATH_SOURCE)
-	@echo Creating the project peripheral source folder
-	@mkdir $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+	@ $(call mdir,$@)
 
 
 # Cover matter binding rules

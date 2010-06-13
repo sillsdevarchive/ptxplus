@@ -76,10 +76,12 @@ class MakeTexControlFile (object) :
 		self._txSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_SETUP', '.setup_tex.txt')
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
-		self._flags = ('project', 'cover', 'front', 'bible', 'back', 'otc', 'ntc', 'periph')
+		self._flags = ('project', 'cover', 'front', 'bible', 'back', 'periph')
 		self._frontMatter = self._log_manager._settings['System']['Binding']['MATTER_FRONT'].split()
 		self._backMatter = self._log_manager._settings['System']['Binding']['MATTER_BACK'].split()
 		self._coverMatter = self._log_manager._settings['System']['Binding']['MATTER_COVER'].split()
+		self._otMatter = self._log_manager._settings['System']['Binding']['MATTER_OT'].split()
+		self._ntMatter = self._log_manager._settings['System']['Binding']['MATTER_NT'].split()
 		self._publicationType = log_manager._publicationType
 		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
 		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_PROCESS', 'Process')
@@ -161,16 +163,20 @@ class MakeTexControlFile (object) :
 				settings = settings + '\\input ' + hyphenFile + '\n'
 
 			# Since we were passed here it is assmumed that the context
-			# flag will contain a book ID, not a context marker. We will
-			# make a list of them here but the list may contain only one
-			# book ID.
-			componentScripture = self._contextFlag.split()
-
-
-
-#####################################################################################################################
-
-# Need to work on this part so that multiple books can be processed.
+			# flag will contain a book ID, or will represent the entire
+			# new or old testament which we will handle different.
+			# If it isn't a NT or OT marker, then we assume it is a
+			# single book and we will only process that one book based
+			# on the book ID given.
+			if self._contextFlag == 'otc' :
+				componentScripture = self._otMatter
+			elif self._contextFlag == 'ntc' :
+				componentScripture = self._ntMatter
+			else :
+				if len(self._contextFlag.split()) == 1 :
+					componentScripture = [self._contextFlag]
+				else :
+					self._log_manager.log("ERRR", "Not sure how to process \"" + self._contextFlag + "\" in the context of a control file. The process has failed.")
 
 			# This will apply the \OmitChapterNumbertrue to only the books
 			# that consist of one chapter. Or, if the omitAllChapterNumbers
@@ -189,11 +195,6 @@ class MakeTexControlFile (object) :
 					settings = settings + '\\OmitChapterNumberfalse\n'
 				else :
 					settings = settings + '\\ptxfile{' + thisBook + '}\n'
-
-
-#####################################################################################################################
-
-
 
 		# If there was no context flag at all that means it has to be peripheral
 		# matter. But is is front or back matter. we'll need to test to see
@@ -439,7 +440,10 @@ class MakeTexControlFile (object) :
 				fileInput = fileInput + '\\GenerateTOC[' + tocTitle + ']{' + autoTocFile + '}\n'
 			# Do we want a page border?
 			if usePageBorder.lower() == 'true' :
-				fileInput = fileInput + '\\def\\PageBorder{' + pageBorderFile + ' scaled ' + pageBorderScale + '}\n'
+				if pageBorderScale == '' :
+					fileInput = fileInput + '\\def\\PageBorder{' + pageBorderFile + '}\n'
+				else :
+					fileInput = fileInput + '\\def\\PageBorder{' + pageBorderFile + ' scaled ' + pageBorderScale + '}\n'
 			# Verse/chapter settings
 			if verseRefs.lower() == 'true' :
 				verseChapterSettings = verseChapterSettings + '\\VerseRefstrue\n'

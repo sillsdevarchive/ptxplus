@@ -34,6 +34,7 @@
 #		on rules that had not been expanded yet.
 # 20091223 - djd - Removed references to MAPS folder
 # 20100507 - djd - Moved out rules for illustration creation
+# 20100611 - djd - Added functions to share
 
 
 ##############################################################
@@ -51,13 +52,12 @@ MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).pdf
 # changes the name of the source folder after it might get
 # confusing but that is more of a procedural problem.
 $(PATH_SOURCE) :
-	@echo INFO: Creating folder: $(PATH_SOURCE)
-	mkdir -p $(PATH_SOURCE)
+	@ $(call mdir,$@)
 
 # In case the process folder isn't there (because of archive)
 # This should be in the dependent file list.
 $(PATH_PROCESS)/.stamp :
-	mkdir -p $(PATH_PROCESS)
+	@ $(call mdir,$(PATH_PROCESS))
 	touch $(PATH_PROCESS)/.stamp
 
 # Update a project.conf file so system improvements can be
@@ -82,33 +82,29 @@ dev-update :
 # If, for some odd reason the Illustrations folder is not in
 # the right place we'll put one where it is supposed to be found.
 $(PATH_ILLUSTRATIONS) :
-	@echo INFO: Creating $@
-	@mkdir -p $@
+	@ $(call mdir,$@)
 
 # This is the main rule for copying all the shared illustration
 # material like logos, watermarks, etc. First we will make the
 # folder, then we will copy everthing into it.
 $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) : | $(PATH_ILLUSTRATIONS)
-	@echo INFO: Creating $@
-	@mkdir -p $@
+	@ $(call mdir,$@)
 
 $(PATH_PROCESS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
-	@echo Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
-	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
-	@echo Linking: $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) to $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK)
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE))/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) $(PATH_PROCESS)/$(FILE_WATERMARK)
+	@ $(call cplibtoshare,$(FILE_WATERMARK))
+	@ $(call lnsharetoproc,$(FILE_WATERMARK))
 
 $(PATH_PROCESS)/$(FILE_LOGO_BSM) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
-	@echo Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)
-	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)
-	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM) to $(PATH_PROCESS)/$(FILE_LOGO_BSM)
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE))/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM) $(PATH_PROCESS)/$(FILE_LOGO_BSM)
+	@ $(call cplibtoshare,$(FILE_LOGO_BSM))
+	@ $(call lnsharetoproc,$(FILE_LOGO_BSM))
 
 $(PATH_PROCESS)/$(FILE_LOGO_CFE) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
-	@echo Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)
-	@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)
-	@echo Linking: $(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE) to $(PATH_PROCESS)/$(FILE_LOGO_CFE)
-	@ln -sf $(shell readlink -f -- $(PATH_SOURCE))/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE) $(PATH_PROCESS)/$(FILE_LOGO_CFE)
+	@ $(call cplibtoshare,$(FILE_LOGO_CFE))
+	@ $(call lnsharetoproc,$(FILE_LOGO_CFE))
+
+$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+	@ $(call cplibtoshare,$(FILE_PAGE_BORDER))
+	@ $(call lnsharetoproc,$(FILE_PAGE_BORDER))
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
@@ -136,6 +132,11 @@ $(PATH_PROCESS)/PROJECT_INFO.tex :
 #		Shared functions
 ###############################################################
 
+define mdir
+@echo INFO: Creating $(1)
+@mkdir -p $(1)
+endef
+
 define watermark
 @if [ $(WATERMARK) = "true" ] ; then \
 	echo INFO: Adding watermark to ouput: $(1); \
@@ -143,6 +144,16 @@ define watermark
 	cp $(PATH_PROCESS)/tmp.pdf $(1); \
 	rm -f $(PATH_PROCESS)/tmp.pdf; \
 fi
+endef
+
+define cplibtoshare
+@echo INFO: Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(1) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(1)
+@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(1) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(1)
+endef
+
+define lnsharetoproc
+@echo INFO: Linking: $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(1) to $(PATH_ILLUSTRATIONS)/$(1)
+@ln -sf $(shell readlink -f -- $(PATH_SOURCE))/$(PATH_ILLUSTRATIONS_SHARED)/$(1) $(PATH_PROCESS)/$(1)
 endef
 
 
@@ -157,6 +168,7 @@ $(MATTER_BOOK_PDF) : $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MAT
 # This is the caller for the main rule, let's look at the results
 view-book : $(MATTER_BOOK_PDF)
 	@- $(CLOSEPDF)
+	@ $(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 
