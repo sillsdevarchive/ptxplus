@@ -67,12 +67,16 @@ class MakeTexControlFile (object) :
 		self._log_manager = log_manager
 		self._outputFile = log_manager._currentOutput
 		self._inputFile = log_manager._currentInput
+		self._inputID = log_manager._currentTargetID
+		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
+		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_PROCESS', 'Process')
+		self._pathToIllustrations = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
 		self._texMacros = self._log_manager._settings['System']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
 		self._cvSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_COVER', '.cover_settings.txt')
 		self._fmSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_FRONT', '.front_settings.txt')
 		self._biSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_BIBLE', '.bible_settings.txt')
 		self._bmSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_BACK', '.back_settings.txt')
-		self._cmSettingsFile = os.getcwd() + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_CUSTOM', 'custom-tex.txt')
+		self._cmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_CUSTOM', 'custom-tex.txt')
 		self._txSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_SETUP', '.setup_tex.txt')
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
@@ -83,8 +87,6 @@ class MakeTexControlFile (object) :
 		self._otMatter = self._log_manager._settings['System']['Binding']['MATTER_OT'].split()
 		self._ntMatter = self._log_manager._settings['System']['Binding']['MATTER_NT'].split()
 		self._publicationType = log_manager._publicationType
-		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
-		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_PROCESS', 'Process')
 		# Some lists
 		self._headerPositions = ['RHtitleleft', 'RHtitlecenter', 'RHtitleright', \
 						'RHoddleft', 'RHoddcenter', 'RHoddright', \
@@ -147,8 +149,14 @@ class MakeTexControlFile (object) :
 		settings = settings + '\\input ' + self._cmSettingsFile + '\n'
 
 		# Make a link to the local override stylesheet. This file can override
-		# styles that were introduced in the main setup file
-		settings = settings + '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.sty}\n'
+		# styles that were introduced in the main setup file. However, for major
+		# sections like the OT and NT, we should not be needing a style sheet at
+		# this level so we will only output an override style sheet for peripheral
+		# material where it is needed most.
+		# Only Scriture matter will have an ID so if its empty we can output an
+		# override style file reference.
+		if self._inputID == '' :
+			settings = settings + '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.sty}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
@@ -168,15 +176,17 @@ class MakeTexControlFile (object) :
 			# If it isn't a NT or OT marker, then we assume it is a
 			# single book and we will only process that one book based
 			# on the book ID given.
-			if self._contextFlag == 'otc' :
+			componentScripture = []
+			if self._inputID == 'ot' :
 				componentScripture = self._otMatter
-			elif self._contextFlag == 'ntc' :
+			elif self._inputID == 'nt' :
 				componentScripture = self._ntMatter
 			else :
-				if len(self._contextFlag.split()) == 1 :
-					componentScripture = [self._contextFlag]
+				if self._inputID :
+					componentScripture = [self._inputID]
 				else :
-					self._log_manager.log("ERRR", "Not sure how to process \"" + self._contextFlag + "\" in the context of a control file. The process has failed.")
+					self._log_manager.log("ERRR", "Not sure how to process the inputID in this context. The inputID is empty. The process has failed.")
+					return
 
 			# This will apply the \OmitChapterNumbertrue to only the books
 			# that consist of one chapter. Or, if the omitAllChapterNumbers
@@ -233,7 +243,7 @@ class MakeTexControlFile (object) :
 			elsewhere in this module.'''
 
 		# Build some paths and file names
-		styleFile = os.getcwd() + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_STYLE', 'ptx2pdf.sty')
+		styleFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_STYLE', 'project.sty')
 		# Bring in page format settings
 		cropmarks = self._log_manager._settings['Format']['PageLayout'].get('CROPMARKS', 'true')
 		pageHeight = self._log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
@@ -340,7 +350,6 @@ class MakeTexControlFile (object) :
 		# below depending on the context
 
 		# Process
-		pathToIllustrations = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
 		marginalVerses = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
 		useFigurePlaceholders = self._log_manager._settings['Format']['Scripture']['Illustrations'].get('useFigurePlaceholders', 'true')
 		autoTocFile = self._log_manager._settings['System']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
@@ -431,6 +440,8 @@ class MakeTexControlFile (object) :
 
 		elif self._contextFlag.lower() == 'bible' :
 			fileName = self._biSettingsFile
+			# Path to Illustration files (what if we are not using them?)
+			fileInput = fileInput + '\\PicPath={' + self._pathToIllustrations + '}\n'
 			# Will we use marginal verses?
 			if useMarginalVerses.lower() == 'true' :
 				fileInput = fileInput + '\\input ' + marginalVerses + '\n'
@@ -506,6 +517,9 @@ class MakeTexControlFile (object) :
 				footnoteSettings = footnoteSettings + '\\ParagraphedNotes{f}\n'
 			if paragraphedCrossRefs.lower() == 'true' :
 				footnoteSettings = footnoteSettings + '\\ParagraphedNotes{x}\n'
+			# General settings
+			if useFigurePlaceholders.lower() == 'true' :
+				generalSettings = generalSettings + '\\FigurePlaceholderstrue\n'
 
 		else :
 			# If we can't figure out what this is we have a system level bug and we might as well quite here

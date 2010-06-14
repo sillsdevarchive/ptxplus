@@ -44,9 +44,57 @@
 # This is the final output we want so we can name it here
 MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).pdf
 
+
+##############################################################
+#		System-wide dependent files
+##############################################################
+
+# Build the dependent file listing here. This will include
+# file paths and names we build here and the list we bring in
+# from the project config file. This needs to be loaded early
+# in the process. If this rules file ever needs to be moved
+# down the chain this might have to move, or be put in a
+# seperate file.
+DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
+  $(PATH_PROCESS)/$(FILE_WATERMARK) \
+  $(PATH_PROCESS)/$(FILE_LOGO_BSM) \
+  $(PATH_PROCESS)/$(FILE_LOGO_CFE) \
+  $(PATH_PROCESS)/$(FILE_PAGE_BORDER) \
+  $(PATH_PROCESS)/$(FILE_TEX_STYLE) \
+  $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) \
+  $(FILE_PROJECT_CONF)
+
+
 ##############################################################
 #			   Rules for building and managing system files
 ##############################################################
+
+# Create the main settings file for this Scripture project.
+# This will contain publication format settings. Context
+# specific settings are kept in the bible_settings.txt file.
+# In this context using PY_RUN_PROCESS we use the
+# optional passed var as a way to pass the type of control
+# file we are making. In this instance, we use "project"
+# because the script will know by the flag name exactly what
+# it is and what goes in it.
+$(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
+	@echo INFO: Creating: $@
+	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'project'
+
+# Rule to create the primary style file for the project. There
+# will be lots of other secondary override stylesheets that
+# are associated with specific objects but this is the "mother"
+# style file.
+$(PATH_PROCESS)/$(FILE_TEX_STYLE) :
+	@echo INFO: Creating: $@
+	@cp $(PATH_RESOURCES_PROCESS)/$(FILE_TEX_STYLE) $@
+
+# Rule to create the custom style file which holds TeX code
+# that is hard to automate. Project wide custom TeX macros
+# should be put in this file.
+$(PATH_PROCESS)/$(FILE_TEX_CUSTOM) :
+	@echo INFO: Creating: $@
+	@cp $(PATH_RESOURCES_PROCESS)/$(FILE_TEX_CUSTOM) $@
 
 # Rule to make the project source folder. Of cource, if the user
 # changes the name of the source folder after it might get

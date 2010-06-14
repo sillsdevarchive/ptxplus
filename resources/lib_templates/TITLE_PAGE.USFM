@@ -3,8 +3,8 @@
 \periph Title Page
 \mt1 New Testament
 \mt2 For You to Read
-\par
-\makedigitsother
-\hfil \XeTeXpicfile cfe_logo.png width 80pt \hfil \par%
+\makedigitsother\catcode`{=1 \catcode`}=2
+\vskip 6in\par
+\centerline{\XeTeXpicfile cfe_logo.png width 80pt} \par%
+\centerline{\sls Christian Far East Ministry \sls*}
 \makedigitsletters
-\sls \hfil Christian Far East Ministry \hfil\sls*

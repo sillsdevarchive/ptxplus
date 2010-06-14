@@ -10,24 +10,6 @@
 
 
 ##############################################################
-#		Variales for Middle Matter
-##############################################################
-
-# Build the dependent file listing here. This will include
-# file paths and names we build here and the list we bring in
-# from the project config file. This needs to be loaded early
-# in the process. If this rules file ever needs to be moved
-# down the chain this might have to move, or be put in a
-# seperate file.
-DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
-  $(PATH_PROCESS)/$(FILE_WATERMARK) \
-  $(PATH_PROCESS)/$(FILE_LOGO_BSM) \
-  $(PATH_PROCESS)/$(FILE_LOGO_CFE) \
-  $(PATH_PROCESS)/$(FILE_PAGE_BORDER) \
-  $(FILE_PROJECT_CONF)
-
-
-##############################################################
 #		Rules for publication Scripture content
 ##############################################################
 
@@ -107,7 +89,7 @@ endif
 # control file that will link to the other settings
 $(PATH_PROCESS)/$(1).usfm.tex : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating book control file: $$@
-	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).usfm' '$$@' '$(1)'
+	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).usfm' '$$@' ''
 
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).usfm.sty :
@@ -188,34 +170,11 @@ endef
 # dependent rules here before we hit the main component_rules
 # building rule
 
-# Create the main settings file for this Scripture project.
-# This will contain publication format settings. Context
-# specific settings are kept in the bible_settings.txt file.
-# In this context using PY_RUN_PROCESS we use the
-# optional passed var as a way to pass the type of control
-# file we are making. In this instance, we use "project"
-# because the script will know by the flag name exactly what
-# it is and what goes in it.
-$(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
-	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'project'
-
 # Rule for building the TeX settings file that is used in a
-# specific context.
+# specific context. In this case it is for Scripture.
 $(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP) $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
 	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'bible'
-
-# Rule to create the primary style file for the project. There
-# will be lots of other secondary override stylesheets that
-# are associated with specific objects but this is the "mother"
-# style file.
-$(PATH_PROCESS)/$(FILE_TEX_STYLE) :
-	@echo INFO: Creating: $@
-	@cp $(PATH_RESOURCES_PROCESS)/$(FILE_TEX_STYLE) @$
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-Make the custom file here too!
 
 
 # Start with the OT but we don't want to do anything if there
@@ -231,22 +190,10 @@ $(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' 'ot' '$@' 'otc'
-
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-# The rule to create the override style sheet.
-$(PATH_PROCESS)/$(1).usfm.sty :
-	@echo INFO: Creating: $$@
-	@echo \# Override PTX style sheet for $(1).usfm, edit as needed >> $$@
-
-
-
-
+	@$(PY_RUN_PROCESS) make_tex_control_file 'ot' 'ot' '$@' ''
 
 # Render the entire OT
-$(FILE_MATTER_OT_PDF) : \
+$(PATH_PROCESS)/$(FILE_MATTER_OT_PDF) : \
 	$(foreach v,$(filter $(OT_COMPONENTS),$(MATTER_OT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(foreach v,$(filter-out $(OT_COMPONENTS),$(MATTER_OT)), \
@@ -276,22 +223,10 @@ $(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : \
 	$(FILE_PROJECT_CONF) \
 	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' 'nt' '$@' 'ntc'
-
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-# The rule to create the override style sheet.
-$(PATH_PROCESS)/$(1).usfm.sty :
-	@echo INFO: Creating: $$@
-	@echo \# Override PTX style sheet for $(1).usfm, edit as needed >> $$@
-
-
-
-
+	@$(PY_RUN_PROCESS) make_tex_control_file 'nt' 'nt' '$@' ''
 
 # Render the entire NT
-$(FILE_MATTER_NT_PDF) : \
+$(PATH_PROCESS)/$(FILE_MATTER_NT_PDF) : \
 	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
 	$(PATH_TEXTS)/$(v).usfm) \
 	$(foreach v,$(filter-out $(NT_COMPONENTS),$(MATTER_NT)), \
@@ -310,12 +245,12 @@ pdf-remove-nt :
 	@rm -f $(FILE_MATTER_NT_PDF)
 
 # Do a component section and veiw the resulting output
-view-ot : $(FILE_MATTER_OT_PDF)
+view-ot : $(PATH_PROCESS)/$(FILE_MATTER_OT_PDF)
 	@- $(CLOSEPDF)
 	@ $(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
-view-nt : $(FILE_MATTER_NT_PDF)
+view-nt : $(PATH_PROCESS)/$(FILE_MATTER_NT_PDF)
 	@- $(CLOSEPDF)
 	@ $(call watermark,$<)
 	@ $(VIEWPDF) $< &

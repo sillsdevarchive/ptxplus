@@ -106,7 +106,7 @@ $(PATH_PROCESS)/$(1).tex : | \
 	$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
 	$(PATH_PROCESS)/$(FILE_TEX_BACK)
 	@echo INFO: Creating: $$@
-	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(1)' '$$@' 'periph'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' '$(1)' '$$@' 'periph'
 
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).sty :
