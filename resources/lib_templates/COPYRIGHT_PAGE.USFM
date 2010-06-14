@@ -1,15 +1,21 @@
 \id OTH
 \ide UTF-8
 \periph Publication Data
-\spacer
-\mt3 THE NEW TESTAMENT
-\mt4 In Some Language
-\spacer
-\is © United Bible Societies, 2010
-\spacer
-\is Language Code
-\is ISBN ???-??-?????
-\is (\it First Printing\it*)
-\spacer
-\ip Quotations of the New Testament, Zyphe language, in any form, must obtain written permission from the United Bible Societies, if the quoted material is inclusive of at least 1,000 verses, or a copy of any book wholly or partially, which amounts to 50\% of the book quoted. For any long quotation, notice of copyright must appear as follows:
-\is Text copyright © 2010 United Bible Societies. Used by permission.
+\mt1 THE NEW TESTAMENT
+\mt2 In Some Language
+\pc© Christian Far East Ministry, 2010
+\makedigitsother\catcode`{=1 \catcode`}=2%
+\pc \vskip 0.5in Language Code
+\pc \vskip 0.25in ISBN ???-??-?????
+\pc \vskip 0.25in \it (First Printing)\it*
+\p
+\vskip 0.5in
+\makedigitsletters
+\p The New Testament in the Kayah Language by Christian Far East Ministry is licensed under a Creative Commons License.
+\p \bd You are free to Share\bd* — to copy, distribute and transmit the work under the following conditions:
+\li1 • \bd Attribution\bd* — You must attribute the work in the following manner: \it “Scripture taken from the Kayah New Testament. Copyright © 2010. Used by permission of CFE Ministry. All rights reserved.”\it*
+\li1 • \bd Noncommercial\bd* — You may not use this work for commercial purposes.
+\li1 • \bd No Derivative Works\bd* — You may not alter, transform, or build upon this work.
+\p This work is licensed under the Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 Unported License. To view a copy of this license, visit:
+\pc http:\slash\slash creativecommons.org/licenses/by-nc-nd/3.0/
+\m or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
