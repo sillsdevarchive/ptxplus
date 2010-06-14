@@ -245,7 +245,7 @@ class MakeTexControlFile (object) :
 		# Build some paths and file names
 		styleFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_STYLE', 'project.sty')
 		# Bring in page format settings
-		cropmarks = self._log_manager._settings['Format']['PageLayout'].get('CROPMARKS', 'true')
+		useCropmarks = self._log_manager._settings['Format']['PageLayout'].get('USE_CROPMARKS', 'true')
 		pageHeight = self._log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
 		pageWidth = self._log_manager._settings['Format']['PageLayout'].get('pageWidth', '148mm')
 		endBookNoEject = self._log_manager._settings['Format']['Scripture']['Columns'].get('endBookNoEject', 'false')
@@ -291,7 +291,7 @@ class MakeTexControlFile (object) :
 		# Add format settings
 		formatSettings = '\\PaperHeight=' + pageHeight + '\n'
 		formatSettings = formatSettings + '\\PaperWidth=' + pageWidth + '\n'
-		if cropmarks.lower() == 'true' :
+		if useCropmarks.lower() == 'true' :
 			formatSettings = formatSettings + '\\CropMarkstrue\n'
 		if endBookNoEject.lower() == 'true' :
 			formatSettings = formatSettings + '\\endbooknoejecttrue\n'
@@ -350,13 +350,14 @@ class MakeTexControlFile (object) :
 		# below depending on the context
 
 		# Process
-		marginalVerses = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
+		marginalVersesMacro = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
 		useFigurePlaceholders = self._log_manager._settings['Format']['Scripture']['Illustrations'].get('useFigurePlaceholders', 'true')
 		autoTocFile = self._log_manager._settings['System']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
 		generateTOC = self._log_manager._settings['System']['TOC'].get('generateTOC', 'true')
 		tocTitle = self._log_manager._settings['System']['TOC'].get('mainTitle', 'Table of Contents')
 		# Format -> PageLayout
-		usePageBorder = self._log_manager._settings['Format']['PageLayout'].get('usePageBorder', 'false')
+		useIllustrations = self._log_manager._settings['Format']['PageLayout'].get('USE_ILLUSTRATIONS', 'false')
+		usePageBorder = self._log_manager._settings['Format']['PageLayout'].get('USE_PAGE_BORDER', 'false')
 		pageBorderScale = self._log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
 		pageBorderFile = self._log_manager._settings['System']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
 		useMarginalVerses = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
@@ -444,7 +445,7 @@ class MakeTexControlFile (object) :
 			fileInput = fileInput + '\\PicPath={' + self._pathToIllustrations + '}\n'
 			# Will we use marginal verses?
 			if useMarginalVerses.lower() == 'true' :
-				fileInput = fileInput + '\\input ' + marginalVerses + '\n'
+				fileInput = fileInput + '\\input ' + marginalVersesMacro + '\n'
 				fileInput = fileInput + '\\columnshift=' + columnshift + 'pt\n'
 			# First off, if a file name for the TOC is found, write it out
 			if generateTOC == 'true' :

@@ -276,7 +276,7 @@ preprocess-nt :
 
 
 ##############################################################
-#			   Rules for handling illustrations material
+#			Rules for handling illustrations material
 ##############################################################
 
 # Copy into place the captions.csv file that goes in the
