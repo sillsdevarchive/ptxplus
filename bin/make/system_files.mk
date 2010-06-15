@@ -186,7 +186,7 @@ define mdir
 endef
 
 define watermark
-@if [ $(WATERMARK) = "true" ] ; then \
+@if [ $(USE_WATERMARK) = "true" ] ; then \
 	echo INFO: Adding watermark to ouput: $(1); \
 	pdftk $(1) background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
 	cp $(PATH_PROCESS)/tmp.pdf $(1); \
