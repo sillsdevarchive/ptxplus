@@ -37,6 +37,7 @@
 # 20100125 - djd - Added ability to process map graphic files
 #		that have been created by an external process
 # 20100202 - djd - Added auto CMYK conversion ability
+# 20100615 - djd - Changed hard codded extions to vars
 
 
 ##############################################################
@@ -62,32 +63,32 @@ ifneq ($(CREATE_MAP),0)
 # script will see to it that there is a Maps folder and a csv
 # file for this map. It takes care of the copy process. It should
 # be able to do this and if it can't it should tell us why.
-$(PATH_TEXTS)/$(1)-map.svg : \
-	$(PATH_TEXTS)/$(1)-data.csv \
-	$(PATH_TEXTS)/$(1)-styles.csv \
-	$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
+$(PATH_TEXTS)/$(1)-map.$(EXT_SVG) : \
+	$(PATH_TEXTS)/$(1)-data.$(EXT_CSV) \
+	$(PATH_TEXTS)/$(1)-styles.$(EXT_CSV) \
+	$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.$(EXT_PNG)
 	@echo INFO: Map $(1): Adding necessary files to project
-	@cp $(PATH_MAP_TEMPLATES)/$(1)-map.svg $$@
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-map.$(EXT_SVG) $$@
 
-$(PATH_TEXTS)/$(1)-map-post.svg : | $(PATH_TEXTS)/$(1)-map.svg
-	@echo INFO: Merging map data and styles into $$(shell readlink -f -- $(PATH_TEXTS)/$(1)-map-post.svg)
-	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1)-map.svg $$@
+$(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG) : | $(PATH_TEXTS)/$(1)-map.$(EXT_SVG)
+	@echo INFO: Merging map data and styles into $$(shell readlink -f -- $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG))
+	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1)-map.$(EXT_SVG) $$@
 
 # Copy project map style file into project
-$(PATH_TEXTS)/$(1)-styles.csv :
+$(PATH_TEXTS)/$(1)-styles.$(EXT_CSV) :
 	@echo WARNING: Map style data: $$@ not found adding default to project.
-	@cp $(PATH_MAP_TEMPLATES)/$(1)-styles.csv $$@
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-styles.$(EXT_CSV) $$@
 
 # Copy the map reference file to the peripheral-map source folder
 # This is for refering to when the map data is being translated
-$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png : | $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.$(EXT_PNG) : | $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
 	@echo INFO: Map reference file: $$@ is being copied to project.
-	@cp $(PATH_MAP_TEMPLATES)/$(1)-org.png $$@
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-org.$(EXT_PNG) $$@
 
 # Create a common project map translation (data) file
-$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv : | $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
+$(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.$(EXT_CSV) : | $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
 	@echo WARNING: Map tranlation data: $$@ not found adding default to project.
-	@cp $(PATH_MAP_TEMPLATES)/$(1)-data.csv $$@
+	@cp $(PATH_MAP_TEMPLATES)/$(1)-data.$(EXT_CSV) $$@
 
 # Link the project map data translation file to the Texts folder.
 # We link it to prevent changes from being made that might cause
@@ -102,15 +103,15 @@ $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv : | $(PATH_SOURCE)/$(PATH_SOURC
 # will be needed to generate the original map label data.
 # BTW, we use readlink here to resolve the path so the ln will make
 # a successful link.
-$(PATH_TEXTS)/$(1)-data.csv : | $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv
+$(PATH_TEXTS)/$(1)-data.$(EXT_CSV) : | $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.$(EXT_CSV)
 	@echo INFO: Linking data for: $$(shell pwd)/$$@
-	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.csv) $(PATH_TEXTS)/
+	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-data.$(EXT_CSV)) $(PATH_TEXTS)/
 
 # When the View-Maps button is clicked this will create the
-# USFM file that will be called from the .tex file. One is
+# USFM file that will be called from the .$(EXT_TEX) file. One is
 # auto-created for each map that is to be processed. This is
 # specifically for the RGB version of the map.
-$(PATH_TEXTS)/$(1)-map-page-rgb.usfm :
+$(PATH_TEXTS)/$(1)-map-page-rgb.$(EXT_WORK) :
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
@@ -119,12 +120,12 @@ $(PATH_TEXTS)/$(1)-map-page-rgb.usfm :
 	@echo \\startmaps >> $$@
 	@echo '\\makedigitsother' >> $$@
 	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6' >> $$@
-	@echo '\\domap{$(1)-map-rgb.pdf}' >> $$@
+	@echo '\\domap{$(1)-map-rgb.$(EXT_PDF)}' >> $$@
 
 # When the cmyk-<mapID> command is given this will create the
-# USFM file that will be called from the cmyk.tex file. One is
+# USFM file that will be called from the cmyk.$(EXT_TEX) file. One is
 # auto-created for each map that is to be processed.
-$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm :
+$(PATH_TEXTS)/$(1)-map-page-cmyk.$(EXT_WORK) :
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
@@ -133,82 +134,82 @@ $(PATH_TEXTS)/$(1)-map-page-cmyk.usfm :
 	@echo \\startmaps >> $$@
 	@echo '\\makedigitsother' >> $$@
 	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6' >> $$@
-	@echo '\\domap{$(1)-map-cmyk.pdf}' >> $$@
+	@echo '\\domap{$(1)-map-cmyk.$(EXT_PDF)}' >> $$@
 
-# This is the .tex file that is necessary to process the
-# map .usfm file. This is created when the View-Maps button
-# is clicked. This is dependent on the .usfm file
-$(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCESS)/MAPS.sty
+# This is the .$(EXT_TEX) file that is necessary to process the
+# map .$(EXT_WORK) file. This is created when the View-Maps button
+# is clicked. This is dependent on the .$(EXT_WORK) file
+$(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX) : | $(PATH_PROCESS)/MAPS.$(EXT_TEX) $(PATH_PROCESS)/MAPS.$(EXT_STYLE)
 	@echo INFO: Creating: $$@
-	@echo \\input MAPS.tex >> $$@
+	@echo \\input MAPS.$(EXT_TEX) >> $$@
 	@echo \\def\\TopMarginFactor{0.4} >> $$@
-	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-rgb.usfm} >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-rgb.$(EXT_WORK)} >> $$@
 	@echo '\\bye' >> $$@
 
-# This is the .tex file that is necessary to process the
-# map cmyk.usfm file. This is created when the cmyk-<mapID>
-# command is given. This is dependent on the cmyk.usfm file
-$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCESS)/MAPS.sty
+# This is the .$(EXT_TEX) file that is necessary to process the
+# map cmyk.$(EXT_WORK) file. This is created when the cmyk-<mapID>
+# command is given. This is dependent on the cmyk.$(EXT_WORK) file
+$(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX) : | $(PATH_PROCESS)/MAPS.$(EXT_TEX) $(PATH_PROCESS)/MAPS.$(EXT_STYLE)
 	@echo INFO: Creating: $$@
-	@echo \\input MAPS.tex >> $$@
+	@echo \\input MAPS.$(EXT_TEX) >> $$@
 	@echo \\def\\TopMarginFactor{0.4} >> $$@
-	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm} >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-cmyk.$(EXT_WORK)} >> $$@
 	@echo '\\bye' >> $$@
 
 # Create the typeset PDF version of the map
 # This is the second step for creating the final map file.
 # The rule here will call on TeX to process the map TeX file,
 # creating a final version of the map ready for the final
-# process, binding. This is dependent on the map.png process.
-$(PATH_PROCESS)/$(1)-map-page-rgb.pdf : \
-	$(PATH_PROCESS)/$(1)-map-rgb.pdf \
-	$(PATH_PROCESS)/MAPS.tex \
-	$(PATH_PROCESS)/$(1)-map-page-rgb.tex \
-	$(PATH_TEXTS)/$(1)-map-page-rgb.usfm
+# process, binding. This is dependent on the map.$(EXT_PNG) process.
+$(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF) : \
+	$(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PDF) \
+	$(PATH_PROCESS)/MAPS.$(EXT_TEX) \
+	$(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX) \
+	$(PATH_TEXTS)/$(1)-map-page-rgb.$(EXT_WORK)
 	@echo INFO: Creating: $$@
-	@rm -f $(PATH_PROCESS)/$(1)-map.pdf
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-rgb.tex
+	@rm -f $(PATH_PROCESS)/$(1)-map.$(EXT_PDF)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX)
 
 # This process creates a PDF of the CMYK PNG file that was
 # created in an earlier process. The PNG file is an intermediat
 # step in the process.
-$(PATH_PROCESS)/$(1)-map-page-cmyk.pdf : \
-	$(PATH_PROCESS)/$(1)-map-cmyk.pdf \
-	$(PATH_PROCESS)/MAPS.tex \
-	$(PATH_PROCESS)/$(1)-map-page-cmyk.tex \
-	$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm
+$(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF) : \
+	$(PATH_PROCESS)/$(1)-map-cmyk.$(EXT_PDF) \
+	$(PATH_PROCESS)/MAPS.$(EXT_TEX) \
+	$(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX) \
+	$(PATH_TEXTS)/$(1)-map-page-cmyk.$(EXT_WORK)
 	@echo INFO: Creating: $$@
-	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-cmyk.tex
+	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX)
 
 # Create the intermediate PDF version of the map
 # This will transform the svg file to the initial PDF file.
 # To typeset to to final form a second process must be run.
 # This is just the first step in the total process.
-# This process has a dependency on the map-post.svg file.
-$(PATH_PROCESS)/$(1)-map-rgb.pdf : $(PATH_TEXTS)/$(1)-map-post.svg
+# This process has a dependency on the map-post.$(EXT_SVG) file.
+$(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PDF) : $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG)
 	@echo INFO: Creating: $$@
-	@rm -f $(PATH_PROCESS)/$(1)-map-rgb.pdf
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_TEXTS)/$(1)-map-post.svg --export-pdf=$$@
+	@rm -f $(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PDF)
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG) --export-pdf=$$@
 
 # Create the intermediate PNG file for the CMYK color space
 # conversion by ImageMagick. This is done this way because the
 # path out of Inkscape (which is what creates this file) is
 # better than trying to do it all with ImageMagick. We convert
 # SVG to PNG/RGB, then in the next step go PNG to PDF/CMYK.
-$(PATH_PROCESS)/$(1)-map-rgb.png : $(PATH_TEXTS)/$(1)-map-post.svg
+$(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG) : $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG)
 	@echo INFO: Creating: $$@
-	@rm -f $(PATH_PROCESS)/$(1)-map-rgb.png
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_TEXTS)/$(1)-map-post.svg --export-png=$$@
+	@rm -f $(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG)
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG) --export-png=$$@
 
 # This is the process for creating a CMYK version of the
 # current map and outputs to PDF. It uses ImageMagick for this.
 # This is the second step of a two step process to get from
 # SVG/RGB to PDF/CMYK. The PNG file is an intermediate step
 # and has been created by Inkscape from the source SVG file.
-$(PATH_PROCESS)/$(1)-map-cmyk.pdf : $(PATH_PROCESS)/$(1)-map-rgb.png
+$(PATH_PROCESS)/$(1)-map-cmyk.$(EXT_PDF) : $(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG)
 	@echo INFO: Creating: $$@
-	@convert png:$(PATH_PROCESS)/$(1)-map-rgb.png -profile '$(RGB_PROFILE)' -profile $(CMYK_PROFILE) -compress zip -units PixelsPerInch -define pdf:use-cropbox=true pdf:$$@
+	@convert png:$(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG) -profile '$(RGB_PROFILE)' -profile $(CMYK_PROFILE) -compress zip -units PixelsPerInch -define pdf:use-cropbox=true pdf:$$@
 
 # This will run all the preprocesses to the SVG file and
 # open it up in Inkscape (or any other designated SVG editor)
@@ -217,44 +218,44 @@ $(PATH_PROCESS)/$(1)-map-cmyk.pdf : $(PATH_PROCESS)/$(1)-map-rgb.png
 # after so they will be deleted. This is similar behavior
 # as with book file processing. The default color space
 # output is RGB. A special command is availible for CMYK.
-preprocess-$(1) : $(PATH_TEXTS)/$(1)-map-post.svg
-	@echo INFO: Creating or editing $(PATH_TEXTS)/$(1)-map-post.svg
-	@rm -f $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
-	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1)-map-post.svg &
+preprocess-$(1) : $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG)
+	@echo INFO: Creating or editing $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG)
+	@rm -f $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
+	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG) &
 
 # Process the SVG file and view it in PDF when it is done. Note that this
 # process will fail if the preprocess has not been run first. The map making
 # process differs from typesetting so it has to be this way to protect data.
-view-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
-	@echo INFO: Creating final typeset map: $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
-	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-page-rgb.pdf &
+view-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
+	@echo INFO: Creating final typeset map: $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
+	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF) &
 
 # Convert the intermediat PNG file to a CMYK color profile
-cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
-	@echo INFO: Creating CMYK color profile map: $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
-	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf &
+cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
+	@echo INFO: Creating CMYK color profile map: $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
+	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF) &
 
 # Remove the current map PDF file
 pdf-remove-$(1) :
-	@echo WARNING: Removing: $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-rgb.pdf) and $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.pdf)
-	@rm -f $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
-	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
+	@echo WARNING: Removing: $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)) and $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.$(EXT_PDF))
+	@rm -f $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
 
 # Edit the CSV data file
-edit-data-$(1) : $(PATH_TEXTS)/$(1)-data.csv
-	$(EDITCSV) $(PATH_TEXTS)/$(1)-data.csv
+edit-data-$(1) : $(PATH_TEXTS)/$(1)-data.$(EXT_CSV)
+	$(EDITCSV) $(PATH_TEXTS)/$(1)-data.$(EXT_CSV)
 
 # Edit the CSV style file
-edit-styles-$(1) : $(PATH_TEXTS)/$(1)-styles.csv
-	$(EDITCSV) $(PATH_TEXTS)/$(1)-styles.csv
+edit-styles-$(1) : $(PATH_TEXTS)/$(1)-styles.$(EXT_CSV)
+	$(EDITCSV) $(PATH_TEXTS)/$(1)-styles.$(EXT_CSV)
 
 # View the original model map
-view-model-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
-	$(VIEWIMG) $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.png
+view-model-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.$(EXT_PNG)
+	$(VIEWIMG) $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)-org.$(EXT_PNG)
 
 # View the original SVG template map
-view-template-$(1) : $(PATH_TEXTS)/$(1)-map.svg
-	$(VIEWSVG) $(PATH_TEXTS)/$(1)-map.svg
+view-template-$(1) : $(PATH_TEXTS)/$(1)-map.$(EXT_SVG)
+	$(VIEWSVG) $(PATH_TEXTS)/$(1)-map.$(EXT_SVG)
 
 else
 
@@ -268,7 +269,7 @@ else
 
 # Link the ready-made graphic file to the process folder. This is the
 # common place to find files like this.
-$(PATH_PROCESS)/$(1)-map-rgb.png : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)
+$(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG) : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)
 	@echo INFO: Linking file to: $(shell pwd)/$$@
 	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)) $$@
 
@@ -277,18 +278,18 @@ $(PATH_PROCESS)/$(1)-map-rgb.png : $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)/$(1)
 # the original version and all this assumes that the original is RGB. The
 # PDF file is actually only a container for the graphic file (probably TIFF)
 # We will treat it like the other PNG graphic file.
-$(PATH_PROCESS)/$(1)-map-cmyk.pdf : $(PATH_PROCESS)/$(1)-map-rgb.png
+$(PATH_PROCESS)/$(1)-map-cmyk.$(EXT_PDF) : $(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG)
 	@echo INFO: Creating: $$@
-	@echo png:$(PATH_PROCESS)/$(1)-map-rgb.png -profile $(RGB_PROFILE) -profile $(CMYK_PROFILE) -compress zip -units PixelsPerInch -define pdf:use-cropbox=true pdf:$$@
-	@convert png:$(PATH_PROCESS)/$(1)-map-rgb.png -profile $(RGB_PROFILE) -profile $(CMYK_PROFILE) -compress zip -units PixelsPerInch -define pdf:use-cropbox=true pdf:$$@
+	@echo png:$(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG) -profile $(RGB_PROFILE) -profile $(CMYK_PROFILE) -compress zip -units PixelsPerInch -define pdf:use-cropbox=true pdf:$$@
+	@convert png:$(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG) -profile $(RGB_PROFILE) -profile $(CMYK_PROFILE) -compress zip -units PixelsPerInch -define pdf:use-cropbox=true pdf:$$@
 
-# This is the rgb.tex file that is necessary to process the
-# map .rgb.usfm file. This is created when the View-Maps button
-# is clicked. This has a dependency on MAPS.tex
+# This is the rgb.$(EXT_TEX) file that is necessary to process the
+# map .rgb.$(EXT_WORK) file. This is created when the View-Maps button
+# is clicked. This has a dependency on MAPS.$(EXT_TEX)
 # which it calls from the matter_peripheral.mk rules file.
-$(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCESS)/MAPS.sty
+$(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX) : | $(PATH_PROCESS)/MAPS.$(EXT_TEX) $(PATH_PROCESS)/MAPS.$(EXT_STYLE)
 	@echo INFO: Creating: $$@
-	@echo \\input MAPS.tex >> $$@
+	@echo \\input MAPS.$(EXT_TEX) >> $$@
 	@echo '\\def\HeaderPosition{0}' >> $$@
 	@echo '\\def\FooterPosition{0}' >> $$@
 	@echo '% Change paper width for portrate or landscape adjust margins as needed' >> $$@
@@ -297,16 +298,16 @@ $(PATH_PROCESS)/$(1)-map-page-rgb.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCES
 	@echo '\\def\TopMarginFactor{0}' >> $$@
 	@echo '\\def\SideMarginFactor{0}' >> $$@
 	@echo '\\def\BottomMarginFactor{0}' >> $$@
-	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-rgb.usfm} >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-rgb.$(EXT_WORK)} >> $$@
 	@echo '\\bye' >> $$@
 
-# This is the cmyk.tex file that is necessary to process the
-# map .cmyk.usfm file. This is created when the View-Maps button
-# is clicked. This has a dependency on MAPS.tex
+# This is the cmyk.$(EXT_TEX) file that is necessary to process the
+# map .cmyk.$(EXT_WORK) file. This is created when the View-Maps button
+# is clicked. This has a dependency on MAPS.$(EXT_TEX)
 # which it calls from the matter_peripheral.mk rules file.
-$(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCESS)/MAPS.sty
+$(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX) : | $(PATH_PROCESS)/MAPS.$(EXT_TEX) $(PATH_PROCESS)/MAPS.$(EXT_STYLE)
 	@echo INFO: Creating: $$@
-	@echo \\input MAPS.tex >> $$@
+	@echo \\input MAPS.$(EXT_TEX) >> $$@
 	@echo '\\def\HeaderPosition{0}' >> $$@
 	@echo '\\def\FooterPosition{0}' >> $$@
 	@echo '% Change paper width for portrate or landscape adjust margins as needed' >> $$@
@@ -315,12 +316,12 @@ $(PATH_PROCESS)/$(1)-map-page-cmyk.tex : | $(PATH_PROCESS)/MAPS.tex $(PATH_PROCE
 	@echo '\\def\TopMarginFactor{0}' >> $$@
 	@echo '\\def\SideMarginFactor{0}' >> $$@
 	@echo '\\def\BottomMarginFactor{0}' >> $$@
-	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm} >> $$@
+	@echo \\ptxfile{$(PATH_TEXTS)/$(1)-map-page-cmyk.$(EXT_WORK)} >> $$@
 	@echo '\\bye' >> $$@
 
-# Create the rgb.USFM file for processing this map. The map file
+# Create the rgb.$(EXT_WORK) file for processing this map. The map file
 # is linked into the process here.
-$(PATH_TEXTS)/$(1)-map-page-rgb.usfm : | $(PATH_PROCESS)/$(1)-map-rgb.png
+$(PATH_TEXTS)/$(1)-map-page-rgb.$(EXT_WORK) : | $(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG)
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
@@ -328,12 +329,12 @@ $(PATH_TEXTS)/$(1)-map-page-rgb.usfm : | $(PATH_PROCESS)/$(1)-map-rgb.png
 	@echo \\periph Map Page >> $$@
 	@echo \\p >> $$@
 	@echo '\\makedigitsother' >> $$@
-	@echo '\\hfil\XeTeXpicfile $(1)-map-rgb.png width 300pt \hfil\par' >> $$@
+	@echo '\\hfil\XeTeXpicfile $(1)-map-rgb.$(EXT_PNG) width 300pt \hfil\par' >> $$@
 	@echo '\\makedigitsletters' >> $$@
 
-# Create the cmyk.USFM file for processing this map. The map file
+# Create the cmyk.$(EXT_WORK) file for processing this map. The map file
 # is linked into the process here.
-$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm : | $(PATH_PROCESS)/$(1)-map-cmyk.pdf
+$(PATH_TEXTS)/$(1)-map-page-cmyk.$(EXT_WORK) : | $(PATH_PROCESS)/$(1)-map-cmyk.$(EXT_PDF)
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
@@ -341,27 +342,27 @@ $(PATH_TEXTS)/$(1)-map-page-cmyk.usfm : | $(PATH_PROCESS)/$(1)-map-cmyk.pdf
 	@echo \\periph Map Page >> $$@
 	@echo \\p >> $$@
 	@echo '\\makedigitsother' >> $$@
-	@echo '\\hfil\XeTeXpdffile $(1)-map-cmyk.pdf width 300pt \hfil\par' >> $$@
+	@echo '\\hfil\XeTeXpdffile $(1)-map-cmyk.$(EXT_PDF) width 300pt \hfil\par' >> $$@
 	@echo '\\makedigitsletters' >> $$@
 
-# Render the resulting PDF file from the rgb.tex and rgb.usfm file.
-$(PATH_PROCESS)/$(1)-map-page-rgb.pdf : \
-	$(PATH_TEXTS)/$(1)-map-page-rgb.usfm \
-	$(PATH_PROCESS)/$(1)-map-page-rgb.tex
+# Render the resulting PDF file from the rgb.$(EXT_TEX) and rgb.$(EXT_WORK) file.
+$(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF) : \
+	$(PATH_TEXTS)/$(1)-map-page-rgb.$(EXT_WORK) \
+	$(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX)
 	@echo INFO: Creating: $$@
 	@rm -f $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-rgb.tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX)
 
-# Render the resulting PDF file from the cmyk.tex and cmyk.usfm file.
-$(PATH_PROCESS)/$(1)-map-page-cmyk.pdf : \
-	$(PATH_TEXTS)/$(1)-map-page-cmyk.usfm \
-	$(PATH_PROCESS)/$(1)-map-page-cmyk.tex
+# Render the resulting PDF file from the cmyk.$(EXT_TEX) and cmyk.$(EXT_WORK) file.
+$(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF) : \
+	$(PATH_TEXTS)/$(1)-map-page-cmyk.$(EXT_WORK) \
+	$(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX)
 	@echo INFO: Creating: $$@
 	@rm -f $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-cmyk.tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX)
 
 # View the resulting created PDF file for this map.
-view-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.pdf
+view-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
 	@echo INFO: Viewing RGB color profile map: $$<
 	@ $(VIEWPDF) $$< &
 
@@ -371,14 +372,14 @@ preprocess-$(1) :
 	@echo INFO:  This feature is not necessary in this mode.
 
 # Convert this map ID to CMYK
-cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
+cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
 	@echo INFO: Creating CMYK color profile map: $$<
 	@ $(VIEWPDF) $$< &
 
 # Remove the current map PDF file
 pdf-remove-$(1) :
-	@echo WARNING: Removing: $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf)
-	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.pdf
+	@echo WARNING: Removing: $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF))
+	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
 
 # Edit the CSV data file
 edit-data-$(1) :
@@ -430,8 +431,8 @@ ifneq ($(MATTER_MAPS),)
 
 # If there was something in the binding list then we will need to set
 # these two vars.
-MATTER_MAPS_RGB_PDF		= $(PATH_PROCESS)/MATTER_MAPS_RGB.pdf
-MATTER_MAPS_CMYK_PDF		= $(PATH_PROCESS)/MATTER_MAPS_CMYK.pdf
+MATTER_MAPS_RGB_PDF		= $(PATH_PROCESS)/MATTER_MAPS_RGB.$(EXT_PDF)
+MATTER_MAPS_CMYK_PDF		= $(PATH_PROCESS)/MATTER_MAPS_CMYK.$(EXT_PDF)
 
 # This first rule is for auto SVG processing
 #ifneq ($(CREATE_MAP),0)
@@ -439,28 +440,28 @@ MATTER_MAPS_CMYK_PDF		= $(PATH_PROCESS)/MATTER_MAPS_CMYK.pdf
 # For binding we will use pdftk to put together the
 # individual PDFs we created earlier in this process.
 # We need to do this for both RGB and CMYK files.
-$(MATTER_MAPS_RGB_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-rgb.pdf)
+$(MATTER_MAPS_RGB_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-rgb.$(EXT_PDF))
 	@echo INFO: Creating the bound PDF file for RGB maps: $(MATTER_MAPS_RGB_PDF)
-	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-rgb.pdf) cat output $@
+	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-rgb.$(EXT_PDF)) cat output $@
 
-$(MATTER_MAPS_CMYK_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-cmyk.pdf)
+$(MATTER_MAPS_CMYK_PDF) : $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-cmyk.$(EXT_PDF))
 	@echo INFO: Creating the bound PDF file: $(MATTER_MAPS_CMYK_PDF)
-	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-cmyk.pdf) cat output $@
+	pdftk $(foreach v,$(MATTER_MAPS),$(PATH_PROCESS)/$(v)-map-page-cmyk.$(EXT_PDF)) cat output $@
 
 # Create the Maps source folder
 $(PATH_SOURCE)/$(PATH_SOURCE_MAPS) :
 	@echo INFO: Creating folder: $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
 	@mkdir $(PATH_SOURCE)/$(PATH_SOURCE_MAPS)
 
-# Copy in the MAPS.tex file
-$(PATH_PROCESS)/MAPS.tex :
+# Copy in the MAPS.$(EXT_TEX) file
+$(PATH_PROCESS)/MAPS.$(EXT_TEX) :
 	@echo INFO: Creating file: $@
-	@cp $(PATH_TEMPLATES)/MAPS.tex '$@'
+	@cp $(PATH_TEMPLATES)/MAPS.$(EXT_TEX) '$@'
 
-# Copy in the MAPS.sty file
-$(PATH_PROCESS)/MAPS.sty :
+# Copy in the MAPS.$(EXT_STYLE) file
+$(PATH_PROCESS)/MAPS.$(EXT_STYLE) :
 	@echo INFO: Creating file: $@
-	@cp $(PATH_TEMPLATES)/MAPS.sty '$@'
+	@cp $(PATH_TEMPLATES)/MAPS.$(EXT_STYLE) '$@'
 
 endif
 
@@ -495,7 +496,7 @@ preprocess-maps :
 clean-maps :
 	@echo WARNING: All map have been deleted, Sorry if you did not mean to do this
 	$(foreach v,$(MATTER_MAPS), $(shell rm -f $(PATH_TEXTS)/$(v)* && rm -f $(PATH_PROCESS)/$(v)*))
-	@rm -f $(PATH_PROCESS)/MAPS.tex
-	@rm -f $(PATH_PROCESS)/MAPS.sty
+	@rm -f $(PATH_PROCESS)/MAPS.$(EXT_TEX)
+	@rm -f $(PATH_PROCESS)/MAPS.$(EXT_STYLE)
 	@rm -f $(MATTER_MAPS_RGB_PDF)
 	@rm -f $(MATTER_MAPS_CMYK_PDF)

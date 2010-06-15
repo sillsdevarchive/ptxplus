@@ -7,6 +7,7 @@
 
 # 20100602 - djd - Initial version created from code in
 #		matter_books.mk file.
+# 20100615 - djd - Changed hard codded extions to vars
 
 
 ##############################################################
@@ -28,10 +29,10 @@ define component_rules
 # user to come up cold when he selects a file for processing if
 # that file is not there. Rather a dummy file will be created
 # telling them the file is missing.
-$(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) : | $(PATH_SOURCE)
-	@if test -r $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); then \
-		echo Copying into project from: $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); \
-		cp $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) '$$@'; \
+$(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_SOURCE)
+	@if test -r "$(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)"; then \
+		echo Copying into project from: $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); \
+		cp $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) '$$@'; \
 	else \
 		echo Could not find: $$@; \
 		echo Creating this file:; \
@@ -43,26 +44,26 @@ $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
 	fi
 
 # This is the basic rule for auto-text-processing. To control processes
-# edit the project.conf file. This will automatically run the four
+# edit the .project.conf file. This will automatically run the four
 # phases of text processing. However, first it will delete any copies
 # in the system to avoid having bad data in the system. All problems with
 # the source must be fixed in the source, no where else. The first process
 # will be preprocess checks of the source text. Next it will run any custom
-# proecesses that are configured in the project.conf file. These could be
+# proecesses that are configured in the .project.conf file. These could be
 # anything and may include copying text into the project, in which case
 # requires setting the CopyIntoSystem setting to false. After the custom
 # proecesses are run it will copy the text into the system and then it will
 # run any necessary text processes on the system source text as defined in
-# the project.conf file.
+# the .project.conf file.
 ifeq ($(LOCKED),0)
-$(PATH_TEXTS)/$(1).usfm : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION)
+$(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
 	@echo INFO: Auto-preprocessing: $$< and creating $$@
-	@rm -f $(PATH_TEXTS)/$(1).usfm
+	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<' '$$@'
 	@$(PY_RUN_PROCESS) copyIntoSystem $(1) '$$<' '$$@'
 	@$(PY_RUN_PROCESS) textProcesses $(1) '$$@' '$$@'
 else
-#	@echo File $(PATH_TEXTS)/$(1).usfm is locked
+#	@echo File $(PATH_TEXTS)/$(1).$(EXT_WORK) is locked
 endif
 
 # This enables us to do the preprocessing on a single component and view the log file
@@ -71,10 +72,10 @@ endif
 # If we are checking text that means we are not sure about how good it is. That
 # being the case, we don't want this text in the system yet so the very first
 # thing we do is try to delete any existing copies from the source directory.
-preprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION) $(DEPENDENT_FILE_LIST)
+preprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
-	@echo INFO: Removing $(PATH_TEXTS)/$(1).usfm and error checking '$$<'
-	@rm -f $(PATH_TEXTS)/$(1).usfm
+	@echo INFO: Removing $(PATH_TEXTS)/$(1).$(EXT_WORK) and error checking '$$<'
+	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<'
 endif
 
@@ -87,46 +88,41 @@ endif
 
 # Call the TeX control file creation script to create a simple
 # control file that will link to the other settings
-$(PATH_PROCESS)/$(1).usfm.tex : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating book control file: $$@
-	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).usfm' '$$@' ''
-
-# The rule to create the override style sheet.
-$(PATH_PROCESS)/$(1).usfm.sty :
-	@echo INFO: Creating: $$@
-	@echo \# Override PTX style sheet for $(1).usfm, edit as needed >> $$@
+	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).$(EXT_WORK)' '$$@' ''
 
 # Process a single component and produce the final PDF. Special dependencies
-# are set for the .adj and .piclist files in case they have been altered.
-# The .piclist file is created in the content_illustrations.mk rules file.
-$(PATH_PROCESS)/$(1).usfm.pdf : \
-	$(PATH_TEXTS)/$(1).usfm \
-	$(PATH_TEXTS)/$(1).usfm.adj \
-	$(PATH_TEXTS)/$(1).usfm.piclist \
-	$(PATH_PROCESS)/$(1).usfm.tex \
-	$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) | $(PATH_PROCESS)/$(1).usfm.sty $(DEPENDENT_FILE_LIST)
+# are set for the .$(EXT_ADJUSTMENT) and .$(EXT_PICLIST) files in case they have been altered.
+# The .$(EXT_PICLIST) file is created in the content_illustrations.mk rules file.
+$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF) : \
+	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
+	$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) \
+	$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) \
+	$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) \
+	$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) | $(PATH_PROCESS)/$(FILE_BIBLE_STYLE) $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).usfm.tex
-#	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).$(EXT_WORK).$(EXT_TEX)
+#	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).$(EXT_TEX)
 #	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
 
 # Open the PDF file with reader
-view-$(1) : $(PATH_PROCESS)/$(1).usfm.pdf
+view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
 	@- $(CLOSEPDF)
-	@ $(call watermark,$$<)
+	$(call watermark,$$<)
 	@ $(VIEWPDF) $$< &
 
 # Open the SFM file with the text editor
-edit-$(1) : $(PATH_TEXTS)/$(1).usfm
+edit-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@ $(EDITSFM) $$< &
 
 # Shortcut to open the PDF file
-$(1) : $(PATH_PROCESS)/$(1).pdf
+$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Make adjustment file
-$(PATH_TEXTS)/$(1).usfm.adj :
+$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
 	@echo INFO: Creating the adjustments file: $$@
-	@$(PY_RUN_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).usfm
+	@$(PY_RUN_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
@@ -134,28 +130,28 @@ $(PATH_TEXTS)/$(1).usfm.adj :
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
-$(PATH_TEXTS)/$(1).usfm.piclist : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS)
+$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifneq ($(PATH_ILLUSTRATIONS_LIB),)
 	@echo INFO: Creating illustrations list file: $$@
-	@$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).usfm
+	@$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 endif
 
 # Rules for cleaning up content process files
 
 # Remove the PDF for this component only
 pdf-remove-$(1) :
-	@echo INFO: Removing file: $(PATH_PROCESS)/$(1).pdf
-	@rm -f $(PATH_PROCESS)/$(1).pdf
+	@echo INFO: Removing file: $(PATH_PROCESS)/$(1).$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Remove the adjustment file for this component only
 adjfile-remove-$(1) :
-	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).usfm.adj
-	@rm -f $(PATH_TEXTS)/$(1).usfm.adj
+	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
 
 # Remove the picture placement file for this component only
 picfile-remove-$(1) :
-	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).usfm.piclist
-	@rm -f $(PATH_TEXTS)/$(1).usfm.piclist
+	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
+	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
 
 endef
 
@@ -176,6 +172,18 @@ $(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP) $(FILE_PRO
 	@echo INFO: Creating: $@
 	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'bible'
 
+# The rule to create the bible override style sheet. This is
+# used to override styles for Scripture that come from the
+# .project.sty file.
+$(PATH_PROCESS)/$(FILE_BIBLE_STYLE) : | $(PATH_SOURCE)
+	@if test -r "$(PATH_TEMPLATES)/$(FILE_BIBLE_STYLE)"; then \
+		echo Copying into project from: $(PATH_TEMPLATES)/$(FILE_BIBLE_STYLE); \
+		cp $(PATH_TEMPLATES)/$(FILE_BIBLE_STYLE) '$@'; \
+	else \
+		echo INFO: Creating: $@; \
+		echo \# Override style sheet for $@, This is used for Scripture publishing projects, edit as needed >> $@; \
+	fi
+
 
 # Start with the OT but we don't want to do anything if there
 # are no components to process
@@ -195,11 +203,11 @@ $(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : \
 # Render the entire OT
 $(PATH_PROCESS)/$(FILE_MATTER_OT_PDF) : \
 	$(foreach v,$(filter $(OT_COMPONENTS),$(MATTER_OT)), \
-	$(PATH_TEXTS)/$(v).usfm) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
 	$(foreach v,$(filter-out $(OT_COMPONENTS),$(MATTER_OT)), \
-	$(PATH_TEXTS)/$(v).usfm.piclist \
-	$(PATH_TEXTS)/$(v).usfm.adj \
-	$(PATH_TEXTS)/$(v).usfm) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_PICLIST) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_ADJUSTMENT) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
 	$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) \
 	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
@@ -212,7 +220,7 @@ pdf-remove-ot :
 
 
 # Moving along we will do the NT if there are any components
-# listed in the project.conf file
+# listed in the .project.conf file
 ifneq ($(MATTER_NT),)
 # These build a rule (in memory) for this set of components
 $(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
@@ -228,11 +236,11 @@ $(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : \
 # Render the entire NT
 $(PATH_PROCESS)/$(FILE_MATTER_NT_PDF) : \
 	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
-	$(PATH_TEXTS)/$(v).usfm) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
 	$(foreach v,$(filter-out $(NT_COMPONENTS),$(MATTER_NT)), \
-	$(PATH_TEXTS)/$(v).usfm.piclist \
-	$(PATH_TEXTS)/$(v).usfm.adj \
-	$(PATH_TEXTS)/$(v).usfm) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_PICLIST) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_ADJUSTMENT) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
 	$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) \
 	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
@@ -247,12 +255,12 @@ pdf-remove-nt :
 # Do a component section and veiw the resulting output
 view-ot : $(PATH_PROCESS)/$(FILE_MATTER_OT_PDF)
 	@- $(CLOSEPDF)
-	@ $(call watermark,$<)
+	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 view-nt : $(PATH_PROCESS)/$(FILE_MATTER_NT_PDF)
 	@- $(CLOSEPDF)
-	@ $(call watermark,$<)
+	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 
@@ -265,11 +273,11 @@ preprocess-checks: preprocess-ot preprocess-nt
 # when a specific group is being checked. (More may need to be added)
 preprocess-ot :
 	@echo INFO: Preprocess checking OT components:
-	@$(foreach v,$(MATTER_OT), $(PY_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@$(foreach v,$(MATTER_OT), $(PY_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
 
 preprocess-nt :
 	@echo INFO: Preprocess checking NT components:
-	@$(foreach v,$(MATTER_NT), $(PY_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(NAME_SOURCE_EXTENSION); )
+	@$(foreach v,$(MATTER_NT), $(PY_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
 
 # Having these here enable rules to call other rules
 .PHONY: view-ot view-nt preprocess-checks
@@ -293,7 +301,7 @@ endif
 
 # Note: The following rule is here as a reminder. The project captions.csv
 # file is created during make_piclist_file process which is done in the
-# $(PATH_TEXTS)/$(1).usfm.piclist rule. The issue is that if this file
+# $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) rule. The issue is that if this file
 # is removed or deleted it cannot be remade on its own. This can cause an
 # error in certain situations. This part of the make_piclist_file process
 # might need to be done alone to avoid this if ever becomes a real problem.

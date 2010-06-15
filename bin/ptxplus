@@ -17,7 +17,7 @@
 
 # History:
 # 20080613 - djd - Initial draft
-# 20081023 - djd - Refactor project.conf structure changes
+# 20081023 - djd - Refactor .project.conf structure changes
 # 20081028 - djd - Removed system logging. Only using
 #        process logging now.
 
@@ -102,7 +102,7 @@ def setupNewProject () :
 # It would be good to get some input from the user on this.
 # However, the way the project manager works, the following
 # is not that useful so it is commented for now.
-	# Look for a project.conf file in the cwd. If there is none, ask
+	# Look for a .project.conf file in the cwd. If there is none, ask
 	# if we need to create a new project.
 #    if tools.isProjectFolder() == False :
 #        newProjectpath = os.path.abspath(sys.argv[2])
@@ -257,7 +257,7 @@ else :
 			# Right off we need to tell the user if the project is locked (only if it is locked)
 
 
-			# Update the project.conf file if it needs it
+			# Update the .project.conf file if it needs it
 			mod = __import__("update_project_settings")
 			mod.doIt()
 
@@ -268,7 +268,7 @@ else :
 
 			# There are a number of processes we may want to run before we want to
 			# start the actual process. These are done via the GlobalProcesses listed
-			# in the project.conf file.
+			# in the .project.conf file.
 			#log_manager.logItSystem("INFO", "Looking for global project processes to run.")
 
 			# Look for all the global processes that need to be run

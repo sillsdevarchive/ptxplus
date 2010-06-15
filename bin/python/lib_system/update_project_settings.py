@@ -10,16 +10,16 @@
 ################ Description/Documentation ##################
 #############################################################
 
-# This script will update the project.conf file with new
-# settings from the master project.conf file. This enables
+# This script will update the .project.conf file with new
+# settings from the master .project.conf file. This enables
 # changes to be propagated to the projects downstream. However,
 # this isn't necessarialy a fool-proof method. With a big
-# enough changes the original project.conf file may need to
+# enough changes the original .project.conf file may need to
 # be edited by hand.
 #
 # This process would normally be done after a system update
 # the first time the project is run. It will check the version
-# stamp in the project.conf file and see if it matches the
+# stamp in the .project.conf file and see if it matches the
 # current version. If not, it will run the update, otherwise
 # nothing happens.
 
@@ -31,11 +31,11 @@
 #        data without updating the project.ini file.
 # 20081015 - djd - Rewrite to facilitate lots of changes in
 #        the program.
-# 20081023 - djd - Refactor project.conf structure changes
+# 20081023 - djd - Refactor .project.conf structure changes
 # 20081028 - djd - Removed system logging, messages only now
 # 20081111 - djd - Added tools.makeNecessaryFiles() to help
 #        repair older projects. Also moved the location
-#        of the master project.conf file.
+#        of the master .project.conf file.
 
 
 #############################################################
@@ -56,7 +56,7 @@ class UpdateProjectSettings (object) :
 
 	def main (self) :
 
-		# This is all about updating the project.conf file. However, we
+		# This is all about updating the .project.conf file. However, we
 		# should be sure that all the other files we need are there as well.
 		tools.makeNecessaryFiles()
 
@@ -74,15 +74,15 @@ class UpdateProjectSettings (object) :
 
 		if settings['System']['systemVersion'] != curVer :
 
-			# First make a backup copy of our original project.conf
-			bakSettingsProjectFile = "project.conf~"
-			settingsProjectFile = "project.conf"
+			# First make a backup copy of our original .project.conf
+			bakSettingsProjectFile = ".project.conf~"
+			settingsProjectFile = ".project.conf"
 			shutil.copy(settingsProjectFile, bakSettingsProjectFile)
 			oldSettings = ConfigObj(bakSettingsProjectFile,encoding='utf-8')
 
-			# Get the system defaul project.conf file
-			systemProjectConfFile = basePath + "/resources/lib_sysFiles/project.conf"
-			tempMasterConfFile = os.getcwd() + "/project.conf"
+			# Get the system defaul .project.conf file
+			systemProjectConfFile = basePath + "/resources/lib_sysFiles/.project.conf"
+			tempMasterConfFile = os.getcwd() + "/.project.conf"
 
 			if os.path.isfile(tempMasterConfFile) != True :
 				tools.userMessage("Error: Could not update project, [" + tempMasterConfFile + "] not found")

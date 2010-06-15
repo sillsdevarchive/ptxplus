@@ -7,7 +7,7 @@
 
 # History:
 # 20081023 - djd - Changed references to config object to reflect
-#        reorganization to the project.conf file
+#        reorganization to the .project.conf file
 # 20081112 - djd - Added an example menu item
 # 20081229 - djd - Added menu items, Preprocess, Process and Bind
 # 20090914 - djd - Removed "-book" from preprocess-book to try to resolve
@@ -174,19 +174,19 @@ class ConfigGUI (object) :
 		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
 		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
 
-		if os.access('project.conf', os.R_OK) :
+		if os.access('.project.conf', os.R_OK) :
 			self.init_dir()
 		else :
 			self.close_dir()        # to declare the attributes ;)
 
 	def init_dir (self, bkid='') :
-		if not os.access('project.conf', os.R_OK) :
+		if not os.access('.project.conf', os.R_OK) :
 			self.close_dir()
 			return
 		if self.ceditor :
-			self.ceditor.new_config('project.conf')
+			self.ceditor.new_config('.project.conf')
 		else :
-			self.ceditor = ConfigEditor('project.conf', self.wTree, 'tv_sections', 'tv_keys')
+			self.ceditor = ConfigEditor('.project.conf', self.wTree, 'tv_sections', 'tv_keys')
 
 		self.styles = FileEditor('ptx2pdf.sty', self.tv_styles, self.language_manager.get_language("latex"))
 		self.setup = FileEditor('ptx2pdf-setup.txt', self.tv_setup, self.language_manager.get_language("latex"))
@@ -311,11 +311,11 @@ class ConfigGUI (object) :
 			fcd.destroy()
 
 			if isProject :
-				if not os.access(os.path.join(newdir, "project.conf"), os.R_OK) :
+				if not os.access(os.path.join(newdir, ".project.conf"), os.R_OK) :
 					dialog = gtk.MessageDialog(None,
 						gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 						gtk.MESSAGE_ERROR, gtk.BUTTONS_OK_CANCEL,
-						"Directory: %s has no project.conf" % newdir)
+						"Directory: %s has no .project.conf" % newdir)
 					res = dialog.run()
 					dialog.destroy()
 					if res == gtk.RESPONSE_CANCEL : return None

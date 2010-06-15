@@ -16,7 +16,7 @@
 
 # History:
 # 20080806 - djd - Initial draft
-# 20081023 - djd - Refactor project.conf structure changes
+# 20081023 - djd - Refactor .project.conf structure changes
 # 20081028 - djd - Removed system logging, messages only now
 # 20090218 - djd - Added system logging access as other like
 #        processes needed it too
@@ -43,17 +43,20 @@ class MakeMakefile (object) :
 
 		self._log_manager = log_manager
 
+		# The folder name for peripheral material is auto created here
+		peripheralFolderName = os.getcwd().split('/')[-1]
+
 		# Create the new makefile object (overwrite the old file)
 		# Note here about encoding. If you use utf_8_sig rather than
 		# just utf-8 it will put a BOM in the file. This seems to make
 		# Make choke. Keeping with just utf-8 seems to fix it.
-		makefileObject = codecs.open('Makefile', 'w', encoding='utf-8')
+		makefileObject = codecs.open('.makefile', 'w', encoding='utf-8')
 
 		# Create the file elements
 		makefileHeader = "# Makefile\n\n# This is an auto-generated file, do not edit. Any necessary changes\n" + \
-				"# should be made to the project.conf file.\n\n"
+				"# should be made to the .project.conf file.\n\n"
 
-		# Pull in settings stored in the Process section of the project.conf object
+		# Pull in settings stored in the Process section of the .project.conf object
 		# As there are sub-sections we will add them to the settings object one
 		# at after another. There's probably a better way to do this but not today ;-)
 		makefileSettings = ""
@@ -68,17 +71,25 @@ class MakeMakefile (object) :
 		cmykPath = self._log_manager._settings['System']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
 		makefileSettings = makefileSettings + 'CMYK_PROFILE' + "=" + cmykPath + "\n"
 
-		watermark = self._log_manager._settings['Format']['PageLayout'].get('WATERMARK','true')
-		makefileSettings = makefileSettings + 'WATERMARK' + "=" + watermark + "\n"
+		watermark = self._log_manager._settings['Format']['PageLayout'].get('USE_WATERMARK','true')
+		makefileSettings = makefileSettings + 'USE_WATERMARK' + "=" + watermark + "\n"
 
-		cropmarks = self._log_manager._settings['Format']['PageLayout'].get('CROPMARKS','true')
-		makefileSettings = makefileSettings + 'CROPMARKS' + "=" + cropmarks + "\n"
+		cropmarks = self._log_manager._settings['Format']['PageLayout'].get('USE_CROPMARKS','true')
+		makefileSettings = makefileSettings + 'USE_CROPMARKS' + "=" + cropmarks + "\n"
 
 		for key, value, in self._log_manager._settings['System']['General'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
+		for key, value, in self._log_manager._settings['System']['Extensions'].iteritems() :
+			makefileSettings = makefileSettings + key + "=" + value + "\n"
+
 		for key, value, in self._log_manager._settings['System']['Paths'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
+
+		# Insert the peripheral folder name here. This is a
+		# hard-coded insert because it should always be the
+		# name given here. The user cannot change this.
+		makefileSettings = makefileSettings + 'PATH_SOURCE_PERIPH' + "=" + peripheralFolderName + "\n"
 
 		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
@@ -119,6 +130,12 @@ class MakeMakefile (object) :
 		# Output to the new makefile file
 		makefileObject.write(makefileHeader + makefileSettings + makefileFinal)
 
+#    def setPeripheralFolderName (self) :
+#        '''This will find out the name of the current project folder and then
+#            pass that back. That name will be used as the folder name for
+#            project peripheral material that is stored in the source folder.'''
+#
+#            print os.getcwd().split('/')[-1]
 
 # This starts the whole process going
 def doIt(log_manager):

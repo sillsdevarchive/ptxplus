@@ -35,6 +35,7 @@
 # 20091223 - djd - Removed references to MAPS folder
 # 20100507 - djd - Moved out rules for illustration creation
 # 20100611 - djd - Added functions to share
+# 20100615 - djd - Changed hard codded extions to vars
 
 
 ##############################################################
@@ -42,7 +43,7 @@
 ##############################################################
 
 # This is the final output we want so we can name it here
-MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).pdf
+MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).$(EXT_PDF)
 
 
 ##############################################################
@@ -108,7 +109,7 @@ $(PATH_PROCESS)/.stamp :
 	@ $(call mdir,$(PATH_PROCESS))
 	touch $(PATH_PROCESS)/.stamp
 
-# Update a project.conf file so system improvements can be
+# Update a .project.conf file so system improvements can be
 # pulled into existing projects.
 update :
 	$(PY_RUN_PROCESS) update_project_settings
@@ -158,21 +159,21 @@ $(PATH_PROCESS)/$(FILE_PAGE_BORDER) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED
 # recorded information about this project and output it in
 # a formated PDF document
 
-# Create the .pdf file
-$(PATH_PROCESS)/PROJECT_INFO.pdf : \
-	$(PATH_TEXTS)/PROJECT_INFO.usfm \
-	$(PATH_PROCESS)/PROJECT_INFO.tex
+# Create the .$(EXT_PDF) file
+$(PATH_PROCESS)/PROJECT_INFO.$(EXT_PDF) : \
+	$(PATH_TEXTS)/PROJECT_INFO.$(EXT_WORK) \
+	$(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX)
 	@echo INFO: Creating: $@
 	@rm -f $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/PROJECT_INFO.tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX)
 
-# Create the .tex file that drives the typesetting process
-$(PATH_PROCESS)/PROJECT_INFO.tex :
+# Create the .$(EXT_TEX) file that drives the typesetting process
+$(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX) :
 	@echo INFO: Creating: $@
 	@echo \\input $(FILE_TEX_MACRO) > $@
 	@echo \\input $(FILE_TEX_SETUP) >> $@
 	@echo \\BodyColumns=1 >> $@
-	@echo \\ptxfile{$(PATH_TEXTS)/PROJECT_INFO.usfm} >> $@
+	@echo \\ptxfile{$(PATH_TEXTS)/PROJECT_INFO.$(EXT_WORK)} >> $@
 	@echo '\\bye' >> $@
 
 
@@ -186,11 +187,11 @@ define mdir
 endef
 
 define watermark
-@if [ $(USE_WATERMARK) = "true" ] ; then \
+@if [ "$(USE_WATERMARK)" = "true" ] ; then \
 	echo INFO: Adding watermark to ouput: $(1); \
-	pdftk $(1) background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.pdf; \
-	cp $(PATH_PROCESS)/tmp.pdf $(1); \
-	rm -f $(PATH_PROCESS)/tmp.pdf; \
+	pdftk $(1) background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.$(EXT_PDF); \
+	cp $(PATH_PROCESS)/tmp.$(EXT_PDF) $(1); \
+	rm -f $(PATH_PROCESS)/tmp.$(EXT_PDF); \
 fi
 endef
 
@@ -216,7 +217,7 @@ $(MATTER_BOOK_PDF) : $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MAT
 # This is the caller for the main rule, let's look at the results
 view-book : $(MATTER_BOOK_PDF)
 	@- $(CLOSEPDF)
-	@ $(call watermark,$<)
+	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 
@@ -230,14 +231,14 @@ pdf-remove-book :
 
 # Clean out the log files
 log-clean :
-	rm -f $(PATH_LOG)/*.log
+	rm -f $(PATH_LOG)/*.$(EXT_LOG)
 
 # Clean the reports folder
 reports-clean :
 	rm -f $(PATH_REPORTS)/*.tmp
-	rm -f $(PATH_REPORTS)/*.txt
-	rm -f $(PATH_REPORTS)/*.html
-	rm -f $(PATH_REPORTS)/*.csv
+	rm -f $(PATH_REPORTS)/*.$(EXT_TEXT)
+	rm -f $(PATH_REPORTS)/*.$(EXT_HTML)
+	rm -f $(PATH_REPORTS)/*.$(EXT_CSV)
 
 # Illustration folder clean up. Just take out the linked PNG files
 illustrations-clean :
@@ -245,22 +246,22 @@ illustrations-clean :
 
 # Just in case we need to clean up to have a fresh start
 process-clean :
-	rm -f $(PATH_PROCESS)/*.log
+	rm -f $(PATH_PROCESS)/*.$(EXT_LOG)
 	rm -f $(PATH_PROCESS)/*.notepages
 	rm -f $(PATH_PROCESS)/*.parlocs
 	rm -f $(PATH_PROCESS)/*.delayed
-	rm -f $(PATH_PROCESS)/*.pdf
-	rm -f $(PATH_PROCESS)/*.PDF
+	rm -f $(PATH_PROCESS)/*.$(EXT_PDF)
+	rm -f $(PATH_PROCESS)/*.$(EXT_PDF)
 
 # This will clean out all the generated in the texts folder.
 # Be very careful with this one! You don't want to lose the
-# work you put into your .piclist and .adj files. Hopefully
+# work you put into your .$(EXT_PICLIST) and .$(EXT_ADJUSTMENT) files. Hopefully
 # the lock mechanism will prevent this.
 texts-clean :
 ifeq ($(LOCKED),0)
-	rm -f $(PATH_TEXTS)/*.txt
-	rm -f $(PATH_TEXTS)/*.usfm
-	rm -f $(PATH_TEXTS)/*.USFM
+	rm -f $(PATH_TEXTS)/*.$(EXT_TEXT)
+	rm -f $(PATH_TEXTS)/*.$(EXT_WORK)
+	rm -f $(PATH_TEXTS)/*.$(EXT_WORK)
 endif
 	rm -f $(PATH_TEXTS)/*.bak
 	rm -f $(PATH_TEXTS)/*~
@@ -268,13 +269,13 @@ endif
 # This supports clean-all or can be called alone.
 adjfile-clean-all :
 ifeq ($(LOCKED),0)
-	rm -f $(PATH_TEXTS)/*.adj
+	rm -f $(PATH_TEXTS)/*.$(EXT_ADJUSTMENT)
 endif
 
 # This supports clean-all or can be called alone.
 picfile-clean-all :
 ifeq ($(LOCKED),0)
-	rm -f $(PATH_TEXTS)/*.piclist
+	rm -f $(PATH_TEXTS)/*.$(EXT_PICLIST)
 endif
 
 # Just in case, here is a clean_all rule. However, be very
@@ -309,14 +310,14 @@ wiki : $(PATH_ADMIN_WIKI)
 # (At some point we'll add a date prepend routine before the wiki page call.)
 note : $(PATH_ADMIN_WIKI)
 	@-$(CLOSEWIKI)
-	$(TEXT_TO_WIKI) note $(PATH_ADMIN_WIKI)/Notes.txt
+	$(TEXT_TO_WIKI) note $(PATH_ADMIN_WIKI)/Notes.$(EXT_TEXT)
 	$(VIEWWIKI) $(PATH_ADMIN_WIKI) Notes &
 
 # Call on the project wiki issues page
 # (At some point we'll add a date prepend routine before the wiki page call.)
 issue : $(PATH_ADMIN_WIKI)
 	@-$(CLOSEWIKI)
-	$(TEXT_TO_WIKI) issue $(PATH_ADMIN_WIKI)/Issues.txt
+	$(TEXT_TO_WIKI) issue $(PATH_ADMIN_WIKI)/Issues.$(EXT_TEXT)
 	$(VIEWWIKI) $(PATH_ADMIN_WIKI) Issues &
 
 # Call the system wiki help pages
@@ -327,8 +328,8 @@ help :
 about :
 	$(VIEWWIKI) $(PATH_SYSTEM_HELP) About &
 
-# To edit the project.conf file
+# To edit the .project.conf file
 configure :
-	$(EDITCONF) project.conf ptx2pdf-setup.txt ptx2pdf.sty &
+	$(EDITCONF) .project.conf ptx2pdf-setup.$(EXT_TEXT) ptx2pdf.sty &
 
 

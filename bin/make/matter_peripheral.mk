@@ -34,6 +34,7 @@
 # 20100212 - djd - Started adding custom TOC generation rules
 # 20100213 - djd - Moved the TOC rules to a seperate file
 # 20100603 - djd - Added TeX control file auto build process
+# 20100615 - djd - Changed hard codded extions to vars
 
 ##############################################################
 #		Variables for peripheral matter
@@ -93,14 +94,14 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIP
 	fi
 endif
 
-# This .tex file also generally has some dependencies on the
-# COVER/FRONT/BACK_MATTER.tex files so we add them here. However,
+# This .$(EXT_TEX) file also generally has some dependencies on the
+# COVER/FRONT/BACK_MATTER.$(EXT_TEX) files so we add them here. However,
 # we will use the "|" (pipe) trick to prevent any updating in
 # case the file already exists. Also, at this point, we are not
 # passing any IDs or flags through. We will try to make this
 # control file by context in the script.
-$(PATH_PROCESS)/$(1).tex : | \
-	$(PATH_PROCESS)/$(1).sty \
+$(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
+	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
 	$(PATH_PROCESS)/$(FILE_TEX_SETUP) \
 	$(PATH_PROCESS)/$(FILE_TEX_COVER) \
 	$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
@@ -109,10 +110,10 @@ $(PATH_PROCESS)/$(1).tex : | \
 	@$(PY_RUN_PROCESS) make_tex_control_file '' '$(1)' '$$@' 'periph'
 
 # The rule to create the override style sheet.
-$(PATH_PROCESS)/$(1).sty :
-	@if test -r $(PATH_TEMPLATES)/$(1).sty; then \
-		echo INFO: Copying $$@ into project from: $(PATH_TEMPLATES)/$(1).sty; \
-		cp $(PATH_TEMPLATES)/$(1).sty '$$@'; \
+$(PATH_PROCESS)/$(1).$(EXT_STYLE) :
+	@if test -r $(PATH_TEMPLATES)/$(1).$(EXT_STYLE); then \
+		echo INFO: Copying $$@ into project from: $(PATH_TEMPLATES)/$(1).$(EXT_STYLE); \
+		cp $(PATH_TEMPLATES)/$(1).$(EXT_STYLE) '$$@'; \
 	else \
 		echo INFO: Could not find: $$@; \
 		echo INFO: Creating: $$@; \
@@ -121,18 +122,18 @@ $(PATH_PROCESS)/$(1).sty :
 	fi
 
 # Process a single peripheral item and produce the final PDF.
-$(PATH_PROCESS)/$(1).pdf : \
+$(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1) \
-	$(PATH_PROCESS)/$(1).tex \
-	$(PATH_PROCESS)/$(1).sty \
+	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
+	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
 	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).tex
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).$(EXT_TEX)
 
 # Open the PDF file with reader - Add a watermark if needed
-view-$(1) : $(PATH_PROCESS)/$(1).pdf
+view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@- $(CLOSEPDF)
-	@ $(call watermark,$$<)
+	$(call watermark,$$<)
 	@ $(VIEWPDF) $$< &
 
 
@@ -143,12 +144,12 @@ preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 	@$(PY_RUN_PROCESS) PreprocessChecks $(1) '$$<'
 
 # Do not open the PDF file with reader
-$(1) : $(PATH_PROCESS)/$(1).pdf $(DEPENDENT_FILE_LIST)
+$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF) $(DEPENDENT_FILE_LIST)
 
 # Remove the PDF file for this source file
 pdf-remove-$(1) :
 	@echo INFO: Removing $$@
-	@rm -f $(PATH_PROCESS)/$(1).pdf
+	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 endef
 
 # Filter out repeat instances of peripheral matter, like
@@ -160,9 +161,9 @@ endef
 # Bind all the matter for a given set
 define matter_binding
 ifneq ($($(1)),)
-$(1)_PDF = $(PATH_PROCESS)/$(1).pdf
-$(PATH_PROCESS)/$(1).pdf : $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) $(DEPENDENT_FILE_LIST)
-	@pdftk $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).pdf) cat output $$@
+$(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
+$(PATH_PROCESS)/$(1).$(EXT_PDF) : $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
+	@pdftk $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) cat output $$@
 endif
 endef
 
@@ -197,15 +198,15 @@ $(PATH_PROCESS)/$(FILE_TEX_COVER) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	@echo INFO: Creating: $@
 	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'cover'
 
-# Most front matter peripheral .tex files will have a dependency
+# Most front matter peripheral .$(EXT_TEX) files will have a dependency
 # on $(FILE_TEX_FRONT) even if it doesn't, there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/$(FILE_TEX_FRONT) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	@echo INFO: Creating: $@
 	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'front'
 
-# Most back matter peripheral .tex files will have a dependency
-# on BACK_MATTER.tex even if it doesn't there is a hard coded
+# Most back matter peripheral .$(EXT_TEX) files will have a dependency
+# on BACK_MATTER.$(EXT_TEX) even if it doesn't there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	@echo INFO: Creating: $@
@@ -219,7 +220,7 @@ $(foreach v,$(call uniq,$(MATTER_COVER) $(MATTER_FRONT) $(MATTER_BACK)),$(eval $
 # Produce all the outer cover material in one PDF file
 view-cover : $(MATTER_COVER_PDF)
 	@- $(CLOSEPDF)
-	@ $(call watermark,$<)
+	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 # To produce individual elements of the outer cover just
@@ -228,13 +229,13 @@ view-cover : $(MATTER_COVER_PDF)
 # Produce just the font matter (bound)
 view-front : $(MATTER_FRONT_PDF)
 	@- $(CLOSEPDF)
-	@ $(call watermark,$<)
+	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 # Produce just the back matter (bound)
 view-back : $(MATTER_BACK_PDF)
 	@- $(CLOSEPDF)
-	@ $(call watermark,$<)
+	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 # Clean up rules for peripheral matter

@@ -87,6 +87,8 @@ class MakeTexControlFile (object) :
 		self._otMatter = self._log_manager._settings['System']['Binding']['MATTER_OT'].split()
 		self._ntMatter = self._log_manager._settings['System']['Binding']['MATTER_NT'].split()
 		self._publicationType = log_manager._publicationType
+		# File extentions (Expand this, more will be needed in the future)
+		self._extStyle = self._log_manager._settings['System']['Extensions'].get('EXT_STYLE', 'sty')
 		# Some lists
 		self._headerPositions = ['RHtitleleft', 'RHtitlecenter', 'RHtitleright', \
 						'RHoddleft', 'RHoddcenter', 'RHoddright', \
@@ -134,7 +136,8 @@ class MakeTexControlFile (object) :
 		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
 		useHyphenation = self._log_manager._settings['System']['Hyphenation'].get('useHyphenation', 'true')
 		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
-		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files'].get('FILE_HYPHENATION_TEX', '')
+		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
+		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files'].get('FILE_BIBLE_STYLE', 'bible.sty')
 
 		# Input the main macro set here in the control file
 		settings = '\\input ' + self._texMacros + '\n'
@@ -149,14 +152,16 @@ class MakeTexControlFile (object) :
 		settings = settings + '\\input ' + self._cmSettingsFile + '\n'
 
 		# Make a link to the local override stylesheet. This file can override
-		# styles that were introduced in the main setup file. However, for major
-		# sections like the OT and NT, we should not be needing a style sheet at
-		# this level so we will only output an override style sheet for peripheral
-		# material where it is needed most.
-		# Only Scriture matter will have an ID so if its empty we can output an
-		# override style file reference.
-		if self._inputID == '' :
-			settings = settings + '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.sty}\n'
+		# styles that were introduced in the main setup file. For major
+		# sections like the OT and NT, we have a bible.sty style sheet at
+		# this level. This is an override style sheet for Scripture material.
+		# Only Scriture matter will have an ID so if it has one we will
+		# output the bible.sty override file. Otherwise, we output a custom
+		# style override file.
+		if self._inputID != '' :
+			settings = settings + '\\stylesheet{' + bibleStyleFile + '}\n'
+		else :
+			settings = settings + '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.' + self._extStyle + '}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
@@ -243,7 +248,7 @@ class MakeTexControlFile (object) :
 			elsewhere in this module.'''
 
 		# Build some paths and file names
-		styleFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_STYLE', 'project.sty')
+		styleFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_STYLE', '.project.sty')
 		# Bring in page format settings
 		useCropmarks = self._log_manager._settings['Format']['PageLayout'].get('USE_CROPMARKS', 'true')
 		pageHeight = self._log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')

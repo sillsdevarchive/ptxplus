@@ -17,7 +17,7 @@
 # 20080626 - djd - Initial draft
 # 20081022 - djd - Folded the config files together and
 #        changed the routines here to reflect that
-# 20081023 - djd - Refactor project.conf structure changes
+# 20081023 - djd - Refactor .project.conf structure changes
 # 20081028 - djd - Moved localiseFontsConf to font_manager.py
 # 20091009 - te - Added "No Context" return to getSliceOfText()
 # 20100416 - djd - Added CSVtoDict class written by te.
@@ -145,17 +145,17 @@ class Tools (object) :
 	def getProjectSettingsObject (self) :
 		'''Return an object which contains the project settings.'''
 
-		if os.path.isfile(os.getcwd() + "/project.conf") :
+		if os.path.isfile(os.getcwd() + "/.project.conf") :
 			# Load in the settings from our project
-			return ConfigObj(os.getcwd() + "/project.conf", encoding='utf-8')
+			return ConfigObj(os.getcwd() + "/.project.conf", encoding='utf-8')
 
 
 	def getProjectDefaultSettingsObject (self) :
 		'''Return a default project object from the system.'''
 
-		defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/project.conf"
+		defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/.project.conf"
 		if os.path.isfile(defaultFile) :
-			# Load in the settings from our default project.conf file
+			# Load in the settings from our default .project.conf file
 			return ConfigObj(defaultFile, encoding='utf-8')
 
 	def getSystemSettingsOverrideObject (self) :
@@ -264,7 +264,7 @@ class Tools (object) :
 
 
 	def getProjectID (self) :
-		'''Get the project ID from the project.conf file.'''
+		'''Get the project ID from the .project.conf file.'''
 
 		return self.getProjectSettingsObject()['Project']['ProjectInformation']['projectID']
 
@@ -272,7 +272,7 @@ class Tools (object) :
 	def inProject (self) :
 		'''Simple test to see if a project.ini file exists.'''
 
-		if os.path.isfile("project.conf") == True :
+		if os.path.isfile(".project.conf") == True :
 			return True
 		else :
 			return False
@@ -338,12 +338,12 @@ class Tools (object) :
 
 
 	def isProjectFolder (self) :
-		'''Check to see if the project folder and the project.conf file
+		'''Check to see if the project folder and the .project.conf file
 			exists in the current directory.'''
 
 		path = os.getcwd()
 		ok = False
-		if os.path.isfile(path + "/project.conf") :
+		if os.path.isfile(path + "/.project.conf") :
 			ok = True
 
 		return ok
@@ -408,7 +408,7 @@ class Tools (object) :
 
 		except :
 
-			self.userMessage('Could not run makefile command. The project.conf file may be corrupt.')
+			self.userMessage('Could not run makefile command. The .project.conf file may be corrupt.')
 
 
 	def doCustomProcess (self, processCommand) :
