@@ -131,29 +131,41 @@ dev-update :
 # If, for some odd reason the Illustrations folder is not in
 # the right place we'll put one where it is supposed to be found.
 $(PATH_ILLUSTRATIONS) :
-	@ $(call mdir,$@)
+	$(call mdir,$@)
 
 # This is the main rule for copying all the shared illustration
 # material like logos, watermarks, etc. First we will make the
 # folder, then we will copy everthing into it.
 $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) : | $(PATH_ILLUSTRATIONS)
-	@ $(call mdir,$@)
+	$(call mdir,$@)
 
-$(PATH_PROCESS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
-	@ $(call cplibtoshare,$(FILE_WATERMARK))
-	@ $(call lnsharetoproc,$(FILE_WATERMARK))
+# Watermark
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
 
-$(PATH_PROCESS)/$(FILE_LOGO_BSM) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
-	@ $(call cplibtoshare,$(FILE_LOGO_BSM))
-	@ $(call lnsharetoproc,$(FILE_LOGO_BSM))
+$(PATH_PROCESS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK),$@)
 
-$(PATH_PROCESS)/$(FILE_LOGO_CFE) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
-	@ $(call cplibtoshare,$(FILE_LOGO_CFE))
-	@ $(call lnsharetoproc,$(FILE_LOGO_CFE))
+# BSM Logo
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
 
-$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
-	@ $(call cplibtoshare,$(FILE_PAGE_BORDER))
-	@ $(call lnsharetoproc,$(FILE_PAGE_BORDER))
+$(PATH_PROCESS)/$(FILE_LOGO_BSM) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM),$@)
+
+# CFE Logo
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE) :| $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
+
+$(PATH_PROCESS)/$(FILE_LOGO_CFE) :$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE),$@)
+
+# Page border
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_PAGE_BORDER) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
+
+$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_PAGE_BORDER)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_PAGE_BORDER),$@)
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
@@ -181,11 +193,13 @@ $(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX) :
 #		Shared functions
 ###############################################################
 
+# Make a directory
 define mdir
 @echo INFO: Creating $(1)
 @mkdir -p $(1)
 endef
 
+# Add a watermark to the output if called for
 define watermark
 @if [ "$(USE_WATERMARK)" = "true" ] ; then \
 	echo INFO: Adding watermark to ouput: $(1); \
@@ -195,14 +209,25 @@ define watermark
 fi
 endef
 
-define cplibtoshare
-@echo INFO: Copying: $(PATH_RESOURCES_ILLUSTRATIONS)/$(1) to $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(1)
-@cp $(PATH_RESOURCES_ILLUSTRATIONS)/$(1) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(1)
+# This will test for a file at the indicated
+# source location. If one is found, it will
+# copy it to the destination. If not, a dummy
+# file will be created. This is useful for
+# control files that can be empty.
+define copysmart
+@if test -r "$(1)"; then \
+	echo INFO: Copying into project: $(2); \
+	cp $(1) $(2); \
+else \
+	echo INFO: File not found. Creating: $(2); \
+	echo \# The file you have requested, $(2), is missing. This file was created to take its place. Please replace or edit this file as needed >> $(2); \
+fi
 endef
 
-define lnsharetoproc
-@echo INFO: Linking: $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(1) to $(PATH_ILLUSTRATIONS)/$(1)
-@ln -sf $(shell readlink -f -- $(PATH_SOURCE))/$(PATH_ILLUSTRATIONS_SHARED)/$(1) $(PATH_PROCESS)/$(1)
+# Create a link into the project
+define linkme
+@echo INFO: Linking: $(1) to $(2)
+@ln -sf $(shell readlink -f -- $(1)) $(2)
 endef
 
 

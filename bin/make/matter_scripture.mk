@@ -30,18 +30,7 @@ define component_rules
 # that file is not there. Rather a dummy file will be created
 # telling them the file is missing.
 $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_SOURCE)
-	@if test -r "$(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)"; then \
-		echo Copying into project from: $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); \
-		cp $(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) '$$@'; \
-	else \
-		echo Could not find: $$@; \
-		echo Creating this file:; \
-		echo Caution, you will need to edit it; \
-		echo \\id $(1) >> $$@; \
-		echo \\ide UTF-8 >> $$@; \
-		echo \\p This is an auto created page found at: $$@ >> $$@; \
-		echo \\p Please replace this with a valid USFM file to continue the proecess. >> $$@; \
-	fi
+	$(call copysmart,$(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
 
 # This is the basic rule for auto-text-processing. To control processes
 # edit the .project.conf file. This will automatically run the four
@@ -176,13 +165,7 @@ $(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP) $(FILE_PRO
 # used to override styles for Scripture that come from the
 # .project.sty file.
 $(PATH_PROCESS)/$(FILE_BIBLE_STYLE) : | $(PATH_SOURCE)
-	@if test -r "$(PATH_TEMPLATES)/$(FILE_BIBLE_STYLE)"; then \
-		echo Copying into project from: $(PATH_TEMPLATES)/$(FILE_BIBLE_STYLE); \
-		cp $(PATH_TEMPLATES)/$(FILE_BIBLE_STYLE) '$@'; \
-	else \
-		echo INFO: Creating: $@; \
-		echo \# Override style sheet for $@, This is used for Scripture publishing projects, edit as needed >> $@; \
-	fi
+	$(call copysmart,$(PATH_RESOURCES_PROCESS)/$(FILE_BIBLE_STYLE),$@)
 
 
 # Start with the OT but we don't want to do anything if there

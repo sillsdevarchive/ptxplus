@@ -258,7 +258,7 @@ class Tools (object) :
 
 		path, file = pathPlusFileName.rsplit("/", 1)
 		nameSourceOriginal = settings_project['System']['General']['NAME_SOURCE_ORIGINAL']
-		nameSourceExtention = settings_project['System']['General']['NAME_SOURCE_EXTENSION']
+		nameSourceExtention = settings_project['System']['General']['EXT_SOURCE']
 		file = file.replace(nameSourceOriginal + "." + nameSourceExtention, "")
 		return file
 

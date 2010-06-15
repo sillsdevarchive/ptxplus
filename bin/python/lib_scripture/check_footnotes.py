@@ -13,11 +13,11 @@
 # This class will check footnote usage in an SFM file. It will
 # follow these basic rules concerning footnotes:
 #
-#	There need not be a space before the opening marker
-#		This helps avoid orphan callout markers
-#	There need not be a space after the closing marker
-#		This may be the case when a fn comes at the
-#		front of a verse
+#    There need not be a space before the opening marker
+#        This helps avoid orphan callout markers
+#    There need not be a space after the closing marker
+#        This may be the case when a fn comes at the
+#        front of a verse
 #
 # The focus of this script is strictly footnotes. All other
 # issues will be left to other preprocessing scripts.
@@ -27,12 +27,12 @@
 # 20080917 - djd - Changed output to Reports folder
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 # 20081216 - djd - Changed to work with new sfm parser.
 # 20090505 - djd - Added a filter for peripheral matter files
 # 20100104 - djd - Changed file encoding to utf_8_sig to prevent
-#		BOM problems
+#        BOM problems
 
 
 #############################################################
@@ -57,10 +57,10 @@ class CheckFootnotes (object) :
 		self._markup_manager = MarkupManager(self._settings)
 		self._encoding_manager = EncodingManager(self._settings)
 		self._tools = Tools()
-#		self._sfms = sfm_definitions.init_usfm()
+#        self._sfms = sfm_definitions.init_usfm()
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
-		self._reportFilePath = self._settings['Process']['Paths']['PATH_REPORTS']
+		self._reportFilePath = self._settings['System']['Paths']['PATH_REPORTS']
 
 
 	def main (self) :
@@ -72,9 +72,9 @@ class CheckFootnotes (object) :
 		# Note that the isPeripheralMatter() function is now
 		# disabled. Do we really need to do this check anyway?
 		# Let's go away and think about it
-#		if tools.isPeripheralMatter(self._inputFile) :
+#        if tools.isPeripheralMatter(self._inputFile) :
 #
-#			return
+#            return
 
 		# Get our book object
 		bookObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')

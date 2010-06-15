@@ -13,8 +13,8 @@
 # This class will check crossreference usage in an SFM file.
 # It will follow these basic rules concerning crossreferences:
 #
-#	There need not be a space before the opening marker
-#	There must be a space after the closing marker
+#    There need not be a space before the opening marker
+#    There must be a space after the closing marker
 #
 # The focus of this script is strictly crossreferences. All
 # other issues will be left to other preprocessing scripts.
@@ -24,11 +24,11 @@
 # 20080729 - djd - Fix blank file output problem
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 # 20090505 - djd - Added a filter for peripheral matter files
 # 20100104 - djd - Changed file encoding to utf_8_sig to prevent
-#		BOM problems
+#        BOM problems
 
 
 #############################################################
@@ -54,7 +54,7 @@ class CheckCrossreferences (object) :
 
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
-		self._reportFilePath = self._settings['Process']['Paths']['PATH_REPORTS']
+		self._reportFilePath = self._settings['System']['Paths']['PATH_REPORTS']
 
 
 	def main(self):
@@ -66,9 +66,9 @@ class CheckCrossreferences (object) :
 		# Note that the isPeripheralMatter() function is now
 		# disabled. Do we really need to do this check anyway?
 		# Let's go away and think about it
-#		if tools.isPeripheralMatter(self._inputFile) :
+#        if tools.isPeripheralMatter(self._inputFile) :
 #
-#			return
+#            return
 
 		# Get our book object
 		bookObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
@@ -103,8 +103,8 @@ class CheckCrossreferences (object) :
 						# number of words in on the line to be able to
 						# grab the crossRef caller character if it is
 						# in the right place.
-#						print callerChar
-#						if not words[wordCount] == ('+' or '-' or '?') :
+#                        print callerChar
+#                        if not words[wordCount] == ('+' or '-' or '?') :
 						if callerChar != '-' :
 							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "ERRR", "Line: " + str(lineNumber) + " The crossRef caller: " + words[wordCount] + " is not valid")
 

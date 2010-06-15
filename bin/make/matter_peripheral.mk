@@ -79,19 +79,23 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 # changing.
 ifneq ($(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm)
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
-	@if test -r $(PATH_TEMPLATES)/$(1); then \
-		echo INFO: Copying  $$@ into project from: $(PATH_TEMPLATES)/$(1); \
-		cp $(PATH_TEMPLATES)/$(1) '$$@'; \
-	else \
-		echo INFO: Could not find: $$@; \
-		echo INFO: Creating: $$@; \
-		echo INFO: Caution, you may need to edit it; \
-		echo \\id OTH >> $$@; \
-		echo \\ide UTF-8 >> $$@; \
-		echo \\periph \<Fill in page type here\> >> $$@; \
-		echo \\p This is a auto created page found at: $$@ >> $$@; \
-		echo \\p Please edit as needed. >> $$@; \
-	fi
+	$(call copysmart,$(PATH_TEMPLATES)/$(1),$$@)
+
+
+
+#	@if test -r $(PATH_TEMPLATES)/$(1); then \
+#		echo INFO: Copying  $$@ into project from: $(PATH_TEMPLATES)/$(1); \
+#		cp $(PATH_TEMPLATES)/$(1) '$$@'; \
+#	else \
+#		echo INFO: Could not find: $$@; \
+#		echo INFO: Creating: $$@; \
+#		echo INFO: Caution, you may need to edit it; \
+#		echo \\id OTH >> $$@; \
+#		echo \\ide UTF-8 >> $$@; \
+#		echo \\periph \<Fill in page type here\> >> $$@; \
+#		echo \\p This is a auto created page found at: $$@ >> $$@; \
+#		echo \\p Please edit as needed. >> $$@; \
+#	fi
 endif
 
 # This .$(EXT_TEX) file also generally has some dependencies on the

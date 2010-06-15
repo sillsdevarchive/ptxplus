@@ -17,22 +17,22 @@
 # History:
 # 20090130 - djd - Initial draft
 # 20090204 - djd - Completed working first version. However,
-#		There is a lot of potential with this process but
-#		a lot of work needs to be done such as CSV output
-#		on the book report files.
+#        There is a lot of potential with this process but
+#        a lot of work needs to be done such as CSV output
+#        on the book report files.
 # 20090209 - djd - Completed optimization, works very fast
-#		now. We may want to incorporate this in check_book
+#        now. We may want to incorporate this in check_book
 # 20090323 - djd - With Tim E's help we got the encoding
-#		issues ironed out and added true CSV output.
+#        issues ironed out and added true CSV output.
 # 20090326 - djd - Moved the process to strip out non-word
-#		characters to the encoding manager so it can be
-#		shared by other processes.
+#        characters to the encoding manager so it can be
+#        shared by other processes.
 # 20090401 - djd - Added some better debugging to track
-#		possible problems with encoding transformations.
-#		Again, Tim E did pretty much all of it
+#        possible problems with encoding transformations.
+#        Again, Tim E did pretty much all of it
 # 20091009 - te - Reordered process and added piping so that
-# 		a common encoding conversion process could be
-#		used rather than having two seperate processes.
+#         a common encoding conversion process could be
+#        used rather than having two seperate processes.
 
 
 #############################################################
@@ -56,7 +56,7 @@ class MakeBookWordlist (object) :
 		inputFile = log_manager._currentInput
 		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'BookWordlist'
-		reportPath = log_manager._settings['Process']['Paths']['PATH_REPORTS']
+		reportPath = log_manager._settings['System']['Paths']['PATH_REPORTS']
 		bookReportFile = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.csv"
 		bookWordlist = {}
 		wordlist = []
@@ -70,8 +70,8 @@ class MakeBookWordlist (object) :
 		# Note that the isPeripheralMatter() function is now
 		# disabled. Do we really need to do this check anyway?
 		# Let's go away and think about it
-#		if tools.isPeripheralMatter(inputFile) :
-#			return
+#        if tools.isPeripheralMatter(inputFile) :
+#            return
 
 		# Make our Report folder if it isn't there
 		if not os.path.isdir(reportPath) :
@@ -86,17 +86,17 @@ class MakeBookWordlist (object) :
 		# back in to finish the processing. This is done with pipes so it seems
 		# very seamless.
 		# Bring in any encoding mapings we may need.
-		encoder = log_manager._settings['Encoding']['Processing']['customEncodingProcess']
+		encoder = log_manager._settings['System']['General']['customEncodingProcess']
 		if encoder:
 			# Process the customEncodingProcess string to set the meta filesnames
 			encoder = [arg.replace('[outfile]','/dev/stdout').replace('[infile]',inputFile) for arg in encoder.split()]
 			# Run the conversions on all our text
-#			log_manager.log("DBUG", 'make_book_wordlist: Preconversion length %d' % len(pre_wordlist))
-#			handler._wordlist = pipe_to(encoder, '\n'.join(pre_wordlist)).split('\n')
-#			log_manager.log("DBUG", 'make_book_wordlist: Postconversion length %d' % len(filter(bool, handler._wordlist)))
+#            log_manager.log("DBUG", 'make_book_wordlist: Preconversion length %d' % len(pre_wordlist))
+#            handler._wordlist = pipe_to(encoder, '\n'.join(pre_wordlist)).split('\n')
+#            log_manager.log("DBUG", 'make_book_wordlist: Postconversion length %d' % len(filter(bool, handler._wordlist)))
 
 		# Get our current book object
-#		bookObject = childprocess(encoder).decode('utf-8') if encoder else codecs.open(inputFile, "r", encoding='utf-8').read()
+#        bookObject = childprocess(encoder).decode('utf-8') if encoder else codecs.open(inputFile, "r", encoding='utf-8').read()
 # This encoding change needs testing
 		bookObject = childprocess(encoder).decode('utf-8') if encoder else codecs.open(inputFile, "r", encoding='utf_8_sig').read()
 
@@ -120,37 +120,37 @@ class MakeBookWordlist (object) :
 			bookWordlist[word] += 1
 
 
-#		# If the lists after removing duplicates and the set before do not match there
-#		# may be an encoding problem.  Only generate extended logging info if this is the case
-#		num_uniq_pre  = len(set(pre_wordlist))
-#		num_uniq_post = len(bookWordlist)
-#		if num_uniq_pre != num_uniq_post:
-#			log_manager.log("WARN",
-#				'possible conversion error: number of unique words do not match: %d -> %d' % (
-#					num_uniq_pre,num_uniq_post))
+#        # If the lists after removing duplicates and the set before do not match there
+#        # may be an encoding problem.  Only generate extended logging info if this is the case
+#        num_uniq_pre  = len(set(pre_wordlist))
+#        num_uniq_post = len(bookWordlist)
+#        if num_uniq_pre != num_uniq_post:
+#            log_manager.log("WARN",
+#                'possible conversion error: number of unique words do not match: %d -> %d' % (
+#                    num_uniq_pre,num_uniq_post))
 #
-#			# Generate before and after word to word number sets mappings.
-#			pre_word_num_map = defaultdict(set)
-#			post_word_num_map = defaultdict(set)
-#			for n,w in enumerate(pre_wordlist): pre_word_num_map[w].add(n)
-#			for n,w in enumerate(handler._wordlist): post_word_num_map[w].add(n)
+#            # Generate before and after word to word number sets mappings.
+#            pre_word_num_map = defaultdict(set)
+#            post_word_num_map = defaultdict(set)
+#            for n,w in enumerate(pre_wordlist): pre_word_num_map[w].add(n)
+#            for n,w in enumerate(handler._wordlist): post_word_num_map[w].add(n)
 #
-#			larger  = (pre_wordlist,      set(map(tuple,pre_word_num_map.values())),  'source')
-#			smaller = (handler._wordlist, set(map(tuple,post_word_num_map.values())), 'target')
-#			# we always need to take the smaller set from the larger so there are more words
-#			# /after/ the conversion swap them around
-#			if num_uniq_pre < num_uniq_post: larger, smaller = smaller,larger
-#			for ids in larger[1].difference(smaller[1]):
-#				for i in ids:
-#					log_manager.log("DBUG",
-#						'%s text word no. %d has ambiguous mapping in %s: codepoint sequences (source -> target): %s -> %s' % (
-#							larger[2], i, smaller[2],
-#							unicode_sequence(pre_wordlist[i].decode('utf_8')),
-#							unicode_sequence(handler._wordlist[i].decode('utf_8'))))
+#            larger  = (pre_wordlist,      set(map(tuple,pre_word_num_map.values())),  'source')
+#            smaller = (handler._wordlist, set(map(tuple,post_word_num_map.values())), 'target')
+#            # we always need to take the smaller set from the larger so there are more words
+#            # /after/ the conversion swap them around
+#            if num_uniq_pre < num_uniq_post: larger, smaller = smaller,larger
+#            for ids in larger[1].difference(smaller[1]):
+#                for i in ids:
+#                    log_manager.log("DBUG",
+#                        '%s text word no. %d has ambiguous mapping in %s: codepoint sequences (source -> target): %s -> %s' % (
+#                            larger[2], i, smaller[2],
+#                            unicode_sequence(pre_wordlist[i].decode('utf_8')),
+#                            unicode_sequence(handler._wordlist[i].decode('utf_8'))))
 
 		# Write out the new csv book word count file
 		# More info on writing to csv is here:
-		#	http://docs.python.org/library/csv.html#writer-objects
+		#    http://docs.python.org/library/csv.html#writer-objects
 		cvsBookFile = csv.writer(open(bookReportFile, "wb"), dialect=csv.excel)
 		cvsBookFile.writerows(bookWordlist.items())
 
