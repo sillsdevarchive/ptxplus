@@ -120,10 +120,28 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
-ifeq ($(USE_ILLUSTRATIONS),true)
-	@echo INFO: Creating: $$@
-	@$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+ifneq ($(USE_ILLUSTRATIONS),true)
+	@if test -e "$$@"; then \
+		echo $$@ Deleting the file; \
+		rm -f "$$@"; \
+	else \
+		echo $$@ File was gone already; \
+	fi
+else
+	@ifneq test -e "$$@"; then \
+		echo INFO: Creating: $$@; \
+		$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+	fi
 endif
+
+# we want to build a rule there that will make use of the illustrations switch. If the
+# switch is false, it will delete any existing .piclist file When set to true, it will
+# create a new one
+
+#ifeq ($(USE_ILLUSTRATIONS),true)
+#	@echo INFO: Creating: $$@
+#	@$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+#endif
 
 # Rules for cleaning up content process files
 

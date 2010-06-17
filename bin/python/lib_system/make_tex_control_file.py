@@ -358,11 +358,11 @@ class MakeTexControlFile (object) :
 
 		# Process
 		marginalVersesMacro = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
-		useFigurePlaceholders = self._log_manager._settings['Format']['Scripture']['Illustrations'].get('useFigurePlaceholders', 'true')
 		autoTocFile = self._log_manager._settings['System']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
 		generateTOC = self._log_manager._settings['System']['TOC'].get('generateTOC', 'true')
 		tocTitle = self._log_manager._settings['System']['TOC'].get('mainTitle', 'Table of Contents')
 		# Format -> PageLayout
+		useFigurePlaceholders = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_PLACEHOLDERS', 'true')
 		useIllustrations = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_ILLUSTRATIONS', 'false')
 		usePageBorder = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_PAGE_BORDER', 'false')
 		pageBorderScale = self._log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')

@@ -261,7 +261,8 @@ reports-clean :
 	rm -f $(PATH_REPORTS)/*.$(EXT_HTML)
 	rm -f $(PATH_REPORTS)/*.$(EXT_CSV)
 
-# Illustration folder clean up. Just take out the linked PNG files
+# Illustration folder clean up. Just take out the
+# linked PNG files
 illustrations-clean :
 	rm -f $(PATH_ILLUSTRATIONS)/*.png
 
