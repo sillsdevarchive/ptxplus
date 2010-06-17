@@ -68,19 +68,20 @@ class MakeTexControlFile (object) :
 		self._outputFile = log_manager._currentOutput
 		self._inputFile = log_manager._currentInput
 		self._inputID = log_manager._currentTargetID
-		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_TEXTS', 'Texts')
-		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['Process']['Paths'].get('PATH_PROCESS', 'Process')
-		self._pathToIllustrations = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
+		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_TEXTS', 'Texts')
+		self._pathToSource = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_SOURCE', '../Source'))
+		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_PROCESS', 'Process')
+		self._pathToIllustrations = self._pathToSource + "/" + self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
 		self._texMacros = self._log_manager._settings['System']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
-		self._cvSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_COVER', '.cover_settings.txt')
-		self._fmSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_FRONT', '.front_settings.txt')
-		self._biSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_BIBLE', '.bible_settings.txt')
-		self._bmSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_BACK', '.back_settings.txt')
+		self._cvSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_COVER', '.cover_settings.txt')
+		self._fmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_FRONT', '.front_settings.txt')
+		self._biSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_BIBLE', '.bible_settings.txt')
+		self._bmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_BACK', '.back_settings.txt')
 		self._cmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_CUSTOM', 'custom-tex.txt')
-		self._txSettingsFile = self._log_manager._settings['System']['Files'].get('FILE_TEX_SETUP', '.setup_tex.txt')
+		self._txSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_SETUP', '.setup_tex.txt')
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
-		self._flags = ('project', 'cover', 'front', 'bible', 'back', 'periph')
+		self._flags = ('cover', 'front', 'bible', 'back', 'periph')
 		self._frontMatter = self._log_manager._settings['System']['Binding']['MATTER_FRONT'].split()
 		self._backMatter = self._log_manager._settings['System']['Binding']['MATTER_BACK'].split()
 		self._coverMatter = self._log_manager._settings['System']['Binding']['MATTER_COVER'].split()
@@ -100,11 +101,11 @@ class MakeTexControlFile (object) :
 
 		if self._publicationType.lower() == 'scripture' :
 			# Decide which file we are needing to make, then direct it to
-			# the right function.
-
-			if self._txSettingsFile in self._outputFile.split('/') :
+			# the right function. (Assume the file name has the path in it.)
+			if self._txSettingsFile.split('/')[-1] in self._outputFile.split('/') :
 				# This is the project-wide setup file that contains
-				# general project parameters
+				# general project parameters. The file name tells us
+				# where to go.
 				self.makeTheSettingsFile()
 
 			elif self._contextFlag in self._flags and self._contextFlag != 'periph' :
@@ -166,7 +167,8 @@ class MakeTexControlFile (object) :
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
 		# a peripheral control file.
-		if self._contextFlag not in self._flags :
+#        if self._contextFlag not in self._flags :
+		if self._inputID != '' :
 
 			settings = settings + '\\input ' + self._biSettingsFile + '\n'
 
@@ -224,7 +226,7 @@ class MakeTexControlFile (object) :
 				settings = settings + '\\input ' + self._cvSettingsFile + '\n'
 
 			else :
-				self._log_manager.log("ERRR", "This module thinks that: " + self._inputFile + " part of the peripheral matter but it cannot find it on either the cover, front or back matter binding lists. Process halted.")
+				self._log_manager.log("ERRR", "Trying to Create: " + self._outputFile + " - This module thinks that input: [" + self._inputFile + "] is part of the peripheral matter but it cannot find it on either the cover, front or back matter binding lists. Process halted.")
 				return
 
 			# For peripheral matter we do not have to generate the name like
@@ -250,7 +252,7 @@ class MakeTexControlFile (object) :
 		# Build some paths and file names
 		styleFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_STYLE', '.project.sty')
 		# Bring in page format settings
-		useCropmarks = self._log_manager._settings['Format']['PageLayout'].get('USE_CROPMARKS', 'true')
+		useCropmarks = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_CROPMARKS', 'true')
 		pageHeight = self._log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
 		pageWidth = self._log_manager._settings['Format']['PageLayout'].get('pageWidth', '148mm')
 		endBookNoEject = self._log_manager._settings['Format']['Scripture']['Columns'].get('endBookNoEject', 'false')
@@ -361,8 +363,8 @@ class MakeTexControlFile (object) :
 		generateTOC = self._log_manager._settings['System']['TOC'].get('generateTOC', 'true')
 		tocTitle = self._log_manager._settings['System']['TOC'].get('mainTitle', 'Table of Contents')
 		# Format -> PageLayout
-		useIllustrations = self._log_manager._settings['Format']['PageLayout'].get('USE_ILLUSTRATIONS', 'false')
-		usePageBorder = self._log_manager._settings['Format']['PageLayout'].get('USE_PAGE_BORDER', 'false')
+		useIllustrations = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_ILLUSTRATIONS', 'false')
+		usePageBorder = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_PAGE_BORDER', 'false')
 		pageBorderScale = self._log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
 		pageBorderFile = self._log_manager._settings['System']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
 		useMarginalVerses = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('useMarginalVerses', 'false')
@@ -446,8 +448,9 @@ class MakeTexControlFile (object) :
 
 		elif self._contextFlag.lower() == 'bible' :
 			fileName = self._biSettingsFile
-			# Path to Illustration files (what if we are not using them?)
-			fileInput = fileInput + '\\PicPath={' + self._pathToIllustrations + '}\n'
+			# Path to Illustration files (Note we add a "/" at the end so ptx2pdf can get it right.)
+			if useIllustrations.lower() == 'true' :
+				fileInput = fileInput + '\\PicPath={' + self._pathToIllustrations + '/}\n'
 			# Will we use marginal verses?
 			if useMarginalVerses.lower() == 'true' :
 				fileInput = fileInput + '\\input ' + marginalVersesMacro + '\n'

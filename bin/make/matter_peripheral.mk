@@ -98,12 +98,13 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIP
 #	fi
 endif
 
-# This .$(EXT_TEX) file also generally has some dependencies on the
-# COVER/FRONT/BACK_MATTER.$(EXT_TEX) files so we add them here. However,
+# This .tex file also generally has some dependencies on the
+# COVER/FRONT/BACK_MATTER.tex files so we add them here. However,
 # we will use the "|" (pipe) trick to prevent any updating in
-# case the file already exists. Also, at this point, we are not
-# passing any IDs or flags through. We will try to make this
-# control file by context in the script.
+# case the file already exists. As this is peripheral material
+# we do not have an ID to pass along but we will set a special
+# use flag which identifies the object as peripheral matter. For
+# this we use the "periph" flag.
 $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
 	$(PATH_PROCESS)/$(FILE_TEX_SETUP) \
@@ -114,16 +115,20 @@ $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 	@$(PY_RUN_PROCESS) make_tex_control_file '' '$(1)' '$$@' 'periph'
 
 # The rule to create the override style sheet.
+#$(PATH_PROCESS)/$(1).$(EXT_STYLE) :
+#	@if test -r $(PATH_TEMPLATES)/$(1).$(EXT_STYLE); then \
+#		echo INFO: Copying $$@ into project from: $(PATH_TEMPLATES)/$(1).$(EXT_STYLE); \
+#		cp $(PATH_TEMPLATES)/$(1).$(EXT_STYLE) '$$@'; \
+#	else \
+#		echo INFO: Could not find: $$@; \
+#		echo INFO: Creating: $$@; \
+#		echo INFO: To change any styles relevate to the $(PATH_TEXTS)/$(1) object, you will need to edit it; \
+#		echo \# Override PTX style sheet for $(PATH_TEXTS)/$(1), edit as needed >> $$@; \
+#	fi
+
 $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
-	@if test -r $(PATH_TEMPLATES)/$(1).$(EXT_STYLE); then \
-		echo INFO: Copying $$@ into project from: $(PATH_TEMPLATES)/$(1).$(EXT_STYLE); \
-		cp $(PATH_TEMPLATES)/$(1).$(EXT_STYLE) '$$@'; \
-	else \
-		echo INFO: Could not find: $$@; \
-		echo INFO: Creating: $$@; \
-		echo INFO: To change any styles relevate to the $(PATH_TEXTS)/$(1) object, you will need to edit it; \
-		echo \# Override PTX style sheet for $(PATH_TEXTS)/$(1), edit as needed >> $$@; \
-	fi
+	$(call copysmart,$(PATH_TEMPLATES)/$(1).$(EXT_STYLE),$$@)
+
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \

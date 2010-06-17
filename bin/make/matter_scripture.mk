@@ -78,7 +78,7 @@ endif
 # Call the TeX control file creation script to create a simple
 # control file that will link to the other settings
 $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
-	@echo INFO: Creating book control file: $$@
+	@echo INFO: Creating: $$@
 	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).$(EXT_WORK)' '$$@' ''
 
 # Process a single component and produce the final PDF. Special dependencies
@@ -89,7 +89,7 @@ $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) \
 	$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) \
-	$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) | $(PATH_PROCESS)/$(FILE_BIBLE_STYLE) $(DEPENDENT_FILE_LIST)
+	$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $$@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).$(EXT_WORK).$(EXT_TEX)
 #	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).$(EXT_TEX)
@@ -119,9 +119,9 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
-$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS)
-ifneq ($(PATH_ILLUSTRATIONS_LIB),)
-	@echo INFO: Creating illustrations list file: $$@
+$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
+ifeq ($(USE_ILLUSTRATIONS),true)
+	@echo INFO: Creating: $$@
 	@$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 endif
 
@@ -129,17 +129,17 @@ endif
 
 # Remove the PDF for this component only
 pdf-remove-$(1) :
-	@echo INFO: Removing file: $(PATH_PROCESS)/$(1).$(EXT_PDF)
+	@echo INFO: Removing: $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Remove the adjustment file for this component only
 adjfile-remove-$(1) :
-	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
 
 # Remove the picture placement file for this component only
 picfile-remove-$(1) :
-	@echo INFO: Removing file: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
+	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
 
 endef
@@ -157,7 +157,7 @@ endef
 
 # Rule for building the TeX settings file that is used in a
 # specific context. In this case it is for Scripture.
-$(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP) $(FILE_PROJECT_CONF)
+$(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	@echo INFO: Creating: $@
 	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'bible'
 
@@ -177,9 +177,7 @@ $(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
 
 # A rule for creating the TeX control file for when the
 # entire OT is being typeset.
-$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : \
-	$(FILE_PROJECT_CONF) \
-	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
 	@$(PY_RUN_PROCESS) make_tex_control_file 'ot' 'ot' '$@' ''
 
@@ -210,9 +208,7 @@ $(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
 
 # A rule for creating the TeX control file for when the
 # entire OT is being typeset.
-$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : \
-	$(FILE_PROJECT_CONF) \
-	$(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
 	@$(PY_RUN_PROCESS) make_tex_control_file 'nt' 'nt' '$@' ''
 
@@ -271,25 +267,9 @@ preprocess-nt :
 ##############################################################
 
 # Copy into place the captions.csv file that goes in the
-# shared folder if needed. Also, since the new captions file
-# is probably different from the one in the project, we will
-# delete that one right now, for better or worse.
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
-ifneq ($(PATH_ILLUSTRATIONS_LIB),)
-	@echo INFO: Removing file: $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
-	@rm -f $(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
-	@echo INFO: Copying $@ to $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
-	@cp $@ $(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS)
+# project peripheral folder located in the Source folder.
+$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+ifeq ($(USE_ILLUSTRATIONS),true)
+	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
 endif
 
-# Note: The following rule is here as a reminder. The project captions.csv
-# file is created during make_piclist_file process which is done in the
-# $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) rule. The issue is that if this file
-# is removed or deleted it cannot be remade on its own. This can cause an
-# error in certain situations. This part of the make_piclist_file process
-# might need to be done alone to avoid this if ever becomes a real problem.
-#$(PATH_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS)
-#ifneq ($(PATH_ILLUSTRATIONS_LIB),)
-#	@echo INFO: Copying $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) to $@
-#	@cp $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_ILLUSTRATION_CAPTIONS) $@
-#endif

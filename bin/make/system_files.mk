@@ -61,7 +61,9 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
   $(PATH_PROCESS)/$(FILE_LOGO_BSM) \
   $(PATH_PROCESS)/$(FILE_LOGO_CFE) \
   $(PATH_PROCESS)/$(FILE_PAGE_BORDER) \
+  $(PATH_PROCESS)/$(FILE_TEX_SETUP) \
   $(PATH_PROCESS)/$(FILE_TEX_STYLE) \
+  $(PATH_PROCESS)/$(FILE_BIBLE_STYLE) \
   $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) \
   $(FILE_PROJECT_CONF)
 
@@ -80,7 +82,7 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
 # it is and what goes in it.
 $(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'project'
+	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' ''
 
 # Rule to create the primary style file for the project. There
 # will be lots of other secondary override stylesheets that
@@ -130,42 +132,36 @@ dev-update :
 
 # If, for some odd reason the Illustrations folder is not in
 # the right place we'll put one where it is supposed to be found.
-$(PATH_ILLUSTRATIONS) :
-	$(call mdir,$@)
-
-# This is the main rule for copying all the shared illustration
-# material like logos, watermarks, etc. First we will make the
-# folder, then we will copy everthing into it.
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED) : | $(PATH_ILLUSTRATIONS)
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS) :
 	$(call mdir,$@)
 
 # Watermark
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
 
-$(PATH_PROCESS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_WATERMARK),$@)
+$(PATH_PROCESS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
 
 # BSM Logo
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
 
-$(PATH_PROCESS)/$(FILE_LOGO_BSM) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_BSM),$@)
+$(PATH_PROCESS)/$(FILE_LOGO_BSM) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
 
 # CFE Logo
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE) :| $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE) :| $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
 
-$(PATH_PROCESS)/$(FILE_LOGO_CFE) :$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_LOGO_CFE),$@)
+$(PATH_PROCESS)/$(FILE_LOGO_CFE) :$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
 
 # Page border
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_PAGE_BORDER) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)
+$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
 
-$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_PAGE_BORDER)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS_SHARED)/$(FILE_PAGE_BORDER),$@)
+$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
@@ -193,7 +189,7 @@ $(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX) :
 #		Shared functions
 ###############################################################
 
-# Make a directory
+# Just make a directory, that's all
 define mdir
 @echo INFO: Creating $(1)
 @mkdir -p $(1)

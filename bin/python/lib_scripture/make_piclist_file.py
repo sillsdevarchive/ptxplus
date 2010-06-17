@@ -17,24 +17,26 @@
 # History:
 # 20080623 - djd - Initial draft
 # 20080904 - djd - Changed to output .piclist file even if
-#		there are no pictures to process. This solves
-#		a dependency problem in makefile
+#       there are no pictures to process. This solves
+#       a dependency problem in makefile
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#       This script will not run without it because
+#       it handles all the parameters it needs.
 # 20081230 - djd - Changed over to work stand-alone instead
-#		of through version control.
+#       of through version control.
 # 20090504 - djd - Added a filter for peripheral matter files
 # 20091214 - djd - Added a check for missing lib info. If not
-#		found then it is reported and the process is
-#		halted.
+#       found then it is reported and the process is
+#       halted.
 # 20100414 - djd - Changed the way process works by adding a
-#		lib data file and limiting the project file to
-#		only containing caption and location info.
+#       lib data file and limiting the project file to
+#       only containing caption and location info.
 # 20100512 - djd - Changes to the caption copy process and
-#		illustration handling. There is now linking
-#		from a shared folder to the project.
+#       illustration handling. There is now linking
+#       from a shared folder to the project.
+# 20100616 - djd - Adjusted conf call due to conf file
+#       reorg. Also removed tabs.
 
 
 #############################################################
@@ -64,28 +66,25 @@ class MakePiclistFile (object) :
 		self._bookID = log_manager._currentTargetID
 
 		# Pull in some default sizing params if they exist, if not use the default settings.
-		self._texsize = self._settings['General']['Resources']['Illustrations'].get('size','col')
-		self._texpos = self._settings['General']['Resources']['Illustrations'].get('position','tl')
-		self._texscale = self._settings['General']['Resources']['Illustrations'].get('scale',1.0)
-		self._chpVerSep = self._settings['General']['Resources']['Illustrations'].get('chpVerSep',':')
-		self._captionRef = self._settings['General']['Resources']['Illustrations'].get('captionRef','true')
-		self._captionProcessing = self._settings['General']['Resources']['Illustrations'].get('captionProcessing','')
+		self._texsize = self._settings['Format']['Scripture']['Illustrations'].get('size','col')
+		self._texpos = self._settings['Format']['Scripture']['Illustrations'].get('position','tl')
+		self._texscale = self._settings['Format']['Scripture']['Illustrations'].get('scale',1.0)
+		self._chpVerSep = self._settings['Format']['Scripture']['Illustrations'].get('chpVerSep',':')
+		self._captionRef = self._settings['Format']['Scripture']['Illustrations'].get('captionRef','true')
+		self._captionProcessing = self._settings['Format']['Scripture']['Illustrations'].get('captionProcessing','')
 		self._inputFile = log_manager._currentInput
 		self._outputFile = self._inputFile + ".piclist"
 		self._outFileObject = {}
-		self._sourcePath = self._settings['Process']['Paths']['PATH_SOURCE']
-		self._captionsFileName = self._settings['Process']['Files']['FILE_ILLUSTRATION_CAPTIONS']
-		self._sourceIllustrationsLibDataFileName = self._settings['Process']['Files']['FILE_ILLUSTRATION_DATA']
-		self._sharedIllustrationsPath = os.path.abspath(self._sourcePath + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_SHARED'])
-		self._projectIllustrationsPath = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_ILLUSTRATIONS']
-		self._sourceIllustrationsLibPath = os.path.abspath(self._settings['Process']['Paths']['PATH_ILLUSTRATIONS_LIB'])
+		self._sourcePath = os.path.abspath(self._settings['System']['Paths']['PATH_SOURCE'])
+		self._captionsFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_CAPTIONS']
+		self._sourceIllustrationsLibDataFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_DATA']
+		self._projectIllustrationsPath = self._sourcePath + "/" + self._settings['System']['Paths']['PATH_ILLUSTRATIONS']
+		self._sourceIllustrationsLibPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
 		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + self._sourceIllustrationsLibDataFileName
-		self._sharedIllustrationsCaptions = self._sharedIllustrationsPath + "/" + self._captionsFileName
-		self._projectIllustrationsCaptions = self._projectIllustrationsPath + "/" + self._captionsFileName
-
-		# Pull in the library data file using the CSVtoDict class in tools
-		self._libData = CSVtoDict(self._sourceIllustrationsLibData)
-
+		# The folder name for peripheral material is auto created here
+		self._projectPeripheralFolderName = os.getcwd().split('/')[-1]
+		self._projectPeripheralFolderPath = self._sourcePath + '/' + self._projectPeripheralFolderName
+		self._projectIllustrationsCaptions = os.path.abspath(self._projectPeripheralFolderPath + "/" + self._captionsFileName)
 		self._errors = 0
 
 
@@ -125,7 +124,7 @@ class MakePiclistFile (object) :
 		if vCap != "" :
 			caption = vCap
 
-		line = bookID + " " + loc + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + \
+		line = bookID.upper() + " " + loc + " |" + fileName + "|" + self._texsize + "|" + self._texpos + "|" + \
 				str(self._texscale) + "|" + copyright + "|" + caption + "|" + ref
 		self._log_manager.log("DBUG", "Collected: " + line)
 
@@ -151,8 +150,7 @@ class MakePiclistFile (object) :
 
 		# Build the file names, they should be all absolute paths
 		source = self._sourceIllustrationsLibPath + "/" + fileName
-		target = self._sharedIllustrationsPath + "/" + fileName
-		link = self._projectIllustrationsPath + "/" + fileName
+		target = self._projectIllustrationsPath + "/" + fileName
 
 		# Sanity test, we want to throw an error if the source
 		# file isn't there
@@ -162,21 +160,11 @@ class MakePiclistFile (object) :
 		# Copy the picture file from the source to the target location
 		# if it doesn't exist there already
 		if not os.path.isfile(target) :
-			if shutil.copy(source, target) :
-				self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
-			else :
-				self._log_manager.log("ERRR", "Failed to copy from: " + source + " ---To:--> " + target)
-
-		# We don't want to store illustraton files in the project
-		# so we will use os.symlink(source, link_name) to make a
-		# symbolic link from the target to the Illstrations folder
-		# We will check to see if this needs to be done every time
-		# this function is called
-		if not os.path.exists(link) :
-			if os.symlink(target, link) :
-				self._log_manager.log("DBUG", "Linked: " + target + " ---To:--> to: " + link)
-			else :
-				self._log_manager.log("ERRR", "The file: " + target + " could not be linked to: " + link)
+			x = shutil.copy(source, target)
+			print x, "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+#                self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
+#            else :
+#                self._log_manager.log("ERRR", "Failed to copy from: " + source + " ---To:--> " + target)
 
 
 	def main(self):
@@ -192,43 +180,39 @@ class MakePiclistFile (object) :
 		# See if the output file already exists. if it does, then we stop here
 		if os.path.isfile(self._outputFile) :
 			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted to prevent data loss.")
-			return
+			self._errors +=1
 
 		# Check to see if the captions file exists in the share folder
 		# if it doesn't we're all done for now
-		if not os.path.isfile(self._sharedIllustrationsCaptions) :
-			self._log_manager.log("ERRR", "The illustration caption file (" + self._sharedIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
-			return
+		if not os.path.isfile(self._projectIllustrationsCaptions) :
+			self._log_manager.log("ERRR", "The illustration caption file (" + self._projectIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
+			self._errors +=1
 
 		# Check to see if the path to the illustrations lib is good. If it doesn't we're done
 		if not os.path.isdir(self._sourceIllustrationsLibPath) :
 			self._log_manager.log("ERRR", "The path to the illustrations library (" + self._sourceIllustrationsLibPath + ") does not seem to be correct. This process cannot work without it.")
-			return
+			self._errors +=1
 
 		# Check to see if the data file exists. If it doesn't we're done because we need that too
 		if not os.path.isfile(self._sourceIllustrationsLibData) :
 			self._log_manager.log("ERRR", "The illustration data file (" + self._sourceIllustrationsLibData + ") seems to be missing from the library. This process cannot work without it.")
+			self._errors +=1
+
+		# If we get an error we really can't go on at this point
+		if self._errors != 0 :
 			return
 
-		# Project captions file will be copied into the project here rather
-		# than with Makefile. This is because encoding transformations may
-		# be needed.
-		if not os.path.exists(self._projectIllustrationsCaptions) :
-			# This is compleatly untested at this point. I am just
-			# going to put a raw system call here and hope that
-			# whatever gets passed to it works. We'll see how it
-			# goes and I'm sure we'll be revisiting this later.
-			if self._captionProcessing != "" :
-				os.system(self._captionProcessing)
-			else :
-				x = shutil.copy(self._sharedIllustrationsCaptions, self._projectIllustrationsCaptions)
-				self._log_manager.log("INFO", "The " + self._sharedIllustrationsCaptions + " has been copied to the project Illustrations folder.")
+		# Pull in the library data file using the CSVtoDict class in tools
+		self._libData = CSVtoDict(self._sourceIllustrationsLibData)
 
 		# If we didn't bail out right above, we'll go ahead and open the data file
 		# The assumption here is that the encoding of the pieces of the csv are
 		# what they need to be.
-		inFileData = filter(lambda l: l[1]==self._bookID,
+
+		# Filter out any IDs that do not have anything to do with this book
+		inFileData = filter(lambda l: l[1].lower() == self._bookID.lower(),
 					csv.reader(open(self._projectIllustrationsCaptions), dialect=csv.excel))
+
 		# Right here we will sort the list by BCV. This should prevent unsorted
 		# data from getting out into the piclist.
 		inFileData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))

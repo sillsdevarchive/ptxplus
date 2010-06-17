@@ -71,11 +71,8 @@ class MakeMakefile (object) :
 		cmykPath = self._log_manager._settings['System']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
 		makefileSettings = makefileSettings + 'CMYK_PROFILE' + "=" + cmykPath + "\n"
 
-		watermark = self._log_manager._settings['Format']['PageLayout'].get('USE_WATERMARK','true')
-		makefileSettings = makefileSettings + 'USE_WATERMARK' + "=" + watermark + "\n"
-
-		cropmarks = self._log_manager._settings['Format']['PageLayout'].get('USE_CROPMARKS','true')
-		makefileSettings = makefileSettings + 'USE_CROPMARKS' + "=" + cropmarks + "\n"
+		for key, value, in self._log_manager._settings['Format']['PageLayout']['Switches'].iteritems() :
+			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
 		for key, value, in self._log_manager._settings['System']['General'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
