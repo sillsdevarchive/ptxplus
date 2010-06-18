@@ -36,6 +36,8 @@
 # 20100507 - djd - Moved out rules for illustration creation
 # 20100611 - djd - Added functions to share
 # 20100615 - djd - Changed hard codded extions to vars
+# 20100618 - djd - Added extra warning with zenity dialogs
+#		to the clean up process.
 
 
 ##############################################################
@@ -103,32 +105,26 @@ $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) :
 # changes the name of the source folder after it might get
 # confusing but that is more of a procedural problem.
 $(PATH_SOURCE) :
-	@ $(call mdir,$@)
+	$(call mdir,$@)
 
 # In case the process folder isn't there (because of archive)
 # This should be in the dependent file list.
 $(PATH_PROCESS)/.stamp :
-	@ $(call mdir,$(PATH_PROCESS))
-	touch $(PATH_PROCESS)/.stamp
+	$(call mdir,$(PATH_PROCESS))
+	@touch $(PATH_PROCESS)/.stamp
 
 # Update a .project.conf file so system improvements can be
 # pulled into existing projects.
 update :
-	$(PY_RUN_PROCESS) update_project_settings
-
+	@$(PY_RUN_PROCESS) update_project_settings
 
 # Make a project.sty file (when needed)
 make-styles :
-	$(PY_RUN_PROCESS) make_sty_file
+	@$(PY_RUN_PROCESS) make_sty_file
 
 # Make a template from the current state of the project
 make-template :
-	$(PY_RUN_PROCESS) make_template
-
-# Update a developer version of ptxplus
-# This assumes you have Mercurial installed and setup
-dev-update :
-	cd $(PTXPLUS_BASE) && hg pull -u ptxplus
+	@$(PY_RUN_PROCESS) make_template
 
 # If, for some odd reason the Illustrations folder is not in
 # the right place we'll put one where it is supposed to be found.
@@ -250,31 +246,8 @@ view-book : $(MATTER_BOOK_PDF)
 # have some contols in place. We will first set up a bunch of
 # cleaning rules that call functions to do the work. I will
 # use identical names between rules and functions. This seems
-# to work ok.
-#
-# We want to implement some simple command line input from
-# the user with the bash read comment. For example I would like
-# to use something like:
-
-SHELL := /bin/bash
-#SHELL=/bin/bash
-
-test :
-	$(call test)
-
-define test
-@echo "A yes or no question"
-@read $myinput
-@if [ "$$myinput" == "yes" ]; then \
-	echo Now I go do something; \
-else \
-	echo No I cannot do that because you answered $$myinput; \
-fi
-endef
-
-# But this does not work, why?
-
-
+# to work ok. We will also use Zenity dialogs to help guide
+# the process to avoid accidental deletion of critical data.
 
 pdf-remove-book :
 	$(call pdf-remove-book)
@@ -347,26 +320,39 @@ endef
 # Illustration folder clean up. Just take out the
 # linked PNG files
 define illustrations-clean
-	@echo INFO: Deleting illustration files in: $(PATH_ILLUSTRATIONS)
-	@rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PNG)
-	@rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PDF)
+@if zenity --question --text="You have requested to clean out the Illustrations folder. If this project is part of a multi-publication group, by clicking OK, the deletion of the illustrations will effect other projects in this group that share these illustrations. Are you sure you want to do this?"; then \
+	echo INFO: Deleting illustration files in: $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS); \
+	rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PNG); \
+	rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PDF); \
+else \
+	echo "INFO: Deletion of the illustration files has been canceled."; \
+fi
+
 endef
 
 # This supports clean-all or can be called alone.
 define picfile-clean-all
-	@echo INFO: Deleting all .$(EXT_PICLIST) files from: $(PATH_TEXTS)
-	@rm -f $(PATH_TEXTS)/*.$(EXT_PICLIST)
+@if zenity --question --text="By continuing with this process you will delete your illustration placement files. These control where pictures are placed in your publication. Are you sure you want to do this?"; then \
+	echo INFO: Deleting all .$(EXT_PICLIST) files from: $(PATH_TEXTS) ; \
+	rm -f $(PATH_TEXTS)/*.$(EXT_PICLIST) ; \
+else \
+	echo "INFO: Deletion of the .$(EXT_PICLIST) files has been canceled." ; \
+fi
 endef
 
 # This supports clean-all or can be called alone.
 define adjfile-clean-all
-	@echo INFO: Deleting all .$(EXT_ADJUSTMENT) files from: $(PATH_TEXTS)
-	@rm -f $(PATH_TEXTS)/*.$(EXT_ADJUSTMENT)
+@if zenity --question --text="By continuing with this process you will delete your adjustment files. These control paragraph adjustments. Are you sure you want to do this?"; then \
+	echo INFO: Deleting all .$(EXT_ADJUSTMENT) files from: $(PATH_TEXTS) ; \
+	rm -f $(PATH_TEXTS)/*.$(EXT_ADJUSTMENT) ; \
+else \
+	echo "INFO: Deletion of text adjustments has been canceled." ; \
+fi
 endef
 
 # Just in case we need to clean up to have a fresh start
 define process-clean
-	@echo INFO: Cleaning out process files from: $(PATH_PROCESS)
+	@echo INFO: Cleaning out auto-generated files from: $(PATH_PROCESS)
 	@rm -f $(PATH_PROCESS)/*.$(EXT_LOG)
 	@rm -f $(PATH_PROCESS)/*.notepages
 	@rm -f $(PATH_PROCESS)/*.parlocs
@@ -380,18 +366,24 @@ endef
 # work you put into your .$(EXT_PICLIST) and .$(EXT_ADJUSTMENT) files. Hopefully
 # the lock mechanism will prevent this.
 define texts-clean
-	@echo INFO: Cleaning out file from: $(PATH_TEXTS)
-	@rm -f $(PATH_TEXTS)/*.$(EXT_TEXT)
-	@rm -f $(PATH_TEXTS)/*.$(EXT_WORK)
-	@rm -f $(PATH_TEXTS)/*.bak
-	@rm -f $(PATH_TEXTS)/*~
+@if zenity --question --text="By continuing with this process you will delete your working source text. Are you sure you want to do this?"; then \
+	echo INFO: Cleaning out working source files from: $(PATH_TEXTS) ; \
+	rm -f $(PATH_TEXTS)/*.$(EXT_TEXT) ; \
+	rm -f $(PATH_TEXTS)/*.$(EXT_WORK) ; \
+	rm -f $(PATH_TEXTS)/*.bak ; \
+	rm -f $(PATH_TEXTS)/*~ ; \
+else \
+	echo "INFO: Deletion working text has been canceled." ; \
+fi
 endef
 
 # Just in case, here is a clean_all rule. However, be very
 # when using it. It will wipe out all your previous work. This
 # is mainly for using when you want to start over on a project.
 define reset
+	@zenity --warning --text="You have chosen to reset the project. At critical points in the process you will be given a chance to cancel specific actions. Carefully read the dialogs and answer thoughtfully. Be careful as you continue."
 	@echo INFO: Resetting the project. I hope you meant to do that!
+	$(call pdf-remove-book)
 	$(call pdf-remove-book)
 	$(call texts-clean)
 	$(call adjfile-clean-all)
@@ -410,38 +402,36 @@ endef
 # If for some reason the Wiki doesn't exist for this project
 # we'll make a fresh one now.
 $(PATH_ADMIN_WIKI) :
-	mkdir -p $(PATH_ADMIN_WIKI)
-	cp $(PATH_WIKI_SOURCE)/* $(PATH_ADMIN_WIKI)
+	@echo INFO: Creating: $@
+	@mkdir -p $(PATH_ADMIN_WIKI)
+	@cp $(PATH_WIKI_SOURCE)/* $(PATH_ADMIN_WIKI)
 
 # Simple call to open the project wiki home page
-wiki : $(PATH_ADMIN_WIKI)
+wiki : | $(PATH_ADMIN_WIKI)
 	@-$(CLOSEWIKI)
-	$(VIEWWIKI) $(PATH_ADMIN_WIKI) Home &
+	@$(VIEWWIKI) $(PATH_ADMIN_WIKI) Home &
 
 # Call on the project wiki notes
 # (At some point we'll add a date prepend routine before the wiki page call.)
-note : $(PATH_ADMIN_WIKI)
+note : | $(PATH_ADMIN_WIKI)
 	@-$(CLOSEWIKI)
-	$(TEXT_TO_WIKI) note $(PATH_ADMIN_WIKI)/Notes.$(EXT_TEXT)
-	$(VIEWWIKI) $(PATH_ADMIN_WIKI) Notes &
+	@$(TEXT_TO_WIKI) note $(PATH_ADMIN_WIKI)/Notes.$(EXT_TEXT)
+	@$(VIEWWIKI) $(PATH_ADMIN_WIKI) Notes &
 
 # Call on the project wiki issues page
 # (At some point we'll add a date prepend routine before the wiki page call.)
-issue : $(PATH_ADMIN_WIKI)
+issue : | $(PATH_ADMIN_WIKI)
 	@-$(CLOSEWIKI)
-	$(TEXT_TO_WIKI) issue $(PATH_ADMIN_WIKI)/Issues.$(EXT_TEXT)
-	$(VIEWWIKI) $(PATH_ADMIN_WIKI) Issues &
+	@$(TEXT_TO_WIKI) issue $(PATH_ADMIN_WIKI)/Issues.$(EXT_TEXT)
+	@$(VIEWWIKI) $(PATH_ADMIN_WIKI) Issues &
 
 # Call the system wiki help pages
 help :
-	$(VIEWWIKI) $(PATH_SYSTEM_HELP) Home &
+	@$(VIEWWIKI) $(PATH_SYSTEM_HELP) Home &
 
 # Call the system wiki about page
 about :
-	$(VIEWWIKI) $(PATH_SYSTEM_HELP) About &
+	@$(VIEWWIKI) $(PATH_SYSTEM_HELP) About &
 
-# To edit the .project.conf file
-configure :
-	$(EDITCONF) .project.conf ptx2pdf-setup.$(EXT_TEXT) ptx2pdf.sty &
 
 
