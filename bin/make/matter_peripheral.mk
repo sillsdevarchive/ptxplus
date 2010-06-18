@@ -80,22 +80,6 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 ifneq ($(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm)
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
 	$(call copysmart,$(PATH_TEMPLATES)/$(1),$$@)
-
-
-
-#	@if test -r $(PATH_TEMPLATES)/$(1); then \
-#		echo INFO: Copying  $$@ into project from: $(PATH_TEMPLATES)/$(1); \
-#		cp $(PATH_TEMPLATES)/$(1) '$$@'; \
-#	else \
-#		echo INFO: Could not find: $$@; \
-#		echo INFO: Creating: $$@; \
-#		echo INFO: Caution, you may need to edit it; \
-#		echo \\id OTH >> $$@; \
-#		echo \\ide UTF-8 >> $$@; \
-#		echo \\periph \<Fill in page type here\> >> $$@; \
-#		echo \\p This is a auto created page found at: $$@ >> $$@; \
-#		echo \\p Please edit as needed. >> $$@; \
-#	fi
 endif
 
 # This .tex file also generally has some dependencies on the
@@ -115,17 +99,6 @@ $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 	@$(PY_RUN_PROCESS) make_tex_control_file '' '$(1)' '$$@' 'periph'
 
 # The rule to create the override style sheet.
-#$(PATH_PROCESS)/$(1).$(EXT_STYLE) :
-#	@if test -r $(PATH_TEMPLATES)/$(1).$(EXT_STYLE); then \
-#		echo INFO: Copying $$@ into project from: $(PATH_TEMPLATES)/$(1).$(EXT_STYLE); \
-#		cp $(PATH_TEMPLATES)/$(1).$(EXT_STYLE) '$$@'; \
-#	else \
-#		echo INFO: Could not find: $$@; \
-#		echo INFO: Creating: $$@; \
-#		echo INFO: To change any styles relevate to the $(PATH_TEXTS)/$(1) object, you will need to edit it; \
-#		echo \# Override PTX style sheet for $(PATH_TEXTS)/$(1), edit as needed >> $$@; \
-#	fi
-
 $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
 	$(call copysmart,$(PATH_TEMPLATES)/$(1).$(EXT_STYLE),$$@)
 
@@ -149,8 +122,12 @@ view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # This enables us to do the preprocessing on a single peripheral item.
 preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
+ifeq ($(LOCKED),0)
 	@echo INFO: Preprocessing $(1)
-	@$(PY_RUN_PROCESS) PreprocessChecks $(1) '$$<'
+	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<'
+else
+	echo INFO: Cannot run: $$@ This is because the project is locked.
+endif
 
 # Do not open the PDF file with reader
 $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF) $(DEPENDENT_FILE_LIST)

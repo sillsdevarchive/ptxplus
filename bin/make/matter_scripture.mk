@@ -44,15 +44,15 @@ $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH
 # proecesses are run it will copy the text into the system and then it will
 # run any necessary text processes on the system source text as defined in
 # the .project.conf file.
-ifeq ($(LOCKED),0)
 $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
+ifeq ($(LOCKED),0)
 	@echo INFO: Auto-preprocessing: $$< and creating $$@
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<' '$$@'
 	@$(PY_RUN_PROCESS) copyIntoSystem $(1) '$$<' '$$@'
 	@$(PY_RUN_PROCESS) textProcesses $(1) '$$@' '$$@'
 else
-#	@echo File $(PATH_TEXTS)/$(1).$(EXT_WORK) is locked
+	@echo INFO: Cannot create: $$@ This is because the project is locked.
 endif
 
 # This enables us to do the preprocessing on a single component and view the log file
@@ -66,20 +66,19 @@ ifeq ($(LOCKED),0)
 	@echo INFO: Removing $(PATH_TEXTS)/$(1).$(EXT_WORK) and error checking '$$<'
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<'
+else
+	@echo INFO: Cannot run: $$@ This is because the project is locked.
 endif
-
-#################################
-# Problem: It would be nice if we could include a warning to users in the above process
-# whenever the system is locked so they know why it isn't processing their text. The
-# problem is that an else statement with a warning doesn't seem to work. Don't know
-# why so I had to remove it for now.
-#################################
 
 # Call the TeX control file creation script to create a simple
 # control file that will link to the other settings
 $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+ifeq ($(LOCKED),0)
 	@echo INFO: Creating: $$@
 	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).$(EXT_WORK)' '$$@' ''
+else
+	@echo INFO: Cannot create: $$@ This is because the project is locked.
+endif
 
 # Process a single component and produce the final PDF. Special dependencies
 # are set for the .$(EXT_ADJUSTMENT) and .$(EXT_PICLIST) files in case they have been altered.
@@ -110,8 +109,12 @@ $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Make adjustment file
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
+ifeq ($(USE_ADJUSTMENTS),true)
 	@echo INFO: Creating the adjustments file: $$@
 	@$(PY_RUN_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+else
+	@echo INFO: USE_ADJUSTMENTS is set to \"$(USE_ADJUSTMENTS)\". $$@ not made.
+endif
 
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
@@ -120,28 +123,13 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
-ifneq ($(USE_ILLUSTRATIONS),true)
-	@if test -e "$$@"; then \
-		echo $$@ Deleting the file; \
-		rm -f "$$@"; \
-	else \
-		echo $$@ File was gone already; \
-	fi
+ifeq ($(USE_ILLUSTRATIONS),true)
+	@echo INFO: Creating: $$@; \
+	@$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 else
-	@ifneq test -e "$$@"; then \
-		echo INFO: Creating: $$@; \
-		$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK); \
-	fi
+	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\". $$@ not made.
 endif
 
-# we want to build a rule there that will make use of the illustrations switch. If the
-# switch is false, it will delete any existing .piclist file When set to true, it will
-# create a new one
-
-#ifeq ($(USE_ILLUSTRATIONS),true)
-#	@echo INFO: Creating: $$@
-#	@$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
-#endif
 
 # Rules for cleaning up content process files
 
@@ -152,13 +140,22 @@ pdf-remove-$(1) :
 
 # Remove the adjustment file for this component only
 adjfile-remove-$(1) :
+ifeq ($(LOCKED),0)
 	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+else
+	@echo INFO: Cannot run: $$@ This is because the project is locked.
+endif
 
 # Remove the picture placement file for this component only
 picfile-remove-$(1) :
+ifeq ($(LOCKED),0)
 	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
+else
+	@echo INFO: Cannot run: $$@ This is because the project is locked.
+endif
+
 
 endef
 

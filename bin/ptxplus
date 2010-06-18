@@ -87,7 +87,6 @@ else :
 	tools.userMessage("Welcome to XeTeX-ptxplus!")
 	command = "manage"
 
-print "command = " + command
 
 #############################################################
 ################# Define Script functions ###################
@@ -297,8 +296,24 @@ else :
 			# Get rid of the old error log file.
 			error_manager.deleteErrorLog()
 
+			# At this point we want to check to see if a few certain switches
+			# are set to false. If they are, we will run a couple makefile
+			# clean up commands before the command that the user is calling
+			# for is run. (Right now we are limiting this action to Scripture
+			# publications.)
+			pubType = tools.getSettingsObject()['Format']['publicationType']
+			locked = tools.getSettingsObject()['System']['General']['LOCKED']
+			useIllustrations = tools.getSettingsObject()['Format']['PageLayout']['Switches']['USE_ILLUSTRATIONS']
+			useAdjustments = tools.getSettingsObject()['Format']['PageLayout']['Switches']['USE_ADJUSTMENTS']
+			if locked == 0 :
+				if pubType.lower() == 'scripture' :
+					if useIllustrations.lower() == 'false' :
+						tools.makefileCommand('picfile-clean-all')
+					if useAdjustments.lower() == 'false' :
+						tools.makefileCommand('adjfile-clean-all')
+
 			# The project should be ready now
-			tools.userMessage("Starting a process. Command: " +  command)
+			tools.userMessage("\n\nStarting a process. Command: " +  command)
 
 			# Now send off the command to makefile
 			errorCode = tools.makefileCommand(command)

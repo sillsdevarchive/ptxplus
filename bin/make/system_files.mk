@@ -42,6 +42,8 @@
 #		Variables for some of the system matter
 ##############################################################
 
+SHELL := /bin/bash
+
 # This is the final output we want so we can name it here
 MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).$(EXT_PDF)
 
@@ -246,71 +248,157 @@ view-book : $(MATTER_BOOK_PDF)
 #		Clean up files
 ###############################################################
 
-# Remove the book PDF file
+# To protect the user from accidental deleations we need to
+# have some contols in place. We will first set up a bunch of
+# cleaning rules that call functions to do the work. I will
+# use identical names between rules and functions. This seems
+# to work ok.
+#
+# We want to implement some simple command line input from
+# the user with the bash read comment. For example I would like
+# to use something like:
+#test :
+#	$(call test)
+
+#define test
+#@echo "A yes or no question"
+#@read $myinput
+#@if [ "$$myinput" == "yes" ]; then \
+#	echo Now I go do something; \
+#else \
+#	echo No I cannot do that because you answered $$myinput; \
+#fi
+#endef
+#
+# But this does not work, why?
+
+
+
 pdf-remove-book :
-	rm -f $(MATTER_BOOK_PDF)
+	$(call pdf-remove-book)
+
+log-clean :
+	$(call log-clean)
+
+reports-clean :
+	$(call reports-clean)
+
+illustrations-clean :
+ifeq ($(LOCKED),0)
+	$(call illustrations-clean)
+else
+	@echo WARN: Cannot delete .$(EXT_PNG) files because the project is locked!
+endif
+
+picfile-clean-all :
+ifeq ($(LOCKED),0)
+	$(call picfile-clean-all)
+else
+	@echo WARN: Cannot delete .$(EXT_PICLIST) files because the project is locked!
+endif
+
+adjfile-clean-all :
+ifeq ($(LOCKED),0)
+	$(call adjfile-clean-all)
+else
+	@echo WARN: Cannot delete .$(EXT_ADJUSTMENT) files because the project is locked!
+endif
+
+process-clean :
+	$(call process-clean)
+
+texts-clean :
+ifeq ($(LOCKED),0)
+	$(call texts-clean)
+else
+	@echo INFO: Project is locked, could not clean all files from: $(PATH_TEXTS)
+endif
+
+reset :
+ifeq ($(LOCKED),0)
+	$(call reset)
+else
+	@echo INFO: Project is locked, you are not permitted use the reset command.
+endif
+
+# Remove the book PDF file
+define pdf-remove-book
+	@echo INFO: Deleting: $(MATTER_BOOK_PDF)
+	@rm -f $(MATTER_BOOK_PDF)
+endef
 
 # Clean out the log files
-log-clean :
-	rm -f $(PATH_LOG)/*.$(EXT_LOG)
+define log-clean
+	@echo INFO: Cleaning out the Log folder
+	@rm -f $(PATH_LOG)/*.$(EXT_LOG)
+endef
 
 # Clean the reports folder
-reports-clean :
-	rm -f $(PATH_REPORTS)/*.tmp
-	rm -f $(PATH_REPORTS)/*.$(EXT_TEXT)
-	rm -f $(PATH_REPORTS)/*.$(EXT_HTML)
-	rm -f $(PATH_REPORTS)/*.$(EXT_CSV)
+define reports-clean
+	@echo INFO: Cleaning out the Reports folder
+	@rm -f $(PATH_REPORTS)/*.tmp
+	@rm -f $(PATH_REPORTS)/*.$(EXT_TEXT)
+	@rm -f $(PATH_REPORTS)/*.$(EXT_HTML)
+	@rm -f $(PATH_REPORTS)/*.$(EXT_CSV)
+endef
 
 # Illustration folder clean up. Just take out the
 # linked PNG files
-illustrations-clean :
-	rm -f $(PATH_ILLUSTRATIONS)/*.png
+define illustrations-clean
+	@echo INFO: Deleting illustration files in: $(PATH_ILLUSTRATIONS)
+	@rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PNG)
+	@rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PDF)
+endef
+
+# This supports clean-all or can be called alone.
+define picfile-clean-all
+	@echo INFO: Deleting all .$(EXT_PICLIST) files from: $(PATH_TEXTS)
+	@rm -f $(PATH_TEXTS)/*.$(EXT_PICLIST)
+endef
+
+# This supports clean-all or can be called alone.
+define adjfile-clean-all
+	@echo INFO: Deleting all .$(EXT_ADJUSTMENT) files from: $(PATH_TEXTS)
+	@rm -f $(PATH_TEXTS)/*.$(EXT_ADJUSTMENT)
+endef
 
 # Just in case we need to clean up to have a fresh start
-process-clean :
-	rm -f $(PATH_PROCESS)/*.$(EXT_LOG)
-	rm -f $(PATH_PROCESS)/*.notepages
-	rm -f $(PATH_PROCESS)/*.parlocs
-	rm -f $(PATH_PROCESS)/*.delayed
-	rm -f $(PATH_PROCESS)/*.$(EXT_PDF)
-	rm -f $(PATH_PROCESS)/*.$(EXT_PDF)
+define process-clean
+	@echo INFO: Cleaning out process files from: $(PATH_PROCESS)
+	@rm -f $(PATH_PROCESS)/*.$(EXT_LOG)
+	@rm -f $(PATH_PROCESS)/*.notepages
+	@rm -f $(PATH_PROCESS)/*.parlocs
+	@rm -f $(PATH_PROCESS)/*.delayed
+	@rm -f $(PATH_PROCESS)/*.$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/*.$(EXT_PDF)
+endef
 
 # This will clean out all the generated in the texts folder.
 # Be very careful with this one! You don't want to lose the
 # work you put into your .$(EXT_PICLIST) and .$(EXT_ADJUSTMENT) files. Hopefully
 # the lock mechanism will prevent this.
-texts-clean :
-ifeq ($(LOCKED),0)
-	rm -f $(PATH_TEXTS)/*.$(EXT_TEXT)
-	rm -f $(PATH_TEXTS)/*.$(EXT_WORK)
-	rm -f $(PATH_TEXTS)/*.$(EXT_WORK)
-endif
-	rm -f $(PATH_TEXTS)/*.bak
-	rm -f $(PATH_TEXTS)/*~
-
-# This supports clean-all or can be called alone.
-adjfile-clean-all :
-ifeq ($(LOCKED),0)
-	rm -f $(PATH_TEXTS)/*.$(EXT_ADJUSTMENT)
-endif
-
-# This supports clean-all or can be called alone.
-picfile-clean-all :
-ifeq ($(LOCKED),0)
-	rm -f $(PATH_TEXTS)/*.$(EXT_PICLIST)
-endif
+define texts-clean
+	@echo INFO: Cleaning out file from: $(PATH_TEXTS)
+	@rm -f $(PATH_TEXTS)/*.$(EXT_TEXT)
+	@rm -f $(PATH_TEXTS)/*.$(EXT_WORK)
+	@rm -f $(PATH_TEXTS)/*.bak
+	@rm -f $(PATH_TEXTS)/*~
+endef
 
 # Just in case, here is a clean_all rule. However, be very
 # when using it. It will wipe out all your previous work. This
 # is mainly for using when you want to start over on a project.
-reset : pdf-remove-book \
-	texts-clean \
-	adjfile-clean-all \
-	picfile-clean-all \
-	illustrations-clean \
-	process-clean \
-	reports-clean \
-	log-clean
+define reset
+	@echo INFO: Resetting the project. I hope you meant to do that!
+	$(call pdf-remove-book)
+	$(call texts-clean)
+	$(call adjfile-clean-all)
+	$(call picfile-clean-all)
+	$(call illustrations-clean)
+	$(call process-clean)
+	$(call reports-clean)
+	$(call log-clean)
+endef
 
 
 ###############################################################
