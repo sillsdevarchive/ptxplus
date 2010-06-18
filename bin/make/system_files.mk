@@ -42,8 +42,6 @@
 #		Variables for some of the system matter
 ##############################################################
 
-SHELL := /bin/bash
-
 # This is the final output we want so we can name it here
 MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).$(EXT_PDF)
 
@@ -257,19 +255,23 @@ view-book : $(MATTER_BOOK_PDF)
 # We want to implement some simple command line input from
 # the user with the bash read comment. For example I would like
 # to use something like:
-#test :
-#	$(call test)
 
-#define test
-#@echo "A yes or no question"
-#@read $myinput
-#@if [ "$$myinput" == "yes" ]; then \
-#	echo Now I go do something; \
-#else \
-#	echo No I cannot do that because you answered $$myinput; \
-#fi
-#endef
-#
+SHELL := /bin/bash
+#SHELL=/bin/bash
+
+test :
+	$(call test)
+
+define test
+@echo "A yes or no question"
+@read $myinput
+@if [ "$$myinput" == "yes" ]; then \
+	echo Now I go do something; \
+else \
+	echo No I cannot do that because you answered $$myinput; \
+fi
+endef
+
 # But this does not work, why?
 
 
