@@ -40,7 +40,8 @@
 # Firstly, import all the standard Python modules we need for
 # this process
 
-import os, shutil, sys, re
+#import os, shutil, sys, re
+import os, shutil, sys
 
 # Import supporting local classes
 from tools import *

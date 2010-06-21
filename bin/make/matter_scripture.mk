@@ -125,7 +125,7 @@ endif
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@echo INFO: Creating: $$@; \
-	@$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+	$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 else
 	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\". $$@ not made.
 endif
@@ -135,8 +135,8 @@ endif
 
 # Remove the PDF for this component only
 pdf-remove-$(1) :
-	@echo INFO: Removing: $(PATH_PROCESS)/$(1).$(EXT_PDF)
-	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
+	@echo INFO: Removing: $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
 
 # Remove the adjustment file for this component only
 adjfile-remove-$(1) :

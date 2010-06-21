@@ -23,7 +23,7 @@
 # Firstly, import all the standard Python modules we need for
 # this process
 
-import codecs, os
+import codecs, os, re
 
 # Import supporting local classes
 from tools import *
@@ -97,6 +97,23 @@ class ErrorManager (object) :
 
 				if errrCount > 0 :
 					tools.userMessage("A total of " + str(errrCount) + " errors were found.")
+					# Now we will add a more "in your face" error report so they are not ignored
+					# It might be good to exchange the sed command for stanard Python regex code
+					try :
+						sed_filter = """sed -r 's/[[:blank:]]*("[^"]*")[[:blank:]]*,/\\1\\n/g' < Log/{log!r}"""\
+								   """| sed -r 's/(^[[:blank:]]*"|"[[:blank:]]*$)//g'""".format
+						dialog_command = "zenity --title={title!r} "\
+												"--window-icon=/home/dennis/Projects/ptxplus/resources/icons/ptxplus.png "\
+												"--height=400 --width=600 --list "\
+												"--text={text!r} "\
+												"--column='File' --column='Type' --column='Book' --column='Ref' --column='Description' "\
+												"--hide-column=1,2".format
+						os.system(sed_filter(log='error.log') + ' | ' +
+								  dialog_command(title='PtxPlus error log report',
+												 text ='A total of {0} errors were found'.format(errrCount)))
+					except :
+						tools.userMessage('error_manager.py: Error report dialog failed to work!')
+
 
 				if warnCount == 1 :
 					tools.userMessage("Also, one warning was found too")
@@ -115,16 +132,16 @@ class ErrorManager (object) :
 		if os.path.isfile(self._errorLogFile) == True :
 			if os.system("rm " + self._errorLogFile) != 0 :
 				tools.userMessage("Failed to delete: " + self._errorLogFile)
-#		return True
+#        return True
 
 
 	def recordError (self, event) :
 		'''Record an error report line to the error log object.'''
 
 		if os.path.isfile(self._errorLogFile) == True :
-			errorWriteObject = codecs.open(self._errorLogFile, "a", encoding='utf_8_sig')
+			errorWriteObject = codecs.open(self._errorLogFile, "a", encoding='utf_8')
 		else :
-			errorWriteObject = codecs.open(self._errorLogFile, "w", encoding='utf_8_sig')
+			errorWriteObject = codecs.open(self._errorLogFile, "w", encoding='utf_8')
 
 		errorWriteObject.write(event + '\n')
 		errorWriteObject.close()

@@ -348,14 +348,14 @@
 					<child>
 					  <widget class="GtkMenuItem" id="menu_make_piclist">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Create an picture list file for this component</property>
+						<property name="tooltip" translatable="yes">Create a picture list file for this component</property>
 						<property name="label" translatable="yes">Add Pictures</property>
 						<signal name="activate" handler="on_menu_make_pic_activate"/>
 					  </widget>
 					</child>
 					<child>
 					  <widget class="GtkImageMenuItem" id="menu_remove_piclist_current">
-						<property name="label" translatable="yes">Remove Pictures</property>
+						<property name="label" translatable="yes">Remove Picture List (Current)</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove the illustrations list file for this component</property>
 						<property name="use_stock">False</property>
@@ -371,7 +371,7 @@
 					</child>
 					<child>
 					  <widget class="GtkImageMenuItem" id="menu_clean_pic_all">
-						<property name="label">Remove All Pictures</property>
+						<property name="label">Remove All Picture Lists</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove all the illustrations list files for this publication</property>
 						<property name="use_stock">False</property>

@@ -79,12 +79,14 @@ class MakePiclistFile (object) :
 		self._captionsFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_CAPTIONS']
 		self._sourceIllustrationsLibDataFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_DATA']
 		self._projectIllustrationsPath = self._sourcePath + "/" + self._settings['System']['Paths']['PATH_ILLUSTRATIONS']
-		self._sourceIllustrationsLibPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
+#        self._sourceIllustrationsLibPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
+		self._sourceIllustrationsLibPath = self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB']
 		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + self._sourceIllustrationsLibDataFileName
 		# The folder name for peripheral material is auto created here
 		self._projectPeripheralFolderName = os.getcwd().split('/')[-1]
 		self._projectPeripheralFolderPath = self._sourcePath + '/' + self._projectPeripheralFolderName
 		self._projectIllustrationsCaptions = os.path.abspath(self._projectPeripheralFolderPath + "/" + self._captionsFileName)
+		self._libData = {}
 		self._errors = 0
 
 
@@ -161,10 +163,9 @@ class MakePiclistFile (object) :
 		# if it doesn't exist there already
 		if not os.path.isfile(target) :
 			x = shutil.copy(source, target)
-			print x, "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
-#                self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
-#            else :
-#                self._log_manager.log("ERRR", "Failed to copy from: " + source + " ---To:--> " + target)
+			self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
+		else :
+			self._log_manager.log("ERRR", "Failed to copy from: " + source + " ---To:--> " + target)
 
 
 	def main(self):
@@ -188,7 +189,7 @@ class MakePiclistFile (object) :
 			self._log_manager.log("ERRR", "The illustration caption file (" + self._projectIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
 			self._errors +=1
 
-		# Check to see if the path to the illustrations lib is good. If it doesn't we're done
+		# Check to see if the path to the illustrations lib is good.
 		if not os.path.isdir(self._sourceIllustrationsLibPath) :
 			self._log_manager.log("ERRR", "The path to the illustrations library (" + self._sourceIllustrationsLibPath + ") does not seem to be correct. This process cannot work without it.")
 			self._errors +=1
@@ -203,7 +204,10 @@ class MakePiclistFile (object) :
 			return
 
 		# Pull in the library data file using the CSVtoDict class in tools
-		self._libData = CSVtoDict(self._sourceIllustrationsLibData)
+		try :
+			self._libData = CSVtoDict(self._sourceIllustrationsLibData)
+		except :
+			self._log_manager.log("ERRR", "Not able to find (" + self._sourceIllustrationsLibData + "). More than likely the file is missing or the path is wrong.")
 
 		# If we didn't bail out right above, we'll go ahead and open the data file
 		# The assumption here is that the encoding of the pieces of the csv are
