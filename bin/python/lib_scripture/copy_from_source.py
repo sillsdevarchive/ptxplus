@@ -10,8 +10,12 @@
 ################ Description/Documentation ##################
 #############################################################
 
-# This script will simply copy the source file to the
-# destination file.
+# This script handels the copying of text source files to the
+# working directory. It is blind when it comes to encoding
+# changes. Changing the encoding at copy time is seen more as
+# a technique than a common practice. This is somewhat
+# simplistic but should allow for more complex copy operations
+# as it is developed further.
 
 # History:
 # 20080519 - djd - Initial draft
@@ -32,6 +36,8 @@
 # 20081030 - djd - Added total dependence on log_manager.
 #        This script will not run without it because
 #        it handles all the parameters it needs.
+# 20100622 - djd - Removed the reencodingRequired var which
+#       changes the script to be encoding agnostic.
 
 
 #############################################################
@@ -59,15 +65,7 @@ class CopyFromSource (object) :
 		outputFile =  log_manager._currentOutput
 
 		# Pull in the command from the project.conf file
-		copyCommand = settings['System']['TextProcesses']['CopyIntoSystem']['copyCommand']
-		reencodingRequired = settings['System']['TextProcesses']['CopyIntoSystem']['reencodingRequired']
-		customEncodingProcess = settings['System']['General']['customEncodingProcess']
-		if reencodingRequired == 'true' :
-			copyCommand = customEncodingProcess
-			# Now, if it no command is found...
-			if customEncodingProcess == '' :
-				log_manager.logIt("SYS", "ERRR", "Re-encoding is required for this project but no customEncodingProcess has been defined. Copy process has been aborted.")
-				return()
+		copyCommand = settings['System']['TextProcesses']['copyCommand']
 
 		# Because we want to be able to customize the command if necessary the
 		# incoming command has placeholders for the input and output. We need
@@ -79,13 +77,15 @@ class CopyFromSource (object) :
 		copyCommand = copyCommand.replace('[inFile]', inputFile)
 		copyCommand = copyCommand.replace('[outFile]', outputFile)
 
-		# Send off the command
-		os.system(copyCommand)
-		# Check to see if the copy actually took place.
-		if os.path.isfile(outputFile) :
-			log_manager.logIt("SYS", "INFO", "Copied from: " + inputFile + " ---To:--> " + outputFile + " Command used: " + copyCommand)
-		else :
-			log_manager.logIt("SYS", "INFO", "Failed to execute: " + copyCommand)
+		# Try the command and check to see if it was successful
+		try :
+			os.system(copyCommand)
+			if os.path.isfile(outputFile) :
+				log_manager.logIt("SYS", "INFO", "Copied from: " + inputFile + " ---To:--> " + outputFile + " Command used: " + copyCommand)
+			else :
+				log_manager.logIt("SYS", "ERRR", "File not found. The Copy command was executed but seemed to fail. Command executed: " + copyCommand)
+		except :
+			log_manager.logIt("SYS", "ERRR", "Failed to execute: " + copyCommand)
 
 
 # This starts the whole process going
