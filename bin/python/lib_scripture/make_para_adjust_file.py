@@ -66,7 +66,7 @@ class MakeParaAdjustFile (object) :
 		self._markup_manager = MarkupManager(self._settings)
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
-		self._outputFile = self._inputFile + self._settings['System']['Extensions']['EXT_ADJUSTMENT']
+		self._outputFile = self._inputFile + '.' + self._settings['System']['Extensions']['EXT_ADJUSTMENT']
 		self._bookID = log_manager._currentTargetID
 		self._adjustLinesWritten = 0
 		self._poetryMarkers = {}
@@ -98,12 +98,15 @@ class MakeParaAdjustFile (object) :
 # This needs to be rewritten to use the sfm parser which would simplify it somewhat
 
 
-		# Pull in any settings that we need from the project INI file
-		# You may need to use int() to be sure numbers work right
-#        adjustParaLength = int(self._settings['System']['TextProcesses']['AdjustParagraph']['adjustParaLength'])
-		print sys.argv[1], "zzzzzzzzzzzzzzzzzzzzzzzzzzzz"
-		adjustParaLength = int(sys.argv[1])
-		print adjustParaLength, "ccccccccccccccccccccccccccccccc"
+		# Pull in any argments we need. For this module we know that the first one
+		# is the one we need. If there are more they are relevant.
+		adjustParaLength = int(0)
+		adjustParaLength = int(tools.getModuleArguments()[0])
+# How do we do integer comparison?
+		if adjustParaLength not gt 0 :
+			adjustParaLength = int(29)
+			self._log_manager.log("ERRR", "The paragraph length does not seem to be set. A default value will be used. Please check your settings file.")
+
 		verseNumberMarker = "\\" + self._settings['System']['Markup']['ChaptersVerses']['verseNumber']
 		footnoteOpenMarker = "\\" + self._settings['System']['Markup']['Footnotes']['footnoteOpenMarker']
 
@@ -118,23 +121,14 @@ class MakeParaAdjustFile (object) :
 
 			return
 
-		# Note that the isPeripheralMatter() function is now
-		# disabled. Do we really need to do this check anyway?
-		# Let's go away and think about it
-#        if tools.isPeripheralMatter(self._inputFile) :
-#            # If the parent file belongs to the peripheral mater we will
-#            # not go through with the process
-#
-#            self._log_manager.log("INFO", "The " + self._inputFile + " is part of the peripheral mater so the process is being halted.")
-#
-#            return
-
 		# Otherwise we'll just continue on by opening up a new .adj file
-		outputObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
+		outputObject = codecs.open(self._outputFile, "w", encoding='utf-8')
 
 		# Open up our book file (Unicode encoded)  and suck in the
 		# entire body of text.
-		inputObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
+		inputObject = codecs.open(self._inputFile, "r", encoding='utf-8')
+
+		self._log_manager.log("INFO", "Identifying all paragraphs with " + str(adjustParaLength) + " words or more.")
 
 		paragraph = "off"
 		verseCount = 0
@@ -216,7 +210,6 @@ class MakeParaAdjustFile (object) :
 						paragraphType     = "##"
 					continue
 
-
 		# Clean up! Write out the last line now that we are done.
 		# As before, we need to do some checking on other elements in
 		# the line. If a footnote marker is found we will go on to
@@ -226,9 +219,7 @@ class MakeParaAdjustFile (object) :
 			self.writeAdjLine(verseCount, footnoteCount, wordCount, \
 				locationLine, paragraphType, adjustParaLength, outputObject)
 
-
 		# All done, tell the world what we did
-		self._log_manager.log("INFO", "Paragraph limit set to: " + str(adjustParaLength))
 		self._log_manager.log("INFO", "Created paragraph adjustment file: " + self._outputFile)
 		self._log_manager.log("INFO", "Lines written =  " + str(self._adjustLinesWritten))
 

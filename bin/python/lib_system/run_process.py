@@ -129,24 +129,31 @@ class RunProcess (object) :
 			metaTask = task
 			taskList = log_manager._settings['System']['Processes'][metaTask]
 			for thisTask in taskList :
+				# The standard sys.argv[1] setting contains the name of the metaTask
+				# However, that is not the name of the actual module we want to send
+				# off to process. We need to replace sys.argv[1] with the right task
+				# name and any parameters that go with it.
+				sys.argv[1] = thisTask
 				self.runIt(thisTask)
 
 		# If it is not a meta task then it must be a single one
 		# so we will just run it as it comes in
 		else :
-#            self.runIt(task)
-
-			print len(task.split()), "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-			if len(task.split()) >= 2 :
-				self.runIt(task.split()[0], task.split()[1])
-			else :
-				self.runIt(task)
+			self.runIt(task)
 
 
-	def runIt (self, thisTask, parm=False) :
+	def runIt (self, taskCommand) :
 		'''This will dynamically run a module when given a
 			valid name. The module must have the doIt() function
 			defined in the "root" of the module.'''
+
+		# For flexibility, some tasks may have parameters added
+		# to them. To initiate the task we need to pull out the
+		# the module name to be able to initialize it. Once the
+		# module has been initialized, it will get the parmeters
+		# from sys.argv[1] and take it from there.
+		thisTask = taskCommand.split()[0]
+		print taskCommand, thisTask, "mmmmmmmmmmmmmmmmmmmmm"
 
 		# Go a head and do it if we have not reached our error limit
 		if log_manager.reachedErrorLimit() != True :
@@ -161,12 +168,14 @@ class RunProcess (object) :
 			# This will dynamically import the module
 			# This will work because all the right paths have
 			# been defined earlier.
-			try :
-				module = __import__(thisTask, globals(), locals(), [])
-				log_manager.log("DBUG", "Imported module: " + thisTask)
-			except :
-				tools.userMessage("Hmmm, cannot seem to import the \"" + thisTask + "\" module. This will not bode well for the rest of the process.")
-				log_manager.log("ERRR", "Could not import module: " + thisTask)
+			module = __import__(thisTask, globals(), locals(), [])
+			log_manager.log("DBUG", "Imported module: " + thisTask)
+#            try :
+#                module = __import__(thisTask, globals(), locals(), [])
+#                log_manager.log("DBUG", "Imported module: " + thisTask)
+#            except :
+#                tools.userMessage("Hmmm, cannot seem to import the \"" + thisTask + "\" module. This will not bode well for the rest of the process.")
+#                log_manager.log("ERRR", "Could not import module: " + thisTask)
 
 			# Run the module
 			module.doIt(log_manager)

@@ -71,9 +71,8 @@ class MakeMakefile (object) :
 		cmykPath = self._log_manager._settings['System']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
 		makefileSettings = makefileSettings + 'CMYK_PROFILE' + "=" + cmykPath + "\n"
 
-# Working with modules might be a little tricky so this next var is kind of experimental
-		modAdjustPara = self._log_manager._settings['System']['Processes'].get('MOD_PARA_ADJUST','make_para_adjust_file 29')
-		makefileSettings = makefileSettings + 'MOD_PARA_ADJUST' + "=\"" + modAdjustPara + "\"\n"
+		for key, value, in self._log_manager._settings['System']['Modules'].iteritems() :
+			makefileSettings = makefileSettings + key + "=\"" + value + "\"\n"
 
 		for key, value, in self._log_manager._settings['Format']['PageLayout']['Switches'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"

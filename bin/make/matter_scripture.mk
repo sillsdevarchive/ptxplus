@@ -30,7 +30,7 @@ define component_rules
 # that file is not there. Rather a dummy file will be created
 # telling them the file is missing.
 $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_SOURCE)
-	$(call copysmart,$(PATH_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
+	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
 
 # This is the basic rule for auto-text-processing. To control processes
 # edit the .project.conf file. This will automatically run the four

@@ -128,36 +128,36 @@ make-template :
 
 # If, for some odd reason the Illustrations folder is not in
 # the right place we'll put one where it is supposed to be found.
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS) :
+$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS) :
 	$(call mdir,$@)
 
 # Watermark
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)
+$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_WATERMARK) : | $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
 
-$(PATH_PROCESS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
+$(PATH_PROCESS)/$(FILE_WATERMARK) : $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_WATERMARK)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
 
 # BSM Logo
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)
+$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_LOGO_BSM) : | $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
 
-$(PATH_PROCESS)/$(FILE_LOGO_BSM) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
+$(PATH_PROCESS)/$(FILE_LOGO_BSM) : $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
 
 # CFE Logo
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE) :| $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)
+$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_LOGO_CFE) :| $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
 
-$(PATH_PROCESS)/$(FILE_LOGO_CFE) :$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
+$(PATH_PROCESS)/$(FILE_LOGO_CFE) :$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
 
 # Page border
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)
+$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_PAGE_BORDER) : | $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
 
-$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
+$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_PAGE_BORDER)
+	$(call linkme,$(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
@@ -321,9 +321,9 @@ endef
 # linked PNG files
 define illustrations-clean
 @if zenity --question --text="You have requested to clean out the Illustrations folder. If this project is part of a multi-publication group, by clicking OK, the deletion of the illustrations will effect other projects in this group that share these illustrations. Are you sure you want to do this?"; then \
-	echo INFO: Deleting illustration files in: $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS); \
-	rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PNG); \
-	rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PDF); \
+	echo INFO: Deleting illustration files in: $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS); \
+	rm -f $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/*.$(EXT_PNG); \
+	rm -f $(PATH_SOURCE)/$(PATH_SOURCE_ILLUSTRATIONS)/*.$(EXT_PDF); \
 else \
 	echo "INFO: Deletion of the illustration files has been canceled."; \
 fi

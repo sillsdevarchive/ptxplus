@@ -21,6 +21,7 @@
 # 20081028 - djd - Moved localiseFontsConf to font_manager.py
 # 20091009 - te - Added "No Context" return to getSliceOfText()
 # 20100416 - djd - Added CSVtoDict class written by te.
+# 20100623 - djd - Added getModuleArguments() function
 
 
 #############################################################
@@ -28,7 +29,7 @@
 #############################################################
 # Firstly, import all the modules we need for this process
 
-import re, os, shutil, codecs, csv
+import re, os, shutil, codecs, csv, sys
 from configobj import ConfigObj
 from datetime import *
 
@@ -55,6 +56,25 @@ class Tools (object) :
 			if not os.path.isfile(file) :
 				shutil.copy(fileLib + "/" + file, file)
 				self.userMessage('Added file: ' + file)
+
+
+	def getModuleArguments (self) :
+		'''Return a list of arguments for the current module.
+			This function will querry the sys.argv[1] parameter
+			to figure out what they are. This allows flexibility
+			to add new modules without having to define parms in
+			the .conf file. They can just be passed with the
+			module name.'''
+
+		# Strip out the module name from the standard sys.argv[1]
+		# It has to be the first part of the param.
+		cmd = sys.argv[1]
+		modName = cmd.split()[0]
+
+		# Now strip the module name out and gather up the args
+		modArgs = cmd.replace(modName, '').split()
+
+		return modArgs
 
 
 	def getSystemName (self) :

@@ -79,7 +79,7 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 # changing.
 ifneq ($(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm)
 $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
-	$(call copysmart,$(PATH_TEMPLATES)/$(1),$$@)
+	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$(1),$$@)
 endif
 
 # This .tex file also generally has some dependencies on the
@@ -100,7 +100,7 @@ $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
-	$(call copysmart,$(PATH_TEMPLATES)/$(1).$(EXT_STYLE),$$@)
+	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$(1).$(EXT_STYLE),$$@)
 
 
 # Process a single peripheral item and produce the final PDF.

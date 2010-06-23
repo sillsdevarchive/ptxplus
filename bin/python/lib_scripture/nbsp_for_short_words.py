@@ -19,14 +19,14 @@
 
 # History:
 # 20090120 - djd - Initial draft - Works but we may want to
-#			Add some additional testing
+#            Add some additional testing
 # 20090209 - djd - Fixed a problem with not getting paragraph
-# 		certain kinds of paragraph covered. Also added
-#		counting
+#         certain kinds of paragraph covered. Also added
+#        counting
 # 20090911 - djd - Changed the process to work only with word
-#		lengths rather than specific words.
+#        lengths rather than specific words.
 # 20100104 - djd - Changed file encoding to utf_8_sig to prevent
-#		BOM problems
+#        BOM problems
 
 #############################################################
 ######################### Shell Class #######################
@@ -52,16 +52,15 @@ class NBSPForShortWords (object) :
 
 		# Get the parameters if they exist. Note it is important to set this
 		# to an integer now so it stays persistent.
-		try :
-			wordLength = int(log_manager._settings['General']['TextProcesses']['nbspWordLength'])
-		except :
-			log_manager.log("ERRR", "This process is checked as true but the short word length is not set. Process aborted.")
+		wordLength = int(tools.getModuleArguments()[0])
+		log_manager.log("INFO", "Will replaced spaces with nbsp before the last word in a paragraph that has " + str(wordLength) + " characters or less.")
 
 		# Get our book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
+		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()
+
 
 		# This calls a version of the handler which strips out everything
 		# but the text and basic format.
@@ -72,7 +71,7 @@ class NBSPForShortWords (object) :
 
 
 		# Output the modified book file
-		newBookObject = codecs.open(bookFile, "w", encoding='utf_8_sig')
+		newBookObject = codecs.open(bookFile, "w", encoding='utf-8')
 		newBookObject.write(newBookOutput)
 		log_manager.log("INFO", "Replaced U+0020 with U+00A0 a total of " + str(handler._replacementCount) + " times")
 
