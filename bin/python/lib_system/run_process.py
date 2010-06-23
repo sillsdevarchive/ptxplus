@@ -121,24 +121,29 @@ class RunProcess (object) :
 		# Make a list that contains all the metaProcesses
 		metaTaskList = []
 		taskList = []
-		metaTaskList = log_manager._settings['System']['TextProcesses']['metaProcesses']
-
+		metaTaskList = log_manager._settings['System']['Processes']['textMetaProcesses']
 		# if this is a meta task then we need to process it as
 		# if there are multiple sub-tasks within even though
 		# there may only be one
 		if task in metaTaskList :
 			metaTask = task
-			taskList = log_manager._settings['System']['TextProcesses'][metaTask]
+			taskList = log_manager._settings['System']['Processes'][metaTask]
 			for thisTask in taskList :
 				self.runIt(thisTask)
 
 		# If it is not a meta task then it must be a single one
 		# so we will just run it as it comes in
 		else :
-			self.runIt(task)
+#            self.runIt(task)
+
+			print len(task.split()), "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+			if len(task.split()) >= 2 :
+				self.runIt(task.split()[0], task.split()[1])
+			else :
+				self.runIt(task)
 
 
-	def runIt (self, thisTask) :
+	def runIt (self, thisTask, parm=False) :
 		'''This will dynamically run a module when given a
 			valid name. The module must have the doIt() function
 			defined in the "root" of the module.'''
@@ -149,20 +154,29 @@ class RunProcess (object) :
 			# Initialize the log manager to do its thing
 			log_manager.initializeLog(thisTask, typeID, inputFile, outputFile, optionalPassedVariable)
 
+			# Tell the log what we're doing.
+			log_manager.log("DBUG", "Starting process: " + thisTask)
+
+
 			# This will dynamically import the module
 			# This will work because all the right paths have
 			# been defined earlier.
 			try :
 				module = __import__(thisTask, globals(), locals(), [])
+				log_manager.log("DBUG", "Imported module: " + thisTask)
 			except :
 				tools.userMessage("Hmmm, cannot seem to import the \"" + thisTask + "\" module. This will not bode well for the rest of the process.")
-
-			# Tell the log what we're doing.
-			log_manager.log("DBUG", "Starting process: " + thisTask)
+				log_manager.log("ERRR", "Could not import module: " + thisTask)
 
 			# Run the module
 			module.doIt(log_manager)
 			log_manager.log("DBUG", "Process completed: " + thisTask)
+#            try :
+#                module.doIt(log_manager)
+#                log_manager.log("DBUG", "Process completed: " + thisTask)
+#            except :
+#                tools.userMessage("Cannot run the \"" + thisTask + "\" module.")
+#                log_manager.log("ERRR", "Cannot run the \"" + thisTask + "\" module.")
 
 			# Close out the process by reporting to the log file
 			log_manager.closeOutSessionLog()

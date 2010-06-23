@@ -66,7 +66,7 @@ class MakeParaAdjustFile (object) :
 		self._markup_manager = MarkupManager(self._settings)
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
-		self._outputFile = self._inputFile + ".adj"
+		self._outputFile = self._inputFile + self._settings['System']['Extensions']['EXT_ADJUSTMENT']
 		self._bookID = log_manager._currentTargetID
 		self._adjustLinesWritten = 0
 		self._poetryMarkers = {}
@@ -100,7 +100,10 @@ class MakeParaAdjustFile (object) :
 
 		# Pull in any settings that we need from the project INI file
 		# You may need to use int() to be sure numbers work right
-		adjustParaLength = int(self._settings['System']['TextProcesses']['AdjustParagraph']['adjustParaLength'])
+#        adjustParaLength = int(self._settings['System']['TextProcesses']['AdjustParagraph']['adjustParaLength'])
+		print sys.argv[1], "zzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+		adjustParaLength = int(sys.argv[1])
+		print adjustParaLength, "ccccccccccccccccccccccccccccccc"
 		verseNumberMarker = "\\" + self._settings['System']['Markup']['ChaptersVerses']['verseNumber']
 		footnoteOpenMarker = "\\" + self._settings['System']['Markup']['Footnotes']['footnoteOpenMarker']
 

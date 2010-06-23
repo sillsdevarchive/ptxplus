@@ -273,23 +273,24 @@ else :
 			# Look for all the global processes that need to be run
 			try :
 
-				for key, value in tools.getSettingsObject()['System']['GlobalProcesses'].iteritems() :
+				taskList = []
+				taskList = log_manager._settings['System']['Processes']['globalProcesses']
+				for thisTask in taskList :
 
 					# Initialize the log manager to do its thing. However, as
 					# this is a system process we don't book ID and may not
 					# even have input or output.
 					try :
-						log_manager.initializeLog(key, "NA", "", "", "")
+						log_manager.initializeLog(thisTask, "NA", "", "", "")
 					except :
 						tools.userMessage('Error: Failed to initialize process log.')
 
-					# Run any that are set to "true"
-					if value.lower() == "true" :
-						try :
-							module = __import__(key, globals(), locals(), [])
-							module.doIt(log_manager)
-						except :
-							tools.userMessage('Error: Could not run the ' + key + ' process in global processes.')
+					try :
+						module = __import__(thisTask, globals(), locals(), [])
+						module.doIt(log_manager)
+					except :
+						tools.userMessage('Error: Could not run the ' + thisTask + ' process in global processes.')
+
 			except :
 				tools.userMessage('Error: No global processes seem to be present, might be a problem with the .conf file.')
 

@@ -65,7 +65,7 @@ class CopyFromSource (object) :
 		outputFile =  log_manager._currentOutput
 
 		# Pull in the command from the project.conf file
-		copyCommand = settings['System']['TextProcesses']['copyCommand']
+		copyCommand = settings['System']['Processes']['copyCommand']
 
 		# Because we want to be able to customize the command if necessary the
 		# incoming command has placeholders for the input and output. We need

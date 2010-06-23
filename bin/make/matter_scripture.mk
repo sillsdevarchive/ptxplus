@@ -111,10 +111,13 @@ $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
 ifeq ($(USE_ADJUSTMENTS),true)
 	@echo INFO: Creating the adjustments file: $$@
-	@$(PY_RUN_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@$(PY_RUN_PROCESS) $(MOD_PARA_ADJUST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 else
 	@echo INFO: USE_ADJUSTMENTS is set to \"$(USE_ADJUSTMENTS)\". $$@ not made.
 endif
+
+#	@$(PY_RUN_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+
 
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
