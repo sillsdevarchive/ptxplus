@@ -65,7 +65,7 @@ class ErrorManager (object) :
 
 		count = 0
 		if os.path.isfile(self._errorLogFile) :
-			fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8_sig')
+			fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8')
 			for line in fileObject :
 				if line.find("ERRR") > 0 :
 					count +=1
@@ -86,7 +86,7 @@ class ErrorManager (object) :
 
 		if os.path.isfile(self._errorLogFile) == True :
 			try :
-				fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8_sig')
+				fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8')
 				errrOutput = "\nErrors found: \n"
 				warnOutput = "\nWarnings found: \n"
 				for line in fileObject :
@@ -114,7 +114,6 @@ class ErrorManager (object) :
 					except :
 						tools.userMessage('error_manager.py: Error report dialog failed to work!')
 
-
 				if warnCount == 1 :
 					tools.userMessage("Also, one warning was found too")
 				elif warnCount > 1 :
@@ -138,6 +137,7 @@ class ErrorManager (object) :
 	def recordError (self, event) :
 		'''Record an error report line to the error log object.'''
 
+
 		if os.path.isfile(self._errorLogFile) == True :
 			errorWriteObject = codecs.open(self._errorLogFile, "a", encoding='utf_8')
 		else :
@@ -145,3 +145,4 @@ class ErrorManager (object) :
 
 		errorWriteObject.write(event + '\n')
 		errorWriteObject.close()
+

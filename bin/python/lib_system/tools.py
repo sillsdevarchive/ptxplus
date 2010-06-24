@@ -32,11 +32,48 @@
 import re, os, shutil, codecs, csv, sys
 from configobj import ConfigObj
 from datetime import *
+#from log_manager import *
 
 class Tools (object) :
 	'''This class contains a bunch of misc. functions that work with
 		ptxplus. If something can be used cross-scripts, it ends
 		up here.'''
+
+	def taskRunner (self, log_manager, thisTask) :
+		'''This is the final function used for running all system tasks.
+			All calls from the system to run a task or process should
+			end up here.'''
+
+		# Tell the log what we're doing.
+		log_manager.log("DBUG", "Starting process: " + thisTask)
+
+		if log_manager._settings['System']['Processes'].get('debugMode', 'false').lower() == 'true' :
+			# Import the module
+			module = __import__(thisTask, globals(), locals(), [])
+			log_manager.log("DBUG", "Imported module: " + thisTask)
+			# Run the module
+			module.doIt(log_manager)
+			log_manager.log("DBUG", "Completed: " + thisTask)
+
+		else :
+			# If we are in debug mode then do it like this to suppress debugging code
+
+			# Import/load the module
+			try :
+				module = __import__(thisTask, globals(), locals(), [])
+				log_manager.log("DBUG", "Imported module: " + thisTask)
+			except :
+				self.userMessage("Hmmm, cannot seem to import the \"" + thisTask + "\" module. This will not bode well for the rest of the process.")
+				log_manager.log("ERRR", "Could not import module: " + thisTask)
+
+			# Run the module
+			try :
+				module.doIt(log_manager)
+				log_manager.log("DBUG", "Process completed: " + thisTask)
+			except :
+				self.userMessage("Cannot run the \"" + thisTask + "\" module.")
+				log_manager.log("ERRR", "Cannot run the \"" + thisTask + "\" module.")
+
 
 	def makeNecessaryFiles (self) :
 		'''Create all the necessary files and folders for a project.
@@ -368,19 +405,6 @@ class Tools (object) :
 
 		return ok
 
-############ This is no longer needed but it might throw errors in other places. We'll keep it here until everything is cleanded up.
-
-#    def isPeripheralMatter (self, fileName) :
-#        '''Check to see if this file (from wherever) exists in the Peripheral folder.
-#            return True if it does.'''
-#
-#        (head, tail) = os.path.split(fileName)
-#        path = os.getcwd() + "/Peripheral"
-#        target = path + "/" + tail
-#        if os.path.isfile(target) :
-#            return True
-
-###################################################################################################################
 
 	def userConfirm (self, msg) :
 		'''Ask the user to confirm something.'''

@@ -71,13 +71,15 @@ class MakeMakefile (object) :
 		cmykPath = self._log_manager._settings['System']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
 		makefileSettings = makefileSettings + 'CMYK_PROFILE' + "=" + cmykPath + "\n"
 
+		# Modules used by the makefile, note the use of extra
+		# quoting. This is to preserve the strings.
 		for key, value, in self._log_manager._settings['System']['Modules'].iteritems() :
 			makefileSettings = makefileSettings + key + "=\"" + value + "\"\n"
 
 		for key, value, in self._log_manager._settings['Format']['PageLayout']['Switches'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in self._log_manager._settings['System']['General'].iteritems() :
+		for key, value, in self._log_manager._settings['Project']['SourceText'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
 		for key, value, in self._log_manager._settings['System']['Extensions'].iteritems() :
@@ -103,18 +105,19 @@ class MakeMakefile (object) :
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		editorBibleInfo = ""
 
 		# Add rules from the system that are not in the .conf files
 		# The order of the include is important. We include system_files.mk last
 		# so that all of the other rules are caught and can be expanded in that
 		# make file.
+		editor = self._log_manager._settings['Project']['SourceText']['projectEditor']
+		editorBibleInfo = ""
 		basePath = os.environ.get('PTXPLUS_BASE')
-		if self._log_manager._settings['System']['General']['projectEditor'] == 'ptx' :
+		if editor == 'ptx' :
 			editorBibleInfo = "include " + basePath + "/bin/make/ptx_bible_info.mk\n"
-		elif self._log_manager._settings['System']['General']['projectEditor'] == 'be' :
+		elif editor == 'be' :
 			editorBibleInfo = "include " + basePath + "/bin/make/be_bible_info.mk\n"
-		elif self._log_manager._settings['System']['General']['projectEditor'] == 'te' :
+		elif editor == 'te' :
 			editorBibleInfo = "include " + basePath + "/bin/make/te_bible_info.mk\n"
 
 		makefileFinal = "include " + basePath + "/bin/make/common_bible_info.mk\n" + \
@@ -130,12 +133,6 @@ class MakeMakefile (object) :
 		# Output to the new makefile file
 		makefileObject.write(makefileHeader + makefileSettings + makefileFinal)
 
-#    def setPeripheralFolderName (self) :
-#        '''This will find out the name of the current project folder and then
-#            pass that back. That name will be used as the folder name for
-#            project peripheral material that is stored in the source folder.'''
-#
-#            print os.getcwd().split('/')[-1]
 
 # This starts the whole process going
 def doIt(log_manager):

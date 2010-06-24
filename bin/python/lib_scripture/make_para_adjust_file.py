@@ -103,7 +103,7 @@ class MakeParaAdjustFile (object) :
 		adjustParaLength = int(0)
 		adjustParaLength = int(tools.getModuleArguments()[0])
 # How do we do integer comparison?
-		if adjustParaLength not gt 0 :
+		if adjustParaLength <= 0 :
 			adjustParaLength = int(29)
 			self._log_manager.log("ERRR", "The paragraph length does not seem to be set. A default value will be used. Please check your settings file.")
 

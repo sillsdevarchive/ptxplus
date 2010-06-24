@@ -271,31 +271,26 @@ else :
 			#log_manager.logItSystem("INFO", "Looking for global project processes to run.")
 
 			# Look for all the global processes that need to be run
-			try :
-
-				taskList = []
-				taskList = log_manager._settings['System']['Processes']['globalProcesses']
-				for thisTask in taskList :
-
-					# Initialize the log manager to do its thing. However, as
-					# this is a system process we don't book ID and may not
-					# even have input or output.
-					try :
-						log_manager.initializeLog(thisTask, "NA", "", "", "")
-					except :
-						tools.userMessage('Error: Failed to initialize process log.')
-
-					try :
-						module = __import__(thisTask, globals(), locals(), [])
-						module.doIt(log_manager)
-					except :
-						tools.userMessage('Error: Could not run the ' + thisTask + ' process in global processes.')
-
-			except :
-				tools.userMessage('Error: No global processes seem to be present, might be a problem with the .conf file.')
-
+			taskList = []
+			taskList = log_manager._settings['System']['Processes']['globalProcesses']
 			# Get rid of the old error log file.
 			error_manager.deleteErrorLog()
+			for thisTask in taskList :
+
+				# Initialize the log manager to do its thing
+				log_manager.initializeLog(thisTask, "NA", "", "", "")
+
+				# For running each process we use one centralized task runner in tools.
+				tools.taskRunner(log_manager, thisTask)
+
+				# Close out the process by reporting to the log file
+				log_manager.closeOutSessionLog()
+
+			# Anounce any errors we have found
+			warn = ""
+			if log_manager._warningCount > 0 :
+				warn = " (Warnings = " + str(log_manager._warningCount) + ")"
+			tools.userMessage(thisTask + " completed with " + str(log_manager._errorCount) + " errors" + warn)
 
 			# At this point we want to check to see if a few certain switches
 			# are set to false. If they are, we will run a couple makefile
@@ -303,7 +298,7 @@ else :
 			# for is run. (Right now we are limiting this action to Scripture
 			# publications.)
 			pubType = tools.getSettingsObject()['Format']['publicationType']
-			locked = tools.getSettingsObject()['System']['General']['LOCKED']
+			locked = tools.getSettingsObject()['Project']['SourceText']['LOCKED']
 			useIllustrations = tools.getSettingsObject()['Format']['PageLayout']['Switches']['USE_ILLUSTRATIONS']
 			useAdjustments = tools.getSettingsObject()['Format']['PageLayout']['Switches']['USE_ADJUSTMENTS']
 			if locked == 0 :

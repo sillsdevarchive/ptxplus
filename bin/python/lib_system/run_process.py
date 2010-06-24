@@ -113,6 +113,14 @@ class RunProcess (object) :
 		'''This is the main routine for the class. It will control
 			the running of the process classes we want to run.'''
 
+		# Set some global (might be better done in an init section)
+		self._task = task
+		self._typeID = typeID
+		self._inputFile = inputFile
+		self._outputFile = outputFile
+		self._optionalPassedVariable = optionalPassedVariable
+
+
 		# We need to sort out the task that we are running
 		# Sometimes parent meta-tasks are being called which
 		# need to link to the individual tasks. This sorts that
@@ -125,8 +133,8 @@ class RunProcess (object) :
 		# if this is a meta task then we need to process it as
 		# if there are multiple sub-tasks within even though
 		# there may only be one
-		if task in metaTaskList :
-			metaTask = task
+		if self._task in metaTaskList :
+			metaTask = self._task
 			taskList = log_manager._settings['System']['Processes'][metaTask]
 			for thisTask in taskList :
 				# The standard sys.argv[1] setting contains the name of the metaTask
@@ -139,7 +147,7 @@ class RunProcess (object) :
 		# If it is not a meta task then it must be a single one
 		# so we will just run it as it comes in
 		else :
-			self.runIt(task)
+			self.runIt(self._task)
 
 
 	def runIt (self, taskCommand) :
@@ -147,57 +155,30 @@ class RunProcess (object) :
 			valid name. The module must have the doIt() function
 			defined in the "root" of the module.'''
 
+		# Got debug mode?
+		debugMode = log_manager._settings['System']['Processes'].get('debugMode', 'false')
+
 		# For flexibility, some tasks may have parameters added
 		# to them. To initiate the task we need to pull out the
 		# the module name to be able to initialize it. Once the
 		# module has been initialized, it will get the parmeters
 		# from sys.argv[1] and take it from there.
 		thisTask = taskCommand.split()[0]
-		print taskCommand, thisTask, "mmmmmmmmmmmmmmmmmmmmm"
 
 		# Go a head and do it if we have not reached our error limit
 		if log_manager.reachedErrorLimit() != True :
 
 			# Initialize the log manager to do its thing
-			log_manager.initializeLog(thisTask, typeID, inputFile, outputFile, optionalPassedVariable)
+			log_manager.initializeLog(thisTask, self._typeID, self._inputFile, self._outputFile, self._optionalPassedVariable)
 
-			# Tell the log what we're doing.
-			log_manager.log("DBUG", "Starting process: " + thisTask)
-
-
-			# This will dynamically import the module
-			# This will work because all the right paths have
-			# been defined earlier.
-			module = __import__(thisTask, globals(), locals(), [])
-			log_manager.log("DBUG", "Imported module: " + thisTask)
-#            try :
-#                module = __import__(thisTask, globals(), locals(), [])
-#                log_manager.log("DBUG", "Imported module: " + thisTask)
-#            except :
-#                tools.userMessage("Hmmm, cannot seem to import the \"" + thisTask + "\" module. This will not bode well for the rest of the process.")
-#                log_manager.log("ERRR", "Could not import module: " + thisTask)
-
-			# Run the module
-			module.doIt(log_manager)
-			log_manager.log("DBUG", "Process completed: " + thisTask)
-#            try :
-#                module.doIt(log_manager)
-#                log_manager.log("DBUG", "Process completed: " + thisTask)
-#            except :
-#                tools.userMessage("Cannot run the \"" + thisTask + "\" module.")
-#                log_manager.log("ERRR", "Cannot run the \"" + thisTask + "\" module.")
+			# For running each process we use one centralized task runner in tools.
+			tools.taskRunner(log_manager, thisTask)
 
 			# Close out the process by reporting to the log file
 			log_manager.closeOutSessionLog()
-			warn = ""
-			if log_manager._warningCount > 0 :
-				warn = " (Warnings = " + str(log_manager._warningCount) + ")"
-			tools.userMessage(thisTask + " completed " + typeID + " with " + str(log_manager._errorCount) + " errors" + warn)
+
 		else :
-			tools.userMessage("Did not run: [" + thisTask + "] Errors exceed limit.")
-
-
-
+			tools.userMessage("Did not run: [" + thisTask + "] Errors (" + str(log_manager._errorCount) + ") exceed limit (" + str(log_manager._settings['System']['Logging']['errorLimit']) + ").")
 
 
 #############################################################
