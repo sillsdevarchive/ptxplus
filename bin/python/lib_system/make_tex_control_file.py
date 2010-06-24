@@ -575,7 +575,7 @@ class MakeTexControlFile (object) :
 	def writeOutTheFile (self, contents) :
 		'''Write out the file.'''
 
-		texControlObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
+		texControlObject = codecs.open(self._outputFile, "w", encoding='utf_8')
 		texControlObject.write(contents)
 		texControlObject.close()
 		self._log_manager.log("DBUG", "Wrote out the file: " + self._outputFile)
@@ -584,7 +584,7 @@ class MakeTexControlFile (object) :
 		'''Parse a specific book based on ID then return relevant info.'''
 
 		# Get our current book object
-		bookObject = "".join(codecs.open(book, "r", encoding='utf_8_sig'))
+		bookObject = "".join(codecs.open(book, "r", encoding='utf_8'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()
