@@ -82,11 +82,11 @@ class MakeTexControlFile (object) :
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
 		self._flags = ('cover', 'front', 'bible', 'back', 'periph')
-		self._frontMatter = self._log_manager._settings['System']['Binding']['MATTER_FRONT'].split()
-		self._backMatter = self._log_manager._settings['System']['Binding']['MATTER_BACK'].split()
-		self._coverMatter = self._log_manager._settings['System']['Binding']['MATTER_COVER'].split()
-		self._otMatter = self._log_manager._settings['System']['Binding']['MATTER_OT'].split()
-		self._ntMatter = self._log_manager._settings['System']['Binding']['MATTER_NT'].split()
+		self._frontMatter = self._log_manager._settings['Format']['Binding']['MATTER_FRONT'].split()
+		self._backMatter = self._log_manager._settings['Format']['Binding']['MATTER_BACK'].split()
+		self._coverMatter = self._log_manager._settings['Format']['Binding']['MATTER_COVER'].split()
+		self._otMatter = self._log_manager._settings['Format']['Binding']['MATTER_OT'].split()
+		self._ntMatter = self._log_manager._settings['Format']['Binding']['MATTER_NT'].split()
 		self._publicationType = log_manager._publicationType
 		# File extentions (Expand this, more will be needed in the future)
 		self._extStyle = self._log_manager._settings['System']['Extensions'].get('EXT_STYLE', 'sty')
@@ -135,7 +135,7 @@ class MakeTexControlFile (object) :
 		# Get a couple settings
 		oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('shortBookChapterOmit', 'true')
 		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
-		useHyphenation = self._log_manager._settings['System']['Hyphenation'].get('useHyphenation', 'true')
+		useHyphenation = self._log_manager._settings['System']['Processes']['MakeTeXHyphenationFile'].get('useHyphenation', 'true')
 		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
 		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
 		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files'].get('FILE_BIBLE_STYLE', 'bible.sty')

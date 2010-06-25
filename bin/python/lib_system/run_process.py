@@ -155,9 +155,6 @@ class RunProcess (object) :
 			valid name. The module must have the doIt() function
 			defined in the "root" of the module.'''
 
-		# Got debug mode?
-		debugMode = log_manager._settings['System']['Processes'].get('debugMode', 'false')
-
 		# For flexibility, some tasks may have parameters added
 		# to them. To initiate the task we need to pull out the
 		# the module name to be able to initialize it. Once the

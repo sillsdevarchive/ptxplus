@@ -207,7 +207,7 @@ class ConfigGUI (object) :
 		# Here we grab the binding group names for building our component and group list
 		# To avoid duplicates in the list we use a set() to keep track of the components
 		# If one already exists it will not add it to the list.
-		self.process_groups = self.ceditor.config['System']['Binding']
+		self.process_groups = self.ceditor.config['Format']['Binding']
 
 		for group in self.process_groups :
 			for item in self.process_groups.get(group).split() :
@@ -223,7 +223,7 @@ class ConfigGUI (object) :
 		# We want the groups last so we process them again here, this time
 		# grabbing only the group name tacking that on to the end of the list
 		for group in self.process_groups :
-			items = self.ceditor.config['System']['Binding'][group]
+			items = self.ceditor.config['Format']['Binding'][group]
 			if len(items) > 0 :
 				gName = self.getGroupName(group)
 				self.cs_components.append([gName.lower()])

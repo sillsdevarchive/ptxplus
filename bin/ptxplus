@@ -65,8 +65,8 @@ bkid = ""
 if len(sys.argv) >= 2 :
 
 	# The second argv is normally the file name or book ID
-	componentScripture = tools.getSettingsObject()['System']['Binding']['MATTER_OT']
-	componentScripture = componentScripture + tools.getSettingsObject()['System']['Binding']['MATTER_NT']
+	componentScripture = tools.getSettingsObject()['Format']['Binding']['MATTER_OT']
+	componentScripture = componentScripture + tools.getSettingsObject()['Format']['Binding']['MATTER_NT']
 	componentScripture = componentScripture.split()
 	# This part only works if we are processing Scripture components (books with IDs)
 	if len(componentScripture) > 0 :

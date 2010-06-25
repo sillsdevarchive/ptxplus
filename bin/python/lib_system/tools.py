@@ -49,7 +49,7 @@ class Tools (object) :
 		# Tell the log what we're doing.
 		log_manager.log("DBUG", "INFO: Starting process: " + thisTask)
 
-		if log_manager._settings['System']['Processes'].get('debugMode', 'false').lower() == 'true' :
+		if log_manager._settings['System']['General'].get('debugMode', 'false').lower() == 'true' :
 			# Import the module
 			module = __import__(thisTask, globals(), locals(), [])
 			log_manager.log("DBUG", "Imported module: " + thisTask)

@@ -99,7 +99,7 @@ class MakeMakefile (object) :
 		for key, value, in self._log_manager._settings['System']['TeX'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in self._log_manager._settings['System']['Binding'].iteritems() :
+		for key, value, in self._log_manager._settings['Format']['Binding'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :

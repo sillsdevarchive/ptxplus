@@ -135,10 +135,10 @@ endif
 # context than in the Makefile context.
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
-	@echo INFO: Creating: $$@; \
+	@echo INFO: Creatingxxxxxx: $$@; \
 	$(MOD_RUN_PROCESS) $(MOD_MK_PICLIST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 else
-	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\". $$@ not made.
+	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\"xxx. $$@ not made.
 endif
 
 
