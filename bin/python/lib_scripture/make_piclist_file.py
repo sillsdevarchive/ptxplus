@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20080622
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -79,7 +79,6 @@ class MakePiclistFile (object) :
 		self._captionsFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_CAPTIONS']
 		self._sourceIllustrationsLibDataFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_DATA']
 		self._projectIllustrationsPath = self._sourcePath + "/" + self._settings['System']['Paths']['PATH_ILLUSTRATIONS']
-#        self._sourceIllustrationsLibPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
 		self._sourceIllustrationsLibPath = self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB']
 		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + self._sourceIllustrationsLibDataFileName
 		# The folder name for peripheral material is auto created here
@@ -232,7 +231,7 @@ class MakePiclistFile (object) :
 		# Now we need output anything we might have collected. If nothing was
 		# found, just an empty file will be put out.
 		if hits > 0 :
-			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
+			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8')
 			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
 			self._outFileObject.writelines(self.collectPicLine(*line) + '\n' for line in inFileData)
 

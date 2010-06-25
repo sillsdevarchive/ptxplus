@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080622
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -22,6 +22,8 @@
 # 20091009 - te - Added "No Context" return to getSliceOfText()
 # 20100416 - djd - Added CSVtoDict class written by te.
 # 20100623 - djd - Added getModuleArguments() function
+# 20100625 - djd - Changed utf_8_sig to just utf_8 for all
+#       inernal files.
 
 
 #############################################################
@@ -236,7 +238,7 @@ class Tools (object) :
 				os.mkdir(home + '/.config/ptxplus')
 
 			# Make a new empty file if none exists
-			object = codecs.open(overrideFile, "w", encoding='utf_8_sig')
+			object = codecs.open(overrideFile, "w", encoding='utf_8')
 			object.close()
 
 
@@ -255,7 +257,7 @@ class Tools (object) :
 			# go a head and make one, then write in the information we want.
 			if not os.path.isfile(overrideFile) :
 				self.makeUserOverrideFile()
-				object = codecs.open(overrideFile, "a", encoding='utf_8_sig')
+				object = codecs.open(overrideFile, "a", encoding='utf_8')
 				object.write('# System settings\n')
 				object.write('[System]' + '\n\n')
 				object.write('# The name of the person using this system.\n')
@@ -283,7 +285,7 @@ class Tools (object) :
 			# in the source path information we want.
 			if not os.path.isfile(overrideFile) :
 				self.makeUserOverrideFile()
-				object = codecs.open(overrideFile, "a", encoding='utf_8_sig')
+				object = codecs.open(overrideFile, "a", encoding='utf_8')
 				object.write('# System settings\n')
 				object.write('[System]' + '\n\n')
 				object.write('# The name of the person using this system.\n')
@@ -296,7 +298,7 @@ class Tools (object) :
 				object.close()
 				self.userMessage('System user name set to: Default User, you may want to change it to the right name with the command: ptxplus set-user\n')
 			else :
-				object = codecs.open(overrideFile, "a", encoding='utf_8_sig')
+				object = codecs.open(overrideFile, "a", encoding='utf_8')
 				object.write('\n# Process information\n')
 				object.write('[Process]' + '\n\n')
 				object.write('# System Paths\n')
@@ -624,12 +626,12 @@ class Tools (object) :
 		newLines = ""
 		# Slurp in all the data in the file
 		if os.path.isfile(file) == True :
-			orgObject = codecs.open(file, "r", encoding='utf_8_sig')
+			orgObject = codecs.open(file, "r", encoding='utf_8')
 			for line in orgObject :
 				newLines = newLines + line
 
 			orgObject.close()
-			newObject = codecs.open(file, "w", encoding='utf_8_sig')
+			newObject = codecs.open(file, "w", encoding='utf_8')
 			# Write out the object and stick the additional text to
 			# the front of the existing text.
 			newObject.write(text + newLines)

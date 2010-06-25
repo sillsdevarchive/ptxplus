@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20090120
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -86,3 +86,4 @@ def doIt (log_manager) :
 
 	thisModule = MakeWordlist()
 	return thisModule.main(log_manager)
+

@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080622
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -122,11 +122,12 @@ class MakeParaAdjustFile (object) :
 			return
 
 		# Otherwise we'll just continue on by opening up a new .adj file
-		outputObject = codecs.open(self._outputFile, "w", encoding='utf-8')
+		outputObject = codecs.open(self._outputFile, "w", encoding='utf_8')
 
-		# Open up our book file (Unicode encoded)  and suck in the
-		# entire body of text.
-		inputObject = codecs.open(self._inputFile, "r", encoding='utf-8')
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
+		inputObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
 
 		self._log_manager.log("INFO", "Identifying all paragraphs with " + str(adjustParaLength) + " words or more.")
 

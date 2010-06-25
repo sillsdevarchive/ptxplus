@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080702
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -64,7 +64,9 @@ class MakeStyleFile (object) :
 
 		#for book in bookList :
 
-			# Get our book object
+			# Get our book object - Using utf_8_sig because the source
+			# might be coming from outside the system and we may need
+			# to be able to handle a BOM.
 			#bookObject = "".join(codecs.open(book, "r", encoding='utf_8_sig'))
 			# The parser needs to acumulate the sfms as it goes
 			# through each book

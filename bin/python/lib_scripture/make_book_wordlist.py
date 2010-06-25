@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20090120
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -95,10 +95,10 @@ class MakeBookWordlist (object) :
 #            handler._wordlist = pipe_to(encoder, '\n'.join(pre_wordlist)).split('\n')
 #            log_manager.log("DBUG", 'make_book_wordlist: Postconversion length %d' % len(filter(bool, handler._wordlist)))
 
-		# Get our current book object
-#        bookObject = childprocess(encoder).decode('utf-8') if encoder else codecs.open(inputFile, "r", encoding='utf-8').read()
-# This encoding change needs testing
-		bookObject = childprocess(encoder).decode('utf-8') if encoder else codecs.open(inputFile, "r", encoding='utf_8_sig').read()
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
+		bookObject = childprocess(encoder).decode('utf_8') if encoder else codecs.open(inputFile, "r", encoding='utf_8_sig').read()
 
 		# Load in the sfm parser
 		parser = parse_sfm.Parser()
@@ -110,7 +110,7 @@ class MakeBookWordlist (object) :
 		parser.setHandler(handler)
 		parser.parse(bookObject)
 
-		pre_wordlist = [s.encode('utf-8') for s in handler._wordlist]
+		pre_wordlist = [s.encode('utf_8') for s in handler._wordlist]
 
 		# Here we create a bookWordlist dict using the defaultdict mod. Then we
 		# we add the words we collected from the text handler and do the counting

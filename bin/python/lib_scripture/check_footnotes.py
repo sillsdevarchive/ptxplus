@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080622
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -76,7 +76,9 @@ class CheckFootnotes (object) :
 #
 #            return
 
-		# Get our book object
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		bookObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
 		footnoteListingFile = self._reportFilePath + "/" + self._tools.getScriptureFileID(self._inputFile, self._settings) + "-footnotes.txt"
 		lineNumber = 0
@@ -142,7 +144,7 @@ class CheckFootnotes (object) :
 				os.mkdir(self._reportFilePath)
 
 			# Now write out the file
-			footnoteListingObject = codecs.open(footnoteListingFile, "w", encoding='utf_8_sig')
+			footnoteListingObject = codecs.open(footnoteListingFile, "w", encoding='utf_8')
 			footnoteListingObject.write(footnoteLines)
 			footnoteListingObject.close()
 

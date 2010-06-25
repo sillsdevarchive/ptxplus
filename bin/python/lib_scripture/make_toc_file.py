@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20100514
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -12,8 +12,8 @@
 
 # This class will create the table of contents from ptx2pdf
 # TeX output. It assumes:
-#	1) Found in all rows are these markers: \tr \tc1 \tcr2
-#	2) Output is to this format: \tbltwowlrow{BookName}{pg}
+#    1) Found in all rows are these markers: \tr \tc1 \tcr2
+#    2) Output is to this format: \tbltwowlrow{BookName}{pg}
 #
 # Initial implementation is going to be pretty simple and
 # will be built on as we go.
@@ -85,7 +85,7 @@ class MakeTocFile (object) :
 			return
 
 		if os.path.isfile(self._texTocFile) :
-			inFileObject = codecs.open(self._texTocFile, "r", encoding='utf_8_sig')
+			inFileObject = codecs.open(self._texTocFile, "r", encoding='utf_8')
 		else :
 			# If we don't have a SFM toc input file we're done now.
 			self._log_manager.log("ERRR", "The [" + self._texTocFile + "] file does not exist so the process has been halted.")
@@ -136,7 +136,7 @@ class MakeTocFile (object) :
 
 			# Now we need output anything we might have collected. If nothing was
 			# found, just output the header.
-			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
+			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8')
 			self._outFileObject.write(headerInfo)
 			self._outFileObject.write(content)
 			self._outFileObject.write(footerInfo)

@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20090120
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -55,8 +55,10 @@ class NBSPForShortWords (object) :
 		wordLength = int(tools.getModuleArguments()[0])
 		log_manager.log("INFO", "Will replaced spaces with nbsp before the last word in a paragraph that has " + str(wordLength) + " characters or less.")
 
-		# Get our book object
-		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf-8'))
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
+		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
 		parser = parse_sfm.Parser()
@@ -71,7 +73,7 @@ class NBSPForShortWords (object) :
 
 
 		# Output the modified book file
-		newBookObject = codecs.open(bookFile, "w", encoding='utf-8')
+		newBookObject = codecs.open(bookFile, "w", encoding='utf_8')
 		newBookObject.write(newBookOutput)
 		log_manager.log("INFO", "Replaced U+0020 with U+00A0 a total of " + str(handler._replacementCount) + " times")
 

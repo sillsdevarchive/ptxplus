@@ -1,8 +1,8 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20081124
 # By Dennis Drescher (dennis_drescher at sil.org)
-#	(The core was ghost-written by Martin Hosken)
+#    (The core was ghost-written by Martin Hosken)
 
 # This script has been tested on Python 2.5.1 (Ubuntu)
 # it may not work right with other versions.
@@ -19,10 +19,10 @@
 
 # import parse_sfm
 # class MyClass (object) :
-#	def myFunction (self, ) :
-#		bookObject = "".join(codecs.open(inputFile, "r", encoding='utf_8_sig'))
-#		parser = SFM.Parser()
-#		parser.transduce(bookObject)
+#    def myFunction (self, ) :
+#        bookObject = "".join(codecs.open(inputFile, "r", encoding='utf_8_sig'))
+#        parser = SFM.Parser()
+#        parser.transduce(bookObject)
 
 # To specify a custom handler, in your application you would use:
 
@@ -33,9 +33,9 @@
 # 20081124 - mjph - Initial draft
 # 20081125 - djd - Added basic documentation.
 # 20081210 - djd - Seperated SFM definitions from the module
-#		to allow for parsing other kinds of SFM models
-#		Also changed the name to parse_sfm.py as the
-#		module is more generalized now
+#        to allow for parsing other kinds of SFM models
+#        Also changed the name to parse_sfm.py as the
+#        module is more generalized now
 # 20090214 - djd - Added error handling for missing tags
 
 
@@ -58,19 +58,19 @@ class SFM (object) :
 
 	def __init__ (self, settings = None) :
 
-		self.isChar		= False
-		self.isEmpty	= False
-		self.isEnd		= False
-		self.isFormat	= False
-		self.isInline	= False
-		self.isNonPub	= False
-		self.isNonV		= False
-		self.isNote		= False
-		self.isNum		= False
-		self.isPara		= False
-		self.isRef		= False
-		self.isTitle	= False
-		self.isInfo		= False
+		self.isChar        = False
+		self.isEmpty    = False
+		self.isEnd        = False
+		self.isFormat    = False
+		self.isInline    = False
+		self.isNonPub    = False
+		self.isNonV        = False
+		self.isNote        = False
+		self.isNum        = False
+		self.isPara        = False
+		self.isRef        = False
+		self.isTitle    = False
+		self.isInfo        = False
 
 		if settings :
 			for s in settings :
@@ -158,7 +158,7 @@ class Parser (object) :
 			class. This module contains a default handler but it can be substituted by
 			the calling application.'''
 		res = ''
-#		print 'marker: "%s" "%s"' % (tag, text)
+#        print 'marker: "%s" "%s"' % (tag, text)
 		# Here we strip off the "*"
 		x = tag.find('*')
 		if x != -1 :
@@ -243,13 +243,13 @@ class Parser (object) :
 			return new
 
 		res = (f[0] + f[1] for f in zip(old, new))
-		res.extend(old[len(new)+1:]) if len(old) > len(new) else new[len(old)+1:]
+		 res.extend(old[len(new)+1:]) if len(old) > len(new) else new[len(old)+1:]
 		return res
 
 
 	def start (self, tag, text, info) :
 		word = re.compile(r'(?s)^\s*(\S+)')
-#		print tag, text
+#        print tag, text
 		if info[1].isNum :
 			m = word.search(text)
 			firstword = m.group(1)

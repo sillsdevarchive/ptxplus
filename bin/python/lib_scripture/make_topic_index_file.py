@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20080622
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -12,8 +12,8 @@
 
 # This class will create the contents for a basic topical
 # index. It assumes:
-#	1) CSV 4 field input (section title, topic, sub topic, references)
-#	2) Output to SFM (fixed markers)
+#    1) CSV 4 field input (section title, topic, sub topic, references)
+#    2) Output to SFM (fixed markers)
 #
 # With these parameters met it will produce an SFM file that
 # will need further processing, including possible encoding
@@ -87,7 +87,7 @@ class MakeTopicIndexFile (object) :
 			csv_records = list(csv.reader(open(self._csvWorkFile), dialect=csv.excel))
 			# Now we need output anything we might have collected. If nothing was
 			# found, just output the header.
-			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8_sig')
+			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8')
 			self._outFileObject.write(headerInfo)
 			self._outFileObject.write(recordsToUSFM(USFMTags, csv_records))
 			self._log_manager.log("DBUG", "Created file and wrote out to: " + self._outputFile)

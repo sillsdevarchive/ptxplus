@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20100126
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -46,14 +46,14 @@ class MakeProjectInfo (object) :
 		projectInfo = ""
 
 		# Create the new makefile object (overwrite the old file if needed)
-		fileObject = codecs.open(self._inputFile, 'w', encoding='utf_8_sig')
+		fileObject = codecs.open(self._inputFile, 'w', encoding='utf_8')
 
 		# Insert the basic SFMs for this file
 		fileHeader = "\\id OTH\n\\ide UTF-8\n\\periph Project Info\n\\mt1 Project Information\n\n"
 
-#		projectInfo = self._config['General']['ProjectInformation'].get('projectName')
-#		for i in self._config['General']['ProjectInformation'].inline_comments.iteritems() :
-#			projectInfo = projectInfo + '\\li Description: ' + i + '\n'
+#        projectInfo = self._config['General']['ProjectInformation'].get('projectName')
+#        for i in self._config['General']['ProjectInformation'].inline_comments.iteritems() :
+#            projectInfo = projectInfo + '\\li Description: ' + i + '\n'
 
 		# Insert the project data
 		for key, value, in self._log_manager._settings['General']['ProjectInformation'].iteritems() :
@@ -62,7 +62,7 @@ class MakeProjectInfo (object) :
 			projectInfo = projectInfo + '\\li ' + comment + ': \\hfill ' + value + '\n'
 
 
-#		projectInfo = self._config['General']['ProjectInformation']['copyrightYear'].comments
+#        projectInfo = self._config['General']['ProjectInformation']['copyrightYear'].comments
 
 
 		# Output to the new makefile file

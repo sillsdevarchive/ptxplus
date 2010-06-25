@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080622
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -18,10 +18,10 @@
 # History:
 # 20080623 - djd - Initial draft
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 # 20100104 - djd - Changed file encoding to utf_8_sig to prevent
-#		BOM problems
+#        BOM problems
 
 
 #############################################################
@@ -52,7 +52,9 @@ class InsertCrossreferenceRefs (object) :
 		# Get our log messages
 		self.logMessages()
 
-		# Get our book object
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		bookObject = codecs.open(self.__inputFile, "r", encoding='utf_8_sig')
 
 		for line in bookObject :

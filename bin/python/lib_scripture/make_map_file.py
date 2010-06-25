@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20080423
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -17,16 +17,16 @@
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081029 - djd - Removed system logging, messages only now
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 # 20090909 - te - Fixed bug in XML namespaces and a path
-#		problem in a copy routine
+#        problem in a copy routine
 # 20090914 - djd - Removed code that was duplicating makefile
-#		functions like creating the Maps folder, etc.
+#        functions like creating the Maps folder, etc.
 # 20100113 - djd - Added code for processing maps with seperate
-#		style files
+#        style files
 # 20100116 - djd - Changed from over-writing the original svg
-#		file to creating a new seperate one.
+#        file to creating a new seperate one.
 
 
 #############################################################
@@ -43,8 +43,8 @@ from csv import reader
 from xml.etree.ElementTree import XMLID, ElementTree
 
 # Instantiate local classes
-tools		= Tools()
-elementtree	= ElementTree()
+tools        = Tools()
+elementtree    = ElementTree()
 
 
 class MakeMapFile (object) :
@@ -140,13 +140,13 @@ class MakeMapFile (object) :
 		# Replace the key fields in the XML data with the new map data
 		for key in map.keys() :
 			if dXML.has_key(key) :
-				dXML[key].text = unicode(map[key], 'utf-8')
+				dXML[key].text = unicode(map[key], 'utf_8')
 				temp = re.sub("_.*$", '', key)
 				if styles.has_key(temp) :
 					dXML[key].set('style', styles[temp])
 
 		# Write the new data out to the new SVG file
-		ElementTree(element = eXML).write(outputFile, encoding = 'UTF-8')
+		ElementTree(element = eXML).write(outputFile, encoding = 'utf_8')
 
 
 # This starts the whole process going

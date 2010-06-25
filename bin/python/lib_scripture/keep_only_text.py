@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20090103
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -35,7 +35,9 @@ class KeepOnlyText (object) :
 
 		bookFile = log_manager._currentOutput
 
-		# Get our book object
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
@@ -47,7 +49,7 @@ class KeepOnlyText (object) :
 		newBookOutput = parser.transduce(bookObject)
 
 		# Output the modified book file
-		newBookObject = codecs.open(bookFile, "w", encoding='utf_8_sig')
+		newBookObject = codecs.open(bookFile, "w", encoding='utf_8')
 		newBookObject.write(newBookOutput)
 
 
@@ -118,3 +120,5 @@ def doIt (log_manager) :
 
 	thisModule = KeepOnlyText()
 	return thisModule.main(log_manager)
+
+

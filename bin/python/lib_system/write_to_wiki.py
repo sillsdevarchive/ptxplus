@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20081025
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -66,7 +66,7 @@ class WriteToWiki (object) :
 			print "Writing about file."
 			settings = tools.getSystemSettings()
 			aboutText = settings['System']['aboutText']
-			object = codecs.open(wikiFile, "w", encoding='utf_8_sig')
+			object = codecs.open(wikiFile, "w", encoding='utf_8')
 			object.write('=About: ptxplus=\n')
 			object.write('Version ' + '\n\n')
 			object.write(aboutText)

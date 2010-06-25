@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080423
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -48,9 +48,9 @@ class MakeMakefile (object) :
 
 		# Create the new makefile object (overwrite the old file)
 		# Note here about encoding. If you use utf_8_sig rather than
-		# just utf-8 it will put a BOM in the file. This seems to make
-		# Make choke. Keeping with just utf-8 seems to fix it.
-		makefileObject = codecs.open('.makefile', 'w', encoding='utf-8')
+		# just utf_8 it will put a BOM in the file. This seems to make
+		# Make choke. Keeping with just utf_8 seems to fix it.
+		makefileObject = codecs.open('.makefile', 'w', encoding='utf_8')
 
 		# Create the file elements
 		makefileHeader = "# Makefile\n\n# This is an auto-generated file, do not edit. Any necessary changes\n" + \

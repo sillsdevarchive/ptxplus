@@ -1,4 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
+# version: 20090120
+# By Dennis Drescher (dennis_drescher at sil.org)
+
+# This script has been tested on Python 2.5.1 (Ubuntu)
+# it may not work right with earlier versions.
 
 # This is a unit test written by Tim Eves used to test the output from
 # a master wordlist file against the individual files that created it.

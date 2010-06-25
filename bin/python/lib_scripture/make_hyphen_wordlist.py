@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20090120
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -21,14 +21,14 @@
 # History:
 # 20090130 - djd - Initial draft
 # 20090327 - djd - Draft is working but issues remain over
-#		output discrepancies. This needs to be revisited
-#		later after some other larger issues are settled.
+#        output discrepancies. This needs to be revisited
+#        later after some other larger issues are settled.
 # 20090520 - djd - Massive changes made by TimE to add
-#		regexp rules for making breaks and he also restructured
-#		the file too.
+#        regexp rules for making breaks and he also restructured
+#        the file too.
 # 20090831 - djd - Fixed file pointer config setting that was wrong
 # 20090831 - te - Fixed bug that prevented spurious hyphens from getting
-#		through not allowing strings to be analyzed
+#        through not allowing strings to be analyzed
 
 
 #############################################################
@@ -54,10 +54,10 @@ class MakeHyphenWordlist (object) :
 		self._hyphen = set()
 		self._hyphenCounts = {}
 		self._wordlistReport = set()
-#		self._encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
-#		if self._encodingChain:
-#			# Build the encoding engine(s)
-#			self._encodingChain = TxtconvChain([s.strip() for s in self._encodingChain.split(',')])
+#        self._encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
+#        if self._encodingChain:
+#            # Build the encoding engine(s)
+#            self._encodingChain = TxtconvChain([s.strip() for s in self._encodingChain.split(',')])
 
 	def main (self) :
 		sourceMasterWordsFile = self._log_manager._settings['Process']['Hyphenation']['sourceMasterWordsFile']
@@ -67,7 +67,7 @@ class MakeHyphenWordlist (object) :
 		sourceSuffixListFile = self._log_manager._settings['Process']['Hyphenation']['sourceSuffixListFile']
 		reportNonHypenatedWords = self._log_manager._settings['Process']['Hyphenation']['reportNonHypenatedWords']
 		newHyphenationFile = self._log_manager._settings['Process']['Hyphenation']['newHyphenationFile']
-		hyphenBreakRules = self._log_manager._settings['Process']['Hyphenation']['hyphenBreakRules'].decode('utf-8').decode('unicode_escape')
+		hyphenBreakRules = self._log_manager._settings['Process']['Hyphenation']['hyphenBreakRules'].decode('utf_8').decode('unicode_escape')
 		if hyphenBreakRules == "" :
 			self._log_manager.log("WARN", "There were no hyphenation break rules found in your project.conf file. This may be ok but keep in mind that if there were no other hyphenated words manually listed there will be no output to the file this script is creating. Sorry, I cannot read your mind.")
 
@@ -114,10 +114,12 @@ class MakeHyphenWordlist (object) :
 
 
 	def loadWordlistReport(self,sourceMasterWordsFile):
-		# Read the sourceMasterWordsFile
+		# Read the sourceMasterWordsFile - Using utf_8_sig because
+		# the source might be coming from outside the system and we
+		# may need to be able to handle a BOM.
 		f = open(sourceMasterWordsFile)
 		wordlist_csv = csv.reader(f, dialect=csv.excel)
-		for w in (w.decode('utf-8_sig') for w,c in wordlist_csv):
+		for w in (w.decode('utf_8_sig') for w,c in wordlist_csv):
 			if self._hyphens_re.search(w):
 				self._log_manager.log("INFO", "Input candidate word already hyphenated: " + w)
 			else:
@@ -179,14 +181,14 @@ class MakeHyphenWordlist (object) :
 		double_hyphens = re.compile(u'-{2,}')
 		hyphenkeys = self._hyphenations.items()
 		hyphenkeys.sort(key=itemgetter(0))
-		f = codecs.open(newHyphenationFilePath, "w", encoding='utf-8_sig')
+		f = codecs.open(newHyphenationFilePath, "w", encoding='utf_8')
 		f.writelines(double_hyphens.sub('',v)+'\n' for k,v in hyphenkeys)
 		f.close()
 		self._log_manager.log('DBUG', "Total hyphenations added = %d" % sum(self._hyphenCounts.itervalues()))
 		self._log_manager.log("DBUG", "Hyphenated word list created, made " + str(len(hyphenkeys)) + " words.")
 
 	def writeFailedWords(self,path):
-		f = codecs.open(path, "w", encoding='utf-8_sig')
+		f = codecs.open(path, "w", encoding='utf_8')
 		words = list(w+'\n' for w in self._wordlistReport)
 		words.sort(key=len)
 		f.writelines(words)
@@ -210,15 +212,16 @@ class MakeHyphenWordlist (object) :
 		if os.path.isfile(file_path) :
 			try :
 				# We don't know exactly what the encoding of this file is. It is probably
-				# Unicode, more than likely UTF-8. As such, we'll bring in the text raw,
-				# then decode to Unicode. That should keep things working
+				# Unicode, more than likely utf_8. As such, we'll bring in the text raw,
+				# then decode to Unicode. That should keep things working. We may need to
+				# adjust this at some point to utf_8_sig to be able to deal with BOMs.
 				f = open(file_path, 'rb')
 
 				# Do an encoding conversion if necessary
-#				if self._encodingChain:
-#					sourceHyphenListObject = self._encodingChain.convert(f.read()).decode('utf-8').split('\n')
+#                if self._encodingChain:
+#                    sourceHyphenListObject = self._encodingChain.convert(f.read()).decode('utf_8').split('\n')
 
-				sourceHyphenListObject = f.read().decode('utf-8').split('\n')
+				sourceHyphenListObject = f.read().decode('utf_8').split('\n')
 
 				# Push it into a dictionary w/o line endings
 				word_list = [l for l in (line.strip() for line in sourceHyphenListObject) if l]

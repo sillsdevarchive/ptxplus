@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080729
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -47,7 +47,9 @@ class CheckBook (object) :
 #            return
 
 
-		# Get our book object
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser

@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20081207
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -20,8 +20,8 @@
 # History:
 # 20080729 - djd - Initial draft
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 
 
 #############################################################
@@ -40,7 +40,10 @@ class SwapQuotes (object) :
 	def main (self, log_manager) :
 
 		outputFile = log_manager._currentOutput
-		# Get our book object
+
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
@@ -55,7 +58,7 @@ class SwapQuotes (object) :
 		# The whole idea of this module is to swap quotes but we need to be
 		# sure that an output file name exists.
 		if outputFile != "none" or outputFile != "" :
-			outputObject = codecs.open(outputFile, "w", encoding='utf_8_sig')
+			outputObject = codecs.open(outputFile, "w", encoding='utf_8')
 			outputObject.write(output)
 
 

@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080702
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -70,7 +70,9 @@ class CheckCrossreferences (object) :
 #
 #            return
 
-		# Get our book object
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		bookObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
 		crossrefListingFile = self._reportFilePath + "/" + self._tools.getScriptureFileID(self._inputFile, self._settings) + "-crossreferences.txt"
 		lineNumber = 0
@@ -139,7 +141,7 @@ class CheckCrossreferences (object) :
 
 		# Output crossreferences for inspection if there were any
 		if crossrefLines != "" :
-			crossrefListingObject = codecs.open(crossrefListingFile, "w", encoding='utf_8_sig')
+			crossrefListingObject = codecs.open(crossrefListingFile, "w", encoding='utf_8')
 			crossrefListingObject.write(crossrefLines)
 			crossrefListingObject.close()
 

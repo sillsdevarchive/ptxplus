@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080619
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -566,6 +566,9 @@ class MarkupManager (object) :
 		'''Only find the book ID in an USFM file. This is for special
 			one-off kind of processes.'''
 
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		bookObject = codecs.open(inputFile, "r", encoding='utf_8_sig')
 
 		for line in bookObject :

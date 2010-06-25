@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20090103
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -28,8 +28,8 @@
 # History:
 # 20090103 - djd - Initial draft
 # 20090103 - djd - More thought needs to go into the format
-#		of the endnote output. Also, a way needs to be found
-#		to merge endnotes from multiple books into one file.
+#        of the endnote output. Also, a way needs to be found
+#        to merge endnotes from multiple books into one file.
 
 
 #############################################################
@@ -49,7 +49,9 @@ class MakeIntoEndNotes (object) :
 		endnoteFile = self._preripheralPath + "/ENDNOTES.usfm"
 		bookFile = log_manager._currentOutput
 
-		# Get our book object
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
@@ -77,10 +79,10 @@ class MakeIntoEndNotes (object) :
 			return
 		else :
 			# Output the endnote file
-			endnoteObject = codecs.open(endnoteFile, "w", encoding='utf_8_sig')
+			endnoteObject = codecs.open(endnoteFile, "w", encoding='utf_8')
 			endnoteObject.write(endnoteOutput)
 			# Output the modified book file
-			newBookObject = codecs.open(bookFile, "w", encoding='utf_8_sig')
+			newBookObject = codecs.open(bookFile, "w", encoding='utf_8')
 			newBookObject.write(newBookOutput)
 
 
@@ -224,3 +226,5 @@ def doIt (log_manager) :
 
 	thisModule = MakeIntoEndNotes()
 	return thisModule.main(log_manager)
+
+

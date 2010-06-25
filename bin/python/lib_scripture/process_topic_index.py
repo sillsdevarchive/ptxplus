@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20090113
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -17,7 +17,7 @@
 
 # History:
 # 20090513 - djd - Initial draft, it is very simple at this
-#		point and there is no event logging yet.
+#        point and there is no event logging yet.
 
 
 #############################################################
@@ -38,7 +38,9 @@ class ProcessTopicIndex (object) :
 
 		newIndexFile = log_manager._currentOutput
 
-		# Get our book object
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		indexObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
@@ -50,7 +52,7 @@ class ProcessTopicIndex (object) :
 		newIndexOutput = parser.transduce(indexObject)
 
 		# Output the modified book file
-		newBookObject = codecs.open(newIndexFile, "w", encoding='utf_8_sig')
+		newBookObject = codecs.open(newIndexFile, "w", encoding='utf_8')
 		newBookObject.write(newIndexOutput)
 
 
@@ -121,3 +123,5 @@ def doIt (log_manager) :
 
 	thisModule = ProcessTopicIndex()
 	return thisModule.main(log_manager)
+
+

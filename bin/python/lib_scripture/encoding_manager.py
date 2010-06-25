@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20080619
 # By Dennis Drescher (dennis_drescher at sil.org)
 

@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf_8 -*-
 # version: 20080829
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -18,10 +18,10 @@
 # 20080829 - djd - Initial draft
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 # 20090130 - djd - Added insert of ZWSP in cases where there
-#		is no lable insert text found in .conf
+#        is no lable insert text found in .conf
 # 20090505 - djd - Added a filter for peripheral matter files
 
 
@@ -49,11 +49,13 @@ class InsertChapterLabel (object) :
 		# Note that the isPeripheralMatter() function is now
 		# disabled. Do we really need to do this check anyway?
 		# Let's go away and think about it
-#		if tools.isPeripheralMatter(log_manager._currentInput) :
+#        if tools.isPeripheralMatter(log_manager._currentInput) :
 #
-#			return
+#            return
 
-		# Get our book object
+		# Get our book object - Using utf_8_sig because the source
+		# might be coming from outside the system and we may need
+		# to be able to handle a BOM.
 		bookObject = "".join(codecs.open(log_manager._currentInput, "r", encoding='utf_8_sig'))
 
 		# Load in the parser
@@ -66,7 +68,7 @@ class InsertChapterLabel (object) :
 		newBookOutput = parser.transduce(bookObject)
 
 		# Output the modified book file
-		newBookObject = codecs.open(bookFile, "w", encoding='utf_8_sig')
+		newBookObject = codecs.open(bookFile, "w", encoding='utf_8')
 		newBookObject.write(newBookOutput)
 
 		if myHandler._inserted == True :

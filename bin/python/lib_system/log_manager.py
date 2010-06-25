@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20080529
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -285,9 +285,9 @@ class LogManager (object) :
 
 			# Close process log
 			if os.path.isfile(self._processLogFile) == True :
-				processWriteObject = codecs.open(self._processLogFile, "a", encoding='utf_8_sig')
+				processWriteObject = codecs.open(self._processLogFile, "a", encoding='utf_8')
 			else :
-				processWriteObject = codecs.open(self._processLogFile, "w", encoding='utf_8_sig')
+				processWriteObject = codecs.open(self._processLogFile, "w", encoding='utf_8')
 
 			for line in self._processLogObject :
 				processWriteObject.write(line)

@@ -1,5 +1,5 @@
 #!/usr/bin/python2.5
-# -*- coding: utf-8 -*-
+# -*- coding: utf_8 -*-
 # version: 20080423
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -62,18 +62,23 @@ class MakeTexHyphenationFile (object) :
 
 #            word_list_in = codecs.open(wordListFileName,
 #                mode='r' if os.path.isfile(wordListFileName) else 'rw',
-#                encoding='utf_8_sig')
+#                encoding='utf_8')
+
+# Also, there may be some different tactic taken with encoding on files
+# that come from outside the system. Right now we use utf_8 encoding but
+# we may have to change to utf_8_sig to deal with BOMs that come from MS
+# systems.
 
 # This seems to at least work but it isn't as pretty
 			if not os.path.isfile(wordListFileName) :
-				word_list_in = codecs.open(wordListFileName, mode='w', encoding='utf_8_sig')
+				word_list_in = codecs.open(wordListFileName, mode='w', encoding='utf_8')
 
-			word_list_in = codecs.open(wordListFileName, mode='r', encoding='utf_8_sig')
+			word_list_in = codecs.open(wordListFileName, mode='r', encoding='utf_8')
 
 ###########################################################################
 
 			# Make the TeX hyphen file
-			tex_hypens_out = codecs.open(texHyphenFileName, "w", encoding='utf_8_sig')
+			tex_hypens_out = codecs.open(texHyphenFileName, "w", encoding='utf_8')
 			# Make header line
 			tex_hypens_out.write(
 				"% hyphenation.tex\n"
@@ -88,7 +93,7 @@ class MakeTexHyphenationFile (object) :
 			# It may be necessary to have an lcCodeList included. These codes are
 			# kept in an external file normally kept in the project hyphenation folder.
 			if os.path.isfile(lcCodeListFileName):
-				tex_hypens_out.writelines(codecs.open(lcCodeListFileName, 'r', encoding='utf_8_sig'))
+				tex_hypens_out.writelines(codecs.open(lcCodeListFileName, 'r', encoding='utf_8'))
 				tex_hypens_out.write('\n')
 
 			# The hyphenation word list is normally generated in another process
