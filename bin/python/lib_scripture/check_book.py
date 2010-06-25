@@ -38,14 +38,6 @@ class CheckBook (object) :
 
 	def main (self, log_manager) :
 
-		# Filter out any peripheral files now
-		# Note that the isPeripheralMatter() function is now
-		# disabled. Do we really need to do this check anyway?
-		# Let's go away and think about it
-#        if tools.isPeripheralMatter(log_manager._currentInput) :
-#
-#            return
-
 
 		# Get our book object - Using utf_8_sig because the source
 		# might be coming from outside the system and we may need
@@ -74,6 +66,7 @@ class CheckBook (object) :
 		# Other checks that could be supported would be:
 		#    Footnotes
 		#    Cross References
+		# These are currently external processes
 
 
 # This starts the whole process going

@@ -46,11 +46,16 @@ $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH
 # the .project.conf file.
 $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
 ifeq ($(LOCKED),0)
-	@echo INFO: Auto-preprocessing: $$< and creating $$@
-	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
-	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<' '$$@'
-	@$(PY_RUN_PROCESS) copyIntoSystem $(1) '$$<' '$$@'
-	@$(PY_RUN_PROCESS) textProcesses $(1) '$$@' '$$@'
+	@if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
+		echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+	fi
+	@echo INFO: Running preprocess checks on: '$$<'
+	@$(MOD_RUN_PROCESS) preprocessChecks $(1) '$$<' '$$@'
+	@echo INFO: Copying source to: '$$@'
+	@$(MOD_RUN_PROCESS) copyIntoSystem $(1) '$$<' '$$@'
+	@echo INFO: Running post-processes on: '$$@'
+	@$(MOD_RUN_PROCESS) textProcesses $(1) '$$@' '$$@'
 else
 	@echo INFO: Cannot create: $$@ This is because the project is locked.
 endif
@@ -63,9 +68,12 @@ endif
 # thing we do is try to delete any existing copies from the source directory.
 preprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
-	@echo INFO: Removing $(PATH_TEXTS)/$(1).$(EXT_WORK) and error checking '$$<'
-	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
-	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<'
+	@if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
+		echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+	fi
+	@echo INFO: Checking: '$$<'
+	@$(MOD_RUN_PROCESS) preprocessChecks $(1) '$$<'
 else
 	@echo INFO: Cannot run: $$@ This is because the project is locked.
 endif
@@ -75,7 +83,7 @@ endif
 $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 ifeq ($(LOCKED),0)
 	@echo INFO: Creating: $$@
-	@$(PY_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).$(EXT_WORK)' '$$@' ''
+	@$(MOD_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).$(EXT_WORK)' '$$@' ''
 else
 	@echo INFO: Cannot create: $$@ This is because the project is locked.
 endif
@@ -90,8 +98,8 @@ $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF) : \
 	$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) \
 	$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).$(EXT_WORK).$(EXT_TEX)
-#	cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex --no-pdf $(1).$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_WORK).$(EXT_TEX)
+#	cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) --no-pdf $(1).$(EXT_TEX)
 #	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
 
 # Open the PDF file with reader
@@ -111,12 +119,12 @@ $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
 ifeq ($(USE_ADJUSTMENTS),true)
 	@echo INFO: Creating the adjustments file: $$@
-	@$(PY_RUN_PROCESS) $(MOD_PARA_ADJUST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@$(MOD_RUN_PROCESS) $(MOD_PARA_ADJUST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 else
 	@echo INFO: USE_ADJUSTMENTS is set to \"$(USE_ADJUSTMENTS)\". $$@ not made.
 endif
 
-#	@$(PY_RUN_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+#	@$(MOD_RUN_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 
 
 # Make illustrations file if illustrations are used in this pub
@@ -128,7 +136,7 @@ endif
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@echo INFO: Creating: $$@; \
-	$(PY_RUN_PROCESS) make_piclist_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+	$(MOD_RUN_PROCESS) $(MOD_MK_PICLIST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 else
 	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\". $$@ not made.
 endif
@@ -177,7 +185,7 @@ endef
 # specific context. In this case it is for Scripture.
 $(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'bible'
+	@$(MOD_RUN_PROCESS) make_tex_control_file '' '' '$@' 'bible'
 
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
@@ -197,7 +205,7 @@ $(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
 # entire OT is being typeset.
 $(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file 'ot' 'ot' '$@' ''
+	@$(MOD_RUN_PROCESS) make_tex_control_file 'ot' 'ot' '$@' ''
 
 # Render the entire OT
 $(PATH_PROCESS)/$(FILE_MATTER_OT_PDF) : \
@@ -210,7 +218,7 @@ $(PATH_PROCESS)/$(FILE_MATTER_OT_PDF) : \
 	$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) \
 	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(FILE_MATTER_OT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_MATTER_OT_TEX)
 endif
 
 pdf-remove-ot :
@@ -228,7 +236,7 @@ $(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
 # entire OT is being typeset.
 $(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file 'nt' 'nt' '$@' ''
+	@$(MOD_RUN_PROCESS) make_tex_control_file 'nt' 'nt' '$@' ''
 
 # Render the entire NT
 $(PATH_PROCESS)/$(FILE_MATTER_NT_PDF) : \
@@ -241,7 +249,7 @@ $(PATH_PROCESS)/$(FILE_MATTER_NT_PDF) : \
 	$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) \
 	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(FILE_MATTER_NT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_MATTER_NT_TEX)
 
 endif
 
@@ -270,11 +278,11 @@ preprocess-checks: preprocess-ot preprocess-nt
 # when a specific group is being checked. (More may need to be added)
 preprocess-ot :
 	@echo INFO: Preprocess checking OT components:
-	@$(foreach v,$(MATTER_OT), $(PY_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
+	@$(foreach v,$(MATTER_OT), $(MOD_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
 
 preprocess-nt :
 	@echo INFO: Preprocess checking NT components:
-	@$(foreach v,$(MATTER_NT), $(PY_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
+	@$(foreach v,$(MATTER_NT), $(MOD_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
 
 # Having these here enable rules to call other rules
 .PHONY: view-ot view-nt preprocess-checks

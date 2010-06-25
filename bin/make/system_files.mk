@@ -77,14 +77,14 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
 # Create the main settings file for this Scripture project.
 # This will contain publication format settings. Context
 # specific settings are kept in the bible_settings.txt file.
-# In this context using PY_RUN_PROCESS we use the
+# In this context using MOD_RUN_PROCESS we use the
 # optional passed var as a way to pass the type of control
 # file we are making. In this instance, we use "project"
 # because the script will know by the flag name exactly what
 # it is and what goes in it.
 $(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' ''
+	@$(MOD_RUN_PROCESS) make_tex_control_file '' '' '$@' ''
 
 # Rule to create the primary style file for the project. There
 # will be lots of other secondary override stylesheets that
@@ -116,15 +116,15 @@ $(PATH_PROCESS)/.stamp :
 # Update a .project.conf file so system improvements can be
 # pulled into existing projects.
 update :
-	@$(PY_RUN_PROCESS) update_project_settings
+	@$(MOD_RUN_PROCESS) update_project_settings
 
 # Make a project.sty file (when needed)
 make-styles :
-	@$(PY_RUN_PROCESS) make_sty_file
+	@$(MOD_RUN_PROCESS) make_sty_file
 
 # Make a template from the current state of the project
 make-template :
-	@$(PY_RUN_PROCESS) make_template
+	@$(MOD_RUN_PROCESS) make_template
 
 # If, for some odd reason the Illustrations folder is not in
 # the right place we'll put one where it is supposed to be found.
@@ -169,7 +169,7 @@ $(PATH_PROCESS)/PROJECT_INFO.$(EXT_PDF) : \
 	$(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX)
 	@echo INFO: Creating: $@
 	@rm -f $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX)
 
 # Create the .$(EXT_TEX) file that drives the typesetting process
 $(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX) :

@@ -59,6 +59,8 @@ class CopyFromSource (object) :
 
 	def main(self, log_manager):
 
+		log_manager._currentSubProcess = 'CpFrmSrc'
+
 		# Pull out our parameters from the log_manager object
 		settings = log_manager._settings
 		inputFile = log_manager._currentInput
@@ -81,11 +83,11 @@ class CopyFromSource (object) :
 		try :
 			os.system(copyCommand)
 			if os.path.isfile(outputFile) :
-				log_manager.logIt("SYS", "INFO", "Copied from: " + inputFile + " ---To:--> " + outputFile + " Command used: " + copyCommand)
+				log_manager.log("INFO", "Copied from: " + inputFile + " ---To:--> " + outputFile + " Command used: " + copyCommand)
 			else :
-				log_manager.logIt("SYS", "ERRR", "File not found. The Copy command was executed but seemed to fail. Command executed: " + copyCommand)
+				log_manager.log("ERRR", "File not found. The Copy command was executed but seemed to fail. Command executed: " + copyCommand)
 		except :
-			log_manager.logIt("SYS", "ERRR", "Failed to execute: " + copyCommand)
+			log_manager.logIt("ERRR", "Failed to execute: " + copyCommand)
 
 
 # This starts the whole process going

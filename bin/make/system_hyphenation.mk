@@ -19,19 +19,19 @@ $(PATH_HYPHENATION) :
 
 # Manually create the TeX hyphenation file
 make-tex-hyphens :
-	$(PY_RUN_PROCESS) make_tex_hyphenation_file
+	$(MOD_RUN_PROCESS) make_tex_hyphenation_file
 
 # Create a TeX hyphenation rules file based on what is in the
 # project.conf file
 $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT)
-	$(PY_RUN_PROCESS) make_tex_hyphenation_file
+	$(MOD_RUN_PROCESS) make_tex_hyphenation_file
 
 # Manually create a master wordlist based on existing component
 # wordlists in the Reports file. Best to run this after
 # a preprocess-all command
 make-master-wordlist : preprocess-checks
 	@echo INFO: Creating a new master word list
-	@$(PY_RUN_PROCESS) make_master_wordlist
+	@$(MOD_RUN_PROCESS) make_master_wordlist
 
 #############################################################################
 # Not sure what is happening here, lost track of what I was doing - djd
@@ -53,7 +53,7 @@ $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT) :
 # Manually create the hyphenation word list file
 force-make-hyphen-wordlist : $(PATH_HYPHENATION) make-master-wordlist
 	@echo Creating a new hyphenation word list
-	@$(PY_RUN_PROCESS) make_hyphen_wordlist
+	@$(MOD_RUN_PROCESS) make_hyphen_wordlist
 
 #############################################################################
 

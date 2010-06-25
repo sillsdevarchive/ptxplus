@@ -57,24 +57,16 @@ class CheckFootnotes (object) :
 		self._markup_manager = MarkupManager(self._settings)
 		self._encoding_manager = EncodingManager(self._settings)
 		self._tools = Tools()
-#        self._sfms = sfm_definitions.init_usfm()
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
 		self._reportFilePath = self._settings['System']['Paths']['PATH_REPORTS']
+		self._log_manager._currentSubProcess = 'ChkFns'
 
 
 	def main (self) :
 
 		# Set some local vars
 		footnoteLines = ""
-
-		# Filter out any peripheral files now
-		# Note that the isPeripheralMatter() function is now
-		# disabled. Do we really need to do this check anyway?
-		# Let's go away and think about it
-#        if tools.isPeripheralMatter(self._inputFile) :
-#
-#            return
 
 		# Get our book object - Using utf_8_sig because the source
 		# might be coming from outside the system and we may need
@@ -100,6 +92,8 @@ class CheckFootnotes (object) :
 				inFootnote = "no"
 				for word in words :
 					wordCount +=1
+					self._log_manager._currentContext = tools.getSliceOfText(word, 1, 10)
+					self._log_manager._currentLocation = "Line: " + str(lineNumber)
 					# Need to compensate footnote marker check at the word-level
 					if self._markup_manager._footnote_tracker.hasFootnoteOpenMarkerInLine(word + " ") == True :
 						footnoteNumber +=1
@@ -111,11 +105,11 @@ class CheckFootnotes (object) :
 						# grab the footnote caller character if it is
 						# in the right place.
 						if words[wordCount] != ("+" or "-" or "?") :
-							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "ERRR", "Line: " + str(lineNumber) + " The footnote caller: " + words[wordCount] + " is not valid")
+							self._log_manager.log("ERRR", "Line: " + str(lineNumber) + " The footnote caller: " + words[wordCount] + " is not valid")
 
 						# Check to see if the \f is the first character, if it is we may have a problem.
 						if word[0] == "\\" :
-							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "WARN", "Line: " + str(lineNumber) + " There seems to be a space before this footnote, this may not be wanted. Please verify. ")
+							self._log_manager.log("WARN", "Line: " + str(lineNumber) + " There seems to be a space before this footnote, this may not be wanted. Please verify. ")
 
 						# Now, do we want to do more tests here?
 						# We could check \fr and \ft and others
@@ -129,7 +123,7 @@ class CheckFootnotes (object) :
 								# Before we leave here let's look for some word-final
 								# punctuation after the "*" and give a warning.
 								if self._encoding_manager.hasClosingLastCharacter(word) == True :
-									self._log_manager.logIt(self._markup_manager.getBookChapterVerseLine(), "WARN", "Line: " + str(lineNumber) + " Word-final punctuation found on the closing marker [" + word + "], please check.")
+									self._log_manager.log("WARN", "Line: " + str(lineNumber) + " Word-final punctuation found on the closing marker [" + word + "], please check.")
 
 							else :
 								content = content + word + " "
@@ -150,9 +144,9 @@ class CheckFootnotes (object) :
 
 		# Report what happened
 		if footnoteNumber != 0 :
-			self._log_manager.logIt("End of book", "INFO", "Checked " + str(footnoteNumber) + " footnotes. Extracted notes can be found in: " + footnoteListingFile)
+			self._log_manager.log("INFO", "Checked " + str(footnoteNumber) + " footnotes. Extracted notes can be found in: " + footnoteListingFile)
 		else :
-			self._log_manager.logIt("End of book", "INFO", "No footnotes found.")
+			self._log_manager.log("INFO", "No footnotes found.")
 
 
 # This starts the whole process going

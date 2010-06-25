@@ -51,24 +51,16 @@ class CheckCrossreferences (object) :
 		self._markup_manager = MarkupManager(self._settings)
 		self._encoding_manager = EncodingManager(self._settings)
 		self._tools = Tools()
-
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
 		self._reportFilePath = self._settings['System']['Paths']['PATH_REPORTS']
+		self._log_manager._currentSubProcess = 'ChkCrfs'
 
 
-	def main(self):
+	def main (self) :
 
 		# Set some local vars
 		crossrefLines = ""
-
-		# Filter out any peripheral files now
-		# Note that the isPeripheralMatter() function is now
-		# disabled. Do we really need to do this check anyway?
-		# Let's go away and think about it
-#        if tools.isPeripheralMatter(self._inputFile) :
-#
-#            return
 
 		# Get our book object - Using utf_8_sig because the source
 		# might be coming from outside the system and we may need
@@ -94,6 +86,8 @@ class CheckCrossreferences (object) :
 				inCrossRef = "no"
 				for word in words :
 					wordCount +=1
+					self._log_manager._currentContext = tools.getSliceOfText(word, 1, 10)
+					self._log_manager._currentLocation = "Line: " + str(lineNumber)
 					# Need to compensate footnote marker check at the word-level
 					if self._markup_manager._crossref_tracker.lookForCrossRefOpenMarker(word + " ") == True :
 						crossRefNumber +=1
@@ -105,20 +99,12 @@ class CheckCrossreferences (object) :
 						# number of words in on the line to be able to
 						# grab the crossRef caller character if it is
 						# in the right place.
-#                        print callerChar
-#                        if not words[wordCount] == ('+' or '-' or '?') :
-						if callerChar != '-' :
-							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "ERRR", "Line: " + str(lineNumber) + " The crossRef caller: " + words[wordCount] + " is not valid")
-
-						if callerChar != '+' :
-							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "ERRR", "Line: " + str(lineNumber) + " The crossRef caller: " + words[wordCount] + " is not valid")
-
-						if callerChar != '?' :
-							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "ERRR", "Line: " + str(lineNumber) + " The crossRef caller: " + words[wordCount] + " is not valid")
+						if words[wordCount] not in ['+', '-', '?'] :
+							self._log_manager.log("ERRR", "Line: " + str(lineNumber) + " The crossRef caller: " + words[wordCount] + " is not valid")
 
 						# Check to see if the \x is the first character, if it is we may have a problem.
 						if word[0] == "\\" :
-							self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "WARN", "Line: " + str(lineNumber) + " There seems to be a space before this cross ref., this may not be wanted. Please verify. ")
+							self._log_manager.log("WARN", "Line: " + str(lineNumber) + " There seems to be a space before this cross ref., this may not be wanted. Please verify. ")
 
 						# Now, do we want to do more tests here?
 						# We could check \xo and \xt and others
@@ -132,7 +118,7 @@ class CheckCrossreferences (object) :
 								# Before we leave here let's look for some word-final
 								# punctuation after the "*" and give a warning.
 								if self._encoding_manager.hasClosingLastCharacter(word) == True :
-									self._log_manager.logIt(self._markup_manager.getBookChapterVerse(), "WARN", "Line: " + str(lineNumber) + " Word-final punctuation found on the closing marker [" + word + "], please check.")
+									self._log_manager.log(self._markup_manager.getBookChapterVerse(), "WARN", "Line: " + str(lineNumber) + " Word-final punctuation found on the closing marker [" + word + "], please check.")
 							else :
 								content = content + word + " "
 						else :
@@ -147,9 +133,9 @@ class CheckCrossreferences (object) :
 
 		# Report what we did
 		if crossRefNumber != 0 :
-			self._log_manager.logIt("SYS", "INFO", "Checked " + str(crossRefNumber) + " crossreferences. Extracted references can be found in: " + crossrefListingFile)
+			self._log_manager.log("INFO", "Checked " + str(crossRefNumber) + " crossreferences. Extracted references can be found in: " + crossrefListingFile)
 		else :
-			self._log_manager.logIt("SYS", "INFO", "No crossreferences found.")
+			self._log_manager.log("INFO", "No crossreferences found.")
 
 # This starts the whole process going
 def doIt(log_manager):

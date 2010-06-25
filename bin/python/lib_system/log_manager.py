@@ -108,62 +108,62 @@ class LogManager (object) :
 
 # This will be depricated once we can get the old code to be dependent on tracking the
 # location with self._currentLocation. We will start using a new function with a new name.
-	def logIt (self, location, entryType, event) :
-		'''This will be a simple ini type output the value can be
-			parsed as simple CVS. The output params are:
-			entryType = ERRR, WARN, INFO
-			event = A brief description of the log event
-			###################################################
-			# Note, this isn't clean CSV, more needs to be done
-			###################################################'''
-		if location == "" or location == None :
-			location = "error"
-		if entryType == "" or entryType == None :
-			entryType = "error"
-		if event == "" or event == None :
-			event = "error"
+#    def logIt (self, location, entryType, event) :
+#        '''This will be a simple ini type output the value can be
+#            parsed as simple CVS. The output params are:
+#            entryType = ERRR, WARN, INFO
+#            event = A brief description of the log event
+#            ###################################################
+#            # Note, this isn't clean CSV, more needs to be done
+#            ###################################################'''
+#        if location == "" or location == None :
+#            location = "error"
+#        if entryType == "" or entryType == None :
+#            entryType = "error"
+#        if event == "" or event == None :
+#            event = "error"
 
-		# Our version of a UID
-		entryID = tools.makeUID()
+#        # Our version of a UID
+#        entryID = tools.makeUID()
 
-		# for consistant quoting (I think)
-		newEvent = event.replace('"', '""')
+#        # for consistant quoting (I think)
+#        newEvent = event.replace('"', '""')
 
-		# Assemble the CSV entry line
-		entry = '"' + entryID + '","' + entryType + '","' + \
-				location + '","' + newEvent + '"'
+#        # Assemble the CSV entry line
+#        entry = '"' + entryID + '","' + entryType + '","' + \
+#                location + '","' + newEvent + '"'
 
-		#Collect the entry
-		self._processLogObject.append(entry + "\n")
+#        #Collect the entry
+#        self._processLogObject.append(entry + "\n")
 
-		# If for some reason we fail to find a logModeProject setting we will default to debug output
-		try :
-			if self._settings != None and self._settings['System']['Logging']['logModeProject'] == "debug" :
-				tools.userMessage(entryType + ": " + event)
-		except :
-			tools.userMessage(entryType + ": " + event)
+#        # If for some reason we fail to find a logModeProject setting we will default to debug output
+#        try :
+#            if self._settings != None and self._settings['System']['General']['logModeProject'] == "debug" :
+#                tools.userMessage(entryType + ": " + event)
+#        except :
+#            tools.userMessage(entryType + ": " + event)
 
-		# Because there are so many ways to create errors
-		# we need just a simple way to track them across
-		# seperate processes. This will be done with a
-		# simple error.log. Each time an error is found
-		# it will be added to the object. The object will
-		# be written out at the end of the process. The
-		# error.log file will continue to colect error
-		# repors until the series of processes are done
-		# then the system will collect them all and report.
+#        # Because there are so many ways to create errors
+#        # we need just a simple way to track them across
+#        # seperate processes. This will be done with a
+#        # simple error.log. Each time an error is found
+#        # it will be added to the object. The object will
+#        # be written out at the end of the process. The
+#        # error.log file will continue to colect error
+#        # repors until the series of processes are done
+#        # then the system will collect them all and report.
 
-		if entryType == "ERRR" or entryType == "WARN" :
-			errorID = self._logProcessID + "." + entryID
-			errorEntry = '"' + errorID + '","' + entryType + '","' + \
-			location + '","' + newEvent + '"'
-			error_manager.recordError(errorEntry)
+#        if entryType == "ERRR" or entryType == "WARN" :
+#            errorID = self._logProcessID + "." + entryID
+#            errorEntry = '"' + errorID + '","' + entryType + '","' + \
+#            location + '","' + newEvent + '"'
+#            error_manager.recordError(errorEntry)
 
-		# Don't forget to count the errors
-		if entryType == "ERRR" :
-			self._errorCount +=1
-		elif entryType == "WARN" :
-			self._warningCount +=1
+#        # Don't forget to count the errors
+#        if entryType == "ERRR" :
+#            self._errorCount +=1
+#        elif entryType == "WARN" :
+#            self._warningCount +=1
 
 
 	def resetLocation (self) :
@@ -230,7 +230,7 @@ class LogManager (object) :
 
 		# If for some reason we fail to find a logModeProject setting we will default to debug output
 		try :
-			if self._settings != None and self._settings['System']['Logging']['logModeProject'] == "debug" :
+			if self._settings != None and self._settings['System']['General']['logModeProject'] == "debug" :
 				tools.userMessage(entryType + ": " + event)
 		except :
 			tools.userMessage(entryType + ": " + event)
@@ -257,19 +257,6 @@ class LogManager (object) :
 		elif entryType == "WARN" :
 			self._warningCount +=1
 
-
-	def reachedErrorLimit (self) :
-		'''A simple test to see if we have reached the number of errors
-			allowed by the system. If we have, kill the process now.'''
-
-		errorLimit = int(self._settings['System']['Logging']['errorLimit'])
-		# 0 (zero) means infinite errors allowed. Check for anything else
-		if errorLimit != 0 :
-			# If we have reached the limit let's stop here.
-			if self._errorCount >= errorLimit :
-				return True
-		else :
-			return False
 
 	def closeOutSessionLog (self) :
 		'''This will write out all the logged entries to the log files

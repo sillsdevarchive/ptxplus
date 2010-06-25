@@ -72,7 +72,7 @@ $(PATH_TEXTS)/$(1)-map.$(EXT_SVG) : \
 
 $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG) : | $(PATH_TEXTS)/$(1)-map.$(EXT_SVG)
 	@echo INFO: Merging map data and styles into $$(shell readlink -f -- $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG))
-	@$(PY_PROCESS_SCRIPTURE_TEXT) make_map_file MAP $(PATH_TEXTS)/$(1)-map.$(EXT_SVG) $$@
+	@$(MOD_RUN_PROCESS) make_map_file 'MAP' '$(PATH_TEXTS)/$(1)-map.$(EXT_SVG)' '$$@' ''
 
 # Copy project map style file into project
 $(PATH_TEXTS)/$(1)-styles.$(EXT_CSV) :
@@ -168,7 +168,7 @@ $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1)-map-page-rgb.$(EXT_WORK)
 	@echo INFO: Creating: $$@
 	@rm -f $(PATH_PROCESS)/$(1)-map.$(EXT_PDF)
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX)
 
 # This process creates a PDF of the CMYK PNG file that was
 # created in an earlier process. The PNG file is an intermediat
@@ -180,7 +180,7 @@ $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1)-map-page-cmyk.$(EXT_WORK)
 	@echo INFO: Creating: $$@
 	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX)
 
 # Create the intermediate PDF version of the map
 # This will transform the svg file to the initial PDF file.
@@ -351,7 +351,7 @@ $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF) : \
 	$(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX)
 	@echo INFO: Creating: $$@
 	@rm -f $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_TEX)
 
 # Render the resulting PDF file from the cmyk.$(EXT_TEX) and cmyk.$(EXT_WORK) file.
 $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF) : \
@@ -359,7 +359,7 @@ $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF) : \
 	$(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX)
 	@echo INFO: Creating: $$@
 	@rm -f $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX)
 
 # View the resulting created PDF file for this map.
 view-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)

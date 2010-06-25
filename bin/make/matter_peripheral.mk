@@ -96,7 +96,7 @@ $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 	$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
 	$(PATH_PROCESS)/$(FILE_TEX_BACK)
 	@echo INFO: Creating: $$@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '$(1)' '$$@' 'periph'
+	@$(MOD_RUN_PROCESS) make_tex_control_file '' '$(1)' '$$@' 'periph'
 
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
@@ -110,7 +110,7 @@ $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
 	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(1).$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_TEX)
 
 # Open the PDF file with reader - Add a watermark if needed
 view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
@@ -124,7 +124,7 @@ view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 ifeq ($(LOCKED),0)
 	@echo INFO: Preprocessing $(1)
-	@$(PY_RUN_PROCESS) preprocessChecks $(1) '$$<'
+	@$(MOD_RUN_PROCESS) preprocessChecks $(1) '$$<'
 else
 	echo INFO: Cannot run: $$@ This is because the project is locked.
 endif
@@ -182,21 +182,21 @@ $(eval $(call matter_binding,MATTER_BACK))
 # processes.
 $(PATH_PROCESS)/$(FILE_TEX_COVER) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'cover'
+	@$(MOD_RUN_PROCESS) make_tex_control_file '' '' '$@' 'cover'
 
 # Most front matter peripheral .$(EXT_TEX) files will have a dependency
 # on $(FILE_TEX_FRONT) even if it doesn't, there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/$(FILE_TEX_FRONT) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'front'
+	@$(MOD_RUN_PROCESS) make_tex_control_file '' '' '$@' 'front'
 
 # Most back matter peripheral .$(EXT_TEX) files will have a dependency
 # on BACK_MATTER.$(EXT_TEX) even if it doesn't there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
 	@echo INFO: Creating: $@
-	@$(PY_RUN_PROCESS) make_tex_control_file '' '' '$@' 'back'
+	@$(MOD_RUN_PROCESS) make_tex_control_file '' '' '$@' 'back'
 
 # This calls all the automated rules defined above and does them
 # once on each file, even if the file is listed repeatedly in the
@@ -247,6 +247,6 @@ pdf-remove-back :
 # Not sure what the status on this call is. Does it
 # even work yet?
 make-topic-index :
-	@$(PY_RUN_PROCESS) make_topic_index_file 'NA' $(PATH_SOURCE)$(PATH_SOURCE_PERIPH)/TOPICAL_INDEX.CSV $(PATH_TEXTS)/TOPICAL_INDEX.USFM
+	@$(MOD_RUN_PROCESS) make_topic_index_file 'NA' $(PATH_SOURCE)$(PATH_SOURCE_PERIPH)/TOPICAL_INDEX.CSV $(PATH_TEXTS)/TOPICAL_INDEX.USFM
 
 

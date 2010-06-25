@@ -243,7 +243,7 @@ class Parser (object) :
 			return new
 
 		res = (f[0] + f[1] for f in zip(old, new))
-		 res.extend(old[len(new)+1:]) if len(old) > len(new) else new[len(old)+1:]
+		res.extend(old[len(new)+1:]) if len(old) > len(new) else new[len(old)+1:]
 		return res
 
 

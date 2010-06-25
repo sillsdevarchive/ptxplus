@@ -125,7 +125,7 @@ def restoreFromBackup () :
 		mod = __import__("restore_project")
 		mod.doIt()
 	else :
-		tools.userMessage("Restore error: This project could not be restored from backup. No backup file found or project does not exist.")
+		tools.userMessage("ERROR: This project could not be restored from backup. No backup file found or project does not exist.")
 
 
 def importProject () :
@@ -135,7 +135,7 @@ def importProject () :
 	# the user to choose from. For now we'll just use a path and file name so we
 	# can point to anything.
 	if len(sys.argv) < 3 :
-		archiveFile = tools.userInput('Please enter the path and filename of the archive file to import: ')
+		archiveFile = tools.userInput('REQUEST: Please enter the path and filename of the archive file to import: ')
 	else :
 		archiveFile = sys.argv[2]
 
@@ -162,7 +162,7 @@ def backupProject () :
 	'''Do a simple backup of the current project.'''
 
 	mod = __import__("backup_project")
-	tools.userMessage("Backing up project, please wait...")
+	tools.userMessage("INFO: Backing up project, please wait...")
 	mod.doIt()
 
 
@@ -187,11 +187,11 @@ elif command == "about" :
 
 elif command == "version" :
 	# Give the user the current system version number
-	tools.userMessage('Current version: ' + tools.getSystemVersion())
+	tools.userMessage('INFO: Current version: ' + tools.getSystemVersion())
 
 elif command == "user" :
 	# Set the system user name
-		tools.userMessage(tools.getSystemUser())
+		tools.userMessage('INFO: ' + tools.getSystemUser())
 
 elif command == "set-user" :
 	# Set the system user name
@@ -199,7 +199,7 @@ elif command == "set-user" :
 		if sys.argv[2] :
 			tools.setSystemUser(sys.argv[2])
 	except :
-		tools.userMessage('No user name given, try again.')
+		tools.userMessage('ERROR: No user name given, try again.')
 
 elif command == "set-source-home" :
 	# Set the source home folder
@@ -207,7 +207,7 @@ elif command == "set-source-home" :
 		tools.setSystemSourceHome(sys.argv[2])
 
 	except :
-		tools.userMessage('Problem setting source path, please try again.')
+		tools.userMessage('ERROR: Problem setting source path, please try again.')
 
 elif command == "example" :
 	# This is a special instance of the import function to facilitate
@@ -246,7 +246,7 @@ else :
 		elif command == "archive" :
 			archiveProject()
 		elif command == "import" or command == "setup" :
-			tools.userMessage('Sorry, that command cannot be used in this location.')
+			tools.userMessage('ERROR: Sorry, that command cannot be used in this location.')
 
 		else :
 
@@ -288,9 +288,9 @@ else :
 
 			# Anounce any errors we have found
 			warn = ""
-			if log_manager._warningCount > 0 :
+			if log_manager._warningCount > 0 or log_manager._errorCount > 0 :
 				warn = " (Warnings = " + str(log_manager._warningCount) + ")"
-			tools.userMessage(thisTask + " completed with " + str(log_manager._errorCount) + " errors" + warn)
+				tools.userMessage("ERROR: " + thisTask + " completed with " + str(log_manager._errorCount) + " errors" + warn)
 
 			# At this point we want to check to see if a few certain switches
 			# are set to false. If they are, we will run a couple makefile
@@ -309,12 +309,12 @@ else :
 						tools.makefileCommand('adjfile-clean-all')
 
 			# The project should be ready now
-			tools.userMessage("\n\nStarting a process. Command: " +  command)
+			tools.userMessage("\nINFO: Starting: " +  command)
 
 			# Now send off the command to makefile
 			errorCode = tools.makefileCommand(command)
 			if errorCode != 0 :
-				tools.userMessage("Makefile process failed. (Error: " + str(errorCode) + ")")
+				tools.userMessage("ERROR: Makefile process failed. (Error code: " + str(errorCode) + ")")
 
 			# Report our errors to the terminal
 			error_manager.outputProcessErrorReport()
@@ -327,11 +327,11 @@ else :
 		elif command == "import" :
 			importProject()
 		else :
-			tools.userMessage("There does not seem to be a valid project in this location and the [" + command + "] command is not recognized in this context.")
+			tools.userMessage("ERROR: There does not seem to be a valid project in this location and the [" + command + "] command is not recognized in this context.")
 
 	else :
-		tools.userMessage(noCommandMsg)
+		tools.userMessage('ERROR: ' + noCommandMsg)
 
 
 # All done
-tools.userMessage("Thank you, please come again!")
+tools.userMessage("\n\t\tThank you, please come again!\n")

@@ -47,7 +47,7 @@ class Tools (object) :
 			end up here.'''
 
 		# Tell the log what we're doing.
-		log_manager.log("DBUG", "Starting process: " + thisTask)
+		log_manager.log("DBUG", "INFO: Starting process: " + thisTask)
 
 		if log_manager._settings['System']['Processes'].get('debugMode', 'false').lower() == 'true' :
 			# Import the module
@@ -65,7 +65,7 @@ class Tools (object) :
 				module = __import__(thisTask, globals(), locals(), [])
 				log_manager.log("DBUG", "Imported module: " + thisTask)
 			except :
-				self.userMessage("Hmmm, cannot seem to import the \"" + thisTask + "\" module. This will not bode well for the rest of the process.")
+				self.userMessage("ERROR: Hmmm, cannot seem to import the \"" + thisTask + "\" module. This will not bode well for the rest of the process.")
 				log_manager.log("ERRR", "Could not import module: " + thisTask)
 
 			# Run the module
@@ -73,7 +73,7 @@ class Tools (object) :
 				module.doIt(log_manager)
 				log_manager.log("DBUG", "Process completed: " + thisTask)
 			except :
-				self.userMessage("Cannot run the \"" + thisTask + "\" module.")
+				self.userMessage("ERROR: Cannot run the \"" + thisTask + "\" module.")
 				log_manager.log("ERRR", "Cannot run the \"" + thisTask + "\" module.")
 
 
@@ -88,13 +88,13 @@ class Tools (object) :
 		for key, folder in object['ProjectStructure']['Folders'].iteritems() :
 			if not os.path.isdir(folder) :
 				os.mkdir(folder)
-				self.userMessage('Added folder: ' + folder)
+				self.userMessage('INFO: Added folder: ' + folder)
 
 		# Now add whatever files we might need
 		for key, file in object['ProjectStructure']['Files'].iteritems() :
 			if not os.path.isfile(file) :
 				shutil.copy(fileLib + "/" + file, file)
-				self.userMessage('Added file: ' + file)
+				self.userMessage('INFO: Added file: ' + file)
 
 
 	def getModuleArguments (self) :
@@ -198,7 +198,7 @@ class Tools (object) :
 			contains the system settings.'''
 
 		# There should always be a conf file here
-		return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/ptxplus.conf", encoding='utf-8')
+		return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/ptxplus.conf", encoding='utf_8')
 
 
 	def getProjectSettingsObject (self) :
@@ -206,7 +206,7 @@ class Tools (object) :
 
 		if os.path.isfile(os.getcwd() + "/.project.conf") :
 			# Load in the settings from our project
-			return ConfigObj(os.getcwd() + "/.project.conf", encoding='utf-8')
+			return ConfigObj(os.getcwd() + "/.project.conf", encoding='utf_8')
 
 
 	def getProjectDefaultSettingsObject (self) :
@@ -215,7 +215,7 @@ class Tools (object) :
 		defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/.project.conf"
 		if os.path.isfile(defaultFile) :
 			# Load in the settings from our default .project.conf file
-			return ConfigObj(defaultFile, encoding='utf-8')
+			return ConfigObj(defaultFile, encoding='utf_8')
 
 	def getSystemSettingsOverrideObject (self) :
 		'''If it exists, return an object which contains the system override
@@ -225,7 +225,7 @@ class Tools (object) :
 		overrideFile = home + "/.config/ptxplus/override.conf"
 
 		if os.path.isfile(overrideFile) == True :
-			return ConfigObj(overrideFile, encoding='utf-8')
+			return ConfigObj(overrideFile, encoding='utf_8')
 
 
 	def makeUserOverrideFile (self) :
@@ -265,7 +265,7 @@ class Tools (object) :
 				object.close()
 
 		# Report what happened
-		self.userMessage('System user name set to: ' + self.getSystemUser())
+		self.userMessage('INFO: System user name set to: ' + self.getSystemUser())
 
 
 	def setSystemSourceHome (self, sourceHomePath) :
@@ -296,7 +296,7 @@ class Tools (object) :
 				object.write('[[Paths]]' + '\n')
 				object.write('PATH_SOURCE_HOME = \'' + sourceHomePath + '\'\n\n')
 				object.close()
-				self.userMessage('System user name set to: Default User, you may want to change it to the right name with the command: ptxplus set-user\n')
+				self.userMessage('INFO: System user name set to: Default User, you may want to change it to the right name with the command: ptxplus set-user\n')
 			else :
 				object = codecs.open(overrideFile, "a", encoding='utf_8')
 				object.write('\n# Process information\n')
@@ -307,7 +307,7 @@ class Tools (object) :
 				object.close()
 
 		# Report what happened
-		self.userMessage('System source path set to: ' + self.getSystemSourceHomePath())
+		self.userMessage('INFO: System source path set to: ' + self.getSystemSourceHomePath())
 
 
 	def getScriptureFileID (self, pathPlusFileName, settings_project) :
@@ -316,8 +316,8 @@ class Tools (object) :
 			file name.'''
 
 		path, file = pathPlusFileName.rsplit("/", 1)
-		nameSourceOriginal = settings_project['System']['General']['NAME_SOURCE_ORIGINAL']
-		nameSourceExtention = settings_project['System']['General']['EXT_SOURCE']
+		nameSourceOriginal = settings_project['Project']['SourceText']['NAME_SOURCE_ORIGINAL']
+		nameSourceExtention = settings_project['Project']['SourceText']['EXT_SOURCE']
 		file = file.replace(nameSourceOriginal + "." + nameSourceExtention, "")
 		return file
 
@@ -418,9 +418,9 @@ class Tools (object) :
 			confirm = True
 
 		elif answer.lower() == "n" :
-			self.userMessage("No is okay too. We can do this another time.")
+			self.userMessage("INFO: No is okay too. We can do this another time.")
 		else :
-			self.userMessage("I am not sure what you mean by \"" + answer + "\" I am only " \
+			self.userMessage("INFO: I am not sure what you mean by \"" + answer + "\" I am only " \
 				"programed for \"y\" or \"n\" I am confused by anything else.")
 
 		return confirm
@@ -444,7 +444,7 @@ class Tools (object) :
 
 		# Get any special makefile params for debugging
 		try :
-			params = self.getSettingsObject()['System']['Logging']['makeFileParams']
+			params = self.getSettingsObject()['System']['General']['makeFileParams']
 
 			# Build the command
 			sysCommand = "make " + params + " " + command
@@ -454,7 +454,7 @@ class Tools (object) :
 
 		except :
 
-			self.userMessage('Could not run makefile command. The .project.conf file may be corrupt.')
+			self.userMessage('ERROR: Could not run makefile command. The .project.conf file may be corrupt.')
 
 
 	def doCustomProcess (self, processCommand) :

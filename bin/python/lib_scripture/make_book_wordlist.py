@@ -55,7 +55,7 @@ class MakeBookWordlist (object) :
 
 		inputFile = log_manager._currentInput
 		bookFile = log_manager._currentOutput
-		log_manager._currentSubProcess = 'BookWordlist'
+		log_manager._currentSubProcess = 'MkBkWrdlst'
 		reportPath = log_manager._settings['System']['Paths']['PATH_REPORTS']
 		bookReportFile = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.csv"
 		bookWordlist = {}

@@ -106,7 +106,7 @@ class ErrorManager (object) :
 												"--window-icon=/home/dennis/Projects/ptxplus/resources/icons/ptxplus.png "\
 												"--height=400 --width=600 --list "\
 												"--text={text!r} "\
-												"--column='File' --column='Type' --column='Book' --column='Ref' --column='Description' "\
+												"--column='File' --column='Type' --column='Ref' --column='Context' --column='Description' "\
 												"--hide-column=1,2".format
 						os.system(sed_filter(log='error.log') + ' | ' +
 								  dialog_command(title='PtxPlus error log report',

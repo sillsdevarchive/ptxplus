@@ -50,7 +50,7 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.$(EXT_WORK) : | \
 	$(PATH_PROCESS)/FRONT_MATTER.$(EXT_TEX) \
 	$(PATH_PROCESS)/auto-toc-nt.$(EXT_WORK)
 	@echo Creating TOC from: $(PATH_TEXTS)/auto-toc-nt.$(EXT_WORK)
-	@$(PY_PROCESS_SCRIPTURE_TEXT) make_toc_file "TOC" $(PATH_PROCESS)/auto-toc-nt.$(EXT_WORK) $@
+	@$(MOD_RUN_PROCESS) $(MOD_MK_TOC) 'TOC' '$(PATH_PROCESS)/auto-toc-nt.$(EXT_WORK)' '$@' ''
 
 #	@cp $(PATH_PROCESS)/auto-toc-nt.$(EXT_WORK) $@
 
@@ -76,7 +76,7 @@ $(PATH_PROCESS)/TOC-NT.$(EXT_PDF) : \
 	$(PATH_PROCESS)/TOC.$(EXT_STYLE) \
 	$(DEPENDENT_FILE_LIST)
 	@echo Starting TeX processing
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/TOC-NT.$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/TOC-NT.$(EXT_TEX)
 
 # Open the TOC-NT PDF file with reader
 view-toc-nt : $(PATH_PROCESS)/TOC-NT.$(EXT_PDF)
@@ -124,7 +124,7 @@ $(PATH_PROCESS)/TOC-OT.$(EXT_PDF) : \
 	$(PATH_PROCESS)/TOC.$(EXT_TEX) \
 	$(PATH_PROCESS)/TOC.$(EXT_STYLE) \
 	$(DEPENDENT_FILE_LIST)
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) xetex $(PATH_PROCESS)/TOC-OT.$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/TOC-OT.$(EXT_TEX)
 
 # Open the TOC-NT PDF file with reader
 view-toc-ot : $(PATH_PROCESS)/TOC-OT.$(EXT_PDF)

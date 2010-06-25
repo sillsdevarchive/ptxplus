@@ -165,20 +165,14 @@ class RunProcess (object) :
 		# from sys.argv[1] and take it from there.
 		thisTask = taskCommand.split()[0]
 
-		# Go a head and do it if we have not reached our error limit
-		if log_manager.reachedErrorLimit() != True :
+		# Initialize the log manager to do its thing
+		log_manager.initializeLog(thisTask, self._typeID, self._inputFile, self._outputFile, self._optionalPassedVariable)
 
-			# Initialize the log manager to do its thing
-			log_manager.initializeLog(thisTask, self._typeID, self._inputFile, self._outputFile, self._optionalPassedVariable)
+		# For running each process we use one centralized task runner in tools.
+		tools.taskRunner(log_manager, thisTask)
 
-			# For running each process we use one centralized task runner in tools.
-			tools.taskRunner(log_manager, thisTask)
-
-			# Close out the process by reporting to the log file
-			log_manager.closeOutSessionLog()
-
-		else :
-			tools.userMessage("Did not run: [" + thisTask + "] Errors (" + str(log_manager._errorCount) + ") exceed limit (" + str(log_manager._settings['System']['Logging']['errorLimit']) + ").")
+		# Close out the process by reporting to the log file
+		log_manager.closeOutSessionLog()
 
 
 #############################################################
