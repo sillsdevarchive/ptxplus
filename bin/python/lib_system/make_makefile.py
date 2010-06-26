@@ -62,13 +62,13 @@ class MakeMakefile (object) :
 		makefileSettings = ""
 
 		# First grab some individual settings we need in the makefile
-		cMapVal = self._log_manager._settings['System']['MapProcesses'].get('CREATE_MAP',0)
+		cMapVal = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CREATE_MAP',0)
 		makefileSettings = makefileSettings + 'CREATE_MAP' + "=" + cMapVal + "\n"
 
-		rgbPath = self._log_manager._settings['System']['MapProcesses'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
+		rgbPath = self._log_manager._settings['System']['Processes']['MapProcesses'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
 		makefileSettings = makefileSettings + 'RGB_PROFILE' + "=" + rgbPath + "\n"
 
-		cmykPath = self._log_manager._settings['System']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
+		cmykPath = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
 		makefileSettings = makefileSettings + 'CMYK_PROFILE' + "=" + cmykPath + "\n"
 
 		# Modules used by the makefile, note the use of extra

@@ -41,7 +41,7 @@ class BackupProject (object) :
 
 		self.settings = tools.getSettingsObject()
 		# This is found in the project.conf file
-		lastBackup = int(self.settings['General']['Backup']['lastBackup'])
+		lastBackup = int(self.settings['System']['Backup']['lastBackup'])
 		now = int(tools.makeDateStamp())
 
 		# We'll do the backup now
@@ -51,11 +51,11 @@ class BackupProject (object) :
 		# Get the actual project.conf object
 		projConf = tools.getProjectSettingsObject()
 		# Update the setting you need to change
-		projConf['General']['Backup']['lastBackup'] = now
+		projConf['System']['Backup']['lastBackup'] = now
 		# Write out the setting to make it permenent
 		projConf.write()
 		# This updates the changes for this session
-		self.settings['General']['Backup']['lastBackup'] = now
+		self.settings['System']['Backup']['lastBackup'] = now
 
 
 	def doBackup (self) :
@@ -63,7 +63,7 @@ class BackupProject (object) :
 
 		# For the location we use whatever the makefile.conf file has
 		# whether it is abs or relative. Note, we use abs in archive_project.py
-		backupFilePath = self.settings['General']['Backup']['backupPath']
+		backupFilePath = self.settings['System']['Backup']['backupPath']
 		backupFile = backupFilePath + "/Backup.tar.gz"
 
 		# Let's look to see if the Backup folder is there
@@ -75,7 +75,7 @@ class BackupProject (object) :
 		tar.close()
 
 		# Tell the world what we did
-		tools.userMessage('Project has been backed up')
+		tools.userMessage('INFO: Project has been backed up')
 
 
 # This starts the whole process going

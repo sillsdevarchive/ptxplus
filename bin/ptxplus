@@ -162,7 +162,7 @@ def backupProject () :
 	'''Do a simple backup of the current project.'''
 
 	mod = __import__("backup_project")
-	tools.userMessage("INFO: Backing up project, please wait...")
+	tools.userMessage("\nINFO: Backing up project, please wait...")
 	mod.doIt()
 
 
