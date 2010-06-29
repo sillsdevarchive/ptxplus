@@ -179,12 +179,19 @@ class ConfigGUI (object) :
 		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
 		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
 
+# FIXME: Right here we will look for a .scripture.conf or a .dictionary.conf
+# Whatever we find we will route it to the internal name of project.conf
+
+
 		if os.access('.project.conf', os.R_OK) :
 			self.init_dir()
 		else :
 			self.close_dir()        # to declare the attributes ;)
 
 	def init_dir (self, bkid='') :
+
+# FIXME: This will need to be refactored due to the .scripture.conf change
+
 		if not os.access('.project.conf', os.R_OK) :
 			self.close_dir()
 			return
@@ -316,6 +323,9 @@ class ConfigGUI (object) :
 			fcd.destroy()
 
 			if isProject :
+
+# FIXME: This will need to be refactored due to the .scripture.conf change
+
 				if not os.access(os.path.join(newdir, ".project.conf"), os.R_OK) :
 					dialog = gtk.MessageDialog(None,
 						gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,

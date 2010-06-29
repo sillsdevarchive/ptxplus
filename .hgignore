@@ -4,3 +4,4 @@ syntax: glob
 
 relre:.cache
 relre:state.conf
+relre:.zim

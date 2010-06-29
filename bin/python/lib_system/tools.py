@@ -204,6 +204,8 @@ class Tools (object) :
 	def getProjectSettingsObject (self) :
 		'''Return an object which contains the project settings.'''
 
+# FIXME: This will need to be refactored due to the .scripture.conf change
+
 		if os.path.isfile(os.getcwd() + "/.project.conf") :
 			# Load in the settings from our project
 			return ConfigObj(os.getcwd() + "/.project.conf", encoding='utf_8')
@@ -211,6 +213,8 @@ class Tools (object) :
 
 	def getProjectDefaultSettingsObject (self) :
 		'''Return a default project object from the system.'''
+
+# FIXME: This will need to be refactored due to the .scripture.conf change
 
 		defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/.project.conf"
 		if os.path.isfile(defaultFile) :
@@ -331,6 +335,8 @@ class Tools (object) :
 	def inProject (self) :
 		'''Simple test to see if a project.ini file exists.'''
 
+# FIXME: This will need to be refactored due to the .scripture.conf change
+
 		if os.path.isfile(".project.conf") == True :
 			return True
 		else :
@@ -399,6 +405,8 @@ class Tools (object) :
 	def isProjectFolder (self) :
 		'''Check to see if the project folder and the .project.conf file
 			exists in the current directory.'''
+
+# FIXME: This will need to be refactored due to the .scripture.conf change
 
 		path = os.getcwd()
 		ok = False
