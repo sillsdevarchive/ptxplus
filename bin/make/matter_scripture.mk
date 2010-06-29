@@ -118,13 +118,11 @@ $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 # Make adjustment file
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
 ifeq ($(USE_ADJUSTMENTS),true)
-	@echo INFO: Creating the adjustments file: $$@
+	@echo INFO: Creating: $$@
 	@$(MOD_RUN_PROCESS) $(MOD_PARA_ADJUST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 else
 	@echo INFO: USE_ADJUSTMENTS is set to \"$(USE_ADJUSTMENTS)\". $$@ not made.
 endif
-
-#	@$(MOD_RUN_PROCESS) make_para_adjust_file $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 
 
 # Make illustrations file if illustrations are used in this pub
@@ -135,10 +133,10 @@ endif
 # context than in the Makefile context.
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
-	@echo INFO: Creatingxxxxxx: $$@; \
-	$(MOD_RUN_PROCESS) $(MOD_MK_PICLIST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+	@echo INFO: Creating: $$@
+	@$(MOD_RUN_PROCESS) $(MOD_MK_PICLIST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 else
-	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\"xxx. $$@ not made.
+	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\". $$@ not made.
 endif
 
 

@@ -160,11 +160,15 @@ class MakePiclistFile (object) :
 
 		# Copy the picture file from the source to the target location
 		# if it doesn't exist there already
-		if not os.path.isfile(target) :
-			x = shutil.copy(source, target)
-			self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
+		if os.path.isfile(target) :
+			self._log_manager.log("DBUG", "The file: " + target + " already exists. This process will NOT overwrite it.")
 		else :
-			self._log_manager.log("ERRR", "Failed to copy from: " + source + " ---To:--> " + target)
+			# copy and test (why is a successful return form shutil.copy "None" not helpful)
+			x = shutil.copy(source, target)
+			if os.path.isfile(target) :
+				self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
+			else :
+				self._log_manager.log("ERRR", "Failed to copy from: " + source + " ---To:--> " + target)
 
 
 	def main(self):
@@ -195,7 +199,7 @@ class MakePiclistFile (object) :
 
 		# Check to see if the data file exists. If it doesn't we're done because we need that too
 		if not os.path.isfile(self._sourceIllustrationsLibData) :
-			self._log_manager.log("ERRR", "The illustration data file (" + self._sourceIllustrationsLibData + ") seems to be missing from the library. This process cannot work without it.")
+			self._log_manager.log("ERRR", "The illustration data file (" + self._sourceIllustrationsLibDataFileName + ") seems to be missing from the library. This process cannot work without it.")
 			self._errors +=1
 
 		# If we get an error we really can't go on at this point

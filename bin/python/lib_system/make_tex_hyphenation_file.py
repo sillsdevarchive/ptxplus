@@ -49,6 +49,12 @@ class MakeTexHyphenationFile (object) :
 		texHyphenFileName = hyphenPath + '/' + settings['System']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
 		wordListFileName =  hyphenPath + '/' + settings['System']['Files'].get('FILE_HYPHENATION_TXT', 'hyphenation.txt')
 		lcCodeListFileName = hyphenPath + '/' + settings['System']['Files'].get('FILE_LCCODELIST_TXT', 'lccodelist.txt')
+		# Get our project hyphenation commands
+		languageCode = settings['Project']['ProjectInformation'].get('languageCode', 'XYZ')
+		setHyphenCharacter = settings['Format']['Hyphenation'].get('setHyphenCharacter', '\"2010')
+		setHyphenPenalty = settings['Format']['Hyphenation'].get('setHyphenPenalty', '0')
+		setExHyphenPenalty = settings['Format']['Hyphenation'].get('setExHyphenPenalty', '0')
+		setPretolerance = settings['Format']['Hyphenation'].get('setPretolerance', '')
 
 		# If we see that the texHyphenFile exists we will abort
 		# That file needs to be manually removed to avoid problems
@@ -58,24 +64,13 @@ class MakeTexHyphenationFile (object) :
 		else :
 			# Just make the file, nothing else
 
-################ Something is wrong with this next line ###################
-
-#            word_list_in = codecs.open(wordListFileName,
-#                mode='r' if os.path.isfile(wordListFileName) else 'rw',
-#                encoding='utf_8')
-
-# Also, there may be some different tactic taken with encoding on files
-# that come from outside the system. Right now we use utf_8 encoding but
-# we may have to change to utf_8_sig to deal with BOMs that come from MS
-# systems.
-
-# This seems to at least work but it isn't as pretty
+			# Open our wordlist file, if one exists, if not, make one
 			if not os.path.isfile(wordListFileName) :
 				word_list_in = codecs.open(wordListFileName, mode='w', encoding='utf_8')
+			else :
+				# Use utf_8_sig to open it in case it has a BOM in it!
+				word_list_in = codecs.open(wordListFileName, mode='r', encoding='utf_8_sig')
 
-			word_list_in = codecs.open(wordListFileName, mode='r', encoding='utf_8')
-
-###########################################################################
 
 			# Make the TeX hyphen file
 			tex_hypens_out = codecs.open(texHyphenFileName, "w", encoding='utf_8')
@@ -85,10 +80,14 @@ class MakeTexHyphenationFile (object) :
 				"% This is an auto-generated hyphenation rules file for this project.\n"
 				"% Please refer to the documentation for details on how to make changes.\n\n")
 
-#            This doesn't seem to belong here and it doesn't really work right, test before deleting
-#            # Pickup our settings
-#            settingsToGet = settings['System']['Hyphenation']['MakeTeXHyphenationFile']
-#            tex_hypens_out.writelines(v+'\n' for v in settingsToGet.values())
+			# Insert the TeX hyphenation commands from our .project.conf file
+			tex_hypens_out.write('\\newlanguage\\' + languageCode + 'language\n')
+			tex_hypens_out.write('\\language = \\' + languageCode + 'language\n')
+			tex_hypens_out.write('\\defaulthyphenchar=' + setHyphenCharacter + '\n')
+			tex_hypens_out.write('\\hyphenpenalty=' + setHyphenPenalty + '\n')
+			tex_hypens_out.write('\\exhyphenpenalty=' + setExHyphenPenalty + '\n')
+			if setPretolerance != '' :
+				tex_hypens_out.write('\\pretolerance=' + setPretolerance + '\n')
 
 			# It may be necessary to have an lcCodeList included. These codes are
 			# kept in an external file normally kept in the project hyphenation folder.
@@ -112,7 +111,6 @@ class MakeTexHyphenationFile (object) :
 
 # This starts the whole process going
 def doIt(log_manager):
-#    import pdb
+
 	thisModule = MakeTexHyphenationFile()
 	return thisModule.main(log_manager)
-#    return pdb.run(thisModule.main, log_manager)

@@ -55,12 +55,12 @@ class CheckQuotes (object) :
 		self._closeToOpenBrackets = {}
 		self._quoteRegexp = ""
 		self._newPara = False
-		if self._settings['System']['TextFeatures']['contractionMarkers'] == "true" :
+		if self._settings['System']['Encoding']['TextFeatures']['contractionMarkers'] == "true" :
 			self._contractionMarkers = True
 		else :
 			self._contractionMarkers = False
 
-		if self._settings['System']['TextFeatures']['possessiveMarkers'] == "true" :
+		if self._settings['System']['Encoding']['TextFeatures']['possessiveMarkers'] == "true" :
 			self._possessiveMarkers = True
 		else :
 			self._possessiveMarkers = False
@@ -69,7 +69,7 @@ class CheckQuotes (object) :
 		self._smartContraction = self._settings['System']['Encoding']['Punctuation']['Quotation']['SmartQuotes']['contractionMarker']
 		self._dumbPossessive = self._settings['System']['Encoding']['Punctuation']['Quotation']['DumbQuotes']['possessiveMarker']
 		self._smartPossessive = self._settings['System']['Encoding']['Punctuation']['Quotation']['SmartQuotes']['possessiveMarker']
-		if self._settings['System']['TextFeatures']['dumbQuotes'] == "true" :
+		if self._settings['System']['Encoding']['TextFeatures']['dumbQuotes'] == "true" :
 			self._currentQuoteSystem = "DumbQuotes"
 			self._contractionChar = self._dumbContraction
 			self._possessiveChar = self._dumbPossessive

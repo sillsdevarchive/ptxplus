@@ -132,10 +132,12 @@ class MakeTexControlFile (object) :
 			instructions for this object that can be added
 			in an automated way.'''
 
+		# Build some paths and file names
+		styleFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_STYLE', '.project.sty')
 		# Get a couple settings
 		oneChapOmmitRule = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('shortBookChapterOmit', 'true')
 		omitAllChapterNumbers = self._log_manager._settings['Format']['Scripture']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
-		useHyphenation = self._log_manager._settings['System']['Processes']['MakeTeXHyphenationFile'].get('useHyphenation', 'true')
+		useHyphenation = self._log_manager._settings['Format']['Hyphenation'].get('useHyphenation', 'true')
 		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
 		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
 		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files'].get('FILE_BIBLE_STYLE', 'bible.sty')
@@ -152,24 +154,36 @@ class MakeTexControlFile (object) :
 		# place to bing it in.
 		settings = settings + '\\input ' + self._cmSettingsFile + '\n'
 
-		# Make a link to the local override stylesheet. This file can override
-		# styles that were introduced in the main setup file. For major
-		# sections like the OT and NT, we have a bible.sty style sheet at
-		# this level. This is an override style sheet for Scripture material.
-		# Only Scriture matter will have an ID so if it has one we will
-		# output the bible.sty override file. Otherwise, we output a custom
-		# style override file.
-		if self._inputID != '' :
-			settings = settings + '\\stylesheet{' + bibleStyleFile + '}\n'
-		else :
-			settings = settings + '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.' + self._extStyle + '}\n'
+		# If there is no ID given then this is probably peripheral stuff
+		# which means we need to output general peripheral TeX settings
+		# file input for what ever kind of peripheral matter it is.
+		if self._inputID == '' :
+			if self._inputFile.split('/')[-1] in self._frontMatter :
+				settings = settings + '\\input ' + self._fmSettingsFile + '\n'
+
+			elif self._inputFile.split('/')[-1] in self._backMatter :
+				settings = settings + '\\input ' + self._bmSettingsFile + '\n'
+
+			elif self._inputFile.split('/')[-1] in self._coverMatter :
+				settings = settings + '\\input ' + self._cvSettingsFile + '\n'
+
+			else :
+				self._log_manager.log("ERRR", "Trying to Create: " + self._outputFile + " - This module thinks that input: [" + self._inputFile + "] is part of the peripheral matter but it cannot find it on either the cover, front or back matter binding lists. Process halted.")
+				return
+
+		# Add the global style sheet
+		settings = settings + '\\stylesheet{' + styleFile + '}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
 		# a peripheral control file.
-#        if self._contextFlag not in self._flags :
 		if self._inputID != '' :
 
+			# Make a link to the bible.sty style sheet. This is an override
+			# style sheet for Scripture material.
+			settings = settings + '\\stylesheet{' + bibleStyleFile + '}\n'
+
+			# Output the Bible settings file input command
 			settings = settings + '\\input ' + self._biSettingsFile + '\n'
 
 			# Hyphenation is optional project-wide so we will put it here. However,
@@ -216,18 +230,8 @@ class MakeTexControlFile (object) :
 		# If there was no context flag at all that means it has to be peripheral
 		# matter. But is is front or back matter. we'll need to test to see
 		else :
-			if self._inputFile.split('/')[-1] in self._frontMatter :
-				settings = settings + '\\input ' + self._fmSettingsFile + '\n'
-
-			elif self._inputFile.split('/')[-1] in self._backMatter :
-				settings = settings + '\\input ' + self._bmSettingsFile + '\n'
-
-			elif self._inputFile.split('/')[-1] in self._coverMatter :
-				settings = settings + '\\input ' + self._cvSettingsFile + '\n'
-
-			else :
-				self._log_manager.log("ERRR", "Trying to Create: " + self._outputFile + " - This module thinks that input: [" + self._inputFile + "] is part of the peripheral matter but it cannot find it on either the cover, front or back matter binding lists. Process halted.")
-				return
+			# Make a link to the custom override style sheet for peripheral material.
+			settings = settings + '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.' + self._extStyle + '}\n'
 
 			# For peripheral matter we do not have to generate the name like
 			# with Scripture books
@@ -249,8 +253,6 @@ class MakeTexControlFile (object) :
 			files that are made by the makeTheContentSettingsFile()
 			elsewhere in this module.'''
 
-		# Build some paths and file names
-		styleFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_STYLE', '.project.sty')
 		# Bring in page format settings
 		useCropmarks = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_CROPMARKS', 'true')
 		pageHeight = self._log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
@@ -293,8 +295,6 @@ class MakeTexControlFile (object) :
 		# Create the file header
 		fileHeaderText =    "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
 					"% should be made to the project.conf file or the custom TeX setup file.\n\n"
-		# Add the global style sheet
-		fileInput = fileInput + '\\stylesheet{' + styleFile + '}\n'
 		# Add format settings
 		formatSettings = '\\PaperHeight=' + pageHeight + '\n'
 		formatSettings = formatSettings + '\\PaperWidth=' + pageWidth + '\n'
@@ -359,8 +359,8 @@ class MakeTexControlFile (object) :
 		# Process
 		marginalVersesMacro = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
 		autoTocFile = self._log_manager._settings['System']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
-		generateTOC = self._log_manager._settings['System']['Processes']['TOC'].get('generateTOC', 'true')
-		tocTitle = self._log_manager._settings['System']['Processes']['TOC'].get('mainTitle', 'Table of Contents')
+		generateTOC = self._log_manager._settings['Format']['TOC'].get('generateTOC', 'true')
+		tocTitle = self._log_manager._settings['Format']['TOC'].get('mainTitle', 'Table of Contents')
 		# Format -> PageLayout
 		useFigurePlaceholders = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_PLACEHOLDERS', 'true')
 		useIllustrations = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_ILLUSTRATIONS', 'false')

@@ -79,7 +79,7 @@ class EncodingManager (object) :
 		self._nonWordCharsMap = {}
 		# Find out what kind of quote system we use
 		# Define some dictionaries we'll use
-		if settings['System']['TextFeatures']['dumbQuotes'] == "true" :
+		if settings['System']['Encoding']['TextFeatures']['dumbQuotes'] == "true" :
 			self._currentQuoteSystem = "DumbQuotes"
 		else :
 			self._currentQuoteSystem = "SmartQuotes"
@@ -116,6 +116,7 @@ class EncodingManager (object) :
 		self._abbreviationTest = re.compile('[^.]+\.[^.]+\.')
 		# Simple test to see if this is an email address
 		self._emailAddressTest = re.compile('@')
+
 		# Build a dictionary of valid bracket related key/value pairs
 		for k, v, in self._settings['System']['Encoding']['Punctuation']['Brackets'].iteritems() :
 			if k != "bracketMarkerPairs" :
@@ -123,12 +124,25 @@ class EncodingManager (object) :
 					self._brackets[k] = v
 					# Add any relevant characters to our nonWordChars dict
 					self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
+
+# FIXME: We need some kind of solution here that doesn't force us to add a special field to the .conf file
+# which is what we need to do for languages that have special chars for final stop. We might be able to
+# create a list and use an "if in list" kind of an approch.
+
+
 		# Build a dictionary of valid word-final related key/value pairs
 		for k, v, in self._settings['System']['Encoding']['Punctuation']['WordFinal'].iteritems() :
 			if v != '' :
 				self._wordFinal[k] = v
 				# Add any relevant characters to our nonWordChars dict
 				self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
+
+
+
+
+
+
+
 		# Build a dictionary of quotation related key/value pairs for whatever the specific quote system is
 		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation'][self._currentQuoteSystem].iteritems() :
 			if v != '' :
@@ -137,14 +151,17 @@ class EncodingManager (object) :
 				v = v.decode('utf_8')
 				if len(v) == 1 :
 					self._nonWordCharsMap[ord(v)] = None
+
 		# Build a dictionary of quotation related key/value pairs for dumb quotes
 		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation']['DumbQuotes'].iteritems() :
 			if v != '' :
 				self._quotationDumb[k] = v
+
 		# Build a dictionary of quotation related key/value pairs for smart quotes
 		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation']['SmartQuotes'].iteritems() :
 			if v != '' :
 				self._quotationSmart[k] = v
+
 		# Build a dictionary of "other" punctuation related key/value pairs
 		for k, v, in self._settings['System']['Encoding']['Punctuation']['Other'].iteritems() :
 			if v != '' :

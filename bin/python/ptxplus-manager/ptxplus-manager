@@ -18,11 +18,16 @@
 # 20091214 - djd - Added some wordlist and hyphen list making commands
 # 20100609 - djd - Fixed a problem with list values that only have one element
 #        being messed up when saved by the UI. Thanks TimE
+# 20100629 - djd - More robust read and write in list form was added by TimE
+#       this enabled us to put a comma in a comma seperated list.
 
 ########################################################################################
 
 
 import sys, re, os, time
+from StringIO  import StringIO
+from configobj import ConfigObj
+
 try:
 	import pygtk
 	pygtk.require("2.0")
@@ -677,10 +682,18 @@ class FindDialog (object) :
 
 class configlist(list):
 		def __new__(cls,*args,**kwds):
-				return super(configlist,cls).__new__(cls,*args,**kwds)
+			return super(configlist,cls).__new__(cls,*args,**kwds)
+
+		def __init__(self,*args,**kwds):
+			super(configlist,self).__init__(*args,**kwds)
+			fstr = StringIO()
+			c    = ConfigObj(encoding="utf-8")
+			c['str'] = self
+			c.write(fstr)
+			self._str_value = fstr.getvalue().split("=",1)[1].strip()
 
 		def __str__(self):
-				return ', '.join(self)
+			return self._str_value
 
 class ConfigEditor (object) :
 
@@ -800,7 +813,12 @@ class ConfigEditor (object) :
 	def active_row (self, widget, path, column) :
 		k,v = self.keys_ts[path]
 		self.entry_name.set_text(k)
-		self.entry_type.set_text("List" if isinstance(v, list) else "String")
+		c = ConfigObj(["str = " + str(v)],encoding="utf-8")
+		if isinstance(c['str'], basestring): etype="String"
+		if isinstance(c['str'], list):       etype="List"
+		if isinstance(c['str'], bool):       etype="Boolean"
+		if isinstance(c['str'], (int,long)): etype="Number"
+		self.entry_type.set_text(etype)
 		self.entry_value.set_text(str(v))
 		self.wTree.get_widget("bt_apply_entry").connect("clicked", self.entry_apply)
 		self.wTree.get_widget("bt_cancel_entry").connect("clicked", self.entry_cancel)
@@ -808,10 +826,12 @@ class ConfigEditor (object) :
 
 	def entry_apply (self, widget) :
 		value = self.entry_value.get_text().strip()
-		if self.entry_type.get_text() == "List":
-				value = filter(bool, (v.strip() for v in value.split(',')))
-		self.sections_curr[self.entry_name.get_text()] = value
+		c = ConfigObj(["str = " + value], encoding="utf-8")
+		self.sections_curr[self.entry_name.get_text()] = c['str']
 		self.keys_fill(self.sections_curr)
+		# FIXME: Some error checking should be done here to catch
+		# the output before it is saved. At the least a simple
+		# try and except clause should be used.
 		self.save()
 
 	def entry_cancel (self, widget) :
