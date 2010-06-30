@@ -106,33 +106,16 @@ class MakeMakefile (object) :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
 
-		# Add rules from the system that are not in the .conf files
-		# The order of the include is important. We include system_files.mk last
-		# so that all of the other rules are caught and can be expanded in that
-		# make file.
-		editor = self._log_manager._settings['Project']['SourceText']['projectEditor']
-		editorBibleInfo = ""
+		# Add make rule files via the include call in make
+		# This is all controled via the .scripture.conf file
 		basePath = os.environ.get('PTXPLUS_BASE')
-		if editor == 'ptx' :
-			editorBibleInfo = "include " + basePath + "/bin/make/ptx_bible_info.mk\n"
-		elif editor == 'be' :
-			editorBibleInfo = "include " + basePath + "/bin/make/be_bible_info.mk\n"
-		elif editor == 'te' :
-			editorBibleInfo = "include " + basePath + "/bin/make/te_bible_info.mk\n"
+		makefileFinal = "include " + basePath + "/bin/make/" + self._log_manager._settings['System']['MakefileSettings']['MakeIncludeVariables'][self._log_manager._settings['Project']['SourceText']['projectEditor']] + "\n"
 
-		makefileFinal = "include " + basePath + "/bin/make/common_bible_info.mk\n" + \
-				editorBibleInfo + \
-				"include " + basePath + "/bin/make/periph_info.mk\n" + \
-				"include " + basePath + "/bin/make/system_files.mk\n" + \
-				"include " + basePath + "/bin/make/matter_scripture.mk\n" + \
-				"include " + basePath + "/bin/make/matter_peripheral.mk\n" + \
-				"include " + basePath + "/bin/make/matter_toc.mk\n" + \
-				"include " + basePath + "/bin/make/matter_maps.mk\n" + \
-				"include " + basePath + "/bin/make/system_hyphenation.mk\n\n"
+		for key, value, in self._log_manager._settings['System']['MakefileSettings']['MakeInclude'].iteritems() :
+			makefileFinal = makefileFinal + "include " + basePath + "/bin/make/" + value + "\n"
 
 		# Output to the new makefile file
 		makefileObject.write(makefileHeader + makefileSettings + makefileFinal)
-
 
 # This starts the whole process going
 def doIt(log_manager):

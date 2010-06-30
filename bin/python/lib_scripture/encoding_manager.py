@@ -117,6 +117,8 @@ class EncodingManager (object) :
 		# Simple test to see if this is an email address
 		self._emailAddressTest = re.compile('@')
 
+# FIXME: We may want to convert everything to lists like with ._wordFinal
+
 		# Build a dictionary of valid bracket related key/value pairs
 		for k, v, in self._settings['System']['Encoding']['Punctuation']['Brackets'].iteritems() :
 			if k != "bracketMarkerPairs" :
@@ -125,23 +127,8 @@ class EncodingManager (object) :
 					# Add any relevant characters to our nonWordChars dict
 					self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 
-# FIXME: We need some kind of solution here that doesn't force us to add a special field to the .conf file
-# which is what we need to do for languages that have special chars for final stop. We might be able to
-# create a list and use an "if in list" kind of an approch.
-
-
-		# Build a dictionary of valid word-final related key/value pairs
-		for k, v, in self._settings['System']['Encoding']['Punctuation']['WordFinal'].iteritems() :
-			if v != '' :
-				self._wordFinal[k] = v
-				# Add any relevant characters to our nonWordChars dict
-				self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
-
-
-
-
-
-
+		# Bring in a list of valid word-final characters
+		self._wordFinal = self._settings['System']['Encoding']['Punctuation']['WordFinal']['allWordFinal']
 
 		# Build a dictionary of quotation related key/value pairs for whatever the specific quote system is
 		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation'][self._currentQuoteSystem].iteritems() :
@@ -181,13 +168,12 @@ class EncodingManager (object) :
 	def hasClosingLastCharacter (self, string) :
 		'''A meta-class which checks for characters which have some kind of
 			compleation punctuation on the very end of the string.'''
-
+		# FIXME: Future task, these might work better with lists like wordFinal
 		found = False
-
 		# Look for sentence ending characters
-		for key in self._wordFinal.keys() :
-			# Get the last character in the string and compare with the value of the key
-			found = self.hasCharacterEnd(string, self._wordFinal[key])
+		for charF in self._wordFinal :
+			# Get the last character in the string and compare with the char from the list
+			found = self.hasCharacterEnd(string, charF)
 
 		# Look for closing quotes
 		for key in self._quotation.keys() :
@@ -481,13 +467,15 @@ class EncodingManager (object) :
 			all known punctuation characters and return True if
 			it is, otherwise, False.'''
 
+		# FIXME: This could be better done if everything was moved to lists
+		# like is done with wordFinal
 		found = False
 		for k, v, in self._brackets.iteritems() :
 			if v == char :
 				found = True
-		for k, v, in self._wordFinal.iteritems() :
-			if v == char :
-				found = True
+		# This is a list now so we handle it different from the others
+		if char in self._wordFinal :
+			found = True
 		for k, v, in self._quotationDumb.iteritems() :
 			if v == char :
 				found = True
@@ -507,8 +495,8 @@ class EncodingManager (object) :
 			in a line (string with multiple words).'''
 
 		found = False
-		for key in self._wordFinal.keys() :
-			if string.find(self._wordFinal[key]) > -1 :
+		for charF in self._wordFinal :
+			if string.find(charF) > -1 :
 				found = True
 
 		return found
@@ -520,8 +508,8 @@ class EncodingManager (object) :
 			smarter than hasWordFinalInLine.'''
 
 		found = False
-		for key in self._wordFinal.keys() :
-			if word.find(self._wordFinal[key]) > -1 :
+		for charF in self._wordFinal :
+			if word.find(charF) > -1 :
 				found = True
 
 		return found
@@ -532,9 +520,8 @@ class EncodingManager (object) :
 			of the string.'''
 
 		found = False
-		for key in self._wordFinal.keys() :
-			if self.hasCharacterStart(string, self._wordFinal[key]) == True :
-#                print string
+		for charF in self._wordFinal :
+			if self.hasCharacterStart(string, charF) == True :
 				found = True
 
 		return found
@@ -545,8 +532,8 @@ class EncodingManager (object) :
 			on the very end of word string.'''
 
 		found = False
-		for key in self._wordFinal.keys() :
-			if self.hasCharacterEnd(word, self._wordFinal[key]) == True :
+		for charF in self._wordFinal :
+			if self.hasCharacterEnd(word, charF) == True :
 				found = True
 
 		return found
@@ -558,14 +545,11 @@ class EncodingManager (object) :
 
 		found = False
 		continous = 0
-		for key in self._wordFinal.keys() :
-#            print '[' + self._wordFinal[key] + ']+'
-#            test = re.compile('[' + self._wordFinal[key] + self._wordFinal[key] + ']+')
-#            test = re.compile('\.{2,}')
+		for charF in self._wordFinal :
 			# Do the test
-			if len(word.split(self._wordFinal[key])) > 2 :
+			if len(word.split(charF)) > 2 :
 				for char in word :
-					if char == self._wordFinal[key] :
+					if char == charF :
 						continous +=1
 				if continous > 1 :
 					found = True
@@ -582,9 +566,9 @@ class EncodingManager (object) :
 
 		puncChar = ""
 		# Figure out which character we have
-		for key in self._wordFinal.keys() :
-			if word.find(self._wordFinal[key]) != -1 :
-				puncChar = self._wordFinal[key]
+		for charF in self._wordFinal :
+			if word.find(charF) != -1 :
+				puncChar = charF
 				if puncChar == '' : continue
 				slicedWord = word.split(puncChar)
 				secondHalf = slicedWord[1]

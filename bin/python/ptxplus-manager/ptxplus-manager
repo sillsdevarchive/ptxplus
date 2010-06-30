@@ -178,27 +178,43 @@ class ConfigGUI (object) :
 		self.cimport = ImportDialog(self.wTree, 'd_import', self)
 		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
 		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
+		self.ourProjectConf = self.thisProjectConf()
 
-# FIXME: Right here we will look for a .scripture.conf or a .dictionary.conf
-# Whatever we find we will route it to the internal name of project.conf
-
-
-		if os.access('.project.conf', os.R_OK) :
+		if os.access(self.ourProjectConf, os.R_OK) :
 			self.init_dir()
 		else :
 			self.close_dir()        # to declare the attributes ;)
 
+
+	def thisProjectConf (self) :
+		'''Look for and return the name of a valid .conf file in
+			the current cwd. Note: A near duplicate of this can be
+			found in tools().'''
+
+		if os.access('.scripture.conf', os.R_OK) :
+			return '.scripture.conf'
+		elif  os.access('.dictionary.conf', os.R_OK) :
+			return '.dictionary.conf'
+		else :
+			# If we can't find the .conf file we might as well quite now
+			print "ERROR: No valid configuration file found in this folder."
+			sys.exit(1)
+
+
 	def init_dir (self, bkid='') :
 
-# FIXME: This will need to be refactored due to the .scripture.conf change
-
-		if not os.access('.project.conf', os.R_OK) :
+		if not os.access(self.ourProjectConf, os.R_OK) :
 			self.close_dir()
 			return
 		if self.ceditor :
-			self.ceditor.new_config('.project.conf')
+			self.ceditor.new_config(self.ourProjectConf)
 		else :
-			self.ceditor = ConfigEditor('.project.conf', self.wTree, 'tv_sections', 'tv_keys')
+			self.ceditor = ConfigEditor(self.ourProjectConf, self.wTree, 'tv_sections', 'tv_keys')
+
+
+# FIXME: These next three vars are no longer valid. Need to do
+# something about this. Right now, these tabs will not display
+# anything.
 
 		self.styles = FileEditor('ptx2pdf.sty', self.tv_styles, self.language_manager.get_language("latex"))
 		self.setup = FileEditor('ptx2pdf-setup.txt', self.tv_setup, self.language_manager.get_language("latex"))
@@ -324,9 +340,7 @@ class ConfigGUI (object) :
 
 			if isProject :
 
-# FIXME: This will need to be refactored due to the .scripture.conf change
-
-				if not os.access(os.path.join(newdir, ".project.conf"), os.R_OK) :
+				if not os.access(os.path.join(newdir, self.ourProjectConf), os.R_OK) :
 					dialog = gtk.MessageDialog(None,
 						gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 						gtk.MESSAGE_ERROR, gtk.BUTTONS_OK_CANCEL,

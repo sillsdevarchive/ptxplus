@@ -63,8 +63,7 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
   $(PATH_PROCESS)/$(FILE_LOGO_BSM) \
   $(PATH_PROCESS)/$(FILE_LOGO_CFE) \
   $(PATH_PROCESS)/$(FILE_PAGE_BORDER) \
-  $(PATH_PROCESS)/$(FILE_TEX_SETUP) \
-  $(PATH_PROCESS)/$(FILE_TEX_STYLE) \
+  $(PATH_PROCESS)/$(FILE_TEX_BIBLE) \
   $(PATH_PROCESS)/$(FILE_BIBLE_STYLE) \
   $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) \
   $(FILE_PROJECT_CONF)
@@ -73,26 +72,6 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
 ##############################################################
 #			   Rules for building and managing system files
 ##############################################################
-
-# Create the main settings file for this Scripture project.
-# This will contain publication format settings. Context
-# specific settings are kept in the bible_settings.txt file.
-# In this context using MOD_RUN_PROCESS we use the
-# optional passed var as a way to pass the type of control
-# file we are making. In this instance, we use "project"
-# because the script will know by the flag name exactly what
-# it is and what goes in it.
-$(PATH_PROCESS)/$(FILE_TEX_SETUP) : $(FILE_PROJECT_CONF)
-	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) make_tex_control_file '' '' '$@' ''
-
-# Rule to create the primary style file for the project. There
-# will be lots of other secondary override stylesheets that
-# are associated with specific objects but this is the "mother"
-# style file.
-$(PATH_PROCESS)/$(FILE_TEX_STYLE) :
-	@echo INFO: Creating: $@
-	@cp $(PATH_RESOURCES_PROCESS)/$(FILE_TEX_STYLE) $@
 
 # Rule to create the custom style file which holds TeX code
 # that is hard to automate. Project wide custom TeX macros
@@ -129,7 +108,6 @@ make-template :
 # If, for some odd reason the Illustrations folder is not in
 # the right place we'll put one where it is supposed to be found.
 $(PATH_ILLUSTRATIONS) : | $(PATH_SOURCE)
-	@echo This is just a test zzzzzzzzzzzzzzzzzzzzzzzz
 	$(call mdir,$(PATH_SOURCE)/$@)
 
 # Watermark
@@ -433,6 +411,3 @@ help :
 # Call the system wiki about page
 about :
 	@$(VIEWWIKI) $(PATH_SYSTEM_HELP) About &
-
-
-

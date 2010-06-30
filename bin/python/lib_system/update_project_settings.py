@@ -75,14 +75,14 @@ class UpdateProjectSettings (object) :
 		if settings['System']['systemVersion'] != curVer :
 
 			# First make a backup copy of our original .project.conf
-			bakSettingsProjectFile = ".project.conf~"
-			settingsProjectFile = ".project.conf"
+			bakSettingsProjectFile = tools.thisProjectConf() + '~'
+			settingsProjectFile = tools.thisProjectConf()
 			shutil.copy(settingsProjectFile, bakSettingsProjectFile)
 			oldSettings = ConfigObj(bakSettingsProjectFile,encoding='utf-8')
 
-			# Get the system defaul .project.conf file
-			systemProjectConfFile = basePath + "/resources/lib_sysFiles/.project.conf"
-			tempMasterConfFile = os.getcwd() + "/.project.conf"
+			# Get the system defaul .conf file
+			systemProjectConfFile = basePath + "/resources/lib_sysFiles/" + tools.thisProjectConf()
+			tempMasterConfFile = os.getcwd() + "/" + tools.thisProjectConf()
 
 			if os.path.isfile(tempMasterConfFile) != True :
 				tools.userMessage("Error: Could not update project, [" + tempMasterConfFile + "] not found")

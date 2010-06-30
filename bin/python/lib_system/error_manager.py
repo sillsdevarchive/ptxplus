@@ -124,6 +124,10 @@ class ErrorManager (object) :
 			except :
 				tools.userMessage('Unable to open error log file: ' + self._errorLogFile)
 
+		else :
+			tools.userMessage('INFO: No errors found.')
+
+
 
 	def deleteErrorLog (self) :
 		'''Get rid of the error log file.'''

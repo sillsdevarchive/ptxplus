@@ -24,6 +24,7 @@
 # 20100623 - djd - Added getModuleArguments() function
 # 20100625 - djd - Changed utf_8_sig to just utf_8 for all
 #       inernal files.
+# 20100630 - djd - Refactor for multiple .conf files.
 
 
 #############################################################
@@ -40,6 +41,22 @@ class Tools (object) :
 	'''This class contains a bunch of misc. functions that work with
 		ptxplus. If something can be used cross-scripts, it ends
 		up here.'''
+
+
+	def thisProjectConf (self) :
+		'''Look for and return the name of a valid .conf file in
+			the current cwd. Note: A duplicate of this can be
+			found in ptxplus-manager.'''
+
+		if os.access('.scripture.conf', os.R_OK) :
+			return '.scripture.conf'
+		elif  os.access('.dictionary.conf', os.R_OK) :
+			return '.dictionary.conf'
+		else :
+			# If we can't find the .conf file we might as well quite now
+			print "ERROR: No valid configuration file found in this folder."
+			sys.exit(1)
+
 
 	def taskRunner (self, log_manager, thisTask) :
 		'''This is the final function used for running all system tasks.
@@ -206,9 +223,9 @@ class Tools (object) :
 
 # FIXME: This will need to be refactored due to the .scripture.conf change
 
-		if os.path.isfile(os.getcwd() + "/.project.conf") :
+		if os.path.isfile(os.getcwd() + "/" + self.thisProjectConf()) :
 			# Load in the settings from our project
-			return ConfigObj(os.getcwd() + "/.project.conf", encoding='utf_8')
+			return ConfigObj(os.getcwd() + "/" + self.thisProjectConf(), encoding='utf_8')
 
 
 	def getProjectDefaultSettingsObject (self) :
@@ -216,9 +233,9 @@ class Tools (object) :
 
 # FIXME: This will need to be refactored due to the .scripture.conf change
 
-		defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/.project.conf"
+		defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/" + self.thisProjectConf()
 		if os.path.isfile(defaultFile) :
-			# Load in the settings from our default .project.conf file
+			# Load in the settings from our default .conf file
 			return ConfigObj(defaultFile, encoding='utf_8')
 
 	def getSystemSettingsOverrideObject (self) :
@@ -327,7 +344,7 @@ class Tools (object) :
 
 
 	def getProjectID (self) :
-		'''Get the project ID from the .project.conf file.'''
+		'''Get the project ID from the .conf file.'''
 
 		return self.getProjectSettingsObject()['Project']['ProjectInformation']['projectID']
 
@@ -337,7 +354,7 @@ class Tools (object) :
 
 # FIXME: This will need to be refactored due to the .scripture.conf change
 
-		if os.path.isfile(".project.conf") == True :
+		if os.path.isfile(self.thisProjectConf()) == True :
 			return True
 		else :
 			return False
@@ -403,14 +420,14 @@ class Tools (object) :
 
 
 	def isProjectFolder (self) :
-		'''Check to see if the project folder and the .project.conf file
+		'''Check to see if the project folder and the .conf file
 			exists in the current directory.'''
 
 # FIXME: This will need to be refactored due to the .scripture.conf change
 
 		path = os.getcwd()
 		ok = False
-		if os.path.isfile(path + "/.project.conf") :
+		if os.path.isfile(path + "/" + self.thisProjectConf()) :
 			ok = True
 
 		return ok
@@ -462,7 +479,7 @@ class Tools (object) :
 
 		except :
 
-			self.userMessage('ERROR: Could not run makefile command. The .project.conf file may be corrupt.')
+			self.userMessage('ERROR: Could not run makefile command. The ' + self.thisProjectConf() + ' file may be corrupt.')
 
 
 	def doCustomProcess (self, processCommand) :

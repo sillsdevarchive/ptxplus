@@ -35,9 +35,10 @@ if not basePath :
 	basePath = "/usr/share/xetex-ptxplus"
 	os.environ['PTXPLUS_BASE'] = basePath
 
-#sys.path.append(basePath + '/bin/python')
-#sys.path.append(basePath + '/bin/python/lib_system')
-#sys.path.append(basePath + '/bin/python/lib_scripture')
+# FIXME: We will need a clever way to have the system
+# point to the right lib folder for the context it is in
+# For example, if we are publishing a dictionary we will
+# want it to point to lib_dictionary, not _scripture.
 sys.path.insert(0, basePath + '/bin/python')
 sys.path.insert(0, basePath + '/bin/python/lib_system')
 sys.path.insert(0, basePath + '/bin/python/lib_scripture')
@@ -98,19 +99,11 @@ def setupNewProject () :
 		setup in the CWD. If that isn't right, oh well, the user should
 		pay more attention. :-)'''
 
-# It would be good to get some input from the user on this.
-# However, the way the project manager works, the following
-# is not that useful so it is commented for now.
-	# Look for a .project.conf file in the cwd. If there is none, ask
-	# if we need to create a new project.
-#    if tools.isProjectFolder() == False :
-#        newProjectpath = os.path.abspath(sys.argv[2])
-#        if tools.userConfirm("Would you like to start a new project. Create a new project here? " + newProjectpath) != True :
-#            return
-#        else :
-#            # Send out the make new project command
-#            mod = __import__('make_new_project')
-#            mod.doIt(newProjectpath)
+# FIXME: It would be good to get some input from the user on this.
+# We could use Zenity to do this fairly simply, also we need
+# to be sure to find out the type of project and pass that on
+# to the new file mod so that it can bring in the right .conf
+# file.
 
 	# Send out the make new project command
 	mod = __import__('make_new_project')

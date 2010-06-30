@@ -40,7 +40,8 @@ class CheckPunctuation (object) :
 
 		# Build a regular expression for punctuation checking
 		punctChars = ""
-		for k, v, in self._settings['System']['Encoding']['Punctuation']['WordFinal'].iteritems() :
+#        for k, v, in self._settings['System']['Encoding']['Punctuation']['WordFinal'].iteritems() :
+		for v in self._settings['System']['Encoding']['Punctuation']['WordFinal']['allWordFinal'] :
 			if v != "" :
 				punctChars = punctChars + v + "|"
 		punctChars = '[' + punctChars.rstrip('|') + ']'

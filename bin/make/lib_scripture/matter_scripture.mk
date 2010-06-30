@@ -83,7 +83,7 @@ endif
 $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 ifeq ($(LOCKED),0)
 	@echo INFO: Creating: $$@
-	@$(MOD_RUN_PROCESS) make_tex_control_file '$(1)' '$(1).$(EXT_WORK)' '$$@' ''
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) '$(1)' '$(1).$(EXT_WORK)' '$$@' ''
 else
 	@echo INFO: Cannot create: $$@ This is because the project is locked.
 endif
@@ -179,11 +179,11 @@ endef
 # dependent rules here before we hit the main component_rules
 # building rule
 
-# Rule for building the TeX settings file that is used in a
-# specific context. In this case it is for Scripture.
-$(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(PATH_PROCESS)/$(FILE_TEX_SETUP)
+# Rule for building the TeX settings file that is used for
+# the main content.
+$(PATH_PROCESS)/$(FILE_TEX_BIBLE) :
 	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) make_tex_control_file '' '' '$@' 'bible'
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) '' '' '$@' ''
 
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
@@ -203,7 +203,7 @@ $(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
 # entire OT is being typeset.
 $(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) make_tex_control_file 'ot' 'ot' '$@' ''
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'ot' 'ot' '$@' ''
 
 # Render the entire OT
 $(PATH_PROCESS)/$(FILE_MATTER_OT_PDF) : \
@@ -234,7 +234,7 @@ $(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
 # entire OT is being typeset.
 $(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) make_tex_control_file 'nt' 'nt' '$@' ''
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'nt' 'nt' '$@' ''
 
 # Render the entire NT
 $(PATH_PROCESS)/$(FILE_MATTER_NT_PDF) : \
@@ -296,4 +296,3 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_SO
 ifeq ($(USE_ILLUSTRATIONS),true)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
 endif
-
