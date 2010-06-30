@@ -353,7 +353,7 @@ class Tools (object) :
 		'''Simple test to see if a project.ini file exists.'''
 
 # FIXME: This will need to be refactored due to the .scripture.conf change
-
+		print "Calling inProject  xxxxxxxxxxxxxxxxxxxxxxxxxx"
 		if os.path.isfile(self.thisProjectConf()) == True :
 			return True
 		else :

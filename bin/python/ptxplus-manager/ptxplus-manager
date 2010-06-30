@@ -198,7 +198,7 @@ class ConfigGUI (object) :
 		else :
 			# If we can't find the .conf file we might as well quite now
 			print "ERROR: No valid configuration file found in this folder."
-			sys.exit(1)
+			self.close_dir()
 
 
 	def init_dir (self, bkid='') :

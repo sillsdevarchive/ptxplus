@@ -65,6 +65,7 @@ bkid = ""
 # There should always be at least one arg, look for a second
 if len(sys.argv) >= 2 :
 
+	# FIXME: This needs to be generalized to support other kinds of publications
 	# The second argv is normally the file name or book ID
 	componentScripture = tools.getSettingsObject()['Format']['Binding']['MATTER_OT']
 	componentScripture = componentScripture + tools.getSettingsObject()['Format']['Binding']['MATTER_NT']
@@ -85,7 +86,7 @@ if len(sys.argv) >= 2 :
 
 # Other wise we'll just start up the manager
 else :
-	tools.userMessage("Welcome to XeTeX-ptxplus!")
+	tools.userMessage("\n\t\tWelcome to XeTeX-ptxplus!\n")
 	command = "manage"
 
 
@@ -313,9 +314,12 @@ else :
 			error_manager.outputProcessErrorReport()
 
 	elif tools.inProject() == False :
+
+		print command, "mmmmmmmmmmmmmmmmmmmmmmmmmm"
 		# These are system level commands and have to be used
 		# from outside the project area
 		if command == "setup" :
+			print "setting up! cccccccccccccccccccccccc"
 			setupNewProject()
 		elif command == "import" :
 			importProject()

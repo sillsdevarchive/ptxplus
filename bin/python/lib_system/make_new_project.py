@@ -67,10 +67,15 @@ class MakeNewProject (object) :
 
 		newProjectPath = os.path.abspath(newFolderName)
 
-		tools.makeNecessaryFiles()
+		dialog_command = 'zenity  --list  --text "What kind of project?" --radiolist ".scripture.conf" Scripture ".dictionary.conf" Dictionary'
+		print dialog_command
+		os.system(dialog_command)
+
+
+		#tools.makeNecessaryFiles()
 
 		# Tell the world what we did
-		tools.userMessage('Created new project at: ' + newProjectPath)
+		tools.userMessage('INFO: Created new project at: ' + newProjectPath)
 
 
 # This starts the whole process going
