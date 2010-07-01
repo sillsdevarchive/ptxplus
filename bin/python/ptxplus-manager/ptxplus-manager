@@ -178,7 +178,11 @@ class ConfigGUI (object) :
 		self.cimport = ImportDialog(self.wTree, 'd_import', self)
 		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
 		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
-		self.ourProjectConf = self.thisProjectConf()
+		self.ourProjectConf = 'none'
+		if os.access('.scripture.conf', os.R_OK) :
+			self.ourProjectConf = '.scripture.conf'
+		elif  os.access('.dictionary.conf', os.R_OK) :
+			self.ourProjectConf = '.dictionary.conf'
 
 		if os.access(self.ourProjectConf, os.R_OK) :
 			self.init_dir()
@@ -186,19 +190,6 @@ class ConfigGUI (object) :
 			self.close_dir()        # to declare the attributes ;)
 
 
-	def thisProjectConf (self) :
-		'''Look for and return the name of a valid .conf file in
-			the current cwd. Note: A near duplicate of this can be
-			found in tools().'''
-
-		if os.access('.scripture.conf', os.R_OK) :
-			return '.scripture.conf'
-		elif  os.access('.dictionary.conf', os.R_OK) :
-			return '.dictionary.conf'
-		else :
-			# If we can't find the .conf file we might as well quite now
-			print "ERROR: No valid configuration file found in this folder."
-			self.close_dir()
 
 
 	def init_dir (self, bkid='') :
@@ -499,10 +490,18 @@ class ConfigGUI (object) :
 
 	def m_new (self, widget) :
 		self.set_working_dir(False)
-		self.execute("ptxplus", "setup", ".")
+		# FIXME: The interface needs to ask the user what kind
+		# of project this will be. As nothing other than scripture
+		# is supported at this time, the default is set to that.
+		# FIXME: Also, I would like to see better project path
+		# information sent out. This is incase we want to setup
+		# a project in some other place than cwd.
+		self.execute("ptxplus", "setup", ".", "scripture")
 		self.init_dir()
+		self.ourProjectConf = ".scripture.conf"
 
 	def m_open (self, widget) :
+		self.execute("ptxplus", "open", ".")
 		self.set_working_dir(True)
 
 	def m_import (self, widget) :

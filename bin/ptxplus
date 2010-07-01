@@ -26,7 +26,7 @@
 ######################### Load Modules ######################
 #############################################################
 # Firstly, import all the standard Python modules we need for
-# this process
+# this process and set the base path
 
 import sys, os, codecs, shutil
 
@@ -35,24 +35,34 @@ if not basePath :
 	basePath = "/usr/share/xetex-ptxplus"
 	os.environ['PTXPLUS_BASE'] = basePath
 
-# FIXME: We will need a clever way to have the system
-# point to the right lib folder for the context it is in
-# For example, if we are publishing a dictionary we will
-# want it to point to lib_dictionary, not _scripture.
+# Before we get started we need to do some preliminary
+# tests to see what the environment we are starting in
+# looks like. That will determine where we go from here.
+
+projectType = 'none'
+
+# Set our paths to application resources
 sys.path.insert(0, basePath + '/bin/python')
 sys.path.insert(0, basePath + '/bin/python/lib_system')
-sys.path.insert(0, basePath + '/bin/python/lib_scripture')
+# Context sensitive stuff
+if os.access('.scripture.conf', os.R_OK) :
+	sys.path.insert(0, basePath + '/bin/python/lib_scripture')
+	projectType = 'scripture'
+elif  os.access('.dictionary.conf', os.R_OK) :
+	sys.path.insert(0, basePath + '/bin/python/lib_dictionary')
+	projectType = 'dictionary'
 
-# Import supporting local classes
-#from lib_system.tools import *
+# No mater what, we will need tools to work with.
 from tools import *
-from log_manager import *
-from error_manager import *
+tools = Tools()
 
-# Instantiate classes
-tools            = Tools()
-error_manager        = ErrorManager()
-log_manager        = LogManager()
+# Import supporting local classes if we already have project going.
+# Instantiate classes right away too
+if projectType == 'scripture' or projectType == 'dictionary' :
+	from log_manager import *
+	log_manager = LogManager()
+	from error_manager import *
+	error_manage = ErrorManager()
 
 # We want to see one valid arguments given. However, that
 # may not happen so this script is all about testing the
@@ -60,27 +70,33 @@ log_manager        = LogManager()
 # place.
 
 command = ""
-bkid = ""
 
 # There should always be at least one arg, look for a second
 if len(sys.argv) >= 2 :
 
-	# FIXME: This needs to be generalized to support other kinds of publications
-	# The second argv is normally the file name or book ID
-	componentScripture = tools.getSettingsObject()['Format']['Binding']['MATTER_OT']
-	componentScripture = componentScripture + tools.getSettingsObject()['Format']['Binding']['MATTER_NT']
-	componentScripture = componentScripture.split()
-	# This part only works if we are processing Scripture components (books with IDs)
-	if len(componentScripture) > 0 :
-		for book in componentScripture :
-			# We will lc that for consistency
-			if sys.argv[1].lower() == book.lower() :
-				bkid = sys.argv[1].lower()
+	# The second argv is normally the file name or book ID in the context of Scripture
+	if projectType.lower() == 'scripture' :
+		bkid = ""
+		componentScripture = tools.getSettingsObject()['Format']['Binding']['MATTER_OT']
+		componentScripture = componentScripture + tools.getSettingsObject()['Format']['Binding']['MATTER_NT']
+		componentScripture = componentScripture.split()
+		# This part only works if we are processing Scripture components (books with IDs)
+		if len(componentScripture) > 0 :
+			for book in componentScripture :
+				# We will lc that for consistency
+				if sys.argv[1].lower() == book.lower() :
+					bkid = sys.argv[1].lower()
 
-	# If we found an argv with an lc bkid then that becomes the command
-	if bkid != "" :
-		command = bkid
-	# Otherwise we'll just read it in raw
+		# If we found an argv with an lc bkid then that becomes the command
+		if bkid != "" :
+			command = bkid
+		# Otherwise we'll just read it in raw
+		else :
+			command = sys.argv[1]
+
+	elif projectType.lower() == 'dictionary' :
+		tools.userMessage("Sorry dictionary publishing is not supported (yet).\n")
+
 	else :
 		command = sys.argv[1]
 
@@ -106,9 +122,30 @@ def setupNewProject () :
 # to the new file mod so that it can bring in the right .conf
 # file.
 
+
 	# Send out the make new project command
 	mod = __import__('make_new_project')
-	mod.doIt(sys.argv[2])
+
+	# I really want to use hard paths in context
+	# If it is a dot we assume cwd, otherwise we
+	# test to be sure.
+	try :
+		sys.argv[2] == '.'
+		newProjDir = os.getcwd()
+	except :
+		newProjDir = sys.argv[2]
+		if not os.access(newProjDir) :
+			tools.userMessage("ERROR: The path: [" + newProjDir + "] does not exist. Process halted!")
+			sys.exit(1)
+
+	try :
+		projType = sys.argv[3]
+	except :
+		tools.userMessage("ERROR: The project type is missing. Process halted!")
+		sys.exit(1)
+
+	# Send it off to process
+	mod.doIt(newProjDir, projType)
 
 
 def restoreFromBackup () :
@@ -158,6 +195,13 @@ def backupProject () :
 	mod = __import__("backup_project")
 	tools.userMessage("\nINFO: Backing up project, please wait...")
 	mod.doIt()
+
+def openProject () :
+	'''This simply provides some feedback to the user
+		when a project is opened.'''
+
+	tools.userMessage("INFO: Opening project at: \t" + os.getcwd())
+
 
 
 #############################################################
@@ -239,6 +283,8 @@ else :
 			backupProject()
 		elif command == "archive" :
 			archiveProject()
+		elif command == "open" :
+			openProject()
 		elif command == "import" or command == "setup" :
 			tools.userMessage('ERROR: Sorry, that command cannot be used in this location.')
 
@@ -291,8 +337,8 @@ else :
 			# clean up commands before the command that the user is calling
 			# for is run. (Right now we are limiting this action to Scripture
 			# publications.)
-			pubType = tools.getSettingsObject()['Format']['publicationType']
-			locked = tools.getSettingsObject()['Project']['SourceText']['LOCKED']
+			pubType = tools.getProjectType()
+			locked = tools.getSettingsObject()['ProjectText']['SourceText']['General']['LOCKED']
 			useIllustrations = tools.getSettingsObject()['Format']['PageLayout']['Switches']['USE_ILLUSTRATIONS']
 			useAdjustments = tools.getSettingsObject()['Format']['PageLayout']['Switches']['USE_ADJUSTMENTS']
 			if locked == 0 :
@@ -314,18 +360,14 @@ else :
 			error_manager.outputProcessErrorReport()
 
 	elif tools.inProject() == False :
-
-		print command, "mmmmmmmmmmmmmmmmmmmmmmmmmm"
 		# These are system level commands and have to be used
 		# from outside the project area
 		if command == "setup" :
-			print "setting up! cccccccccccccccccccccccc"
 			setupNewProject()
 		elif command == "import" :
 			importProject()
 		else :
 			tools.userMessage("ERROR: There does not seem to be a valid project in this location and the [" + command + "] command is not recognized in this context.")
-
 	else :
 		tools.userMessage('ERROR: ' + noCommandMsg)
 

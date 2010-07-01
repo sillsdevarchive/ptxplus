@@ -45,17 +45,15 @@ class Tools (object) :
 
 	def thisProjectConf (self) :
 		'''Look for and return the name of a valid .conf file in
-			the current cwd. Note: A duplicate of this can be
-			found in ptxplus-manager.'''
+			the current cwd. If not it will simply return the
+			string, none'''
 
 		if os.access('.scripture.conf', os.R_OK) :
 			return '.scripture.conf'
 		elif  os.access('.dictionary.conf', os.R_OK) :
 			return '.dictionary.conf'
 		else :
-			# If we can't find the .conf file we might as well quite now
-			print "ERROR: No valid configuration file found in this folder."
-			sys.exit(1)
+			return 'none'
 
 
 	def taskRunner (self, log_manager, thisTask) :
@@ -94,18 +92,29 @@ class Tools (object) :
 				log_manager.log("ERRR", "Cannot run the \"" + thisTask + "\" module.")
 
 
-	def makeNecessaryFiles (self) :
+	def makeNecessaryFiles (self, path, projType) :
 		'''Create all the necessary files and folders for a project.
 			If they already exist, we will not touch the existings ones.'''
 
 		object = self.getSystemSettingsObject()
 		fileLib = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles"
 
+		# FIXME: Might want a more clever way to do this to avoide hard file names
+		# FIXME: Might also want error checking on the copy
+		# Bring in the .conf file according to the type of project this is
+		if projType == 'scripture' :
+			shutil.copy(fileLib + "/.scripture.conf", path + "/.scripture.conf")
+		elif projType == 'dictionary' :
+			shutil.copy(fileLib + "/.dictionary.conf", path + "/.dictionary.conf")
+		else :
+			self.userMessage("ERROR: The project type: [" + projType + "] is unknown. Process halted!")
+			sys.exit(1)
+
 		# Make whatever folders are necessary
 		for key, folder in object['ProjectStructure']['Folders'].iteritems() :
-			if not os.path.isdir(folder) :
-				os.mkdir(folder)
-				self.userMessage('INFO: Added folder: ' + folder)
+			if not os.path.isdir(path + '/' + folder) :
+				os.mkdir(path + '/' + folder)
+				self.userMessage('INFO: Added folder: ' + path + '/' + folder)
 
 		# Now add whatever files we might need
 		for key, file in object['ProjectStructure']['Files'].iteritems() :
@@ -221,8 +230,6 @@ class Tools (object) :
 	def getProjectSettingsObject (self) :
 		'''Return an object which contains the project settings.'''
 
-# FIXME: This will need to be refactored due to the .scripture.conf change
-
 		if os.path.isfile(os.getcwd() + "/" + self.thisProjectConf()) :
 			# Load in the settings from our project
 			return ConfigObj(os.getcwd() + "/" + self.thisProjectConf(), encoding='utf_8')
@@ -231,9 +238,11 @@ class Tools (object) :
 	def getProjectDefaultSettingsObject (self) :
 		'''Return a default project object from the system.'''
 
-# FIXME: This will need to be refactored due to the .scripture.conf change
+		# FIXME: This may cause an error because the .conf file
+		# may not be found.
 
 		defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/" + self.thisProjectConf()
+
 		if os.path.isfile(defaultFile) :
 			# Load in the settings from our default .conf file
 			return ConfigObj(defaultFile, encoding='utf_8')
@@ -349,11 +358,18 @@ class Tools (object) :
 		return self.getProjectSettingsObject()['Project']['ProjectInformation']['projectID']
 
 
-	def inProject (self) :
-		'''Simple test to see if a project.ini file exists.'''
+	def getProjectType (self) :
+		'''Based on the name of the .conf file, return what this
+			function thinks the type of this project is.'''
 
-# FIXME: This will need to be refactored due to the .scripture.conf change
-		print "Calling inProject  xxxxxxxxxxxxxxxxxxxxxxxxxx"
+		# This assumes that the name construction is .name.conf
+		# we will suck out the "name".
+		return self.thisProjectConf().split('.')[1]
+
+
+	def inProject (self) :
+		'''Simple test to see if a .conf file exists.'''
+
 		if os.path.isfile(self.thisProjectConf()) == True :
 			return True
 		else :

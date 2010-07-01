@@ -58,7 +58,7 @@ class UpdateProjectSettings (object) :
 
 		# This is all about updating the .project.conf file. However, we
 		# should be sure that all the other files we need are there as well.
-		tools.makeNecessaryFiles()
+		tools.makeNecessaryFiles(os.getcwd(), tools.getProjectType())
 
 
 		basePath = os.environ.get('PTXPLUS_BASE')

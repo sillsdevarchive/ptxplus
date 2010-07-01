@@ -62,25 +62,21 @@ tools = Tools()
 class MakeNewProject (object) :
 
 
-	def main (self, newFolderName) :
+	def main (self, newFolderName, projType) :
 		'''Create a new project at the specified path.'''
 
+		# Just in case it isn't already a full path
 		newProjectPath = os.path.abspath(newFolderName)
 
-		dialog_command = 'zenity  --list  --text "What kind of project?" --radiolist ".scripture.conf" Scripture ".dictionary.conf" Dictionary'
-		print dialog_command
-		os.system(dialog_command)
-
-
-		#tools.makeNecessaryFiles()
+		tools.makeNecessaryFiles(newProjectPath, projType)
 
 		# Tell the world what we did
 		tools.userMessage('INFO: Created new project at: ' + newProjectPath)
 
 
 # This starts the whole process going
-def doIt(pathToProject) :
+def doIt(pathToProject, projType) :
 
 	thisModule = MakeNewProject()
-	return thisModule.main(pathToProject)
+	return thisModule.main(pathToProject, projType)
 
