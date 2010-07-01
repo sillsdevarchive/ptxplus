@@ -17,7 +17,7 @@
 # 20080819 - djd - Initial draft
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081111 - djd - Changed locations of font files, also fixed
-#		problem with font files not copying.
+#        problem with font files not copying.
 
 
 #############################################################
@@ -41,12 +41,12 @@ class FontManager (object) :
 		# will be passed along with this object.
 		self._settings_project = tools.getProjectSettingsObject()
 		try :
-			self.projectFontFamily = self._settings_project['General']['Resources']['Fonts']['projectFontFamily']
+			self.projectFontFamily = self._settings_project['Format']['Fonts']['projectFontFamily']
 			if self.projectFontFamily == "" :
 				self.projectFontFamily = "GenBkBas"
 
-			self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['Process']['Paths']['PATH_FONTS']
-			self.pathToFontLibrary = self._settings_project['General']['Resources']['Fonts']['pathToFontLibrary']
+			self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['System']['Paths']['PATH_FONTS']
+			self.pathToFontLibrary = self._settings_project['System']['Paths']['PATH_FONT_LIB']
 			if self.pathToFontLibrary == "" :
 				self.pathToFontLibrary = os.environ.get('PTXPLUS_BASE') + "/resources/lib_fonts"
 
@@ -97,8 +97,8 @@ class FontManager (object) :
 
 	def localiseFontsConf(self) :
 		'''Sets the <dir> and <cachdir> to be the directory in which
-			the fonts.conf file exists. This helps to provide better
-			seperation of our fonts from the system.'''
+			   the fonts.conf file exists. This helps to provide better
+			   seperation of our fonts from the system.'''
 
 		fileName = self.projectFontsFolder + "/fonts.conf"
 		# First lets check to see if the fonts.conf file exists
@@ -121,3 +121,5 @@ class FontManager (object) :
 
 		# Write out the new font.conf file
 		et.write(fileName, encoding = 'utf-8')
+
+

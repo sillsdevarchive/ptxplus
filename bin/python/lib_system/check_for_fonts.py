@@ -19,7 +19,7 @@
 # 20080819 - djd - Initial draft
 # 20081028 - djd - Removed system logging, messages only now
 # 20090218 - djd - Readded system logging access as some
-#		other processes need it
+#        other processes need it
 
 
 #############################################################
@@ -54,3 +54,4 @@ def doIt(log_manager):
 
 	thisModule = CheckForFonts()
 	return thisModule.main(log_manager)
+

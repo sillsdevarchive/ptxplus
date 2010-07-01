@@ -102,10 +102,13 @@ class Tools (object) :
 		# FIXME: Might want a more clever way to do this to avoide hard file names
 		# FIXME: Might also want error checking on the copy
 		# Bring in the .conf file according to the type of project this is
+		# but only if it doesn't already exist
 		if projType == 'scripture' :
-			shutil.copy(fileLib + "/.scripture.conf", path + "/.scripture.conf")
+			if not os.access(path + "/.scripture.conf", os.R_OK) :
+				shutil.copy(fileLib + "/.scripture.conf", path + "/.scripture.conf")
 		elif projType == 'dictionary' :
-			shutil.copy(fileLib + "/.dictionary.conf", path + "/.dictionary.conf")
+			if not os.access(path + "/.dictionary.conf", os.R_OK) :
+				shutil.copy(fileLib + "/.dictionary.conf", path + "/.dictionary.conf")
 		else :
 			self.userMessage("ERROR: The project type: [" + projType + "] is unknown. Process halted!")
 			sys.exit(1)

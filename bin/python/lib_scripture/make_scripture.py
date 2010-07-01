@@ -11,7 +11,7 @@
 #############################################################
 
 # This script will auto-generate the system make file based
-# on settings found in the project.cfg file. It does this
+# on settings found in the .scripture.cfg file. It does this
 # every time the typeset file is used with valid commands.
 
 # History:
@@ -54,9 +54,9 @@ class MakeMakefile (object) :
 
 		# Create the file elements
 		makefileHeader = "# Makefile\n\n# This is an auto-generated file, do not edit. Any necessary changes\n" + \
-				"# should be made to the .project.conf file.\n\n"
+				"# should be made to the .scripture.conf file.\n\n"
 
-		# Pull in settings stored in the Process section of the .project.conf object
+		# Pull in settings stored in the Process section of the .scripture.conf object
 		# As there are sub-sections we will add them to the settings object one
 		# at after another. There's probably a better way to do this but not today ;-)
 		makefileSettings = ""
@@ -79,7 +79,7 @@ class MakeMakefile (object) :
 		for key, value, in self._log_manager._settings['Format']['PageLayout']['Switches'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
-		for key, value, in self._log_manager._settings['Project']['SourceText'].iteritems() :
+		for key, value, in self._log_manager._settings['ProjectText']['SourceText']['General'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"
 
 		for key, value, in self._log_manager._settings['System']['Extensions'].iteritems() :
@@ -109,7 +109,7 @@ class MakeMakefile (object) :
 		# Add make rule files via the include call in make
 		# This is all controled via the .scripture.conf file
 		basePath = os.environ.get('PTXPLUS_BASE')
-		makefileFinal = "include " + basePath + "/bin/make/" + self._log_manager._settings['System']['MakefileSettings']['MakeIncludeVariables'][self._log_manager._settings['Project']['SourceText']['projectEditor']] + "\n"
+		makefileFinal = "include " + basePath + "/bin/make/" + self._log_manager._settings['System']['MakefileSettings']['MakeIncludeVariables'][self._log_manager._settings['ProjectText']['SourceText']['General']['projectEditor']] + "\n"
 
 		for key, value, in self._log_manager._settings['System']['MakefileSettings']['MakeInclude'].iteritems() :
 			makefileFinal = makefileFinal + "include " + basePath + "/bin/make/" + value + "\n"
