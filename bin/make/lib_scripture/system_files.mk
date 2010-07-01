@@ -80,12 +80,6 @@ $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) :
 	@echo INFO: Creating: $@
 	@cp $(PATH_RESOURCES_PROCESS)/$(FILE_TEX_CUSTOM) $@
 
-# Rule to make the project source folder. Of cource, if the user
-# changes the name of the source folder after it might get
-# confusing but that is more of a procedural problem.
-$(PATH_SOURCE) :
-	$(call mdir,$@)
-
 # In case the process folder isn't there (because of archive)
 # This should be in the dependent file list.
 $(PATH_PROCESS)/.stamp :
@@ -105,38 +99,44 @@ make-styles :
 make-template :
 	@$(MOD_RUN_PROCESS) make_template
 
+# Rule to make the project source folder. Of cource, if the user
+# changes the name of the source folder after it might get
+# confusing but that is more of a procedural problem.
+$(PATH_SOURCE) :
+	$(call mdir,$@)
+
 # If, for some odd reason the Illustrations folder is not in
 # the right place we'll put one where it is supposed to be found.
 $(PATH_ILLUSTRATIONS) : | $(PATH_SOURCE)
-	$(call mdir,$(PATH_SOURCE)/$@)
+	$(call mdir,"$(PATH_ILLUSTRATIONS)")
 
 # Watermark
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) : | $(PATH_ILLUSTRATIONS)
+$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) : | $(PATH_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
 
-$(PATH_PROCESS)/$(FILE_WATERMARK) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
+$(PATH_PROCESS)/$(FILE_WATERMARK) : | $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK)
+	$(call linkme,$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
 
 # BSM Logo
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM) : | $(PATH_ILLUSTRATIONS)
+$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM) : | $(PATH_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
 
-$(PATH_PROCESS)/$(FILE_LOGO_BSM) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
+$(PATH_PROCESS)/$(FILE_LOGO_BSM) : | $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
+	$(call linkme,$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
 
 # CFE Logo
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE) :| $(PATH_ILLUSTRATIONS)
+$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE) :| $(PATH_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
 
-$(PATH_PROCESS)/$(FILE_LOGO_CFE) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
+$(PATH_PROCESS)/$(FILE_LOGO_CFE) : | $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
+	$(call linkme,$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
 
 # Page border
-$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER) : | $(PATH_ILLUSTRATIONS)
+$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER) : | $(PATH_ILLUSTRATIONS)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
 
-$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : | $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER)
-	$(call linkme,$(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
+$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : | $(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER)
+	$(call linkme,$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
