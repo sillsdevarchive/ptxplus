@@ -29,6 +29,8 @@ from encoding_manager import *
 from tools import *
 tools = Tools()
 
+# FIXME: The module needs to be able to work in both the source
+# text context and the working text.
 
 class CheckPunctuation (object) :
 
@@ -40,8 +42,7 @@ class CheckPunctuation (object) :
 
 		# Build a regular expression for punctuation checking
 		punctChars = ""
-#        for k, v, in self._settings['System']['Encoding']['Punctuation']['WordFinal'].iteritems() :
-		for v in self._settings['System']['Encoding']['Punctuation']['WordFinal']['allWordFinal'] :
+		for v in self._settings['ProjectText']['SourceText']['Encoding']['WordFinalPunctuation']['allWordFinal'] :
 			if v != "" :
 				punctChars = punctChars + v + "|"
 		punctChars = '[' + punctChars.rstrip('|') + ']'

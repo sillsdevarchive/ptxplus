@@ -42,6 +42,11 @@ class FootnoteTracker (object) :
 		self._settings_project = settings_project
 		self._footnoteStatus = "off"
 		self._footnoteMarkers = {}
+
+
+# Start here!
+
+
 		# Build a dictionary of valid footnote related key/value pairs
 		for k, v, in self._settings_project['System']['Markup']['Footnotes'].iteritems() :
 			self._footnoteMarkers[k] = v

@@ -36,6 +36,9 @@ from encoding_manager import *
 from tools import *
 tools = Tools()
 
+# FIXME: The module needs to be able to work in both the source
+# text context and the working text.
+
 class CheckQuotes (object) :
 
 	def __init__(self, log_manager) :
@@ -55,21 +58,21 @@ class CheckQuotes (object) :
 		self._closeToOpenBrackets = {}
 		self._quoteRegexp = ""
 		self._newPara = False
-		if self._settings['System']['Encoding']['TextFeatures']['contractionMarkers'] == "true" :
+		if self._settings['ProjectText']['SourceText']['Features']['contractionMarkers'] == "true" :
 			self._contractionMarkers = True
 		else :
 			self._contractionMarkers = False
 
-		if self._settings['System']['Encoding']['TextFeatures']['possessiveMarkers'] == "true" :
+		if self._settings['ProjectText']['SourceText']['Features']['possessiveMarkers'] == "true" :
 			self._possessiveMarkers = True
 		else :
 			self._possessiveMarkers = False
 
-		self._dumbContraction = self._settings['System']['Encoding']['Punctuation']['Quotation']['DumbQuotes']['contractionMarker']
-		self._smartContraction = self._settings['System']['Encoding']['Punctuation']['Quotation']['SmartQuotes']['contractionMarker']
-		self._dumbPossessive = self._settings['System']['Encoding']['Punctuation']['Quotation']['DumbQuotes']['possessiveMarker']
-		self._smartPossessive = self._settings['System']['Encoding']['Punctuation']['Quotation']['SmartQuotes']['possessiveMarker']
-		if self._settings['System']['Encoding']['TextFeatures']['dumbQuotes'] == "true" :
+		self._dumbContraction = self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['DumbQuotes']['contractionMarker']
+		self._smartContraction = self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['SmartQuotes']['contractionMarker']
+		self._dumbPossessive = self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['DumbQuotes']['possessiveMarker']
+		self._smartPossessive = self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['SmartQuotes']['possessiveMarker']
+		if self._settings['ProjectText']['SourceText']['Features']['dumbQuotes'] == "true" :
 			self._currentQuoteSystem = "DumbQuotes"
 			self._contractionChar = self._dumbContraction
 			self._possessiveChar = self._dumbPossessive
@@ -80,22 +83,28 @@ class CheckQuotes (object) :
 			self._possessiveChar = self._smartPossessive
 			self._dumbQuotes = False
 
+		# Build a list of quotation characters for dumb quotes
+		self._quotation = self._settings['ProjectText']['SourceText']['Encoding']['Quotation'][self._currentQuoteSystem]['quoteMarkerPairs']
+
 		# Build a dictionary key/value pairs for quote markers used on this project
-		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation'][self._currentQuoteSystem].iteritems() :
-			if v != '' :
-				self._quotation[k] = v
+#        for k, v, in self._settings['ProjectText']['SourceText']['Encoding']['Quotation'][self._currentQuoteSystem].iteritems() :
+#            if v != '' :
+#                self._quotation[k] = v
+
+		# Build a list of valid bracket characters
+		self._brackets = self._settings['ProjectText']['SourceText']['Encoding']['Brackets']['bracketMarkerPairs']
 
 		# Build a dictionary of key/value pairs for the brackets used on this project
-		for k, v, in self._settings['System']['Encoding']['Punctuation']['Brackets'].iteritems() :
-			if v != '' :
-				self._brackets[k] = v
+#        for k, v, in self._settings['System']['Encoding']['Punctuation']['Brackets'].iteritems() :
+#            if v != '' :
+#                self._brackets[k] = v
 
 		# Build a regular expression for quote checking
 		startList = ""
 		endList = ""
 		# First quote markers
-		markers = unicode(self._quotation['quoteMarkerPairs']).split(',')
-		brackets = unicode(self._brackets['bracketMarkerPairs']).split(',')
+		markers = unicode(self._quotation)
+		brackets = unicode(self._brackets)
 		for marker in markers :
 			# We want to be sure that any elements with more than one char
 			# are on the front of the list
@@ -121,8 +130,8 @@ class CheckQuotes (object) :
 			self._closeToOpenBrackets[c.lstrip()] = o.lstrip()
 
 		# Build a list seperate lists for dumb and smart quotes
-		dumbQuoteList = unicode(self._settings['System']['Encoding']['Punctuation']['Quotation']['DumbQuotes']['quoteMarkerPairs']).split(',')
-		smartQuoteList = unicode(self._settings['System']['Encoding']['Punctuation']['Quotation']['SmartQuotes']['quoteMarkerPairs']).split(',')
+		dumbQuoteList = unicode(self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['DumbQuotes']['quoteMarkerPairs'])
+		smartQuoteList = unicode(self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['SmartQuotes']['quoteMarkerPairs'])
 
 		# Now build seperate lists which seperates them into close and open pair types
 		for do, so, dc, sc in zip(dumbQuoteList[0::2], smartQuoteList[0::2], dumbQuoteList[1::2], smartQuoteList[1::2]) :

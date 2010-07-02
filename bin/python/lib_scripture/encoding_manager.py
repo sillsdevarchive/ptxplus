@@ -122,20 +122,11 @@ class EncodingManager (object) :
 		# Simple test to see if this is an email address
 		self._emailAddressTest = re.compile('@')
 
-# FIXME: We may want to convert everything to lists like with ._wordFinal
-
-		# Build a dictionary of valid bracket related key/value pairs
+		# Build a list of valid bracket characters
 		self._brackets = self._settings['ProjectText']['SourceText']['Encoding']['Brackets']['bracketMarkerPairs']
 		# Add any relevant characters to our nonWordChars dict
 		for c in self._brackets :
 			self._nonWordCharsMap[ord(c.decode('utf_8'))] = None
-
-#        for k, v, in self._settings['System']['Encoding']['Punctuation']['Brackets'].iteritems() :
-#            if k != "bracketMarkerPairs" :
-#                if v != '' :
-#                    self._brackets[k] = v
-#                    # Add any relevant characters to our nonWordChars dict
-#                    self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 
 		# Bring in a list of valid word-final characters
 		self._wordFinal = self._settings['ProjectText']['SourceText']['Encoding']['WordFinalPunctuation']['allWordFinal']
@@ -143,36 +134,23 @@ class EncodingManager (object) :
 		for c in self._wordFinal :
 			self._nonWordCharsMap[ord(c.decode('utf_8'))] = None
 
-		# Build a dictionary of quotation related key/value pairs for whatever the specific quote system is
-		self._wordFinal = self._settings['ProjectText']['SourceText']['Encoding']['Quotation'][self._currentQuoteSystem]['quoteMarkerPairs']
-		# Add any relevant characters to our nonWordChars dict
-		for c in self._wordFinal :
+		# Build a list of quotation related characters for whatever the specific quote system is
+		self._quotation = self._settings['ProjectText']['SourceText']['Encoding']['Quotation'][self._currentQuoteSystem]['quoteMarkerPairs']
+		# Add any relevant characters to our nonWordChars dict and
+		# strip out extra characters for quote sequences like << >>.
+		for c in self._quotation :
+			c = c.decode('utf_8')
+			if len(c)== 1 :
+				self._nonWordCharsMap[ord(c)] = None
 
-# Pickup here
-			self._nonWordCharsMap[ord(c.decode('utf_8'))] = None
+		# Build a list of quotation characters for dumb quotes
+		self._quotationDumb = self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['DumbQuotes']['quoteMarkerPairs']
 
-#        for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation'][self._currentQuoteSystem].iteritems() :
-#            if v != '' :
-#                self._quotation[k] = v
-#                # Add any relevant characters to our nonWordChars dict
-#                v = v.decode('utf_8')
-#                if len(v) == 1 :
-#                    self._nonWordCharsMap[ord(v)] = None
+		# Build a list of quotation characters for smart quotes
+		self._quotationSmart = self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['SmartQuotes']['quoteMarkerPairs']
 
-		# Build a dictionary of quotation related key/value pairs for dumb quotes
-		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation']['DumbQuotes'].iteritems() :
-			if v != '' :
-				self._quotationDumb[k] = v
-
-		# Build a dictionary of quotation related key/value pairs for smart quotes
-		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation']['SmartQuotes'].iteritems() :
-			if v != '' :
-				self._quotationSmart[k] = v
-
-		# Build a dictionary of "other" punctuation related key/value pairs
-		for k, v, in self._settings['System']['Encoding']['Punctuation']['Other'].iteritems() :
-			if v != '' :
-				self._otherPunctuation[k] = v
+		# Build a list of "other" punctuation characters
+		self._otherPunctuation = self._settings['ProjectText']['SourceText']['Encoding']['Other']['otherNonWordCharacters']
 
 
 	# General functions for looking at characters
@@ -487,26 +465,28 @@ class EncodingManager (object) :
 			all known punctuation characters and return True if
 			it is, otherwise, False.'''
 
-		# FIXME: This could be better done if everything was moved to lists
-		# like is done with wordFinal
 		found = False
-		for k, v, in self._brackets.iteritems() :
-			if v == char :
-				found = True
-		# This is a list now so we handle it different from the others
+		if char in self._brackets :
+			found = True
+
 		if char in self._wordFinal :
 			found = True
-		for k, v, in self._quotationDumb.iteritems() :
-			if v == char :
-				found = True
-		for k, v, in self._quotationSmart.iteritems() :
-			if v == char :
-				found = True
-		# Something about this next set throws a Unicode error in the comparison of the 2 characters
-		# We'll just comment it out for now.
-		for k, v, in self._otherPunctuation.iteritems() :
-			if v == char :
-				found = True
+
+		if char in self._quotationDumb :
+			found = True
+
+		if char in self._quotationSmart :
+			found = True
+
+		if char in self._otherPunctuation :
+			found = True
+
+#        # Something about this next set throws a Unicode error in the comparison of the 2 characters
+#        # We'll just comment it out for now.
+#        for k, v, in self._otherPunctuation.iteritems() :
+#            if v == char :
+#                found = True
+
 		return found
 
 
