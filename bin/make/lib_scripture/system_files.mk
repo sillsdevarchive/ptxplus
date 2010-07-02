@@ -300,9 +300,9 @@ endef
 # linked PNG files
 define illustrations-clean
 @if zenity --question --text="You have requested to clean out the Illustrations folder. If this project is part of a multi-publication group, by clicking OK, the deletion of the illustrations will effect other projects in this group that share these illustrations. Are you sure you want to do this?"; then \
-	echo INFO: Deleting illustration files in: $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS); \
-	rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PNG); \
-	rm -f $(PATH_SOURCE)/$(PATH_ILLUSTRATIONS)/*.$(EXT_PDF); \
+	echo INFO: Deleting illustration files in: $(PATH_ILLUSTRATIONS); \
+	rm -f $(PATH_ILLUSTRATIONS)/*.$(EXT_PNG); \
+	rm -f $(PATH_ILLUSTRATIONS)/*.$(EXT_PDF); \
 else \
 	echo "INFO: Deletion of the illustration files has been canceled."; \
 fi

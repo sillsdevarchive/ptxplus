@@ -174,14 +174,14 @@ class EncodingManager (object) :
 			found = self.hasCharacterEnd(string, charF)
 
 		# Look for closing quotes
-		for key in self._quotation.keys() :
+		for charQ in self._quotation :
 			# Get the last character in the string and compare with the value of the key
-			found = self.hasCharacterEnd(string, self._quotation[key])
+			found = self.hasCharacterEnd(string, charQ)
 
 		# Look for brackets
-		for key in self._brackets.keys() :
+		for charB in self._brackets :
 			# Get the last character in the string and compare with the value of the key
-			found = self.hasCharacterEnd(string, self._brackets[key])
+			found = self.hasCharacterEnd(string, charB)
 
 		return found
 

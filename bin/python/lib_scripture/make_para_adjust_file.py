@@ -70,10 +70,10 @@ class MakeParaAdjustFile (object) :
 		self._bookID = log_manager._currentTargetID
 		self._adjustLinesWritten = 0
 		self._poetryMarkers = {}
-		for k, v, in self._settings['System']['Markup']['Poetry'].iteritems() :
+		for k, v, in self._settings['System']['USFM']['Poetry'].iteritems() :
 			self._poetryMarkers[k] = v
 		self._paragraphMarkers = {}
-		for k, v, in self._settings['System']['Markup']['Paragraphs'].iteritems() :
+		for k, v, in self._settings['System']['USFM']['Paragraphs'].iteritems() :
 			self._paragraphMarkers[k] = v
 
 
@@ -107,8 +107,8 @@ class MakeParaAdjustFile (object) :
 			adjustParaLength = int(29)
 			self._log_manager.log("ERRR", "The paragraph length does not seem to be set. A default value will be used. Please check your settings file.")
 
-		verseNumberMarker = "\\" + self._settings['System']['Markup']['ChaptersVerses']['verseNumber']
-		footnoteOpenMarker = "\\" + self._settings['System']['Markup']['Footnotes']['footnoteOpenMarker']
+		verseNumberMarker = "\\" + self._settings['System']['USFM']['ChaptersVerses']['verseNumber']
+		footnoteOpenMarker = "\\" + self._settings['System']['USFM']['Footnotes']['footnoteOpenMarker']
 
 		if os.path.isfile(self._outputFile) :
 			# If it exists that may be a problem as we don't want to

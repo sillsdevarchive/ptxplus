@@ -349,8 +349,8 @@ class Tools (object) :
 			file name.'''
 
 		path, file = pathPlusFileName.rsplit("/", 1)
-		nameSourceOriginal = settings_project['Project']['SourceText']['NAME_SOURCE_ORIGINAL']
-		nameSourceExtention = settings_project['Project']['SourceText']['EXT_SOURCE']
+		nameSourceOriginal = settings_project['ProjectText']['SourceText']['NAME_SOURCE_ORIGINAL']
+		nameSourceExtention = settings_project['System']['Extensions']['EXT_SOURCE']
 		file = file.replace(nameSourceOriginal + "." + nameSourceExtention, "")
 		return file
 
@@ -488,7 +488,7 @@ class Tools (object) :
 
 		# Get any special makefile params for debugging
 		try :
-			params = self.getSettingsObject()['System']['General']['makeFileParams']
+			params = self.getSettingsObject()['System']['MakefileSettings']['makeFileParams']
 
 			# Build the command
 			sysCommand = "make " + params + " " + command

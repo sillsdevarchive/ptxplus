@@ -43,6 +43,7 @@ class MakeMakefile (object) :
 
 		self._log_manager = log_manager
 		basePath = os.environ.get('PTXPLUS_BASE')
+		sourcePath = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
 
 
 		# The folder name for peripheral material is auto created here
@@ -117,7 +118,7 @@ class MakeMakefile (object) :
 		# Insert the peripheral folder name here. This is a
 		# hard-coded insert because it should always be the
 		# name given here. The user cannot change this.
-		makefileSettings = makefileSettings + 'PATH_SOURCE_PERIPH' + "=" + peripheralFolderName + "\n"
+		makefileSettings = makefileSettings + 'PATH_SOURCE_PERIPH' + '=' + sourcePath + '/' + peripheralFolderName + '\n'
 
 		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + "\n"

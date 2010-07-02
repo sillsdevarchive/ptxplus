@@ -78,13 +78,13 @@ class MakePiclistFile (object) :
 		self._sourcePath = os.path.abspath(self._settings['System']['Paths']['PATH_SOURCE'])
 		self._captionsFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_CAPTIONS']
 		self._sourceIllustrationsLibDataFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_DATA']
-		self._projectIllustrationsPath = self._sourcePath + "/" + self._settings['System']['Paths']['PATH_ILLUSTRATIONS']
-		self._sourceIllustrationsLibPath = self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB']
+		self._projectIllustrationsPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
+		self._sourceIllustrationsLibPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
 		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + self._sourceIllustrationsLibDataFileName
 		# The folder name for peripheral material is auto created here
 		self._projectPeripheralFolderName = os.getcwd().split('/')[-1]
 		self._projectPeripheralFolderPath = self._sourcePath + '/' + self._projectPeripheralFolderName
-		self._projectIllustrationsCaptions = os.path.abspath(self._projectPeripheralFolderPath + "/" + self._captionsFileName)
+		self._projectIllustrationsCaptions = self._projectPeripheralFolderPath + "/" + self._captionsFileName
 		self._libData = {}
 		self._errors = 0
 

@@ -43,12 +43,8 @@ class FootnoteTracker (object) :
 		self._footnoteStatus = "off"
 		self._footnoteMarkers = {}
 
-
-# Start here!
-
-
 		# Build a dictionary of valid footnote related key/value pairs
-		for k, v, in self._settings_project['System']['Markup']['Footnotes'].iteritems() :
+		for k, v, in self._settings_project['System']['USFM']['Footnotes'].iteritems() :
 			self._footnoteMarkers[k] = v
 
 
@@ -117,7 +113,7 @@ class CrossReferenceTracker (object) :
 		self._settings_project = settings_project
 		self._crossReferenceStatus = "off"
 		self._crossRefMarkers = {}
-		for k, v, in self._settings_project['System']['Markup']['CrossRefereces'].iteritems() :
+		for k, v, in self._settings_project['System']['USFM']['CrossRefereces'].iteritems() :
 			self._crossRefMarkers[k] = v
 
 
@@ -194,15 +190,15 @@ class MarkupManager (object) :
 		# Pushing the dynamic vars in __dict__ allows them to be persistant.
 		# However, we might want to look at using a regular dictionary object
 		# to do this same thing. It is a bit dodgy using __dict__.
-		for k, v, in self._settings_project['System']['Markup']['Identification'].iteritems() :
+		for k, v, in self._settings_project['System']['USFM']['Identification'].iteritems() :
 			self.__dict__[k] = v
-		for k, v, in self._settings_project['System']['Markup']['ChaptersVerses'].iteritems() :
+		for k, v, in self._settings_project['System']['USFM']['ChaptersVerses'].iteritems() :
 			self.__dict__[k] = v
-		for k, v, in self._settings_project['System']['Markup']['USFMAllMarkers'].iteritems() :
+		for k, v, in self._settings_project['System']['USFM']['AllMarkers'].iteritems() :
 			self._allUSFM += v
 
 		# As these are already in list form we will take them like this
-		self._allParagraph = self._settings_project['System']['Markup']['USFMAllMarkers']['paragraphs']
+		self._allParagraph = self._settings_project['System']['USFM']['AllMarkers']['paragraphs']
 
 
 	def setLocation (self, word, char) :

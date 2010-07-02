@@ -131,7 +131,7 @@ endif
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
-$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
+$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@echo INFO: Creating: $$@
 	@$(MOD_RUN_PROCESS) $(MOD_MK_PICLIST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
@@ -292,7 +292,7 @@ preprocess-nt :
 
 # Copy into place the captions.csv file that goes in the
 # project peripheral folder located in the Source folder.
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_SOURCE_PERIPH)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
 endif
