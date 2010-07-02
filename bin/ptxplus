@@ -338,9 +338,9 @@ else :
 			# for is run. (Right now we are limiting this action to Scripture
 			# publications.)
 			pubType = tools.getProjectType()
-			locked = tools.getSettingsObject()['ProjectText']['SourceText']['General']['LOCKED']
-			useIllustrations = tools.getSettingsObject()['Format']['PageLayout']['Switches']['USE_ILLUSTRATIONS']
-			useAdjustments = tools.getSettingsObject()['Format']['PageLayout']['Switches']['USE_ADJUSTMENTS']
+			locked = tools.getSettingsObject()['ProjectText']['SourceText']['LOCKED']
+			useIllustrations = tools.getSettingsObject()['Format']['Illustrations']['USE_ILLUSTRATIONS']
+			useAdjustments = tools.getSettingsObject()['ProjectText']['WorkingText']['Features']['USE_ADJUSTMENTS']
 			if locked == 0 :
 				if pubType.lower() == 'scripture' :
 					if useIllustrations.lower() == 'false' :

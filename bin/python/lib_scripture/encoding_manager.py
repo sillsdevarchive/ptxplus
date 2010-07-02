@@ -77,9 +77,14 @@ class EncodingManager (object) :
 		self._quotationDumb = {}
 		self._quotationSmart = {}
 		self._nonWordCharsMap = {}
+		# FIXME: This code will need to be able to handle
+		# checking both incoming source text and working
+		# text so that comparisons can be done on the
+		# results. No dumb quotes will be in working text
+		# (we think).
 		# Find out what kind of quote system we use
 		# Define some dictionaries we'll use
-		if settings['System']['Encoding']['TextFeatures']['dumbQuotes'] == "true" :
+		if settings['ProjectText']['SourceText']['Features']['dumbQuotes'] == "true" :
 			self._currentQuoteSystem = "DumbQuotes"
 		else :
 			self._currentQuoteSystem = "SmartQuotes"
@@ -93,7 +98,7 @@ class EncodingManager (object) :
 
 		# Look to see if any checking needs to be done for a second
 		# number encoding that could be used in xrefs and footnotes
-		zero = settings['System']['Encoding']['Numbers']['whereIsZero']
+		zero = settings['ProjectText']['SourceText']['Encoding']['Numbers']['whereIsZero']
 		if zero != '' and zero != ' ' :
 			numRange = '[0-9' + tools.makeUnicodeNumberRange(zero) + ']+'
 		else :
@@ -120,24 +125,39 @@ class EncodingManager (object) :
 # FIXME: We may want to convert everything to lists like with ._wordFinal
 
 		# Build a dictionary of valid bracket related key/value pairs
-		for k, v, in self._settings['System']['Encoding']['Punctuation']['Brackets'].iteritems() :
-			if k != "bracketMarkerPairs" :
-				if v != '' :
-					self._brackets[k] = v
-					# Add any relevant characters to our nonWordChars dict
-					self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
+		self._brackets = self._settings['ProjectText']['SourceText']['Encoding']['Brackets']['bracketMarkerPairs']
+		# Add any relevant characters to our nonWordChars dict
+		for c in self._brackets :
+			self._nonWordCharsMap[ord(c.decode('utf_8'))] = None
+
+#        for k, v, in self._settings['System']['Encoding']['Punctuation']['Brackets'].iteritems() :
+#            if k != "bracketMarkerPairs" :
+#                if v != '' :
+#                    self._brackets[k] = v
+#                    # Add any relevant characters to our nonWordChars dict
+#                    self._nonWordCharsMap[ord(v.decode('utf_8'))] = None
 
 		# Bring in a list of valid word-final characters
-		self._wordFinal = self._settings['System']['Encoding']['Punctuation']['WordFinal']['allWordFinal']
+		self._wordFinal = self._settings['ProjectText']['SourceText']['Encoding']['WordFinalPunctuation']['allWordFinal']
+		# Add any relevant characters to our nonWordChars dict
+		for c in self._wordFinal :
+			self._nonWordCharsMap[ord(c.decode('utf_8'))] = None
 
 		# Build a dictionary of quotation related key/value pairs for whatever the specific quote system is
-		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation'][self._currentQuoteSystem].iteritems() :
-			if v != '' :
-				self._quotation[k] = v
-				# Add any relevant characters to our nonWordChars dict
-				v = v.decode('utf_8')
-				if len(v) == 1 :
-					self._nonWordCharsMap[ord(v)] = None
+		self._wordFinal = self._settings['ProjectText']['SourceText']['Encoding']['Quotation'][self._currentQuoteSystem]['quoteMarkerPairs']
+		# Add any relevant characters to our nonWordChars dict
+		for c in self._wordFinal :
+
+# Pickup here
+			self._nonWordCharsMap[ord(c.decode('utf_8'))] = None
+
+#        for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation'][self._currentQuoteSystem].iteritems() :
+#            if v != '' :
+#                self._quotation[k] = v
+#                # Add any relevant characters to our nonWordChars dict
+#                v = v.decode('utf_8')
+#                if len(v) == 1 :
+#                    self._nonWordCharsMap[ord(v)] = None
 
 		# Build a dictionary of quotation related key/value pairs for dumb quotes
 		for k, v, in self._settings['System']['Encoding']['Punctuation']['Quotation']['DumbQuotes'].iteritems() :
