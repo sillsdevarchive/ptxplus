@@ -442,8 +442,6 @@ class Tools (object) :
 		'''Check to see if the project folder and the .conf file
 			exists in the current directory.'''
 
-# FIXME: This will need to be refactored due to the .scripture.conf change
-
 		path = os.getcwd()
 		ok = False
 		if os.path.isfile(path + "/" + self.thisProjectConf()) :
@@ -486,8 +484,8 @@ class Tools (object) :
 	def makefileCommand (self, command) :
 		'''Send off a makefile command.'''
 
-		# Get any special makefile params for debugging
-		try :
+
+		if self.getSettingsObject()['System']['General'].get('debugMode', 'false').lower() == 'true' :
 			params = self.getSettingsObject()['System']['MakefileSettings']['makeFileParams']
 
 			# Build the command
@@ -496,9 +494,20 @@ class Tools (object) :
 			# Send off the command return error code
 			return os.system(sysCommand)
 
-		except :
+		else :
 
-			self.userMessage('ERROR: Could not run makefile command. The ' + self.thisProjectConf() + ' file may be corrupt.')
+			# Get any special makefile params for debugging
+			try :
+				params = self.getSettingsObject()['System']['MakefileSettings']['makeFileParams']
+
+				# Build the command
+				sysCommand = "make " + params + " " + command
+
+				# Send off the command return error code
+				return os.system(sysCommand)
+
+			except :
+				self.userMessage('ERROR: Could not run makefile command. The ' + self.thisProjectConf() + ' file may be corrupt.')
 
 
 	def doCustomProcess (self, processCommand) :
