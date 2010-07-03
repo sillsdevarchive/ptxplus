@@ -89,7 +89,7 @@ class InsertLableContextHandler (parse_sfm.Handler) :
 		self._lastCloseTag = ""
 		self._lastCloseTagInfo = []
 		self._log_manager.resetLocation()
-		self._chapterLable = self._log_manager._settings['Markup']['FieldContent']['cl']
+		self._chapterLable = self._log_manager._settings['Format']['ChapterVerse']['cl']
 		self._inserted = False
 
 

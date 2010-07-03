@@ -63,7 +63,7 @@ define periph_rules
 
 # This rule simply links everything in the source peripheral folder
 # to the project Texts folder
-$(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
+$(PATH_TEXTS)/$(1) : $(PATH_SOURCE_PERIPH)/$(1)
 	@echo INFO: Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
 	@ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
 
@@ -77,8 +77,8 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
 # the current target doesn't have to be rebuilt if it has not changed.
 # This is very important here because a directory will always be
 # changing.
-ifneq ($(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/TOC-NT.usfm)
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+ifneq ($(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE_PERIPH)/TOC-NT.usfm)
+$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE_PERIPH)
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$(1),$$@)
 endif
 
@@ -121,7 +121,7 @@ view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 
 # This enables us to do the preprocessing on a single peripheral item.
-preprocess-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
+preprocess-$(1) : $(PATH_SOURCE_PERIPH)/$(1)
 ifeq ($(LOCKED),0)
 	@echo INFO: Preprocessing $(1)
 	@$(MOD_RUN_PROCESS) preprocessChecks $(1) '$$<'
@@ -163,7 +163,7 @@ endef
 
 # Other rules will depend on this to create the project
 # peripheral source folder if one doesn't exist.
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH) : | $(PATH_SOURCE)
+$(PATH_SOURCE_PERIPH) : | $(PATH_SOURCE)
 	@ $(call mdir,$@)
 
 
@@ -247,4 +247,4 @@ pdf-remove-back :
 # Not sure what the status on this call is. Does it
 # even work yet?
 make-topic-index :
-	@$(MOD_RUN_PROCESS) make_topic_index_file 'NA' $(PATH_SOURCE)$(PATH_SOURCE_PERIPH)/TOPICAL_INDEX.CSV $(PATH_TEXTS)/TOPICAL_INDEX.USFM
+	@$(MOD_RUN_PROCESS) make_topic_index_file 'NA' $(PATH_SOURCE_PERIPH)/TOPICAL_INDEX.CSV $(PATH_TEXTS)/TOPICAL_INDEX.USFM

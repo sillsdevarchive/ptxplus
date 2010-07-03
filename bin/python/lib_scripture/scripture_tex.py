@@ -518,6 +518,7 @@ class MakeTexControlFile (object) :
 
 		# Build our output - These are the strings we will fill:
 		fileHeaderText = ''
+		formatSettings = ''
 		headerSettings = ''
 		footerSettings = ''
 
@@ -528,16 +529,25 @@ class MakeTexControlFile (object) :
 			fileName = self._cvSettingsFile
 			# There is not much to a cover file but we know that we
 			# need to turn off all the header and footer output
+			formatSettings = formatSettings + '\\TitleColumns=1\n'
+			formatSettings = formatSettings + '\\IntroColumns=1\n'
+			formatSettings = formatSettings + '\\BodyColumns=1\n'
 			headerSettings = headerSettings + self.RemovePageNumbers(self._headerPositions)
 			footerSettings = footerSettings + self.RemovePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'front' :
 			fileName = self._fmSettingsFile
+			formatSettings = formatSettings + '\\TitleColumns=1\n'
+			formatSettings = formatSettings + '\\IntroColumns=1\n'
+			formatSettings = formatSettings + '\\BodyColumns=1\n'
 			headerSettings = headerSettings + self.RemovePageNumbers(self._headerPositions)
 			footerSettings = footerSettings + self.RemovePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'back' :
 			fileName = self._bmSettingsFile
+			formatSettings = formatSettings + '\\TitleColumns=1\n'
+			formatSettings = formatSettings + '\\IntroColumns=1\n'
+			formatSettings = formatSettings + '\\BodyColumns=1\n'
 			headerSettings = headerSettings + self.RemovePageNumbers(self._headerPositions)
 			footerSettings = footerSettings + self.RemovePageNumbers(self._footerPositions)
 
@@ -559,6 +569,7 @@ class MakeTexControlFile (object) :
 
 		# Ship the results, change order as needed
 		orderedContents =     fileHeaderText + \
+					formatSettings + \
 					headerSettings + \
 					footerSettings + \
 					'\n'
