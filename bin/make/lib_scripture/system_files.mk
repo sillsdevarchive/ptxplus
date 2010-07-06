@@ -59,9 +59,8 @@ MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).$(EXT_PDF)
 # down the chain this might have to move, or be put in a
 # seperate file.
 DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
+  project-graphics \
   $(PATH_PROCESS)/$(FILE_WATERMARK) \
-  $(PATH_PROCESS)/$(FILE_LOGO_BSM) \
-  $(PATH_PROCESS)/$(FILE_LOGO_CFE) \
   $(PATH_PROCESS)/$(FILE_PAGE_BORDER) \
   $(PATH_PROCESS)/$(FILE_TEX_BIBLE) \
   $(PATH_PROCESS)/$(FILE_BIBLE_STYLE) \
@@ -112,31 +111,24 @@ $(PATH_ILLUSTRATIONS) : | $(PATH_SOURCE)
 
 # Watermark
 $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) : | $(PATH_ILLUSTRATIONS)
-	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
-
-$(PATH_PROCESS)/$(FILE_WATERMARK) : | $(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK)
-	$(call linkme,$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK),$@)
-
-# BSM Logo
-$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM) : | $(PATH_ILLUSTRATIONS)
-	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
-
-$(PATH_PROCESS)/$(FILE_LOGO_BSM) : | $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM)
-	$(call linkme,$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_BSM),$@)
-
-# CFE Logo
-$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE) :| $(PATH_ILLUSTRATIONS)
-	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
-
-$(PATH_PROCESS)/$(FILE_LOGO_CFE) : | $(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE)
-	$(call linkme,$(PATH_ILLUSTRATIONS)/$(FILE_LOGO_CFE),$@)
+	$(call copylinkgraphic,$(PATH_GRAPHICS_LIB),$(FILE_WATERMARK),$@)
 
 # Page border
 $(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER) : | $(PATH_ILLUSTRATIONS)
-	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
+	$(call copylinkgraphic,$(PATH_GRAPHICS_LIB),$(FILE_PAGE_BORDER),$@)
 
-$(PATH_PROCESS)/$(FILE_PAGE_BORDER) : | $(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER)
-	$(call linkme,$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER),$@)
+
+
+
+
+# Copy in and link other graphic files that are listed in
+# the project .conf file and found in our graphic's library.
+project-graphics : $(LIST_GRAPHICS)
+	echo $<
+#$(foreach g,$(LIST_GRAPHICS),$(call copylinkgraphic,$(PATH_GRAPHICS_LIB),$(g),$(PATH_ILLUSTRATIONS)/$(g));)
+
+
+.PHONY: project-graphics
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
@@ -195,10 +187,39 @@ else \
 fi
 endef
 
+#	$(call copygraphic,$(PATH_GRAPHICS_LIB),$(FILE_WATERMARK),$@)
+#	$(foreach g,$(LIST_GRAPHICS),$(call copygraphic,$(PATH_GRAPHICS_LIB),$(g),$(PATH_ILLUSTRATIONS)/$(g));)
+
+
+# This will copy a graphic file from a location specified.
+# If the file cannot be found, it will look in the system
+# lib. If it cannot be found there it will copy in a "dummy"
+# picture to help the user know they are missing a picture.
+define copylinkgraphic
+	@echo copylinkgraphic test
+	@echo 2nd line
+#	@if test -r "$(1)/$(2)"; then \
+#	    echo INFO: Copying into project: $(2); \
+#	    cp $(1)/$(2) $(3); \
+#	elif test -r "$(PATH_RESOURCES_ILLUSTRATIONS)/$(2)"; then \
+#	    echo INFO: Could not find: $(2) copying from: $(PATH_RESOURCES_ILLUSTRATIONS)/$(2); \
+#	    cp $(1)/$(2) $(3); \
+#	else \
+#	    echo ERROR: File not found. Creating dummy for: $(2); \
+#	    cp $(PATH_RESOURCES_ILLUSTRATIONS)/missing.png $(3); \
+#	fi;
+#	@$(call linkme,$(PATH_ILLUSTRATIONS)/$(2),$(PATH_PROCESS)/$(2))
+endef
+
+
 # Create a link into the project
 define linkme
-@echo INFO: Linking: $(2)
-@ln -sf $(shell readlink -f -- $(1)) $(2)
+#	if test -r "$(1)"; then \
+#		echo INFO: Linking: $(2); \
+#		ln -sf $(shell readlink -f -- $(1)) $(2); \
+#	else \
+#		echo ERROR: Could not link $(1) to $(2); \
+#	fi
 endef
 
 

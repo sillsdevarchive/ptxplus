@@ -66,79 +66,91 @@ class MakeMakefile (object) :
 
 		# First grab some individual settings we need in the makefile
 		cMapVal = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CREATE_MAP',0)
-		makefileSettings = makefileSettings + 'CREATE_MAP' + "=" + cMapVal + "\n"
+		makefileSettings = makefileSettings + 'CREATE_MAP=' + cMapVal + '\n'
 
 		rgbPath = self._log_manager._settings['System']['Processes']['MapProcesses'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
-		makefileSettings = makefileSettings + 'RGB_PROFILE' + "=\"" + rgbPath + "\"\n"
+		makefileSettings = makefileSettings + 'RGB_PROFILE=\"' + rgbPath + '\"\n'
 
 		cmykPath = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
-		makefileSettings = makefileSettings + 'CMYK_PROFILE' + "=\"" + cmykPath + "\"\n"
+		makefileSettings = makefileSettings + 'CMYK_PROFILE=\"' + cmykPath + '\"\n'
 
 		# Get our switches from their respective sections
 		useIllustrations = self._log_manager._settings['Format']['Illustrations']['USE_ILLUSTRATIONS']
-		makefileSettings = makefileSettings + 'USE_ILLUSTRATIONS' + "=" + useIllustrations + "\n"
+		makefileSettings = makefileSettings + 'USE_ILLUSTRATIONS=' + useIllustrations + '\n'
 
 		usePlaceholders = self._log_manager._settings['Format']['Illustrations']['USE_PLACEHOLDERS']
-		makefileSettings = makefileSettings + 'USE_PLACEHOLDERS' + "=" + usePlaceholders + "\n"
+		makefileSettings = makefileSettings + 'USE_PLACEHOLDERS=' + usePlaceholders + '\n'
 
 		useWatermark = self._log_manager._settings['Format']['PageLayout']['USE_WATERMARK']
-		makefileSettings = makefileSettings + 'USE_WATERMARK' + "=" + useWatermark + "\n"
+		makefileSettings = makefileSettings + 'USE_WATERMARK=' + useWatermark + '\n'
 
 		useCropmarks = self._log_manager._settings['Format']['PageLayout']['USE_CROPMARKS']
-		makefileSettings = makefileSettings + 'USE_CROPMARKS' + "=" + useCropmarks + "\n"
+		makefileSettings = makefileSettings + 'USE_CROPMARKS=' + useCropmarks + '\n'
 
 		usePageborder = self._log_manager._settings['Format']['PageLayout']['USE_PAGE_BORDER']
-		makefileSettings = makefileSettings + 'USE_PAGE_BORDER' + "=" + usePageborder + "\n"
+		makefileSettings = makefileSettings + 'USE_PAGE_BORDER=' + usePageborder + '\n'
 
 		useAdjustments = self._log_manager._settings['ProjectText']['WorkingText']['Features']['USE_ADJUSTMENTS']
-		makefileSettings = makefileSettings + 'USE_ADJUSTMENTS' + "=" + useAdjustments + "\n"
+		makefileSettings = makefileSettings + 'USE_ADJUSTMENTS=' + useAdjustments + '\n'
 
-		# Pickup some other settings needed by makefile
+		# Pickup some other misc settings needed by makefile
 		sourceLock = self._log_manager._settings['ProjectText']['SourceText']['LOCKED']
-		makefileSettings = makefileSettings + 'LOCKED' + "=" + sourceLock + "\n"
+		makefileSettings = makefileSettings + 'LOCKED=' + sourceLock + '\n'
 
 		sourceName = self._log_manager._settings['ProjectText']['SourceText']['NAME_SOURCE_ORIGINAL']
-		makefileSettings = makefileSettings + 'NAME_SOURCE_ORIGINAL' + "=" + sourceName + "\n"
+		makefileSettings = makefileSettings + 'NAME_SOURCE_ORIGINAL=' + sourceName + '\n'
+
+		graphicsList = self._log_manager._settings['Format']['Illustrations']['LIST_GRAPHICS']
+		c = 0
+		makefileSettings = makefileSettings + 'LIST_GRAPHICS='
+		for f in graphicsList :
+			if c == 0 :
+				makefileSettings = makefileSettings + f
+				c+=1
+			else :
+				makefileSettings = makefileSettings + ' ' + f
+
+		makefileSettings = makefileSettings + '\n'
 
 		# Modules used by the makefile, note the use of extra
 		# quoting. This is to preserve the strings.
 		for key, value, in self._log_manager._settings['System']['Modules'].iteritems() :
-			makefileSettings = makefileSettings + key + "=\"" + value + "\"\n"
+			makefileSettings = makefileSettings + key + "=\"" + value + '\"\n'
 
 		for key, value, in self._log_manager._settings['System']['Extensions'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + "\n"
+			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
 		# Get our path information and output absolute paths
 		for key, value, in self._log_manager._settings['System']['Paths'].iteritems() :
 			if value.split('/')[0] == '__PTXPLUS__' :
-				makefileSettings = makefileSettings + key + "=" + value.replace('__PTXPLUS__', basePath) + "\n"
+				makefileSettings = makefileSettings + key + '=\"' + value.replace('__PTXPLUS__', basePath) + '\"\n'
 			else :
-				makefileSettings = makefileSettings + key + "=" + os.path.abspath(value) + "\n"
+				makefileSettings = makefileSettings + key + '=\"' + os.path.abspath(value) + '\"\n'
 
 		# Insert the peripheral folder name here. This is a
 		# hard-coded insert because it should always be the
 		# name given here. The user cannot change this.
-		makefileSettings = makefileSettings + 'PATH_SOURCE_PERIPH' + '=' + sourcePath + '/' + peripheralFolderName + '\n'
+		makefileSettings = makefileSettings + 'PATH_SOURCE_PERIPH=\"' + sourcePath + '/' + peripheralFolderName + '\"\n'
 
 		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + "\n"
+			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
 		for key, value, in self._log_manager._settings['System']['TeX'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + "\n"
+			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
 		for key, value, in self._log_manager._settings['Format']['Binding'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + "\n"
+			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + "\n"
+			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
 		# Add make rule files via the include call in make
 		# This is all controled via the .scripture.conf file
 		basePath = os.environ.get('PTXPLUS_BASE')
-		makefileFinal = "include " + basePath + "/bin/make/" + self._log_manager._settings['System']['MakefileSettings']['MakeIncludeVariables'][self._log_manager._settings['ProjectText']['SourceText']['Features']['projectEditor']] + "\n"
+		makefileFinal = "include " + basePath + "/bin/make/" + self._log_manager._settings['System']['MakefileSettings']['MakeIncludeVariables'][self._log_manager._settings['ProjectText']['SourceText']['Features']['projectEditor']] + '\n'
 
 		for key, value, in self._log_manager._settings['System']['MakefileSettings']['MakeInclude'].iteritems() :
-			makefileFinal = makefileFinal + "include " + basePath + "/bin/make/" + value + "\n"
+			makefileFinal = makefileFinal + "include " + basePath + "/bin/make/" + value + '\n'
 
 		# Output to the new makefile file
 		makefileObject.write(makefileHeader + makefileSettings + makefileFinal)
