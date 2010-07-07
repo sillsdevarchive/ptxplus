@@ -18,6 +18,12 @@
 # overwrite it. In the refresh mode, it will copy over any
 # existing files that are there with the ones if finds in
 # the source area it was directed to.
+#
+# There is also a fallback location. If it doesn't find the
+# file it needs in the default location it will fall back to
+# the system lib where some of the necessary files exist.
+# If it doesn't find it there it will throw an additional
+# error.
 
 # History:
 # 20100707 - djd - Initial draft
@@ -47,19 +53,21 @@ class CheckAssets (object) :
 			self._mode = 'basic'
 
 		# Gather up the initial settings
-		pathHome            = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_HOME'])
-		pathSource          = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
-		pathProcess         = pathHome + '/' + self._log_manager._settings['System']['Paths']['PATH_PROCESS']
-		pathIllustrations   = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
-		pathGraphics        = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
-		fileWatermark       = self._log_manager._settings['System']['Files']['FILE_WATERMARK']
-		filePageBorder      = self._log_manager._settings['System']['Files']['FILE_PAGE_BORDER']
-		listGraphics        = self._log_manager._settings['Format']['Illustrations']['LIST_GRAPHICS']
+		basePath                = os.environ.get('PTXPLUS_BASE')
+		pathHome                = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_HOME'])
+		pathSource              = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
+		pathProcess             = pathHome + '/' + self._log_manager._settings['System']['Paths']['PATH_PROCESS']
+		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
+		pathGraphics            = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
+		pathIllustrationsLib    = self._log_manager._settings['System']['Paths']['PATH_RESOURCES_ILLUSTRATIONS'].replace('__PTXPLUS__', basePath)
+		fileWatermark           = self._log_manager._settings['System']['Files']['FILE_WATERMARK']
+		filePageBorder          = self._log_manager._settings['System']['Files']['FILE_PAGE_BORDER']
+		listGraphics            = self._log_manager._settings['Format']['Illustrations']['LIST_GRAPHICS']
 
 		# Do some sanity testing
-		if pathGraphics == '' :
-			tools.userMessage('ERROR: check your configuration, no setting for the graphics source path found. Halting process now!')
-			self._log_manager.log('ERRR', 'There is no setting for the graphics source path. Please check your configuration.')
+		if not os.path.isdir(pathGraphics) :
+			tools.userMessage('ERROR: Check your configuration, no graphics source folder found. Halting process now!')
+			self._log_manager.log('ERRR', 'There is no graphics source folder. Please check your configuration.')
 			sys.exit(1)
 
 		# Check/install folders we might need
@@ -70,37 +78,60 @@ class CheckAssets (object) :
 		# Check/install system assets
 
 		# Watermark
-		self.smartCopy(pathGraphics + '/' + fileWatermark, pathIllustrations + '/' + fileWatermark, pathProcess + '/' + fileWatermark)
+		self.smartCopy(pathGraphics + '/' + fileWatermark, pathIllustrations + '/' + fileWatermark, pathProcess + '/' + fileWatermark, pathIllustrationsLib + '/' + fileWatermark)
 		# Page border
-		self.smartCopy(pathGraphics + '/' + filePageBorder, pathIllustrations + '/' + filePageBorder, pathProcess + '/' + filePageBorder)
+		self.smartCopy(pathGraphics + '/' + filePageBorder, pathIllustrations + '/' + filePageBorder, pathProcess + '/' + filePageBorder, pathIllustrationsLib + '/' + filePageBorder)
 		# Graphics list
 		for graphic in listGraphics :
-			self.smartCopy(pathGraphics + '/' + graphic, pathIllustrations + '/' + graphic, pathProcess + '/' + graphic)
+			self.smartCopy(pathGraphics + '/' + graphic, pathIllustrations + '/' + graphic, pathProcess + '/' + graphic, pathIllustrationsLib + '/' + graphic)
 
-	def smartCopy (self, source, destination, linkto) :
+	def smartCopy (self, source, destination, linkto, lib) :
 		'''Copies a file but does it according to the mode the
 			script is in.'''
 
 		if self._mode == 'basic' :
 			if os.path.isfile(destination) :
 				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + destination + "] is already there. Nothing to do.")
+				# But what if there is no link, better check
+				self.justLink(destination, linkto)
 			else :
-				self.copyLink(source, destination, linkto)
+				self.copyLink(source, destination, linkto, lib)
 		elif self._mode == 'refresh' :
-				self.copyLink(source, destination, linkto)
+				self.copyLink(source, destination, linkto, lib)
 		else :
 				self._log_manager.log('ERRR', 'Mode [' + self._mode + '] is not currently supported by the system. Cannot complete operation.')
 				tools.userMessage('ERROR: Mode [' + self._mode + '] is not currently supported by the system. Cannot complete operation.')
 
 
-	def copyLink (self, source, destination, linkto) :
-		'''Don't be creative, just copy and link a given file.'''
+	def copyLink (self, source, destination, linkto, lib) :
+		'''Copy and link a given file. If not found, look in the
+			system resouce lib.'''
 
-		shutil.copy(source, destination)
-		self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + source + "] has been copied to: [" + destination + "]")
+		if os.path.isfile(source) :
+			shutil.copy(source, destination)
+			if os.path.isfile(destination) :
+				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + source + "] has been copied to: [" + destination + "]")
+				self.justLink(destination, linkto)
+			else :
+				self._log_manager.log("ERRR", "File: " + destination + " failed to copy. Process incomplete.")
+		else :
+			if os.path.isfile(lib) :
+				shutil.copy(lib, destination)
+				self._log_manager.log("INFO", "File: " + destination + " had to be copied from the system lib.")
+				self.justLink(destination, linkto)
+			else :
+				self._log_manager.log("ERRR", "File: " + destination + " could not be found anywhere. Process incomplete.")
+
+
+	def justLink (self, destination, linkto) :
+		'''Just check to see if a link is needed into the project.'''
+
 		if not os.path.isfile(linkto) :
 			os.symlink(destination, linkto)
-			self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + destination + "] has been linked to: [" + linkto + "]")
+			if os.path.isfile(linkto) :
+				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + destination + "] has been linked to: [" + linkto + "]")
+			else :
+				self._log_manager.log("ERRR", "Mode = " + self._mode + " The file: [" + linkto + "] was not successfully linked.")
 
 
 # This starts the whole process going
@@ -108,3 +139,4 @@ def doIt(log_manager):
 
 	thisModule = CheckAssets()
 	return thisModule.main(log_manager)
+
