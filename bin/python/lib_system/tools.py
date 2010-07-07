@@ -94,7 +94,10 @@ class Tools (object) :
 
 	def makeNecessaryFiles (self, path, projType) :
 		'''Create all the necessary files and folders for a project.
-			If they already exist, we will not touch the existings ones.'''
+			If they already exist, we will not touch the existings ones.
+			This is driven from the info we get from the ptxplus.conf
+			file in the system. It is only for basic project structure.
+			For project asset management see the check_assets.py script.'''
 
 		object = self.getSystemSettingsObject()
 		fileLib = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles"

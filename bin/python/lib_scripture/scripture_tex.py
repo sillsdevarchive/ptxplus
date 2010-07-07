@@ -133,8 +133,6 @@ class MakeTexControlFile (object) :
 			instructions for this object that can be added
 			in an automated way.'''
 
-		# Build some paths and file names
-		styleFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_BIBLE_STYLE', 'bible.sty')
 		# Get a couple settings
 		oneChapOmmitRule = self._log_manager._settings['Format']['ChapterVerse'].get('shortBookChapterOmit', 'true')
 		omitAllChapterNumbers = self._log_manager._settings['Format']['ChapterVerse'].get('omitAllChapterNumbers', 'false')
@@ -173,7 +171,7 @@ class MakeTexControlFile (object) :
 				return
 
 		# Add the global style sheet
-		settings = settings + '\\stylesheet{\"' + styleFile + '\"}\n'
+		settings = settings + '\\stylesheet{\"' + bibleStyleFile + '\"}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
@@ -255,7 +253,7 @@ class MakeTexControlFile (object) :
 			elsewhere in this module.'''
 
 		# Bring in page format settings
-		useCropmarks = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_CROPMARKS', 'true')
+		useCropmarks = self._log_manager._settings['Format']['PageLayout'].get('USE_CROPMARKS', 'true')
 		pageHeight = self._log_manager._settings['Format']['PageLayout'].get('pageHeight', '210mm')
 		pageWidth = self._log_manager._settings['Format']['PageLayout'].get('pageWidth', '148mm')
 		endBookNoEject = self._log_manager._settings['Format']['Columns'].get('endBookNoEject', 'false')
@@ -274,9 +272,9 @@ class MakeTexControlFile (object) :
 		columnshift = self._log_manager._settings['Format']['Columns'].get('columnshift', '15')
 
 		# Format -> PageLayout
-		useFigurePlaceholders = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_PLACEHOLDERS', 'true')
-		useIllustrations = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_ILLUSTRATIONS', 'false')
-		usePageBorder = self._log_manager._settings['Format']['PageLayout']['Switches'].get('USE_PAGE_BORDER', 'false')
+		useFigurePlaceholders = self._log_manager._settings['Format']['Illustrations'].get('USE_PLACEHOLDERS', 'true')
+		useIllustrations = self._log_manager._settings['Format']['Illustrations'].get('USE_ILLUSTRATIONS', 'false')
+		usePageBorder = self._log_manager._settings['Format']['PageLayout'].get('USE_PAGE_BORDER', 'false')
 		pageBorderScale = self._log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
 		pageBorderFile = self._log_manager._settings['System']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
 		useMarginalVerses = self._log_manager._settings['Format']['ChapterVerse'].get('useMarginalVerses', 'false')

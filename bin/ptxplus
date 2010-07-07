@@ -295,7 +295,6 @@ else :
 
 			# Right off we need to tell the user if the project is locked (only if it is locked)
 
-
 			# Update the .project.conf file if it needs it
 			mod = __import__("update_project_settings")
 			mod.doIt()
@@ -304,11 +303,6 @@ else :
 			from font_manager import *
 			font_manager    = FontManager()
 			font_manager.localiseFontsConf()
-
-			# There are a number of processes we may want to run before we want to
-			# start the actual process. These are done via the GlobalProcesses listed
-			# in the .project.conf file.
-			#log_manager.logItSystem("INFO", "Looking for global project processes to run.")
 
 			# Look for all the global processes that need to be run
 			taskList = []

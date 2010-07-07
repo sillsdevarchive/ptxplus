@@ -108,7 +108,7 @@ $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1) \
 	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
 	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
-	$(DEPENDENT_FILE_LIST)
+	check-assets | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $$@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_TEX)
 

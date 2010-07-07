@@ -59,9 +59,6 @@ MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).$(EXT_PDF)
 # down the chain this might have to move, or be put in a
 # seperate file.
 DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
-  project-graphics \
-  $(PATH_PROCESS)/$(FILE_WATERMARK) \
-  $(PATH_PROCESS)/$(FILE_PAGE_BORDER) \
   $(PATH_PROCESS)/$(FILE_TEX_BIBLE) \
   $(PATH_PROCESS)/$(FILE_BIBLE_STYLE) \
   $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) \
@@ -71,6 +68,24 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
 ##############################################################
 #			   Rules for building and managing system files
 ##############################################################
+
+# Rule to run assets check on project. This is run any time
+# a typesetting process is run to be sure the files we need
+# are in place. This is mainly for graphics files but could
+# be easily expanded to other types as well.
+check-assets : $(FILE_PROJECT_CONF)
+	@echo INFO: Checking project assets, for needed graphics, etc.
+	@$(MOD_RUN_PROCESS) $(MOD_CHECK_ASSETS) 'SYS' '' '' 'basic'
+
+# This is just like the check-assets rule but the 'refresh'
+# mode is used to be sure that that existing files are over-
+# written in case there has been updates.
+refresh-assets :
+	@echo INFO: Checking project assets, for needed graphics, etc.
+	@$(MOD_RUN_PROCESS) $(MOD_CHECK_ASSETS) 'SYS' '' '' 'refresh'
+
+# Having these here enable rules to call other rules
+.PHONY: check-assets refresh-assets
 
 # Rule to create the custom style file which holds TeX code
 # that is hard to automate. Project wide custom TeX macros
@@ -108,27 +123,6 @@ $(PATH_SOURCE) :
 # the right place we'll put one where it is supposed to be found.
 $(PATH_ILLUSTRATIONS) : | $(PATH_SOURCE)
 	$(call mdir,"$(PATH_ILLUSTRATIONS)")
-
-# Watermark
-$(PATH_ILLUSTRATIONS)/$(FILE_WATERMARK) : | $(PATH_ILLUSTRATIONS)
-	$(call copylinkgraphic,$(PATH_GRAPHICS_LIB),$(FILE_WATERMARK),$@)
-
-# Page border
-$(PATH_ILLUSTRATIONS)/$(FILE_PAGE_BORDER) : | $(PATH_ILLUSTRATIONS)
-	$(call copylinkgraphic,$(PATH_GRAPHICS_LIB),$(FILE_PAGE_BORDER),$@)
-
-
-
-
-
-# Copy in and link other graphic files that are listed in
-# the project .conf file and found in our graphic's library.
-project-graphics : $(LIST_GRAPHICS)
-	echo $<
-#$(foreach g,$(LIST_GRAPHICS),$(call copylinkgraphic,$(PATH_GRAPHICS_LIB),$(g),$(PATH_ILLUSTRATIONS)/$(g));)
-
-
-.PHONY: project-graphics
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
@@ -186,42 +180,6 @@ else \
 	echo \# The file you have requested, $(2), is missing. This file was created to take its place. Please replace or edit this file as needed >> $(2); \
 fi
 endef
-
-#	$(call copygraphic,$(PATH_GRAPHICS_LIB),$(FILE_WATERMARK),$@)
-#	$(foreach g,$(LIST_GRAPHICS),$(call copygraphic,$(PATH_GRAPHICS_LIB),$(g),$(PATH_ILLUSTRATIONS)/$(g));)
-
-
-# This will copy a graphic file from a location specified.
-# If the file cannot be found, it will look in the system
-# lib. If it cannot be found there it will copy in a "dummy"
-# picture to help the user know they are missing a picture.
-define copylinkgraphic
-	@echo copylinkgraphic test
-	@echo 2nd line
-#	@if test -r "$(1)/$(2)"; then \
-#	    echo INFO: Copying into project: $(2); \
-#	    cp $(1)/$(2) $(3); \
-#	elif test -r "$(PATH_RESOURCES_ILLUSTRATIONS)/$(2)"; then \
-#	    echo INFO: Could not find: $(2) copying from: $(PATH_RESOURCES_ILLUSTRATIONS)/$(2); \
-#	    cp $(1)/$(2) $(3); \
-#	else \
-#	    echo ERROR: File not found. Creating dummy for: $(2); \
-#	    cp $(PATH_RESOURCES_ILLUSTRATIONS)/missing.png $(3); \
-#	fi;
-#	@$(call linkme,$(PATH_ILLUSTRATIONS)/$(2),$(PATH_PROCESS)/$(2))
-endef
-
-
-# Create a link into the project
-define linkme
-#	if test -r "$(1)"; then \
-#		echo INFO: Linking: $(2); \
-#		ln -sf $(shell readlink -f -- $(1)) $(2); \
-#	else \
-#		echo ERROR: Could not link $(1) to $(2); \
-#	fi
-endef
-
 
 ###############################################################
 #		Final component binding rules
