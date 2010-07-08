@@ -74,14 +74,14 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
 # are in place. This is mainly for graphics files but could
 # be easily expanded to other types as well.
 check-assets : $(FILE_PROJECT_CONF)
-	@echo INFO: Checking project assets, for needed graphics, etc.
+	@echo INFO: Checking project assets
 	@$(MOD_RUN_PROCESS) $(MOD_CHECK_ASSETS) 'SYS' '' '' 'basic'
 
 # This is just like the check-assets rule but the 'refresh'
 # mode is used to be sure that that existing files are over-
 # written in case there has been updates.
 refresh-assets :
-	@echo INFO: Checking project assets, for needed graphics, etc.
+	@echo INFO: Refreshing project assets
 	@$(MOD_RUN_PROCESS) $(MOD_CHECK_ASSETS) 'SYS' '' '' 'refresh'
 
 # Having these here enable rules to call other rules

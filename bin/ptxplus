@@ -349,9 +349,10 @@ else :
 			errorCode = tools.makefileCommand(command)
 			if errorCode != 0 :
 				tools.userMessage("ERROR: Makefile process failed. (Error code: " + str(errorCode) + ")")
-
-			# Report our errors to the terminal
-			error_manager.outputProcessErrorReport()
+			else :
+				# If all went well with the makefile process, report any
+				# other errors we might have to the terminal
+				error_manager.outputProcessErrorReport()
 
 	elif tools.inProject() == False :
 		# These are system level commands and have to be used
@@ -367,4 +368,7 @@ else :
 
 
 # All done
-tools.userMessage("\n\t\tThank you, please come again!\n")
+if errorCode != 0 :
+	tools.userMessage("\n\t\tSorry, but please come again!\n")
+else :
+	tools.userMessage("\n\t\tThank you, please come again!\n")

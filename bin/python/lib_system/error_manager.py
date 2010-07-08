@@ -125,7 +125,7 @@ class ErrorManager (object) :
 				tools.userMessage('Unable to open error log file: ' + self._errorLogFile)
 
 		else :
-			tools.userMessage('INFO: No errors found.')
+			tools.userMessage('INFO: As far as I can tell, no process errors were found.')
 
 
 

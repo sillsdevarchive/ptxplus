@@ -488,6 +488,9 @@ class MakeTexControlFile (object) :
 		# General settings
 		if useFigurePlaceholders.lower() == 'true' :
 			generalSettings = generalSettings + '\\FigurePlaceholderstrue\n'
+		# Allow the use of digets in text
+		generalSettings = generalSettings + '\\catcode`@=11\n\\def\\makedigitsother{\\m@kedigitsother}\n\\def\\makedigitsletters{\\m@kedigitsletters}\n\\catcode `@=12\n'
+
 
 		# Ship the results, change order as needed
 		orderedContents =     fileHeaderText + \
