@@ -181,10 +181,26 @@ endef
 # building rule
 
 # Rule for building the TeX settings file that is used for
-# the main content.
+# format settings of all the main content. This is not to
+# be confused with the Bible control file which is a TeX
+# control file for processing the entire Bible.
 $(PATH_PROCESS)/$(FILE_TEX_BIBLE) :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) '' '' '$@' ''
+
+
+#################################################################################
+
+# Starting here to build a whole bible content rule to enable auto toc creation
+
+$(PATH_PROCESS)/$(FILE_MATTER_BIBLE_TEX) :
+	@echo INFO: Creating: $@
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'bible' 'bible' '$@' ''
+
+# Need to build the rule to process $(FILE_MATTER_BIBLE_PDF)
+# We will need to combine the OT and NT component lists to start
+
+#################################################################################
 
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the

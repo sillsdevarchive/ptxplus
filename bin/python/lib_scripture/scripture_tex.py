@@ -75,11 +75,11 @@ class MakeTexControlFile (object) :
 		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_PROCESS', 'Process')
 		self._pathToIllustrations = self._pathToSource + "/" + self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
 		self._texMacros = self._log_manager._settings['System']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
-		self._cvSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_COVER', '.cover.tex')
-		self._fmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_FRONT', '.front.tex')
-		self._bmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_BACK', '.back.tex')
-		self._cmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_CUSTOM', 'custom.tex')
-		self._biSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_BIBLE', '.bible.tex')
+		self._cvSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_COVER', '.cover-settings.tex')
+		self._fmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_FRONT', '.front-settings.tex')
+		self._bmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_BACK', '.back-settings.tex')
+		self._cmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_CUSTOM', 'custom-settings.tex')
+		self._biSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_BIBLE', '.bible-settings.tex')
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
 		self._flags = ('cover', 'front', 'back', 'periph')
@@ -88,6 +88,7 @@ class MakeTexControlFile (object) :
 		self._coverMatter = self._log_manager._settings['Format']['Binding']['MATTER_COVER'].split()
 		self._otMatter = self._log_manager._settings['Format']['Binding']['MATTER_OT'].split()
 		self._ntMatter = self._log_manager._settings['Format']['Binding']['MATTER_NT'].split()
+		self._bibleMatter = self._otMatter + ' ' + self._ntMatter
 		self._publicationType = log_manager._publicationType
 		# File extentions (Expand this, more will be needed in the future)
 		self._extStyle = self._log_manager._settings['System']['Extensions'].get('EXT_STYLE', 'sty')
@@ -139,7 +140,7 @@ class MakeTexControlFile (object) :
 		useHyphenation = self._log_manager._settings['Format']['Hyphenation'].get('useHyphenation', 'true')
 		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
 		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
-		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files'].get('FILE_BIBLE_STYLE', 'bible.sty')
+		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files'].get('FILE_BIBLE_STYLE', 'bible-format.sty')
 
 		# Input the main macro set here in the control file
 		settings = '\\input \"' + self._texMacros + '\"\n'
@@ -201,6 +202,8 @@ class MakeTexControlFile (object) :
 				componentScripture = self._otMatter
 			elif self._inputID == 'nt' :
 				componentScripture = self._ntMatter
+			elif self._inputID == 'bible' :
+				componentScripture = self._bibleMatter
 			else :
 				if self._inputID :
 					componentScripture = [self._inputID]
