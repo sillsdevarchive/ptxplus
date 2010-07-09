@@ -135,7 +135,7 @@ endif
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@echo INFO: Creating: $$@
-	@$(MOD_RUN_PROCESS) $(MOD_MK_PICLIST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_PICLIST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
 else
 	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\". $$@ not made.
 endif
@@ -188,17 +188,26 @@ $(PATH_PROCESS)/$(FILE_TEX_BIBLE) :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) '' '' '$@' ''
 
-
-#################################################################################
-
-# Starting here to build a whole bible content rule to enable auto toc creation
-
+# Rule for building the MATTER_BIBLE control file. This is
+# not the same as TeX settings file above.
 $(PATH_PROCESS)/$(FILE_MATTER_BIBLE_TEX) :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'bible' 'bible' '$@' ''
 
-# Need to build the rule to process $(FILE_MATTER_BIBLE_PDF)
-# We will need to combine the OT and NT component lists to start
+# Rule for generating the entire Scripture content. It will
+# also generate the TOC if that feature is turned on.
+$(PATH_PROCESS)/$(FILE_MATTER_BIBLE_PDF) : \
+	$(foreach v,$(filter $(BIBLE_COMPONENTS_ALL),$(MATTER_BIBLE)), \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+	$(foreach v,$(filter-out $(BIBLE_COMPONENTS_ALL),$(MATTER_BIBLE)), \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_PICLIST) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_ADJUSTMENT) \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+	$(PATH_PROCESS)/$(FILE_MATTER_BIBLE_TEX) \
+	check-assets | $(DEPENDENT_FILE_LIST)
+	@echo INFO: Creating: $@
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_MATTER_BIBLE_TEX)
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC)
 
 #################################################################################
 

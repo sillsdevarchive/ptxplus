@@ -141,6 +141,14 @@ class MakeMakefile (object) :
 		for key, value, in self._log_manager._settings['Format']['Binding'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
+		# This is a special generated field for all Scripture matter
+		otMatter = self._log_manager._settings['Format']['Binding']['MATTER_OT'].split()
+		ntMatter = self._log_manager._settings['Format']['Binding']['MATTER_NT'].split()
+		apMatter = self._log_manager._settings['Format']['Binding']['MATTER_AP'].split()
+		bibleMatter = otMatter + ' ' + ntMatter + ' ' + apMatter
+		makefileSettings = makefileSettings + 'MATTER_BIBLE=' + bibleMatter + '\n'
+
+
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'
 

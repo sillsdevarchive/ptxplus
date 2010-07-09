@@ -88,7 +88,8 @@ class MakeTexControlFile (object) :
 		self._coverMatter = self._log_manager._settings['Format']['Binding']['MATTER_COVER'].split()
 		self._otMatter = self._log_manager._settings['Format']['Binding']['MATTER_OT'].split()
 		self._ntMatter = self._log_manager._settings['Format']['Binding']['MATTER_NT'].split()
-		self._bibleMatter = self._otMatter + ' ' + self._ntMatter
+		self._apMatter = self._log_manager._settings['Format']['Binding']['MATTER_AP'].split()
+		self._bibleMatter = self._otMatter + ' ' + self._ntMatter + ' ' + self._apMatter
 		self._publicationType = log_manager._publicationType
 		# File extentions (Expand this, more will be needed in the future)
 		self._extStyle = self._log_manager._settings['System']['Extensions'].get('EXT_STYLE', 'sty')
@@ -202,6 +203,8 @@ class MakeTexControlFile (object) :
 				componentScripture = self._otMatter
 			elif self._inputID == 'nt' :
 				componentScripture = self._ntMatter
+			elif self._inputID == 'ap' :
+				componentScripture = self._apMatter
 			elif self._inputID == 'bible' :
 				componentScripture = self._bibleMatter
 			else :
