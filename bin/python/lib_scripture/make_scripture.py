@@ -19,8 +19,10 @@
 # 20081023 - djd - Refactor .project.conf structure changes
 # 20081028 - djd - Removed system logging, messages only now
 # 20090218 - djd - Added system logging access as other like
-#        processes needed it too
+#       processes needed it too
 # 20100513 - djd - Added key/value harvesting for Process::Files
+# 20100712 - djd - Changed the way lists work in the binding
+#       area so a proper list could be used in the .conf file.
 
 
 #############################################################
@@ -139,14 +141,34 @@ class MakeMakefile (object) :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
 		for key, value, in self._log_manager._settings['Format']['Binding'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + '\n'
+			# Only output matter component groups, output as string, not list
+			if key.find('MATTER_') == 0 :
+				makefileSettings = makefileSettings + key + "=" + ' '.join(value) + '\n'
 
-		# This is a special generated field for all Scripture matter
-		otMatter = self._log_manager._settings['Format']['Binding']['MATTER_OT'].split()
-		ntMatter = self._log_manager._settings['Format']['Binding']['MATTER_NT'].split()
-		apMatter = self._log_manager._settings['Format']['Binding']['MATTER_AP'].split()
-		bibleMatter = otMatter + ' ' + ntMatter + ' ' + apMatter
-		makefileSettings = makefileSettings + 'MATTER_BIBLE=' + bibleMatter + '\n'
+		# Now we will build some special process groups. There
+		# maybe a clever way to do this in afew lines but this
+		# will do for now.
+		frMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_FRONT'])
+		otMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_OT'])
+		ntMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_NT'])
+		apMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_AP'])
+		bkMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_BACK'])
+		mpMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_MAPS'])
+		frontGroup = frMatter
+		contentGroup = otMatter + ' ' + ntMatter + ' ' + apMatter
+		backGroup = bkMatter
+		mapGroup = mpMatter
+		makefileSettings = makefileSettings + 'GROUP_FRONT=' + frontGroup + '\n'
+		makefileSettings = makefileSettings + 'GROUP_CONTENT=' + contentGroup.strip() + '\n'
+		makefileSettings = makefileSettings + 'GROUP_BACK=' + backGroup + '\n'
+		makefileSettings = makefileSettings + 'GROUP_MAPS=' + mapGroup + '\n'
+
+		# Make the PDF file names for the BOOK group
+		for group in self._log_manager._settings['Format']['Binding']['BOOK'] :
+			makefileSettings = makefileSettings + 'FILE_' + group + '=' + group + '.pdf\n'
+
+		# Make the master book file name (hard codded)
+		makefileSettings = makefileSettings + 'FILE_BOOK=BOOK.pdf\n'
 
 
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :

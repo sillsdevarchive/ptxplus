@@ -229,24 +229,23 @@ class ConfigGUI (object) :
 		self.process_groups = self.ceditor.config['Format']['Binding']
 
 		for group in self.process_groups :
-			for item in self.process_groups.get(group).split() :
+			for item in self.process_groups.get(group) :
 				if item == bkid :
 					index = len(self.cs_components)
 				if item and not item in component_list :
 					component_list.add(item)
-					# We want to weed-out the BOOK group which is handled elsewhere
-					if self.getGroupName(group) != 'BOOK' :
-						 self.cs_components.append([item])
+					# We want to weed-out the BOOK group and the GROUP
+					# group which are handled elsewhere
+					if group.find('MATTER_') == 0 :
+						self.cs_components.append([item])
 
 
 		# We want the groups last so we process them again here, this time
 		# grabbing only the group name tacking that on to the end of the list
 		for group in self.process_groups :
-			items = self.ceditor.config['Format']['Binding'][group]
-			if len(items) > 0 :
+			if group.find('GROUP_') == 0 or group.find('BOOK') == 0 :
 				gName = self.getGroupName(group)
 				self.cs_components.append([gName.lower()])
-
 
 		self.cb_components.set_active(index)
 

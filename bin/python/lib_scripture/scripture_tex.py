@@ -73,7 +73,7 @@ class MakeTexControlFile (object) :
 		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_TEXTS', 'Texts')
 		self._pathToSource = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_SOURCE', '../Source'))
 		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_PROCESS', 'Process')
-		self._pathToIllustrations = self._pathToSource + "/" + self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', 'Illustrations')
+		self._pathToIllustrations = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', '../Source/Illustrations'))
 		self._texMacros = self._log_manager._settings['System']['Files'].get('FILE_TEX_MACRO', 'paratext2.tex')
 		self._cvSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_COVER', '.cover-settings.tex')
 		self._fmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files'].get('FILE_TEX_FRONT', '.front-settings.tex')
@@ -83,13 +83,16 @@ class MakeTexControlFile (object) :
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
 		self._flags = ('cover', 'front', 'back', 'periph')
-		self._frontMatter = self._log_manager._settings['Format']['Binding']['MATTER_FRONT'].split()
-		self._backMatter = self._log_manager._settings['Format']['Binding']['MATTER_BACK'].split()
-		self._coverMatter = self._log_manager._settings['Format']['Binding']['MATTER_COVER'].split()
-		self._otMatter = self._log_manager._settings['Format']['Binding']['MATTER_OT'].split()
-		self._ntMatter = self._log_manager._settings['Format']['Binding']['MATTER_NT'].split()
-		self._apMatter = self._log_manager._settings['Format']['Binding']['MATTER_AP'].split()
-		self._bibleMatter = self._otMatter + ' ' + self._ntMatter + ' ' + self._apMatter
+		self._frontMatter = self._log_manager._settings['Format']['Binding']['MATTER_FRONT']
+		self._backMatter = self._log_manager._settings['Format']['Binding']['MATTER_BACK']
+		self._coverMatter = self._log_manager._settings['Format']['Binding']['MATTER_COVER']
+		self._otMatter = self._log_manager._settings['Format']['Binding']['MATTER_OT']
+		self._ntMatter = self._log_manager._settings['Format']['Binding']['MATTER_NT']
+		self._apMatter = self._log_manager._settings['Format']['Binding']['MATTER_AP']
+		self._bibleMatter = []
+		self._bibleMatter.extend(self._otMatter)
+		self._bibleMatter.extend(self._ntMatter)
+		self._bibleMatter.extend(self._apMatter)
 		self._publicationType = log_manager._publicationType
 		# File extentions (Expand this, more will be needed in the future)
 		self._extStyle = self._log_manager._settings['System']['Extensions'].get('EXT_STYLE', 'sty')
@@ -180,13 +183,6 @@ class MakeTexControlFile (object) :
 		# a peripheral control file.
 		if self._inputID != '' :
 
-			# Make a link to the bible.sty style sheet. This is an override
-			# style sheet for Scripture material.
-			settings = settings + '\\stylesheet{\"' + bibleStyleFile + '\"}\n'
-
-			# Output the Bible settings file input command
-			settings = settings + '\\input \"' + self._biSettingsFile + '\"\n'
-
 			# Hyphenation is optional project-wide so we will put it here. However,
 			# we might need to rethink this.
 			if useHyphenation.lower() == 'true' :
@@ -271,7 +267,7 @@ class MakeTexControlFile (object) :
 		columnGutterRuleSkip = self._log_manager._settings['Format']['Columns'].get('columnGutterRuleSkip', '4')
 
 		# Process
-		autoTocFile = self._log_manager._settings['System']['Paths'].get('FILE_AUTO_TOC', 'auto-toc')
+		autoTocFile = self._log_manager._settings['System']['Paths'].get('FILE_AUTO_TOC', 'auto-toc.usfm')
 		generateTOC = self._log_manager._settings['Format']['TOC'].get('generateTOC', 'true')
 		tocTitle = self._log_manager._settings['Format']['TOC'].get('mainTitle', 'Table of Contents')
 		marginalVersesMacro = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')

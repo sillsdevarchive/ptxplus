@@ -79,7 +79,7 @@ if len(sys.argv) >= 2 :
 		bkid = ""
 		componentScripture = tools.getSettingsObject()['Format']['Binding']['MATTER_OT']
 		componentScripture = componentScripture + tools.getSettingsObject()['Format']['Binding']['MATTER_NT']
-		componentScripture = componentScripture.split()
+#        componentScripture = componentScripture.split()
 		# This part only works if we are processing Scripture components (books with IDs)
 		if len(componentScripture) > 0 :
 			for book in componentScripture :
