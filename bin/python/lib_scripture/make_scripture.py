@@ -170,6 +170,12 @@ class MakeMakefile (object) :
 		# Make the master book file name (hard codded)
 		makefileSettings = makefileSettings + 'FILE_BOOK=BOOK.pdf\n'
 
+		# Make the group control files (hard codded)
+		makefileSettings = makefileSettings + 'FILE_GROUP_FRONT_TEX=GROUP_FRONT.tex\n'
+		makefileSettings = makefileSettings + 'FILE_GROUP_CONTENT_TEX=GROUP_CONTENT.tex\n'
+		makefileSettings = makefileSettings + 'FILE_GROUP_BACK_TEX=GROUP_BACK.tex\n'
+		makefileSettings = makefileSettings + 'FILE_GROUP_MAPS_TEX=GROUP_MAPS.tex\n'
+
 
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'

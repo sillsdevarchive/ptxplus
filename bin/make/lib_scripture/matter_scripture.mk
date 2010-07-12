@@ -180,6 +180,12 @@ endef
 # dependent rules here before we hit the main component_rules
 # building rule
 
+# The rule to create the bible override style sheet. This is
+# used to override styles for Scripture that come from the
+# .project.sty file.
+$(PATH_PROCESS)/$(FILE_BIBLE_STYLE) : | $(PATH_SOURCE)
+	$(call copysmart,$(PATH_RESOURCES_PROCESS)/$(FILE_BIBLE_STYLE),$@)
+
 # Rule for building the TeX settings file that is used for
 # format settings of all the main content. This is not to
 # be confused with the Bible control file which is a TeX
@@ -188,34 +194,26 @@ $(PATH_PROCESS)/$(FILE_TEX_BIBLE) :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) '' '' '$@' ''
 
-# Rule for building the MATTER_BIBLE control file. This is
+# Rule for building the GROUP_CONTENT control file. This is
 # not the same as TeX settings file above.
-$(PATH_PROCESS)/$(FILE_MATTER_BIBLE_TEX) :
+$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
 	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'bible' 'bible' '$@' ''
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'content' 'content' '$@' ''
 
 # Rule for generating the entire Scripture content. It will
 # also generate the TOC if that feature is turned on.
-$(PATH_PROCESS)/$(FILE_MATTER_BIBLE_PDF) : \
-	$(foreach v,$(filter $(BIBLE_COMPONENTS_ALL),$(MATTER_BIBLE)), \
+$(PATH_PROCESS)/$(FILE_CONTENT_GROUP) : \
+	$(foreach v,$(filter $(BIBLE_COMPONENTS_ALL),$(GROUP_CONTENT)), \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(foreach v,$(filter-out $(BIBLE_COMPONENTS_ALL),$(MATTER_BIBLE)), \
+	$(foreach v,$(filter-out $(BIBLE_COMPONENTS_ALL),$(GROUP_CONTENT)), \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_PICLIST) \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_ADJUSTMENT) \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(PATH_PROCESS)/$(FILE_MATTER_BIBLE_TEX) \
+	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) \
 	check-assets | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_MATTER_BIBLE_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC)
-
-#################################################################################
-
-# The rule to create the bible override style sheet. This is
-# used to override styles for Scripture that come from the
-# .project.sty file.
-$(PATH_PROCESS)/$(FILE_BIBLE_STYLE) : | $(PATH_SOURCE)
-	$(call copysmart,$(PATH_RESOURCES_PROCESS)/$(FILE_BIBLE_STYLE),$@)
 
 
 # Start with the OT but we don't want to do anything if there

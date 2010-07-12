@@ -89,10 +89,10 @@ class MakeTexControlFile (object) :
 		self._otMatter = self._log_manager._settings['Format']['Binding']['MATTER_OT']
 		self._ntMatter = self._log_manager._settings['Format']['Binding']['MATTER_NT']
 		self._apMatter = self._log_manager._settings['Format']['Binding']['MATTER_AP']
-		self._bibleMatter = []
-		self._bibleMatter.extend(self._otMatter)
-		self._bibleMatter.extend(self._ntMatter)
-		self._bibleMatter.extend(self._apMatter)
+		self._contentGroup = []
+		self._contentGroup.extend(self._otMatter)
+		self._contentGroup.extend(self._ntMatter)
+		self._contentGroup.extend(self._apMatter)
 		self._publicationType = log_manager._publicationType
 		# File extentions (Expand this, more will be needed in the future)
 		self._extStyle = self._log_manager._settings['System']['Extensions'].get('EXT_STYLE', 'sty')
@@ -190,19 +190,13 @@ class MakeTexControlFile (object) :
 
 			# Since we were passed here it is assmumed that the context
 			# flag will contain a book ID, or will represent the entire
-			# new or old testament which we will handle different.
-			# If it isn't a NT or OT marker, then we assume it is a
+			# content group.
+			# If it isn't the content group, then we assume it is a
 			# single book and we will only process that one book based
 			# on the book ID given.
 			componentScripture = []
-			if self._inputID == 'ot' :
-				componentScripture = self._otMatter
-			elif self._inputID == 'nt' :
-				componentScripture = self._ntMatter
-			elif self._inputID == 'ap' :
-				componentScripture = self._apMatter
-			elif self._inputID == 'bible' :
-				componentScripture = self._bibleMatter
+			if self._inputID == 'content' :
+				componentScripture = self._contentGroup
 			else :
 				if self._inputID :
 					componentScripture = [self._inputID]
