@@ -40,7 +40,9 @@ class FontManager (object) :
 		# Pull in the project settings object that
 		# will be passed along with this object.
 		self._settings_project = tools.getProjectSettingsObject()
-		try :
+
+		if self._settings_project['System']['General'].get('debugMode', 'false').lower() == 'true' :
+
 			self.projectFontFamily = self._settings_project['Format']['Fonts']['projectFontFamily']
 			if self.projectFontFamily == "" :
 				self.projectFontFamily = "GenBkBas"
@@ -49,16 +51,26 @@ class FontManager (object) :
 			self.pathToFontLibrary = self._settings_project['System']['Paths']['PATH_FONT_LIB']
 			if self.pathToFontLibrary == "" :
 				self.pathToFontLibrary = os.environ.get('PTXPLUS_BASE') + "/resources/lib_fonts"
+				self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
+		else :
+			try :
+				self.projectFontFamily = self._settings_project['Format']['Fonts']['projectFontFamily']
+				if self.projectFontFamily == "" :
+					self.projectFontFamily = "GenBkBas"
 
-			self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
+				self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['System']['Paths']['PATH_FONTS']
+				self.pathToFontLibrary = self._settings_project['System']['Paths']['PATH_FONT_LIB']
+				if self.pathToFontLibrary == "" :
+					self.pathToFontLibrary = os.environ.get('PTXPLUS_BASE') + "/resources/lib_fonts"
 
+				self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
 
-		except :
-			# Idealy, we don't want to hard-code anything but in some cases it is just
-			# necessary to do it.
-			self.projectFontFamily = "GenBkBas"
-			self.projectFontsFolder = os.getcwd() + "/Fonts"
-			self.fontFamilySourceFolder = os.environ.get('PTXPLUS_BASE') + "/resources/lib_fonts/GenBkBas"
+			except :
+				# Idealy, we don't want to hard-code anything but in some cases it is just
+				# necessary to do it.
+				self.projectFontFamily = "GenBkBas"
+				self.projectFontsFolder = os.getcwd() + "/Fonts"
+				self.fontFamilySourceFolder = os.environ.get('PTXPLUS_BASE') + "/resources/lib_fonts/GenBkBas"
 
 		self.projectFontFamilyFolder = self.projectFontsFolder + "/" + self.projectFontFamily
 

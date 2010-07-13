@@ -138,6 +138,7 @@ $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF) $(DEPENDENT_FILE_LIST)
 pdf-remove-$(1) :
 	@echo INFO: Removing $$@
 	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
+
 endef
 
 # Filter out repeat instances of peripheral matter, like
