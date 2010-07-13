@@ -71,14 +71,16 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE_PERIPH)/$(1)
 # the template files doesn't exsit, then create a dummy one to
 # serve as a placeholder. This is done by using the "test" conditional
 # statement below. Note the line concatanation. This needs to be
-# exicuted as one long line.
+# exicuted as one long line. Also be aware that we do not generate
+# the TOC here as it is made by a seperate process.
 # NOTE: the use of the "|" in the dependency list. The pipe enables makefile
 # to check on the dependent target, in this case a directory, but
 # the current target doesn't have to be rebuilt if it has not changed.
 # This is very important here because a directory will always be
 # changing.
-ifneq ($(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE_PERIPH)/TOC-NT.usfm)
+ifneq ($(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE_PERIPH)/$(FILE_TOC))
 $(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE_PERIPH)
+	@echo TESTING: $(PATH_SOURCE_PERIPH)/$(1) -- $(PATH_SOURCE_PERIPH)/$(FILE_TOC)
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$(1),$$@)
 endif
 
@@ -148,7 +150,7 @@ endef
 define matter_binding
 ifneq ($($(1)),)
 $(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
-$(PATH_PROCESS)/$(1).$(EXT_PDF) : $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
+$(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
 	@pdftk $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) cat output $$@
 endif
 endef

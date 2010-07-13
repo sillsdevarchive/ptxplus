@@ -180,6 +180,9 @@ endef
 # dependent rules here before we hit the main component_rules
 # building rule
 
+# This builds a rule (in memory) for each of the content components
+$(foreach v,$(GROUP_CONTENT), $(eval $(call component_rules,$(v))))
+
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
 # .project.sty file.
@@ -202,7 +205,7 @@ $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
 
 # Rule for generating the entire Scripture content. It will
 # also generate the TOC if that feature is turned on.
-$(PATH_PROCESS)/$(FILE_CONTENT_GROUP) : \
+$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
 	$(foreach v,$(filter $(BIBLE_COMPONENTS_ALL),$(GROUP_CONTENT)), \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
 	$(foreach v,$(filter-out $(BIBLE_COMPONENTS_ALL),$(GROUP_CONTENT)), \
@@ -215,99 +218,27 @@ $(PATH_PROCESS)/$(FILE_CONTENT_GROUP) : \
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC)
 
+# The TOC data is made during the content creation. As such
+# the TOC file creation cannot happen until the content is made.
+$(PATH_SOURCE_PERIPH)/$(FILE_TOC) : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 
-# Start with the OT but we don't want to do anything if there
-# are no components to process
-
-ifneq ($(MATTER_OT),)
-# These build a rule (in memory) for this set of components
-$(foreach v,$(MATTER_OT), $(eval $(call component_rules,$(v))))
-
-# A rule for creating the TeX control file for when the
-# entire OT is being typeset.
-$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
-	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'ot' 'ot' '$@' ''
-
-# Render the entire OT
-$(PATH_PROCESS)/$(FILE_MATTER_OT_PDF) : \
-	$(foreach v,$(filter $(OT_COMPONENTS),$(MATTER_OT)), \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(foreach v,$(filter-out $(OT_COMPONENTS),$(MATTER_OT)), \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_PICLIST) \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_ADJUSTMENT) \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) \
-	check-assets | $(DEPENDENT_FILE_LIST)
-	@echo INFO: Creating: $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_MATTER_OT_TEX)
-endif
-
-pdf-remove-ot :
-	@echo INFO: Removing file: $(FILE_MATTER_OT_PDF)
-	@rm -f $(FILE_MATTER_OT_PDF)
-
-
-# Moving along we will do the NT if there are any components
-# listed in the .project.conf file
-ifneq ($(MATTER_NT),)
-# These build a rule (in memory) for this set of components
-$(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
-
-# A rule for creating the TeX control file for when the
-# entire OT is being typeset.
-$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
-	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'nt' 'nt' '$@' ''
-
-# Render the entire NT
-$(PATH_PROCESS)/$(FILE_MATTER_NT_PDF) : \
-	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(foreach v,$(filter-out $(NT_COMPONENTS),$(MATTER_NT)), \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_PICLIST) \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_ADJUSTMENT) \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) \
-	check-assets | $(DEPENDENT_FILE_LIST)
-	@echo INFO: Creating: $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_MATTER_NT_TEX)
-
-endif
-
-pdf-remove-nt :
-	@echo INFO: Removing file: $(FILE_MATTER_NT_PDF)
-	@rm -f $(FILE_MATTER_NT_PDF)
+# This enables preprocess checks on all the components at one time.
+preprocess-content :
+	@echo INFO: Preprocess checking all content components:
+	@$(foreach v,$(GROUP_CONTENT), $(MOD_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
 
 # Do a component section and veiw the resulting output
-view-ot : $(PATH_PROCESS)/$(FILE_MATTER_OT_PDF)
+view-contents : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 	@- $(CLOSEPDF)
 	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
-view-nt : $(PATH_PROCESS)/$(FILE_MATTER_NT_PDF)
-	@- $(CLOSEPDF)
-	$(call watermark,$<)
-	@ $(VIEWPDF) $< &
+pdf-remove-contents :
+	@echo INFO: Removing file: $(FILE_CONTENTS_PDF)
+	@rm -f $(FILE_CONTENTS_PDF)
 
 
-# Preproces all the components in a project then run whatever global processes
-# needed like make-master-wordlist. (Add additional elements as added in the section below)
-preprocess-checks: preprocess-ot preprocess-nt
 
-
-# These are to augment the individual book commands set above for instances
-# when a specific group is being checked. (More may need to be added)
-preprocess-ot :
-	@echo INFO: Preprocess checking OT components:
-	@$(foreach v,$(MATTER_OT), $(MOD_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
-
-preprocess-nt :
-	@echo INFO: Preprocess checking NT components:
-	@$(foreach v,$(MATTER_NT), $(MOD_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
-
-# Having these here enable rules to call other rules
-.PHONY: view-ot view-nt preprocess-checks
 
 
 ##############################################################
@@ -320,3 +251,104 @@ $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_SOURCE_PERIPH)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
 endif
+
+
+
+# Old stuff for trash
+
+
+## Start with the OT but we don't want to do anything if there
+## are no components to process
+
+#ifneq ($(MATTER_OT),)
+## These build a rule (in memory) for all of the content components
+#$(foreach v,$(GROUP_CONTENT), $(eval $(call component_rules,$(v))))
+
+## A rule for creating the TeX control file for when the
+## entire OT is being typeset.
+#$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+#	@echo INFO: Creating: $@
+#	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'ot' 'ot' '$@' ''
+
+## Render the entire OT
+#$(PATH_PROCESS)/$(FILE_MATTER_OT_PDF) : \
+#	$(foreach v,$(filter $(OT_COMPONENTS),$(MATTER_OT)), \
+#	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+#	$(foreach v,$(filter-out $(OT_COMPONENTS),$(MATTER_OT)), \
+#	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_PICLIST) \
+#	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_ADJUSTMENT) \
+#	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+#	$(PATH_PROCESS)/$(FILE_MATTER_OT_TEX) \
+#	check-assets | $(DEPENDENT_FILE_LIST)
+#	@echo INFO: Creating: $@
+#	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_MATTER_OT_TEX)
+#endif
+
+#pdf-remove-ot :
+#	@echo INFO: Removing file: $(FILE_MATTER_OT_PDF)
+#	@rm -f $(FILE_MATTER_OT_PDF)
+
+
+## Moving along we will do the NT if there are any components
+## listed in the .project.conf file
+#ifneq ($(MATTER_NT),)
+## These build a rule (in memory) for this set of components
+#$(foreach v,$(MATTER_NT), $(eval $(call component_rules,$(v))))
+
+## A rule for creating the TeX control file for when the
+## entire OT is being typeset.
+#$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+#	@echo INFO: Creating: $@
+#	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'nt' 'nt' '$@' ''
+
+## Render the entire NT
+#$(PATH_PROCESS)/$(FILE_MATTER_NT_PDF) : \
+#	$(foreach v,$(filter $(NT_COMPONENTS),$(MATTER_NT)), \
+#	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+#	$(foreach v,$(filter-out $(NT_COMPONENTS),$(MATTER_NT)), \
+#	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_PICLIST) \
+#	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_ADJUSTMENT) \
+#	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+#	$(PATH_PROCESS)/$(FILE_MATTER_NT_TEX) \
+#	check-assets | $(DEPENDENT_FILE_LIST)
+#	@echo INFO: Creating: $@
+#	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_MATTER_NT_TEX)
+
+#endif
+
+#pdf-remove-nt :
+#	@echo INFO: Removing file: $(FILE_MATTER_NT_PDF)
+#	@rm -f $(FILE_MATTER_NT_PDF)
+
+## Do a component section and veiw the resulting output
+#view-ot : $(PATH_PROCESS)/$(FILE_MATTER_OT_PDF)
+#	@- $(CLOSEPDF)
+#	$(call watermark,$<)
+#	@ $(VIEWPDF) $< &
+
+#view-nt : $(PATH_PROCESS)/$(FILE_MATTER_NT_PDF)
+#	@- $(CLOSEPDF)
+#	$(call watermark,$<)
+#	@ $(VIEWPDF) $< &
+
+
+## Preproces all the components in a project then run whatever global processes
+## needed like make-master-wordlist. (Add additional elements as added in the section below)
+#preprocess-checks: preprocess-ot preprocess-nt
+
+
+## These are to augment the individual book commands set above for instances
+## when a specific group is being checked. (More may need to be added)
+#preprocess-ot :
+#	@echo INFO: Preprocess checking OT components:
+#	@$(foreach v,$(MATTER_OT), $(MOD_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
+
+#preprocess-nt :
+#	@echo INFO: Preprocess checking NT components:
+#	@$(foreach v,$(MATTER_NT), $(MOD_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
+
+## Having these here enable rules to call other rules
+#.PHONY: view-ot view-nt preprocess-checks
+
+
+

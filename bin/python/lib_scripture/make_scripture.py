@@ -140,43 +140,83 @@ class MakeMakefile (object) :
 		for key, value, in self._log_manager._settings['System']['TeX'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
-		for key, value, in self._log_manager._settings['Format']['Binding'].iteritems() :
-			# Only output matter component groups, output as string, not list
-			if key.find('MATTER_') == 0 :
-				makefileSettings = makefileSettings + key + "=" + ' '.join(value) + '\n'
+		# Build up all the component groupings
+		# The tricky part here is that we are
+		# going to output to the makefile hard-coded
+		# file names to simplify rules. We need
+		# to be sure we have covered every .conf
+		# setting necessary rather than relying on
+		# an iteration to catch everything.
 
-		# Now we will build some special process groups. There
-		# maybe a clever way to do this in afew lines but this
-		# will do for now.
-		frMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_FRONT'])
-		otMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_OT'])
-		ntMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_NT'])
-		apMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_AP'])
-		bkMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_BACK'])
-		mpMatter = ' '.join(self._log_manager._settings['Format']['Binding']['MATTER_MAPS'])
-		frontGroup = frMatter
-		contentGroup = otMatter + ' ' + ntMatter + ' ' + apMatter
-		backGroup = bkMatter
-		mapGroup = mpMatter
-		makefileSettings = makefileSettings + 'GROUP_FRONT=' + frontGroup + '\n'
+		# Cover components
+		cvMatter = ''
+		cvGroup = ''
+		for fn in self._log_manager._settings['Format']['Binding']['MATTER_COVER'] :
+			cvMatter = cvMatter + fn + ' '
+			cvGroup = cvGroup + fn + '.pdf '
+
+		# Build content components
+		otComponents = ''
+		for fid in self._log_manager._settings['Format']['Binding']['MATTER_OT'] :
+			otComponents = otComponents + fid + ' '
+
+		ntComponents = ''
+		for fid in self._log_manager._settings['Format']['Binding']['MATTER_NT'] :
+			ntComponents = ntComponents + fid + ' '
+
+		apComponents = ''
+		for fid in self._log_manager._settings['Format']['Binding']['MATTER_AP'] :
+			apComponents = apComponents + fid + ' '
+
+		# Build peripheral components
+		frMatter = ''
+		frGroup = ''
+		for fn in self._log_manager._settings['Format']['Binding']['MATTER_FRONT'] :
+			frMatter = frMatter + fn + ' '
+			frGroup = frGroup + fn + '.pdf '
+
+		bkMatter = ''
+		bkGroup = ''
+		for fn in self._log_manager._settings['Format']['Binding']['MATTER_BACK'] :
+			bkMatter = bkMatter + fn + ' '
+			bkGroup = bkGroup + fn + '.pdf '
+
+		mpMatter = ''
+		mpGroup = ''
+		for fn in self._log_manager._settings['Format']['Binding']['MATTER_MAPS'] :
+			mpMatter = mpMatter + fn + ' '
+			mpGroup = mpGroup + fn + '.pdf '
+
+		# Output component matter
+		makefileSettings = makefileSettings + 'MATTER_COVER=' + cvMatter.strip() + '\n'
+		makefileSettings = makefileSettings + 'MATTER_OT=' + otComponents.strip() + '\n'
+		makefileSettings = makefileSettings + 'MATTER_NT=' + ntComponents.strip() + '\n'
+		makefileSettings = makefileSettings + 'MATTER_AP=' + apComponents.strip() + '\n'
+		makefileSettings = makefileSettings + 'MATTER_FRONT=' + frMatter.strip() + '\n'
+		makefileSettings = makefileSettings + 'MATTER_BACK=' + bkMatter.strip() + '\n'
+		makefileSettings = makefileSettings + 'MATTER_MAPS=' + mpMatter.strip() + '\n'
+
+		# Output the groups here
+		contentGroup = otComponents + ' ' + ntComponents + ' ' + apComponents
+		makefileSettings = makefileSettings + 'GROUP_COVER=' + cvGroup.strip() + '\n'
+		makefileSettings = makefileSettings + 'GROUP_FRONT=' + frGroup.strip() + '\n'
 		makefileSettings = makefileSettings + 'GROUP_CONTENT=' + contentGroup.strip() + '\n'
-		makefileSettings = makefileSettings + 'GROUP_BACK=' + backGroup + '\n'
-		makefileSettings = makefileSettings + 'GROUP_MAPS=' + mapGroup + '\n'
-
-		# Make the PDF file names for the BOOK group
-		for group in self._log_manager._settings['Format']['Binding']['BOOK'] :
-			makefileSettings = makefileSettings + 'FILE_' + group + '=' + group + '.pdf\n'
+		makefileSettings = makefileSettings + 'GROUP_BACK=' + bkGroup.strip() + '\n'
+		makefileSettings = makefileSettings + 'GROUP_MAPS=' + mpGroup.strip() + '\n'
 
 		# Make the master book file name (hard codded)
 		makefileSettings = makefileSettings + 'FILE_BOOK=BOOK.pdf\n'
 
-		# Make the group control files (hard codded)
-		makefileSettings = makefileSettings + 'FILE_GROUP_FRONT_TEX=GROUP_FRONT.tex\n'
+
+		makefileSettings = makefileSettings + 'FILE_GROUP_CONTENT_PDF=GROUP_CONTENT.pdf\n'
+
+		# Make the content group TeX control file (hard codded)
+		# The other groups will not use TeX to compile their master
+		# PDF file like the content group does. They will use pdftk
+		# so a control file is not necessary.
 		makefileSettings = makefileSettings + 'FILE_GROUP_CONTENT_TEX=GROUP_CONTENT.tex\n'
-		makefileSettings = makefileSettings + 'FILE_GROUP_BACK_TEX=GROUP_BACK.tex\n'
-		makefileSettings = makefileSettings + 'FILE_GROUP_MAPS_TEX=GROUP_MAPS.tex\n'
 
-
+		# Output the helper commands
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'
 

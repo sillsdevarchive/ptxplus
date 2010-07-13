@@ -145,6 +145,7 @@ class MakeTexControlFile (object) :
 		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['System']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
 		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
 		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files'].get('FILE_BIBLE_STYLE', 'bible-format.sty')
+		generateTOC = self._log_manager._settings['Format']['TOC'].get('generateTOC', 'true')
 
 		# Input the main macro set here in the control file
 		settings = '\\input \"' + self._texMacros + '\"\n'
@@ -194,9 +195,13 @@ class MakeTexControlFile (object) :
 			# If it isn't the content group, then we assume it is a
 			# single book and we will only process that one book based
 			# on the book ID given.
+			# And while we are at it, we'll generate a TOC file if this
+			# is for the content group.
 			componentScripture = []
 			if self._inputID == 'content' :
 				componentScripture = self._contentGroup
+				if generateTOC == 'true' :
+					settings = settings + '\\GenerateTOC[' + tocTitle + ']{' + autoTocFile + '}\n'
 			else :
 				if self._inputID :
 					componentScripture = [self._inputID]
@@ -262,7 +267,6 @@ class MakeTexControlFile (object) :
 
 		# Process
 		autoTocFile = self._log_manager._settings['System']['Paths'].get('FILE_AUTO_TOC', 'auto-toc.usfm')
-		generateTOC = self._log_manager._settings['Format']['TOC'].get('generateTOC', 'true')
 		tocTitle = self._log_manager._settings['Format']['TOC'].get('mainTitle', 'Table of Contents')
 		marginalVersesMacro = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
 		columnshift = self._log_manager._settings['Format']['Columns'].get('columnshift', '15')
@@ -404,9 +408,6 @@ class MakeTexControlFile (object) :
 		if useMarginalVerses.lower() == 'true' :
 			fileInput = fileInput + '\\input ' + marginalVersesMacro + '\n'
 			fileInput = fileInput + '\\columnshift=' + columnshift + 'pt\n'
-		# First off, if a file name for the TOC is found, write it out
-		if generateTOC == 'true' :
-			fileInput = fileInput + '\\GenerateTOC[' + tocTitle + ']{' + autoTocFile + '}\n'
 		# Do we want a page border?
 		if usePageBorder.lower() == 'true' :
 			if pageBorderScale == '' :
