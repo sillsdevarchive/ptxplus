@@ -208,6 +208,7 @@ def openProject () :
 ################# Main Body of the Script ###################
 #############################################################
 
+errorCode = ''
 noCommandMsg = "Sorry, no valid command was given. Try again."
 
 if command == "manage" :
@@ -368,7 +369,7 @@ else :
 
 
 # All done
-if errorCode != 0 :
-	tools.userMessage("\n\t\tSorry, but please come again!\n")
-else :
+if errorCode == 0 or errorCode == '' :
 	tools.userMessage("\n\t\tThank you, please come again!\n")
+else :
+	tools.userMessage("\n\t\tSorry, but please come again!\n")
