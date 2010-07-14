@@ -75,14 +75,14 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
 # be easily expanded to other types as well.
 check-assets : $(FILE_PROJECT_CONF)
 	@echo INFO: Checking project assets
-	@$(MOD_RUN_PROCESS) $(MOD_CHECK_ASSETS) 'SYS' '' '' 'basic'
+	@$(MOD_RUN_PROCESS) "$(MOD_CHECK_ASSETS)" "SYS" "" "" "basic"
 
 # This is just like the check-assets rule but the 'refresh'
 # mode is used to be sure that that existing files are over-
 # written in case there has been updates.
 refresh-assets :
 	@echo INFO: Refreshing project assets
-	@$(MOD_RUN_PROCESS) $(MOD_CHECK_ASSETS) 'SYS' '' '' 'refresh'
+	@$(MOD_RUN_PROCESS) "$(MOD_CHECK_ASSETS)" "SYS" "" "" "refresh"
 
 # Having these here enable rules to call other rules
 .PHONY: check-assets refresh-assets
@@ -103,15 +103,15 @@ $(PATH_PROCESS)/.stamp :
 # Update a .project.conf file so system improvements can be
 # pulled into existing projects.
 update :
-	@$(MOD_RUN_PROCESS) update_project_settings
+	@$(MOD_RUN_PROCESS) "update_project_settings"
 
 # Make a project.sty file (when needed)
 make-styles :
-	@$(MOD_RUN_PROCESS) make_sty_file
+	@$(MOD_RUN_PROCESS) "make_sty_file"
 
 # Make a template from the current state of the project
 make-template :
-	@$(MOD_RUN_PROCESS) make_template
+	@$(MOD_RUN_PROCESS) "make_template"
 
 # Rule to make the project source folder. Of cource, if the user
 # changes the name of the source folder after it might get
