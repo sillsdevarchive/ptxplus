@@ -43,27 +43,22 @@ class FontManager (object) :
 
 		if self._settings_project['System']['General'].get('debugMode', 'false').lower() == 'true' :
 
-			self.projectFontFamily = self._settings_project['Format']['Fonts']['projectFontFamily']
-			if self.projectFontFamily == "" :
-				self.projectFontFamily = "GenBkBas"
-
-			self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['System']['Paths']['PATH_FONTS']
+			self.projectFontFamily = self._settings_project['Format']['Fonts'].get('projectFontFamily', 'GenBkBas')
+			self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['System']['Paths'].get('PATH_FONTS', 'Fonts')
 			self.pathToFontLibrary = self._settings_project['System']['Paths']['PATH_FONT_LIB']
-			if self.pathToFontLibrary == "" :
+			if not os.path.isdir(self.pathToFontLibrary) :
 				self.pathToFontLibrary = os.environ.get('PTXPLUS_BASE') + "/resources/lib_fonts"
 				self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
+
+
 		else :
 			try :
-				self.projectFontFamily = self._settings_project['Format']['Fonts']['projectFontFamily']
-				if self.projectFontFamily == "" :
-					self.projectFontFamily = "GenBkBas"
-
-				self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['System']['Paths']['PATH_FONTS']
+				self.projectFontFamily = self._settings_project['Format']['Fonts'].get('projectFontFamily', 'GenBkBas')
+				self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['System']['Paths'].get('PATH_FONTS', 'Fonts')
 				self.pathToFontLibrary = self._settings_project['System']['Paths']['PATH_FONT_LIB']
-				if self.pathToFontLibrary == "" :
+				if not os.path.isdir(self.pathToFontLibrary) :
 					self.pathToFontLibrary = os.environ.get('PTXPLUS_BASE') + "/resources/lib_fonts"
-
-				self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
+					self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
 
 			except :
 				# Idealy, we don't want to hard-code anything but in some cases it is just
@@ -85,7 +80,8 @@ class FontManager (object) :
 		# how many of them there are. For that reason we need to keep
 		# this simple (for now)
 		if os.path.isdir(self.projectFontFamilyFolder) :
-			ok = True
+			if len(os.listdir(self.projectFontFamilyFolder)) > 0 :
+				ok = True
 
 		return ok
 
@@ -99,7 +95,6 @@ class FontManager (object) :
 		if not os.path.isdir(self.projectFontFamilyFolder) :
 			os.mkdir(self.projectFontFamilyFolder)
 			tools.userMessage('Created folder: ' + self.projectFontFamilyFolder)
-		print self.fontFamilySourceFolder, self.projectFontFamilyFolder
 		if os.path.isdir(self.fontFamilySourceFolder) == True :
 			tools.copyFiles(self.fontFamilySourceFolder, self.projectFontFamilyFolder)
 			ok = True
@@ -120,7 +115,6 @@ class FontManager (object) :
 			if os.path.isdir(self.projectFontsFolder) == False :
 				os.mkdir(self.projectFontsFolder)
 
-			print fileName, srcname
 			shutil.copy(srcname, fileName)
 
 		# Import this module for this process only (May need to move it if other processes ever need it)
