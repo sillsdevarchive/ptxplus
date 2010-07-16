@@ -1,9 +1,9 @@
 Manual installation instructions for the developer version of the ptxplus package
 	By Dennis Drescher (dennis_drescher@sil.org)
-	Last edited: 14/12/2009
+	Last edited: 15/07/2010
 
 
-These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently Karmic, 9.10). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
+These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently Lucid, 10.04). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
 
 
 REQUIRED PACKAGES
@@ -12,44 +12,28 @@ There are a number of packages that need to be installed for ptxplus to work. So
 
 	sudo gedit /etc/apt/sources.list
 
-Next, in gedit in the file you just opened, go to the bottom of the file and add these lines if they do not already exist in the file:
+Next, in gedit in the file you just opened, go to the bottom of the file and add this line if it does not already exist in the file:
 
-	deb http://packages.sil.org/ubuntu karmic main
-	deb http://ppa.launchpad.net/mercurial-ppa/stable-snapshots/ubuntu karmic main
-	deb http://ppa.launchpad.net/mercurial-ppa/builddeps/ubuntu karmic main
-	deb http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu karmic main
+	deb http://packages.sil.org/ubuntu lucid main
 
 Save the file and close it.
-
-Before you can update your package list, you should be sure that you have an authentic key installed for the ppa repositories. You do that with this command:
-
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'
 
 Again, in the terminal, update your package list and update your system with the folling command and answer yes to the "install without verification" question:
 
 	sudo apt-get update
 	sudo apt-get upgrade
 
-A NOTE FOR KARMIC: Because of a bug in Inkscape 0.47~pre which was released with Karmic, you need to run an updated version that is found in the another PPA. Here are additional instructions for this. To install version 0.47 final in Ubuntu Karmic, you must add the following PPA:
-
-	sudo add-apt-repository ppa:ricotz/ppa
-
-Then upgrade Inkscape to the latest version:
-
-	sudo apt-get update && sudo apt-get upgrade
-
-
-Next, in the terminal, you need to install all the necessary packages to run the ptxplus publishing system. There are two categories, required and suggested. Use this command and answer yes like above:
+Next, in the terminal, you need to install all the necessary packages to run the ptxplus publishing system. There are two categories, required and suggested. When you use this command, be sure to review the list of programs that it is proposing to install. Look for any that it might want to remove. Be sure no critical programs are being removed. If you are not sure, do not go any further. Here are packages to install:
 
 Required:
 
-	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk
+	sudo apt-get install texlive texlive-xetex python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk
 
 Suggested:
 
 	sudo apt-get install libgtk2-spell-perl libteckit-perl teckit mercurial meld tortoisehg tortoisehg-nautilus libfont-ttf-scripts-perl
 
-As of Ubuntu 9.10 (Karmic) these instructions will install a version of xetex (3.141592-2.2-0.996-patch2) that will handle most things. However, we recommend you install the latest version over the one you installed above. It will come from the packages.sil.org repository. You do not need to do anything special just use this command:
+Another suggested program would be a modified version of XeTeX. You may need this if you are processing complex scripts. This version includes the latest features and bug fixes.
 
 	sudo apt-get install texlive-xetex-snapshot
 
@@ -58,7 +42,6 @@ That will remove the other version and replace it with version 3.1415926-2.2-0.9
 Finally, log out and log back in again so the system will properly recognize the newly installed packages and the TortoiseHg package should work correctly.
 
 With all the above packages installed, we are ready to move on to installing ptxplus publishing package.
-
 
 GETTING ptxplus
 -----------------------------------------
@@ -91,6 +74,7 @@ Now we will get ptxplus in your path by editing the ~/.profile file. To do that 
 
 Add this to the end of the file you just opened on its own line:
 
+	# Export the ptxplus path
 	export PTXPLUS_BASE="$HOME/Projects/ptxplus"
 
 Save the file and close it. Next time you reboot or login, the new path settings will be there.
