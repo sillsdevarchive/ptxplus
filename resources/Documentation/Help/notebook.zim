@@ -3,7 +3,7 @@ autosave_version=0
 document_root=/home/dennis/Projects/ptxplus/resources/Documentation/Help
 home=
 icon=
-name=ptxplus-Help
+name=ptxplus
 slow_fs=1
+version=0.4
 
-# vim: syntax=desktop
