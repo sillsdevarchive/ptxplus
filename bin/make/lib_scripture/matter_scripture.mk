@@ -51,11 +51,11 @@ ifeq ($(LOCKED),0)
 		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 	fi
 	@echo INFO: Running preprocess checks on: '$$<'
-	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<" "$$@"
+	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<" "$$@" ""
 	@echo INFO: Copying source to: '$$@'
-	@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$$<" "$$@"
+	@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$$<" "$$@" ""
 	@echo INFO: Running post-processes on: '$$@'
-	@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$$@" "$$@"
+	@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$$@" "$$@" ""
 else
 	@echo INFO: Cannot create: $$@ This is because the project is locked.
 endif

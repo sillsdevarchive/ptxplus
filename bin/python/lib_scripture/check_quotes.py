@@ -103,9 +103,13 @@ class CheckQuotes (object) :
 		startList = ""
 		endList = ""
 		# First quote markers
-		markers = unicode(self._quotation)
-		brackets = unicode(self._brackets)
-		for marker in markers :
+#        markers = unicode(self._quotation)
+#        brackets = unicode(self._brackets)
+#        markers = self._quotation
+#        brackets = self._brackets
+		for marker in self._quotation :
+
+			print marker, "mmmmmmmmmmmmmmmmmmmm"
 			# We want to be sure that any elements with more than one char
 			# are on the front of the list
 			if len(marker) == 1 :
@@ -114,18 +118,18 @@ class CheckQuotes (object) :
 				startList = startList + marker.lstrip() + "|"
 
 		# Now get our brackets
-		for bracket in brackets :
+		for bracket in self._brackets :
 			endList += "\\" + bracket.lstrip()
 
 		self._quoteRegexp = re.compile(startList + "[" + endList + "]")
 
 		# Build a matching lists for open to close and close to open for quotes
-		for o, c in zip(markers[0::2], markers[1::2]) :
+		for o, c in zip(self._quotation[0::2], self._quotation[1::2]) :
 			self._openToCloseQuotes[o.lstrip()] = c.lstrip()
 			self._closeToOpenQuotes[c.lstrip()] = o.lstrip()
 
 		# Build a matching lists for open to close and close to open for brackets
-		for o, c in zip(brackets[0::2], brackets[1::2]) :
+		for o, c in zip(self._brackets[0::2], self._brackets[1::2]) :
 			self._openToCloseBrackets[o.lstrip()] = c.lstrip()
 			self._closeToOpenBrackets[c.lstrip()] = o.lstrip()
 
