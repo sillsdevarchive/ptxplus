@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 # -*- coding: utf-8 -*-
 # version: 20080423
 # By Dennis Drescher (dennis_drescher at sil.org)
@@ -218,7 +218,7 @@ if command == "manage" :
 elif command == "help" :
 	# We have to help the user get started so this will allow us to call help
 	# even if a project is not open.
-	os.system('zim ' + basePath + '/resources/Documentation/Help/ Home.txt')
+	os.system('zim ' + basePath + '/resources/Documentation/Help/Home.txt')
 
 elif command == "about" :
 	# Give the user an "about" window even if not in a project.

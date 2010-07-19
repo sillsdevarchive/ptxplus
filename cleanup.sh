@@ -4,3 +4,4 @@
 
 find . -name "*~" -exec rm -rfv {} \;
 find . -name "*.pyc" -exec rm -rfv {} \;
+find . -name "*.bak" -exec rm -rfv {} \;

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 # -*- coding: utf_8 -*-
 # version: 20080608
 # By Dennis Drescher (dennis_drescher at sil.org)

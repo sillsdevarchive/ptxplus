@@ -51,11 +51,11 @@ ifeq ($(LOCKED),0)
 		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 	fi
 	@echo INFO: Running preprocess checks on: '$$<'
-	@$(MOD_RUN_PROCESS) preprocessChecks $(1) '$$<' '$$@'
+	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<" "$$@" ""
 	@echo INFO: Copying source to: '$$@'
-	@$(MOD_RUN_PROCESS) copyIntoSystem $(1) '$$<' '$$@'
+	@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$$<" "$$@" ""
 	@echo INFO: Running post-processes on: '$$@'
-	@$(MOD_RUN_PROCESS) textProcesses $(1) '$$@' '$$@'
+	@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$$@" "$$@" ""
 else
 	@echo INFO: Cannot create: $$@ This is because the project is locked.
 endif
@@ -73,7 +73,7 @@ ifeq ($(LOCKED),0)
 		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 	fi
 	@echo INFO: Checking: '$$<'
-	@$(MOD_RUN_PROCESS) preprocessChecks $(1) '$$<'
+	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<"
 else
 	@echo INFO: Cannot run: $$@ This is because the project is locked.
 endif
@@ -83,7 +83,7 @@ endif
 $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
 ifeq ($(LOCKED),0)
 	@echo INFO: Creating: $$@
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) '$(1)' '$(1).$(EXT_WORK)' '$$@' ''
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "$(1)" "$(1).$(EXT_WORK)" "$$@" ""
 else
 	@echo INFO: Cannot create: $$@ This is because the project is locked.
 endif
@@ -120,7 +120,7 @@ $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
 ifeq ($(USE_ADJUSTMENTS),true)
 	@echo INFO: Creating: $$@
-	@$(MOD_RUN_PROCESS) $(MOD_PARA_ADJUST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@$(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
 else
 	@echo INFO: USE_ADJUSTMENTS is set to \"$(USE_ADJUSTMENTS)\". $$@ not made.
 endif
@@ -135,7 +135,7 @@ endif
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@echo INFO: Creating: $$@
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_PICLIST) $(1) $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_PICLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
 else
 	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\". $$@ not made.
 endif
@@ -193,15 +193,15 @@ $(PATH_PROCESS)/$(FILE_BIBLE_STYLE) : | $(PATH_SOURCE)
 # format settings of all the main content. This is not to
 # be confused with the Bible control file which is a TeX
 # control file for processing the entire Bible.
-$(PATH_PROCESS)/$(FILE_TEX_BIBLE) :
+$(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) '' '' '$@' ''
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" ""
 
 # Rule for building the GROUP_CONTENT control file. This is
 # not the same as TeX settings file above.
 $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
 	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TEX) 'content' 'content' '$@' ''
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
 
 # Rule for generating the entire Scripture content. It will
 # also generate the TOC if that feature is turned on.
@@ -216,7 +216,7 @@ $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
 	check-assets | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC)
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)"
 
 # The TOC data is made during the content creation. As such
 # the TOC file creation cannot happen until the content is made.
@@ -225,7 +225,7 @@ $(PATH_SOURCE_PERIPH)/$(FILE_TOC) : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 # This enables preprocess checks on all the components at one time.
 preprocess-content :
 	@echo INFO: Preprocess checking all content components:
-	@$(foreach v,$(GROUP_CONTENT), $(MOD_RUN_PROCESS) preprocessChecks $(v) $(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE); )
+	@$(foreach v,$(GROUP_CONTENT), $(MOD_RUN_PROCESS) "preprocessChecks" "$(v)" "$(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)"; )
 
 # Do a component section and veiw the resulting output
 view-contents : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)

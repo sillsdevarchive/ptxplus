@@ -1,9 +1,9 @@
 Manual installation instructions for the developer version of the ptxplus package
 	By Dennis Drescher (dennis_drescher@sil.org)
-	Last edited: 14/12/2009
+	Last edited: 15/07/2010
 
 
-These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently Karmic, 9.10). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
+These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently Lucid, 10.04). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
 
 
 REQUIRED PACKAGES
@@ -12,44 +12,28 @@ There are a number of packages that need to be installed for ptxplus to work. So
 
 	sudo gedit /etc/apt/sources.list
 
-Next, in gedit in the file you just opened, go to the bottom of the file and add these lines if they do not already exist in the file:
+Next, in gedit in the file you just opened, go to the bottom of the file and add this line if it does not already exist in the file:
 
-	deb http://packages.sil.org/ubuntu karmic main
-	deb http://ppa.launchpad.net/mercurial-ppa/stable-snapshots/ubuntu karmic main
-	deb http://ppa.launchpad.net/mercurial-ppa/builddeps/ubuntu karmic main
-	deb http://ppa.launchpad.net/tortoisehg-ppa/releases/ubuntu karmic main
+	deb http://packages.sil.org/ubuntu lucid main
 
 Save the file and close it.
-
-Before you can update your package list, you should be sure that you have an authentic key installed for the ppa repositories. You do that with this command:
-
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys '323293EE D5056DDE'
 
 Again, in the terminal, update your package list and update your system with the folling command and answer yes to the "install without verification" question:
 
 	sudo apt-get update
 	sudo apt-get upgrade
 
-A NOTE FOR KARMIC: Because of a bug in Inkscape 0.47~pre which was released with Karmic, you need to run an updated version that is found in the another PPA. Here are additional instructions for this. To install version 0.47 final in Ubuntu Karmic, you must add the following PPA:
-
-	sudo add-apt-repository ppa:ricotz/ppa
-
-Then upgrade Inkscape to the latest version:
-
-	sudo apt-get update && sudo apt-get upgrade
-
-
-Next, in the terminal, you need to install all the necessary packages to run the ptxplus publishing system. There are two categories, required and suggested. Use this command and answer yes like above:
+Next, in the terminal, you need to install all the necessary packages to run the ptxplus publishing system. There are two categories, required and suggested. When you use this command, be sure to review the list of programs that it is proposing to install. Look for any that it might want to remove. Be sure no critical programs are being removed. If you are not sure, do not go any further. Here are packages to install:
 
 Required:
 
-	sudo apt-get install texlive texlive-xetex python2.5 python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk
+	sudo apt-get install texlive texlive-xetex python-htmlgen python-configobj python-mako evince inkscape zim python-gtk2 python-vte pdftk
 
 Suggested:
 
 	sudo apt-get install libgtk2-spell-perl libteckit-perl teckit mercurial meld tortoisehg tortoisehg-nautilus libfont-ttf-scripts-perl
 
-As of Ubuntu 9.10 (Karmic) these instructions will install a version of xetex (3.141592-2.2-0.996-patch2) that will handle most things. However, we recommend you install the latest version over the one you installed above. It will come from the packages.sil.org repository. You do not need to do anything special just use this command:
+Another suggested program would be a modified version of XeTeX. You may need this if you are processing complex scripts. This version includes the latest features and bug fixes.
 
 	sudo apt-get install texlive-xetex-snapshot
 
@@ -58,7 +42,6 @@ That will remove the other version and replace it with version 3.1415926-2.2-0.9
 Finally, log out and log back in again so the system will properly recognize the newly installed packages and the TortoiseHg package should work correctly.
 
 With all the above packages installed, we are ready to move on to installing ptxplus publishing package.
-
 
 GETTING ptxplus
 -----------------------------------------
@@ -91,6 +74,7 @@ Now we will get ptxplus in your path by editing the ~/.profile file. To do that 
 
 Add this to the end of the file you just opened on its own line:
 
+	# Export the ptxplus path
 	export PTXPLUS_BASE="$HOME/Projects/ptxplus"
 
 Save the file and close it. Next time you reboot or login, the new path settings will be there.
@@ -123,9 +107,9 @@ This should complete the manual installation of ptxplus. Now you should be able 
 
 	ptxplus
 
-Go a head, give it a try.
+Go a head, give it a try. What you should see is a ptxplus control panel come up but there will obviously be no project displayed. Work needs to be done to the display to gray-out parts of the display that are not relevant when there is no project but it works for now.
 
-One system value that should be set is the user name. This is used for making log entires and such. To do this, at the command prompt type:
+One system value that should be set at this point is the user name. This is used for making log entires and such. To do this, at the command prompt type:
 
 	ptxplus set-user 'your name'
 
@@ -133,7 +117,36 @@ Then, to check the user name type:
 
 	ptxplus user
 
-In a terminal, to start ptxplus on an existing project, start it from the root of a project folder. It will find the project.conf file and automatically load that project. Also, because a special Nautilus script was installed (above) You can start ptxplus with a right-click from the file browser.
+
+QUICK START GUIDE
+-----------------------------------------
+Ptxplus is a system which helps you carry out and manage a publication project. It is not a magical piece of software that does it for you. This is why you get paid all that money to be a "publishing specialist". :-) Here we will provide a quick little exercize that will help you get started. I would point you to the Help with system for this but with the Lucid release that seems to be broken now.
+
+Follow these steps to familiarize yourself and test the system:
+
+1) Create a folder on your drive where you would like to do your publishing work. It can be anywhere and it doesn't have to be just one place. Next create a folder in that folder with some silly name like "test".
+
+2) Assuming you are in Nautilus, navigate to your new test folder, then right click and then Scripts -> ptxplus
+
+3) In the ptxplus control panel, click Project -> New, then in the dialog type a test project name and click Open.
+
+4) Next click Project -> Open, it should be located in your new project, if not, find it, then click Open.
+
+5) You are now in your test "New Nameless Project". Check out the Config tab, that is the "DNA" of the publication. Also, look at the folders and files that ptxplus has created. Familiarize yourself with what is in them.
+
+6) Now click on the View-COVERFRONT.USFM button. In a few seconds a PDF file should apear with a draft of your project's front cover.
+
+7) As the file was just freshly generated it is still warm, so don't touch it yet. While you are waiting for it to cool, look around the project files again and see what has changed since you ran this first typesetting operation.
+
+8) Next, in the Config tab find Format -> Binding -> MATTER_NT. Double click on the field and a small dialog will apear where you can change the setting. Initially, the setting will be "," (this indicates it is a list field). Replace this with "jas," (note the comma) and click apply. Then click Close. In the main window click on the Reload Settings button. Now in the Component list (upper left), click the button and a list should apear of all the components that the system recognizes for this project. Click on "jas". You are now ready to process the Book of James.
+
+9) Click on the Session tab, then click on the View-jas button. A bunch of text will fly by in the session window then you will see the freshly created jas.usfm.pdf file. The source that created this PDF is a test file that is included with the system for testing purposes and was imported into the Source folder of the project when it found there was none there. Take a look at the PDF. Notice that it uses "dumb" quotes. Now close it and look for the error log window. There should have been some. Close that window and look at the project folder again and notice the changes that were made.
+
+
+
+OPENING A PROJECT
+-----------------------------------------
+In a terminal, to start ptxplus on an existing project, start it from the root of a project folder. It will find the confguraton (.scripture.conf or .dictionary.conf) file and automatically load that project. Also, because a special Nautilus script was installed (above) You can start ptxplus with a right-click from the file browser.
 
 At this point you may need to load some projects on your local system or start a new project. To do this, start ptxplus and open the system help with Help->System Help. You can then look at the Repository section to get a better idea of how to get going.
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 # -*- coding: utf_8 -*-
 # version: 20080729
 # By Dennis Drescher (dennis_drescher at sil.org)
@@ -86,26 +86,15 @@ class CheckQuotes (object) :
 		# Build a list of quotation characters for dumb quotes
 		self._quotation = self._settings['ProjectText']['SourceText']['Encoding']['Quotation'][self._currentQuoteSystem]['quoteMarkerPairs']
 
-		# Build a dictionary key/value pairs for quote markers used on this project
-#        for k, v, in self._settings['ProjectText']['SourceText']['Encoding']['Quotation'][self._currentQuoteSystem].iteritems() :
-#            if v != '' :
-#                self._quotation[k] = v
-
 		# Build a list of valid bracket characters
 		self._brackets = self._settings['ProjectText']['SourceText']['Encoding']['Brackets']['bracketMarkerPairs']
-
-		# Build a dictionary of key/value pairs for the brackets used on this project
-#        for k, v, in self._settings['System']['Encoding']['Punctuation']['Brackets'].iteritems() :
-#            if v != '' :
-#                self._brackets[k] = v
 
 		# Build a regular expression for quote checking
 		startList = ""
 		endList = ""
 		# First quote markers
-		markers = unicode(self._quotation)
-		brackets = unicode(self._brackets)
-		for marker in markers :
+		for marker in self._quotation :
+
 			# We want to be sure that any elements with more than one char
 			# are on the front of the list
 			if len(marker) == 1 :
@@ -114,30 +103,29 @@ class CheckQuotes (object) :
 				startList = startList + marker.lstrip() + "|"
 
 		# Now get our brackets
-		for bracket in brackets :
+		for bracket in self._brackets :
 			endList += "\\" + bracket.lstrip()
 
 		self._quoteRegexp = re.compile(startList + "[" + endList + "]")
 
 		# Build a matching lists for open to close and close to open for quotes
-		for o, c in zip(markers[0::2], markers[1::2]) :
+		for o, c in zip(self._quotation[0::2], self._quotation[1::2]) :
 			self._openToCloseQuotes[o.lstrip()] = c.lstrip()
 			self._closeToOpenQuotes[c.lstrip()] = o.lstrip()
 
 		# Build a matching lists for open to close and close to open for brackets
-		for o, c in zip(brackets[0::2], brackets[1::2]) :
+		for o, c in zip(self._brackets[0::2], self._brackets[1::2]) :
 			self._openToCloseBrackets[o.lstrip()] = c.lstrip()
 			self._closeToOpenBrackets[c.lstrip()] = o.lstrip()
 
 		# Build a list seperate lists for dumb and smart quotes
-		dumbQuoteList = unicode(self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['DumbQuotes']['quoteMarkerPairs'])
-		smartQuoteList = unicode(self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['SmartQuotes']['quoteMarkerPairs'])
+		dumbQuoteList = self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['DumbQuotes']['quoteMarkerPairs']
+		smartQuoteList = self._settings['ProjectText']['SourceText']['Encoding']['Quotation']['SmartQuotes']['quoteMarkerPairs']
 
 		# Now build seperate lists which seperates them into close and open pair types
 		for do, so, dc, sc in zip(dumbQuoteList[0::2], smartQuoteList[0::2], dumbQuoteList[1::2], smartQuoteList[1::2]) :
 			self._dumbToSmartOpen[do.lstrip()] = so.lstrip()
 			self._dumbToSmartClose[dc.lstrip()] = sc.lstrip()
-
 
 	def processTextChunk(self, text, tag, info, lastTag, lastInfo, mode) :
 		'''Main quote checking funtion which will report any errors found.'''

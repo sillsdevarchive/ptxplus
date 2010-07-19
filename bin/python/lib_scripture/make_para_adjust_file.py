@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 # -*- coding: utf_8 -*-
 # version: 20080622
 # By Dennis Drescher (dennis_drescher at sil.org)
@@ -99,7 +99,7 @@ class MakeParaAdjustFile (object) :
 
 
 		# Pull in any argments we need. For this module we know that the first one
-		# is the one we need. If there are more they are relevant.
+		# is the one we need. If there are more they are irrelevant.
 		adjustParaLength = int(0)
 		adjustParaLength = int(tools.getModuleArguments()[0])
 # How do we do integer comparison?
