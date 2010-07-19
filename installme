@@ -120,28 +120,7 @@ Then, to check the user name type:
 
 QUICK START GUIDE
 -----------------------------------------
-Ptxplus is a system which helps you carry out and manage a publication project. It is not a magical piece of software that does it for you. This is why you get paid all that money to be a "publishing specialist". :-) Here we will provide a quick little exercize that will help you get started. I would point you to the Help with system for this but with the Lucid release that seems to be broken now.
-
-Follow these steps to familiarize yourself and test the system:
-
-1) Create a folder on your drive where you would like to do your publishing work. It can be anywhere and it doesn't have to be just one place. Next create a folder in that folder with some silly name like "test".
-
-2) Assuming you are in Nautilus, navigate to your new test folder, then right click and then Scripts -> ptxplus
-
-3) In the ptxplus control panel, click Project -> New, then in the dialog type a test project name and click Open.
-
-4) Next click Project -> Open, it should be located in your new project, if not, find it, then click Open.
-
-5) You are now in your test "New Nameless Project". Check out the Config tab, that is the "DNA" of the publication. Also, look at the folders and files that ptxplus has created. Familiarize yourself with what is in them.
-
-6) Now click on the View-COVERFRONT.USFM button. In a few seconds a PDF file should apear with a draft of your project's front cover.
-
-7) As the file was just freshly generated it is still warm, so don't touch it yet. While you are waiting for it to cool, look around the project files again and see what has changed since you ran this first typesetting operation.
-
-8) Next, in the Config tab find Format -> Binding -> MATTER_NT. Double click on the field and a small dialog will apear where you can change the setting. Initially, the setting will be "," (this indicates it is a list field). Replace this with "jas," (note the comma) and click apply. Then click Close. In the main window click on the Reload Settings button. Now in the Component list (upper left), click the button and a list should apear of all the components that the system recognizes for this project. Click on "jas". You are now ready to process the Book of James.
-
-9) Click on the Session tab, then click on the View-jas button. A bunch of text will fly by in the session window then you will see the freshly created jas.usfm.pdf file. The source that created this PDF is a test file that is included with the system for testing purposes and was imported into the Source folder of the project when it found there was none there. Take a look at the PDF. Notice that it uses "dumb" quotes. Now close it and look for the error log window. There should have been some. Close that window and look at the project folder again and notice the changes that were made.
-
+Ptxplus has a Wiki help system which, as we are able to update it, gives the user documentaion on the system. This can be accessed by cliking on Help -> Help in the main ptxplus menu. There is a quick start guide under Examples called "Role Your Own" that will help you get started.
 
 
 OPENING A PROJECT
