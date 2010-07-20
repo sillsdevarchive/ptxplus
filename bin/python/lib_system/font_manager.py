@@ -46,7 +46,9 @@ class FontManager (object) :
 			self.projectFontFamily = self._settings_project['Format']['Fonts'].get('projectFontFamily', 'GenBkBas')
 			self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['System']['Paths'].get('PATH_FONTS', 'Fonts')
 			self.pathToFontLibrary = self._settings_project['System']['Paths']['PATH_FONT_LIB']
-			if not os.path.isdir(self.pathToFontLibrary) :
+			if os.path.isdir(self.pathToFontLibrary) :
+				self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
+			else :
 				self.pathToFontLibrary = os.environ.get('PTXPLUS_BASE') + "/resources/lib_fonts"
 				self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
 
@@ -56,7 +58,9 @@ class FontManager (object) :
 				self.projectFontFamily = self._settings_project['Format']['Fonts'].get('projectFontFamily', 'GenBkBas')
 				self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['System']['Paths'].get('PATH_FONTS', 'Fonts')
 				self.pathToFontLibrary = self._settings_project['System']['Paths']['PATH_FONT_LIB']
-				if not os.path.isdir(self.pathToFontLibrary) :
+				if os.path.isdir(self.pathToFontLibrary) :
+					self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
+				else :
 					self.pathToFontLibrary = os.environ.get('PTXPLUS_BASE') + "/resources/lib_fonts"
 					self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
 
