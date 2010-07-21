@@ -103,6 +103,9 @@ class MakeTexControlFile (object) :
 		self._footerPositions = ['RFtitleleft', 'RFtitlecenter', 'RFtitleright', \
 						'RFoddleft', 'RFoddcenter', 'RFoddright', \
 						'RFevenleft', 'RFevencenter', 'RFevenright']
+		# Some global settings
+		self._useMarginalVerses = self._log_manager._settings['Format']['ChapterVerse'].get('useMarginalVerses', 'false')
+
 
 
 		if self._publicationType.lower() == 'scripture' :
@@ -146,6 +149,7 @@ class MakeTexControlFile (object) :
 		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
 		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files'].get('FILE_BIBLE_STYLE', 'bible-format.sty')
 		generateTOC = self._log_manager._settings['Format']['TOC'].get('generateTOC', 'true')
+		marginalVersesMacro = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
 
 		# Input the main macro set here in the control file
 		settings = '\\input \"' + self._texMacros + '\"\n'
@@ -188,6 +192,13 @@ class MakeTexControlFile (object) :
 			# we might need to rethink this.
 			if useHyphenation.lower() == 'true' :
 				settings = settings + '\\input \"' + hyphenFile + '\"\n'
+
+			# Are we using marginal verses?
+			# Really, we don't want to put this here but due to a problem with
+			# passing style params, we need to pull in the marginal verse macro
+			# code at this point.
+			if self._useMarginalVerses.lower() == 'true' :
+				settings = settings + '\\input ' + marginalVersesMacro + '\n'
 
 			# Since we were passed here it is assmumed that the context
 			# flag will contain a book ID, or will represent the entire
@@ -268,7 +279,6 @@ class MakeTexControlFile (object) :
 		# Process
 		autoTocFile = self._log_manager._settings['System']['Paths'].get('FILE_AUTO_TOC', 'auto-toc.usfm')
 		tocTitle = self._log_manager._settings['Format']['TOC'].get('mainTitle', 'Table of Contents')
-		marginalVersesMacro = self._log_manager._settings['System']['Files'].get('FILE_MARGINAL_VERSES', 'ptxplus-marginalverses.tex')
 		columnshift = self._log_manager._settings['Format']['Columns'].get('columnshift', '15')
 
 		# Format -> PageLayout
@@ -277,7 +287,6 @@ class MakeTexControlFile (object) :
 		usePageBorder = self._log_manager._settings['Format']['PageLayout'].get('USE_PAGE_BORDER', 'false')
 		pageBorderScale = self._log_manager._settings['Format']['PageLayout'].get('pageBorderScale', '825')
 		pageBorderFile = self._log_manager._settings['System']['Files'].get('FILE_PAGE_BORDER', 'pageborder.pdf')
-		useMarginalVerses = self._log_manager._settings['Format']['ChapterVerse'].get('useMarginalVerses', 'false')
 
 		# Format -> Scripture
 		useRunningHeaderRule = self._log_manager._settings['Format']['HeaderFooter'].get('useRunningHeaderRule', 'false')
@@ -404,9 +413,9 @@ class MakeTexControlFile (object) :
 		# Path to Illustration files (Note we add a "/" at the end so ptx2pdf can get it right.)
 		if useIllustrations.lower() == 'true' :
 			fileInput = fileInput + '\\PicPath={' + self._pathToIllustrations + '/}\n'
-		# Will we use marginal verses?
-		if useMarginalVerses.lower() == 'true' :
-			fileInput = fileInput + '\\input ' + marginalVersesMacro + '\n'
+		# Will we use marginal verses? This setting is
+		# mainly for use with marginal verses
+		if self._useMarginalVerses.lower() == 'true' :
 			fileInput = fileInput + '\\columnshift=' + columnshift + 'pt\n'
 		# Do we want a page border?
 		if usePageBorder.lower() == 'true' :
