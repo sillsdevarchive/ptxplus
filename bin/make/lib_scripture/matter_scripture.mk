@@ -57,7 +57,7 @@ ifeq ($(LOCKED),0)
 	@echo INFO: Running post-processes on: '$$@'
 	@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$$@" "$$@" ""
 else
-	@echo INFO: Cannot create: $$@ This is because the project is locked.
+	@echo INFO: Cannot create: $$@ because the project is locked.
 endif
 
 # This enables us to do the preprocessing on a single component and view the log file
@@ -75,7 +75,26 @@ ifeq ($(LOCKED),0)
 	@echo INFO: Checking: '$$<'
 	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<"
 else
-	@echo INFO: Cannot run: $$@ This is because the project is locked.
+	@echo INFO: Cannot process: $$@ because the project is locked.
+endif
+
+# This is a postprocess rule that can be called independently
+# To be safe.it will delete the working copy and run the preprocess
+# checks too before copying and postprocessing.
+postprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
+ifeq ($(LOCKED),0)
+	@if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
+		echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+	fi
+	@echo INFO: Running preprocess checks on: '$$<'
+	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<" "$$@" ""
+	@echo INFO: Copying source to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+	@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$$<" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+	@echo INFO: Running post-processes on: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'
+	@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+else
+	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
 
 # Call the TeX control file creation script to create a simple
@@ -226,6 +245,21 @@ $(PATH_SOURCE_PERIPH)/$(FILE_TOC) : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 preprocess-content :
 	@echo INFO: Preprocess checking all content components:
 	@$(foreach v,$(GROUP_CONTENT), $(MOD_RUN_PROCESS) "preprocessChecks" "$(v)" "$(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)"; )
+
+
+
+####################################################################################
+
+# working here
+
+# This enables preprocess checks on all the components at one time.
+#postprocess-content :
+#	@echo INFO: Postprocessing all content components:
+#	@$(foreach v,$(GROUP_CONTENT), $(MOD_RUN_PROCESS) "preprocessChecks" "$(v)" "$(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)"; )
+
+#call this postprocess-$(v)
+
+####################################################################################
 
 # Do a component section and veiw the resulting output
 view-contents : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
