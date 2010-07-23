@@ -291,6 +291,7 @@ class MakeTexControlFile (object) :
 		useRunningHeaderRule = self._log_manager._settings['Format']['HeaderFooter']['useRunningHeaderRule']
 		runningHeaderRulePosition = self._log_manager._settings['Format']['HeaderFooter']['runningHeaderRulePosition']
 		verseRefs = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['verseRefs']
+		omitBookRef = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['omitBookRef']
 		chapterVerseSeparator = self._log_manager._settings['Format']['ChapterVerse']['chapterVerseSeparator']
 		omitChapterNumber = self._log_manager._settings['Format']['ChapterVerse']['omitAllChapterNumbers']
 		omitVerseNumberOne = self._log_manager._settings['Format']['ChapterVerse']['omitVerseNumberOne']
@@ -428,6 +429,8 @@ class MakeTexControlFile (object) :
 			verseChapterSettings = verseChapterSettings + '\\VerseRefstrue\n'
 		if omitChapterNumber.lower() == 'true' :
 			verseChapterSettings = verseChapterSettings + '\\OmitChapterNumberRHtrue\n'
+		if omitBookRef.lower() == 'true' :
+			verseChapterSettings = verseChapterSettings + '\\OmitBookReftrue\n'
 		if omitVerseNumberOne.lower() == 'true' :
 			verseChapterSettings = verseChapterSettings + '\\OmitVerseNumberOnetrue\n'
 		if removeIndentAfterHeading.lower() == 'true' :
