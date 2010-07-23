@@ -5,6 +5,7 @@
   <widget class="GtkWindow" id="w_main">
 	<property name="visible">True</property>
 	<property name="title" translatable="yes">ptxplus-manager</property>
+	<signal name="delete_event" handler="on_w_main_delete_event"/>
 	<child>
 	  <widget class="GtkVBox" id="vbox1">
 		<property name="visible">True</property>

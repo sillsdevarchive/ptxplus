@@ -84,6 +84,7 @@ class ConfigGUI (object) :
 
 		dic = {
 			"on_w_main_destroy"                     : self.quit,
+			"on_w_main_delete_event"                : self.quit,
 			"on_b_view_clicked"                     : self.b_view_clicked,
 			"on_b_check_clicked"                    : self.b_check_clicked,
 			"on_b_wiki_clicked"                     : self.b_wiki_clicked,
@@ -362,7 +363,7 @@ class ConfigGUI (object) :
 		self.execute("cd", newdir)
 		self.init_dir()
 
-	def quit (self, widget) :
+	def quit (self, widget, data=None) :
 		self.write_files()
 		gtk.main_quit()
 
