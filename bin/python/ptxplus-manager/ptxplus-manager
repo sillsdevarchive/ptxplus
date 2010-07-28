@@ -20,6 +20,7 @@
 #        being messed up when saved by the UI. Thanks TimE
 # 20100629 - djd - More robust read and write in list form was added by TimE
 #       this enabled us to put a comma in a comma seperated list.
+# 20100728 - djd - A a menu item for running postprocesses only
 
 ########################################################################################
 
@@ -87,6 +88,8 @@ class ConfigGUI (object) :
 			"on_menu_backup_activate"               : self.m_backup,
 			"on_menu_reload_activate"               : self.m_reload,
 			"on_menu_preprocess_activate"           : self.m_preprocess,
+			"on_menu_postprocess_all_activate"          : self.m_postprocess_all,
+			"on_menu_postprocess_current_activate"          : self.m_postprocess_current,
 			"on_menu_wordlist_activate"             : self.m_wordlist,
 			"on_menu_hyphenlist_activate"           : self.m_hyphenlist,
 #            "on_menu_bind_activate"                 : self.m_bind,
@@ -575,6 +578,12 @@ class ConfigGUI (object) :
 
 	def m_preprocess (self, widget) :
 		self.execute("ptxplus", "preprocess")
+
+	def m_postprocess_all (self, widget) :
+		self.execute("ptxplus", "postprocess-content")
+
+	def m_postprocess_current (self, widget) :
+		self.execute("ptxplus", "postprocess-" + self.bkid)
 
 	def m_quit (self, widget) :
 		self.quit()
