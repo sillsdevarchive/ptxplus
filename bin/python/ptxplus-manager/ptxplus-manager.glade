@@ -345,21 +345,28 @@
 				  <widget class="GtkMenu" id="process">
 					<property name="visible">True</property>
 					<child>
-					  <widget class="GtkMenuItem" id="postprocess_all">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Postprocess all the content of this publication	</property>
-						<property name="label" translatable="yes">Postprocess All</property>
-						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_postprocess_all_activate"/>
-					  </widget>
-					</child>
-					<child>
 					  <widget class="GtkMenuItem" id="postprocess_current">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Postprocess the current component of this publication</property>
 						<property name="label" translatable="yes">Postprocess (Current)</property>
 						<property name="use_underline">True</property>
 						<signal name="activate" handler="on_menu_postprocess_current_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="postprocess_all">
+						<property name="label" translatable="yes">PostProcess (All)</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Postprocess all the content of this publication	</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
+						<signal name="activate" handler="on_menu_postprocess_all_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image9">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -393,7 +400,7 @@
 					</child>
 					<child>
 					  <widget class="GtkImageMenuItem" id="menu_clean_pic_all">
-						<property name="label">Remove All Picture Lists</property>
+						<property name="label">Remove Picture Lists (ALL)</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove all the illustrations list files for this publication</property>
 						<property name="use_stock">False</property>
@@ -414,7 +421,7 @@
 					</child>
 					<child>
 					  <widget class="GtkImageMenuItem" id="menu_remove_adj">
-						<property name="label">Clear Adjustments</property>
+						<property name="label">Clear Adjustments (Current)</property>
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Remove the current adjustment list file</property>
 						<property name="use_stock">False</property>
