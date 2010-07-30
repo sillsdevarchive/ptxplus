@@ -8,7 +8,6 @@
 	<child>
 	  <widget class="GtkVBox" id="vbox1">
 		<property name="visible">True</property>
-		<property name="orientation">vertical</property>
 		<child>
 		  <widget class="GtkMenuBar" id="menubar1">
 			<property name="visible">True</property>
@@ -346,6 +345,29 @@
 				  <widget class="GtkMenu" id="process">
 					<property name="visible">True</property>
 					<child>
+					  <widget class="GtkMenuItem" id="postprocess_all">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Postprocess all the content of this publication	</property>
+						<property name="label" translatable="yes">Postprocess All</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_postprocess_all_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="postprocess_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Postprocess the current component of this publication</property>
+						<property name="label" translatable="yes">Postprocess (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_postprocess_current_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="&lt;separator&gt;">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
 					  <widget class="GtkMenuItem" id="menu_make_piclist">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Create a picture list file for this component</property>
@@ -654,7 +676,6 @@
 			<child>
 			  <widget class="GtkVBox" id="vbox3">
 				<property name="visible">True</property>
-				<property name="orientation">vertical</property>
 				<child>
 				  <widget class="GtkLabel" id="label2">
 					<property name="visible">True</property>
@@ -684,7 +705,6 @@
 				<child>
 				  <widget class="GtkVButtonBox" id="vbuttonbox1">
 					<property name="visible">True</property>
-					<property name="orientation">vertical</property>
 					<child>
 					  <widget class="GtkButton" id="b_view">
 						<property name="label" translatable="yes">_View-component</property>
@@ -741,7 +761,6 @@
 				<child>
 				  <widget class="GtkVButtonBox" id="vbuttonbox2">
 					<property name="visible">True</property>
-					<property name="orientation">vertical</property>
 					<child>
 					  <widget class="GtkButton" id="b_wiki">
 						<property name="label" translatable="yes">_Wiki</property>
@@ -896,7 +915,6 @@
 					  <widget class="GtkVPaned" id="vpaned1">
 						<property name="visible">True</property>
 						<property name="can_focus">True</property>
-						<property name="orientation">vertical</property>
 						<child>
 						  <widget class="GtkScrolledWindow" id="scrolledwindow2">
 							<property name="visible">True</property>
@@ -922,7 +940,6 @@
 						<child>
 						  <widget class="GtkVBox" id="vbox2">
 							<property name="visible">True</property>
-							<property name="orientation">vertical</property>
 							<child>
 							  <widget class="GtkLabel" id="label1">
 								<property name="visible">True</property>
@@ -1175,7 +1192,6 @@
 	<child internal-child="vbox">
 	  <widget class="GtkVBox" id="dialog-vbox1">
 		<property name="visible">True</property>
-		<property name="orientation">vertical</property>
 		<property name="spacing">2</property>
 		<child>
 		  <widget class="GtkTable" id="table1">
@@ -1314,7 +1330,6 @@
 	<child internal-child="vbox">
 	  <widget class="GtkVBox" id="dialog-vbox2">
 		<property name="visible">True</property>
-		<property name="orientation">vertical</property>
 		<property name="spacing">2</property>
 		<child>
 		  <widget class="GtkTable" id="table2">
@@ -1452,7 +1467,6 @@
 	<child internal-child="vbox">
 	  <widget class="GtkVBox" id="dialog-vbox3">
 		<property name="visible">True</property>
-		<property name="orientation">vertical</property>
 		<property name="spacing">2</property>
 		<child>
 		  <widget class="GtkHBox" id="dialog-hbox1">

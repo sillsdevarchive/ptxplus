@@ -137,6 +137,9 @@ class RunProcess (object) :
 			metaTask = self._task
 			taskList = log_manager._settings['System']['Processes'][metaTask]
 			for thisTask in taskList :
+				# It would be good if we gave a little feedback to the user
+				# as to what exactly which processes are going to be run.
+				tools.userMessage('INFO: Now running: ' + thisTask)
 				# The standard sys.argv[1] setting contains the name of the metaTask
 				# However, that is not the name of the actual module we want to send
 				# off to process. We need to replace sys.argv[1] with the right task

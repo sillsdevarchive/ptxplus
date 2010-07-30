@@ -26,36 +26,18 @@
 define component_rules
 
 # Define our source file rule here. The idea is we do not want the
-# user to come up cold when he selects a file for processing if
-# that file is not there. Rather a dummy file will be created
-# telling them the file is missing.
+# user to get a file not found error when they process a file.
+# Rather a dummy file will be created telling them the file is missing
+# and hopefully some instructions on what to do.
 $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_SOURCE)
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
 
-# This is the basic rule for auto-text-processing. To control processes
-# edit the .project.conf file. This will automatically run the four
-# phases of text processing. However, first it will delete any copies
-# in the system to avoid having bad data in the system. All problems with
-# the source must be fixed in the source, no where else. The first process
-# will be preprocess checks of the source text. Next it will run any custom
-# proecesses that are configured in the .project.conf file. These could be
-# anything and may include copying text into the project, in which case
-# requires setting the CopyIntoSystem setting to false. After the custom
-# proecesses are run it will copy the text into the system and then it will
-# run any necessary text processes on the system source text as defined in
-# the .project.conf file.
+# This is the rule for creating the working text. We will use
+# the postprocessing function to do this.
 $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
 ifeq ($(LOCKED),0)
-	@if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
-		echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
-		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
-	fi
-	@echo INFO: Running preprocess checks on: '$$<'
-	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<" "$$@" ""
-	@echo INFO: Copying source to: '$$@'
-	@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$$<" "$$@" ""
-	@echo INFO: Running post-processes on: '$$@'
-	@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$$@" "$$@" ""
+	@echo Creating: $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	$$(call postprocessing,$(1),$($(1)_component))
 else
 	@echo INFO: Cannot create: $$@ because the project is locked.
 endif
@@ -68,31 +50,15 @@ endif
 # thing we do is try to delete any existing copies from the source directory.
 preprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
-	@if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
-		echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
-		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
-	fi
-	@echo INFO: Checking: '$$<'
-	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<"
+	$$(call preprocessing,$(1),$($(1)_component))
 else
 	@echo INFO: Cannot process: $$@ because the project is locked.
 endif
 
-# This is a postprocess rule that can be called independently
-# To be safe.it will delete the working copy and run the preprocess
-# checks too before copying and postprocessing.
+# Call a postprocessing function which will run all the postprocesses.
 postprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
-	@if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
-		echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
-		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
-	fi
-	@echo INFO: Running preprocess checks on: '$$<'
-	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<" "$$@" ""
-	@echo INFO: Copying source to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
-	@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$$<" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
-	@echo INFO: Running post-processes on: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'
-	@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+	$$(call postprocessing,$(1),$($(1)_component))
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
@@ -246,20 +212,14 @@ preprocess-content :
 	@echo INFO: Preprocess checking all content components:
 	@$(foreach v,$(GROUP_CONTENT), $(MOD_RUN_PROCESS) "preprocessChecks" "$(v)" "$(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)"; )
 
-
-
-####################################################################################
-
-# working here
-
 # This enables preprocess checks on all the components at one time.
-#postprocess-content :
-#	@echo INFO: Postprocessing all content components:
-#	@$(foreach v,$(GROUP_CONTENT), $(MOD_RUN_PROCESS) "preprocessChecks" "$(v)" "$(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)"; )
-
-#call this postprocess-$(v)
-
-####################################################################################
+postprocess-content :
+ifeq ($(LOCKED),0)
+	@echo INFO: Postprocessing all content components
+	@$(foreach v,$(GROUP_CONTENT), $(call postprocessing,$(v),$($(v)_component)) )
+else
+	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
+endif
 
 # Do a component section and veiw the resulting output
 view-contents : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
@@ -272,8 +232,29 @@ pdf-remove-contents :
 	@rm -f $(FILE_CONTENTS_PDF)
 
 
+###############################################################
+#			Shared functions
+###############################################################
 
+# Run the postprocesses on working text, however, to be safe
+# we run the preprocesses as well.
+define postprocessing
+$(call preprocessing ,$(1),$($(1)_component))
+@echo INFO: Copy to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+@echo INFO: Postprocessing: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'
+@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+endef
 
+# Run preprocesses on the source text.
+define preprocessing
+@if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
+	echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+	rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+fi
+@echo INFO: Preprocessing: '$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)'
+@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+endef
 
 ##############################################################
 #			Rules for handling illustrations material
