@@ -334,7 +334,8 @@ class MakeTexControlFile (object) :
 		omitCallerInCrossRefs = self._log_manager._settings['Format']['Footnotes']['omitCallerInCrossRefs']
 		paragraphedFootnotes = self._log_manager._settings['Format']['Footnotes']['paragraphedFootnotes']
 		paragraphedCrossRefs = self._log_manager._settings['Format']['Footnotes']['paragraphedCrossRefs']
-		footnoteRule = self._log_manager._settings['Format']['Footnotes']['footnoteRule']
+		useFootnoteRule = self._log_manager._settings['Format']['Footnotes']['useFootnoteRule']
+		defineNewFootnoteRule = self._log_manager._settings['Format']['Footnotes']['defineNewFootnoteRule']
 
 		# Margins
 		marginUnit = self._log_manager._settings['Format']['Margins']['marginUnit']
@@ -480,7 +481,18 @@ class MakeTexControlFile (object) :
 				footnoteSettings = footnoteSettings + '\\PageResetCallers{f}\n'
 			if pageResetCallersCrossRefs.lower() == 'true' :
 				footnoteSettings = footnoteSettings + '\\PageResetCallers{x}\n'
-		if footnoteRule.lower() == 'true' :
+		# This seems to be an inconsistancy in ptxplus. If the footnoterule
+		# param is blank it will not put out anything. If it is not defined
+		# at all it will put out the default 4pt hrule. This hopefully makes
+		# it simpler to understand by the user.
+		if useFootnoteRule.lower() == 'true' :
+			if defineNewFootnoteRule != '' :
+				footnoteSettings = footnoteSettings + '\\def\\footnoterule{' + defineNewFootnoteRule + '}\n'
+			# The unstated else here is that if the user wants a footnote rule
+			# but did not define anything, the default is used.
+		else :
+			# In this case the footnote rule is turned off by defining the
+			# footnoterule to nothing
 			footnoteSettings = footnoteSettings + '\\def\\footnoterule{}\n'
 		if omitCallerInFootnote.lower() == 'true' :
 			footnoteSettings = footnoteSettings + '\\OmitCallerInNote{f}\n'

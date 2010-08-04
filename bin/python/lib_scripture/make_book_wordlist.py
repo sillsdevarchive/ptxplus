@@ -85,15 +85,18 @@ class MakeBookWordlist (object) :
 		# txtconv program to do the encoding conversion externally, then bring it
 		# back in to finish the processing. This is done with pipes so it seems
 		# very seamless.
-		# Bring in any encoding mapings we may need.
-		encoder = log_manager._settings['System']['General']['customEncodingProcess']
-		if encoder:
-			# Process the customEncodingProcess string to set the meta filesnames
-			encoder = [arg.replace('[outfile]','/dev/stdout').replace('[infile]',inputFile) for arg in encoder.split()]
-			# Run the conversions on all our text
-#            log_manager.log("DBUG", 'make_book_wordlist: Preconversion length %d' % len(pre_wordlist))
-#            handler._wordlist = pipe_to(encoder, '\n'.join(pre_wordlist)).split('\n')
-#            log_manager.log("DBUG", 'make_book_wordlist: Postconversion length %d' % len(filter(bool, handler._wordlist)))
+		# Bring in the system command from the .conf file
+		encoder = u''.join(log_manager._settings['System']['General']['customEncodingProcess'])
+		if encoder :
+			# Try to catch any simple typos in the infile and outfile params
+			encoder = encoder.replace('[infile]', '[inFile]').replace('[outfile]', '[outFile]')
+			# Now replace the in and out strings to set the meta filesnames
+			# This is changed from a sting to a list so it can be processed
+			# by childprocess()
+			encoder = [arg.replace('[outFile]','/dev/stdout').replace('[inFile]',inputFile) for arg in encoder.split()]
+
+		# FIXME: What happens if there isn't any encoding to be done?
+		# This can't be good.
 
 		# Get our book object - Using utf_8_sig because the source
 		# might be coming from outside the system and we may need

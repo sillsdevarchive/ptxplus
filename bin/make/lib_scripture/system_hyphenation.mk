@@ -29,7 +29,7 @@ $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : | $(PATH_HYPHENATION)/$(FILE_HYPHE
 # Manually create a master wordlist based on existing component
 # wordlists in the Reports file. Best to run this after
 # a preprocess-all command
-make-master-wordlist : preprocess-checks
+make-master-wordlist : preprocess-content
 	@echo INFO: Creating a new master word list
 	@$(MOD_RUN_PROCESS) make_master_wordlist
 

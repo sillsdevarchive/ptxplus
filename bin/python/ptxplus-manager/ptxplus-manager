@@ -7,20 +7,22 @@
 
 # History:
 # 20081023 - djd - Changed references to config object to reflect
-#        reorganization to the .project.conf file
+#       reorganization to the .project.conf file
 # 20081112 - djd - Added an example menu item
 # 20081229 - djd - Added menu items, Preprocess, Process and Bind
 # 20090914 - djd - Removed "-book" from preprocess-book to try to resolve
-#        a makefile conflict with the maps routine.
+#       a makefile conflict with the maps routine.
 # 20091201 - djd - Removed Preprocess menu item, added groups to the component list
-#        and a few other modifications for processing groups
+#       and a few other modifications for processing groups
 # 20091209 - djd - Added code for get-clip command
 # 20091214 - djd - Added some wordlist and hyphen list making commands
 # 20100609 - djd - Fixed a problem with list values that only have one element
-#        being messed up when saved by the UI. Thanks TimE
+#       being messed up when saved by the UI. Thanks TimE
 # 20100629 - djd - More robust read and write in list form was added by TimE
 #       this enabled us to put a comma in a comma seperated list.
 # 20100728 - djd - A a menu item for running postprocesses only
+# 20100804 - djd - Added a fix to keep object types in place after they have
+#       been modified (TimE)
 
 ########################################################################################
 
@@ -717,14 +719,17 @@ class configlist(list):
 
 		def __init__(self,*args,**kwds):
 			super(configlist,self).__init__(*args,**kwds)
-			fstr = StringIO()
-			c    = ConfigObj(encoding="utf-8")
-			c['str'] = self
-			c.write(fstr)
-			self._str_value = fstr.getvalue().split("=",1)[1].strip()
+			self._str_value = configobj_str(self)
 
 		def __str__(self):
 			return self._str_value
+
+def configobj_str(value):
+	c = ConfigObj(encoding="utf-8")
+	fstr = StringIO()
+	c['str'] = value
+	c.write(fstr)
+	return fstr.getvalue().split("=",1)[1].strip()
 
 class ConfigEditor (object) :
 
@@ -828,6 +833,7 @@ class ConfigEditor (object) :
 		self.keys_ts.clear()
 		for k in section.keys() :
 			v = section[k]
+			print k, type(v)
 			if isinstance(v, list) :
 				self.keys_ts.append([k, configlist(v)])
 			elif not isinstance(v, (dict, tuple)) :
@@ -844,11 +850,10 @@ class ConfigEditor (object) :
 	def active_row (self, widget, path, column) :
 		k,v = self.keys_ts[path]
 		self.entry_name.set_text(k)
-		c = ConfigObj(["str = " + str(v)],encoding="utf-8")
-		if isinstance(c['str'], basestring): etype="String"
-		if isinstance(c['str'], list):       etype="List"
-		if isinstance(c['str'], bool):       etype="Boolean"
-		if isinstance(c['str'], (int,long)): etype="Number"
+		if isinstance(v, basestring): etype="String"
+		if isinstance(v, list):       etype="List"
+		if isinstance(v, bool):       etype="Boolean"
+		if isinstance(v, (int,long)): etype="Number"
 		self.entry_type.set_text(etype)
 		self.entry_value.set_text(str(v))
 		self.wTree.get_widget("bt_apply_entry").connect("clicked", self.entry_apply)
@@ -857,7 +862,9 @@ class ConfigEditor (object) :
 
 	def entry_apply (self, widget) :
 		value = self.entry_value.get_text().strip()
-		c = ConfigObj(["str = " + value], encoding="utf-8")
+		etype = self.entry_type.get_text()
+		import pdb; pdb.set_trace()
+		c = ConfigObj(["str = " + (repr(value) if etype == "String" else value)], encoding="utf-8")
 		self.sections_curr[self.entry_name.get_text()] = c['str']
 		self.keys_fill(self.sections_curr)
 		# FIXME: Some error checking should be done here to catch
