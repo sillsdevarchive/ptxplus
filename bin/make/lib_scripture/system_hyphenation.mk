@@ -26,14 +26,9 @@ make-tex-hyphens :
 $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT)
 	$(MOD_RUN_PROCESS) make_tex_hyphenation_file
 
-# Manually create a master wordlist based on existing component
-# wordlists in the Reports file. Best to run this after
-# a preprocess-all command
-make-master-wordlist : preprocess-content
-	@echo INFO: Creating a new master word list
-	@$(MOD_RUN_PROCESS) make_master_wordlist
 
 #############################################################################
+
 # Not sure what is happening here, lost track of what I was doing - djd
 
 # There needs to be a review of he whole hyphenation list creation process
@@ -50,12 +45,34 @@ $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT) :
 	@echo INFO: Creating $@
 	@touch $@
 
+
+
+
+
+
+
+##################################################################################################
+
+# Manually create a master wordlist based on existing component
+# wordlists in the Reports file. Best to run this after
+# a preprocess-all command
+#make-master-wordlist : preprocess-content
+make-master-wordlist :
+	@echo INFO: Creating a new master word list
+	@$(MOD_RUN_PROCESS) make_master_wordlist
+
 # Manually create the hyphenation word list file
-force-make-hyphen-wordlist : $(PATH_HYPHENATION) make-master-wordlist
+#force-make-hyphen-wordlist : $(PATH_HYPHENATION) make-master-wordlist
+force-make-hyphen-wordlist : make-master-wordlist
 	@echo Creating a new hyphenation word list
 	@$(MOD_RUN_PROCESS) make_hyphen_wordlist
 
 #############################################################################
+
+
+
+
+
 
 # This enables all the preprocessing to be done in one command
 preprocess: force-make-hyphen-wordlist

@@ -863,7 +863,6 @@ class ConfigEditor (object) :
 	def entry_apply (self, widget) :
 		value = self.entry_value.get_text().strip()
 		etype = self.entry_type.get_text()
-		import pdb; pdb.set_trace()
 		c = ConfigObj(["str = " + (repr(value) if etype == "String" else value)], encoding="utf-8")
 		self.sections_curr[self.entry_name.get_text()] = c['str']
 		self.keys_fill(self.sections_curr)

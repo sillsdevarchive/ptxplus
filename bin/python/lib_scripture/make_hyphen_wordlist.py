@@ -18,6 +18,7 @@
 # can be used by another process to create the actual file
 # TeX will use for hyphenation on the text.
 
+
 # History:
 # 20090130 - djd - Initial draft
 # 20090327 - djd - Draft is working but issues remain over
@@ -46,7 +47,7 @@ tools = Tools()
 
 
 class MakeHyphenWordlist (object) :
-	_hyphens_re = re.compile(u'\u002D|\u2010|\u2011|\u2012|\u2013|\u2014|\ufeff')
+	_hyphens_re = re.compile(u'\u002D|\u00AD|\u2010') # Don't include U+2011 so we don't break on it.
 
 	def __init__(self, log_manager):
 		self._log_manager = log_manager
@@ -78,22 +79,26 @@ class MakeHyphenWordlist (object) :
 		except IOError, e:
 			self._log_manager.log("ERRR", "Hyphenation auto-generation failed. Word list not read, due to: " + str(e))
 			return
-		# load the source user names hyphenation file is there is one.
-		self.loadPreHyphenatedWordList(sourceHyphenatedNamesFile)
-		# load the source user custom hyphenation file is there is one.
-		self.loadPreHyphenatedWordList(sourceHyphenatedWordsFile)
+		import pdb; pdb.set_trace();
+		try:
+			# load the source user names hyphenation file is there is one.
+			self.loadPreHyphenatedWordList(sourceHyphenatedNamesFile)
+			# load the source user custom hyphenation file is there is one.
+			self.loadPreHyphenatedWordList(sourceHyphenatedWordsFile)
 
-		# Pass 1: This part is all about auto-generating hyphenated words. This can
-		# be done a number of ways.
-		self.generatePrefixSuffixHyphenation(sourceMasterWordsFile, sourcePrefixListFile, sourceSuffixListFile)
-		# Pass 2: Use the provided regexp to find automatic break points.
-		self.generateRuleBrokenHyphenations(hyphenBreakRules)
+			# Pass 1: This part is all about auto-generating hyphenated words. This can
+			# be done a number of ways.
+			self.generatePrefixSuffixHyphenation(sourceMasterWordsFile, sourcePrefixListFile, sourceSuffixListFile)
+			# Pass 2: Use the provided regexp to find automatic break points.
+			self.generateRuleBrokenHyphenations(hyphenBreakRules)
 
-		#write out the hyphenation list
-		self.writeHyphenationList(newHyphenationFile)
+			#write out the hyphenation list
+			self.writeHyphenationList(newHyphenationFile)
 
-		#Debuging, write out words that could not be hyphenated
-		self.writeFailedWords(reportNonHypenatedWords)
+			#Debuging, write out words that could not be hyphenated
+			self.writeFailedWords(reportNonHypenatedWords)
+		except:
+			sys.exit(sys.argv[0] + ": Hyphenation auto-generation failed: please see log.")
 
 	def loadPreHyphenatedWordList(self,filepath):
 		# Load the exsiting hyphen words source list if one is in the source folder.
@@ -108,8 +113,9 @@ class MakeHyphenWordlist (object) :
 		# by hand to correct them.
 		hyphens = self.wordListFromFile(filepath)
 		words = map(self.cleanWord, hyphens)
-		self._hyphenations.update(filter(lambda wh: wh[0] in self._wordlistReport, zip(words, hyphens)))
+		self._hyphenations.update(filter(lambda wh: wh[0] in self._wordlistReport or wh[1] in self._wordlistReport, zip(words, hyphens)))
 		self._wordlistReport.difference_update(words)
+		self._wordlistReport.difference_update(hyphens)
 		self.logHyphenCount("load " + filepath)
 
 
@@ -126,8 +132,7 @@ class MakeHyphenWordlist (object) :
 			# file where they can be dealt with.
 			if self._hyphens_re.search(w):
 				self._log_manager.log("INFO", "Input candidate word already hyphenated: " + w)
-			else:
-				self._wordlistReport.add(w)
+			self._wordlistReport.add(w)
 		self._log_manager.log("INFO", sourceMasterWordsFile + " loaded, found " + str(len(self._wordlistReport)) + " words.")
 
 
@@ -155,7 +160,7 @@ class MakeHyphenWordlist (object) :
 		suffixList.sort(reverse=True)
 
 		# Make the Regex
-		prefixTest = re.compile("^(?ui)(" + ('|'.join(prefixList)) + ")(?=\w.)")
+		prefixTest = re.compile("^(?ui)(" + ('|'.join(prefixList)) + ")(?=-?\w\W{0,6}\w)")
 		suffixTest = re.compile("(?ui)(?<=..)(" + ('|'.join(suffixList)) + ")$")
 
 		for word in frozenset(self._wordlistReport):
@@ -167,7 +172,11 @@ class MakeHyphenWordlist (object) :
 
 	def generateRuleBrokenHyphenations(self, hyphenBreakRules):
 		if hyphenBreakRules:
-			hyphenBreaks = re.compile(hyphenBreakRules)
+			try:
+				hyphenBreaks = re.compile(hyphenBreakRules)
+			except:
+				self._log_manager.log("ERRR", "Hyphenation auto-generation failed. Could not compile hyphen break rule:" + str(sys.exc_info()[1]))
+				raise
 			for word in frozenset(self._wordlistReport):
 				hyphenation = word
 				for off,match in enumerate(hyphenBreaks.finditer(word)):
@@ -183,10 +192,10 @@ class MakeHyphenWordlist (object) :
 		# Output the values sorted by key to the newHyphenationFile (simple word list)
 		# Turn the hyphenList to a list and sort it on the key.
 		double_hyphens = re.compile(u'-{2,}')
-		hyphenkeys = self._hyphenations.items()
-		hyphenkeys.sort(key=itemgetter(0))
+		hyphenkeys = list(set(self._hyphenations.itervalues()))
+		hyphenkeys.sort()
 		f = codecs.open(newHyphenationFile, "w", encoding='utf_8')
-		f.writelines(double_hyphens.sub('',v)+'\n' for k,v in hyphenkeys)
+		f.writelines(double_hyphens.sub('-',v).strip('-') +'\n' for v in hyphenkeys)
 		f.close()
 		self._log_manager.log('DBUG', "Total hyphenations added = %d" % sum(self._hyphenCounts.itervalues()))
 		self._log_manager.log("DBUG", "Hyphenated word list created, made " + str(len(hyphenkeys)) + " words.")
