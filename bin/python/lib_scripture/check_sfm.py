@@ -34,8 +34,6 @@ class CheckSFM (object) :
 		self._log_manager = log_manager
 		self._settings = log_manager._settings
 
-	# Nothing is really happening here yet. This is kind of a place holder.
-
 
 class SFMContextHandler (parse_sfm.Handler) :
 	'''This class replaces the Handler class in the parse_sfm module.'''
@@ -110,7 +108,7 @@ class SFMContextHandler (parse_sfm.Handler) :
 						# Because of the error here we need to override the nextVerseNum setting
 						self._nextVerseNum = self._lastVerseNum + 2
 					# Record the last vers number
-					self._lastVerseNum = int(num)
+					self._lastVerseNum = self.convertToInt(num)
 			else :
 				# Doubtful this would ever happen but you never know...
 				self._log_manager.log("ERRR", "No number was found for this verse tag.")
@@ -157,36 +155,46 @@ class SFMContextHandler (parse_sfm.Handler) :
 			return "\\" + ctag
 
 
-	def error (self, tag, text, msg) :
-		'''Send any errors the parser finds back to the calling application.'''
+#    def error (self, tag, text, msg) :
+#        '''Send any errors the parser finds back to the calling application.'''
 
-		self._log_manager.log("ERRR", msg + " Marker [\\" + tag + "]")
+#        self._log_manager.log("ERRR", msg + " Marker [\\" + tag + "]")
 
+	def convertToInt (self, number) :
+
+		try :
+			# Change verse number string to integer
+			number = int(number)
+		except :
+			# In case there is a problem let's report it
+			self._log_manager.log("ERRR", "There is a problem with this number: " + number)
+			number = 1000
+
+		return number
 
 	def numberTest (self, thisNumber, tag) :
 		'''Simple test for verses and chapters to see if the given number
 			what we expect it to be in the context of the given tag.'''
 
-		# Change verse number string to integer
-		thisNumber = int(thisNumber)
 		match = False
+		intNumber = self.convertToInt(thisNumber)
 		if tag == "c" :
-			if thisNumber == self._nextChapterNum :
+			if intNumber == self._nextChapterNum :
 				match = True
 			# Get ready for next test
-			self._nextChapterNum = thisNumber + 1
+			self._nextChapterNum = intNumber + 1
 		elif tag == "v" :
-			if thisNumber == self._nextVerseNum :
+			if intNumber == self._nextVerseNum :
 				match = True
 			# Get ready for next test
-			self._nextVerseNum = thisNumber + 1
+			self._nextVerseNum = intNumber + 1
+
 		# Return results
 		return match
 
 
-
 # This starts the whole process going
 def doIt (log_manager) :
-
 	thisModule = CheckSFM(log_manager)
 	return thisModule
+

@@ -79,7 +79,7 @@ class MakeHyphenWordlist (object) :
 		except IOError, e:
 			self._log_manager.log("ERRR", "Hyphenation auto-generation failed. Word list not read, due to: " + str(e))
 			return
-		import pdb; pdb.set_trace();
+
 		try:
 			# load the source user names hyphenation file is there is one.
 			self.loadPreHyphenatedWordList(sourceHyphenatedNamesFile)
