@@ -308,8 +308,8 @@ else :
 			# Look for all the global processes that need to be run
 			taskList = []
 			taskList = log_manager._settings['System']['Processes']['globalProcesses']
-			# Get rid of the old error log file.
-			error_manager.deleteErrorLog()
+			# Get rid of the old error log files.
+			error_manager.deleteErrorLogs()
 			for thisTask in taskList :
 
 				# Initialize the log manager to do its thing
@@ -348,6 +348,7 @@ else :
 
 			# Now send off the command to makefile
 			errorCode = tools.makefileCommand(command)
+
 			if errorCode != 0 :
 				tools.userMessage("ERROR: Makefile process failed. (Error code: " + str(errorCode) + ")")
 			else :

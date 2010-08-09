@@ -29,6 +29,9 @@ import codecs, os, re
 from tools import *
 tools = Tools()
 
+# Get the ptxplus basePath
+basePath = os.environ.get('PTXPLUS_BASE')
+
 class ErrorManager (object) :
 
 	# Intitate the whole class
@@ -43,6 +46,7 @@ class ErrorManager (object) :
 			self._logFolder = os.getcwd() + "/Log"
 
 		self._errorLogFile = self._logFolder +  "/error.log"
+		self._errorUnicodeLogFile = self._logFolder +  "/error-unicode.log"
 		self._errorLogObject = []
 		self._errorCount = 0
 
@@ -81,17 +85,37 @@ class ErrorManager (object) :
 
 		errrOutput = ""
 		warnOutput = ""
+		unicodeErrors = ""
+		unicodeErrrCount = 0
 		errrCount = 0
 		warnCount = 0
 
-		if os.path.isfile(self._errorLogFile) == True :
+		# We will look at Unicode errors first and report them. Nothing else
+		# matters if there are encoding issues.
+		if os.path.isfile(self._errorUnicodeLogFile) == True :
+			try :
+				fileObject = codecs.open(self._errorUnicodeLogFile, "r", encoding='utf_8')
+				lastLine = ''
+				for line in fileObject :
+					if line.strip() != '' and line.strip() != lastLine.strip() :
+						unicodeErrors = unicodeErrors + line
+						unicodeErrrCount +=1
+					if line.strip() != '' :
+						lastLine = line.strip()
+
+				if unicodeErrrCount > 0 :
+					tools.userMessageDialog(unicodeErrors, 'ERRR')
+			except :
+				tools.userMessage('Unable to open Unicode error log file: ' + self._errorUnicodeLogFile)
+
+		elif os.path.isfile(self._errorLogFile) == True :
 			try :
 				fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8')
 				errrOutput = "\nErrors found: \n"
 				warnOutput = "\nWarnings found: \n"
 				for line in fileObject :
 					if line.find("ERRR") > 0 :
-						errrCount +=1
+						errorCount +=1
 					elif line.find("WARN") > 0 :
 						warnCount +=1
 
@@ -103,7 +127,7 @@ class ErrorManager (object) :
 						sed_filter = """sed -r 's/[[:blank:]]*("[^"]*")[[:blank:]]*,/\\1\\n/g' < Log/{log!r}"""\
 								   """| sed -r 's/(^[[:blank:]]*"|"[[:blank:]]*$)//g'""".format
 						dialog_command = "zenity --title={title!r} "\
-												"--window-icon=/home/dennis/Projects/ptxplus/resources/icons/ptxplus.png "\
+												"--window-icon=" + basePath + "/resources/icons/ptxplus.png "\
 												"--height=400 --width=600 --list "\
 												"--text={text!r} "\
 												"--column='File' --column='Type' --column='Ref' --column='Context' --column='Description' "\
@@ -129,13 +153,16 @@ class ErrorManager (object) :
 
 
 
-	def deleteErrorLog (self) :
-		'''Get rid of the error log file.'''
+	def deleteErrorLogs (self) :
+		'''Get rid of the error log files.'''
 
 		if os.path.isfile(self._errorLogFile) == True :
 			if os.system("rm " + self._errorLogFile) != 0 :
 				tools.userMessage("Failed to delete: " + self._errorLogFile)
-#        return True
+
+		if os.path.isfile(self._errorUnicodeLogFile) == True :
+			if os.system("rm " + self._errorUnicodeLogFile) != 0 :
+				tools.userMessage("Failed to delete: " + self._errorUnicodeLogFile)
 
 
 	def recordError (self, event) :
@@ -146,6 +173,19 @@ class ErrorManager (object) :
 			errorWriteObject = codecs.open(self._errorLogFile, "a", encoding='utf_8')
 		else :
 			errorWriteObject = codecs.open(self._errorLogFile, "w", encoding='utf_8')
+
+		errorWriteObject.write(event + '\n')
+		errorWriteObject.close()
+
+
+	def recordUnicodeError (self, event) :
+		'''Record a Unicode encoding error report line to the Unicode error log object.'''
+
+
+		if os.path.isfile(self._errorUnicodeLogFile) == True :
+			errorWriteObject = codecs.open(self._errorUnicodeLogFile, "a", encoding='utf_8')
+		else :
+			errorWriteObject = codecs.open(self._errorUnicodeLogFile, "w", encoding='utf_8')
 
 		errorWriteObject.write(event + '\n')
 		errorWriteObject.close()

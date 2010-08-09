@@ -860,6 +860,11 @@ class ConfigEditor (object) :
 		self.wTree.get_widget("bt_cancel_entry").connect("clicked", self.entry_cancel)
 		self.entry_w.show()
 
+
+
+
+# FIXME: There is something wrong here and it is adding extra "\" each time it saves out data
+
 	def entry_apply (self, widget) :
 		value = self.entry_value.get_text().strip()
 		etype = self.entry_type.get_text()
@@ -876,6 +881,11 @@ class ConfigEditor (object) :
 
 	def save (self) :
 		self.config.write()
+
+
+
+
+
 
 	def parse (self, lines) :
 		inpara = 0

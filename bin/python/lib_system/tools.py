@@ -35,7 +35,9 @@
 import re, os, shutil, codecs, csv, sys
 from configobj import ConfigObj
 from datetime import *
-#from log_manager import *
+
+# Get the ptxplus basePath, declair as global
+basePath = os.environ.get('PTXPLUS_BASE')
 
 class Tools (object) :
 	'''This class contains a bunch of misc. functions that work with
@@ -90,6 +92,33 @@ class Tools (object) :
 			except :
 				self.userMessage("ERROR: Cannot run the \"" + thisTask + "\" module.")
 				log_manager.log("ERRR", "Cannot run the \"" + thisTask + "\" module.")
+
+		# Do a sanity test on the data that was just processed.
+		self.unicodeSanity(log_manager)
+
+
+	def unicodeSanity (self, log_manager) :
+		'''This will be automatically run after every process that does anything with the
+			text of any kind, both pre and post process. It works at a different level
+			than most of the error checking and reports different as well.'''
+
+		errors = ''
+		if log_manager._currentInput != '' :
+			inputFile = log_manager._currentInput
+			head, tail = os.path.split(log_manager._currentInput)
+
+			try :
+				for n, l in enumerate(codecs.open(inputFile, "r", encoding='utf_8_sig'),start=1) :
+					if u'\ufffd' in l or u'\u0000' in l :
+						errors = errors + tail + ": Unicode issue detected on line " + str(n) + "\n"
+			except :
+				self.userMessage("ERROR: Unicode Sanity check, cannot open \"" + inputFile + "\" Why?")
+
+		# Store the error away for referencing at the end of the process.
+		if errors != '' :
+			import error_manager
+			error_manager = ErrorManager()
+			error_manager.recordUnicodeError(errors)
 
 
 	def makeNecessaryFiles (self, path, projType) :
@@ -482,6 +511,16 @@ class Tools (object) :
 
 		# We can make this prettier later.
 		print self.wordWrap(event, 60)
+
+
+	def userMessageDialog (self, event, dialogType) :
+		'''Output a windowed message to get the user's attention.'''
+
+		if dialogType == 'ERRR' :
+			dialogType = "--error --title='Process Error'"
+
+		dialog_command = "zenity " + dialogType + " --window-icon=" + basePath + "/resources/icons/ptxplus.png --width=400 --text='" + event + "'"
+		os.system(dialog_command)
 
 
 	def makefileCommand (self, command) :
