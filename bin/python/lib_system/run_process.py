@@ -56,7 +56,6 @@ import tools
 from log_manager import *
 
 # Instantiate local classes
-tools        = Tools()
 log_manager    = LogManager()
 
 basePath = os.environ.get('PTXPLUS_BASE')
