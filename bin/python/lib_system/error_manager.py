@@ -106,51 +106,44 @@ class ErrorManager (object) :
 				if unicodeErrrCount > 0 :
 					tools.userMessageDialog(unicodeErrors, 'ERRR')
 			except :
-				tools.userMessage('Unable to open Unicode error log file: ' + self._errorUnicodeLogFile)
+				tools.userMessage('ERRR: Unable to open Unicode error log file: ' + self._errorUnicodeLogFile)
 
-		elif os.path.isfile(self._errorLogFile) == True :
-			try :
-				fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8')
-				errrOutput = "\nErrors found: \n"
-				warnOutput = "\nWarnings found: \n"
-				for line in fileObject :
-					if line.find("ERRR") > 0 :
-						errorCount +=1
-					elif line.find("WARN") > 0 :
-						warnCount +=1
+		if os.path.isfile(self._errorLogFile) == True :
+			fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8')
+			errrOutput = "\nErrors found: \n"
+			warnOutput = "\nWarnings found: \n"
+			for line in fileObject :
+				if line.find("ERRR") > 0 :
+					errrCount +=1
+				elif line.find("WARN") > 0 :
+					warnCount +=1
 
-				if errrCount > 0 :
-					tools.userMessage("A total of " + str(errrCount) + " errors were found.")
-					# Now we will add a more "in your face" error report so they are not ignored
-					# It might be good to exchange the sed command for stanard Python regex code
-					try :
-						sed_filter = """sed -r 's/[[:blank:]]*("[^"]*")[[:blank:]]*,/\\1\\n/g' < Log/{log!r}"""\
-								   """| sed -r 's/(^[[:blank:]]*"|"[[:blank:]]*$)//g'""".format
-						dialog_command = "zenity --title={title!r} "\
-												"--window-icon=" + basePath + "/resources/icons/ptxplus.png "\
-												"--height=400 --width=600 --list "\
-												"--text={text!r} "\
-												"--column='File' --column='Type' --column='Ref' --column='Context' --column='Description' "\
-												"--hide-column=1,2".format
-						os.system(sed_filter(log='error.log') + ' | ' +
-								  dialog_command(title='PtxPlus error log report',
-												 text ='A total of {0} errors were found'.format(errrCount)))
-					except :
-						tools.userMessage('error_manager.py: Error report dialog failed to work!')
+			if errrCount > 0 :
+				tools.userMessage("ERRR: A total of " + str(errrCount) + " errors were found.")
+				# Now we will add a more "in your face" error report so they are not ignored
+				# It might be good to exchange the sed command for stanard Python regex code
+				try :
+					sed_filter = """sed -r 's/[[:blank:]]*("[^"]*")[[:blank:]]*,/\\1\\n/g' < Log/{log!r}"""\
+								"""| sed -r 's/(^[[:blank:]]*"|"[[:blank:]]*$)//g'""".format
+					dialog_command =    "zenity --title={title!r} "\
+										"--window-icon={path!r}/resources/icons/ptxplus.png "\
+										"--height=400 --width=600 --list "\
+										"--text={text!r} "\
+										"--column='File' --column='Type' --column='Ref' --column='Context' --column='Description' "\
+										"--hide-column=1,2".format
+					os.system(sed_filter(log='error.log') + ' | ' +
+						dialog_command(title='PtxPlus error log report', path = basePath,
+							text ='A total of {0} errors were found'.format(errrCount)))
+				except :
+					tools.userMessage('ERRR: Error report dialog failed to work! (error_manager.py)')
 
-				if warnCount == 1 :
-					tools.userMessage("Also, one warning was found too")
-				elif warnCount > 1 :
-					tools.userMessage("A total " + str(warnCount) + " warnings were found too")
+			if warnCount == 1 :
+				tools.userMessage("WARN: Also, one warning was found too")
+			elif warnCount > 1 :
+				tools.userMessage("WARN: A total " + str(warnCount) + " warnings were found too")
 
-				tools.userMessage("For details see: " + self._errorLogFile)
-
-			except :
-				tools.userMessage('Unable to open error log file: ' + self._errorLogFile)
-
-		else :
-			tools.userMessage('INFO: As far as I can tell, no process errors were found.')
-
+			# Probably do not need this if the Zenity dialog is working
+			# tools.userMessage("INFO: For more details see: " + self._errorLogFile)
 
 
 	def deleteErrorLogs (self) :

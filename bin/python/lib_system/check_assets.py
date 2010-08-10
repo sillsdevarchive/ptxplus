@@ -46,6 +46,7 @@ class CheckAssets (object) :
 		'''This is the main process function for getting and checking
 			project assets.'''
 
+		tools.userMessage('INFO: Checking project assets')
 		# Set the mode
 		self._log_manager = log_manager
 		self._mode = self._log_manager._optionalPassedVariable

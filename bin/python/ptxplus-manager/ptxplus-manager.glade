@@ -307,12 +307,26 @@
 				  <widget class="GtkMenu" id="preprocess">
 					<property name="visible">True</property>
 					<child>
+					  <widget class="GtkMenuItem" id="menu_preprocess_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Perform all checks on source text</property>
+						<property name="label" translatable="yes">Preprocess (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_preprocess_current_activate"/>
+					  </widget>
+					</child>
+					<child>
 					  <widget class="GtkMenuItem" id="menu_preprocess_all">
 						<property name="visible">True</property>
 						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Run all the selected preprocesses on the entire project (including hyphenation)</property>
-						<property name="label" translatable="yes">Preprocess All</property>
-						<signal name="activate" handler="on_menu_preprocess_activate"/>
+						<property name="tooltip" translatable="yes">Run checks on all the content source files</property>
+						<property name="label" translatable="yes">Preprocess (All)</property>
+						<signal name="activate" handler="on_menu_preprocess_all_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem7">
+						<property name="visible">True</property>
 					  </widget>
 					</child>
 					<child>
@@ -331,6 +345,31 @@
 						<property name="tooltip" translatable="yes">Create a hyphenation word list from the master word list</property>
 						<property name="label" translatable="yes">Make Hyphen Word List</property>
 						<signal name="activate" handler="on_menu_hyphenlist_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_tex_hyphen">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Create a new TeX hyphenation file</property>
+						<property name="label" translatable="yes">Make TeX Hyphen File</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_make_tex_hyphen"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="image_tex_hyphen_ow">
+						<property name="label" translatable="yes">Overwrite TeX Hyphen File</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Overwrite the current TeX hyphenation file. Caution, all local edits will be lost.</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
+						<signal name="activate" handler="on_menu_overwrite_tex_hyphen"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image10">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 				  </widget>

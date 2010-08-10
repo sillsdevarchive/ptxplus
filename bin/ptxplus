@@ -305,6 +305,11 @@ else :
 			font_manager    = FontManager()
 			font_manager.localiseFontsConf()
 
+			# Check the project assets
+			log_manager.initializeLog("check_assets", "SYS", "", "", "basic")
+			tools.taskRunner(log_manager, "check_assets")
+			log_manager.closeOutSessionLog()
+
 			# Look for all the global processes that need to be run
 			taskList = []
 			taskList = log_manager._settings['System']['Processes']['globalProcesses']

@@ -159,7 +159,7 @@ endef
 # Add a watermark to the output if called for
 define watermark
 @if [ "$(USE_WATERMARK)" = "true" ] ; then \
-	echo INFO: Adding watermark to ouput: $(1); \
+	echo INFO: Adding watermark; \
 	pdftk $(1) background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.$(EXT_PDF); \
 	cp $(PATH_PROCESS)/tmp.$(EXT_PDF) $(1); \
 	rm -f $(PATH_PROCESS)/tmp.$(EXT_PDF); \

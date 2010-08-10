@@ -89,11 +89,14 @@ class ConfigGUI (object) :
 			"on_menu_restore_activate"              : self.m_restore,
 			"on_menu_backup_activate"               : self.m_backup,
 			"on_menu_reload_activate"               : self.m_reload,
-			"on_menu_preprocess_activate"           : self.m_preprocess,
+			"on_menu_preprocess_all_activate"       : self.m_preprocess_all,
+			"on_menu_preprocess_current_activate"   : self.m_preprocess_current,
 			"on_menu_postprocess_all_activate"      : self.m_postprocess_all,
 			"on_menu_postprocess_current_activate"  : self.m_postprocess_current,
 			"on_menu_wordlist_activate"             : self.m_wordlist,
 			"on_menu_hyphenlist_activate"           : self.m_hyphenlist,
+			"on_menu_make_tex_hyphen"               : self.m_tex_hyphen,
+			"on_menu_overwrite_tex_hyphen"          : self.m_tex_hyphen_overwrite,
 #            "on_menu_bind_activate"                 : self.m_bind,
 #            "on_menu_bind_booklet_activate"         : self.m_bind_booklet,
 #            "on_menu_bind_booklet_current_activate" : self.m_bind_booklet_current,
@@ -552,7 +555,13 @@ class ConfigGUI (object) :
 		self.execute('ptxplus', 'make-master-wordlist')
 
 	def m_hyphenlist (self, widget) :
-		self.execute('ptxplus', 'force-make-hyphen-wordlist')
+		self.execute('ptxplus', 'make-hyphen-wordlist')
+
+	def m_tex_hyphen (self, widget) :
+		self.execute('ptxplus', 'make-tex-hyphens')
+
+	def m_tex_hyphen_overwrite (self, widget) :
+		self.execute('ptxplus', 'overwrite-tex-hyphens')
 
 	def m_remove_pdf (self, widget) :
 		self.execute("ptxplus", "pdf-remove")
@@ -578,8 +587,11 @@ class ConfigGUI (object) :
 	def m_make_pic (self, widget) :
 		self.execute("ptxplus", "make-picfile-" + self.bkid)
 
-	def m_preprocess (self, widget) :
-		self.execute("ptxplus", "preprocess")
+	def m_preprocess_all (self, widget) :
+		self.execute("ptxplus", "preprocess-content")
+
+	def m_preprocess_current (self, widget) :
+		self.execute("ptxplus", "preprocess-" + self.bkid)
 
 	def m_postprocess_all (self, widget) :
 		self.execute("ptxplus", "postprocess-content")

@@ -116,7 +116,7 @@ class Tools (object) :
 
 		# Store the error away for referencing at the end of the process.
 		if errors != '' :
-			import error_manager
+			from error_manager import ErrorManager
 			error_manager = ErrorManager()
 			error_manager.recordUnicodeError(errors)
 

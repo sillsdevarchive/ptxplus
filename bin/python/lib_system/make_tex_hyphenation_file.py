@@ -43,24 +43,24 @@ class MakeTexHyphenationFile (object) :
 
 	def main (self, log_manager) :
 		settings = tools.getSettingsObject()
-		hyphenPath = settings['System']['Paths'].get('PATH_HYPHENATION', 'Hyphenation')
+		hyphenPath = settings['System']['Paths']['PATH_HYPHENATION']
 
 		# Set the output file name and the wordlist file name
-		texHyphenFileName = hyphenPath + '/' + settings['System']['Files'].get('FILE_HYPHENATION_TEX', 'hyphenation.tex')
-		wordListFileName =  hyphenPath + '/' + settings['System']['Files'].get('FILE_HYPHENATION_TXT', 'hyphenation.txt')
-		lcCodeListFileName = hyphenPath + '/' + settings['System']['Files'].get('FILE_LCCODELIST_TXT', 'lccodelist.txt')
+		texHyphenFileName   = hyphenPath + '/' + settings['System']['Files']['FILE_HYPHENATION_TEX']
+		wordListFileName    =  hyphenPath + '/' + settings['System']['Files']['FILE_HYPHENATION_TXT']
+		lcCodeListFileName  = hyphenPath + '/' + settings['System']['Files']['FILE_LCCODELIST_TXT']
 		# Get our project hyphenation commands
-		languageCode = settings['Project']['ProjectInformation'].get('languageCode', 'XYZ')
-		setHyphenCharacter = settings['Format']['Hyphenation'].get('setHyphenCharacter', '\"2010')
-		setHyphenPenalty = settings['Format']['Hyphenation'].get('setHyphenPenalty', '0')
-		setExHyphenPenalty = settings['Format']['Hyphenation'].get('setExHyphenPenalty', '0')
-		setPretolerance = settings['Format']['Hyphenation'].get('setPretolerance', '')
+		languageCode        = settings['ProjectText']['languageCode']
+		setHyphenCharacter  = settings['Format']['Hyphenation']['setHyphenCharacter']
+		setHyphenPenalty    = settings['Format']['Hyphenation']['setHyphenPenalty']
+		setExHyphenPenalty  = settings['Format']['Hyphenation']['setExHyphenPenalty']
+		setPretolerance     = settings['Format']['Hyphenation']['setPretolerance']
 
-		# If we see that the texHyphenFile exists we will abort
-		# That file needs to be manually removed to avoid problems
-		if os.path.isfile(texHyphenFileName) == True :
-			# Report that we found a .tex file and had to stop
-			tools.userMessage("make_tex_hyphenation_file: The file, " + texHyphenFileName + " already exists. Process halted")
+		# If we see that the texHyphenFile exists we will check to see if
+		# the overwrite flag has been set.
+		if os.path.isfile(texHyphenFileName) == True and log_manager._optionalPassedVariable != 'overwrite' :
+				# Report that we found a .tex file and had to stop
+				tools.userMessage("WARN: " + texHyphenFileName + " exists. Process halted")
 		else :
 			# Just make the file, nothing else
 
@@ -89,6 +89,9 @@ class MakeTexHyphenationFile (object) :
 			if setPretolerance != '' :
 				tex_hypens_out.write('\\pretolerance=' + setPretolerance + '\n')
 
+			# Spacer
+			tex_hypens_out.write('\n\n')
+
 			# It may be necessary to have an lcCodeList included. These codes are
 			# kept in an external file normally kept in the project hyphenation folder.
 			if os.path.isfile(lcCodeListFileName):
@@ -105,7 +108,7 @@ class MakeTexHyphenationFile (object) :
 			tex_hypens_out.close()
 
 			# Tell the world what we did
-			tools.userMessage("make_tex_hyphenation_file: Wrote out file: " + texHyphenFileName)
+			tools.userMessage("INFO: Created: " + texHyphenFileName)
 
 
 

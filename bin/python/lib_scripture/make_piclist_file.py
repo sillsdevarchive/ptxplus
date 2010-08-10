@@ -66,12 +66,12 @@ class MakePiclistFile (object) :
 		self._bookID = log_manager._currentTargetID
 
 		# Pull in some default sizing params if they exist, if not use the default settings.
-		self._texsize = self._settings['Format']['Illustrations'].get('size','col')
-		self._texpos = self._settings['Format']['Illustrations'].get('position','tl')
-		self._texscale = self._settings['Format']['Illustrations'].get('scale',1.0)
-		self._chpVerSep = self._settings['Format']['Illustrations'].get('chpVerSep',':')
-		self._captionRef = self._settings['Format']['Illustrations'].get('captionRef','true')
-		self._captionProcessing = self._settings['Format']['Illustrations'].get('captionProcessing','')
+		self._texsize = self._settings['Format']['Illustrations']['size']
+		self._texpos = self._settings['Format']['Illustrations']['position']
+		self._texscale = self._settings['Format']['Illustrations']['scale']
+		self._chpVerSep = self._settings['Format']['Illustrations']['chpVerSep']
+		self._captionRef = self._settings['Format']['Illustrations']['captionRef']
+		self._captionProcessing = self._settings['Format']['Illustrations']['captionProcessing']
 		self._inputFile = log_manager._currentInput
 		self._outputFile = self._inputFile + ".piclist"
 		self._outFileObject = {}
