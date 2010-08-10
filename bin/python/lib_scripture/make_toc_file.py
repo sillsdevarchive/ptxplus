@@ -32,8 +32,7 @@
 import os, sys, codecs, shutil
 
 # Import supporting local classes
-#from tools import *
-#tools = Tools()
+#import tools
 
 class MakeTocFile (object) :
 

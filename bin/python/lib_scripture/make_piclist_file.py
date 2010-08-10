@@ -49,8 +49,7 @@ import os, sys, codecs, csv, shutil, pdb
 from operator import itemgetter
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 
 class MakePiclistFile (object) :

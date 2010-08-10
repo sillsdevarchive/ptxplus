@@ -32,11 +32,11 @@
 import codecs, os, sys
 
 # Import supporting local classes
-from tools import *
+import tools
 from error_manager import *
+from datetime import *
 
 # Instantiate local classes
-tools = Tools()
 error_manager = ErrorManager()
 
 class LogManager (object) :

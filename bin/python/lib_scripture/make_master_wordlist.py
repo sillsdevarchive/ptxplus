@@ -26,11 +26,10 @@ import codecs, os, csv
 
 # Import supporting local classes
 from encoding_manager import *
-from tools import *
+import tools
 from threading import Thread
 from collections import defaultdict
 from operator import itemgetter
-tools = Tools()
 
 
 class MakeWordlist (object) :

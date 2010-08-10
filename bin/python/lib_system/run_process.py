@@ -52,7 +52,7 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 # Import supporting local classes
-from tools import *
+import tools
 from log_manager import *
 
 # Instantiate local classes

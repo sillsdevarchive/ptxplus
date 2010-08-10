@@ -33,8 +33,7 @@ import parse_sfm
 from encoding_manager import *
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 # FIXME: The module needs to be able to work in both the source
 # text context and the working text.

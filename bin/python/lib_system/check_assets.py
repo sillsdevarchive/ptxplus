@@ -36,8 +36,7 @@
 
 import sys, os, shutil
 
-from tools import *
-tools = Tools()
+import tools
 
 class CheckAssets (object) :
 

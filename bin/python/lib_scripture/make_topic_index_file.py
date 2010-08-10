@@ -33,8 +33,7 @@ import os, sys, codecs, csv, shutil, operator
 
 # Import supporting local classes
 from encoding_manager import *
-from tools import *
-tools = Tools()
+import tools
 
 class MakeTopicIndexFile (object) :
 

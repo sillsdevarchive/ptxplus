@@ -29,9 +29,8 @@ import codecs, os, csv
 
 # Import supporting local classes
 from encoding_manager import *
-from tools import *
+import tools
 from operator import itemgetter, setitem
-tools = Tools()
 
 
 class TransformCSV (object) :

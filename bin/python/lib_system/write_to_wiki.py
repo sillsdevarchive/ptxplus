@@ -27,8 +27,7 @@ import os, sys
 from datetime import *
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 # These are the arguments passed by makefile
 insertType = sys.argv[1]

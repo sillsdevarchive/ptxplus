@@ -51,8 +51,7 @@
 import os, shutil, codecs, tarfile
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 
 #############################################################

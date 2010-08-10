@@ -54,8 +54,7 @@ import parse_sfm
 
 # Import supporting local classes
 from encoding_manager import *
-from tools import *
-tools = Tools()
+import tools
 
 
 class MakeTexControlFile (object) :

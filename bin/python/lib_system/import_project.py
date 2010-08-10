@@ -37,9 +37,8 @@
 import os, tarfile, shutil
 
 # Import supporting local classes
-from tools import *
+import tools
 
-tools = Tools()
 
 #############################################################
 #################### Main Module Defined ####################

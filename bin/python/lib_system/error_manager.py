@@ -26,8 +26,7 @@
 import codecs, os, re
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 # Get the ptxplus basePath
 basePath = os.environ.get('PTXPLUS_BASE')

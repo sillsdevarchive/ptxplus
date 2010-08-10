@@ -28,9 +28,8 @@
 # Firstly, import all the modules we need for this process
 
 from font_manager import *
-from tools import *
+import tools
 font_manager = FontManager()
-tools = Tools()
 
 class CheckForFonts (object) :
 

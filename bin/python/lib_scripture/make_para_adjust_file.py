@@ -53,8 +53,7 @@ import sys, codecs, os
 from markup_manager import *
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 
 class MakeParaAdjustFile (object) :

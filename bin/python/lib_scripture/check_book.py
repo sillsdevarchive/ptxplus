@@ -30,8 +30,7 @@ from check_sfm import *
 from check_punctuation import *
 from check_quotes import *
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 
 class CheckBook (object) :

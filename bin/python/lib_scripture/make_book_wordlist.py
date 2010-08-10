@@ -44,9 +44,8 @@ import parse_sfm
 
 # Import supporting local classes
 from encoding_manager import *
-from tools import *
+import tools
 from collections import defaultdict
-tools = Tools()
 
 
 class MakeBookWordlist (object) :

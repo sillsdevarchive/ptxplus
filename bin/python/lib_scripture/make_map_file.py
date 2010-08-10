@@ -38,7 +38,7 @@
 import os, shutil
 
 # Import supporting local classes
-from tools import *
+import tools
 from csv import reader
 from xml.etree.ElementTree import XMLID, ElementTree
 

@@ -48,8 +48,7 @@ import os, sys, shutil
 from configobj import ConfigObj
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 class UpdateProjectSettings (object) :
 

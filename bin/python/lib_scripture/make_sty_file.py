@@ -29,8 +29,7 @@ import parse_sfm
 #import parse_sty
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 
 class MakeStyleFile (object) :

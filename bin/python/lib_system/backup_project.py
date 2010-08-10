@@ -30,8 +30,7 @@
 import tarfile
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 class BackupProject (object) :
 

@@ -34,8 +34,7 @@
 import sys, codecs, os
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 
 class MakeTexHyphenationFile (object) :

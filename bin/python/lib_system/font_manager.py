@@ -29,8 +29,7 @@
 import codecs, os, sys, shutil
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 class FontManager (object) :
 

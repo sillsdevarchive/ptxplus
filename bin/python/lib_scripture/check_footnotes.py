@@ -45,7 +45,7 @@ import sys, codecs, os
 import parse_sfm
 from markup_manager import *
 from encoding_manager import *
-from tools import *
+import tools
 
 
 class CheckFootnotes (object) :
@@ -56,7 +56,6 @@ class CheckFootnotes (object) :
 		self._settings = log_manager._settings
 		self._markup_manager = MarkupManager(self._settings)
 		self._encoding_manager = EncodingManager(self._settings)
-		self._tools = Tools()
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
 		self._reportFilePath = self._settings['System']['Paths']['PATH_REPORTS']
@@ -72,7 +71,7 @@ class CheckFootnotes (object) :
 		# might be coming from outside the system and we may need
 		# to be able to handle a BOM.
 		bookObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
-		footnoteListingFile = self._reportFilePath + "/" + self._tools.getScriptureFileID(self._inputFile, self._settings) + "-footnotes.txt"
+		footnoteListingFile = self._reportFilePath + "/" + tools.getScriptureFileID(self._inputFile, self._settings) + "-footnotes.txt"
 		lineNumber = 0
 		footnoteNumber = 0
 

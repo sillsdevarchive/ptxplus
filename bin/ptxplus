@@ -53,8 +53,7 @@ elif  os.access('.dictionary.conf', os.R_OK) :
 	projectType = 'dictionary'
 
 # No mater what, we will need tools to work with.
-from tools import *
-tools = Tools()
+import tools
 
 # Import supporting local classes if we already have project going.
 # Instantiate classes right away too

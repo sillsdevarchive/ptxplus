@@ -28,8 +28,7 @@
 import tarfile
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 #############################################################
 #################### Main Module Defined ####################

@@ -35,8 +35,7 @@
 import re, os, subprocess
 
 # Import supporting local classes
-from tools import *
-tools = Tools()
+import tools
 
 def childprocess(cmdline, input_str=None):
 	res = subprocess.Popen(cmdline, stdin=subprocess.PIPE,stdout=subprocess.PIPE).communicate(input_str)
