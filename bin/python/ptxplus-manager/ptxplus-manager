@@ -152,7 +152,7 @@ class ConfigGUI (object) :
 
 		# replace TextView with SourceView
 		self.language_manager = gtksourceview2.LanguageManager()
-		sourceviews = ['usfm', 'styles', 'setup', 'fonts', 'adj', 'errors', 'texlog']
+		sourceviews = ['usfm', 'styles', 'adj', 'errors', 'texlog']
 		for s in sourceviews:
 			sc = 'sc_'+s
 			tv = 'tv_'+s
@@ -198,8 +198,6 @@ class ConfigGUI (object) :
 			self.close_dir()        # to declare the attributes ;)
 
 
-
-
 	def init_dir (self, bkid='') :
 
 		if not os.access(self.ourProjectConf, os.R_OK) :
@@ -210,14 +208,15 @@ class ConfigGUI (object) :
 		else :
 			self.ceditor = ConfigEditor(self.ourProjectConf, self.wTree, 'tv_sections', 'tv_keys')
 
+######################################################
 
-# FIXME: These next three vars are no longer valid. Need to do
-# something about this. Right now, these tabs will not display
-# anything.
+# Connect this with FILE_TEX_STYLE setting
 
-		self.styles = FileEditor('ptx2pdf.sty', self.tv_styles, self.language_manager.get_language("latex"))
-		self.setup = FileEditor('ptx2pdf-setup.txt', self.tv_setup, self.language_manager.get_language("latex"))
-		self.fonts = FileEditor('ptx2pdf-fonts.txt', self.tv_fonts, self.language_manager.get_language("latex"))
+
+		self.styles = FileEditor('Process/bible-format.sty', self.tv_styles, self.language_manager.get_language("latex"))
+
+#######################################################
+
 
 		try :
 			title = self.ceditor.config['Project']['ProjectInformation'].get('projectName')

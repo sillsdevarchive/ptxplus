@@ -1054,56 +1054,6 @@
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkScrolledWindow" id="sc_setup">
-					<property name="visible">True</property>
-					<property name="can_focus">True</property>
-					<property name="hscrollbar_policy">automatic</property>
-					<property name="vscrollbar_policy">automatic</property>
-					<child>
-					  <placeholder/>
-					</child>
-				  </widget>
-				  <packing>
-					<property name="position">4</property>
-				  </packing>
-				</child>
-				<child>
-				  <widget class="GtkLabel" id="label7">
-					<property name="visible">True</property>
-					<property name="label" translatable="yes">Setup</property>
-				  </widget>
-				  <packing>
-					<property name="position">4</property>
-					<property name="tab_fill">False</property>
-					<property name="type">tab</property>
-				  </packing>
-				</child>
-				<child>
-				  <widget class="GtkScrolledWindow" id="sc_fonts">
-					<property name="visible">True</property>
-					<property name="can_focus">True</property>
-					<property name="hscrollbar_policy">automatic</property>
-					<property name="vscrollbar_policy">automatic</property>
-					<child>
-					  <placeholder/>
-					</child>
-				  </widget>
-				  <packing>
-					<property name="position">5</property>
-				  </packing>
-				</child>
-				<child>
-				  <widget class="GtkLabel" id="label12">
-					<property name="visible">True</property>
-					<property name="label" translatable="yes">Fonts</property>
-				  </widget>
-				  <packing>
-					<property name="position">5</property>
-					<property name="tab_fill">False</property>
-					<property name="type">tab</property>
-				  </packing>
-				</child>
-				<child>
 				  <widget class="GtkScrolledWindow" id="sc_adj">
 					<property name="visible">True</property>
 					<property name="can_focus">True</property>
@@ -1114,7 +1064,7 @@
 					</child>
 				  </widget>
 				  <packing>
-					<property name="position">6</property>
+					<property name="position">4</property>
 				  </packing>
 				</child>
 				<child>
@@ -1123,7 +1073,7 @@
 					<property name="label" translatable="yes">Adjustments</property>
 				  </widget>
 				  <packing>
-					<property name="position">6</property>
+					<property name="position">4</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
@@ -1139,7 +1089,7 @@
 					</child>
 				  </widget>
 				  <packing>
-					<property name="position">7</property>
+					<property name="position">5</property>
 				  </packing>
 				</child>
 				<child>
@@ -1148,7 +1098,7 @@
 					<property name="label" translatable="yes">Errors</property>
 				  </widget>
 				  <packing>
-					<property name="position">7</property>
+					<property name="position">5</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
@@ -1164,7 +1114,7 @@
 					</child>
 				  </widget>
 				  <packing>
-					<property name="position">8</property>
+					<property name="position">6</property>
 				  </packing>
 				</child>
 				<child>
@@ -1174,7 +1124,7 @@
 					<property name="justify">right</property>
 				  </widget>
 				  <packing>
-					<property name="position">8</property>
+					<property name="position">6</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
