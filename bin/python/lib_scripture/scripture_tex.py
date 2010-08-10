@@ -299,6 +299,7 @@ class MakeTexControlFile (object) :
 		afterChapterSpaceFactor = self._log_manager._settings['Format']['ChapterVerse']['afterChapterSpaceFactor']
 		removeIndentAfterHeading = self._log_manager._settings['Format']['ChapterVerse']['removeIndentAfterHeading']
 		adornVerseNumber = self._log_manager._settings['Format']['ChapterVerse']['adornVerseNumber']
+		verseMarker = self._log_manager._settings['Format']['ChapterVerse']['verseMarker']
 
 		# Running Header
 		runningHeaderTitleLeft = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderTitleLeft']
@@ -437,6 +438,7 @@ class MakeTexControlFile (object) :
 			verseChapterSettings = verseChapterSettings + '\\IndentAfterHeadingtrue\n'
 		if adornVerseNumber.lower() == 'true' :
 			verseChapterSettings = verseChapterSettings + '\\def\\AdornVerseNumber#1{(#1)}\n'
+		verseChapterSettings = verseChapterSettings + '\\def\\VerseMarker{' + verseMarker + '}\n'
 		verseChapterSettings = verseChapterSettings + '\\def\\ChapterVerseSeparator{' + chapterVerseSeparator + '}\n'
 		verseChapterSettings = verseChapterSettings + '\\def\\AfterVerseSpaceFactor{' + afterVerseSpaceFactor + '}\n'
 		verseChapterSettings = verseChapterSettings + '\\def\\AfterChapterSpaceFactor{' + afterChapterSpaceFactor + '}\n'
