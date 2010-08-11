@@ -93,7 +93,7 @@ endif
 # this we use the "periph" flag.
 $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
-	$(PATH_PROCESS)/$(FILE_TEX_BIBLE) \
+	$(PATH_PROCESS)/$(FILE_TEX_SETUP) \
 	$(PATH_PROCESS)/$(FILE_TEX_COVER) \
 	$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
 	$(PATH_PROCESS)/$(FILE_TEX_BACK)
@@ -183,21 +183,21 @@ $(eval $(call matter_binding,MATTER_BACK))
 # not really be needed but it seems to be the best way to handle
 # this proceedure and remain consistant with the rest of the
 # processes.
-$(PATH_PROCESS)/$(FILE_TEX_COVER) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+$(PATH_PROCESS)/$(FILE_TEX_COVER) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "cover"
 
 # Most front matter peripheral .$(EXT_TEX) files will have a dependency
 # on $(FILE_TEX_FRONT) even if it doesn't, there is a hard coded
 # dependency here that will be met if called on.
-$(PATH_PROCESS)/$(FILE_TEX_FRONT) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+$(PATH_PROCESS)/$(FILE_TEX_FRONT) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "front"
 
 # Most back matter peripheral .$(EXT_TEX) files will have a dependency
 # on BACK_MATTER.$(EXT_TEX) even if it doesn't there is a hard coded
 # dependency here that will be met if called on.
-$(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+$(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "back"
 

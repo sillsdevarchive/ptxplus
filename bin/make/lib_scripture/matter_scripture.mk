@@ -65,7 +65,7 @@ endif
 
 # Call the TeX control file creation script to create a simple
 # control file that will link to the other settings
-$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_BIBLE)
+$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 ifeq ($(LOCKED),0)
 	@echo INFO: Creating: $$@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "$(1)" "$(1).$(EXT_WORK)" "$$@" ""
@@ -169,14 +169,14 @@ $(foreach v,$(GROUP_CONTENT), $(eval $(call component_rules,$(v))))
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
 # .project.sty file.
-$(PATH_PROCESS)/$(FILE_BIBLE_STYLE) : | $(PATH_SOURCE)
-	$(call copysmart,$(PATH_RESOURCES_PROCESS)/$(FILE_BIBLE_STYLE),$@)
+$(PATH_PROCESS)/$(FILE_TEX_STYLE) : | $(PATH_SOURCE)
+	$(call copysmart,$(PATH_RESOURCES_PROCESS)/$(FILE_TEX_STYLE),$@)
 
 # Rule for building the TeX settings file that is used for
 # format settings of all the main content. This is not to
 # be confused with the Bible control file which is a TeX
 # control file for processing the entire Bible.
-$(PATH_PROCESS)/$(FILE_TEX_BIBLE) : $(FILE_PROJECT_CONF)
+$(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" ""
 

@@ -78,7 +78,7 @@ class MakeTexControlFile (object) :
 		self._fmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_FRONT']
 		self._bmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_BACK']
 		self._cmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_CUSTOM']
-		self._biSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_BIBLE']
+		self._biSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_SETTINGS']
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
 		self._flags = ('cover', 'front', 'back', 'periph')
@@ -146,7 +146,7 @@ class MakeTexControlFile (object) :
 		useHyphenation = self._log_manager._settings['Format']['Hyphenation']['useHyphenation']
 		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['System']['Paths']['PATH_HYPHENATION']
 		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files']['FILE_HYPHENATION_TEX']
-		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files']['FILE_BIBLE_STYLE']
+		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files']['FILE_TEX_STYLE']
 		generateTOC = self._log_manager._settings['Format']['TOC']['generateTOC']
 		marginalVersesMacro = self._log_manager._settings['System']['Files']['FILE_MARGINAL_VERSES']
 

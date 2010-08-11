@@ -59,8 +59,7 @@ MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).$(EXT_PDF)
 # down the chain this might have to move, or be put in a
 # seperate file.
 DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
-  $(PATH_PROCESS)/$(FILE_TEX_BIBLE) \
-  $(PATH_PROCESS)/$(FILE_BIBLE_STYLE) \
+  $(PATH_PROCESS)/$(FILE_TEX_STYLE) \
   $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) \
   $(FILE_PROJECT_CONF)
 
