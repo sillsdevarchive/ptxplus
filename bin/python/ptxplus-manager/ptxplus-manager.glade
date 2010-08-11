@@ -302,30 +302,65 @@
 			<child>
 			  <widget class="GtkMenuItem" id="menu_preproces">
 				<property name="visible">True</property>
-				<property name="label" translatable="yes">Preprocess</property>
+				<property name="label" translatable="yes">Setup</property>
 				<child>
 				  <widget class="GtkMenu" id="preprocess">
 					<property name="visible">True</property>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_preprocess_current">
+					  <widget class="GtkMenuItem" id="menu_make_piclist">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Perform all checks on source text</property>
-						<property name="label" translatable="yes">Preprocess (Current)</property>
-						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_preprocess_current_activate"/>
+						<property name="tooltip" translatable="yes">Create a picture list file for this component</property>
+						<property name="label" translatable="yes">Add Pictures</property>
+						<signal name="activate" handler="on_menu_make_pic_activate"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_preprocess_all">
+					  <widget class="GtkImageMenuItem" id="menu_remove_piclist_current">
+						<property name="label" translatable="yes">Remove Picture List (Current)</property>
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Run checks on all the content source files</property>
-						<property name="label" translatable="yes">Preprocess (All)</property>
-						<signal name="activate" handler="on_menu_preprocess_all_activate"/>
+						<property name="tooltip" translatable="yes">Remove the illustrations list file for this component</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
+						<signal name="activate" handler="on_menu_remove_pic_current_activate"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem7">
+					  <widget class="GtkImageMenuItem" id="menu_clean_pic_all">
+						<property name="label">Remove Picture Lists (ALL)</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove all the illustrations list files for this publication</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
+						<signal name="activate" handler="on_menu_clean_pic_all_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="&lt;separator&gt;">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_remove_adj">
+						<property name="label">Clear Adjustments (Current)</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove the current adjustment list file</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
+						<signal name="activate" handler="on_menu_remove_adj_current_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_clean_adj_all">
+						<property name="label">Remove Adjustments (All)</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove all the adjustment list files for this publication</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
+						<signal name="activate" handler="on_menu_clean_adj_all_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem">
 						<property name="visible">True</property>
 					  </widget>
 					</child>
@@ -384,6 +419,29 @@
 				  <widget class="GtkMenu" id="process">
 					<property name="visible">True</property>
 					<child>
+					  <widget class="GtkMenuItem" id="menu_preprocess_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Perform all checks on source text</property>
+						<property name="label" translatable="yes">Preprocess (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_preprocess_current_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_preprocess_all">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Run checks on all the content source files</property>
+						<property name="label" translatable="yes">Preprocess (All)</property>
+						<signal name="activate" handler="on_menu_preprocess_all_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem7">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
 					  <widget class="GtkMenuItem" id="postprocess_current">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Postprocess the current component of this publication</property>
@@ -402,88 +460,6 @@
 						<signal name="activate" handler="on_menu_postprocess_all_activate"/>
 						<child internal-child="image">
 						  <widget class="GtkImage" id="image9">
-							<property name="visible">True</property>
-							<property name="stock">gtk-dialog-warning</property>
-						  </widget>
-						</child>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkSeparatorMenuItem" id="&lt;separator&gt;">
-						<property name="visible">True</property>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkMenuItem" id="menu_make_piclist">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Create a picture list file for this component</property>
-						<property name="label" translatable="yes">Add Pictures</property>
-						<signal name="activate" handler="on_menu_make_pic_activate"/>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkImageMenuItem" id="menu_remove_piclist_current">
-						<property name="label" translatable="yes">Remove Picture List (Current)</property>
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove the illustrations list file for this component</property>
-						<property name="use_stock">False</property>
-						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_remove_pic_current_activate"/>
-						<child internal-child="image">
-						  <widget class="GtkImage" id="image8">
-							<property name="visible">True</property>
-							<property name="stock">gtk-clear</property>
-						  </widget>
-						</child>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkImageMenuItem" id="menu_clean_pic_all">
-						<property name="label">Remove Picture Lists (ALL)</property>
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove all the illustrations list files for this publication</property>
-						<property name="use_stock">False</property>
-						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_clean_pic_all_activate"/>
-						<child internal-child="image">
-						  <widget class="GtkImage" id="image3">
-							<property name="visible">True</property>
-							<property name="stock">gtk-dialog-warning</property>
-						  </widget>
-						</child>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem">
-						<property name="visible">True</property>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkImageMenuItem" id="menu_remove_adj">
-						<property name="label">Clear Adjustments (Current)</property>
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove the current adjustment list file</property>
-						<property name="use_stock">False</property>
-						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_remove_adj_current_activate"/>
-						<child internal-child="image">
-						  <widget class="GtkImage" id="image4">
-							<property name="visible">True</property>
-							<property name="stock">gtk-clear</property>
-						  </widget>
-						</child>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkImageMenuItem" id="menu_clean_adj_all">
-						<property name="label">Remove Adjustments (All)</property>
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove all the adjustment list files for this publication</property>
-						<property name="use_stock">False</property>
-						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_clean_adj_all_activate"/>
-						<child internal-child="image">
-						  <widget class="GtkImage" id="image5">
 							<property name="visible">True</property>
 							<property name="stock">gtk-dialog-warning</property>
 						  </widget>
