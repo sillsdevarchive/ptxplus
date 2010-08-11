@@ -62,45 +62,14 @@ class MakeBookWordlist (object) :
 		pre_wordlist = {}
 		raw_str = ''
 
-		# The focus of this script is Scripture text but there maybe times
-		# when it is called to work on peripheral matter. At this time we
-		# don't want to go there. So, we will filter out peripheral material
-		# here by bailing out at this point.
-		# Note that the isPeripheralMatter() function is now
-		# disabled. Do we really need to do this check anyway?
-		# Let's go away and think about it
-#        if tools.isPeripheralMatter(inputFile) :
-#            return
-
 		# Make our Report folder if it isn't there
 		if not os.path.isdir(reportPath) :
 			os.mkdir(reportPath)
 
-		# Now we will collect all the words from this book from the text handler
-		# and we will apply any encoding changes that are necessary. The process
-		# here is more complex than should be but pyTecKit doesn't allow us to
-		# do multiple encodings chained together as some projects require. As such
-		# we will use a home-spun module to call a shell script that will use the
-		# txtconv program to do the encoding conversion externally, then bring it
-		# back in to finish the processing. This is done with pipes so it seems
-		# very seamless.
-		# Bring in the system command from the .conf file
-		encoder = u''.join(log_manager._settings['System']['General']['customEncodingProcess'])
-		if encoder :
-			# Try to catch any simple typos in the infile and outfile params
-			encoder = encoder.replace('[infile]', '[inFile]').replace('[outfile]', '[outFile]')
-			# Now replace the in and out strings to set the meta filesnames
-			# This is changed from a sting to a list so it can be processed
-			# by childprocess()
-			encoder = [arg.replace('[outFile]','/dev/stdout').replace('[inFile]',inputFile) for arg in encoder.split()]
-
-		# FIXME: What happens if there isn't any encoding to be done?
-		# This can't be good.
-
-		# Get our book object - Using utf_8_sig because the source
-		# might be coming from outside the system and we may need
-		# to be able to handle a BOM.
-		bookObject = childprocess(encoder).decode('utf_8') if encoder else codecs.open(inputFile, "r", encoding='utf_8_sig').read()
+		# This will pull its word data from the working text which should
+		# already have been run through all post processes and be ready
+		# for the typesetting process.
+		bookObject = codecs.open(inputFile, "r", encoding='utf_8_sig').read()
 
 		# Load in the sfm parser
 		parser = parse_sfm.Parser()
@@ -120,35 +89,6 @@ class MakeBookWordlist (object) :
 		bookWordlist = defaultdict(int)
 		for word in handler._wordlist:
 			bookWordlist[word] += 1
-
-
-#        # If the lists after removing duplicates and the set before do not match there
-#        # may be an encoding problem.  Only generate extended logging info if this is the case
-#        num_uniq_pre  = len(set(pre_wordlist))
-#        num_uniq_post = len(bookWordlist)
-#        if num_uniq_pre != num_uniq_post:
-#            log_manager.log("WARN",
-#                'possible conversion error: number of unique words do not match: %d -> %d' % (
-#                    num_uniq_pre,num_uniq_post))
-#
-#            # Generate before and after word to word number sets mappings.
-#            pre_word_num_map = defaultdict(set)
-#            post_word_num_map = defaultdict(set)
-#            for n,w in enumerate(pre_wordlist): pre_word_num_map[w].add(n)
-#            for n,w in enumerate(handler._wordlist): post_word_num_map[w].add(n)
-#
-#            larger  = (pre_wordlist,      set(map(tuple,pre_word_num_map.values())),  'source')
-#            smaller = (handler._wordlist, set(map(tuple,post_word_num_map.values())), 'target')
-#            # we always need to take the smaller set from the larger so there are more words
-#            # /after/ the conversion swap them around
-#            if num_uniq_pre < num_uniq_post: larger, smaller = smaller,larger
-#            for ids in larger[1].difference(smaller[1]):
-#                for i in ids:
-#                    log_manager.log("DBUG",
-#                        '%s text word no. %d has ambiguous mapping in %s: codepoint sequences (source -> target): %s -> %s' % (
-#                            larger[2], i, smaller[2],
-#                            unicode_sequence(pre_wordlist[i].decode('utf_8')),
-#                            unicode_sequence(handler._wordlist[i].decode('utf_8'))))
 
 		# Write out the new csv book word count file
 		# More info on writing to csv is here:
