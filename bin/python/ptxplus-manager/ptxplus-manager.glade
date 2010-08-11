@@ -302,10 +302,33 @@
 			<child>
 			  <widget class="GtkMenuItem" id="menu_preproces">
 				<property name="visible">True</property>
-				<property name="label" translatable="yes">Setup</property>
+				<property name="label" translatable="yes">Preprocess</property>
 				<child>
 				  <widget class="GtkMenu" id="preprocess">
 					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_preprocess_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Perform all checks on source text</property>
+						<property name="label" translatable="yes">Preprocess (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_preprocess_current_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_preprocess_all">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Run checks on all the content source files</property>
+						<property name="label" translatable="yes">Preprocess (All)</property>
+						<signal name="activate" handler="on_menu_preprocess_all_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem7">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
 					<child>
 					  <widget class="GtkMenuItem" id="menu_wordlist">
 						<property name="visible">True</property>
@@ -349,6 +372,42 @@
 						</child>
 					  </widget>
 					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_process">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Process</property>
+				<child>
+				  <widget class="GtkMenu" id="process">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkMenuItem" id="postprocess_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Postprocess the current component of this publication</property>
+						<property name="label" translatable="yes">Postprocess (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_postprocess_current_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="postprocess_all">
+						<property name="label" translatable="yes">PostProcess (All)</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Postprocess all the content of this publication	</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
+						<signal name="activate" handler="on_menu_postprocess_all_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image9">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
+					  </widget>
+					</child>
 					<child>
 					  <widget class="GtkSeparatorMenuItem" id="&lt;separator&gt;">
 						<property name="visible">True</property>
@@ -370,6 +429,12 @@
 						<property name="use_stock">False</property>
 						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_remove_pic_current_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image8">
+							<property name="visible">True</property>
+							<property name="stock">gtk-clear</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -380,6 +445,12 @@
 						<property name="use_stock">False</property>
 						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_clean_pic_all_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image3">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -395,6 +466,12 @@
 						<property name="use_stock">False</property>
 						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_remove_adj_current_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image4">
+							<property name="visible">True</property>
+							<property name="stock">gtk-clear</property>
+						  </widget>
+						</child>
 					  </widget>
 					</child>
 					<child>
@@ -405,61 +482,8 @@
 						<property name="use_stock">False</property>
 						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_clean_adj_all_activate"/>
-					  </widget>
-					</child>
-				  </widget>
-				</child>
-			  </widget>
-			</child>
-			<child>
-			  <widget class="GtkMenuItem" id="menu_process">
-				<property name="visible">True</property>
-				<property name="label" translatable="yes">Process</property>
-				<child>
-				  <widget class="GtkMenu" id="process">
-					<property name="visible">True</property>
-					<child>
-					  <widget class="GtkMenuItem" id="menu_preprocess_current">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Perform all checks on source text</property>
-						<property name="label" translatable="yes">Preprocess (Current)</property>
-						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_preprocess_current_activate"/>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkMenuItem" id="menu_preprocess_all">
-						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Run checks on all the content source files</property>
-						<property name="label" translatable="yes">Preprocess (All)</property>
-						<signal name="activate" handler="on_menu_preprocess_all_activate"/>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem7">
-						<property name="visible">True</property>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkMenuItem" id="postprocess_current">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Postprocess the current component of this publication</property>
-						<property name="label" translatable="yes">Postprocess (Current)</property>
-						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_postprocess_current_activate"/>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkImageMenuItem" id="postprocess_all">
-						<property name="label" translatable="yes">PostProcess (All)</property>
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Postprocess all the content of this publication	</property>
-						<property name="use_stock">False</property>
-						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_postprocess_all_activate"/>
 						<child internal-child="image">
-						  <widget class="GtkImage" id="image9">
+						  <widget class="GtkImage" id="image5">
 							<property name="visible">True</property>
 							<property name="stock">gtk-dialog-warning</property>
 						  </widget>
@@ -1054,7 +1078,7 @@
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkScrolledWindow" id="sc_adj">
+				  <widget class="GtkScrolledWindow" id="sc_setup">
 					<property name="visible">True</property>
 					<property name="can_focus">True</property>
 					<property name="hscrollbar_policy">automatic</property>
@@ -1068,12 +1092,37 @@
 				  </packing>
 				</child>
 				<child>
+				  <widget class="GtkLabel" id="label7">
+					<property name="visible">True</property>
+					<property name="label" translatable="yes">Setup</property>
+				  </widget>
+				  <packing>
+					<property name="position">4</property>
+					<property name="tab_fill">False</property>
+					<property name="type">tab</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="sc_adj">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">automatic</property>
+					<property name="vscrollbar_policy">automatic</property>
+					<child>
+					  <placeholder/>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">5</property>
+				  </packing>
+				</child>
+				<child>
 				  <widget class="GtkLabel" id="label8">
 					<property name="visible">True</property>
 					<property name="label" translatable="yes">Adjustments</property>
 				  </widget>
 				  <packing>
-					<property name="position">4</property>
+					<property name="position">5</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
@@ -1089,7 +1138,7 @@
 					</child>
 				  </widget>
 				  <packing>
-					<property name="position">5</property>
+					<property name="position">6</property>
 				  </packing>
 				</child>
 				<child>
@@ -1098,7 +1147,7 @@
 					<property name="label" translatable="yes">Errors</property>
 				  </widget>
 				  <packing>
-					<property name="position">5</property>
+					<property name="position">6</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
@@ -1114,7 +1163,7 @@
 					</child>
 				  </widget>
 				  <packing>
-					<property name="position">6</property>
+					<property name="position">7</property>
 				  </packing>
 				</child>
 				<child>
@@ -1124,7 +1173,7 @@
 					<property name="justify">right</property>
 				  </widget>
 				  <packing>
-					<property name="position">6</property>
+					<property name="position">7</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>

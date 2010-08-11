@@ -67,6 +67,15 @@ class ConfigGUI (object) :
 		else :
 			self.binpath = basePath + "/bin/"
 
+		# Set our paths to application resources
+		sys.path.insert(0, basePath + '/bin/python')
+		sys.path.insert(0, basePath + '/bin/python/lib_system')
+
+		# Import our tools
+		import tools
+		self.tools = tools
+
+		# Some local settings
 		self.gladefile = basePath + "/bin/python/ptxplus-manager/ptxplus-manager.glade"
 		self.iconfile = basePath + "/resources/icons/ptxplus.png"
 		self.bkid = ''
@@ -152,7 +161,7 @@ class ConfigGUI (object) :
 
 		# replace TextView with SourceView
 		self.language_manager = gtksourceview2.LanguageManager()
-		sourceviews = ['usfm', 'styles', 'adj', 'errors', 'texlog']
+		sourceviews = ['usfm', 'styles', 'setup', 'adj', 'errors', 'texlog']
 		for s in sourceviews:
 			sc = 'sc_'+s
 			tv = 'tv_'+s
@@ -208,15 +217,12 @@ class ConfigGUI (object) :
 		else :
 			self.ceditor = ConfigEditor(self.ourProjectConf, self.wTree, 'tv_sections', 'tv_keys')
 
-######################################################
-
-# Connect this with FILE_TEX_STYLE setting
-
-
-		self.styles = FileEditor('Process/bible-format.sty', self.tv_styles, self.language_manager.get_language("latex"))
-
-#######################################################
-
+		# File and path info from this project
+		pathProcess = self.tools.getSettingsObject()['System']['Paths']['PATH_PROCESS']
+		styleFile = self.tools.getSettingsObject()['System']['Files']['FILE_TEX_STYLE']
+		setupFile = self.tools.getSettingsObject()['System']['Files']['FILE_TEX_CUSTOM']
+		self.styles = FileEditor(pathProcess + '/' + styleFile, self.tv_styles, self.language_manager.get_language("latex"))
+		self.setup = FileEditor(pathProcess + '/' + setupFile, self.tv_setup, self.language_manager.get_language("latex"))
 
 		try :
 			title = self.ceditor.config['Project']['ProjectInformation'].get('projectName')
@@ -265,7 +271,6 @@ class ConfigGUI (object) :
 
 	def close_dir (self) :
 		self.styles = None
-		self.fonts = None
 		self.setup = None
 		self.adjust = None
 		self.usfm = None
@@ -305,7 +310,6 @@ class ConfigGUI (object) :
 
 	def write_files (self) :
 		if self.styles : self.styles.write('')
-		if self.fonts : self.fonts.write('')
 		if self.setup : self.setup.write('')
 		if self.adjust : self.adjust.write('')
 		if self.usfm : self.usfm.write('')
