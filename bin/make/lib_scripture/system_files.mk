@@ -243,31 +243,31 @@ texts-clean :
 ifeq ($(LOCKED),0)
 	$(call texts-clean)
 else
-	@echo INFO: Project is locked, could not clean all files from: $(PATH_TEXTS)
+	@echo WARN: Project is locked, could not clean all files from: $(PATH_TEXTS)
 endif
 
 reset :
 ifeq ($(LOCKED),0)
 	$(call reset)
 else
-	@echo INFO: Project is locked, you are not permitted use the reset command.
+	@echo WARN: Project is locked, you are not permitted use the reset command.
 endif
 
 # Remove the book PDF file
 define pdf-remove-book
-	@echo INFO: Deleting: $(MATTER_BOOK_PDF)
+	@echo WARN: Deleting: $(MATTER_BOOK_PDF)
 	@rm -f $(MATTER_BOOK_PDF)
 endef
 
 # Clean out the log files
 define log-clean
-	@echo INFO: Cleaning out the Log folder
+	@echo WARN: Cleaning out the Log folder
 	@rm -f $(PATH_LOG)/*.$(EXT_LOG)
 endef
 
 # Clean the reports folder
 define reports-clean
-	@echo INFO: Cleaning out the Reports folder
+	@echo WARN: Cleaning out the Reports folder
 	@rm -f $(PATH_REPORTS)/*.tmp
 	@rm -f $(PATH_REPORTS)/*.$(EXT_TEXT)
 	@rm -f $(PATH_REPORTS)/*.$(EXT_HTML)
@@ -278,7 +278,7 @@ endef
 # linked PNG files
 define illustrations-clean
 @if zenity --question --text="You have requested to clean out the Illustrations folder. If this project is part of a multi-publication group, by clicking OK, the deletion of the illustrations will effect other projects in this group that share these illustrations. Are you sure you want to do this?"; then \
-	echo INFO: Deleting illustration files in: $(PATH_ILLUSTRATIONS); \
+	echo WARN: Deleting illustration files in: $(PATH_ILLUSTRATIONS); \
 	rm -f $(PATH_ILLUSTRATIONS)/*.$(EXT_PNG); \
 	rm -f $(PATH_ILLUSTRATIONS)/*.$(EXT_PDF); \
 else \
@@ -290,7 +290,7 @@ endef
 # This supports clean-all or can be called alone.
 define picfile-clean-all
 @if zenity --question --text="By continuing with this process you will delete your illustration placement files. These control where pictures are placed in your publication. Are you sure you want to do this?"; then \
-	echo INFO: Deleting all .$(EXT_PICLIST) files from: $(PATH_TEXTS) ; \
+	echo WARN: Deleting all .$(EXT_PICLIST) files from: $(PATH_TEXTS) ; \
 	rm -f $(PATH_TEXTS)/*.$(EXT_PICLIST) ; \
 else \
 	echo "INFO: Deletion of the .$(EXT_PICLIST) files has been canceled." ; \
@@ -300,7 +300,7 @@ endef
 # This supports clean-all or can be called alone.
 define adjfile-clean-all
 @if zenity --question --text="By continuing with this process you will delete your adjustment files. These control paragraph adjustments. Are you sure you want to do this?"; then \
-	echo INFO: Deleting all .$(EXT_ADJUSTMENT) files from: $(PATH_TEXTS) ; \
+	echo WARN: Deleting all .$(EXT_ADJUSTMENT) files from: $(PATH_TEXTS) ; \
 	rm -f $(PATH_TEXTS)/*.$(EXT_ADJUSTMENT) ; \
 else \
 	echo "INFO: Deletion of text adjustments has been canceled." ; \
@@ -309,7 +309,7 @@ endef
 
 # Just in case we need to clean up to have a fresh start
 define process-clean
-	@echo INFO: Cleaning out auto-generated files from: $(PATH_PROCESS)
+	@echo WARN: Cleaning out auto-generated files from: $(PATH_PROCESS)
 	@rm -f $(PATH_PROCESS)/*.$(EXT_LOG)
 	@rm -f $(PATH_PROCESS)/*.notepages
 	@rm -f $(PATH_PROCESS)/*.parlocs
@@ -318,13 +318,10 @@ define process-clean
 	@rm -f $(PATH_PROCESS)/*.$(EXT_PDF)
 endef
 
-# This will clean out all the generated in the texts folder.
-# Be very careful with this one! You don't want to lose the
-# work you put into your .$(EXT_PICLIST) and .$(EXT_ADJUSTMENT) files. Hopefully
-# the lock mechanism will prevent this.
+# This will clean out all the generated files in the texts folder.
 define texts-clean
 @if zenity --question --text="By continuing with this process you will delete your working source text. Are you sure you want to do this?"; then \
-	echo INFO: Cleaning out working source files from: $(PATH_TEXTS) ; \
+	echo WARN: Cleaning out working source files from: $(PATH_TEXTS) ; \
 	rm -f $(PATH_TEXTS)/*.$(EXT_TEXT) ; \
 	rm -f $(PATH_TEXTS)/*.$(EXT_WORK) ; \
 	rm -f $(PATH_TEXTS)/*.bak ; \
@@ -339,7 +336,7 @@ endef
 # is mainly for using when you want to start over on a project.
 define reset
 	@zenity --warning --text="You have chosen to reset the project. At critical points in the process you will be given a chance to cancel specific actions. Carefully read the dialogs and answer thoughtfully. Be careful as you continue."
-	@echo INFO: Resetting the project. I hope you meant to do that!
+	@echo WARN: Resetting the project. I hope you meant to do that!
 	$(call pdf-remove-book)
 	$(call pdf-remove-book)
 	$(call texts-clean)

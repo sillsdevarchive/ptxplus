@@ -308,28 +308,37 @@
 				  <widget class="GtkMenu" id="preprocess">
 					<property name="visible">True</property>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_make_piclist">
+					  <widget class="GtkMenuItem" id="menu_piclist_make_current">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Create a picture list file for this component</property>
-						<property name="label" translatable="yes">Add Pictures</property>
-						<signal name="activate" handler="on_menu_make_pic_activate"/>
+						<property name="tooltip" translatable="yes">Create a picture (Illustrations) list file for this component</property>
+						<property name="label" translatable="yes">Make Illustration List (Current)</property>
+						<signal name="activate" handler="on_menu_piclist_make_current_activate"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkImageMenuItem" id="menu_remove_piclist_current">
-						<property name="label" translatable="yes">Remove Picture List (Current)</property>
+					  <widget class="GtkMenuItem" id="menu_piclist_make_all">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove the illustrations list file for this component</property>
+						<property name="tooltip" translatable="yes">Create picture (Illustrations) list files for all components</property>
+						<property name="label" translatable="yes">Make Illustration Lists (All)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_piclist_make_all_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_piclist_remove_current">
+						<property name="label" translatable="yes">Remove Illustration List (Current)</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove the picture (illustrations) list file for this component</property>
 						<property name="use_stock">False</property>
 						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_remove_pic_current_activate"/>
+						<signal name="activate" handler="on_menu_piclist_remove_current_activate"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkImageMenuItem" id="menu_clean_pic_all">
-						<property name="label">Remove Picture Lists (ALL)</property>
+					  <widget class="GtkImageMenuItem" id="menu_piclist_remove_all">
+						<property name="label">Remove Illustration Lists (All)</property>
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove all the illustrations list files for this publication</property>
+						<property name="tooltip" translatable="yes">Remove all the picture (illustrations) list files for this publication</property>
 						<property name="use_stock">False</property>
 						<property name="always_show_image">True</property>
 						<signal name="activate" handler="on_menu_clean_pic_all_activate"/>
@@ -341,23 +350,46 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkImageMenuItem" id="menu_remove_adj">
-						<property name="label">Clear Adjustments (Current)</property>
+					  <widget class="GtkMenuItem" id="menu_adjlist_make_current">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove the current adjustment list file</property>
-						<property name="use_stock">False</property>
-						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_remove_adj_current_activate"/>
+						<property name="label" translatable="yes">Make Adjustments List (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_adjlist_make_current_activate"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkImageMenuItem" id="menu_clean_adj_all">
-						<property name="label">Remove Adjustments (All)</property>
+					  <widget class="GtkMenuItem" id="menu_adjlist_make_all">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove all the adjustment list files for this publication</property>
+						<property name="tooltip" translatable="yes">Create the adjustments list files for this publication</property>
+						<property name="label" translatable="yes">Make Adjustments Lists (All)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_adjlist_make_all_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_adjlist_remove_current">
+						<property name="label">Remove Adjustments List (Current)</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove the current adjustments list file</property>
 						<property name="use_stock">False</property>
 						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_clean_adj_all_activate"/>
+						<signal name="activate" handler="on_menu_adjlist_remove_current_activate"/>
+						<child internal-child="image">
+						  <widget class="GtkImage" id="image4">
+							<property name="visible">True</property>
+							<property name="stock">gtk-dialog-warning</property>
+						  </widget>
+						</child>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkImageMenuItem" id="menu_adjlist_remove_all">
+						<property name="label">Remove Adjustments Lists (All)</property>
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Remove all the adjustments list files for this publication</property>
+						<property name="use_stock">False</property>
+						<property name="always_show_image">True</property>
+						<signal name="activate" handler="on_menu_adjlist_remove_all_activate"/>
 					  </widget>
 					</child>
 					<child>
