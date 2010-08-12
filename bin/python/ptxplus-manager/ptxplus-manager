@@ -107,17 +107,17 @@ class ConfigGUI (object) :
 			"on_menu_hyphenlist_activate"           : self.m_hyphenlist,
 			"on_menu_make_tex_hyphen"               : self.m_tex_hyphen,
 			"on_menu_overwrite_tex_hyphen"          : self.m_tex_hyphen_overwrite,
-#            "on_menu_bind_activate"                 : self.m_bind,
-#            "on_menu_bind_booklet_activate"         : self.m_bind_booklet,
-#            "on_menu_bind_booklet_current_activate" : self.m_bind_booklet_current,
 			"on_menu_reset_activate"                : self.m_reset,
-			"on_menu_clean_adj_all_activate"        : self.m_clean_adj_all,
-			"on_menu_clean_pic_all_activate"        : self.m_clean_pic_all,
-			"on_menu_remove_adj_current_activate"   : self.m_remove_adj_current,
-			"on_menu_remove_pic_current_activate"   : self.m_remove_pic_current,
 			"on_menu_remove_pdf_activate"           : self.m_remove_pdf,
 			"on_menu_remove_pdf_current_activate"   : self.m_remove_pdf_current,
-			"on_menu_make_pic_activate"             : self.m_make_pic,
+			"on_menu_adjlist_make_activate"         : self.m_make_adjlist_current,
+			"on_menu_adjlist_make_activate"         : self.m_make_adjlist_all,
+			"on_menu_adjlist_remove_activate"       : self.m_remove_adjlist_current,
+			"on_menu_adjlist_remove_activate"       : self.m_remove_adjlist_all,
+			"on_menu_piclist_make_activate"         : self.m_make_piclist_current,
+			"on_menu_piclist_make_activate"         : self.m_make_piclist_all,
+			"on_menu_piclist_remove_activate"       : self.m_remove_piclist_current,
+			"on_menu_piclist_remove_activate"       : self.m_remove_piclist_all,
 			"on_menu_quit_activate"                 : self.quit,
 			"on_menu_cut_activate"                  : self.m_cut,
 			"on_menu_copy_activate"                 : self.m_copy,
@@ -576,20 +576,29 @@ class ConfigGUI (object) :
 	def m_reset (self, widget) :
 		self.execute("ptxplus", "reset")
 
-	def m_clean_adj_all (self, widget) :
-		self.execute("ptxplus", "adjfile-clean-all")
+	def m_make_adjlist_current (self, widget) :
+		self.execute("ptxplus", "adjlist-make-" + self.bkid)
 
-	def m_clean_pic_all (self, widget) :
-		self.execute("ptxplus", "picfile-clean-all")
+	def m_make_adjlist_all (self, widget) :
+		self.execute("ptxplus", "adjlist-make-all")
 
-	def m_remove_adj_current (self, widget) :
-		self.execute("ptxplus", "adjfile-remove-" + self.bkid)
+	def m_remove_adjlist_current (self, widget) :
+		self.execute("ptxplus", "adjlist-remove-" + self.bkid)
 
-	def m_remove_pic_current (self, widget) :
-		self.execute("ptxplus", "picfile-remove-" + self.bkid)
+	def m_remove_adjlist_all (self, widget) :
+		self.execute("ptxplus", "adjlist-remove-all")
 
-	def m_make_pic (self, widget) :
-		self.execute("ptxplus", "make-picfile-" + self.bkid)
+	def m_make_piclist_current (self, widget) :
+		self.execute("ptxplus", "piclist-make-" + self.bkid)
+
+	def m_make_piclist_all (self, widget) :
+		self.execute("ptxplus", "piclist-make-all")
+
+	def m_remove_piclist_current (self, widget) :
+		self.execute("ptxplus", "piclist-remove-" + self.bkid)
+
+	def m_remove_piclist_all (self, widget) :
+		self.execute("ptxplus", "piclist-remove-all")
 
 	def m_preprocess_all (self, widget) :
 		self.execute("ptxplus", "preprocess-content")
