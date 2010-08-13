@@ -108,11 +108,6 @@ pdf-remove-$(1) :
 	@echo INFO: Removing: $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
 	@rm -f $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
 
-
-################################################################################################
-
-
-
 # Make adjustment file which is a dependent of the PDF process
 # Because every content file can have an adjustment file we
 # automate this process by setting a dependency
@@ -135,23 +130,22 @@ else
 	@echo INFO: Cannot run: $$@ This is because the project is locked.
 endif
 
+# Currently there is no dependency on this file but I wish there
+# was one, but piclist is not needed for all components.
+$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : piclist-make-$(1)
+
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
 # this rule will create a piclist file for the book being processed.
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
-
-piclist-make-$(1) :
-
-$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
+piclist-make-$(1) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
-	@echo INFO: Creating: $$@
-	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_PICLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+	$$(call makepiclist,$(1))
 else
 	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\". $$@ not made.
 endif
-
 
 # Remove the picture placement file for this component only
 piclist-remove-$(1) :
@@ -161,9 +155,6 @@ ifeq ($(LOCKED),0)
 else
 	@echo INFO: Cannot run: $$@ This is because the project is locked.
 endif
-
-
-
 
 endef
 
@@ -273,6 +264,12 @@ endef
 # Create a single adjustment file if adjustments are turned on
 define makeadjlist
 	@echo INFO: Creating: $(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+	@$(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+endef
+
+# Create a single piclist file if illustrations are turned on
+define makepiclist
+	@echo INFO: Creating: $(1).$(EXT_WORK).$(EXT_PICLIST)
 	@$(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
 endef
 
