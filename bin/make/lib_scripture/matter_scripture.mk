@@ -28,7 +28,7 @@ define component_rules
 # Define our source file rule here. The idea is we do not want the
 # user to get a file not found error when they process a file.
 # Rather a dummy file will be created telling them the file is missing
-# and hopefully some instructions on what to do.
+# and hopefully some helpful instructions on what to do.
 $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_SOURCE)
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
 
@@ -73,9 +73,11 @@ else
 	@echo INFO: Cannot create: $$@ This is because the project is locked.
 endif
 
-# Process a single component and produce the final PDF. Special dependencies
-# are set for the .$(EXT_ADJUSTMENT) and .$(EXT_PICLIST) files in case they have been altered.
-# The .$(EXT_PICLIST) file is created in the content_illustrations.mk rules file.
+# Process a single component and produce the final PDF. A Special dependency
+# is set for the .$(EXT_ADJUSTMENT) file in case it has been altered.
+# It would be nice to have a dependency on the piclist file but that
+# process behaves different and not every component has one. So for
+# now we need to leave it on its own.
 $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) \
@@ -99,15 +101,39 @@ edit-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
 # Shortcut to open the PDF file
 $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
-# Make adjustment file
-$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) :
+# Rules for cleaning up content process files
+
+# Remove the PDF for this component only
+pdf-remove-$(1) :
+	@echo INFO: Removing: $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
+
+
+################################################################################################
+
+
+
+# Make adjustment file which is a dependent of the PDF process
+# Because every content file can have an adjustment file we
+# automate this process by setting a dependency
+$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) : adjlist-make-$(1)
+
+# Call the adjustlist creation macro
+adjlist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
 ifeq ($(USE_ADJUSTMENTS),true)
-	@echo INFO: Creating: $$@
-	@$(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+	$$(call makeadjlist,$(1))
 else
 	@echo INFO: USE_ADJUSTMENTS is set to \"$(USE_ADJUSTMENTS)\". $$@ not made.
 endif
 
+# Remove the adjustment file for this component only
+adjlist-remove-$(1) :
+ifeq ($(LOCKED),0)
+	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+else
+	@echo INFO: Cannot run: $$@ This is because the project is locked.
+endif
 
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
@@ -115,6 +141,9 @@ endif
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
+
+piclist-make-$(1) :
+
 $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@echo INFO: Creating: $$@
@@ -124,30 +153,16 @@ else
 endif
 
 
-# Rules for cleaning up content process files
-
-# Remove the PDF for this component only
-pdf-remove-$(1) :
-	@echo INFO: Removing: $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
-	@rm -f $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
-
-# Remove the adjustment file for this component only
-adjfile-remove-$(1) :
-ifeq ($(LOCKED),0)
-	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-else
-	@echo INFO: Cannot run: $$@ This is because the project is locked.
-endif
-
 # Remove the picture placement file for this component only
-picfile-remove-$(1) :
+piclist-remove-$(1) :
 ifeq ($(LOCKED),0)
 	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
 else
 	@echo INFO: Cannot run: $$@ This is because the project is locked.
 endif
+
+
 
 
 endef
@@ -180,11 +195,14 @@ $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" ""
 
-# Rule for building the GROUP_CONTENT control file. This is
-# not the same as TeX settings file above.
-$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
-	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
+
+################## Depricated?
+## Rule for building the GROUP_CONTENT control file. This is
+## not the same as TeX settings file above.
+#$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
+#	@echo INFO: Creating: $@
+#	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
+
 
 # Rule for generating the entire Scripture content. It will
 # also generate the TOC if that feature is turned on.
@@ -192,8 +210,8 @@ $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
 	$(foreach v,$(filter $(BIBLE_COMPONENTS_ALL),$(GROUP_CONTENT)), \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
 	$(foreach v,$(filter-out $(BIBLE_COMPONENTS_ALL),$(GROUP_CONTENT)), \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK).$(EXT_ADJUSTMENT) \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+	$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) \
 	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
@@ -203,13 +221,12 @@ $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
 # the TOC file creation cannot happen until the content is made.
 $(PATH_SOURCE_PERIPH)/$(FILE_TOC) : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 
-# This enables preprocess checks on all the components at one time.
+# This enables preprocess checks on all the components processing each one independently.
 preprocess-content :
 	@echo INFO: Preprocess checking all content components:
 	@$(foreach v,$(GROUP_CONTENT), $(call preprocessing,$(v),$($(v)_component)) )
-#	@$(foreach v,$(GROUP_CONTENT), $(MOD_RUN_PROCESS) "preprocessChecks" "$(v)" "$(PATH_SOURCE)/$($(v)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)"; )
 
-# This enables preprocess checks on all the components at one time.
+# This enables postprocesses on all the components processing each one independently.
 postprocess-content :
 ifeq ($(LOCKED),0)
 	@echo INFO: Postprocessing all content components
@@ -233,16 +250,6 @@ pdf-remove-contents :
 #			Shared functions
 ###############################################################
 
-# Run the postprocesses on working text, however, to be safe
-# we run the preprocesses as well.
-define postprocessing
-$(call preprocessing ,$(1),$($(1)_component))
-@echo INFO: Copy to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
-@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
-@echo INFO: Postprocessing: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'
-@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
-endef
-
 # Run preprocesses on the source text.
 define preprocessing
 @if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
@@ -253,8 +260,25 @@ fi
 @$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
 endef
 
+# Run the postprocesses on working text, however, to be safe
+# we run the preprocesses as well.
+define postprocessing
+$(call preprocessing ,$(1),$($(1)_component))
+@echo INFO: Copy to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+@echo INFO: Postprocessing: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'
+@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+endef
+
+# Create a single adjustment file if adjustments are turned on
+define makeadjlist
+	@echo INFO: Creating: $(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+	@$(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+endef
+
+
 ##############################################################
-#			Rules for handling illustrations material
+#			Rules for handling piclist file creation
 ##############################################################
 
 # Copy into place the captions.csv file that goes in the
@@ -264,6 +288,11 @@ ifeq ($(USE_ILLUSTRATIONS),true)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
 endif
 
+piclist-make-all :
+piclist-remove-all :
+
+adjlist-make-all :
+adjlist-remove-all :
 
 
 

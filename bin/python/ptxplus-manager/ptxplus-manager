@@ -110,21 +110,14 @@ class ConfigGUI (object) :
 			"on_menu_reset_activate"                    : self.m_reset,
 			"on_menu_remove_pdf_activate"               : self.m_remove_pdf,
 			"on_menu_remove_pdf_current_activate"       : self.m_remove_pdf_current,
-
-
-
 			"on_menu_piclist_make_current_activate"     : self.m_make_piclist_current,
 			"on_menu_piclist_make_all_activate"         : self.m_make_piclist_all,
 			"on_menu_piclist_remove_current_activate"   : self.m_remove_piclist_current,
 			"on_menu_piclist_remove_all_activate"       : self.m_remove_piclist_all,
-
 			"on_menu_adjlist_make_current_activate"     : self.m_make_adjlist_current,
 			"on_menu_adjlist_make_all_activate"         : self.m_make_adjlist_all,
 			"on_menu_adjlist_remove_current_activate"   : self.m_remove_adjlist_current,
 			"on_menu_adjlist_remove_all_activate"       : self.m_remove_adjlist_all,
-
-
-
 			"on_menu_quit_activate"                     : self.quit,
 			"on_menu_cut_activate"                      : self.m_cut,
 			"on_menu_copy_activate"                     : self.m_copy,
