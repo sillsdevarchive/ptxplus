@@ -124,10 +124,9 @@ endif
 # Remove the adjustment file for this component only
 adjlist-remove-$(1) :
 ifeq ($(LOCKED),0)
-	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+	$$(call removeadjlist,$(1))
 else
-	@echo INFO: Cannot run: $$@ This is because the project is locked.
+	@echo INFO: Cannot remove $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) because the project is locked.
 endif
 
 # Currently there is no dependency on this file but I wish there
@@ -150,10 +149,9 @@ endif
 # Remove the picture placement file for this component only
 piclist-remove-$(1) :
 ifeq ($(LOCKED),0)
-	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
-	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
+	$$(call removepiclist,$(1))
 else
-	@echo INFO: Cannot run: $$@ This is because the project is locked.
+	@echo INFO: Cannot remove: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) because the project is locked.
 endif
 
 endef
@@ -270,7 +268,19 @@ endef
 # Create a single piclist file if illustrations are turned on
 define makepiclist
 	@echo INFO: Creating: $(1).$(EXT_WORK).$(EXT_PICLIST)
-	@$(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_PICLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+endef
+
+# Remove a single piclist file
+define removepiclist
+	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
+	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
+endef
+
+# Remove a single adjustment file
+define removeadjlist
+	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
 endef
 
 
@@ -285,11 +295,46 @@ ifeq ($(USE_ILLUSTRATIONS),true)
 	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
 endif
 
+# Rule to make all the piclist files at one time
 piclist-make-all :
-piclist-remove-all :
+ifeq ($(LOCKED),0)
+	@echo INFO: Creating all piclist files:
+	@$(foreach v,$(GROUP_CONTENT), $(call makepiclist,$(v)) )
+else
+	@echo INFO: Cannot create the piclist files because the project is locked
+endif
 
+# Rule to remove all piclist files at one time if the project is not locked
+piclist-remove-all :
+ifeq ($(LOCKED),0)
+	@echo INFO: Removing all piclist files:
+	@$(foreach v,$(GROUP_CONTENT), $(call removepiclist,$(v)) )
+else
+	@echo INFO: Cannot remove the piclist files because the project is locked
+endif
+
+#################################################################################
+# This will not work right if the working files are not created when it is started
+
+# Create all the adjustment files
 adjlist-make-all :
+ifeq ($(LOCKED),0)
+	@echo INFO: Creating all adjustment files:
+	@$(foreach v,$(GROUP_CONTENT), $(call makeadjlist,$(v)) )
+else
+	@echo INFO: Cannot create the adjustment files because the project is locked
+endif
+
+##################################################################################
+
+# Remove all the adjustment files
 adjlist-remove-all :
+ifeq ($(LOCKED),0)
+	@echo INFO: Removing all adjustment files:
+	@$(foreach v,$(GROUP_CONTENT), $(call removeadjlist,$(v)) )
+else
+	@echo INFO: Cannot remove the adjustment files because the project is locked
+endif
 
 
 

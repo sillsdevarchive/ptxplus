@@ -206,10 +206,11 @@ class MakePiclistFile (object) :
 			return
 
 		# Pull in the library data file using the CSVtoDict class in tools
-		try :
-			self._libData = CSVtoDict(self._sourceIllustrationsLibData)
-		except :
-			self._log_manager.log("ERRR", "Not able to find (" + self._sourceIllustrationsLibData + "). More than likely the file is missing or the path is wrong.")
+		self._libData = tools.CSVtoDict(self._sourceIllustrationsLibData)
+#        try :
+#            self._libData = CSVtoDict(self._sourceIllustrationsLibData)
+#        except :
+#            self._log_manager.log("ERRR", "Not able to find (" + self._sourceIllustrationsLibData + "). More than likely the file is missing or the path is wrong.")
 
 		# If we didn't bail out right above, we'll go ahead and open the data file
 		# The assumption here is that the encoding of the pieces of the csv are
