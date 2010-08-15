@@ -106,12 +106,13 @@ def unicodeSanity (log_manager) :
 		inputFile = log_manager._currentInput
 		head, tail = os.path.split(log_manager._currentInput)
 
-		try :
-			for n, l in enumerate(codecs.open(inputFile, "r", encoding='utf_8_sig'),start=1) :
-				if u'\ufffd' in l or u'\u0000' in l :
-					errors = errors + tail + ": Unicode issue detected on line " + str(n) + "\n"
-		except :
-			userMessage("ERROR: Unicode Sanity check, cannot open \"" + inputFile + "\" Why?")
+		if  os.path.isfile(inputFile) == True :
+			try :
+				for n, l in enumerate(codecs.open(inputFile, "r", encoding='utf_8_sig'),start=1) :
+					if u'\ufffd' in l or u'\u0000' in l :
+						errors = errors + tail + ": Unicode issue detected on line " + str(n) + "\n"
+			except :
+				userMessage("ERROR: Unicode Sanity check, cannot open \"" + inputFile + "\" Why?")
 
 	# Store the error away for referencing at the end of the process.
 	if errors != '' :

@@ -206,11 +206,10 @@ class MakePiclistFile (object) :
 			return
 
 		# Pull in the library data file using the CSVtoDict class in tools
-		self._libData = tools.CSVtoDict(self._sourceIllustrationsLibData)
-#        try :
-#            self._libData = CSVtoDict(self._sourceIllustrationsLibData)
-#        except :
-#            self._log_manager.log("ERRR", "Not able to find (" + self._sourceIllustrationsLibData + "). More than likely the file is missing or the path is wrong.")
+		try :
+			self._libData = tools.CSVtoDict(self._sourceIllustrationsLibData)
+		except :
+			self._log_manager.log("ERRR", "Not able to find (" + self._sourceIllustrationsLibData + "). More than likely the file is missing or the path is wrong.")
 
 		# If we didn't bail out right above, we'll go ahead and open the data file
 		# The assumption here is that the encoding of the pieces of the csv are
@@ -237,6 +236,7 @@ class MakePiclistFile (object) :
 		if hits > 0 :
 			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8')
 			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
+			tools.userMessage("INFO: Created piclist file for: " + self._bookID.upper())
 			self._outFileObject.writelines(self.collectPicLine(*line) + '\n' for line in inFileData)
 
 			# Close the piclist file
