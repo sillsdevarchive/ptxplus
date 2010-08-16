@@ -117,16 +117,25 @@ class MakeParaAdjustFile (object) :
 			# to the log and exit gracefully.
 
 			self._log_manager.log("INFO", "The file " + self._outputFile + " already exists so I will not build a new one.")
+			head, tail = os.path.split(self._outputFile)
+			tools.userMessage("ERRR: File found: " + tail)
 
 			return
-
-		# Otherwise we'll just continue on by opening up a new .adj file
-		outputObject = codecs.open(self._outputFile, "w", encoding='utf_8')
 
 		# Get our book object - Using utf_8_sig because the source
 		# might be coming from outside the system and we may need
 		# to be able to handle a BOM.
-		inputObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
+		try :
+			inputObject = codecs.open(self._inputFile, "r", encoding='utf_8_sig')
+			# Continue on by opening up a new .adj file
+			outputObject = codecs.open(self._outputFile, "w", encoding='utf_8')
+
+		except :
+			head, tail = os.path.split(self._inputFile)
+			tools.userMessage("ERRR: Parent not found: " + tail)
+			self._log_manager.log("ERRR", "The file: " + self._inputFile + " could not be opened. Process halted")
+			return
+
 
 		self._log_manager.log("INFO", "Identifying all paragraphs with " + str(adjustParaLength) + " words or more.")
 
@@ -220,6 +229,8 @@ class MakeParaAdjustFile (object) :
 				locationLine, paragraphType, adjustParaLength, outputObject)
 
 		# All done, tell the world what we did
+		head, tail = os.path.split(self._outputFile)
+		tools.userMessage("INFO: Created: " + tail)
 		self._log_manager.log("INFO", "Created paragraph adjustment file: " + self._outputFile)
 		self._log_manager.log("INFO", "Lines written =  " + str(self._adjustLinesWritten))
 

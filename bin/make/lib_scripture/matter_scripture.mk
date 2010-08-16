@@ -116,7 +116,7 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) : adjlist-make-$(1)
 # Call the adjustlist creation macro
 adjlist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
 ifeq ($(USE_ADJUSTMENTS),true)
-	$$(call makeadjlist,$(1))
+	@$$(call makeadjlist,$(1))
 else
 	@echo INFO: USE_ADJUSTMENTS is set to \"$(USE_ADJUSTMENTS)\". $$@ not made.
 endif
@@ -124,7 +124,8 @@ endif
 # Remove the adjustment file for this component only
 adjlist-remove-$(1) :
 ifeq ($(LOCKED),0)
-	$$(call removeadjlist,$(1))
+	@echo Removing: $(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+	@$$(call removeadjlist,$(1))
 else
 	@echo INFO: Cannot remove $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) because the project is locked.
 endif
@@ -141,7 +142,7 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : piclist-make-$(1)
 # context than in the Makefile context.
 piclist-make-$(1) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
-	$$(call makepiclist,$(1))
+	@$$(call makepiclist,$(1))
 else
 	@echo INFO: USE_ILLUSTRATIONS is set to \"$(USE_ILLUSTRATIONS)\". $$@ not made.
 endif
@@ -149,7 +150,8 @@ endif
 # Remove the picture placement file for this component only
 piclist-remove-$(1) :
 ifeq ($(LOCKED),0)
-	$$(call removepiclist,$(1))
+	@echo Removing: $(1).$(EXT_WORK).$(EXT_PICLIST)
+	@$$(call removepiclist,$(1))
 else
 	@echo INFO: Cannot remove: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) because the project is locked.
 endif
@@ -260,28 +262,28 @@ $(call preprocessing ,$(1),$($(1)_component))
 endef
 
 # Create a single adjustment file if adjustments are turned on
-define makeadjlist
-	@echo INFO: Creating: $(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-	@$(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
-endef
+makeadjlist = $(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+
+#define makeadjlist
+#@echo INFO: Creating: $(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+#@$(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+#endef
 
 # Create a single piclist file if illustrations are turned on
-define makepiclist
-	@echo INFO: Creating: $(1).$(EXT_WORK).$(EXT_PICLIST)
-	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_PICLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
-endef
+makepiclist = $(MOD_RUN_PROCESS) "$(MOD_MAKE_PICLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
+
 
 # Remove a single piclist file
-define removepiclist
-	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
-	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
-endef
+removepiclist = rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
+
 
 # Remove a single adjustment file
-define removeadjlist
-	@echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-endef
+removeadjlist = rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+
+#define removeadjlist
+#	echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+#	rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+#endef
 
 
 ##############################################################
@@ -298,8 +300,7 @@ endif
 # Rule to make all the piclist files at one time
 piclist-make-all :
 ifeq ($(LOCKED),0)
-	@echo INFO: Creating all piclist files:
-	@$(foreach v,$(GROUP_CONTENT), $(call makepiclist,$(v)) )
+	@for v in $(GROUP_CONTENT); do $(call makepiclist,$$v); done
 else
 	@echo INFO: Cannot create the piclist files because the project is locked
 endif
@@ -307,20 +308,21 @@ endif
 # Rule to remove all piclist files at one time if the project is not locked
 piclist-remove-all :
 ifeq ($(LOCKED),0)
-	@echo INFO: Removing all piclist files:
-	@$(foreach v,$(GROUP_CONTENT), $(call removepiclist,$(v)) )
+	@echo INFO: Now removing all piclist files
+	@for v in $(GROUP_CONTENT); do $(call removepiclist,$$v); done
 else
 	@echo INFO: Cannot remove the piclist files because the project is locked
 endif
 
 #################################################################################
-# This will not work right if the working files are not created when it is started
 
 # Create all the adjustment files
+# This will not work right if the working files have not been
+# created before it is started
 adjlist-make-all :
 ifeq ($(LOCKED),0)
 	@echo INFO: Creating all adjustment files:
-	@$(foreach v,$(GROUP_CONTENT), $(call makeadjlist,$(v)) )
+	@for v in $(GROUP_CONTENT); do $(call makeadjlist,$$v); done
 else
 	@echo INFO: Cannot create the adjustment files because the project is locked
 endif
@@ -331,7 +333,7 @@ endif
 adjlist-remove-all :
 ifeq ($(LOCKED),0)
 	@echo INFO: Removing all adjustment files:
-	@$(foreach v,$(GROUP_CONTENT), $(call removeadjlist,$(v)) )
+	@for v in $(GROUP_CONTENT); do $(call removeadjlist,$$v); done
 else
 	@echo INFO: Cannot remove the adjustment files because the project is locked
 endif

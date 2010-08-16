@@ -362,7 +362,7 @@
 						<property name="tooltip" translatable="yes">Remove all the picture (illustrations) list files for this publication</property>
 						<property name="use_stock">False</property>
 						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_clean_pic_all_activate"/>
+						<signal name="activate" handler="on_menu_piclist_remove_all_activate"/>
 						<child internal-child="image">
 						  <widget class="GtkImage" id="imageWarnPiclistRemoveAll">
 							<property name="visible">True</property>

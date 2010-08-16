@@ -92,34 +92,6 @@ def taskRunner (log_manager, thisTask) :
 			userMessage("ERROR: Cannot run the \"" + thisTask + "\" module.")
 			log_manager.log("ERRR", "Cannot run the \"" + thisTask + "\" module.")
 
-	# Do a sanity test on the data that was just processed.
-	unicodeSanity(log_manager)
-
-
-def unicodeSanity (log_manager) :
-	'''This will be automatically run after every process that does anything with the
-		text of any kind, both pre and post process. It works at a different level
-		than most of the error checking and reports different as well.'''
-
-	errors = ''
-	if log_manager._currentInput != '' :
-		inputFile = log_manager._currentInput
-		head, tail = os.path.split(log_manager._currentInput)
-
-		if  os.path.isfile(inputFile) == True :
-			try :
-				for n, l in enumerate(codecs.open(inputFile, "r", encoding='utf_8_sig'),start=1) :
-					if u'\ufffd' in l or u'\u0000' in l :
-						errors = errors + tail + ": Unicode issue detected on line " + str(n) + "\n"
-			except :
-				userMessage("ERROR: Unicode Sanity check, cannot open \"" + inputFile + "\" Why?")
-
-	# Store the error away for referencing at the end of the process.
-	if errors != '' :
-		from error_manager import ErrorManager
-		error_manager = ErrorManager()
-		error_manager.recordUnicodeError(errors)
-
 
 def makeNecessaryFiles (path, projType) :
 	'''Create all the necessary files and folders for a project.

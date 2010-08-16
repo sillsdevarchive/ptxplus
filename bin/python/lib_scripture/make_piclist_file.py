@@ -182,6 +182,8 @@ class MakePiclistFile (object) :
 
 		# See if the output file already exists. if it does, then we stop here
 		if os.path.isfile(self._outputFile) :
+			head, tail = os.path.split(self._outputFile)
+			tools.userMessage("INFO: " + tail + " exists")
 			self._log_manager.log("INFO", "The " + self._outputFile + " exists so the process is being halted to prevent data loss.")
 			self._errors +=1
 
@@ -232,15 +234,17 @@ class MakePiclistFile (object) :
 				self.processIllustrationFile(line[0])
 
 		# Now we need output anything we might have collected. If nothing was
-		# found, just an empty file will be put out.
+		# found, we will just send a simple message to the terminal to tell the
+		# user what happened
 		if hits > 0 :
 			self._outFileObject = codecs.open(self._outputFile, "w", encoding='utf_8')
 			self._log_manager.log("DBUG", "Created file: " + self._outputFile)
-			tools.userMessage("INFO: Created piclist file for: " + self._bookID.upper())
+			tools.userMessage("INFO: Created piclist file for: " + self._bookID.upper() + " (" + str(hits) + ")")
 			self._outFileObject.writelines(self.collectPicLine(*line) + '\n' for line in inFileData)
-
 			# Close the piclist file
 			self._outFileObject.close()
+		else :
+			tools.userMessage("INFO: No illustrations found for: " + self._bookID.upper())
 
 		# Tell the world what we did
 		self._log_manager.log("INFO", "We processed " + str(hits) + " illustration line(s) for: " + self._bookID)

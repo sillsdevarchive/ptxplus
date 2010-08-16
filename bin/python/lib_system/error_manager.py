@@ -45,7 +45,6 @@ class ErrorManager (object) :
 			self._logFolder = os.getcwd() + "/Log"
 
 		self._errorLogFile = self._logFolder +  "/error.log"
-		self._errorUnicodeLogFile = self._logFolder +  "/error-unicode.log"
 		self._errorLogObject = []
 		self._errorCount = 0
 
@@ -84,28 +83,8 @@ class ErrorManager (object) :
 
 		errrOutput = ""
 		warnOutput = ""
-		unicodeErrors = ""
-		unicodeErrrCount = 0
 		errrCount = 0
 		warnCount = 0
-
-		# We will look at Unicode errors first and report them. Nothing else
-		# matters if there are encoding issues.
-		if os.path.isfile(self._errorUnicodeLogFile) == True :
-			try :
-				fileObject = codecs.open(self._errorUnicodeLogFile, "r", encoding='utf_8')
-				lastLine = ''
-				for line in fileObject :
-					if line.strip() != '' and line.strip() != lastLine.strip() :
-						unicodeErrors = unicodeErrors + line
-						unicodeErrrCount +=1
-					if line.strip() != '' :
-						lastLine = line.strip()
-
-				if unicodeErrrCount > 0 :
-					tools.userMessageDialog(unicodeErrors, 'ERRR')
-			except :
-				tools.userMessage('ERRR: Unable to open Unicode error log file: ' + self._errorUnicodeLogFile)
 
 		if os.path.isfile(self._errorLogFile) == True :
 			fileObject = codecs.open(self._errorLogFile, "r", encoding='utf_8')
@@ -141,9 +120,6 @@ class ErrorManager (object) :
 			elif warnCount > 1 :
 				tools.userMessage("WARN: A total " + str(warnCount) + " warnings were found too")
 
-			# Probably do not need this if the Zenity dialog is working
-			# tools.userMessage("INFO: For more details see: " + self._errorLogFile)
-
 
 	def deleteErrorLogs (self) :
 		'''Get rid of the error log files.'''
@@ -151,10 +127,6 @@ class ErrorManager (object) :
 		if os.path.isfile(self._errorLogFile) == True :
 			if os.system("rm " + self._errorLogFile) != 0 :
 				tools.userMessage("Failed to delete: " + self._errorLogFile)
-
-		if os.path.isfile(self._errorUnicodeLogFile) == True :
-			if os.system("rm " + self._errorUnicodeLogFile) != 0 :
-				tools.userMessage("Failed to delete: " + self._errorUnicodeLogFile)
 
 
 	def recordError (self, event) :
@@ -169,16 +141,4 @@ class ErrorManager (object) :
 		errorWriteObject.write(event + '\n')
 		errorWriteObject.close()
 
-
-	def recordUnicodeError (self, event) :
-		'''Record a Unicode encoding error report line to the Unicode error log object.'''
-
-
-		if os.path.isfile(self._errorUnicodeLogFile) == True :
-			errorWriteObject = codecs.open(self._errorUnicodeLogFile, "a", encoding='utf_8')
-		else :
-			errorWriteObject = codecs.open(self._errorUnicodeLogFile, "w", encoding='utf_8')
-
-		errorWriteObject.write(event + '\n')
-		errorWriteObject.close()
 
