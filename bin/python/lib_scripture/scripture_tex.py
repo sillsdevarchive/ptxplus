@@ -150,6 +150,10 @@ class MakeTexControlFile (object) :
 		generateTOC = self._log_manager._settings['Format']['TOC']['generateTOC']
 		marginalVersesMacro = self._log_manager._settings['System']['Files']['FILE_MARGINAL_VERSES']
 
+		# TOC Process
+		autoTocFile = self._log_manager._settings['System']['Files']['FILE_AUTO_TOC']
+		tocTitle = self._log_manager._settings['Format']['TOC']['mainTitle']
+
 		# Input the main macro set here in the control file
 		settings = '\\input \"' + self._texMacros + '\"\n'
 
@@ -230,7 +234,7 @@ class MakeTexControlFile (object) :
 				# found in the inputFile, we have to generate them here.
 				thisBook = self._pathToText + '/' + book.lower() + '.usfm'
 				bookInfo = self.parseThisBook(thisBook)
-				if oneChapOmmitRule == 'true' and bookInfo['chapCount'] == 1 or omitAllChapterNumbers == 'true':
+				if (oneChapOmmitRule == 'true' and bookInfo['chapCount'] == 1) or omitAllChapterNumbers == 'true' :
 					settings = settings + '\\OmitChapterNumbertrue\n'
 					settings = settings + '\\ptxfile{' + thisBook + '}\n'
 					settings = settings + '\\OmitChapterNumberfalse\n'
@@ -274,10 +278,6 @@ class MakeTexControlFile (object) :
 		columnGutterFactor = self._log_manager._settings['Format']['Columns']['columnGutterFactor']
 		columnGutterRule = self._log_manager._settings['Format']['Columns']['columnGutterRule']
 		columnGutterRuleSkip = self._log_manager._settings['Format']['Columns']['columnGutterRuleSkip']
-
-		# Process
-		autoTocFile = self._log_manager._settings['System']['Files']['FILE_AUTO_TOC']
-		tocTitle = self._log_manager._settings['Format']['TOC']['mainTitle']
 		columnshift = self._log_manager._settings['Format']['Columns']['columnshift']
 
 		# Format -> PageLayout

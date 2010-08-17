@@ -57,15 +57,15 @@ class MakeTocFile (object) :
 			prevent other processes from crashing.'''
 
 		# Collect the settings we need
-		mainTitle = self._settings['Process']['TOC'].get('mainTitle','Table of Contents')
-		headerRowBookTitle = self._settings['Process']['TOC'].get('headerRowBookTitle','tr')
-		headerRowBookAbbr = self._settings['Process']['TOC'].get('headerRowBookAbbr','tr')
-		headerRowPageNum = self._settings['Process']['TOC'].get('headerRowPageNum','tr')
-		columnFormat = self._settings['Process']['TOC'].get('columnFormat','twoColumnLeadered')
-		inputRowMarker = self._settings['Process']['TOC'].get('inputRowMarker','tr')
-		inputColOne = self._settings['Process']['TOC'].get('inputColOne','tc1')
-		inputColTwo = self._settings['Process']['TOC'].get('inputColTwo','tcr2')
-		inputColThree = self._settings['Process']['TOC'].get('inputColThree','tcr3')
+		mainTitle = self._settings['Format']['TOC'].get('mainTitle','Table of Contents')
+		headerRowBookTitle = self._settings['Format']['TOC'].get('headerRowBookTitle','tr')
+		headerRowBookAbbr = self._settings['Format']['TOC'].get('headerRowBookAbbr','tr')
+		headerRowPageNum = self._settings['Format']['TOC'].get('headerRowPageNum','tr')
+		columnFormat = self._settings['Format']['TOC'].get('columnFormat','twoColumnLeadered')
+		inputRowMarker = self._settings['Format']['TOC'].get('inputRowMarker','tr')
+		inputColOne = self._settings['Format']['TOC'].get('inputColOne','tc1')
+		inputColTwo = self._settings['Format']['TOC'].get('inputColTwo','tcr2')
+		inputColThree = self._settings['Format']['TOC'].get('inputColThree','tcr3')
 
 		# Build some vars in context
 		tocRowFormatMarker = ''

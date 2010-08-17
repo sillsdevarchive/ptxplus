@@ -59,3 +59,4 @@ def doIt(log_manager):
 
 	thisModule = CheckUnicode()
 	return thisModule.main(log_manager)
+

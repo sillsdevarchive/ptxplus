@@ -27,7 +27,7 @@
 ########################################################################################
 
 
-import sys, re, os, time
+import sys, re, os, time, htmlentitydefs
 from StringIO  import StringIO
 from configobj import ConfigObj
 
@@ -858,7 +858,6 @@ class ConfigEditor (object) :
 		self.keys_ts.clear()
 		for k in section.keys() :
 			v = section[k]
-			print k, type(v)
 			if isinstance(v, list) :
 				self.keys_ts.append([k, configlist(v)])
 			elif not isinstance(v, (dict, tuple)) :
@@ -885,15 +884,12 @@ class ConfigEditor (object) :
 		self.wTree.get_widget("bt_cancel_entry").connect("clicked", self.entry_cancel)
 		self.entry_w.show()
 
-
-
-
 # FIXME: There is something wrong here and it is adding extra "\" each time it saves out data
 
 	def entry_apply (self, widget) :
 		value = self.entry_value.get_text().strip()
 		etype = self.entry_type.get_text()
-		c = ConfigObj(["str = " + (repr(value) if etype == "String" else value)], encoding="utf-8")
+		c = ConfigObj(["str = " + ('"%s"' % value if etype == "String" else value)], encoding="utf-8")
 		self.sections_curr[self.entry_name.get_text()] = c['str']
 		self.keys_fill(self.sections_curr)
 		# FIXME: Some error checking should be done here to catch
@@ -910,12 +906,14 @@ class ConfigEditor (object) :
 
 
 
-
+	@staticmethod
+	def entity_prep(l):
+		return reduce(lambda r,c: r + ('&' + htmlentitydefs.codepoint2name[ord(c)] + ';' if ord(c) in htmlentitydefs.codepoint2name else c), l, "")
 
 	def parse (self, lines) :
 		inpara = 0
 		res = ''
-		for l in (re.sub("^#\s?", "", f.strip()) for f in lines) :
+		for l in (self.entity_prep(re.sub("^#\s?", "", f.strip())) for f in lines) :
 			if re.match("^\s*$", l) and inpara != 0:
 				res = res + "\n\n"
 				inpara = 0

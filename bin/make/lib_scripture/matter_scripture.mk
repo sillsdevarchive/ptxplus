@@ -81,7 +81,7 @@ endif
 $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) \
-	$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) | $(DEPENDENT_FILE_LIST)
+	$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $(1).$(EXT_WORK).$(EXT_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_WORK).$(EXT_TEX)
 	$(call watermark,$$@)
@@ -111,10 +111,11 @@ pdf-remove-$(1) :
 # Make adjustment file which is a dependent of the PDF process
 # Because every content file can have an adjustment file we
 # automate this process by setting a dependency
-$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) : adjlist-make-$(1)
+
+adjlist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
 
 # Call the adjustlist creation macro
-adjlist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
+$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
 ifeq ($(USE_ADJUSTMENTS),true)
 	@$$(call makeadjlist,$(1))
 else
@@ -132,7 +133,7 @@ endif
 
 # Currently there is no dependency on this file but I wish there
 # was one, but piclist is not needed for all components.
-$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : piclist-make-$(1)
+piclist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
 
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
@@ -140,7 +141,7 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : piclist-make-$(1)
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
-piclist-make-$(1) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
+$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@$$(call makepiclist,$(1))
 else
@@ -186,13 +187,11 @@ $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" ""
 
-
-################## Depricated?
-## Rule for building the GROUP_CONTENT control file. This is
-## not the same as TeX settings file above.
-#$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
-#	@echo INFO: Creating: $@
-#	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
+# Rule for building the GROUP_CONTENT control file. This is
+# not the same as TeX settings file above.
+$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
+	@echo INFO: Creating: $@
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
 
 
 # Rule for generating the entire Scripture content. It will
@@ -202,10 +201,10 @@ $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
 	$(foreach v,$(filter-out $(BIBLE_COMPONENTS_ALL),$(GROUP_CONTENT)), \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) \
-	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) | $(DEPENDENT_FILE_LIST)
+	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
+	$(call watermark,$@)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)"
 
 # The TOC data is made during the content creation. As such
@@ -227,12 +226,11 @@ else
 endif
 
 # Do a component section and veiw the resulting output
-view-contents : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
+view-content : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 	@- $(CLOSEPDF)
-	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
-pdf-remove-contents :
+pdf-remove-content :
 	@echo INFO: Removing file: $(FILE_CONTENTS_PDF)
 	@rm -f $(FILE_CONTENTS_PDF)
 
@@ -279,11 +277,6 @@ removepiclist = rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
 
 # Remove a single adjustment file
 removeadjlist = rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-
-#define removeadjlist
-#	echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-#	rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-#endef
 
 
 ##############################################################
