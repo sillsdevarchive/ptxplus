@@ -63,7 +63,7 @@ define periph_rules
 
 # This rule simply links everything in the source peripheral folder
 # to the project Texts folder
-$(PATH_TEXTS)/$(1) : $(PATH_SOURCE_PERIPH)/$(1)
+$(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK)
 	@echo INFO: Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
 	@ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
 
@@ -78,10 +78,13 @@ $(PATH_TEXTS)/$(1) : $(PATH_SOURCE_PERIPH)/$(1)
 # the current target doesn't have to be rebuilt if it has not changed.
 # This is very important here because a directory will always be
 # changing.
-ifneq ($(PATH_SOURCE_PERIPH)/$(1), $(PATH_SOURCE_PERIPH)/$(FILE_TOC))
-$(PATH_SOURCE_PERIPH)/$(1) : | $(PATH_SOURCE_PERIPH)
-	@echo TESTING: $(PATH_SOURCE_PERIPH)/$(1) -- $(PATH_SOURCE_PERIPH)/$(FILE_TOC)
-	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$(1),$$@)
+$(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK) : | $(PATH_SOURCE_PERIPH)
+ifeq ($(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK), $(PATH_SOURCE_PERIPH)/$(FILE_TOC_USFM))
+	@echo Creating TOC from: $(PATH_TEXTS)/$(FILE_TOC_AUTO)
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC) 'TOC' '$(PATH_PROCESS)/$(FILE_TOC_AUTO)' '$$@' ''
+else
+	@echo INFO: Creating: $(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK)
+	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$(1).$(EXT_WORK),$$@)
 endif
 
 # This .tex file also generally has some dependencies on the
@@ -107,15 +110,15 @@ $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
-	$(PATH_TEXTS)/$(1) \
+	$(PATH_TEXTS)/$(1).$(EXT_WORK)\
 	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
 	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
 	check-assets | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $$@.$(EXT_TEX)
 
 # Open the PDF file with reader - Add a watermark if needed
-view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
+view-$(1).$(EXT_PDF) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@- $(CLOSEPDF)
 	$(call watermark,$$<)
 	@ $(VIEWPDF) $$< &
@@ -132,13 +135,14 @@ else
 endif
 
 # Do not open the PDF file with reader
-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF) $(DEPENDENT_FILE_LIST)
+$(1).$(EXT_PDF) : $(PATH_PROCESS)/$(1).$(EXT_PDF) $(DEPENDENT_FILE_LIST)
 
 # Remove the PDF file for this source file
-pdf-remove-$(1) :
+pdf-remove-$(1).$(EXT_PDF) :
 	@echo INFO: Removing $$@
-	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/$(1)
 
+# End to the main macro def
 endef
 
 # Filter out repeat instances of peripheral matter, like
@@ -151,8 +155,8 @@ endef
 define matter_binding
 ifneq ($($(1)),)
 $(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
-$(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
-	@pdftk $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) cat output $$@
+$(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v)) $(DEPENDENT_FILE_LIST)
+	@pdftk $(foreach v,$($(1).$(EXT_PDF)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) cat output $$@
 endif
 endef
 

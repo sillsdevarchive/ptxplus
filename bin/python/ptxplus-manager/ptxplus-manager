@@ -475,7 +475,8 @@ class ConfigGUI (object) :
 			self.execute('ptxplus', 'about')
 
 	def b_view_clicked (self, widget) :
-		self.execute("ptxplus", "view-" + self.bkid)
+		extPdf = self.tools.getSettingsObject()['System']['Extensions']['EXT_PDF']
+		self.execute("ptxplus", "view-" + self.bkid + "." + extPdf)
 #        self.set_book(self.bkid)
 
 	def b_check_clicked (self, widget) :

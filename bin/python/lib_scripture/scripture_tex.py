@@ -151,7 +151,7 @@ class MakeTexControlFile (object) :
 		marginalVersesMacro = self._log_manager._settings['System']['Files']['FILE_MARGINAL_VERSES']
 
 		# TOC Process
-		autoTocFile = self._log_manager._settings['System']['Files']['FILE_AUTO_TOC']
+		autoTocFile = self._log_manager._settings['System']['Files']['FILE_TOC_AUTO']
 		tocTitle = self._log_manager._settings['Format']['TOC']['mainTitle']
 
 		# Input the main macro set here in the control file
