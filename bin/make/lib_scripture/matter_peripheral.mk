@@ -79,7 +79,7 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK)
 # This is very important here because a directory will always be
 # changing.
 $(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK) : | $(PATH_SOURCE_PERIPH)
-ifeq ($(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK), $(PATH_SOURCE_PERIPH)/$(FILE_TOC_USFM))
+ifeq ($(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK),$(PATH_SOURCE_PERIPH)/$(FILE_TOC_USFM))
 	@echo Creating TOC from: $(PATH_TEXTS)/$(FILE_TOC_AUTO)
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC) 'TOC' '$(PATH_PROCESS)/$(FILE_TOC_AUTO)' '$$@' ''
 else
@@ -107,7 +107,6 @@ $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$(1).$(EXT_STYLE),$$@)
 
-
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK)\
@@ -115,15 +114,13 @@ $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
 	check-assets | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $$@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $$@.$(EXT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(1).$(EXT_TEX)
+	$(call watermark,$$@)
 
 # Open the PDF file with reader - Add a watermark if needed
-view-$(1).$(EXT_PDF) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
+view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@- $(CLOSEPDF)
-	$(call watermark,$$<)
 	@ $(VIEWPDF) $$< &
-
-
 
 # This enables us to do the preprocessing on a single peripheral item.
 preprocess-$(1) : $(PATH_SOURCE_PERIPH)/$(1)
@@ -135,15 +132,18 @@ else
 endif
 
 # Do not open the PDF file with reader
-$(1).$(EXT_PDF) : $(PATH_PROCESS)/$(1).$(EXT_PDF) $(DEPENDENT_FILE_LIST)
+$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF) $(DEPENDENT_FILE_LIST)
 
 # Remove the PDF file for this source file
-pdf-remove-$(1).$(EXT_PDF) :
+pdf-remove-$(1) :
 	@echo INFO: Removing $$@
-	@rm -f $(PATH_PROCESS)/$(1)
+	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
-# End to the main macro def
+# End to the periph_rules macro def
 endef
+
+
+###################################################################################################
 
 # Filter out repeat instances of peripheral matter, like
 # blank pages which need to be listed multiple times
@@ -155,11 +155,12 @@ endef
 define matter_binding
 ifneq ($($(1)),)
 $(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
-$(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v)) $(DEPENDENT_FILE_LIST)
-	@pdftk $(foreach v,$($(1).$(EXT_PDF)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) cat output $$@
+#$(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
+$(PATH_PROCESS)/$(1).$(EXT_PDF) :
+	@echo INFO: Creating: $(1).$(EXT_PDF) $($(1))
+	@pdftk $(foreach v,$($(1)),$(v:%=$(PATH_PROCESS)/%.$(EXT_PDF))) cat output $$@
 endif
 endef
-
 
 
 ##############################################################
@@ -213,7 +214,6 @@ $(foreach v,$(call uniq,$(MATTER_COVER) $(MATTER_FRONT) $(MATTER_BACK)),$(eval $
 # Produce all the outer cover material in one PDF file
 view-cover : $(MATTER_COVER_PDF)
 	@- $(CLOSEPDF)
-	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 # To produce individual elements of the outer cover just
@@ -221,14 +221,12 @@ view-cover : $(MATTER_COVER_PDF)
 
 # Produce just the font matter (bound)
 view-front : $(MATTER_FRONT_PDF)
-	@- $(CLOSEPDF)
-	$(call watermark,$<)
-	@ $(VIEWPDF) $< &
+#	@- $(CLOSEPDF)
+#	@ $(VIEWPDF) $< &
 
 # Produce just the back matter (bound)
 view-back : $(MATTER_BACK_PDF)
 	@- $(CLOSEPDF)
-	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
 
 # Clean up rules for peripheral matter

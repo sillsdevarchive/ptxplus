@@ -13,21 +13,21 @@
 ##############################################################
 
 # Go get the .$(EXT_TEX) file from the template lib if needed
-$(PATH_PROCESS)/$(FILE_TOC_TEX) :
-	@echo Copying into project from: $(PATH_TEMPLATES)/$(FILE_TOC_TEX)
-	@cp $(PATH_TEMPLATES)/$(FILE_TOC_TEX) $@
+#$(PATH_PROCESS)/$(FILE_TOC_TEX) :
+#	@echo Copying into project from: $(PATH_TEMPLATES)/$(FILE_TOC_TEX)
+#	@cp $(PATH_TEMPLATES)/$(FILE_TOC_TEX) $@
 
 # Make the .$(EXT_STYLE) override file for the TOC
-$(PATH_PROCESS)/$(FILE_TOC_STYLE) :
-	@if test -r $(PATH_TEMPLATES)/$(FILE_TOC_STYLE); then \
-		echo Copying into project from: $(PATH_TEMPLATES)/$(FILE_TOC_STYLE); \
-		cp $(PATH_TEMPLATES)/$(FILE_TOC_STYLE) '$@'; \
-	else \
-		echo Could not find: $@; \
-		echo Creating this file:; \
-		echo Caution, you will need to edit it; \
-		echo \# Override PTX style sheet for $(PATH_TEXTS)/$(FILE_TOC_USFM), edit as needed >> $@; \
-	fi
+#$(PATH_PROCESS)/$(FILE_TOC_STYLE) :
+#	@if test -r $(PATH_TEMPLATES)/$(FILE_TOC_STYLE); then \
+#		echo Copying into project from: $(PATH_TEMPLATES)/$(FILE_TOC_STYLE); \
+#		cp $(PATH_TEMPLATES)/$(FILE_TOC_STYLE) '$@'; \
+#	else \
+#		echo Could not find: $@; \
+#		echo Creating this file:; \
+#		echo Caution, you will need to edit it; \
+#		echo \# Override PTX style sheet for $(PATH_TEXTS)/$(FILE_TOC_USFM), edit as needed >> $@; \
+#	fi
 
 
 ################################################################
@@ -69,5 +69,3 @@ view-toc : $(PATH_PROCESS)/$(FILE_TOC_PDF)
 	@ $(VIEWPDF) $< &
 
 endif
-
-

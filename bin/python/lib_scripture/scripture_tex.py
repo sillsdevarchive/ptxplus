@@ -66,8 +66,8 @@ class MakeTexControlFile (object) :
 
 		log_manager._currentSubProcess = 'MkTexContFile'
 		self._log_manager = log_manager
-		self._outputFile = log_manager._currentOutput
 		self._inputFile = log_manager._currentInput
+		self._outputFile = log_manager._currentOutput
 		self._inputID = log_manager._currentTargetID
 		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['System']['Paths']['PATH_TEXTS']
 		self._pathToSource = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
@@ -95,6 +95,7 @@ class MakeTexControlFile (object) :
 		self._publicationType = log_manager._publicationType
 		# File extentions (Expand this, more will be needed in the future)
 		self._extStyle = self._log_manager._settings['System']['Extensions']['EXT_STYLE']
+		self._extWork = self._log_manager._settings['System']['Extensions']['EXT_WORK']
 		# Some lists
 		self._headerPositions = ['RHtitleleft', 'RHtitlecenter', 'RHtitleright', \
 						'RHoddleft', 'RHoddcenter', 'RHoddright', \
@@ -232,7 +233,7 @@ class MakeTexControlFile (object) :
 			for book in componentScripture :
 				# The file(s) we need to point to in this instance are not
 				# found in the inputFile, we have to generate them here.
-				thisBook = self._pathToText + '/' + book.lower() + '.usfm'
+				thisBook = self._pathToText + '/' + book.lower() + '.' + self._extWork
 				bookInfo = self.parseThisBook(thisBook)
 				if (oneChapOmmitRule == 'true' and bookInfo['chapCount'] == 1) or omitAllChapterNumbers == 'true' :
 					settings = settings + '\\OmitChapterNumbertrue\n'
@@ -249,7 +250,7 @@ class MakeTexControlFile (object) :
 
 			# For peripheral matter we do not have to generate the name like
 			# with Scripture books
-			settings = settings + '\\ptxfile{\"' + self._pathToText + '/' + self._inputFile + '\"}\n'
+			settings = settings + '\\ptxfile{\"' + self._pathToText + '/' + self._inputFile + '.' + self._extWork + '\"}\n'
 
 		# Combine the results
 		settings = settings + '\\bye\n'
