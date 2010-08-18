@@ -72,8 +72,8 @@ DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
 # a typesetting process is run to be sure the files we need
 # are in place. This is mainly for graphics files but could
 # be easily expanded to other types as well.
-check-assets : $(FILE_PROJECT_CONF)
-	@echo INFO: Checking project assets
+check-assets :
+	@echo INFO: Checking project assets - system_files
 	@$(MOD_RUN_PROCESS) "$(MOD_CHECK_ASSETS)" "SYS" "" "" "basic"
 
 # This is just like the check-assets rule but the 'refresh'

@@ -56,8 +56,6 @@ class MakeTocFile (object) :
 			then we need to gracefully stop at that point. This will
 			prevent other processes from crashing.'''
 
-		print "trying to work!"
-
 		# Collect the settings we need
 		mainTitle = self._settings['Format']['TOC'].get('mainTitle','Table of Contents')
 		headerRowBookTitle = self._settings['Format']['TOC'].get('headerRowBookTitle','tr')

@@ -111,8 +111,7 @@ $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK)\
 	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
-	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
-	check-assets | $(DEPENDENT_FILE_LIST)
+	$(PATH_PROCESS)/$(1).$(EXT_STYLE) | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $$@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(1).$(EXT_TEX)
 	$(call watermark,$$@)
