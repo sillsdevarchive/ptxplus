@@ -264,6 +264,25 @@ def getSystemSettingsOverrideObject () :
 	if os.path.isfile(overrideFile) == True :
 		return ConfigObj(overrideFile, encoding='utf_8')
 
+def getSourceFileName (bookID) :
+	'''Return the file name of a source file as determined by
+		by the Scripture editor. If the ID is not recognized
+		it will return nothing'''
+
+	settings = getSettingsObject()
+	suffix = settings['ProjectText']['SourceText'].get('NAME_SOURCE_ORIGINAL')
+	extention = settings['System']['Extensions'].get('EXT_SOURCE')
+	editor = settings['ProjectText']['SourceText']['Features'].get('projectEditor')
+	prefix = ''
+	for key, value in settings['System']['MakefileSettings']['Environment'][editor].iteritems() :
+		if bookID + '_component' == key :
+			prefix = value
+
+	name = prefix + suffix + "." + extention
+
+# FIXME: A little more refinement might be needed here.
+
+	return name
 
 def makeUserOverrideFile () :
 	'''Create a user override file but only if it doesn't already exist.'''

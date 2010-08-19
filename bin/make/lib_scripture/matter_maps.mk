@@ -218,7 +218,7 @@ $(PATH_PROCESS)/$(1)-map-cmyk.$(EXT_PDF) : $(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PN
 # after so they will be deleted. This is similar behavior
 # as with book file processing. The default color space
 # output is RGB. A special command is availible for CMYK.
-preprocess-$(1) : $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG)
+preprocess-map-$(1) : $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG)
 	@echo INFO: Creating or editing $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG)
 	@rm -f $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
 	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG) &
@@ -226,35 +226,35 @@ preprocess-$(1) : $(PATH_TEXTS)/$(1)-map-post.$(EXT_SVG)
 # Process the SVG file and view it in PDF when it is done. Note that this
 # process will fail if the preprocess has not been run first. The map making
 # process differs from typesetting so it has to be this way to protect data.
-view-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
+view-map-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
 	@echo INFO: Creating final typeset map: $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
 	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF) &
 
 # Convert the intermediat PNG file to a CMYK color profile
-cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
+cmyk-map-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
 	@echo INFO: Creating CMYK color profile map: $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
 	@ $(VIEWPDF) $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF) &
 
 # Remove the current map PDF file
-pdf-remove-$(1) :
+pdf-map-remove-$(1) :
 	@echo WARNING: Removing: $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)) and $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map.$(EXT_PDF))
 	@rm -f $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
 	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
 
 # Edit the CSV data file
-edit-data-$(1) : $(PATH_TEXTS)/$(1)-data.$(EXT_CSV)
+edit-map-data-$(1) : $(PATH_TEXTS)/$(1)-data.$(EXT_CSV)
 	$(EDITCSV) $(PATH_TEXTS)/$(1)-data.$(EXT_CSV)
 
 # Edit the CSV style file
-edit-styles-$(1) : $(PATH_TEXTS)/$(1)-styles.$(EXT_CSV)
+edit-map-styles-$(1) : $(PATH_TEXTS)/$(1)-styles.$(EXT_CSV)
 	$(EDITCSV) $(PATH_TEXTS)/$(1)-styles.$(EXT_CSV)
 
 # View the original model map
-view-model-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG)
+view-map-model-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG)
 	$(VIEWIMG) $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG)
 
 # View the original SVG template map
-view-template-$(1) : $(PATH_TEXTS)/$(1)-map.$(EXT_SVG)
+view-map-template-$(1) : $(PATH_TEXTS)/$(1)-map.$(EXT_SVG)
 	$(VIEWSVG) $(PATH_TEXTS)/$(1)-map.$(EXT_SVG)
 
 else
@@ -362,46 +362,46 @@ $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF) : \
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_TEX)
 
 # View the resulting created PDF file for this map.
-view-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
+view-map-$(1) : $(PATH_PROCESS)/$(1)-map-page-rgb.$(EXT_PDF)
 	@echo INFO: Viewing RGB color profile map: $$<
 	@ $(VIEWPDF) $$< &
 
 # In this process this is not too useful. Let's try just telling
 # user to just use the view button
-preprocess-$(1) :
+preprocess-map-$(1) :
 	@echo INFO:  This feature is not necessary in this mode.
 
 # Convert this map ID to CMYK
-cmyk-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
+cmyk-map-$(1) : $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
 	@echo INFO: Creating CMYK color profile map: $$<
 	@ $(VIEWPDF) $$< &
 
 # Remove the current map PDF file
-pdf-remove-$(1) :
+pdf-map-remove-$(1) :
 	@echo WARNING: Removing: $$(shell readlink -f -- $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF))
 	@rm -f $(PATH_PROCESS)/$(1)-map-page-cmyk.$(EXT_PDF)
 
 # Edit the CSV data file
-edit-data-$(1) :
+edit-map-data-$(1) :
 	@echo INFO: This feature is not necessary in this mode.
 
 # Edit the CSV style file
-edit-styles-$(1) :
+edit-map-styles-$(1) :
 	@echo INFO: This feature is not necessary in this mode.
 
 # View the original model map
-view-model-$(1) : $(PATH_PROCESS)/$(1)
+view-map-model-$(1) : $(PATH_PROCESS)/$(1)
 	$(VIEWIMG) $(PATH_PROCESS)/$(1)
 
 # View the original SVG template map
-view-template-$(1) :
+view-map-template-$(1) :
 	@echo INFO: This feature is not necessary in this mode.
 
 endif
 
 # Delete (clean out) this set of map files but do not delete the data
 # in the source folder. This is shared by both types of map processes.
-delete-$(1) :
+delete-map-$(1) :
 	@echo WARNING: Removing all the files for the $(1) map set
 	@rm -f $(PATH_PROCESS)/$(1)*
 	@rm -f $(PATH_TEXTS)/$(1)*

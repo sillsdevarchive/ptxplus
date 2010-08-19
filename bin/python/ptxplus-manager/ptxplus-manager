@@ -162,7 +162,7 @@ class ConfigGUI (object) :
 
 		# replace TextView with SourceView
 		self.language_manager = gtksourceview2.LanguageManager()
-		sourceviews = ['usfm', 'styles', 'setup', 'adj', 'errors', 'texlog']
+		sourceviews = ['txtWork', 'txtSource', 'styGlobal', 'styComponent', 'texCustom', 'texComponent', 'adj', 'errorLog', 'texLog']
 		for s in sourceviews:
 			sc = 'sc_'+s
 			tv = 'tv_'+s
@@ -218,12 +218,27 @@ class ConfigGUI (object) :
 		else :
 			self.ceditor = ConfigEditor(self.ourProjectConf, self.wTree, 'tv_sections', 'tv_keys')
 
-		# File and path info from this project
-		pathProcess = self.tools.getSettingsObject()['System']['Paths']['PATH_PROCESS']
-		styleFile = self.tools.getSettingsObject()['System']['Files']['FILE_TEX_STYLE']
-		setupFile = self.tools.getSettingsObject()['System']['Files']['FILE_TEX_CUSTOM']
-		self.styles = FileEditor(pathProcess + '/' + styleFile, self.tv_styles, self.language_manager.get_language("latex"))
-		self.setup = FileEditor(pathProcess + '/' + setupFile, self.tv_setup, self.language_manager.get_language("latex"))
+		# Now that we have a config object we can set some
+		# global vars for other processes (add more as needed)
+		# NOTE: If there are problems we may need to use try/except
+		self._pathProcess = self.ceditor.config['System']['Paths'].get('PATH_PROCESS')
+		self._pathSource = self.ceditor.config['System']['Paths'].get('PATH_SOURCE')
+		self._pathTexts = self.ceditor.config['System']['Paths'].get('PATH_TEXTS')
+		self._pathLog = self.ceditor.config['System']['Paths'].get('PATH_LOG')
+		self._fileStyle = self.ceditor.config['System']['Files'].get('FILE_TEX_STYLE')
+		self._fileTexCustom = self.ceditor.config['System']['Files'].get('FILE_TEX_CUSTOM')
+		self._fileError = self.ceditor.config['System']['Files'].get('FILE_TEX_CUSTOM')
+		self._extWork = self.ceditor.config['System']['Extensions'].get('EXT_WORK')
+		self._extSource = self.ceditor.config['System']['Extensions'].get('EXT_SOURCE')
+		self._extStyle = self.ceditor.config['System']['Extensions'].get('EXT_STYLE')
+		self._extTex = self.ceditor.config['System']['Extensions'].get('EXT_TEX')
+		self._extAdj = self.ceditor.config['System']['Extensions'].get('EXT_ADJUSTMENT')
+		self._extLog = self.ceditor.config['System']['Extensions'].get('EXT_LOG')
+
+		# Build file information for these tabs
+		self.styGlobal = FileEditor(self._pathProcess + '/' + self._fileStyle, self.tv_styGlobal, self.language_manager.get_language("latex"))
+#        self.texCustom = FileEditor(self._pathProcess + '/' + self._fileTexCustom, self.tv_texCustom, self.language_manager.get_language("latex"))
+		self.texCustom = ''
 
 		try :
 			title = self.ceditor.config['Project']['ProjectInformation'].get('projectName')
@@ -271,22 +286,31 @@ class ConfigGUI (object) :
 
 
 	def close_dir (self) :
-		self.styles = None
-		self.setup = None
+		self.styGlobal = None
+		self.styComponent = None
+		self.texCustom = None
+		self.texComponent = None
 		self.adjust = None
-		self.usfm = None
-		self.texlog = None
-		self.log = None
+		self.txtWork = None
+		self.txtSource = None
+		self.texLog = None
+		self.errorLog = None
 
-	def set_book (self, bkid) :
+
+	def set_component (self, bkid) :
 		self.bkid = bkid
 		self.b_view.set_label("_View-" + bkid)
 		self.b_check.set_label("_Check-" + bkid)
-		self.adjust = FileEditor("Texts/" + bkid + ".usfm.adj", self.tv_adj, self.language_manager.get_language("latex"))
-		self.usfm = FileEditor("Texts/" + bkid + ".usfm", self.tv_usfm, self.language_manager.get_language("latex"))
-		self.log = FileEditor("Log/error.log", self.tv_errors, None)
-		self.log.readonly = True
-		self.texlog = FileEditor("Process/" + bkid + ".log", self.tv_texlog, None)
+		self.adjust = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork + "." + self._extAdj, self.tv_adj, self.language_manager.get_language("latex"))
+		self.txtWork = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork, self.tv_txtWork, self.language_manager.get_language("latex"))
+		self.txtSource = FileEditor(self._pathSource + "/" + self.tools.getSourceFileName(bkid), self.tv_txtSource, self.language_manager.get_language("latex"))
+		self.txtSource.readonly = True
+		self.styComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extStyle, self.tv_styComponent, self.language_manager.get_language("latex"))
+		self.texComponent = ''
+
+		self.errorLog = FileEditor(self._pathLog + "/" + self._fileError + "." + self._extLog, self.tv_errorLog, None)
+		self.errorLog.readonly = True
+		self.texlog = FileEditor(self._pathProcess + "/" + bkid + "." + self._extLog, self.tv_texLog, None)
 		self.texlog.readonly = True
 
 ######################################################################################################
@@ -310,10 +334,10 @@ class ConfigGUI (object) :
 
 
 	def write_files (self) :
-		if self.styles     : self.styles.write('')
-		if self.setup      : self.setup.write('')
+		if self.styGlobal     : self.styGlobal.write('')
+		if self.texCustom      : self.texCustom.write('')
 		if self.adjust     : self.adjust.write('')
-		if self.usfm       : self.usfm.write('')
+		if self.txtWork       : self.txtWork.write('')
 
 	def set_working_dir (self, isProject) :
 
@@ -476,11 +500,11 @@ class ConfigGUI (object) :
 
 	def b_view_clicked (self, widget) :
 		self.execute("ptxplus", "view-" + self.bkid)
-#        self.set_book(self.bkid)
+#        self.set_component(self.bkid)
 
 	def b_check_clicked (self, widget) :
 		self.execute("ptxplus", "preprocess-" + self.bkid)
-#        self.set_book(self.bkid)
+#        self.set_component(self.bkid)
 
 	def b_wiki_clicked (self, widget) :
 		self.execute("ptxplus", "wiki")
@@ -497,7 +521,7 @@ class ConfigGUI (object) :
 	def cb_components_changed (self, widget) :
 		index = widget.get_active()
 		bkid = self.cs_components[index][0]
-		self.set_book(bkid)
+		self.set_component(bkid)
 
 	def m_new (self, widget) :
 		self.set_working_dir(False)
@@ -641,28 +665,28 @@ class ConfigGUI (object) :
 			entry.get_buffer().paste_clipboard(self.clipboard, None, entry.get_editable())
 
 	def m_map_view_model (self, widget) :
-		self.execute("ptxplus", "view-model-" + self.bkid)
+		self.execute("ptxplus", "view-map-model-" + self.bkid)
 
 	def m_map_edit_data (self, widget) :
-		self.execute("ptxplus", "edit-data-" + self.bkid)
+		self.execute("ptxplus", "edit-map-data-" + self.bkid)
 
 	def m_map_view_template (self, widget) :
-		self.execute("ptxplus", "view-template-" + self.bkid)
+		self.execute("ptxplus", "view-map-template-" + self.bkid)
 
 	def m_map_edit_styles (self, widget) :
-		self.execute("ptxplus", "edit-styles-" + self.bkid)
+		self.execute("ptxplus", "edit-map-styles-" + self.bkid)
 
 	def m_map_merge_data (self, widget) :
-		self.execute("ptxplus", "preprocess-" + self.bkid)
+		self.execute("ptxplus", "preprocess-map-" + self.bkid)
 
 	def m_map_create_rgb (self, widget) :
-		self.execute("ptxplus", "view-" + self.bkid)
+		self.execute("ptxplus", "view-map-" + self.bkid)
 
 	def m_map_create_cmyk (self, widget) :
-		self.execute("ptxplus", "cmyk-" + self.bkid)
+		self.execute("ptxplus", "cmyk-map-" + self.bkid)
 
 	def m_map_delete_current (self, widget) :
-		self.execute("ptxplus", "delete-" + self.bkid)
+		self.execute("ptxplus", "delete-map-" + self.bkid)
 
 	def m_map_bind_maps_rgb (self, widget) :
 		self.execute("ptxplus", "view-rgb-maps")

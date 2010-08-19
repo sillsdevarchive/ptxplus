@@ -954,8 +954,9 @@
 				  </widget>
 				</child>
 				<child>
-				  <widget class="GtkLabel" id="label10">
+				  <widget class="GtkLabel" id="tab_session">
 					<property name="visible">True</property>
+					<property name="tooltip" translatable="yes">A running report of processes being run by the system</property>
 					<property name="label" translatable="yes">Session</property>
 				  </widget>
 				  <packing>
@@ -964,7 +965,7 @@
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkScrolledWindow" id="sc_usfm">
+				  <widget class="GtkScrolledWindow" id="sc_txtWork">
 					<property name="visible">True</property>
 					<property name="can_focus">True</property>
 					<property name="hscrollbar_policy">automatic</property>
@@ -978,9 +979,10 @@
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkLabel" id="label15">
+				  <widget class="GtkLabel" id="tab_txtWork">
 					<property name="visible">True</property>
-					<property name="label" translatable="yes">USFM</property>
+					<property name="tooltip" translatable="yes">The project's working text for the current component</property>
+					<property name="label" translatable="yes">Working</property>
 				  </widget>
 				  <packing>
 					<property name="position">1</property>
@@ -989,7 +991,33 @@
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkHPaned" id="hpaned1">
+				  <widget class="GtkScrolledWindow" id="sc_txtSource">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">automatic</property>
+					<property name="vscrollbar_policy">automatic</property>
+					<child>
+					  <placeholder/>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">2</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="tab_txtSource">
+					<property name="visible">True</property>
+					<property name="tooltip" translatable="yes">The project's source text for the current component</property>
+					<property name="label" translatable="yes">Source</property>
+				  </widget>
+				  <packing>
+					<property name="position">2</property>
+					<property name="tab_fill">False</property>
+					<property name="type">tab</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkHPaned" id="sc_system">
 					<property name="visible">True</property>
 					<property name="can_focus">True</property>
 					<child>
@@ -1094,39 +1122,15 @@
 					</child>
 				  </widget>
 				  <packing>
-					<property name="position">2</property>
-					<property name="tab_fill">False</property>
-				  </packing>
-				</child>
-				<child>
-				  <widget class="GtkLabel" id="label5">
-					<property name="visible">True</property>
-					<property name="label" translatable="yes">Config</property>
-				  </widget>
-				  <packing>
-					<property name="position">2</property>
-					<property name="tab_fill">False</property>
-					<property name="type">tab</property>
-				  </packing>
-				</child>
-				<child>
-				  <widget class="GtkScrolledWindow" id="sc_styles">
-					<property name="visible">True</property>
-					<property name="can_focus">True</property>
-					<property name="hscrollbar_policy">automatic</property>
-					<property name="vscrollbar_policy">automatic</property>
-					<child>
-					  <placeholder/>
-					</child>
-				  </widget>
-				  <packing>
 					<property name="position">3</property>
+					<property name="tab_fill">False</property>
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkLabel" id="label6">
+				  <widget class="GtkLabel" id="tab_system">
 					<property name="visible">True</property>
-					<property name="label" translatable="yes">Styles</property>
+					<property name="tooltip" translatable="yes">Main system settings configuration tab</property>
+					<property name="label" translatable="yes">System</property>
 				  </widget>
 				  <packing>
 					<property name="position">3</property>
@@ -1135,7 +1139,7 @@
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkScrolledWindow" id="sc_setup">
+				  <widget class="GtkScrolledWindow" id="sc_styGlobal">
 					<property name="visible">True</property>
 					<property name="can_focus">True</property>
 					<property name="hscrollbar_policy">automatic</property>
@@ -1149,12 +1153,94 @@
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkLabel" id="label7">
+				  <widget class="GtkLabel" id="tab_styGlobal">
 					<property name="visible">True</property>
-					<property name="label" translatable="yes">Setup</property>
+					<property name="tooltip" translatable="yes">Global text formating (styles)</property>
+					<property name="label" translatable="yes">Global</property>
 				  </widget>
 				  <packing>
 					<property name="position">4</property>
+					<property name="tab_fill">False</property>
+					<property name="type">tab</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="sc_styComponent">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">automatic</property>
+					<property name="vscrollbar_policy">automatic</property>
+					<child>
+					  <placeholder/>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">5</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="tab_styComponent">
+					<property name="visible">True</property>
+					<property name="tooltip" translatable="yes">Component text formating (styles)</property>
+					<property name="label" translatable="yes">Component</property>
+				  </widget>
+				  <packing>
+					<property name="position">5</property>
+					<property name="tab_fill">False</property>
+					<property name="type">tab</property>
+				  </packing>
+				</child>
+				<child>
+				  <placeholder/>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="sc_texCustom">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">automatic</property>
+					<property name="vscrollbar_policy">automatic</property>
+					<child>
+					  <placeholder/>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">6</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="tab_texCustom">
+					<property name="visible">True</property>
+					<property name="tooltip" translatable="yes">TeX custom settings</property>
+					<property name="label" translatable="yes">TeX Custom</property>
+				  </widget>
+				  <packing>
+					<property name="position">6</property>
+					<property name="tab_fill">False</property>
+					<property name="type">tab</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="sc_texComponent">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">automatic</property>
+					<property name="vscrollbar_policy">automatic</property>
+					<child>
+					  <placeholder/>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">7</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkLabel" id="tab_texComponent">
+					<property name="visible">True</property>
+					<property name="tooltip" translatable="yes">Component TeX settings</property>
+					<property name="label" translatable="yes">TeX Comp.</property>
+				  </widget>
+				  <packing>
+					<property name="position">7</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
@@ -1170,22 +1256,23 @@
 					</child>
 				  </widget>
 				  <packing>
-					<property name="position">5</property>
+					<property name="position">8</property>
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkLabel" id="label8">
+				  <widget class="GtkLabel" id="tab_compAdj">
 					<property name="visible">True</property>
-					<property name="label" translatable="yes">Adjustments</property>
+					<property name="tooltip" translatable="yes">Component adjustments (if relevant)</property>
+					<property name="label" translatable="yes">Comp. Adj.</property>
 				  </widget>
 				  <packing>
-					<property name="position">5</property>
+					<property name="position">8</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkScrolledWindow" id="sc_errors">
+				  <widget class="GtkScrolledWindow" id="sc_errorLog">
 					<property name="visible">True</property>
 					<property name="can_focus">True</property>
 					<property name="hscrollbar_policy">automatic</property>
@@ -1195,22 +1282,23 @@
 					</child>
 				  </widget>
 				  <packing>
-					<property name="position">6</property>
+					<property name="position">9</property>
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkLabel" id="label9">
+				  <widget class="GtkLabel" id="tab_errorLog">
 					<property name="visible">True</property>
+					<property name="tooltip" translatable="yes">TeX error report for the last run session (operation)</property>
 					<property name="label" translatable="yes">Errors</property>
 				  </widget>
 				  <packing>
-					<property name="position">6</property>
+					<property name="position">9</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkScrolledWindow" id="sc_texlog">
+				  <widget class="GtkScrolledWindow" id="sc_texLog">
 					<property name="visible">True</property>
 					<property name="can_focus">True</property>
 					<property name="hscrollbar_policy">automatic</property>
@@ -1220,17 +1308,20 @@
 					</child>
 				  </widget>
 				  <packing>
-					<property name="position">7</property>
+					<property name="menu_label">sc_texLog</property>
+					<property name="position">10</property>
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkLabel" id="label11">
+				  <widget class="GtkLabel" id="tab_texLog">
 					<property name="visible">True</property>
-					<property name="label" translatable="yes">Tex Log</property>
+					<property name="tooltip" translatable="yes">TeX log from the last run session</property>
+					<property name="label" translatable="yes">TeX Log</property>
 					<property name="justify">right</property>
 				  </widget>
 				  <packing>
-					<property name="position">7</property>
+					<property name="menu_label">tab_texLog</property>
+					<property name="position">10</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
