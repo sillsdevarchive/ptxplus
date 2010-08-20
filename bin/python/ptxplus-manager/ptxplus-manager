@@ -303,7 +303,7 @@ class ConfigGUI (object) :
 		self.b_check.set_label("_Check-" + bkid)
 		self.adjust = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork + "." + self._extAdj, self.tv_adj, self.language_manager.get_language("latex"))
 		self.txtWork = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork, self.tv_txtWork, self.language_manager.get_language("latex"))
-		self.txtSource = FileEditor(self._pathSource + "/" + self.tools.getSourceFileName(bkid), self.tv_txtSource, self.language_manager.get_language("latex"))
+		self.txtSource = FileEditor(self._pathSource + "/" + self.tools.getComponentSourceFileName(bkid), self.tv_txtSource, self.language_manager.get_language("latex"))
 		self.txtSource.readonly = True
 		self.styComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extStyle, self.tv_styComponent, self.language_manager.get_language("latex"))
 		self.texComponent = ''

@@ -44,19 +44,6 @@ basePath = os.environ.get('PTXPLUS_BASE')
 	up here.'''
 
 
-def thisProjectConf () :
-	'''Look for and return the name of a valid .conf file in
-		the current cwd. If not it will simply return the
-		string, none'''
-
-	if os.access('.scripture.conf', os.R_OK) :
-		return '.scripture.conf'
-	elif  os.access('.dictionary.conf', os.R_OK) :
-		return '.dictionary.conf'
-	else :
-		return 'none'
-
-
 def taskRunner (log_manager, thisTask) :
 	'''This is the final function used for running all system tasks.
 		All calls from the system to run a task or process should
@@ -234,12 +221,33 @@ def getSystemSettingsObject () :
 	return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/ptxplus.conf", encoding='utf_8')
 
 
+def getPubInfoObject () :
+	'''Return a publication information object for the
+		current project. Every type of publication should
+		have one resident in the system. This is an ini-type
+		file that is formated just like the .conf files.'''
+
+	# The info file name will be the same as the type
+	return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/" + getProjectType() + '.inf', encoding='utf_8')
+
+
+def getProjectType () :
+	'''Return the type of publication project this is.
+		We will do this by checkging to see what kind of
+		.conf object we have in the root of the project.'''
+
+	for t in getSystemSettingsObject()['System']['pubTypeList'].split() :
+		print t
+		if os.access('.' + t + '.conf', os.R_OK) :
+			return t
+
+
 def getProjectSettingsObject () :
 	'''Return an object which contains the project settings.'''
 
-	if os.path.isfile(os.getcwd() + "/" + thisProjectConf()) :
+	if os.path.isfile(os.getcwd() + "/" + getProjectConfigFileName()) :
 		# Load in the settings from our project
-		return ConfigObj(os.getcwd() + "/" + thisProjectConf(), encoding='utf_8')
+		return ConfigObj(os.getcwd() + "/" + getProjectConfigFileName(), encoding='utf_8')
 
 
 def getProjectDefaultSettingsObject () :
@@ -247,8 +255,7 @@ def getProjectDefaultSettingsObject () :
 
 	# FIXME: This may cause an error because the .conf file
 	# may not be found.
-
-	defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/" + thisProjectConf()
+	defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/" + getProjectConfigFileName()
 
 	if os.path.isfile(defaultFile) :
 		# Load in the settings from our default .conf file
@@ -264,25 +271,29 @@ def getSystemSettingsOverrideObject () :
 	if os.path.isfile(overrideFile) == True :
 		return ConfigObj(overrideFile, encoding='utf_8')
 
-def getSourceFileName (bookID) :
+def getComponentSourceFileName (bookID) :
 	'''Return the file name of a source file as determined by
 		by the Scripture editor. If the ID is not recognized
 		it will return nothing'''
 
-	settings = getSettingsObject()
-	suffix = settings['ProjectText']['SourceText'].get('NAME_SOURCE_ORIGINAL')
-	extention = settings['System']['Extensions'].get('EXT_SOURCE')
-	editor = settings['ProjectText']['SourceText']['Features'].get('projectEditor')
+	settingsProject = getProjectSettingsObject()
+	settingsSystem = getSystemSettingsObject()
+	pubInfo = getPubInfoObject()
+	suffix = settingsProject['ProjectText']['SourceText'].get('NAME_SOURCE_ORIGINAL')
+	extention = settingsProject['System']['Extensions'].get('EXT_SOURCE')
+	editor = settingsProject['ProjectText']['SourceText']['Features'].get('projectEditor')
 	prefix = ''
-	for key, value in settings['System']['MakefileSettings']['Environment'][editor].iteritems() :
+	for key, value in pubInfo['ComponentSourceName_' + editor.upper()].iteritems() :
 		if bookID + '_component' == key :
 			prefix = value
 
-	name = prefix + suffix + "." + extention
+	return prefix + suffix + "." + extention
 
-# FIXME: A little more refinement might be needed here.
+def getProjectConfigFileName () :
+	'''Return the configuration file name for this project.'''
 
-	return name
+	return getProjectType() + '.conf'
+
 
 def makeUserOverrideFile () :
 	'''Create a user override file but only if it doesn't already exist.'''
@@ -384,19 +395,10 @@ def getProjectID () :
 	return getProjectSettingsObject()['Project']['ProjectInformation']['projectID']
 
 
-def getProjectType () :
-	'''Based on the name of the .conf file, return what this
-		function thinks the type of this project is.'''
-
-	# This assumes that the name construction is .name.conf
-	# we will suck out the "name".
-	return thisProjectConf().split('.')[1]
-
-
 def inProject () :
 	'''Simple test to see if a .conf file exists.'''
 
-	if os.path.isfile(thisProjectConf()) == True :
+	if os.path.isfile(getProjectConfigFileName()) == True :
 		return True
 	else :
 		return False
@@ -467,7 +469,7 @@ def isProjectFolder () :
 
 	path = os.getcwd()
 	ok = False
-	if os.path.isfile(path + "/" + thisProjectConf()) :
+	if os.path.isfile(path + "/" + getProjectConfigFileName()) :
 		ok = True
 
 	return ok
@@ -540,7 +542,7 @@ def makefileCommand (command) :
 			return os.system(sysCommand)
 
 		except :
-			userMessage('ERROR: Could not run makefile command. The ' + thisProjectConf() + ' file may be corrupt.')
+			userMessage('ERROR: Could not run makefile command. The ' + getProjectConfigFileName() + ' file may be corrupt.')
 
 
 def doCustomProcess (processCommand) :

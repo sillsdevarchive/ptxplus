@@ -1,73 +1,13 @@
-# COMPONENTS
-# Information about components used in this type of publication.
-[Components]
-
-# PERIPHERAL MATTER SOURCE (PTX)
-# Peripheral matter names for all source peripheral components
-# handled by this system.for this type of publication. This
-# maps the internal system names to source names. This equates
-# to the name of a file but not the extention. These names
-# reflect those that would be used in the Paratext editing
-# environment.
-[[PeripheralSource_PTX]]
+# COMPONENT SOURCE NAME (PTX)
+# Source names for all the components handled by this system.
+# for this type of publication. This maps the internal system
+# names to source names. This equates to the name of a file
+# but not the extention. These names reflect those that would
+# be used in the Paratext editing environment.
+[ComponentSourceName_PTX]
 
 toc_component                = 'TOC'
-
-# PERIPHERAL MATTER DESCRIPTION (ENG)
-# This provides an English description of peripheral components.
-# Try to keep each description to 20 chacters or less.
-[[PeripheralDescription_ENG]]
-
-toc_component                = 'Table of Contents'
-
-# SHARED MATTER SOURCE (PTX)
-# Shared matter names for all source shared components
-# handled by this system.for this type of publication. This
-# maps the internal system names to source names. This equates
-# to the name of a file but not the extention. These names
-# reflect those that would be used in the Paratext editing
-# environment.
-[[SharedSource_PTX]]
-
 bnk_component                = 'BLANK_PAGE'
-
-# SHARED MATTER SOURCE (BE)
-# Shared matter names for all source shared components
-# handled by this system.for this type of publication. This
-# maps the internal system names to source names. This equates
-# to the name of a file but not the extention. These names
-# reflect those that would be used in the Bibledit editing
-# environment.
-[[SharedSource_BE]]
-
-bnk_component                = 'BLANK_PAGE'
-
-# SHARED MATTER SOURCE (TE)
-# Shared matter names for all source shared components
-# handled by this system.for this type of publication. This
-# maps the internal system names to source names. This equates
-# to the name of a file but not the extention. These names
-# reflect those that would be used in the Translation Editor
-# editing environment.
-[[SharedSource_TE]]
-
-bnk_component                = 'BLANK_PAGE'
-
-# SHARED MATTER DESCRIPTION (ENG)
-# This provides an English description of shared components.
-# Try to keep each description to 20 chacters or less.
-[[SharedDescription_ENG]]
-
-bnk_component                = 'Blank Page'
-
-# CONTENT MATTER SOURCE (PTX)
-# Content matter names for all source content components
-# handled by this system.for this type of publication. This
-# maps the internal system names to source names. This equates
-# to the name of a file but not the extention. These names
-# reflect those that would be used in the Paratext editing
-# environment.
-[[ContentSource_PTX]]
 
 gen_component                = '01GEN'
 exo_component                = '02EXO'
@@ -162,14 +102,16 @@ sst_component                = '91SST'
 dnt_component                = '92DNT'
 blt_component                = '93BLT'
 
-# CONTENT MATTER SOURCE (BE)
-# Content matter names for all source content components
-# handled by this system.for this type of publication. This
-# maps the internal system names to source names. This equates
-# to the name of a file but not the extention. These names
-# reflect those that would be used in the Bibledit editing
-# environment.
-[[ContentSource_BE]]
+# COMPONENT SOURCE NAME (BE)
+# Source names for all the components handled by this system.
+# for this type of publication. This maps the internal system
+# names to source names. This equates to the name of a file
+# but not the extention. These names reflect those that would
+# be used in the Paratext editing environment.
+[ComponentSourceName_BE]
+
+toc_component                = 'TOC'
+bnk_component                = 'BLANK_PAGE'
 
 gen_component                = '1_Genesis'
 exo_component                = '2_Exodus'
@@ -264,14 +206,16 @@ sst_component                = 'Susannah\ (Theodotion)'
 dnt_component                = 'Daniel\ (Theodotion)'
 blt_component                = 'Bel\ and\ the\ Dragon\ (Theodotion)'
 
-# CONTENT MATTER SOURCE (TE)
-# Content matter names for all source content components
-# handled by this system.for this type of publication. This
-# maps the internal system names to source names. This equates
-# to the name of a file but not the extention. These names
-# reflect those that would be used in the Translation Editor
-# editing environment.
-[[ContentSource_TE]]
+# COMPONENT SOURCE NAME (TE)
+# Source names for all the components handled by this system.
+# for this type of publication. This maps the internal system
+# names to source names. This equates to the name of a file
+# but not the extention. These names reflect those that would
+# be used in the Paratext editing environment.
+[ComponentSourceName_TE]
+
+toc_component                = 'TOC'
+bnk_component                = 'BLANK_PAGE'
 
 gen_component                = ''
 exo_component                = ''
@@ -366,10 +310,14 @@ sst_component                = ''
 dnt_component                = ''
 blt_component                = ''
 
-# CONTENT MATTER DESCRIPTION (ENG)
-# This provides an English description of content components.
-# Try to keep each description to 20 chacters or less.
-[[ContentDescription_ENG]]
+# COMPONENT DESCRIPTIONS (ENG)
+# This provides an English description of all the components.
+# for this type of publication. Please try to keep each
+# description to 20 chacters or less.
+[ComponentDescription_ENG]
+
+toc_component                = 'Table of Contents'
+bnk_component                = 'Blank Page'
 
 gen_component                = 'Genesis'
 exo_component                = 'Exodus'
@@ -410,6 +358,7 @@ zep_component                = ''
 hag_component                = ''
 zec_component                = ''
 mal_component                = ''
+
 mat_component                = 'Matthew'
 mrk_component                = 'Mark'
 luk_component                = 'Luke'
@@ -437,6 +386,7 @@ jas_component                = 'James'
 3jn_component                = '3 John'
 jud_component                = 'Jude'
 rev_component                = 'Revelation'
+
 tob_component                = ''
 jdt_component                = ''
 esg_component                = ''

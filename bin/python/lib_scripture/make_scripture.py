@@ -133,6 +133,10 @@ class MakeMakefile (object) :
 		# name given here. The user cannot change this.
 		makefileSettings = makefileSettings + 'PATH_SOURCE_PERIPH=' + sourcePath + '/' + peripheralFolderName + '\n'
 
+		# We will use a function to tell us what the project config
+		# name is.
+		makefileSettings = makefileSettings + 'FILE_PROJECT_CONF=' + tools.getProjectConfigFileName()
+
 		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
@@ -219,12 +223,13 @@ class MakeMakefile (object) :
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
-		# Add make rule files via the include call in make
-		# This is all controled via the .scripture.conf file
-		basePath = os.environ.get('PTXPLUS_BASE')
-		makefileFinal = "include " + basePath + "/bin/make/" + self._log_manager._settings['System']['MakefileSettings']['MakeIncludeVariables'][self._log_manager._settings['ProjectText']['SourceText']['Features']['projectEditor']] + '\n'
+		# Add component mapping info here
+		editor = self._log_manager._settings['ProjectText']['SourceText']['Features'].get('projectEditor')
+		for key, value in tools.getPubInfoObject()['ComponentSourceName_' + editor.upper()].iteritems() :
+			makefileSettings = makefileSettings + key + '=' + value + '\n'
 
-		for key, value, in self._log_manager._settings['System']['MakefileSettings']['MakeInclude'].iteritems() :
+		makefileFinal = ""
+		for key, value, in tools.getSystemSettingsObject()['System']['MakeInclude'].iteritems() :
 			makefileFinal = makefileFinal + "include " + basePath + "/bin/make/" + value + '\n'
 
 		# Output to the new makefile file

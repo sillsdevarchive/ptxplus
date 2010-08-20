@@ -44,19 +44,26 @@ projectType = 'none'
 # Set our paths to application resources
 sys.path.insert(0, basePath + '/bin/python')
 sys.path.insert(0, basePath + '/bin/python/lib_system')
-# Context sensitive stuff
-if os.access('.scripture.conf', os.R_OK) :
-	sys.path.insert(0, basePath + '/bin/python/lib_scripture')
-	projectType = 'scripture'
-elif  os.access('.dictionary.conf', os.R_OK) :
-	sys.path.insert(0, basePath + '/bin/python/lib_dictionary')
-	projectType = 'dictionary'
 
 # No mater what, we will need tools to work with.
 import tools
 
+# Find out what kind of project this is
+projectType = tools.getProjectType()
+print projectType, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Context sensitive stuff libraries
+if projectType == 'scripture' :
+	sys.path.insert(0, basePath + '/bin/python/lib_scripture')
+elif projectType == 'dictionary' :
+	sys.path.insert(0, basePath + '/bin/python/lib_dictionary')
+else :
+	tools.userMessage("Publication type: " + projectType + " not supported!\n")
+	sys.exit(1)
+
 # Import supporting local classes if we already have project going.
-# Instantiate classes right away too
+# We don't want to do this for a new project. Instantiate classes
+# right away too.
 if projectType == 'scripture' or projectType == 'dictionary' :
 	from log_manager import *
 	log_manager = LogManager()
