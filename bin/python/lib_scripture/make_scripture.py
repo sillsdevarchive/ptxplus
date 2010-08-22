@@ -133,9 +133,9 @@ class MakeMakefile (object) :
 		# name given here. The user cannot change this.
 		makefileSettings = makefileSettings + 'PATH_SOURCE_PERIPH=' + sourcePath + '/' + peripheralFolderName + '\n'
 
-		# We will use a function to tell us what the project config
-		# name is.
-		makefileSettings = makefileSettings + 'FILE_PROJECT_CONF=' + tools.getProjectConfigFileName()
+		# We will use a function to tell us what the project
+		# config name is.
+		makefileSettings = makefileSettings + 'FILE_PROJECT_CONF=' + tools.getProjectConfigFileName() + '\n'
 
 		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'
@@ -225,8 +225,26 @@ class MakeMakefile (object) :
 
 		# Add component mapping info here
 		editor = self._log_manager._settings['ProjectText']['SourceText']['Features'].get('projectEditor')
-		for key, value in tools.getPubInfoObject()['ComponentSourceName_' + editor.upper()].iteritems() :
-			makefileSettings = makefileSettings + key + '=' + value + '\n'
+		# Build filter list of all possible components in this project
+		coverList = self._log_manager._settings['Format']['Binding']['MATTER_COVER']
+		frontList = self._log_manager._settings['Format']['Binding']['MATTER_FRONT']
+		otList = self._log_manager._settings['Format']['Binding']['MATTER_OT']
+		ntList = self._log_manager._settings['Format']['Binding']['MATTER_NT']
+		apList = self._log_manager._settings['Format']['Binding']['MATTER_AP']
+		backList = self._log_manager._settings['Format']['Binding']['MATTER_BACK']
+		mapsList = self._log_manager._settings['Format']['Binding']['MATTER_MAPS']
+		filterList = []
+		for list in [coverList, frontList, otList, ntList, apList, backList, mapsList] :
+			for item in list :
+				filterList.append(item)
+
+		for cID in filterList :
+			makefileSettings = makefileSettings + tools.getComponentNameKey(cID) + '=' + tools.getComponentNameValue(cID) + '\n'
+
+#        for key, value in tools.getPubInfoObject()['ComponentSourceName_' + editor.upper()].iteritems() :
+#            # Grab only keys that are in this project
+#            if key in filterList :
+#                makefileSettings = makefileSettings + key + '=' + value + '\n'
 
 		makefileFinal = ""
 		for key, value, in tools.getSystemSettingsObject()['System']['MakeInclude'].iteritems() :

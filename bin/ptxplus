@@ -50,7 +50,6 @@ import tools
 
 # Find out what kind of project this is
 projectType = tools.getProjectType()
-print projectType, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # Context sensitive stuff libraries
 if projectType == 'scripture' :
@@ -83,8 +82,9 @@ if len(sys.argv) >= 2 :
 	# The second argv is normally the file name or book ID in the context of Scripture
 	if projectType.lower() == 'scripture' :
 		bkid = ""
+
 		componentScripture = tools.getSettingsObject()['Format']['Binding']['MATTER_OT']
-		componentScripture = componentScripture + tools.getSettingsObject()['Format']['Binding']['MATTER_NT']
+#        componentScripture = componentScripture + tools.getSettingsObject()['Format']['Binding']['MATTER_NT']
 #        componentScripture = componentScripture.split()
 		# This part only works if we are processing Scripture components (books with IDs)
 		if len(componentScripture) > 0 :

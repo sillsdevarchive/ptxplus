@@ -177,6 +177,7 @@ def getSettingsObject () :
 	projectDefault = getProjectDefaultSettingsObject()
 	project = getProjectSettingsObject()
 	sysObj = getSystemSettingsObject()
+
 	try :
 		override = getSystemSettingsOverrideObject()
 	except :
@@ -237,7 +238,6 @@ def getProjectType () :
 		.conf object we have in the root of the project.'''
 
 	for t in getSystemSettingsObject()['System']['pubTypeList'].split() :
-		print t
 		if os.access('.' + t + '.conf', os.R_OK) :
 			return t
 
@@ -245,7 +245,7 @@ def getProjectType () :
 def getProjectSettingsObject () :
 	'''Return an object which contains the project settings.'''
 
-	if os.path.isfile(os.getcwd() + "/" + getProjectConfigFileName()) :
+	if os.path.isfile(os.getcwd() + "/" + getProjectConfigFileName()) != None :
 		# Load in the settings from our project
 		return ConfigObj(os.getcwd() + "/" + getProjectConfigFileName(), encoding='utf_8')
 
@@ -255,6 +255,7 @@ def getProjectDefaultSettingsObject () :
 
 	# FIXME: This may cause an error because the .conf file
 	# may not be found.
+
 	defaultFile = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/" + getProjectConfigFileName()
 
 	if os.path.isfile(defaultFile) :
@@ -271,29 +272,52 @@ def getSystemSettingsOverrideObject () :
 	if os.path.isfile(overrideFile) == True :
 		return ConfigObj(overrideFile, encoding='utf_8')
 
-def getComponentSourceFileName (bookID) :
+def getComponentSourceFileName (compID) :
 	'''Return the file name of a source file as determined by
 		by the Scripture editor. If the ID is not recognized
 		it will return nothing'''
 
 	settingsProject = getProjectSettingsObject()
 	settingsSystem = getSystemSettingsObject()
-	pubInfo = getPubInfoObject()
 	suffix = settingsProject['ProjectText']['SourceText'].get('NAME_SOURCE_ORIGINAL')
 	extention = settingsProject['System']['Extensions'].get('EXT_SOURCE')
-	editor = settingsProject['ProjectText']['SourceText']['Features'].get('projectEditor')
-	prefix = ''
-	for key, value in pubInfo['ComponentSourceName_' + editor.upper()].iteritems() :
-		if bookID + '_component' == key :
-			prefix = value
+	value = getComponentNameValue(compID)
+	key = getComponentNameKey(compID)
 
-	return prefix + suffix + "." + extention
+	# The suffix is only a Paratext naming convention. It is not
+	# needed for peripheral files and will not be present for other
+	# kinds of files. We will just strip it out for peripheral files
+	if key.find('_content') > -1 :
+		return value + suffix + "." + extention
+	else :
+		return value + "." + extention
+
+def getComponentNameValue (compID) :
+	'''Return the key for a given component ID.'''
+
+	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
+	# Check all types of components
+	for key, value in getPubInfoObject()['ComponentSourceName_' + editor.upper()].iteritems() :
+		if compID + '_content' == key or \
+			compID + '_peripheral' == key or \
+			compID + '_map' == key :
+			return value
+
+def getComponentNameKey (compID) :
+	'''Return the value for a given component ID.'''
+
+	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
+	# Check all types of components
+	for key, value in getPubInfoObject()['ComponentSourceName_' + editor.upper()].iteritems() :
+		if compID + '_content' == key or \
+				compID + '_peripheral' == key or \
+				compID + '_map' == key :
+			return key
 
 def getProjectConfigFileName () :
 	'''Return the configuration file name for this project.'''
 
-	return getProjectType() + '.conf'
-
+	return '.' + getProjectType() + '.conf'
 
 def makeUserOverrideFile () :
 	'''Create a user override file but only if it doesn't already exist.'''
