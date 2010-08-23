@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2010-08-23T16:25:24.552177
+
+====== Components ======
+
+A book is made up of individual components. An example of a component is the verso (copyright) page, or an index. Each type of publication may have a different set, or potential set, of components than others. A Bible will have a content group that is made up of many components, whereas a simple dictionary may only have one. In this section we will divide up the information by publication types which are recognized by the system.
+
+[[Scripture]]
+
+[[+Dictionary]]

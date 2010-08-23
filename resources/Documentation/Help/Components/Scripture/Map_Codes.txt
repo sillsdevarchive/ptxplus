@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2010-08-23T16:09:46.863177
+
+====== Map Codes ======
+
+Currently there are 11 map templates to choose from. Here are their codes and a brief description of each one:
+
+m01	Modern world (m001)
+m02	''Ancient world (m002)''
+m03	''Exodus from Egypt (m003)''
+m04	''Conquest of Canaan (m004)''
+m05	''Kingdoms of Israel and Judah (m005)''
+m06	''Holy Land in the Time of Jesus Christ (m006)''
+m07	''Jerusalem in New Testament Times (m007)''
+m08	''Paul's Missionary Journeys (m008)''
+m09	''The Temple in the time of Jesus Christ (m009)''
+m10	''Seven Churches of Asia (m010)''
+m11	''The Temple Buildings (m011)''
