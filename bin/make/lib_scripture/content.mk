@@ -330,6 +330,3 @@ ifeq ($(LOCKED),0)
 else
 	@echo INFO: Cannot remove the adjustment files because the project is locked
 endif
-
-
-

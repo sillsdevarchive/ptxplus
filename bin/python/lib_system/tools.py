@@ -237,7 +237,7 @@ def getProjectType () :
 		We will do this by checkging to see what kind of
 		.conf object we have in the root of the project.'''
 
-	for t in getSystemSettingsObject()['System']['pubTypeList'].split() :
+	for t in getSystemSettingsObject()['System']['pubTypeList'] :
 		if os.access('.' + t + '.conf', os.R_OK) :
 			return t
 
