@@ -42,6 +42,17 @@ GROUP_MAPS                  = MATTER_MAPS,
 # which are produced from combining all the individual components.
 BOOK                        = GROUP_FRONT, GROUP_CONTENT, GROUP_BACK, GROUP_MAPS
 
+# FILE NAMES (HARD-CODDED)
+# These are names of files for this publication type which are
+# hard-codded.
+[FileNames]
+
+FILE_BOOK                   = BOOK.pdf
+FILE_GROUP_CONTENT_PDF      = GROUP_CONTENT.pdf
+FILE_GROUP_CONTENT_TEX      = GROUP_CONTENT.tex
+
+
+
 # COMPONENT SOURCE NAME (PTX)
 # Source names for all the components handled by this system.
 # for this type of publication. This maps the internal system

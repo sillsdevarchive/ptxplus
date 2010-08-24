@@ -149,99 +149,25 @@ class MakeMakefile (object) :
 			makefileSettings = makefileSettings + key + "=" + value + '\n'
 
 		# Build up all the component groupings
-		# The tricky part here is that we are
-		# going to output to the makefile hard-coded
-		# file names to simplify rules. We need
-		# to be sure we have covered every .conf
-		# setting necessary rather than relying on
-		# an iteration to catch everything.
 
-		# Cover components
-		cvMatter = ''
-		cvGroup = ''
-		for fn in self._log_manager._settings['Format']['Binding']['MATTER_COVER'] :
-			cvMatter = cvMatter + fn + ' '
-			cvGroup = cvGroup + fn + '.pdf '
+		# Build component groups
+		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['Binding'].iteritems()) + '\n'
 
-		# Build content components
-		otComponents = ''
-		for fid in self._log_manager._settings['Format']['Binding']['MATTER_OT'] :
-			otComponents = otComponents + fid + ' '
+		# Build meta groups here
+		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._pubInfo['BindingGroups'].iteritems()) + '\n'
 
-		ntComponents = ''
-		for fid in self._log_manager._settings['Format']['Binding']['MATTER_NT'] :
-			ntComponents = ntComponents + fid + ' '
+		# Get special file names for this publication type
+		for key, value in self._pubInfo['FileNames'].iteritems() :
+			makefileSettings += key + "=" + value + '\n'
 
-		apComponents = ''
-		for fid in self._log_manager._settings['Format']['Binding']['MATTER_AP'] :
-			apComponents = apComponents + fid + ' '
-
-		# Build peripheral components
-		frMatter = ''
-		frGroup = ''
-		for fn in self._log_manager._settings['Format']['Binding']['MATTER_FRONT'] :
-			frMatter = frMatter + fn + ' '
-			frGroup = frGroup + fn + '.pdf '
-
-		bkMatter = ''
-		bkGroup = ''
-		for fn in self._log_manager._settings['Format']['Binding']['MATTER_BACK'] :
-			bkMatter = bkMatter + fn + ' '
-			bkGroup = bkGroup + fn + '.pdf '
-
-		mpMatter = ''
-		mpGroup = ''
-		for fn in self._log_manager._settings['Format']['Binding']['MATTER_MAPS'] :
-			mpMatter = mpMatter + fn + ' '
-			mpGroup = mpGroup + fn + '.pdf '
-
-		# Output component matter
-		makefileSettings = makefileSettings + 'MATTER_COVER=' + cvMatter.strip() + '\n'
-		makefileSettings = makefileSettings + 'MATTER_OT=' + otComponents.strip() + '\n'
-		makefileSettings = makefileSettings + 'MATTER_NT=' + ntComponents.strip() + '\n'
-		makefileSettings = makefileSettings + 'MATTER_AP=' + apComponents.strip() + '\n'
-		makefileSettings = makefileSettings + 'MATTER_FRONT=' + frMatter.strip() + '\n'
-		makefileSettings = makefileSettings + 'MATTER_BACK=' + bkMatter.strip() + '\n'
-		makefileSettings = makefileSettings + 'MATTER_MAPS=' + mpMatter.strip() + '\n'
-
-		# Output the groups here
-		contentGroup = otComponents + ' ' + ntComponents + ' ' + apComponents
-		makefileSettings = makefileSettings + 'GROUP_COVER=' + cvGroup.strip() + '\n'
-		makefileSettings = makefileSettings + 'GROUP_FRONT=' + frGroup.strip() + '\n'
-		makefileSettings = makefileSettings + 'GROUP_CONTENT=' + contentGroup.strip() + '\n'
-		makefileSettings = makefileSettings + 'GROUP_BACK=' + bkGroup.strip() + '\n'
-		makefileSettings = makefileSettings + 'GROUP_MAPS=' + mpGroup.strip() + '\n'
-
-
-		def getMatterList(mList) :
-			itemList = []
-			print mList, "xxxxxxxxxxxxxxxxxxxx"
-			for thing in self._log_manager._settings['Format']['Binding'][mList] :
-				print thing
-				itemList.extend(thing)
-			return itemList
-
-#        import pdb; pdb.set_trace();
-#        for key, value in self._pubInfo['BindingGroups'].iteritems() :
-#            print key, value, "qqqqqqqqqqqqqqqqqqqqq"
-#            makefileSettings = makefileSettings + key + '=' + getMatterList(value) + '\n'
-		makefileSettings = '\n'.join(key + '=' + getMatterList(value) for key, value in self._pubInfo['BindingGroups'].iteritems())
-
-		# Make the master book file name (hard codded)
-		makefileSettings = makefileSettings + 'FILE_BOOK=BOOK.pdf\n'
-
-
-		makefileSettings = makefileSettings + 'FILE_GROUP_CONTENT_PDF=GROUP_CONTENT.pdf\n'
-
-		# Make the content group TeX control file (hard codded)
-		# The other groups will not use TeX to compile their master
-		# PDF file like the content group does. They will use pdftk
-		# so a control file is not necessary.
-		makefileSettings = makefileSettings + 'FILE_GROUP_CONTENT_TEX=GROUP_CONTENT.tex\n'
+#        makefileSettings += 'FILE_BOOK=BOOK.pdf\n'
+#        makefileSettings += 'FILE_GROUP_CONTENT_PDF=GROUP_CONTENT.pdf\n'
+#        #
+#        makefileSettings += 'FILE_GROUP_CONTENT_TEX=GROUP_CONTENT.tex\n'
 
 		# Output the helper commands
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + '\n'
+			makefileSettings += key + "=" + value + '\n'
 
 		# Add component mapping info here
 		editor = self._log_manager._settings['ProjectText']['SourceText']['Features'].get('projectEditor')
@@ -256,16 +182,16 @@ class MakeMakefile (object) :
 		filterList = reduce(operator.add, self._log_manager._settings['Format']['Binding'].itervalues(), [])
 
 		for cID in filterList :
-			makefileSettings = makefileSettings + tools.getComponentNameKey(cID) + '=' + tools.getComponentNameValue(cID) + '\n'
+			makefileSettings += tools.getComponentNameKey(cID) + '=' + tools.getComponentNameValue(cID) + '\n'
 
 		# Create the final key/values for the file
 		makefileFinal = ""
 
 		for value in self._pubInfo['Components']['componentTypeList'] :
-			makefileFinal = makefileFinal + "include " + basePath + "/bin/make/lib_" + self._projectType + "/" + value + ".mk\n"
+			makefileFinal += "include " + basePath + "/bin/make/lib_" + self._projectType + "/" + value + ".mk\n"
 
 		# Add in system level include files
-		makefileFinal = makefileFinal + "include " + basePath + "/bin/make/lib_" + self._projectType + "/system.mk\n"
+		makefileFinal += "include " + basePath + "/bin/make/lib_" + self._projectType + "/system.mk\n"
 
 		# Output to the new makefile file
 		makefileObject.write(makefileHeader + makefileSettings + makefileFinal)
