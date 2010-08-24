@@ -153,8 +153,11 @@ class MakeMakefile (object) :
 		# Build component groups
 		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['Binding'].iteritems()) + '\n'
 
-		# Build meta groups here
-		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._pubInfo['BindingGroups'].iteritems()) + '\n'
+		# Build meta groups (output all the components for each )
+		makefileSettings += '\n'.join(key + '=' + ''.join(self.expandMetaGroups(value)) for key, value in self._pubInfo['BindingGroups'].iteritems()) + '\n'
+
+		# The final book group
+		makefileSettings += ''.join('GROUP_BOOK=' + ' '.join(self._pubInfo['Book']['GROUP_BOOK'])) + '\n'
 
 		# Get special file names for this publication type
 		for key, value in self._pubInfo['FileNames'].iteritems() :
@@ -195,6 +198,17 @@ class MakeMakefile (object) :
 
 		# Output to the new makefile file
 		makefileObject.write(makefileHeader + makefileSettings + makefileFinal)
+
+	def expandMetaGroups (self, groups) :
+		'''This will expand meta groups in the binding list.'''
+
+		components = ""
+		for thisGroup in groups :
+			components += " ".join(self._log_manager._settings['Format']['Binding'][thisGroup])
+
+		return components
+
+
 
 # This starts the whole process going
 def doIt(log_manager):

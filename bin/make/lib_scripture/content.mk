@@ -30,14 +30,14 @@ define content_rules
 # Rather a dummy file will be created telling them the file is missing
 # and hopefully some helpful instructions on what to do.
 $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_SOURCE)
-	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
+	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
 
 # This is the rule for creating the working text. We will use
 # the postprocessing function to do this.
-$(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
+$(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
 ifeq ($(LOCKED),0)
 	@echo Creating: $(PATH_TEXTS)/$(1).$(EXT_WORK)
-	$$(call postprocessing,$(1),$($(1)_component))
+	$$(call postprocessing,$(1),$($(1)_content))
 else
 	@echo INFO: Cannot create: $$@ because the project is locked.
 endif
@@ -48,17 +48,17 @@ endif
 # If we are checking text that means we are not sure about how good it is. That
 # being the case, we don't want this text in the system yet so the very first
 # thing we do is try to delete any existing copies from the source directory.
-preprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
+preprocess-$(1) : $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
-	$$(call preprocessing,$(1),$($(1)_component))
+	$$(call preprocessing,$(1),$($(1)_content))
 else
 	@echo INFO: Cannot process: $$@ because the project is locked.
 endif
 
 # Call a postprocessing function which will run all the postprocesses.
-postprocess-$(1) : $(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
+postprocess-$(1) : $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
-	$$(call postprocessing,$(1),$($(1)_component))
+	$$(call postprocessing,$(1),$($(1)_content))
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
@@ -172,6 +172,7 @@ endef
 
 # This builds a rule (in memory) for each of the content components
 $(foreach v,$(GROUP_CONTENT), $(eval $(call content_rules,$(v))))
+#$(foreach v,$(GROUP_CONTENT), $(info $v))
 
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
@@ -214,13 +215,13 @@ $(PATH_SOURCE_PERIPH)/$(FILE_TOC) : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 # This enables preprocess checks on all the components processing each one independently.
 preprocess-content :
 	@echo INFO: Preprocess checking all content components:
-	@$(foreach v,$(GROUP_CONTENT), $(call preprocessing,$(v),$($(v)_component)) )
+	@$(foreach v,$(GROUP_CONTENT), $(call preprocessing,$(v),$($(v)_content)) )
 
 # This enables postprocesses on all the components processing each one independently.
 postprocess-content :
 ifeq ($(LOCKED),0)
 	@echo INFO: Postprocessing all content components
-	@$(foreach v,$(GROUP_CONTENT), $(call postprocessing,$(v),$($(v)_component)) )
+	@$(foreach v,$(GROUP_CONTENT), $(call postprocessing,$(v),$($(v)_content)) )
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
@@ -252,7 +253,7 @@ endef
 # Run the postprocesses on working text, however, to be safe
 # we run the preprocesses as well.
 define postprocessing
-$(call preprocessing ,$(1),$($(1)_component))
+$(call preprocessing ,$(1),$($(1)_content))
 @echo INFO: Copy to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
 @$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
 @echo INFO: Postprocessing: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'

@@ -37,10 +37,12 @@ GROUP_BACK                  = MATTER_BACK,
 # just contains MATTER_MAPS.
 GROUP_MAPS                  = MATTER_MAPS,
 
-# THE BOOK
-# This book file is the final goal. It is compiled from PDF files
-# which are produced from combining all the individual components.
-BOOK                        = GROUP_FRONT, GROUP_CONTENT, GROUP_BACK, GROUP_MAPS
+# THE BOOK GROUP
+# This book group is the final goal of the process. It contains
+# all the meta groups which contains all the components.
+[Book]
+
+GROUP_BOOK                        = GROUP_FRONT, GROUP_CONTENT, GROUP_BACK, GROUP_MAPS
 
 # FILE NAMES (HARD-CODDED)
 # These are names of files for this publication type which are
