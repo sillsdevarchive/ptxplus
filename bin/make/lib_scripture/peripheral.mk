@@ -1,40 +1,20 @@
-# matter_peripheral.mk
+# peripheral.mk
 
-# This file provides build rules for building all peripheral material,
+# This file provides build rules for building all peripheral components,
 # front and back, that might go into a Scripture publication. The
 # rules will be laid out so that it will allow total flexibility as
 # to if matter will be placed in the front or back. For example,
 # it would be possible to put the copyright page in the back of the
 # publication if necessary even though that is normally not done.
 # Where components will be placed will be determined by the user
-# as they layout the order in the Binding section of the project.ini
-# file. That information is used to auto-build the process_instructions.mk
-# file. That is the file that drives this one.
-#
-# It is possible to pick out one component and focus on that. Several
-# generic rules will be provided for that.
+# as they layout the order in the Binding section of the project
+# .conf file.
 
 # History:
 
-# 20080725 - djd - Initial draft version. Moved all the code from the
-#		now deprecated matter_front.mk, matter_back.mk
-#		and matter_maps.mk
-# 20081010 - djd - Removed the -$(NAME_SOURCE_ORIGINAL) porton of
-#		the names to avoid problems in projects where
-#		multiple scripts are used.
-# 20091201 - djd - Changed some process commands to be more in line
-#		with others
-# 20090114 - djd - Changed the process model of peripheral material
-#		so that now there is only one source and it is linked
-#		into the project. Much easier to maintian this way.
-# 20100203 - djd - Added the ability to create peripheral files
-#		on the fly so there doesn't need to be a copy of
-#		it in the ptxplus template lib
-# 20100212 - djd - Added style override files for peripheral matter.
-# 20100212 - djd - Started adding custom TOC generation rules
-# 20100213 - djd - Moved the TOC rules to a seperate file
-# 20100603 - djd - Added TeX control file auto build process
-# 20100615 - djd - Changed hard codded extions to vars
+# 20100824 - djd - Initial draft version. Moved all the code from the
+#		now deprecated matter_peripheral.mk
+
 
 ##############################################################
 #		Variables for peripheral matter
@@ -52,7 +32,7 @@
 define periph_rules
 
 # Peripheral material is unique to each project, as such, there only
-# needs to be one copy to make maintained simpler. With regular
+# needs to be one copy to make maintainance simpler. With regular
 # content text changes may be made to the working copy that are not
 # made to the source. That is not the case with peripheral material.
 # The source is the same as the working copy. The source is kept
@@ -69,16 +49,15 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK)
 
 # Create the peripheral file by copying in the template. But if
 # the template files doesn't exsit, then create a dummy one to
-# serve as a placeholder. This is done by using the "test" conditional
-# statement below. Note the line concatanation. This needs to be
-# exicuted as one long line. Also be aware that we do not generate
+# serve as a placeholder. Note the line concatanation. This needs to
+# be exicuted as one long line. Also be aware that we do not generate
 # the TOC here as it is made by a seperate process.
 # NOTE: the use of the "|" in the dependency list. The pipe enables makefile
 # to check on the dependent target, in this case a directory, but
 # the current target doesn't have to be rebuilt if it has not changed.
 # This is very important here because a directory will always be
 # changing.
-$(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK) : | $(PATH_SOURCE_PERIPH)
+$(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK) : | $(PATH_SOURCE_PERIPH)
 ifeq ($(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK),$(PATH_SOURCE_PERIPH)/$(FILE_TOC_USFM))
 	@echo Creating TOC from: $(PATH_TEXTS)/$(FILE_TOC_AUTO)
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC) 'TOC' '$(PATH_PROCESS)/$(FILE_TOC_AUTO)' '$$@' ''

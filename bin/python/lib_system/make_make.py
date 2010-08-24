@@ -187,11 +187,11 @@ class MakeMakefile (object) :
 		# Create the final key/values for the file
 		makefileFinal = ""
 
+		# Add in system level include files first, then the component types
+		makefileFinal += "include " + basePath + "/bin/make/lib_" + self._projectType + "/system.mk\n"
+
 		for value in self._pubInfo['Components']['componentTypeList'] :
 			makefileFinal += "include " + basePath + "/bin/make/lib_" + self._projectType + "/" + value + ".mk\n"
-
-		# Add in system level include files
-		makefileFinal += "include " + basePath + "/bin/make/lib_" + self._projectType + "/system.mk\n"
 
 		# Output to the new makefile file
 		makefileObject.write(makefileHeader + makefileSettings + makefileFinal)

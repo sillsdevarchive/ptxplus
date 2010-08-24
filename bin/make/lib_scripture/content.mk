@@ -23,13 +23,13 @@
 # Define the main macro for what it takes to process an
 # individual component.
 
-define component_rules
+define content_rules
 
 # Define our source file rule here. The idea is we do not want the
 # user to get a file not found error when they process a file.
 # Rather a dummy file will be created telling them the file is missing
 # and hopefully some helpful instructions on what to do.
-$(PATH_SOURCE)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_SOURCE)
+$(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_SOURCE)
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_component)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
 
 # This is the rule for creating the working text. We will use
@@ -167,11 +167,11 @@ endef
 # in a publication
 
 # In case makefile needs things in order, we will put some
-# dependent rules here before we hit the main component_rules
+# dependent rules here before we hit the main content_rules
 # building rule
 
 # This builds a rule (in memory) for each of the content components
-$(foreach v,$(GROUP_CONTENT), $(eval $(call component_rules,$(v))))
+$(foreach v,$(GROUP_CONTENT), $(eval $(call content_rules,$(v))))
 
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the

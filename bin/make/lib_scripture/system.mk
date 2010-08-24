@@ -44,8 +44,6 @@
 #		Variables for some of the system matter
 ##############################################################
 
-# This is the final output we want so we can name it here
-MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).$(EXT_PDF)
 
 
 ##############################################################
@@ -58,7 +56,7 @@ MATTER_BOOK_PDF=$(PATH_PROCESS)/$(MATTER_BOOK).$(EXT_PDF)
 # in the process. If this rules file ever needs to be moved
 # down the chain this might have to move, or be put in a
 # seperate file.
-DEPENDENT_FILE_LIST = $(FILE_DEPENDENT_LIST) \
+DEPENDENT_FILE_LIST = \
   $(PATH_PROCESS)/$(FILE_TEX_STYLE) \
   $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) \
   $(FILE_PROJECT_CONF)
@@ -231,11 +229,11 @@ endef
 ###############################################################
 
 # This is the main rule for the entire Bible
-$(MATTER_BOOK_PDF) : $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF)
+$(FILE_BOOK) : $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF)
 	pdftk $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF) cat output $@
 
 # This is the caller for the main rule, let's look at the results
-view-book : $(MATTER_BOOK_PDF)
+view-book : $(FILE_BOOK)
 	@- $(CLOSEPDF)
 	$(call watermark,$<)
 	@ $(VIEWPDF) $< &
@@ -301,8 +299,8 @@ endif
 
 # Remove the book PDF file
 define pdf-remove-book
-	@echo WARN: Deleting: $(MATTER_BOOK_PDF)
-	@rm -f $(MATTER_BOOK_PDF)
+	@echo WARN: Deleting: $(FILE_BOOK)
+	@rm -f $(FILE_BOOK)
 endef
 
 # Clean out the log files
