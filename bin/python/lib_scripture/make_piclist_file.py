@@ -72,7 +72,7 @@ class MakePiclistFile (object) :
 		self._captionRef = self._settings['Format']['Illustrations']['captionRef']
 		self._captionProcessing = self._settings['Format']['Illustrations']['captionProcessing']
 		self._inputFile = log_manager._currentInput
-		self._outputFile = self._inputFile + ".piclist"
+		self._outputFile = log_manager._currentOutput
 		self._outFileObject = {}
 		self._sourcePath = os.path.abspath(self._settings['System']['Paths']['PATH_SOURCE'])
 		self._captionsFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_CAPTIONS']

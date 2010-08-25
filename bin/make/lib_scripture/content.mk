@@ -1,4 +1,4 @@
-# matter_scripture.mk
+# content.mk
 
 # This file provides build rules for building all scripture material
 # in a typical Scripture publication
@@ -65,7 +65,7 @@ endif
 
 # Call the TeX control file creation script to create a simple
 # control file that will link to the other settings
-$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
+$(PATH_PROCESS)/$(1).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 ifeq ($(LOCKED),0)
 	@echo INFO: Creating: $$@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "$(1)" "$(1).$(EXT_WORK)" "$$@" ""
@@ -78,19 +78,19 @@ endif
 # It would be nice to have a dependency on the piclist file but that
 # process behaves different and not every component has one. So for
 # now we need to leave it on its own.
-$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF) : \
+$(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
-	$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) \
-	$(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_TEX) $(DEPENDENT_FILE_LIST)
-	@echo INFO: Creating book PDF file: $(1).$(EXT_WORK).$(EXT_PDF)
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_WORK).$(EXT_TEX)
+	$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
+	$(PATH_PROCESS)/$(1).$(EXT_TEX) $(DEPENDENT_FILE_LIST)
+	@echo INFO: Creating book PDF file: $(1).$(EXT_PDF)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_TEX)
 	$(call watermark,$$@)
 
 #	cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) --no-pdf $(1).$(EXT_TEX)
 #	cd $(PATH_PROCESS) && xdvipdfmx $(1).xdv
 
 # Open the PDF file with reader
-view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
+view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $$< &
 
@@ -105,17 +105,17 @@ $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Remove the PDF for this component only
 pdf-remove-$(1) :
-	@echo INFO: Removing: $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
-	@rm -f $(PATH_PROCESS)/$(1).$(EXT_WORK).$(EXT_PDF)
+	@echo INFO: Removing: $(PATH_PROCESS)/$(1).$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Make adjustment file which is a dependent of the PDF process
 # Because every content file can have an adjustment file we
 # automate this process by setting a dependency
 
-adjlist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+adjlist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
 
 # Call the adjustlist creation macro
-$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
+$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
 ifeq ($(USE_ADJUSTMENTS),true)
 	@$$(call makeadjlist,$(1))
 else
@@ -125,15 +125,15 @@ endif
 # Remove the adjustment file for this component only
 adjlist-remove-$(1) :
 ifeq ($(LOCKED),0)
-	@echo Removing: $(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+	@echo Removing: $(1).$(EXT_ADJUSTMENT)
 	@$$(call removeadjlist,$(1))
 else
-	@echo INFO: Cannot remove $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT) because the project is locked.
+	@echo INFO: Cannot remove $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) because the project is locked.
 endif
 
 # Currently there is no dependency on this file but I wish there
 # was one, but piclist is not needed for all components.
-piclist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
+piclist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
 
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
@@ -141,7 +141,7 @@ piclist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
-$(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
+$(PATH_TEXTS)/$(1).$(EXT_PICLIST) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@$$(call makepiclist,$(1))
 else
@@ -151,10 +151,10 @@ endif
 # Remove the picture placement file for this component only
 piclist-remove-$(1) :
 ifeq ($(LOCKED),0)
-	@echo Removing: $(1).$(EXT_WORK).$(EXT_PICLIST)
+	@echo Removing: $(1).$(EXT_PICLIST)
 	@$$(call removepiclist,$(1))
 else
-	@echo INFO: Cannot remove: $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST) because the project is locked.
+	@echo INFO: Cannot remove: $(PATH_TEXTS)/$(1).$(EXT_PICLIST) because the project is locked.
 endif
 
 endef
@@ -261,23 +261,16 @@ $(call preprocessing ,$(1),$($(1)_content))
 endef
 
 # Create a single adjustment file if adjustments are turned on
-makeadjlist = $(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
-
-#define makeadjlist
-#@echo INFO: Creating: $(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
-#@$(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
-#endef
+makeadjlist = $(MOD_RUN_PROCESS) "$(MOD_PARA_ADJUST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)"
 
 # Create a single piclist file if illustrations are turned on
-makepiclist = $(MOD_RUN_PROCESS) "$(MOD_MAKE_PICLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
-
+makepiclist = $(MOD_RUN_PROCESS) "$(MOD_MAKE_PICLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_PICLIST)"
 
 # Remove a single piclist file
-removepiclist = rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_PICLIST)
-
+removepiclist = rm -f $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
 
 # Remove a single adjustment file
-removeadjlist = rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK).$(EXT_ADJUSTMENT)
+removeadjlist = rm -f $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
 
 
 ##############################################################

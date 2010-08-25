@@ -1156,7 +1156,7 @@
 				  <widget class="GtkLabel" id="tab_styGlobal">
 					<property name="visible">True</property>
 					<property name="tooltip" translatable="yes">Global text formating (styles)</property>
-					<property name="label" translatable="yes">Global</property>
+					<property name="label" translatable="yes">Sty. Global</property>
 				  </widget>
 				  <packing>
 					<property name="position">4</property>
@@ -1182,7 +1182,7 @@
 				  <widget class="GtkLabel" id="tab_styComponent">
 					<property name="visible">True</property>
 					<property name="tooltip" translatable="yes">Component text formating (styles)</property>
-					<property name="label" translatable="yes">Component</property>
+					<property name="label" translatable="yes">Sty. Comp.</property>
 				  </widget>
 				  <packing>
 					<property name="position">5</property>
@@ -1211,7 +1211,7 @@
 				  <widget class="GtkLabel" id="tab_texCustom">
 					<property name="visible">True</property>
 					<property name="tooltip" translatable="yes">TeX custom settings</property>
-					<property name="label" translatable="yes">TeX Custom</property>
+					<property name="label" translatable="yes">TeX Global</property>
 				  </widget>
 				  <packing>
 					<property name="position">6</property>

@@ -1,4 +1,4 @@
-# system_files.mk
+# system.mk
 
 # This file provides build rules for setting up system files.
 

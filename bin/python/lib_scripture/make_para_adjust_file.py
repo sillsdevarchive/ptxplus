@@ -65,7 +65,7 @@ class MakeParaAdjustFile (object) :
 		self._markup_manager = MarkupManager(self._settings)
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
-		self._outputFile = self._inputFile + '.' + self._settings['System']['Extensions']['EXT_ADJUSTMENT']
+		self._outputFile = log_manager._currentOutput
 		self._bookID = log_manager._currentTargetID
 		self._adjustLinesWritten = 0
 		self._poetryMarkers = {}

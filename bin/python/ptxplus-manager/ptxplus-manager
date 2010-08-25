@@ -286,13 +286,13 @@ class ConfigGUI (object) :
 
 
 	def close_dir (self) :
-		self.styGlobal = None
-		self.styComponent = None
-		self.texCustom = None
-		self.texComponent = None
-		self.adjust = None
 		self.txtWork = None
 		self.txtSource = None
+		self.styGlobal = None
+		self.styComponent = None
+		self.adjust = None
+		self.texCustom = None
+		self.texComponent = None
 		self.texLog = None
 		self.errorLog = None
 
@@ -301,12 +301,14 @@ class ConfigGUI (object) :
 		self.bkid = bkid
 		self.b_view.set_label("_View-" + bkid)
 		self.b_check.set_label("_Check-" + bkid)
-		self.adjust = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork + "." + self._extAdj, self.tv_adj, self.language_manager.get_language("latex"))
 		self.txtWork = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork, self.tv_txtWork, self.language_manager.get_language("latex"))
 		self.txtSource = FileEditor(self._pathSource + "/" + self.tools.getComponentSourceFileName(bkid), self.tv_txtSource, self.language_manager.get_language("latex"))
 		self.txtSource.readonly = True
+		self.styGlobal = FileEditor(self._pathProcess + "/" + self._fileStyle, self.tv_styGlobal, self.language_manager.get_language("latex"))
 		self.styComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extStyle, self.tv_styComponent, self.language_manager.get_language("latex"))
-		self.texComponent = ''
+		self.texCustom = FileEditor(self._pathProcess + "/" + self._fileTexCustom, self.tv_texCustom, self.language_manager.get_language("latex"))
+		self.texComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extTex, self.tv_texComponent, self.language_manager.get_language("latex"))
+		self.adjust = FileEditor(self._pathTexts + "/" + bkid + "." + self._extAdj, self.tv_adj, self.language_manager.get_language("latex"))
 
 		self.errorLog = FileEditor(self._pathLog + "/" + self._fileError + "." + self._extLog, self.tv_errorLog, None)
 		self.errorLog.readonly = True

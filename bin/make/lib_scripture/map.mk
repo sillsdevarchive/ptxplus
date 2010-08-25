@@ -1,4 +1,4 @@
-# matter_peripheral.mk
+# map.mk
 
 # This file provides build rules for building all peripheral material,
 # front and back, that might go into a Scripture publication. The
