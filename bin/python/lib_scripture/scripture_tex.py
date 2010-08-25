@@ -185,7 +185,7 @@ class MakeTexControlFile (object) :
 				return
 
 		# Add the global style sheet
-		settings = settings + '\\stylesheet{\"' + bibleStyleFile + '\"}\n'
+		settings = settings + '\\stylesheet{' + bibleStyleFile + '}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
@@ -202,7 +202,7 @@ class MakeTexControlFile (object) :
 			# passing style params, we need to pull in the marginal verse macro
 			# code at this point.
 			if self._useMarginalVerses.lower() == 'true' :
-				settings = settings + '\\input ' + marginalVersesMacro + '\n'
+				settings = settings + '\\input \"' + marginalVersesMacro + '\"\n'
 
 			# Since we were passed here it is assmumed that the context
 			# flag will contain a book ID, or will represent the entire
@@ -246,11 +246,11 @@ class MakeTexControlFile (object) :
 		# matter. But is is front or back matter. we'll need to test to see
 		else :
 			# Make a link to the custom override style sheet for peripheral material.
-			settings = settings + '\\stylesheet{\"' + self._pathToProcess + "/" + self._inputFile + '.' + self._extStyle + '\"}\n'
+			settings = settings + '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.' + self._extStyle + '}\n'
 
 			# For peripheral matter we do not have to generate the name like
 			# with Scripture books
-			settings = settings + '\\ptxfile{\"' + self._pathToText + '/' + self._inputFile + '.' + self._extWork + '\"}\n'
+			settings = settings + '\\ptxfile{' + self._pathToText + '/' + self._inputFile + '.' + self._extWork + '}\n'
 
 		# Combine the results
 		settings = settings + '\\bye\n'

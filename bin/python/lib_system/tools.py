@@ -262,6 +262,7 @@ def getProjectDefaultSettingsObject () :
 		# Load in the settings from our default .conf file
 		return ConfigObj(defaultFile, encoding='utf_8')
 
+
 def getSystemSettingsOverrideObject () :
 	'''If it exists, return an object which contains the system override
 		settings found in ~/.config/xetex-ptxplus.'''
@@ -271,6 +272,7 @@ def getSystemSettingsOverrideObject () :
 
 	if os.path.isfile(overrideFile) == True :
 		return ConfigObj(overrideFile, encoding='utf_8')
+
 
 def getComponentSourceFileName (compID) :
 	'''Return the file name of a source file as determined by
@@ -292,6 +294,7 @@ def getComponentSourceFileName (compID) :
 	else :
 		return value + "." + extention
 
+
 def getComponentNameValue (compID) :
 	'''Return the key for a given component ID.'''
 
@@ -302,6 +305,7 @@ def getComponentNameValue (compID) :
 			compID + '_peripheral' == key or \
 			compID + '_map' == key :
 			return value
+
 
 def getComponentNameKey (compID) :
 	'''Return the value for a given component ID.'''
@@ -314,10 +318,12 @@ def getComponentNameKey (compID) :
 				compID + '_map' == key :
 			return key
 
+
 def getProjectConfigFileName () :
 	'''Return the configuration file name for this project.'''
 
 	return '.' + getProjectType() + '.conf'
+
 
 def makeUserOverrideFile () :
 	'''Create a user override file but only if it doesn't already exist.'''

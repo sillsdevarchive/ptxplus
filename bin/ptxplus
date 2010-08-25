@@ -51,14 +51,16 @@ import tools
 # Find out what kind of project this is
 projectType = tools.getProjectType()
 
+
+# FIXME: What if this is a new project?
+
 # Context sensitive stuff libraries
 if projectType == 'scripture' :
 	sys.path.insert(0, basePath + '/bin/python/lib_scripture')
 elif projectType == 'dictionary' :
 	sys.path.insert(0, basePath + '/bin/python/lib_dictionary')
-else :
-	tools.userMessage("Publication type: " + projectType + " not supported!\n")
-	sys.exit(1)
+
+##########################################################
 
 # Import supporting local classes if we already have project going.
 # We don't want to do this for a new project. Instantiate classes
@@ -83,9 +85,20 @@ if len(sys.argv) >= 2 :
 	if projectType.lower() == 'scripture' :
 		bkid = ""
 
+
+
+
+# FIXME: The following needs to have lists merged check make_make for syntax
+
 		componentScripture = tools.getSettingsObject()['Format']['Binding']['MATTER_OT']
 #        componentScripture = componentScripture + tools.getSettingsObject()['Format']['Binding']['MATTER_NT']
 #        componentScripture = componentScripture.split()
+
+
+
+
+
+
 		# This part only works if we are processing Scripture components (books with IDs)
 		if len(componentScripture) > 0 :
 			for book in componentScripture :
@@ -122,11 +135,12 @@ def setupNewProject () :
 		setup in the CWD. If that isn't right, oh well, the user should
 		pay more attention. :-)'''
 
-# FIXME: It would be good to get some input from the user on this.
-# We could use Zenity to do this fairly simply, also we need
-# to be sure to find out the type of project and pass that on
-# to the new file mod so that it can bring in the right .conf
-# file.
+
+
+# FIXME: Setup needs to have an extra param that tells it what
+# kind of project this will be.
+#     ptxplus setup scripture|dictionary
+
 
 
 	# Send out the make new project command

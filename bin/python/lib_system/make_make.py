@@ -72,81 +72,81 @@ class MakeMakefile (object) :
 
 		# First grab some individual settings we need in the makefile
 		cMapVal = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CREATE_MAP',0)
-		makefileSettings = makefileSettings + 'CREATE_MAP=' + cMapVal + '\n'
+		makefileSettings += 'CREATE_MAP=' + cMapVal + '\n'
 
 		rgbPath = self._log_manager._settings['System']['Processes']['MapProcesses'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
-		makefileSettings = makefileSettings + 'RGB_PROFILE=' + rgbPath + '\n'
+		makefileSettings += 'RGB_PROFILE=' + rgbPath + '\n'
 
 		cmykPath = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
-		makefileSettings = makefileSettings + 'CMYK_PROFILE=' + cmykPath + '\n'
+		makefileSettings += 'CMYK_PROFILE=' + cmykPath + '\n'
 
 		# Get our switches from their respective sections
 		useIllustrations = self._log_manager._settings['Format']['Illustrations']['USE_ILLUSTRATIONS']
-		makefileSettings = makefileSettings + 'USE_ILLUSTRATIONS=' + useIllustrations + '\n'
+		makefileSettings += 'USE_ILLUSTRATIONS=' + useIllustrations + '\n'
 
 		usePlaceholders = self._log_manager._settings['Format']['Illustrations']['USE_PLACEHOLDERS']
-		makefileSettings = makefileSettings + 'USE_PLACEHOLDERS=' + usePlaceholders + '\n'
+		makefileSettings += 'USE_PLACEHOLDERS=' + usePlaceholders + '\n'
 
 		useWatermark = self._log_manager._settings['Format']['PageLayout']['USE_WATERMARK']
-		makefileSettings = makefileSettings + 'USE_WATERMARK=' + useWatermark + '\n'
+		makefileSettings += 'USE_WATERMARK=' + useWatermark + '\n'
 
 		useCropmarks = self._log_manager._settings['Format']['PageLayout']['USE_CROPMARKS']
-		makefileSettings = makefileSettings + 'USE_CROPMARKS=' + useCropmarks + '\n'
+		makefileSettings += 'USE_CROPMARKS=' + useCropmarks + '\n'
 
 		usePageborder = self._log_manager._settings['Format']['PageLayout']['USE_PAGE_BORDER']
-		makefileSettings = makefileSettings + 'USE_PAGE_BORDER=' + usePageborder + '\n'
+		makefileSettings += 'USE_PAGE_BORDER=' + usePageborder + '\n'
 
 		useAdjustments = self._log_manager._settings['ProjectText']['WorkingText']['Features']['USE_ADJUSTMENTS']
-		makefileSettings = makefileSettings + 'USE_ADJUSTMENTS=' + useAdjustments + '\n'
+		makefileSettings += 'USE_ADJUSTMENTS=' + useAdjustments + '\n'
 
 		# Pickup some other misc settings needed by makefile
 		sourceLock = self._log_manager._settings['ProjectText']['SourceText']['LOCKED']
-		makefileSettings = makefileSettings + 'LOCKED=' + sourceLock + '\n'
+		makefileSettings += 'LOCKED=' + sourceLock + '\n'
 
 		sourceName = self._log_manager._settings['ProjectText']['SourceText']['NAME_SOURCE_ORIGINAL']
-		makefileSettings = makefileSettings + 'NAME_SOURCE_ORIGINAL=' + sourceName + '\n'
+		makefileSettings += 'NAME_SOURCE_ORIGINAL=' + sourceName + '\n'
 
 		graphicsList = self._log_manager._settings['Format']['Illustrations']['LIST_GRAPHICS']
 		c = 0
-		makefileSettings = makefileSettings + 'LIST_GRAPHICS='
-		for f in graphicsList :
+		makefileSettings += 'LIST_GRAPHICS='
+		for fileName in graphicsList :
 			if c == 0 :
-				makefileSettings = makefileSettings + f
+				makefileSettings += fileName
 				c+=1
 			else :
-				makefileSettings = makefileSettings + ' ' + f
+				makefileSettings += ' ' + fileName
 
-		makefileSettings = makefileSettings + '\n'
+		makefileSettings += '\n'
 
 		# Modules used by the makefile, note the use of extra
 		# quoting. This is to preserve the strings.
 		for key, value, in self._log_manager._settings['System']['Modules'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + '\n'
+			makefileSettings += key + "=" + value + '\n'
 
 		for key, value, in self._log_manager._settings['System']['Extensions'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + '\n'
+			makefileSettings += key + "=" + value + '\n'
 
 		# Get our path information and output absolute paths
 		for key, value, in self._log_manager._settings['System']['Paths'].iteritems() :
 			if value.split('/')[0] == '__PTXPLUS__' :
-				makefileSettings = makefileSettings + key + '=' + value.replace('__PTXPLUS__', basePath) + '\n'
+				makefileSettings += key + '=' + value.replace('__PTXPLUS__', basePath) + '\n'
 			else :
-				makefileSettings = makefileSettings + key + '=' + os.path.abspath(value) + '\n'
+				makefileSettings += key + '=' + os.path.abspath(value) + '\n'
 
 		# Insert the peripheral folder name here. This is a
 		# hard-coded insert because it should always be the
 		# name given here. The user cannot change this.
-		makefileSettings = makefileSettings + 'PATH_SOURCE_PERIPH=' + sourcePath + '/' + peripheralFolderName + '\n'
+		makefileSettings += 'PATH_SOURCE_PERIPH=' + sourcePath + '/' + peripheralFolderName + '\n'
 
 		# We will use a function to tell us what the project
 		# config name is.
-		makefileSettings = makefileSettings + 'FILE_PROJECT_CONF=' + tools.getProjectConfigFileName() + '\n'
+		makefileSettings += 'FILE_PROJECT_CONF=' + tools.getProjectConfigFileName() + '\n'
 
 		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + '\n'
+			makefileSettings += key + "=" + value + '\n'
 
 		for key, value, in self._log_manager._settings['System']['TeX'].iteritems() :
-			makefileSettings = makefileSettings + key + "=" + value + '\n'
+			makefileSettings += key + "=" + value + '\n'
 
 		# Build up all the component groupings
 
@@ -162,11 +162,6 @@ class MakeMakefile (object) :
 		# Get special file names for this publication type
 		for key, value in self._pubInfo['FileNames'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
-
-#        makefileSettings += 'FILE_BOOK=BOOK.pdf\n'
-#        makefileSettings += 'FILE_GROUP_CONTENT_PDF=GROUP_CONTENT.pdf\n'
-#        #
-#        makefileSettings += 'FILE_GROUP_CONTENT_TEX=GROUP_CONTENT.tex\n'
 
 		# Output the helper commands
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :

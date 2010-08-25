@@ -43,9 +43,9 @@ define periph_rules
 
 # This rule simply links everything in the source peripheral folder
 # to the project Texts folder
-$(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK)
+$(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK)
 	@echo INFO: Linking project to peripheral source texts: $$(shell readlink -f -- $$<)
-	@ln -sf $$(shell readlink -f -- $$<) $(PATH_TEXTS)/
+	@ln -sf $$(shell readlink -f -- $$<) $$@
 
 # Create the peripheral file by copying in the template. But if
 # the template files doesn't exsit, then create a dummy one to
@@ -62,8 +62,8 @@ ifeq ($(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK),$(PATH_SOURCE_PERIPH)/$(FILE_TOC_US
 	@echo Creating TOC from: $(PATH_TEXTS)/$(FILE_TOC_AUTO)
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC) 'TOC' '$(PATH_PROCESS)/$(FILE_TOC_AUTO)' '$$@' ''
 else
-	@echo INFO: Creating: $(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK)
-	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$(1).$(EXT_WORK),$$@)
+	@echo INFO: Creating: $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK)
+	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_peripheral).$(EXT_WORK),$$@)
 endif
 
 # This .tex file also generally has some dependencies on the
