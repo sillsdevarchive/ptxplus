@@ -46,6 +46,9 @@ class MakeMakefile (object) :
 		basePath = os.environ.get('PTXPLUS_BASE')
 		sourcePath = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
 
+		# Publication type settings
+		pubSettings = tools.getPubInfoObject()
+
 		# Get the type of project this is
 		self._projectType = tools.getProjectType()
 
@@ -120,10 +123,10 @@ class MakeMakefile (object) :
 
 		# Modules used by the makefile, note the use of extra
 		# quoting. This is to preserve the strings.
-		for key, value, in self._log_manager._settings['System']['Modules'].iteritems() :
+		for key, value, in pubSettings['Modules'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
 
-		for key, value, in self._log_manager._settings['System']['Extensions'].iteritems() :
+		for key, value, in pubSettings['Extensions'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
 
 		# Get our path information and output absolute paths

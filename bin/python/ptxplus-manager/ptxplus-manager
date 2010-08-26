@@ -233,6 +233,7 @@ class ConfigGUI (object) :
 		self._extStyle = self.ceditor.config['System']['Extensions'].get('EXT_STYLE')
 		self._extTex = self.ceditor.config['System']['Extensions'].get('EXT_TEX')
 		self._extAdj = self.ceditor.config['System']['Extensions'].get('EXT_ADJUSTMENT')
+		self._extPiclist = self.ceditor.config['System']['Extensions'].get('EXT_PICLIST')
 		self._extLog = self.ceditor.config['System']['Extensions'].get('EXT_LOG')
 
 		# Build file information for these tabs

@@ -42,18 +42,250 @@ GROUP_MAPS                  = MATTER_MAPS,
 # all the meta groups which contains all the components.
 [Book]
 
-GROUP_BOOK                        = GROUP_FRONT, GROUP_CONTENT, GROUP_BACK, GROUP_MAPS
+GROUP_BOOK                  = GROUP_FRONT, GROUP_CONTENT, GROUP_BACK, GROUP_MAPS
 
 # FILE NAMES (HARD-CODDED)
 # These are names of files for this publication type which are
 # hard-codded.
 [FileNames]
 
+# FINAL BOOK FILE NAME
 FILE_BOOK                   = BOOK.pdf
+
+# CONTENT GROUP FILE NAME
 FILE_GROUP_CONTENT_PDF      = GROUP_CONTENT.pdf
+
+# CONTENT GROUP TEX FILE NAME
 FILE_GROUP_CONTENT_TEX      = GROUP_CONTENT.tex
 
+# PROJECT ERROR FILE
+# The name of the project error file. This is the file that
+# the system outputs errors too for reporting at the end of
+# a process. This file is deleted at the start of every
+# process.
+#   Default = error.log
+FILE_PROJECT_ERROR           = 'error.log'
 
+# CAPTIONS FILE
+# Project Illustrations caption file name. Normally this will
+# not need to be edited. The default is: captions.csv
+# This is the key file so dependencies have to key off of this
+# file. This file is derived from the file of the same name in
+# the shared folder.
+#   Default = captions.csv
+FILE_ILLUSTRATION_CAPTIONS   = 'captions.csv'
+
+# MAIN TEX MACRO
+# The main TeX macro file name with lib path. This will
+# connect with any other necessary macros located in the
+# same folder.
+#   Default = paratext2.tex
+FILE_TEX_MACRO               = 'paratext2.tex'
+
+# MAIN GLOBAL SETTINGS
+# TeX macro setup file for a Bible publication. This file
+# is made automatically and should not be edited. Custom
+# settings should be added to the custom project settings
+# file.
+#   Default = .bible-settings.tex
+FILE_TEX_SETTINGS            = '.bible-settings.tex'
+
+# GLOBAL CUSTOM SETTINGS
+# TeX macro custom publication settings file. These are
+# settings which are for this specific project and not
+# found in the auto-generated setup file.
+#   Default = custom.tex
+FILE_TEX_CUSTOM              = 'custom-settings.tex'
+
+# COVER SETTINGS
+# TeX cover settings file.
+#   Default = .cover.tex
+FILE_TEX_COVER               = '.cover-settings.tex'
+
+# FRONT SETTINGS
+# TeX front matter peripheral settings file.
+#   Default = .front.tex
+FILE_TEX_FRONT               = '.front-settings.tex'
+
+# BACK SETTINGS
+# TeX back matter peripheral settings file.
+#   Default = .back.tex
+FILE_TEX_BACK                = '.back-settings.tex'
+
+# BIBLE STYLE FILE
+# This is the override style file for
+# a Scripture publication. This file
+# is meant to be edited by the user.
+#   Default = bible.sty
+FILE_TEX_STYLE               = 'bible-format.sty'
+
+# SOURCE MASTER WORD LIST
+# This is an automatically generated word list
+# of (hopefully) all the project source files.
+# It is used for generating a hyphenation list for
+# the project as well as other possible uses. This
+# file should be in CSV format.
+#   Default: Reports/wordlist-master.csv
+FILE_MASTERWORDS             = Reports/wordlist-master.csv
+
+# TEX HYPHENATION FILE
+# A completed TeX hyphenation file, normally
+# auto-created by the system from a couple
+# other sources.
+#   Default = hyphenation.tex
+FILE_HYPHENATION_TEX         = 'hyphenation.tex'
+
+# HYPHENATED WORDS
+# The file name of complete list of hyphenated
+# words for this project.
+#   Defualt = hyphenation.txt
+FILE_HYPHENATION_TXT         = 'hyphenation.txt'
+
+# LCCODE LIST
+# A list of lccodes for this project. This will be
+# used to construct the TeX hyphenation file.
+#   Defualt = lccodelist.txt
+FILE_LCCODELIST_TXT          = 'lccodelist.txt'
+
+# MARGINAL VERSES MACRO
+# The file name of the TeX marginal verses macro used
+# in ptx2pdf.
+#   Default = ptxplus-marginalverses.tex
+FILE_MARGINAL_VERSES         = 'ptxplus-marginalverses.tex'
+
+# AUTO TOC FILE
+# When auto TOC generation is turned on the contents
+# for the final TOC file will be output to this file.
+#   Default = auto-toc.usfm
+FILE_TOC_AUTO                = 'auto-toc.usfm'
+
+# TOC USFM FILE
+# The main TOC content file which is created from
+# the FILE_TOC_AUTO file.
+#   Defalt = 'toc.usfm'
+FILE_TOC_USFM                = 'toc.usfm'
+
+# PATHS
+# These are the paths that the Makefile system uses.
+[Paths]
+
+# PROJECT FOLDER
+# This is the path to the project home. This should always
+# be the current working directory. The way we denote this
+# is with a '.' dot/period. This will be transformed into
+# an absolute path via Python. DO NOT CHANGE THIS!
+PATH_HOME                    = '.'
+
+# PROJECT ADMIN FOLDER
+# This is the folder that contains all the administrative
+# stuff for the project.
+#   Default = Admin
+PATH_ADMIN                   = 'Admin'
+
+# ADMIN WIKI FOLDER
+# Path to the project Wiki which keeps notes and issues
+#   Default = Admin/Wiki
+PATH_ADMIN_WIKI              = 'Admin/Wiki'
+
+# PROJECT DELIVERABLES
+# Where the end products are found from processes that
+# are run. Normally PDF files ready for print.
+#   Default = Deliverables
+PATH_DELIVERABLES            = 'Deliverables'
+
+# FONT FOLDER
+# The folder where the project fonts are found.
+#   Default = Fonts
+PATH_FONTS                   = 'Fonts'
+
+# HYPHENATION PATH
+# Path to the TeX hyphenation files
+#   Default = Hyphenation
+PATH_HYPHENATION             = 'Hyphenation'
+
+# LOG PATH
+# Path to the project process log files
+#   Default = Log
+PATH_LOG                     = 'Log'
+
+# PROCESS PATH
+# The path to the process folder
+#   Default = Process
+PATH_PROCESS                 = 'Process'
+
+# REPORTS PATH
+# The path to the reports folder. This is where
+# information that is distilled from the log files
+# is kept.
+#   Default = Reports
+PATH_REPORTS                 = 'Reports'
+
+# TEXT PATH
+# This is the path to where the project working text is
+# kept. This includes all text that is used in the publication
+# and is not limited to any single type of text. It is copied
+# here from the source folder after checks have been run and
+# quality is assured.
+#   Default = Texts
+PATH_TEXTS                   = 'Texts'
+
+# FILE EXTENSIONS
+# These are working extensions used by the system. The
+# only extention that needs adjusting on the average
+# project is the source text extention. Please do not
+# change any of the others that follow unless you really
+# know what you are doing.
+[Extensions]
+
+EXT_WORK = usfm
+EXT_STYLE = sty
+EXT_TEX = tex
+EXT_PDF = pdf
+EXT_ADJUSTMENT = adj
+EXT_PICLIST = piclist
+EXT_CSV = csv
+EXT_TEXT = txt
+EXT_HTML = html
+EXT_LOG = log
+EXT_PNG = png
+EXT_SVG = svg
+
+# MODULES
+# These are system-level modules that may need parameters
+# passed along with them. These will be gathered up by
+# the make_makefile module and inserted as values in there.
+# These values use spaces to seperate different parameters.
+[Modules]
+
+# MAKE TEX CONTROL FILE
+# TeX Control File Module
+# This is the module (Python script) which creates the
+# TeX control files for this publication.
+MOD_MAKE_TEX = scripture_tex
+
+# MAKE PICLIST FILE
+# This module is used to create the illustration listing
+# file that is used when USE_ILLUSTRATIONS is set to
+# true.
+#   Default = make_piclist_file
+MOD_MAKE_PICLIST = make_piclist_file
+
+# MAKE TOC
+# The Table of Contents creation module.
+#   Default = make_toc_file
+MOD_MAKE_TOC = make_toc_file
+
+# CHECK ASSETS
+# This module checks to see if the project assets are
+# in place and puts them there if they are not. It also
+# has a refresh mode. It is called like other modules.
+MOD_CHECK_ASSETS = check_assets
+
+# RUN PROCESS
+# This is the main module used to run all processes on the
+# system. This needs to have the full path in it.
+#   Default = $(PTXPLUS_BASE)/bin/python/lib_system/run_process.py
+MOD_RUN_PROCESS = $(PTXPLUS_BASE)/bin/python/lib_system/run_process.py
 
 # COMPONENT SOURCE NAME (PTX)
 # Source names for all the components handled by this system.

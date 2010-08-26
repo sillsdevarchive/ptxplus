@@ -52,11 +52,14 @@ class CheckAssets (object) :
 		if self._mode == '' :
 			self._mode = 'basic'
 
+		# Publication type settings
+		pubSettings = tools.getPubInfoObject()
+
 		# Gather up the initial settings
 		basePath                = os.environ.get('PTXPLUS_BASE')
-		pathHome                = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_HOME'])
+		pathHome                = os.path.abspath(pubSettings['Paths']['PATH_HOME'])
 		pathSource              = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
-		pathProcess             = pathHome + '/' + self._log_manager._settings['System']['Paths']['PATH_PROCESS']
+		pathProcess             = pathHome + '/' + pubSettings['Paths']['PATH_PROCESS']
 		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		pathGraphics            = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
 		pathIllustrationsLib    = self._log_manager._settings['System']['Paths']['PATH_RESOURCES_ILLUSTRATIONS'].replace('__PTXPLUS__', basePath)
