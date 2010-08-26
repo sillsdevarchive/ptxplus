@@ -533,7 +533,7 @@ class ConfigGUI (object) :
 		# FIXME: Also, I would like to see better project path
 		# information sent out. This is incase we want to setup
 		# a project in some other place than cwd.
-		self.execute("ptxplus", "setup", ".", "scripture")
+		self.execute("ptxplus", "setup", "scripture", ".")
 		self.init_dir()
 		self.ourProjectConf = ".scripture.conf"
 

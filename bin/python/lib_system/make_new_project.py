@@ -42,6 +42,7 @@
 #        function to create a basic project. This is
 #        much simpler and will help things stay more
 #        consistant.
+# 20100826 - djd - Added some pub type checking
 
 #############################################################
 ######################### Load Modules ######################
@@ -61,16 +62,22 @@ import tools
 class MakeNewProject (object) :
 
 
-	def main (self, newFolderName, projType) :
+	def main (self, projType, newFolderName) :
 		'''Create a new project at the specified path.'''
+
+		print projType, newFolderName
 
 		# Just in case it isn't already a full path
 		newProjectPath = os.path.abspath(newFolderName)
 
-		tools.makeNecessaryFiles(newProjectPath, projType)
+		# Check to see if we support this type of publication
+		if projType in tools.getSystemSettingsObject()['System']['pubTypeList'] and projType != 'dictionary' :
+			tools.userMessage('INFO: Creating new project at: ' + newProjectPath)
+			tools.makeNecessaryFiles(newProjectPath, projType)
+			tools.userMessage('INFO: Created new project at: ' + newProjectPath)
+		else :
+			tools.userMessage('ERRR: The [' + projType + '] publication type is not supported.')
 
-		# Tell the world what we did
-		tools.userMessage('INFO: Created new project at: ' + newProjectPath)
 
 
 # This starts the whole process going

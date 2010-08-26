@@ -90,16 +90,11 @@ def makeNecessaryFiles (path, projType) :
 	object = getSystemSettingsObject()
 	fileLib = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles"
 
-	# FIXME: Might want a more clever way to do this to avoide hard file names
-	# FIXME: Might also want error checking on the copy
 	# Bring in the .conf file according to the type of project this is
 	# but only if it doesn't already exist
-	if projType == 'scripture' :
-		if not os.access(path + "/.scripture.conf", os.R_OK) :
-			shutil.copy(fileLib + "/.scripture.conf", path + "/.scripture.conf")
-	elif projType == 'dictionary' :
-		if not os.access(path + "/.dictionary.conf", os.R_OK) :
-			shutil.copy(fileLib + "/.dictionary.conf", path + "/.dictionary.conf")
+	if projType in getSystemSettingsObject()['System']['pubTypeList'] :
+		if not os.access(path + "/." + projType + ".conf", os.R_OK) :
+			shutil.copy(fileLib + "/." + projType + ".conf", path + "/." + projType + ".conf")
 	else :
 		userMessage("ERROR: The project type: [" + projType + "] is unknown. Process halted!")
 		sys.exit(1)
@@ -113,8 +108,8 @@ def makeNecessaryFiles (path, projType) :
 	# Now add whatever files we might need
 	for key, file in object['ProjectStructure']['Files'].iteritems() :
 		if not os.path.isfile(file) :
-			shutil.copy(fileLib + "/" + file, file)
-			userMessage('INFO: Added file: ' + file)
+			shutil.copy(fileLib + "/" + file, path + '/' + file)
+			userMessage('INFO: Added file: ' + path + '/' + file)
 
 
 def getModuleArguments () :
@@ -757,6 +752,15 @@ def prependText (text, file) :
 		return True
 	else:
 		return False
+
+
+def dedupList (seq) :
+	'''Remove the duplicate items from a list but keep the
+		sort order. Using set() insures the first item in will
+		be kept. It will return a list.'''
+
+	seen = set()
+	return [seen.add(element) or element for element in seq if element not in seen]
 
 
 def getSliceOfText (text, start, amount) :

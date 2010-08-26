@@ -28,7 +28,8 @@
 # Firstly, import all the standard Python modules we need for
 # this process and set the base path
 
-import sys, os, codecs, shutil
+import sys, os, codecs, shutil, operator
+
 
 basePath = os.environ.get('PTXPLUS_BASE')
 if not basePath :
@@ -39,8 +40,6 @@ if not basePath :
 # tests to see what the environment we are starting in
 # looks like. That will determine where we go from here.
 
-projectType = 'none'
-
 # Set our paths to application resources
 sys.path.insert(0, basePath + '/bin/python')
 sys.path.insert(0, basePath + '/bin/python/lib_system')
@@ -48,24 +47,41 @@ sys.path.insert(0, basePath + '/bin/python/lib_system')
 # No mater what, we will need tools to work with.
 import tools
 
-# Find out what kind of project this is
 projectType = tools.getProjectType()
 
+# Examine our command line, I'm thinking there will be
+# a max of 4. More than that there is a problem. The first
+# is always the script name.
+command = ""
+subCommandOne = ""
+if len(sys.argv) > 1 :
+	c = 0
+	for arg in sys.argv :
+		if c > 0 :
+			if c == 1 :
+				command = arg.lower()
+			elif c == 2 :
+				subCommandOne = arg.lower()
+			elif c == 3 :
+				# This is probably a path name, don't use .lower()
+				subCommandTwo = arg
+		c += 1
+else :
+	command = "manage"
 
-# FIXME: What if this is a new project?
 
-# Context sensitive stuff libraries
-if projectType == 'scripture' :
-	sys.path.insert(0, basePath + '/bin/python/lib_scripture')
-elif projectType == 'dictionary' :
-	sys.path.insert(0, basePath + '/bin/python/lib_dictionary')
+# Context sensitive stuff libraries. In theory this
+# should only do one insert as we would only be in
+# one type of a project at a time.
+for pubType in tools.getSystemSettingsObject()['System']['pubTypeList'] :
+	if projectType == pubType :
+		sys.path.insert(0, basePath + '/bin/python/lib_' + pubType)
 
-##########################################################
 
 # Import supporting local classes if we already have project going.
 # We don't want to do this for a new project. Instantiate classes
 # right away too.
-if projectType == 'scripture' or projectType == 'dictionary' :
+if projectType in tools.getSystemSettingsObject()['System']['pubTypeList'] :
 	from log_manager import *
 	log_manager = LogManager()
 	from error_manager import *
@@ -76,28 +92,20 @@ if projectType == 'scripture' or projectType == 'dictionary' :
 # arguments given and getting things directed to the right
 # place.
 
-command = ""
 
-# There should always be at least one arg, look for a second
-if len(sys.argv) >= 2 :
+if command == "manage" :
+	tools.userMessage("\n\t\tWelcome to XeTeX-ptxplus!\n")
+
+else :
+	# FIXME: Right now we hard code for publication types but
+	# this needs to be changed to be more generic at some point.
 
 	# The second argv is normally the file name or book ID in the context of Scripture
-	if projectType.lower() == 'scripture' :
+	if projectType == 'scripture' :
 		bkid = ""
-
-
-
-
-# FIXME: The following needs to have lists merged check make_make for syntax
-
-		componentScripture = tools.getSettingsObject()['Format']['Binding']['MATTER_OT']
-#        componentScripture = componentScripture + tools.getSettingsObject()['Format']['Binding']['MATTER_NT']
-#        componentScripture = componentScripture.split()
-
-
-
-
-
+		# Creat a list of component keys that keep the binding order but do not have
+		# any duplicate items in it.
+		componentScripture = tools.dedupList(reduce(operator.add, tools.getSettingsObject()['Format']['Binding'].itervalues(), []))
 
 		# This part only works if we are processing Scripture components (books with IDs)
 		if len(componentScripture) > 0 :
@@ -113,35 +121,21 @@ if len(sys.argv) >= 2 :
 		else :
 			command = sys.argv[1]
 
-	elif projectType.lower() == 'dictionary' :
+	elif projectType == 'dictionary' :
 		tools.userMessage("Sorry dictionary publishing is not supported (yet).\n")
 
 	else :
 		command = sys.argv[1]
-
-# Other wise we'll just start up the manager
-else :
-	tools.userMessage("\n\t\tWelcome to XeTeX-ptxplus!\n")
-	command = "manage"
 
 
 #############################################################
 ################# Define Script functions ###################
 #############################################################
 
-
 def setupNewProject () :
 	'''Looks like we need to setup a new project. A new project will be
 		setup in the CWD. If that isn't right, oh well, the user should
 		pay more attention. :-)'''
-
-
-
-# FIXME: Setup needs to have an extra param that tells it what
-# kind of project this will be.
-#     ptxplus setup scripture|dictionary
-
-
 
 	# Send out the make new project command
 	mod = __import__('make_new_project')
@@ -149,23 +143,25 @@ def setupNewProject () :
 	# I really want to use hard paths in context
 	# If it is a dot we assume cwd, otherwise we
 	# test to be sure.
-	try :
-		sys.argv[2] == '.'
+	if subCommandTwo == '.' :
 		newProjDir = os.getcwd()
-	except :
-		newProjDir = sys.argv[2]
-		if not os.access(newProjDir) :
-			tools.userMessage("ERROR: The path: [" + newProjDir + "] does not exist. Process halted!")
-			sys.exit(1)
+	else :
+		newProjDir = os.getcwd() + '/' + subCommandTwo
+		if not os.access(os.getcwd() + '/' + subCommandTwo, os.W_OK) :
+			os.mkdir(newProjDir)
 
-	try :
-		projType = sys.argv[3]
-	except :
-		tools.userMessage("ERROR: The project type is missing. Process halted!")
-		sys.exit(1)
+#    try :
+#        os.access(subCommandTwo, os.W_OK)
+#        print subCommandTwo, newProjDir
+#    except :
+#        print subCommandTwo, type(subCommandTwo), "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+#        newProjDir = subCommandTwo
+#        if os.access(newProjDir, os.W_OK) :
+#            tools.userMessage("ERROR: The path: [" + newProjDir + "] does not exist. Process halted!")
+#            sys.exit(1)
 
-	# Send it off to process
-	mod.doIt(newProjDir, projType)
+	# Send it off to process (we assume that subCommandOne contains the project type)
+	mod.doIt(subCommandOne, newProjDir)
 
 
 def restoreFromBackup () :
@@ -294,7 +290,7 @@ else :
 	# To do system commands we need to be one folder above
 	# However, if we find we are in a project folder, then
 	# we will perform project processes on that specific project
-	if tools.inProject() == True :
+	if projectType != None :
 
 		# Sort out the commands. These are commands that
 		# can be used from inside the project area
@@ -357,12 +353,11 @@ else :
 			# clean up commands before the command that the user is calling
 			# for is run. (Right now we are limiting this action to Scripture
 			# publications.)
-			pubType = tools.getProjectType()
 			locked = tools.getSettingsObject()['ProjectText']['SourceText']['LOCKED']
 			useIllustrations = tools.getSettingsObject()['Format']['Illustrations']['USE_ILLUSTRATIONS']
 			useAdjustments = tools.getSettingsObject()['ProjectText']['WorkingText']['Features']['USE_ADJUSTMENTS']
 			if locked == 0 :
-				if pubType.lower() == 'scripture' :
+				if projectType.lower() == 'scripture' :
 					if useIllustrations.lower() == 'false' :
 						tools.makefileCommand('picfile-clean-all')
 					if useAdjustments.lower() == 'false' :
@@ -381,7 +376,7 @@ else :
 				# other errors we might have to the terminal
 				error_manager.outputProcessErrorReport()
 
-	elif tools.inProject() == False :
+	elif projectType == None :
 		# These are system level commands and have to be used
 		# from outside the project area
 		if command == "setup" :
