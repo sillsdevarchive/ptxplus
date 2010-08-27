@@ -69,16 +69,16 @@ class MakeTexControlFile (object) :
 		self._inputFile = log_manager._currentInput
 		self._outputFile = log_manager._currentOutput
 		self._inputID = log_manager._currentTargetID
-		self._pathToText = os.getcwd() + "/" + self._log_manager._settings['System']['Paths']['PATH_TEXTS']
+		self._pathToText = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_TEXTS']
 		self._pathToSource = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
-		self._pathToProcess = os.getcwd() + "/" + self._log_manager._settings['System']['Paths']['PATH_PROCESS']
+		self._pathToProcess = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_PROCESS']
 		self._pathToIllustrations = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
-		self._texMacros = self._log_manager._settings['System']['Files']['FILE_TEX_MACRO']
-		self._cvSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_COVER']
-		self._fmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_FRONT']
-		self._bmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_BACK']
-		self._cmSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_CUSTOM']
-		self._biSettingsFile = self._pathToProcess + "/" + self._log_manager._settings['System']['Files']['FILE_TEX_SETTINGS']
+		self._texMacros = tools.pubInfoObject['Files']['FILE_TEX_MACRO']
+		self._cvSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_COVER']
+		self._fmSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_FRONT']
+		self._bmSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_BACK']
+		self._cmSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_CUSTOM']
+		self._biSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_SETTINGS']
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
 		self._flags = ('cover', 'front', 'back', 'periph')
@@ -94,8 +94,8 @@ class MakeTexControlFile (object) :
 		self._contentGroup.extend(self._apMatter)
 		self._publicationType = log_manager._publicationType
 		# File extentions (Expand this, more will be needed in the future)
-		self._extStyle = self._log_manager._settings['System']['Extensions']['EXT_STYLE']
-		self._extWork = self._log_manager._settings['System']['Extensions']['EXT_WORK']
+		self._extStyle = tools.pubInfoObject['Extensions']['EXT_STYLE']
+		self._extWork = tools.pubInfoObject['Extensions']['EXT_WORK']
 		# Some lists
 		self._headerPositions = ['RHtitleleft', 'RHtitlecenter', 'RHtitleright', \
 						'RHoddleft', 'RHoddcenter', 'RHoddright', \
@@ -145,14 +145,14 @@ class MakeTexControlFile (object) :
 		oneChapOmmitRule = self._log_manager._settings['Format']['ChapterVerse']['shortBookChapterOmit']
 		omitAllChapterNumbers = self._log_manager._settings['Format']['ChapterVerse']['omitAllChapterNumbers']
 		useHyphenation = self._log_manager._settings['Format']['Hyphenation']['useHyphenation']
-		pathToHyphen = os.getcwd() + "/" + self._log_manager._settings['System']['Paths']['PATH_HYPHENATION']
-		hyphenFile = pathToHyphen + "/" + self._log_manager._settings['System']['Files']['FILE_HYPHENATION_TEX']
-		bibleStyleFile = self._pathToProcess + '/' + self._log_manager._settings['System']['Files']['FILE_TEX_STYLE']
+		pathToHyphen = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
+		hyphenFile = pathToHyphen + "/" + tools.pubInfoObject['Files']['FILE_HYPHENATION_TEX']
+		bibleStyleFile = self._pathToProcess + '/' + tools.pubInfoObject['Files']['FILE_TEX_STYLE']
 		generateTOC = self._log_manager._settings['Format']['TOC']['generateTOC']
-		marginalVersesMacro = self._log_manager._settings['System']['Files']['FILE_MARGINAL_VERSES']
+		marginalVersesMacro = tools.pubInfoObject['Files']['FILE_MARGINAL_VERSES']
 
 		# TOC Process
-		autoTocFile = self._log_manager._settings['System']['Files']['FILE_TOC_AUTO']
+		autoTocFile = tools.pubInfoObject['Files']['FILE_TOC_AUTO']
 		tocTitle = self._log_manager._settings['Format']['TOC']['mainTitle']
 
 		# Input the main macro set here in the control file
@@ -498,6 +498,7 @@ class MakeTexControlFile (object) :
 		else :
 			# In this case the footnote rule is turned off by defining the
 			# footnoterule to nothing
+
 			footnoteSettings = footnoteSettings + '\\def\\footnoterule{}\n'
 		if omitCallerInFootnote.lower() == 'true' :
 			footnoteSettings = footnoteSettings + '\\OmitCallerInNote{f}\n'

@@ -73,7 +73,7 @@ class ConfigGUI (object) :
 
 		# Import our tools
 		import tools
-		self.tools = tools
+		self._tools = tools
 
 		# Some local settings
 		self.gladefile = basePath + "/bin/python/ptxplus-manager/ptxplus-manager.glade"
@@ -162,7 +162,7 @@ class ConfigGUI (object) :
 
 		# replace TextView with SourceView
 		self.language_manager = gtksourceview2.LanguageManager()
-		sourceviews = ['txtWork', 'txtSource', 'styGlobal', 'styComponent', 'texCustom', 'texComponent', 'adj', 'errorLog', 'texLog']
+		sourceviews = ['txtWork', 'txtSource', 'styGlobal', 'styComponent', 'texCustom', 'texComponent', 'adj', 'piclist', 'errorLog', 'texLog']
 		for s in sourceviews:
 			sc = 'sc_'+s
 			tv = 'tv_'+s
@@ -197,6 +197,7 @@ class ConfigGUI (object) :
 		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
 		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
 		self.ourProjectConf = 'none'
+		# FIXME: Make this next bit more generic
 		if os.access('.scripture.conf', os.R_OK) :
 			self.ourProjectConf = '.scripture.conf'
 		elif  os.access('.dictionary.conf', os.R_OK) :
@@ -221,25 +222,21 @@ class ConfigGUI (object) :
 		# Now that we have a config object we can set some
 		# global vars for other processes (add more as needed)
 		# NOTE: If there are problems we may need to use try/except
-		self._pathProcess = self.ceditor.config['System']['Paths'].get('PATH_PROCESS')
+		self._pathProcess = self._tools.pubInfoObject['Paths'].get('PATH_PROCESS')
 		self._pathSource = self.ceditor.config['System']['Paths'].get('PATH_SOURCE')
-		self._pathTexts = self.ceditor.config['System']['Paths'].get('PATH_TEXTS')
-		self._pathLog = self.ceditor.config['System']['Paths'].get('PATH_LOG')
-		self._fileStyle = self.ceditor.config['System']['Files'].get('FILE_TEX_STYLE')
-		self._fileTexCustom = self.ceditor.config['System']['Files'].get('FILE_TEX_CUSTOM')
-		self._fileError = self.ceditor.config['System']['Files'].get('FILE_TEX_CUSTOM')
-		self._extWork = self.ceditor.config['System']['Extensions'].get('EXT_WORK')
-		self._extSource = self.ceditor.config['System']['Extensions'].get('EXT_SOURCE')
-		self._extStyle = self.ceditor.config['System']['Extensions'].get('EXT_STYLE')
-		self._extTex = self.ceditor.config['System']['Extensions'].get('EXT_TEX')
-		self._extAdj = self.ceditor.config['System']['Extensions'].get('EXT_ADJUSTMENT')
-		self._extPiclist = self.ceditor.config['System']['Extensions'].get('EXT_PICLIST')
-		self._extLog = self.ceditor.config['System']['Extensions'].get('EXT_LOG')
+		self._pathTexts = self._tools.pubInfoObject['Paths'].get('PATH_TEXTS')
+		self._pathLog = self._tools.pubInfoObject['Paths'].get('PATH_LOG')
+		self._fileStyle = self._tools.pubInfoObject['Files'].get('FILE_TEX_STYLE')
+		self._fileTexCustom = self._tools.pubInfoObject['Files'].get('FILE_TEX_CUSTOM')
+		self._fileError = self._tools.pubInfoObject['Files'].get('FILE_TEX_CUSTOM')
+		self._extWork = self._tools.pubInfoObject['Extensions'].get('EXT_WORK')
+		self._extSource = self._tools.pubInfoObject['Extensions'].get('EXT_SOURCE')
+		self._extStyle = self._tools.pubInfoObject['Extensions'].get('EXT_STYLE')
+		self._extTex = self._tools.pubInfoObject['Extensions'].get('EXT_TEX')
+		self._extAdj = self._tools.pubInfoObject['Extensions'].get('EXT_ADJUSTMENT')
+		self._extPiclist = self._tools.pubInfoObject['Extensions'].get('EXT_PICLIST')
+		self._extLog = self._tools.pubInfoObject['Extensions'].get('EXT_LOG')
 
-		# Build file information for these tabs
-		self.styGlobal = FileEditor(self._pathProcess + '/' + self._fileStyle, self.tv_styGlobal, self.language_manager.get_language("latex"))
-#        self.texCustom = FileEditor(self._pathProcess + '/' + self._fileTexCustom, self.tv_texCustom, self.language_manager.get_language("latex"))
-		self.texCustom = ''
 
 		try :
 			title = self.ceditor.config['Project']['ProjectInformation'].get('projectName')
@@ -292,6 +289,7 @@ class ConfigGUI (object) :
 		self.styGlobal = None
 		self.styComponent = None
 		self.adjust = None
+		self.piclist = None
 		self.texCustom = None
 		self.texComponent = None
 		self.texLog = None
@@ -303,14 +301,14 @@ class ConfigGUI (object) :
 		self.b_view.set_label("_View-" + bkid)
 		self.b_check.set_label("_Check-" + bkid)
 		self.txtWork = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork, self.tv_txtWork, self.language_manager.get_language("latex"))
-		self.txtSource = FileEditor(self._pathSource + "/" + self.tools.getComponentSourceFileName(bkid), self.tv_txtSource, self.language_manager.get_language("latex"))
+		self.txtSource = FileEditor(self._pathSource + "/" + self._tools.getComponentSourceFileName(bkid), self.tv_txtSource, self.language_manager.get_language("latex"))
 		self.txtSource.readonly = True
 		self.styGlobal = FileEditor(self._pathProcess + "/" + self._fileStyle, self.tv_styGlobal, self.language_manager.get_language("latex"))
 		self.styComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extStyle, self.tv_styComponent, self.language_manager.get_language("latex"))
 		self.texCustom = FileEditor(self._pathProcess + "/" + self._fileTexCustom, self.tv_texCustom, self.language_manager.get_language("latex"))
 		self.texComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extTex, self.tv_texComponent, self.language_manager.get_language("latex"))
 		self.adjust = FileEditor(self._pathTexts + "/" + bkid + "." + self._extAdj, self.tv_adj, self.language_manager.get_language("latex"))
-
+		self.piclist = FileEditor(self._pathTexts + "/" + bkid + "." + self._extPiclist, self.tv_piclist, self.language_manager.get_language("latex"))
 		self.errorLog = FileEditor(self._pathLog + "/" + self._fileError + "." + self._extLog, self.tv_errorLog, None)
 		self.errorLog.readonly = True
 		self.texlog = FileEditor(self._pathProcess + "/" + bkid + "." + self._extLog, self.tv_texLog, None)
@@ -337,10 +335,11 @@ class ConfigGUI (object) :
 
 
 	def write_files (self) :
-		if self.styGlobal     : self.styGlobal.write('')
-		if self.texCustom      : self.texCustom.write('')
-		if self.adjust     : self.adjust.write('')
-		if self.txtWork       : self.txtWork.write('')
+		if self.styGlobal       : self.styGlobal.write('')
+		if self.texCustom       : self.texCustom.write('')
+		if self.adjust          : self.adjust.write('')
+		if self.piclist         : self.piclist.write('')
+		if self.txtWork         : self.txtWork.write('')
 
 	def set_working_dir (self, isProject) :
 
@@ -1035,7 +1034,6 @@ class ImportDialog (object) :
 	def exit (self, widget) :
 		self.dir = self.e_dir.get_text()
 		self.archive = self.e_archive.get_text()
-#        print "dir = %s, archive = %s" % (self.dir, self.archive)
 		self.dia.hide()
 		self.parent.do_import()
 

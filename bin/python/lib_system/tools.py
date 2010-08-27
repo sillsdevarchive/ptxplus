@@ -36,12 +36,6 @@ import re, os, shutil, codecs, csv, sys
 from configobj import ConfigObj
 from datetime import *
 
-# Get the ptxplus basePath, declair as global
-basePath = os.environ.get('PTXPLUS_BASE')
-
-'''This module contains a bunch of misc. functions that work with
-	ptxplus. If something can be used cross-scripts, it ends
-	up here.'''
 
 
 def taskRunner (log_manager, thisTask) :
@@ -217,14 +211,22 @@ def getSystemSettingsObject () :
 	return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/ptxplus.conf", encoding='utf_8')
 
 
-def getPubInfoObject () :
-	'''Return a publication information object for the
-		current project. Every type of publication should
-		have one resident in the system. This is an ini-type
-		file that is formated just like the .conf files.'''
+#####################################################################################################
+# Trying to optimize here by declaring this as a global var at the bottom
 
-	# The info file name will be the same as the type
-	return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/" + getProjectType() + '.inf', encoding='utf_8')
+# This function needs to be depricated ASAP and the global var used
+
+
+#def getPubInfoObject () :
+#    '''Return a publication information object for the
+#        current project. Every type of publication should
+#        have one resident in the system. This is an ini-type
+#        file that is formated just like the .conf files.'''
+
+#    # The info file name will be the same as the type
+#    return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/" + getProjectType() + '.inf', encoding='utf_8')
+
+######################################################################################################
 
 
 def getProjectType () :
@@ -273,11 +275,10 @@ def getComponentSourceFileName (compID) :
 	'''Return the file name of a source file as determined by
 		by the Scripture editor. If the ID is not recognized
 		it will return nothing'''
-
 	settingsProject = getProjectSettingsObject()
 	settingsSystem = getSystemSettingsObject()
 	suffix = settingsProject['ProjectText']['SourceText'].get('NAME_SOURCE_ORIGINAL')
-	extention = settingsProject['System']['Extensions'].get('EXT_SOURCE')
+	extention = settingsProject['ProjectText']['SourceText'].get('EXT_SOURCE')
 	value = getComponentNameValue(compID)
 	key = getComponentNameKey(compID)
 
@@ -295,7 +296,7 @@ def getComponentNameValue (compID) :
 
 	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
 	# Check all types of components
-	for key, value in getPubInfoObject()['ComponentSourceName_' + editor.upper()].iteritems() :
+	for key, value in pubInfoObject['ComponentSourceName_' + editor.upper()].iteritems() :
 		if compID + '_content' == key or \
 			compID + '_peripheral' == key or \
 			compID + '_map' == key :
@@ -307,7 +308,7 @@ def getComponentNameKey (compID) :
 
 	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
 	# Check all types of components
-	for key, value in getPubInfoObject()['ComponentSourceName_' + editor.upper()].iteritems() :
+	for key, value in pubInfoObject['ComponentSourceName_' + editor.upper()].iteritems() :
 		if compID + '_content' == key or \
 				compID + '_peripheral' == key or \
 				compID + '_map' == key :
@@ -409,7 +410,7 @@ def getScriptureFileID (pathPlusFileName, settings_project) :
 
 	path, file = pathPlusFileName.rsplit("/", 1)
 	nameSourceOriginal = settings_project['ProjectText']['SourceText']['NAME_SOURCE_ORIGINAL']
-	nameSourceExtention = settings_project['System']['Extensions']['EXT_SOURCE']
+	nameSourceExtention = settings_project['ProjectText']['SourceText']['EXT_SOURCE']
 	file = file.replace(nameSourceOriginal + "." + nameSourceExtention, "")
 	return file
 
@@ -804,5 +805,16 @@ class CSVtoDict(dict):
 		csvs = csv.DictReader(open(csv_file_path), dialect=csv.excel)
 		records = list((row.pop(recordkey),row) for row in csvs)
 		return super(CSVtoDict, self).__init__(records)
+
+
+#####################################################################################
+#               Declair Gobal Vars and Objects here
+#####################################################################################
+
+# Get the ptxplus basePath, declair as global
+basePath = os.environ.get('PTXPLUS_BASE')
+
+# This is the information object that contains all the settings for this type of pub
+pubInfoObject = ConfigObj(basePath + "/bin/" + getProjectType() + '.inf', encoding='utf_8')
 
 

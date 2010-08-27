@@ -52,7 +52,7 @@ class CheckCrossreferences (object) :
 		self._encoding_manager = EncodingManager(self._settings)
 		self._log_manager = log_manager
 		self._inputFile = log_manager._currentInput
-		self._reportFilePath = self._settings['System']['Paths']['PATH_REPORTS']
+		self._reportFilePath = tools.pubInfoObject['Paths']['PATH_REPORTS']
 		self._log_manager._currentSubProcess = 'ChkCrfs'
 
 

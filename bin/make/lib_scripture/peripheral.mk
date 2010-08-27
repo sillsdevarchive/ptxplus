@@ -58,7 +58,7 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_
 # This is very important here because a directory will always be
 # changing.
 $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK) : | $(PATH_SOURCE_PERIPH)
-ifeq ($(PATH_SOURCE_PERIPH)/$(1).$(EXT_WORK),$(PATH_SOURCE_PERIPH)/$(FILE_TOC_USFM))
+ifeq ($(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK),$(PATH_SOURCE_PERIPH)/$(FILE_TOC_USFM))
 	@echo Creating TOC from: $(PATH_TEXTS)/$(FILE_TOC_AUTO)
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC) 'TOC' '$(PATH_PROCESS)/$(FILE_TOC_AUTO)' '$$@' ''
 else
@@ -101,10 +101,10 @@ view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@ $(VIEWPDF) $$< &
 
 # This enables us to do the preprocessing on a single peripheral item.
-preprocess-$(1) : $(PATH_SOURCE_PERIPH)/$(1)
+preprocess-$(1) : $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK)
 ifeq ($(LOCKED),0)
-	@echo INFO: Preprocessing $(1)
-	@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$$<"
+	@echo INFO: Preprocessing $($(1)_peripheral).$(EXT_WORK)
+	@$(MOD_RUN_PROCESS) "preprocessChecks" "$($(1)_peripheral).$(EXT_WORK)" "$$<"
 else
 	echo INFO: Cannot run: $$@ This is because the project is locked.
 endif

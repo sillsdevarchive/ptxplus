@@ -44,16 +44,10 @@ class MakeMakefile (object) :
 
 		self._log_manager = log_manager
 		basePath = os.environ.get('PTXPLUS_BASE')
-		sourcePath = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
-
-		# Publication type settings
-		pubSettings = tools.getPubInfoObject()
+		sourcePath = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_SOURCE'))
 
 		# Get the type of project this is
 		self._projectType = tools.getProjectType()
-
-		# Get some info we will need
-		self._pubInfo = tools.getPubInfoObject()
 
 		# The folder name for peripheral material is auto created here
 		peripheralFolderName = os.getcwd().split('/')[-1]
@@ -123,18 +117,26 @@ class MakeMakefile (object) :
 
 		# Modules used by the makefile, note the use of extra
 		# quoting. This is to preserve the strings.
-		for key, value, in pubSettings['Modules'].iteritems() :
+		for key, value, in tools.pubInfoObject['Modules'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
 
-		for key, value, in pubSettings['Extensions'].iteritems() :
+		# Pull in the one extention and module that is not in the proj conf
+		makefileSettings += 'MOD_PARA_ADJUST=' + self._log_manager._settings['System']['Processes']['MOD_PARA_ADJUST'] + '\n'
+		makefileSettings += 'EXT_SOURCE=' + self._log_manager._settings['ProjectText']['SourceText']['EXT_SOURCE'] + '\n'
+
+		for key, value, in tools.pubInfoObject['Extensions'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
 
-		# Get our path information and output absolute paths
+		# Get our path information from our project .conf file and output absolute paths
 		for key, value, in self._log_manager._settings['System']['Paths'].iteritems() :
 			if value.split('/')[0] == '__PTXPLUS__' :
 				makefileSettings += key + '=' + value.replace('__PTXPLUS__', basePath) + '\n'
 			else :
 				makefileSettings += key + '=' + os.path.abspath(value) + '\n'
+
+		# Path info from the pub settings file
+		for key, value, in tools.pubInfoObject['Paths'].iteritems() :
+			makefileSettings += key + '=' + os.path.abspath(value) + '\n'
 
 		# Insert the peripheral folder name here. This is a
 		# hard-coded insert because it should always be the
@@ -144,6 +146,9 @@ class MakeMakefile (object) :
 		# We will use a function to tell us what the project
 		# config name is.
 		makefileSettings += 'FILE_PROJECT_CONF=' + tools.getProjectConfigFileName() + '\n'
+
+		for key, value, in tools.pubInfoObject['Files'].iteritems() :
+			makefileSettings += key + "=" + value + '\n'
 
 		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
@@ -157,14 +162,10 @@ class MakeMakefile (object) :
 		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['Binding'].iteritems()) + '\n'
 
 		# Build meta groups (output all the components for each )
-		makefileSettings += '\n'.join(key + '=' + ''.join(self.expandMetaGroups(value)) for key, value in self._pubInfo['BindingGroups'].iteritems()) + '\n'
+		makefileSettings += '\n'.join(key + '=' + ''.join(self.expandMetaGroups(value)) for key, value in tools.pubInfoObject['BindingGroups'].iteritems()) + '\n'
 
 		# The final book group
-		makefileSettings += ''.join('GROUP_BOOK=' + ' '.join(self._pubInfo['Book']['GROUP_BOOK'])) + '\n'
-
-		# Get special file names for this publication type
-		for key, value in self._pubInfo['FileNames'].iteritems() :
-			makefileSettings += key + "=" + value + '\n'
+		makefileSettings += ''.join('GROUP_BOOK=' + ' '.join(tools.pubInfoObject['Book']['GROUP_BOOK'])) + '\n'
 
 		# Output the helper commands
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
@@ -191,7 +192,7 @@ class MakeMakefile (object) :
 		# Add in system level include files first, then the component types
 		makefileFinal += "include " + basePath + "/bin/make/lib_" + self._projectType + "/system.mk\n"
 
-		for value in self._pubInfo['Components']['componentTypeList'] :
+		for value in tools.pubInfoObject['Components']['componentTypeList'] :
 			makefileFinal += "include " + basePath + "/bin/make/lib_" + self._projectType + "/" + value + ".mk\n"
 
 		# Output to the new makefile file
