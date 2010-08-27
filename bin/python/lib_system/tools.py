@@ -305,7 +305,7 @@ def getComponentNameValue (compID) :
 
 def getComponentNameKey (compID) :
 	'''Return the value for a given component ID.'''
-
+	print "[" + compID + "]"
 	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
 	# Check all types of components
 	for key, value in pubInfoObject['ComponentSourceName_' + editor.upper()].iteritems() :

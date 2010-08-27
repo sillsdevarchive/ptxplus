@@ -130,8 +130,8 @@ else
 	@echo INFO: Cannot remove $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) because the project is locked.
 endif
 
-# Currently there is no dependency on this file but I wish there
-# was one, but piclist is not needed for all components.
+# Make the piclist file if there is a need for it with
+# this component.
 piclist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
 
 # Make illustrations file if illustrations are used in this pub

@@ -243,6 +243,10 @@ class ConfigGUI (object) :
 		except :
 			title = os.getcwd()
 
+
+###############################################################################################
+
+
 		self.wTree.get_widget('w_main').set_title(title)
 		self.cb_components = self.wTree.get_widget('cb_components')
 		self.cs_components = gtk.ListStore(str)
@@ -253,10 +257,12 @@ class ConfigGUI (object) :
 		# Here we grab the binding group names for building our component and group list
 		# To avoid duplicates in the list we use a set() to keep track of the components
 		# If one already exists it will not add it to the list.
-		self.process_groups = self.ceditor.config['Format']['Binding']
+		self.matter_groups = self.ceditor.config['Format']['Binding']
+		self.binding_groups = self._tools.pubInfoObject['BindingGroups']
+		self.book_group = self._tools.pubInfoObject['Book']
 
-		for group in self.process_groups :
-			for item in self.process_groups.get(group) :
+		for group in self.matter_groups :
+			for item in self.matter_groups.get(group) :
 				if item == bkid :
 					index = len(self.cs_components)
 				if item and not item in component_list :
@@ -269,12 +275,22 @@ class ConfigGUI (object) :
 
 		# We want the groups last so we process them again here, this time
 		# grabbing only the group name tacking that on to the end of the list
-		for group in self.process_groups :
-			if group.find('GROUP_') == 0 or group.find('BOOK') == 0 :
+		for group in self.binding_groups :
+			if group.find('GROUP_') == 0 :
+				gName = self.getGroupName(group)
+				self.cs_components.append([gName.lower()])
+
+		# Add the book meta-meta group
+		for group in self.book_group :
+			if group.find('GROUP_') == 0 :
 				gName = self.getGroupName(group)
 				self.cs_components.append([gName.lower()])
 
 		self.cb_components.set_active(index)
+
+
+############################################################################################
+
 
 
 	def getGroupName (self, group) :
