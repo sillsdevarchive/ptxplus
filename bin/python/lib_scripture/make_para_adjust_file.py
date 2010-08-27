@@ -117,8 +117,9 @@ class MakeParaAdjustFile (object) :
 			# to the log and exit gracefully.
 
 			self._log_manager.log("INFO", "The file " + self._outputFile + " already exists so I will not build a new one.")
-			head, tail = os.path.split(self._outputFile)
-			tools.userMessage("ERRR: File found: " + tail)
+			# Don't think we need to report this in the terminal
+			#head, tail = os.path.split(self._outputFile)
+			#tools.userMessage("ERRR: File found: " + tail)
 
 			return
 

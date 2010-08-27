@@ -75,13 +75,12 @@ endif
 
 # Process a single component and produce the final PDF. A Special dependency
 # is set for the .$(EXT_ADJUSTMENT) file in case it has been altered.
-# It would be nice to have a dependency on the piclist file but that
-# process behaves different and not every component has one. So for
-# now we need to leave it on its own.
+# An even more special dependency is set on the piclist file too with an
+# [if] statement because not every component has to have a piclist.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
 	$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
-	$(PATH_PROCESS)/$(1).$(EXT_TEX) $(DEPENDENT_FILE_LIST)
+	$(PATH_PROCESS)/$(1).$(EXT_TEX) $(DEPENDENT_FILE_LIST) $(if @$(shell [ -e $(PATH_TEXTS)/$(1).$(EXT_PICLIST) ] && echo 1), $(PATH_TEXTS)/$(1).$(EXT_PICLIST),)
 	@echo INFO: Creating book PDF file: $(1).$(EXT_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_TEX)
 	$(call watermark,$$@)

@@ -75,7 +75,7 @@ class MakePiclistFile (object) :
 		self._outputFile = log_manager._currentOutput
 		self._outFileObject = {}
 		self._sourcePath = os.path.abspath(self._settings['System']['Paths']['PATH_SOURCE'])
-		self._captionsFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_CAPTIONS']
+		self._captionsFileName = tools.pubInfoObject['Files']['FILE_ILLUSTRATION_CAPTIONS']
 		self._sourceIllustrationsLibDataFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_DATA']
 		self._projectIllustrationsPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		self._sourceIllustrationsLibPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])

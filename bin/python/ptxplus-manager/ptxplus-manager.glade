@@ -1272,7 +1272,7 @@
 				  </packing>
 				</child>
 				<child>
-				  <widget class="GtkScrolledWindow" id="sc_errorLog">
+				  <widget class="GtkScrolledWindow" id="sc_piclist">
 					<property name="visible">True</property>
 					<property name="can_focus">True</property>
 					<property name="hscrollbar_policy">automatic</property>
@@ -1286,13 +1286,39 @@
 				  </packing>
 				</child>
 				<child>
+				  <widget class="GtkLabel" id="tab_compPiclist">
+					<property name="visible">True</property>
+					<property name="tooltip" translatable="yes">Illustration listing and placement (if relevant)</property>
+					<property name="label" translatable="yes">Illustrations</property>
+				  </widget>
+				  <packing>
+					<property name="position">9</property>
+					<property name="tab_fill">False</property>
+					<property name="type">tab</property>
+				  </packing>
+				</child>
+				<child>
+				  <widget class="GtkScrolledWindow" id="sc_errorLog">
+					<property name="visible">True</property>
+					<property name="can_focus">True</property>
+					<property name="hscrollbar_policy">automatic</property>
+					<property name="vscrollbar_policy">automatic</property>
+					<child>
+					  <placeholder/>
+					</child>
+				  </widget>
+				  <packing>
+					<property name="position">10</property>
+				  </packing>
+				</child>
+				<child>
 				  <widget class="GtkLabel" id="tab_errorLog">
 					<property name="visible">True</property>
 					<property name="tooltip" translatable="yes">TeX error report for the last run session (operation)</property>
 					<property name="label" translatable="yes">Errors</property>
 				  </widget>
 				  <packing>
-					<property name="position">9</property>
+					<property name="position">10</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
@@ -1309,7 +1335,7 @@
 				  </widget>
 				  <packing>
 					<property name="menu_label">sc_texLog</property>
-					<property name="position">10</property>
+					<property name="position">11</property>
 				  </packing>
 				</child>
 				<child>
@@ -1321,7 +1347,7 @@
 				  </widget>
 				  <packing>
 					<property name="menu_label">tab_texLog</property>
-					<property name="position">10</property>
+					<property name="position">11</property>
 					<property name="tab_fill">False</property>
 					<property name="type">tab</property>
 				  </packing>
