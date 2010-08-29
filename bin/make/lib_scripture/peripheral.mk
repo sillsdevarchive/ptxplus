@@ -133,13 +133,18 @@ endef
 define matter_binding
 ifneq ($($(1)),)
 $(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
-#$(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
-$(PATH_PROCESS)/$(1).$(EXT_PDF) :
+$(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
+#$(PATH_PROCESS)/$(1).$(EXT_PDF) :
 	@echo INFO: Creating: $(1).$(EXT_PDF) $($(1))
 	@pdftk $(foreach v,$($(1)),$(v:%=$(PATH_PROCESS)/%.$(EXT_PDF))) cat output $$@
 endif
 endef
 
+define group_binding
+
+$(foreach v,$($(1)),$(info $(v)),$(PATH_PROCESS)/$(v).$(EXT_PDF))
+
+endef
 
 ##############################################################
 #		Main processing rules
@@ -151,7 +156,6 @@ endef
 # peripheral source folder if one doesn't exist.
 $(PATH_SOURCE_PERIPH) : | $(PATH_SOURCE)
 	@ $(call mdir,$@)
-
 
 # Cover matter binding rules
 $(eval $(call matter_binding,MATTER_COVER))

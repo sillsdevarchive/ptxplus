@@ -9,54 +9,10 @@
 # how it is processed.
 componentTypeList           = peripheral, content, map
 
-# BINDING GROUPS
-# This is contains various Scripture group binding defs.
-[BindingGroups]
-
-# COVER GROUP
-# The cover group for this publication.
-GROUP_COVER                 = MATTER_COVER,
-
-# FRONT GROUP
-# This is the content of the front matter group. This normally
-# contains just MATTER_FRONT.
-GROUP_FRONT                 = MATTER_FRONT,
-
-# CONTENT GROUP
-# These are the component groups that make up the main content
-# section of the book.
-GROUP_CONTENT               = MATTER_OT, MATTER_NT, MATTER_AP
-
-# BACK GROUP
-# This is the content of the back matter group. This normally
-# contains only the MATTER_BACK object.
-GROUP_BACK                  = MATTER_BACK,
-
-# MAP GROUP
-# This is the content of the map matter group This is normally
-# just contains MATTER_MAPS.
-GROUP_MAPS                  = MATTER_MAPS,
-
-# THE BOOK GROUP
-# This book group is the final goal of the process. It contains
-# all the meta groups which contains all the components.
-[Book]
-
-GROUP_BOOK                  = GROUP_FRONT, GROUP_CONTENT, GROUP_BACK, GROUP_MAPS
-
 # FILE NAMES (HARD-CODDED)
 # These are names of files for this publication type which are
 # pretty much hard-codded and immutable.
 [Files]
-
-# FINAL BOOK FILE NAME
-FILE_BOOK                   = BOOK.pdf
-
-# CONTENT GROUP FILE NAME
-FILE_GROUP_CONTENT_PDF      = GROUP_CONTENT.pdf
-
-# CONTENT GROUP TEX FILE NAME
-FILE_GROUP_CONTENT_TEX      = GROUP_CONTENT.tex
 
 # PROJECT ERROR FILE
 # The name of the project error file. This is the file that

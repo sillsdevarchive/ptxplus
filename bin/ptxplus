@@ -105,7 +105,7 @@ else :
 		bkid = ""
 		# Creat a list of component keys that keep the binding order but do not have
 		# any duplicate items in it.
-		componentScripture = tools.dedupList(reduce(operator.add, tools.getSettingsObject()['Format']['Binding'].itervalues(), []))
+		componentScripture = tools.dedupList(reduce(operator.add, tools.getSettingsObject()['Format']['BindingGroups'].itervalues(), []))
 
 		# This part only works if we are processing Scripture components (books with IDs)
 		if len(componentScripture) > 0 :

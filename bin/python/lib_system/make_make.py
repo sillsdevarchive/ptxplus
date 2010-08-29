@@ -159,13 +159,10 @@ class MakeMakefile (object) :
 		# Build up all the component groupings
 
 		# Build component groups
-		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['Binding'].iteritems()) + '\n'
+		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['BindingGroups'].iteritems()) + '\n'
 
-		# Build meta groups (output all the components for each )
-		makefileSettings += '\n'.join(key + '=' + ''.join(self.expandMetaGroups(value)) for key, value in tools.pubInfoObject['BindingGroups'].iteritems()) + '\n'
-
-		# The final book group
-		makefileSettings += ''.join('GROUP_BOOK=' + ' '.join(tools.pubInfoObject['Book']['GROUP_BOOK'])) + '\n'
+		# Get the book meta group (made up of component groups)
+		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['MetaGroups'].iteritems()) + '\n'
 
 		# Output the helper commands
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
@@ -181,7 +178,7 @@ class MakeMakefile (object) :
 		#     filterList.extend(list)
 		# However, using reduce is a much faster way. Note the '[]' a the end of the
 		# line. This initializes the filterList.
-		filterList = reduce(operator.add, self._log_manager._settings['Format']['Binding'].itervalues(), [])
+		filterList = reduce(operator.add, self._log_manager._settings['Format']['BindingGroups'].itervalues(), [])
 
 		for cID in filterList :
 			makefileSettings += tools.getComponentNameKey(cID) + '=' + tools.getComponentNameValue(cID) + '\n'

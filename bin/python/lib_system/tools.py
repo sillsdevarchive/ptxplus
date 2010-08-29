@@ -211,24 +211,6 @@ def getSystemSettingsObject () :
 	return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/ptxplus.conf", encoding='utf_8')
 
 
-#####################################################################################################
-# Trying to optimize here by declaring this as a global var at the bottom
-
-# This function needs to be depricated ASAP and the global var used
-
-
-#def getPubInfoObject () :
-#    '''Return a publication information object for the
-#        current project. Every type of publication should
-#        have one resident in the system. This is an ini-type
-#        file that is formated just like the .conf files.'''
-
-#    # The info file name will be the same as the type
-#    return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/" + getProjectType() + '.inf', encoding='utf_8')
-
-######################################################################################################
-
-
 def getProjectType () :
 	'''Return the type of publication project this is.
 		We will do this by checkging to see what kind of
@@ -275,6 +257,7 @@ def getComponentSourceFileName (compID) :
 	'''Return the file name of a source file as determined by
 		by the Scripture editor. If the ID is not recognized
 		it will return nothing'''
+
 	settingsProject = getProjectSettingsObject()
 	settingsSystem = getSystemSettingsObject()
 	suffix = settingsProject['ProjectText']['SourceText'].get('NAME_SOURCE_ORIGINAL')
@@ -285,6 +268,9 @@ def getComponentSourceFileName (compID) :
 	# The suffix is only a Paratext naming convention. It is not
 	# needed for peripheral files and will not be present for other
 	# kinds of files. We will just strip it out for peripheral files
+	# FIXME: This is dependent on there being a 'content' component
+	# type but if this is another kind of publication type, that may
+	# not be the case. This needs to be more generic.
 	if key.find('_content') > -1 :
 		return value + suffix + "." + extention
 	else :
@@ -297,22 +283,20 @@ def getComponentNameValue (compID) :
 	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
 	# Check all types of components
 	for key, value in pubInfoObject['ComponentSourceName_' + editor.upper()].iteritems() :
-		if compID + '_content' == key or \
-			compID + '_peripheral' == key or \
-			compID + '_map' == key :
-			return value
+		for compType in pubInfoObject['Components']['componentTypeList'] :
+			if compID + '_' + compType == key :
+				return value
 
 
 def getComponentNameKey (compID) :
 	'''Return the value for a given component ID.'''
-	print "[" + compID + "]"
+
 	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
 	# Check all types of components
 	for key, value in pubInfoObject['ComponentSourceName_' + editor.upper()].iteritems() :
-		if compID + '_content' == key or \
-				compID + '_peripheral' == key or \
-				compID + '_map' == key :
-			return key
+		for compType in pubInfoObject['Components']['componentTypeList'] :
+			if compID + '_' + compType == key :
+				return key
 
 
 def getProjectConfigFileName () :
