@@ -129,10 +129,10 @@ define uniq
 $(if $(1),$(firstword $(1)) $(call uniq,$(filter-out $(firstword $(1)),$(1))),)
 endef
 
-# Bind all the matter for a given set
-define matter_binding
+# Bind all the components for a given set
+define group_binding
 ifneq ($($(1)),)
-$(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
+#$(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
 #$(PATH_PROCESS)/$(1).$(EXT_PDF) :
 	@echo INFO: Creating: $(1).$(EXT_PDF) $($(1))
@@ -158,13 +158,13 @@ $(PATH_SOURCE_PERIPH) : | $(PATH_SOURCE)
 	@ $(call mdir,$@)
 
 # Cover matter binding rules
-$(eval $(call matter_binding,MATTER_COVER))
+$(eval $(call group_binding,MATTER_COVER))
 
 # Front matter binding rules
-$(eval $(call matter_binding,MATTER_FRONT))
+$(eval $(call group_binding,MATTER_FRONT))
 
 # Back matter binding rules
-$(eval $(call matter_binding,MATTER_BACK))
+$(eval $(call group_binding,MATTER_BACK))
 
 # This makes a simple TeX settings file for the cover. This may
 # not really be needed but it seems to be the best way to handle
