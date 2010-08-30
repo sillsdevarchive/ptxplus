@@ -237,60 +237,47 @@ class ConfigGUI (object) :
 		self._extPiclist = self._tools.pubInfoObject['Extensions'].get('EXT_PICLIST')
 		self._extLog = self._tools.pubInfoObject['Extensions'].get('EXT_LOG')
 
-
+		# Get our title
 		try :
 			title = self.ceditor.config['Project']['ProjectInformation'].get('projectName')
 		except :
 			title = os.getcwd()
-
-
-###############################################################################################
-
 
 		self.wTree.get_widget('w_main').set_title(title)
 		self.cb_components = self.wTree.get_widget('cb_components')
 		self.cs_components = gtk.ListStore(str)
 		self.cb_components.set_model(self.cs_components)
 		index = 0
+
+		# Get the data lists we will work with
+		self.binding_groups = self.ceditor.config['Format']['BindingGroups']
+		self.meta_groups = self.ceditor.config['Format']['MetaGroups']
+
+		# Here we grab the component names for building our component list
+		# To avoid duplicates in the list we use a set() to keep track of
+		# the components If one already exists it will not add it to the list.
 		component_list = set()
-
-		# Here we grab the binding group names for building our component and group list
-		# To avoid duplicates in the list we use a set() to keep track of the components
-		# If one already exists it will not add it to the list.
-		self.matter_groups = self.ceditor.config['Format']['Binding']
-		self.binding_groups = self._tools.pubInfoObject['BindingGroups']
-		self.book_group = self._tools.pubInfoObject['Book']
-
-		for group in self.matter_groups :
-			for item in self.matter_groups.get(group) :
+		for group in self.binding_groups :
+			for item in self.binding_groups.get(group) :
 				if item == bkid :
 					index = len(self.cs_components)
 				if item and not item in component_list :
 					component_list.add(item)
-					# We want to weed-out the BOOK group and the GROUP
-					# group which are handled elsewhere
-					if group.find('MATTER_') == 0 :
-						self.cs_components.append([item])
+					self.cs_components.append([item])
 
-
-		# We want the groups last so we process them again here, this time
-		# grabbing only the group name tacking that on to the end of the list
+		# These are the binding groups we want to process
+		# There may be a better place for this but it goes
+		# in this list for now.
 		for group in self.binding_groups :
-			if group.find('GROUP_') == 0 :
-				gName = self.getGroupName(group)
-				self.cs_components.append([gName.lower()])
+			gName = self.getGroupName(group)
+			self.cs_components.append([gName.lower()])
 
-		# Add the book meta-meta group
-		for group in self.book_group :
-			if group.find('GROUP_') == 0 :
-				gName = self.getGroupName(group)
-				self.cs_components.append([gName.lower()])
+		# Add the meta groups (Probably only one)
+		for group in self.meta_groups :
+			mName = self.getGroupName(group)
+			self.cs_components.append([mName.lower()])
 
 		self.cb_components.set_active(index)
-
-
-############################################################################################
-
 
 
 	def getGroupName (self, group) :

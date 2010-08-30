@@ -156,6 +156,7 @@ else
 	@echo INFO: Cannot remove: $(PATH_TEXTS)/$(1).$(EXT_PICLIST) because the project is locked.
 endif
 
+# End of the content_rules define
 endef
 
 ######################## End Main Macro ######################
@@ -171,7 +172,6 @@ endef
 
 # This builds a rule (in memory) for each of the content components
 $(foreach v,$(GROUP_CONTENT), $(eval $(call content_rules,$(v))))
-#$(foreach v,$(GROUP_CONTENT), $(info $v))
 
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
@@ -187,6 +187,11 @@ $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" ""
 
+########################### Do we want to keep it this way?
+FILE_GROUP_CONTENT_TEX = GROUP_CONTENT.tex
+
+
+
 # Rule for building the GROUP_CONTENT control file. This is
 # not the same as TeX settings file above.
 $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
@@ -194,14 +199,18 @@ $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
 
 
-# Rule for generating the entire Scripture content. It will
+############################### Problem with piclist dependency here the v isn't coming out right
+
+
+
+# Rule for generating the content components. It will
 # also generate the TOC if that feature is turned on.
 $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
-	$(foreach v,$(filter $(BIBLE_COMPONENTS_ALL),$(GROUP_CONTENT)), \
+	$(foreach v,$(filter $(COMPONENTS_ALL),$(GROUP_CONTENT)), \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(foreach v,$(filter-out $(BIBLE_COMPONENTS_ALL),$(GROUP_CONTENT)), \
+	$(foreach v,$(filter-out $(COMPONENTS_ALL),$(GROUP_CONTENT)), \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) $(DEPENDENT_FILE_LIST)
+	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) $(DEPENDENT_FILE_LIST) $(if @$(shell [ -e $(PATH_TEXTS)/$(v).$(EXT_PICLIST) ] && echo 1), $(PATH_TEXTS)/$(v).$(EXT_PICLIST),)
 	@echo INFO: Creating: $@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
 	$(call watermark,$@)

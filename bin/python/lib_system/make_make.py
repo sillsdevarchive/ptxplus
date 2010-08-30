@@ -77,6 +77,10 @@ class MakeMakefile (object) :
 		cmykPath = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
 		makefileSettings += 'CMYK_PROFILE=' + cmykPath + '\n'
 
+		# Output the helper commands
+		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
+			makefileSettings += key + "=" + value + '\n'
+
 		# Get our switches from their respective sections
 		useIllustrations = self._log_manager._settings['Format']['Illustrations']['USE_ILLUSTRATIONS']
 		makefileSettings += 'USE_ILLUSTRATIONS=' + useIllustrations + '\n'
@@ -164,10 +168,6 @@ class MakeMakefile (object) :
 		# Get the book meta group (made up of component groups)
 		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['MetaGroups'].iteritems()) + '\n'
 
-		# Output the helper commands
-		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
-			makefileSettings += key + "=" + value + '\n'
-
 		# Add component mapping info here
 		editor = self._log_manager._settings['ProjectText']['SourceText']['Features'].get('projectEditor')
 
@@ -178,10 +178,28 @@ class MakeMakefile (object) :
 		#     filterList.extend(list)
 		# However, using reduce is a much faster way. Note the '[]' a the end of the
 		# line. This initializes the filterList.
-		filterList = reduce(operator.add, self._log_manager._settings['Format']['BindingGroups'].itervalues(), [])
+		# components = reduce(operator.add, self._log_manager._settings['Format']['BindingGroups'].itervalues(), [])
+		# However, the problem with this is that it doesn't preserve order.
+		# To preserve order you need something like this:
+		filterList = set()
+		components = []
+		for group in self._log_manager._settings['Format']['BindingGroups'].iterkeys() :
+			for item in self._log_manager._settings['Format']['BindingGroups'].get(group) :
+				if item and not item in filterList :
+					filterList.add(item)
+					components.append(item)
 
-		for cID in filterList :
-			makefileSettings += tools.getComponentNameKey(cID) + '=' + tools.getComponentNameValue(cID) + '\n'
+		# Output all the components for makefile
+		makefileSettings += 'COMPONENTS_ALL=' + ' '.join(components) + '\n'
+
+		# Output a list of all component key names and names
+		for cID in components :
+			try:
+				makefileSettings += tools.getComponentNameKey(cID) + '=' + tools.getComponentNameValue(cID) + '\n'
+			except:
+				tools.userMessage('ERROR: Component: ' + cID + ' is not known to the system')
+				self._log_manager.log('ERRR', 'Component: ' + cID + ' is not known to the system')
+
 
 		# Create the final key/values for the file
 		makefileFinal = ""

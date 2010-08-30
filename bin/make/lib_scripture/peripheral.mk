@@ -17,17 +17,17 @@
 
 
 ##############################################################
-#		Variables for peripheral matter
+#		Variables for peripheral components
 ##############################################################
 
 # Are there any?
 
 ##############################################################
-#		General rules for all peripheral matter
+#		General rules for all peripheral components
 ##############################################################
 
 # Define the main macro rule group for what it takes to process
-# peripheral matter (front and back).
+# peripheral components (front and back).
 
 define periph_rules
 
@@ -67,12 +67,12 @@ else
 endif
 
 # This .tex file also generally has some dependencies on the
-# COVER/FRONT/BACK_MATTER.tex files so we add them here. However,
+# COVER/FRONT/BACK_GROUP.tex files so we add them here. However,
 # we will use the "|" (pipe) trick to prevent any updating in
 # case the file already exists. As this is peripheral material
 # we do not have an ID to pass along but we will set a special
-# use flag which identifies the object as peripheral matter. For
-# this we use the "periph" flag.
+# use flag which identifies the object as peripheral components.
+# For this we use the "periph" flag.
 $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
 	$(PATH_PROCESS)/$(FILE_TEX_SETUP) \
@@ -123,28 +123,25 @@ endef
 
 ###################################################################################################
 
-# Filter out repeat instances of peripheral matter, like
+# Filter out repeat instances of peripheral components, like
 # blank pages which need to be listed multiple times
 define uniq
 $(if $(1),$(firstword $(1)) $(call uniq,$(filter-out $(firstword $(1)),$(1))),)
 endef
 
-# Bind all the components for a given set
+# Bind all the components into a group PDF file
 define group_binding
+
 ifneq ($($(1)),)
-#$(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
+$(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
 #$(PATH_PROCESS)/$(1).$(EXT_PDF) :
-	@echo INFO: Creating: $(1).$(EXT_PDF) $($(1))
+	@echo INFO: Creating: $(1).$(EXT_PDF) [Components: $($(1))]
 	@pdftk $(foreach v,$($(1)),$(v:%=$(PATH_PROCESS)/%.$(EXT_PDF))) cat output $$@
 endif
-endef
-
-define group_binding
-
-$(foreach v,$($(1)),$(info $(v)),$(PATH_PROCESS)/$(v).$(EXT_PDF))
 
 endef
+
 
 ##############################################################
 #		Main processing rules
@@ -157,14 +154,19 @@ endef
 $(PATH_SOURCE_PERIPH) : | $(PATH_SOURCE)
 	@ $(call mdir,$@)
 
-# Cover matter binding rules
-$(eval $(call group_binding,MATTER_COVER))
+# This calls all the automated rules defined above and does them
+# once on each component, even if the component is listed repeatedly
+# in the Binding list. This is what the uniq call is for.
+$(foreach v,$(call uniq,$(GROUP_COVER) $(GROUP_FRONT) $(GROUP_BACK)),$(eval $(call periph_rules,$(v))))
 
-# Front matter binding rules
-$(eval $(call group_binding,MATTER_FRONT))
+# Cover group binding rules
+$(eval $(call group_binding,GROUP_COVER))
 
-# Back matter binding rules
-$(eval $(call group_binding,MATTER_BACK))
+# Front group binding rules
+$(eval $(call group_binding,GROUP_FRONT))
+
+# Back group binding rules
+$(eval $(call group_binding,GROUP_BACK))
 
 # This makes a simple TeX settings file for the cover. This may
 # not really be needed but it seems to be the best way to handle
@@ -174,59 +176,54 @@ $(PATH_PROCESS)/$(FILE_TEX_COVER) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "cover"
 
-# Most front matter peripheral .$(EXT_TEX) files will have a dependency
+# Most front group peripheral .tex files will have a dependency
 # on $(FILE_TEX_FRONT) even if it doesn't, there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/$(FILE_TEX_FRONT) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "front"
 
-# Most back matter peripheral .$(EXT_TEX) files will have a dependency
-# on BACK_MATTER.$(EXT_TEX) even if it doesn't there is a hard coded
+# Most back group peripheral .tex files will have a dependency
+# on BACK_GROUP.tex even if it doesn't there is a hard coded
 # dependency here that will be met if called on.
 $(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "back"
 
-# This calls all the automated rules defined above and does them
-# once on each file, even if the file is listed repeatedly in the
-# Binding list. This is what the uniq call is for.
-$(foreach v,$(call uniq,$(MATTER_COVER) $(MATTER_FRONT) $(MATTER_BACK)),$(eval $(call periph_rules,$(v))))
-
 # Produce all the outer cover material in one PDF file
-view-cover : $(MATTER_COVER_PDF)
+view-cover : $(GROUP_COVER_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
 # To produce individual elements of the outer cover just
 # use: ptxplus view-<file_name>
 
-# Produce just the font matter (bound)
-view-front : $(MATTER_FRONT_PDF)
-#	@- $(CLOSEPDF)
-#	@ $(VIEWPDF) $< &
-
-# Produce just the back matter (bound)
-view-back : $(MATTER_BACK_PDF)
+# Produce just the font group (bound)
+view-front : $(GROUP_FRONT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
-# Clean up rules for peripheral matter
+# Produce just the back group (bound)
+view-back : $(GROUP_BACK_PDF)
+	@- $(CLOSEPDF)
+	@ $(VIEWPDF) $< &
 
-# Remove the cover matter PDF file
+# Clean up rules for peripheral groups
+
+# Remove the cover group PDF file
 pdf-remove-cover :
-	@echo INFO: Removing: $(MATTER_COVER_PDF)
-	@rm -f $(MATTER_COVER_PDF)
+	@echo INFO: Removing: $(GROUP_COVER_PDF)
+	@rm -f $(GROUP_COVER_PDF)
 
-# Remove the front matter PDF file
+# Remove the front group PDF file
 pdf-remove-front :
-	@echo INFO: Removing: $(MATTER_FRONT_PDF)
-	@rm -f $(MATTER_FRONT_PDF)
+	@echo INFO: Removing: $(GROUP_FRONT_PDF)
+	@rm -f $(GROUP_FRONT_PDF)
 
-# Remove the back matter PDF file
+# Remove the back group PDF file
 pdf-remove-back :
-	@echo INFO: Removing: $(MATTER_BACK_PDF)
-	@rm -f $(MATTER_BACK_PDF)
+	@echo INFO: Removing: $(GROUP_BACK_PDF)
+	@rm -f $(GROUP_BACK_PDF)
 
 
 

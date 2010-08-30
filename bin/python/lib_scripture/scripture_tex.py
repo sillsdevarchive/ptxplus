@@ -82,16 +82,12 @@ class MakeTexControlFile (object) :
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
 		self._flags = ('cover', 'front', 'back', 'periph')
-		self._frontMatter = self._log_manager._settings['Format']['Binding']['MATTER_FRONT']
-		self._backMatter = self._log_manager._settings['Format']['Binding']['MATTER_BACK']
-		self._coverMatter = self._log_manager._settings['Format']['Binding']['MATTER_COVER']
-		self._otMatter = self._log_manager._settings['Format']['Binding']['MATTER_OT']
-		self._ntMatter = self._log_manager._settings['Format']['Binding']['MATTER_NT']
-		self._apMatter = self._log_manager._settings['Format']['Binding']['MATTER_AP']
+		self._frontMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_FRONT']
+		self._backMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_BACK']
+		self._coverMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_COVER']
+		self._contentMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_CONTENT']
 		self._contentGroup = []
-		self._contentGroup.extend(self._otMatter)
-		self._contentGroup.extend(self._ntMatter)
-		self._contentGroup.extend(self._apMatter)
+		self._contentGroup.extend(self._contentMatter)
 		self._publicationType = log_manager._publicationType
 		# File extentions (Expand this, more will be needed in the future)
 		self._extStyle = tools.pubInfoObject['Extensions']['EXT_STYLE']
@@ -181,7 +177,7 @@ class MakeTexControlFile (object) :
 				settings = settings + '\\input \"' + self._cvSettingsFile + '\"\n'
 
 			else :
-				self._log_manager.log("ERRR", "Trying to Create: " + self._outputFile + " - This module thinks that input: [" + self._inputFile + "] is part of the peripheral matter but it cannot find it on either the cover, front or back matter binding lists. Process halted.")
+				self._log_manager.log("ERRR", "Trying to Create: " + self._outputFile + " - This module thinks that input: [" + self._inputFile + "] is part of the peripheral matter but it cannot find it on either the cover, front or back matter binding groups. Process halted.")
 				return
 
 		# Add the global style sheet
