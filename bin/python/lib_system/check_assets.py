@@ -56,6 +56,7 @@ class CheckAssets (object) :
 		basePath                = os.environ.get('PTXPLUS_BASE')
 		pathHome                = os.path.abspath(tools.pubInfoObject['Paths']['PATH_HOME'])
 		pathSource              = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
+		pathPeripheral          = pathSource + '/' + os.getcwd().split('/')[-1]
 		pathProcess             = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_PROCESS']
 		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		pathGraphics            = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
@@ -71,9 +72,28 @@ class CheckAssets (object) :
 			sys.exit(1)
 
 		# Check/install folders we might need
+		if not os.path.isdir(pathSource) :
+			os.mkdir(pathSource)
+			tools.userMessage('INFO: Added folder: ' + pathSource)
+
+		if not os.path.isdir(pathPeripheral) :
+			os.mkdir(pathPeripheral)
+			tools.userMessage('INFO: Added folder: ' + pathPeripheral)
+
 		if not os.path.isdir(pathIllustrations) :
 			os.mkdir(pathIllustrations)
 			tools.userMessage('INFO: Added folder: ' + pathIllustrations)
+
+# Make a Hyphenation folder if necessary
+$(PATH_HYPHENATION) :
+	$(call mdir,$(PATH_HYPHENATION))
+
+# In case the process folder isn't there (because of archive)
+# This should be in the dependent file list.
+$(PATH_PROCESS)/.stamp :
+	$(call mdir,$(PATH_PROCESS))
+	@touch $(PATH_PROCESS)/.stamp
+
 
 		# Check/install system assets
 

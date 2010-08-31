@@ -36,7 +36,7 @@ $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_S
 # the postprocessing function to do this.
 $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
 ifeq ($(LOCKED),0)
-	@echo Creating: $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@echo INFO: Creating: $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	$$(call postprocessing,$(1),$($(1)_content))
 else
 	@echo INFO: Cannot create: $$@ because the project is locked.
@@ -79,8 +79,10 @@ endif
 # [if] statement because not every component has to have a piclist.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
+	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
 	$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
-	$(PATH_PROCESS)/$(1).$(EXT_TEX) $(DEPENDENT_FILE_LIST) $(if @$(shell [ -e $(PATH_TEXTS)/$(1).$(EXT_PICLIST) ] && echo 1), $(PATH_TEXTS)/$(1).$(EXT_PICLIST),)
+	$(if $(findstring $(1),$(ILLUSTRATIONS_IN)),$(PATH_TEXTS)/$(1).$(EXT_PICLIST)) \
+	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $(1).$(EXT_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_TEX)
 	$(call watermark,$$@)
@@ -134,6 +136,13 @@ endif
 # this component.
 piclist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
 
+# Copy into place the captions.csv file that goes in the
+# project peripheral folder located in the Source folder.
+$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS) :
+ifeq ($(USE_ILLUSTRATIONS),true)
+	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
+endif
+
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
 # this rule will create a piclist file for the book being processed.
@@ -176,7 +185,7 @@ $(foreach v,$(GROUP_CONTENT), $(eval $(call content_rules,$(v))))
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
 # .project.sty file.
-$(PATH_PROCESS)/$(FILE_TEX_STYLE) : | $(PATH_SOURCE)
+$(PATH_PROCESS)/$(FILE_TEX_STYLE) :
 	$(call copysmart,$(PATH_RESOURCES_PROCESS)/$(FILE_TEX_STYLE),$@)
 
 # Rule for building the TeX settings file that is used for
@@ -187,30 +196,21 @@ $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" ""
 
-########################### Do we want to keep it this way?
-FILE_GROUP_CONTENT_TEX = GROUP_CONTENT.tex
-
-
-
 # Rule for building the GROUP_CONTENT control file. This is
 # not the same as TeX settings file above.
 $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
 
-
-############################### Problem with piclist dependency here the v isn't coming out right
-
-
-
 # Rule for generating the content components. It will
 # also generate the TOC if that feature is turned on.
 $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
-	$(foreach v,$(filter $(COMPONENTS_ALL),$(GROUP_CONTENT)), \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(foreach v,$(filter-out $(COMPONENTS_ALL),$(GROUP_CONTENT)), \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) $(DEPENDENT_FILE_LIST) $(if @$(shell [ -e $(PATH_TEXTS)/$(v).$(EXT_PICLIST) ] && echo 1), $(PATH_TEXTS)/$(v).$(EXT_PICLIST),)
+	$(foreach v,$(GROUP_CONTENT), \
+	$(PATH_TEXTS)/$(v).$(EXT_WORK) \
+	$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
+	$(if $(findstring $(v),$(ILLUSTRATIONS_IN)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
+	$(DEPENDENT_FILE_LIST) \
+	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX)
 	@echo INFO: Creating: $@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
 	$(call watermark,$@)
@@ -285,12 +285,19 @@ removeadjlist = rm -f $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
 #			Rules for handling piclist file creation
 ##############################################################
 
-# Copy into place the captions.csv file that goes in the
-# project peripheral folder located in the Source folder.
-$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS) : | $(PATH_SOURCE_PERIPH)
-ifeq ($(USE_ILLUSTRATIONS),true)
-	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
-endif
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Rule to make all the piclist files at one time
 piclist-make-all :

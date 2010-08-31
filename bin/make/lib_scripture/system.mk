@@ -59,12 +59,14 @@
 DEPENDENT_FILE_LIST = \
   $(PATH_PROCESS)/$(FILE_TEX_STYLE) \
   $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) \
+  $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) \
   $(FILE_PROJECT_CONF)
 
 
 ##############################################################
 #			   Rules for building and managing system files
 ##############################################################
+
 
 # Rule to run assets check on project. This is run any time
 # a typesetting process is run to be sure the files we need
@@ -91,12 +93,6 @@ $(PATH_PROCESS)/$(FILE_TEX_CUSTOM) :
 	@echo INFO: Creating: $@
 	@cp $(PATH_RESOURCES_PROCESS)/$(FILE_TEX_CUSTOM) $@
 
-# In case the process folder isn't there (because of archive)
-# This should be in the dependent file list.
-$(PATH_PROCESS)/.stamp :
-	$(call mdir,$(PATH_PROCESS))
-	@touch $(PATH_PROCESS)/.stamp
-
 # Update a .project.conf file so system improvements can be
 # pulled into existing projects.
 update :
@@ -109,17 +105,6 @@ make-styles :
 # Make a template from the current state of the project
 make-template :
 	@$(MOD_RUN_PROCESS) "make_template"
-
-# Rule to make the project source folder. Of cource, if the user
-# changes the name of the source folder after it might get
-# confusing but that is more of a procedural problem.
-$(PATH_SOURCE) :
-	$(call mdir,$@)
-
-# If, for some odd reason the Illustrations folder is not in
-# the right place we'll put one where it is supposed to be found.
-$(PATH_ILLUSTRATIONS) : | $(PATH_SOURCE)
-	$(call mdir,"$(PATH_ILLUSTRATIONS)")
 
 # The following rules will guide a process that will extract
 # recorded information about this project and output it in
@@ -146,10 +131,6 @@ $(PATH_PROCESS)/PROJECT_INFO.$(EXT_TEX) :
 ##############################################################
 #		Rules for building hyphenation files
 ##############################################################
-
-# Make a Hyphenation folder if necessary
-$(PATH_HYPHENATION) :
-	$(call mdir,$(PATH_HYPHENATION))
 
 # Manually create the TeX hyphenation file
 make-tex-hyphens : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT)
@@ -192,12 +173,6 @@ make-master-wordlist : postprocess-content
 ###############################################################
 #		Shared functions
 ###############################################################
-
-# Just make a directory, that's all
-define mdir
-@echo INFO: Creating $(1)
-@mkdir -p $(1)
-endef
 
 # Add a watermark to the output if called for
 define watermark

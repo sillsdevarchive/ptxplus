@@ -192,6 +192,10 @@ class MakeMakefile (object) :
 		# Output all the components for makefile
 		makefileSettings += 'COMPONENTS_ALL=' + ' '.join(components) + '\n'
 
+		################################## For testing #######################################
+		makefileSettings += 'ILLUSTRATIONS_IN=' + 'mat mrk luk jhn act eph heb rev' + '\n'
+		######################################################################################
+
 		# Output a list of all component key names and names
 		for cID in components :
 			try:

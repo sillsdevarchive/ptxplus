@@ -66,7 +66,7 @@ ifneq ($(CREATE_MAP),0)
 $(PATH_TEXTS)/$(1)-map.$(EXT_SVG) : \
 	$(PATH_TEXTS)/$(1)-data.$(EXT_CSV) \
 	$(PATH_TEXTS)/$(1)-styles.$(EXT_CSV) \
-	$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG)
+	$(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG)
 	@echo INFO: Map $(1): Adding necessary files to project
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-map.$(EXT_SVG) $$@
 
@@ -81,12 +81,12 @@ $(PATH_TEXTS)/$(1)-styles.$(EXT_CSV) :
 
 # Copy the map reference file to the peripheral-map source folder
 # This is for refering to when the map data is being translated
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+$(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG) : | $(PATH_SOURCE_PERIPH)
 	@echo INFO: Map reference file: $$@ is being copied to project.
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-org.$(EXT_PNG) $$@
 
 # Create a common project map translation (data) file
-$(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-data.$(EXT_CSV) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)
+$(PATH_SOURCE_PERIPH)/$(1)-data.$(EXT_CSV) : | $(PATH_SOURCE_PERIPH)
 	@echo WARNING: Map tranlation data: $$@ not found adding default to project.
 	@cp $(PATH_MAP_TEMPLATES)/$(1)-data.$(EXT_CSV) $$@
 
@@ -103,9 +103,9 @@ $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-data.$(EXT_CSV) : | $(PATH_SOURCE)/$(P
 # will be needed to generate the original map label data.
 # BTW, we use readlink here to resolve the path so the ln will make
 # a successful link.
-$(PATH_TEXTS)/$(1)-data.$(EXT_CSV) : | $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-data.$(EXT_CSV)
+$(PATH_TEXTS)/$(1)-data.$(EXT_CSV) : | $(PATH_SOURCE_PERIPH)/$(1)-data.$(EXT_CSV)
 	@echo INFO: Linking data for: $$(shell pwd)/$$@
-	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-data.$(EXT_CSV)) $(PATH_TEXTS)/
+	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE_PERIPH)/$(1)-data.$(EXT_CSV)) $(PATH_TEXTS)/
 
 # When the View-Maps button is clicked this will create the
 # USFM file that will be called from the .$(EXT_TEX) file. One is
@@ -250,8 +250,8 @@ edit-map-styles-$(1) : $(PATH_TEXTS)/$(1)-styles.$(EXT_CSV)
 	$(EDITCSV) $(PATH_TEXTS)/$(1)-styles.$(EXT_CSV)
 
 # View the original model map
-view-map-model-$(1) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG)
-	$(VIEWIMG) $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG)
+view-map-model-$(1) : $(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG)
+	$(VIEWIMG) $(PATH_SOURCE_PERIPH)/$(1)-org.$(EXT_PNG)
 
 # View the original SVG template map
 view-map-template-$(1) : $(PATH_TEXTS)/$(1)-map.$(EXT_SVG)
@@ -269,9 +269,9 @@ else
 
 # Link the ready-made graphic file to the process folder. This is the
 # common place to find files like this.
-$(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG) : $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)
+$(PATH_PROCESS)/$(1)-map-rgb.$(EXT_PNG) : $(PATH_SOURCE_PERIPH)/$(1)
 	@echo INFO: Linking file to: $(shell pwd)/$$@
-	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE)/$(PATH_SOURCE_PERIPH)/$(1)) $$@
+	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE_PERIPH)/$(1)) $$@
 
 # Create a CMYK PDF version of the graphic file in the process folder for
 # creating the final typeset page version. It is obviously dependent on

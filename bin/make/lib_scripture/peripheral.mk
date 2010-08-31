@@ -75,7 +75,6 @@ endif
 # For this we use the "periph" flag.
 $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
-	$(PATH_PROCESS)/$(FILE_TEX_SETUP) \
 	$(PATH_PROCESS)/$(FILE_TEX_COVER) \
 	$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
 	$(PATH_PROCESS)/$(FILE_TEX_BACK)
@@ -88,7 +87,7 @@ $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
-	$(PATH_TEXTS)/$(1).$(EXT_WORK)\
+	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
 	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
 	$(PATH_PROCESS)/$(1).$(EXT_STYLE) | $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $$@
@@ -135,7 +134,6 @@ define group_binding
 ifneq ($($(1)),)
 $(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
-#$(PATH_PROCESS)/$(1).$(EXT_PDF) :
 	@echo INFO: Creating: $(1).$(EXT_PDF) [Components: $($(1))]
 	@pdftk $(foreach v,$($(1)),$(v:%=$(PATH_PROCESS)/%.$(EXT_PDF))) cat output $$@
 endif
@@ -148,11 +146,6 @@ endef
 ##############################################################
 
 # This builds a rule (in memory) for these sets of files
-
-# Other rules will depend on this to create the project
-# peripheral source folder if one doesn't exist.
-$(PATH_SOURCE_PERIPH) : | $(PATH_SOURCE)
-	@ $(call mdir,$@)
 
 # This calls all the automated rules defined above and does them
 # once on each component, even if the component is listed repeatedly
