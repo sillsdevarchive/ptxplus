@@ -55,9 +55,10 @@ class CheckAssets (object) :
 		# Gather up the initial settings
 		basePath                = os.environ.get('PTXPLUS_BASE')
 		pathHome                = os.path.abspath(tools.pubInfoObject['Paths']['PATH_HOME'])
+		pathHyphenation         = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
+		pathProcess             = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_PROCESS']
 		pathSource              = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
 		pathPeripheral          = pathSource + '/' + os.getcwd().split('/')[-1]
-		pathProcess             = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_PROCESS']
 		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		pathGraphics            = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
 		pathIllustrationsLib    = self._log_manager._settings['System']['Paths']['PATH_RESOURCES_ILLUSTRATIONS'].replace('__PTXPLUS__', basePath)
@@ -84,15 +85,14 @@ class CheckAssets (object) :
 			os.mkdir(pathIllustrations)
 			tools.userMessage('INFO: Added folder: ' + pathIllustrations)
 
-# Make a Hyphenation folder if necessary
-$(PATH_HYPHENATION) :
-	$(call mdir,$(PATH_HYPHENATION))
+		if not os.path.isdir(pathHyphenation) :
+			os.mkdir(pathHyphenation)
+			tools.userMessage('INFO: Added folder: ' + pathHyphenation)
 
-# In case the process folder isn't there (because of archive)
-# This should be in the dependent file list.
-$(PATH_PROCESS)/.stamp :
-	$(call mdir,$(PATH_PROCESS))
-	@touch $(PATH_PROCESS)/.stamp
+		if not os.path.isdir(pathProcess) :
+			os.mkdir(pathProcess)
+			tools.userMessage('INFO: Added folder: ' + pathProcess)
+			#@touch $(PATH_PROCESS)/.stamp
 
 
 		# Check/install system assets

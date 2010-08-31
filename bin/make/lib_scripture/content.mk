@@ -29,7 +29,7 @@ define content_rules
 # user to get a file not found error when they process a file.
 # Rather a dummy file will be created telling them the file is missing
 # and hopefully some helpful instructions on what to do.
-$(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) : | $(PATH_SOURCE)
+$(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) :
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
 
 # This is the rule for creating the working text. We will use
@@ -149,7 +149,7 @@ endif
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
-$(PATH_TEXTS)/$(1).$(EXT_PICLIST) : | $(PATH_ILLUSTRATIONS) $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
+$(PATH_TEXTS)/$(1).$(EXT_PICLIST) : | $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@$$(call makepiclist,$(1))
 else
@@ -284,20 +284,6 @@ removeadjlist = rm -f $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
 ##############################################################
 #			Rules for handling piclist file creation
 ##############################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Rule to make all the piclist files at one time
 piclist-make-all :

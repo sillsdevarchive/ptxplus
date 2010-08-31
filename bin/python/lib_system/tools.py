@@ -799,6 +799,7 @@ class CSVtoDict(dict):
 basePath = os.environ.get('PTXPLUS_BASE')
 
 # This is the information object that contains all the settings for this type of pub
-pubInfoObject = ConfigObj(basePath + "/bin/" + getProjectType() + '.inf', encoding='utf_8')
+if getProjectType() != None :
+	pubInfoObject = ConfigObj(basePath + "/bin/" + getProjectType() + '.inf', encoding='utf_8')
 
 

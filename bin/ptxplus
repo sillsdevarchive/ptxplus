@@ -150,16 +150,6 @@ def setupNewProject () :
 		if not os.access(os.getcwd() + '/' + subCommandTwo, os.W_OK) :
 			os.mkdir(newProjDir)
 
-#    try :
-#        os.access(subCommandTwo, os.W_OK)
-#        print subCommandTwo, newProjDir
-#    except :
-#        print subCommandTwo, type(subCommandTwo), "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-#        newProjDir = subCommandTwo
-#        if os.access(newProjDir, os.W_OK) :
-#            tools.userMessage("ERROR: The path: [" + newProjDir + "] does not exist. Process halted!")
-#            sys.exit(1)
-
 	# Send it off to process (we assume that subCommandOne contains the project type)
 	mod.doIt(subCommandOne, newProjDir)
 
