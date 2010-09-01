@@ -204,14 +204,17 @@ endef
 ###############################################################
 
 # This is the main rule for the entire Bible
-$(FILE_BOOK) : $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF)
-	pdftk $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF) cat output $@
+#$(FILE_BOOK) : $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF)
+#	pdftk $(MATTER_FRONT_PDF) $(MATTER_OT_PDF) $(MATTER_NT_PDF) $(MATTER_BACK_PDF) $(MATTER_MAPS_PDF) cat output $@
+
+$(PATH_DELIVERABLES)/$(FILE_BOOK) : $(foreach v,$(META_BOOK), $(PATH_PROCESS)/$(v).$(EXT_PDF))
+	pdftk $(foreach v,$(META_BOOK), $(PATH_PROCESS)/$(v).$(EXT_PDF)) cat output $@
+
 
 # This is the caller for the main rule, let's look at the results
-view-book : $(FILE_BOOK)
+view-book : $(DEPENDENT_FILE_LIST) $(PATH_DELIVERABLES)/$(FILE_BOOK)
 	@- $(CLOSEPDF)
-	$(call watermark,$<)
-	@ $(VIEWPDF) $< &
+	@ $(VIEWPDF) $(PATH_DELIVERABLES)/$(FILE_BOOK) &
 
 
 ###############################################################

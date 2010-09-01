@@ -25,7 +25,7 @@
 #############################################################
 # Firstly, import all the modules we need for this process
 
-import sys, os, codecs, operator
+import sys, os, codecs, operator, csv
 
 # Import supporting local classes
 import tools
@@ -152,7 +152,13 @@ class MakeMakefile (object) :
 		makefileSettings += 'FILE_PROJECT_CONF=' + tools.getProjectConfigFileName() + '\n'
 
 		for key, value, in tools.pubInfoObject['Files'].iteritems() :
-			makefileSettings += key + "=" + value + '\n'
+			# The book file only happens once
+			if key == 'FILE_BOOK' :
+				date = tools.getYMD()
+				projectID = self._log_manager._settings['Project']['ProjectInformation']['projectID']
+				makefileSettings += key + "=" + projectID + '-' + date + '-' + value + '\n'
+			else :
+				makefileSettings += key + "=" + value + '\n'
 
 		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
@@ -192,9 +198,35 @@ class MakeMakefile (object) :
 		# Output all the components for makefile
 		makefileSettings += 'COMPONENTS_ALL=' + ' '.join(components) + '\n'
 
-		################################## For testing #######################################
-		makefileSettings += 'ILLUSTRATIONS_IN=' + 'mat mrk luk jhn act eph heb rev' + '\n'
-		######################################################################################
+		# Output a list of all the components that have illustrations
+		captionsFileName = tools.pubInfoObject['Files']['FILE_ILLUSTRATION_CAPTIONS']
+		projectPeripheralFolderName = os.getcwd().split('/')[-1]
+		projectPeripheralFolderPath = sourcePath + '/' + projectPeripheralFolderName
+		projectIllustrationsCaptions = projectPeripheralFolderPath + "/" + captionsFileName
+
+		# Make a list of bookIDs that will use illustrations in them
+		# One problem is that at the begining of the project there may
+		# not be a file there yet. This has to be optional.
+		bkids = set()
+		inFileData = ''
+		try :
+			inFileData = csv.reader(open(projectIllustrationsCaptions), dialect=csv.excel)
+			for line in inFileData :
+				if line[1].upper() != 'BOOKID' :
+					bkids.add(line[1].lower())
+
+			makefileSettings += 'HAS_ILLUSTRATIONS=' + ' '.join(bkids) + '\n'
+		except :
+			self._log_manager.log('WARN', 'Not found: ' + inFileData)
+			makefileSettings += 'HAS_ILLUSTRATIONS=\n'
+
+
+		#######################################################################
+		# At this point it would be good to add a couple more 'HAS_' lists
+		# which could be used by makefile to use more generic rules so that
+		# components can all be processed by the same rules. More code will
+		# need to be written like above.
+		#######################################################################
 
 		# Output a list of all component key names and names
 		for cID in components :

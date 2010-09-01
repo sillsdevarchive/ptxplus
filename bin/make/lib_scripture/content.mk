@@ -81,7 +81,7 @@ $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
 	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
 	$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
-	$(if $(findstring $(1),$(ILLUSTRATIONS_IN)),$(PATH_TEXTS)/$(1).$(EXT_PICLIST)) \
+	$(if $(findstring $(1),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(1).$(EXT_PICLIST)) \
 	$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $(1).$(EXT_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_TEX)
@@ -136,20 +136,13 @@ endif
 # this component.
 piclist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
 
-# Copy into place the captions.csv file that goes in the
-# project peripheral folder located in the Source folder.
-$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS) :
-ifeq ($(USE_ILLUSTRATIONS),true)
-	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
-endif
-
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
 # this rule will create a piclist file for the book being processed.
 # Also, the make_piclist_file.py script it will do the illustration
 # file copy and linking operations. It is easier to do that in that
 # context than in the Makefile context.
-$(PATH_TEXTS)/$(1).$(EXT_PICLIST) : | $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
+$(PATH_TEXTS)/$(1).$(EXT_PICLIST) : $(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS)
 ifeq ($(USE_ILLUSTRATIONS),true)
 	@$$(call makepiclist,$(1))
 else
@@ -198,27 +191,43 @@ $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
 
 # Rule for building the GROUP_CONTENT control file. This is
 # not the same as TeX settings file above.
-$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
+$(PATH_PROCESS)/GROUP_CONTENT.tex :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
 
+#$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
+#	@echo INFO: Creating: $@
+#	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
+
 # Rule for generating the content components. It will
 # also generate the TOC if that feature is turned on.
-$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
+$(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
 	$(foreach v,$(GROUP_CONTENT), \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK) \
 	$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
-	$(if $(findstring $(v),$(ILLUSTRATIONS_IN)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
+	$(if $(findstring $(v),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
 	$(DEPENDENT_FILE_LIST) \
-	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX)
+	$(PATH_PROCESS)/GROUP_CONTENT.tex
 	@echo INFO: Creating: $@
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) GROUP_CONTENT.tex
 	$(call watermark,$@)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)"
 
+#$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
+#	$(foreach v,$(GROUP_CONTENT), \
+#	$(PATH_TEXTS)/$(v).$(EXT_WORK) \
+#	$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
+#	$(if $(findstring $(v),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
+#	$(DEPENDENT_FILE_LIST) \
+#	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX)
+#	@echo INFO: Creating: $@
+#	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
+#	$(call watermark,$@)
+#	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)"
+
 # The TOC data is made during the content creation. As such
 # the TOC file creation cannot happen until the content is made.
-$(PATH_SOURCE_PERIPH)/$(FILE_TOC) : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
+$(PATH_SOURCE_PERIPH)/$(FILE_TOC) : $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF)
 
 # This enables preprocess checks on all the components processing each one independently.
 preprocess-content :
@@ -235,9 +244,13 @@ else
 endif
 
 # Do a component section and veiw the resulting output
-view-content : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
+view-content : $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
+
+#view-content : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
+#	@- $(CLOSEPDF)
+#	@ $(VIEWPDF) $< &
 
 pdf-remove-content :
 	@echo INFO: Removing file: $(FILE_CONTENTS_PDF)
@@ -300,6 +313,13 @@ ifeq ($(LOCKED),0)
 	@for v in $(GROUP_CONTENT); do $(call removepiclist,$$v); done
 else
 	@echo INFO: Cannot remove the piclist files because the project is locked
+endif
+
+# Copy into place the captions.csv file that goes in the
+# project peripheral folder located in the Source folder.
+$(PATH_SOURCE_PERIPH)/$(FILE_ILLUSTRATION_CAPTIONS) :
+ifeq ($(USE_ILLUSTRATIONS),true)
+	$(call copysmart,$(PATH_RESOURCES_ILLUSTRATIONS)/$(FILE_ILLUSTRATION_CAPTIONS),$@)
 endif
 
 #################################################################################

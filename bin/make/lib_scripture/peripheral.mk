@@ -83,7 +83,7 @@ $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 
 # The rule to create the override style sheet.
 $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
-	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$(1).$(EXT_STYLE),$$@)
+	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_peripheral).$(EXT_STYLE),$$@)
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
@@ -153,12 +153,15 @@ endef
 $(foreach v,$(call uniq,$(GROUP_COVER) $(GROUP_FRONT) $(GROUP_BACK)),$(eval $(call periph_rules,$(v))))
 
 # Cover group binding rules
+$(PATH_PROCESS)/$(GROUP_COVER).$(EXT_PDF) :
 $(eval $(call group_binding,GROUP_COVER))
 
 # Front group binding rules
+$(PATH_PROCESS)/$(GROUP_FRONT).$(EXT_PDF) :
 $(eval $(call group_binding,GROUP_FRONT))
 
 # Back group binding rules
+$(PATH_PROCESS)/$(GROUP_BACK).$(EXT_PDF) :
 $(eval $(call group_binding,GROUP_BACK))
 
 # This makes a simple TeX settings file for the cover. This may
@@ -184,7 +187,7 @@ $(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "back"
 
 # Produce all the outer cover material in one PDF file
-view-cover : $(GROUP_COVER_PDF)
+view-cover : $(PATH_PROCESS)/GROUP_COVER.$(EXT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
@@ -192,12 +195,12 @@ view-cover : $(GROUP_COVER_PDF)
 # use: ptxplus view-<file_name>
 
 # Produce just the font group (bound)
-view-front : $(GROUP_FRONT_PDF)
+view-front : $(PATH_PROCESS)/GROUP_FRONT.$(EXT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
 # Produce just the back group (bound)
-view-back : $(GROUP_BACK_PDF)
+view-back : $(PATH_PROCESS)/GROUP_BACK.$(EXT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
