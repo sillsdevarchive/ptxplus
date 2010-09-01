@@ -74,7 +74,6 @@ class UpdateProjectSettings (object) :
 		if settings['System']['systemVersion'] != curVer :
 
 			# First make a backup copy of our original .project.conf
-			print tools.getProjectConfigFileName(), "xxxxxxxxxxxxxxxxxxxxxxxxx"
 			bakSettingsProjectFile = tools.getProjectConfigFileName() + '~'
 			settingsProjectFile = tools.getProjectConfigFileName()
 			shutil.copy(settingsProjectFile, bakSettingsProjectFile)

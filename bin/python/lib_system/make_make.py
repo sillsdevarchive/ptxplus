@@ -133,14 +133,14 @@ class MakeMakefile (object) :
 
 		# Get our path information from our project .conf file and output absolute paths
 		for key, value, in self._log_manager._settings['System']['Paths'].iteritems() :
+			makefileSettings += key + '=' + os.path.abspath(value) + '\n'
+
+		# Path info from the pub settings file
+		for key, value, in tools.pubInfoObject['Paths'].iteritems() :
 			if value.split('/')[0] == '__PTXPLUS__' :
 				makefileSettings += key + '=' + value.replace('__PTXPLUS__', basePath) + '\n'
 			else :
 				makefileSettings += key + '=' + os.path.abspath(value) + '\n'
-
-		# Path info from the pub settings file
-		for key, value, in tools.pubInfoObject['Paths'].iteritems() :
-			makefileSettings += key + '=' + os.path.abspath(value) + '\n'
 
 		# Insert the peripheral folder name here. This is a
 		# hard-coded insert because it should always be the
@@ -163,7 +163,7 @@ class MakeMakefile (object) :
 		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
 
-		for key, value, in self._log_manager._settings['System']['TeX'].iteritems() :
+		for key, value, in tools.pubInfoObject['TeX'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
 
 		# Build up all the component groupings
@@ -217,7 +217,7 @@ class MakeMakefile (object) :
 
 			makefileSettings += 'HAS_ILLUSTRATIONS=' + ' '.join(bkids) + '\n'
 		except :
-			self._log_manager.log('WARN', 'Not found: ' + inFileData)
+			self._log_manager.log('INFO', 'Not illustrations found for this publication.')
 			makefileSettings += 'HAS_ILLUSTRATIONS=\n'
 
 

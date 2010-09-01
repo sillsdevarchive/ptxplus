@@ -324,7 +324,7 @@ else :
 			for thisTask in taskList :
 
 				# Initialize the log manager to do its thing
-				log_manager.initializeLog(thisTask, "NA", "", "", "")
+				log_manager.initializeLog(thisTask, "SYS", "", "", "")
 
 				# For running each process we use one centralized task runner in tools.
 				tools.taskRunner(log_manager, thisTask)

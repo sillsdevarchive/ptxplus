@@ -61,7 +61,7 @@ class CheckAssets (object) :
 		pathPeripheral          = pathSource + '/' + os.getcwd().split('/')[-1]
 		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		pathGraphics            = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
-		pathIllustrationsLib    = self._log_manager._settings['System']['Paths']['PATH_RESOURCES_ILLUSTRATIONS'].replace('__PTXPLUS__', basePath)
+		pathIllustrationsLib    = tools.pubInfoObject['Paths']['PATH_RESOURCES_ILLUSTRATIONS'].replace('__PTXPLUS__', basePath)
 		fileWatermark           = self._log_manager._settings['System']['Files']['FILE_WATERMARK']
 		filePageBorder          = self._log_manager._settings['System']['Files']['FILE_PAGE_BORDER']
 		listGraphics            = self._log_manager._settings['Format']['Illustrations']['LIST_GRAPHICS']

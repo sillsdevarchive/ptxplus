@@ -211,7 +211,7 @@ $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
 	@echo INFO: Creating: $@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) GROUP_CONTENT.tex
 	$(call watermark,$@)
-	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)"
+	$(if $(findstring "toc",$(COMPONENTS_ALL)),@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)")
 
 #$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
 #	$(foreach v,$(GROUP_CONTENT), \

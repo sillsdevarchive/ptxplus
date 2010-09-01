@@ -206,6 +206,28 @@ PATH_REPORTS                 = 'Reports'
 #   Default = Texts
 PATH_TEXTS                   = 'Texts'
 
+# Path to all peripheral matter template files
+# that will be used in the Source, Texts and
+# Process folders
+PATH_RESOURCES_TEMPLATES     = '__PTXPLUS__/resources/lib_templates'
+
+# The path to the (global) maps source library. If no map files
+# are found in the source folder, new ones will be copied in from
+# this location. (DO NOT CHANGE)
+PATH_RESOURCES_MAPS          = '__PTXPLUS__/resources/lib_maps'
+
+# The path to the ptxplus system Illustrations folder
+PATH_RESOURCES_ILLUSTRATIONS = '__PTXPLUS__/resources/lib_illustrations'
+
+# The path to the ptxplus system Process folder
+PATH_RESOURCES_PROCESS       = '__PTXPLUS__/resources/lib_sysFiles/Process'
+
+# The path to the new wiki pages
+PATH_WIKI_SOURCE             = '__PTXPLUS__/resources/lib_sysFiles/Admin/Wiki'
+
+# This is where the system help can be found
+PATH_SYSTEM_HELP             = '__PTXPLUS__/resources/Documentation/Help'
+
 # FILE EXTENSIONS
 # These are working extensions used by the system. The
 # only extention that needs adjusting on the average
@@ -262,6 +284,18 @@ MOD_CHECK_ASSETS            = 'check_assets'
 # system. This needs to have the full path in it.
 #   Default = $(PTXPLUS_BASE)/bin/python/lib_system/run_process.py
 MOD_RUN_PROCESS             = '$(PTXPLUS_BASE)/bin/python/lib_system/run_process.py'
+
+# TEX
+# These are general TeX settings used by the system for
+# processing project files. TeX settings for specific
+# purposes can be found in their respective sections.
+[TeX]
+
+# The TeX program that the system is using.
+TEX_ENGINE                   = 'xetex'
+
+# TeX inputs setting
+TEX_INPUTS                   = 'TEXINPUTS=$(PATH_HOME):$(PATH_HOME)/$(PATH_HYPHENATION):$(PTXPLUS_BASE)/bin/tex/lib_scripture:.'
 
 # COMPONENT SOURCE NAME (PTX)
 # Source names for all the components handled by this system.
