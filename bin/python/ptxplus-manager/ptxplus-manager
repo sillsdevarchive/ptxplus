@@ -228,7 +228,7 @@ class ConfigGUI (object) :
 		self._pathLog = self._tools.pubInfoObject['Paths'].get('PATH_LOG')
 		self._fileStyle = self._tools.pubInfoObject['Files'].get('FILE_TEX_STYLE')
 		self._fileTexCustom = self._tools.pubInfoObject['Files'].get('FILE_TEX_CUSTOM')
-		self._fileError = self._tools.pubInfoObject['Files'].get('FILE_TEX_CUSTOM')
+		self._fileError = self._tools.pubInfoObject['Files'].get('FILE_PROJECT_ERROR')
 		self._extWork = self._tools.pubInfoObject['Extensions'].get('EXT_WORK')
 		self._extSource = self._tools.pubInfoObject['Extensions'].get('EXT_SOURCE')
 		self._extStyle = self._tools.pubInfoObject['Extensions'].get('EXT_STYLE')
@@ -312,7 +312,7 @@ class ConfigGUI (object) :
 		self.texComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extTex, self.tv_texComponent, self.language_manager.get_language("latex"))
 		self.adjust = FileEditor(self._pathTexts + "/" + bkid + "." + self._extAdj, self.tv_adj, self.language_manager.get_language("latex"))
 		self.piclist = FileEditor(self._pathTexts + "/" + bkid + "." + self._extPiclist, self.tv_piclist, self.language_manager.get_language("latex"))
-		self.errorLog = FileEditor(self._pathLog + "/" + self._fileError + "." + self._extLog, self.tv_errorLog, None)
+		self.errorLog = FileEditor(self._pathLog + "/" + self._fileError, self.tv_errorLog, None)
 		self.errorLog.readonly = True
 		self.texlog = FileEditor(self._pathProcess + "/" + bkid + "." + self._extLog, self.tv_texLog, None)
 		self.texlog.readonly = True
