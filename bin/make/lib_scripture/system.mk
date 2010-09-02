@@ -277,8 +277,8 @@ endif
 
 # Remove the book PDF file
 define pdf-remove-book
-	@echo WARN: Deleting: $(FILE_BOOK)
-	@rm -f $(FILE_BOOK)
+	@echo WARN: Deleting: $(PATH_DELIVERABLES)/$(FILE_BOOK)
+	@rm -f $(PATH_DELIVERABLES)/$(FILE_BOOK)
 endef
 
 # Clean out the log files

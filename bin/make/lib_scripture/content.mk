@@ -248,13 +248,9 @@ view-content : $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
-#view-content : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
-#	@- $(CLOSEPDF)
-#	@ $(VIEWPDF) $< &
-
 pdf-remove-content :
-	@echo INFO: Removing file: $(FILE_CONTENTS_PDF)
-	@rm -f $(FILE_CONTENTS_PDF)
+	@echo INFO: Removing file: $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF)
 
 
 ###############################################################

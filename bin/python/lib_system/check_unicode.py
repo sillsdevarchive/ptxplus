@@ -22,7 +22,7 @@
 #############################################################
 # Firstly, import all the modules we need for this process
 
-import sys, os, codecs
+import sys, os, codecs, unicodedata
 
 class CheckUnicode (object) :
 
@@ -35,6 +35,7 @@ class CheckUnicode (object) :
 		log_manager._currentSubProcess = 'CkUnicode'
 		log_manager._currentLocation = ""
 		log_manager._currentContext = ""
+		unicodeNormalForm = log_manager._settings['ProjectText']['WorkingText']['Encoding'].get('normalForm')
 
 		# Much more could be done with this but for now we are just
 		# going to look for U+FFFD which indicates some kind of typo,
@@ -44,12 +45,25 @@ class CheckUnicode (object) :
 
 			if os.path.isfile(inputFile) == True :
 				try:
-					head, tail = os.path.split(inputFile)
-					for n, l in enumerate(codecs.open(inputFile, "r", encoding='utf_8_sig'),start=1) :
-						if u'\ufffd' in l or u'\u0000' in l :
-							log_manager._currentLocation = "Line: " + str(n)
-							log_manager._currentContext = tail
-							log_manager.log("ERRR", "Unicode issue detected")
+					path, fName = os.path.split(inputFile)
+					for num, line in enumerate(codecs.open(inputFile, "r", encoding='utf_8_sig'),start=1) :
+						# Check for bad characters
+						if u'\ufffd' in line or u'\u0000' in line :
+							for word in line.split() :
+								if u'\ufffd' in word or u'\u0000' in word :
+									log_manager._currentLocation = fName + " - Line: " + str(num)
+									log_manager._currentContext = word
+									log_manager.log("ERRR", "Unicode issue detected")
+						# Check for NFD or NFC
+						normLine = unicodedata.normalize(unicodeNormalForm, line)
+						if normLine != line :
+							for word in line.split() :
+								normWord = unicodedata.normalize(unicodeNormalForm, word)
+								if normWord != word :
+									log_manager._currentLocation = fName + " - Line: " + str(num)
+									log_manager._currentContext = word
+									log_manager.log("ERRR", "Failed Normalization test (" + unicodeNormalForm + ")")
+
 				except :
 					log_manager.log("ERRR", "Could not open " + log_manager._currentInput + " to do a Unicode sanity check")
 
