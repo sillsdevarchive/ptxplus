@@ -338,12 +338,13 @@ class ConfigGUI (object) :
 
 
 	def write_files (self) :
+		if self.txtWork         : self.txtWork.write('')
 		if self.styGlobal       : self.styGlobal.write('')
-		if self.styComponent       : self.styComponent.write('')
+		if self.styComponent    : self.styComponent.write('')
 		if self.texCustom       : self.texCustom.write('')
+		if self.texComponent    : self.texComponent.write('')
 		if self.adjust          : self.adjust.write('')
 		if self.piclist         : self.piclist.write('')
-		if self.txtWork         : self.txtWork.write('')
 
 	def set_working_dir (self, isProject) :
 

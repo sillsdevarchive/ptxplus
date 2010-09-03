@@ -1,9 +1,15 @@
 Content-Type: text/x-zim-wiki
-Wiki-Format: zim 0.26
+Wiki-Format: zim 0.4
 Creation-Date: Unknown
-Modification-Date: Fri, 02 Oct 2009 15:09:22 +0700
 
 ====== Log ======
+
+**Fri 3 September 2010 2:33 PM ICT**
+Today, after over three months of revision, with no production taking place, I'm calling this version (0.7.6) stable. Now this project goes into maintenance mode. Deployment of this version will break every previous project but the structure in place now should stand for some time to come.
+
+This is the last version of ptxplus. A new branch will be made soon and development will pick up at that point on the next generation of this system.
+
+There are some known problems in the GUI. I will try to log them. Some will never be fixed. Also, the map process probably does not work. With all the changes, there is no reason that it should. That will be looked at at some point and fixed. Over all, the core of the system seems stable and many features that have been shaky for a long time are very solid now.
 
 **Fri 2 October 2009 3:03 PM ICT**
 Branched to stable in order to continue development on the default repository branch. Development will begin with writing specifications and descriptions of publishing components or objects as they will be referred to. The specifications and object descriptions can be found in the [[Specifications]] document.
