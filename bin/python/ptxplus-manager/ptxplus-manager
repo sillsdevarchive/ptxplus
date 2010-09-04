@@ -46,6 +46,21 @@ from configobj import ConfigObj
 import vte
 import gtksourceview2
 
+# Setup our base path and tools
+basePath = os.environ.get('PTXPLUS_BASE')
+if not basePath:
+	basePath = "/usr/share/xetex-ptxplus"
+	binpath = ''
+else :
+	binpath = basePath + "/bin/"
+
+# Set our paths to application resources
+sys.path.insert(0, basePath + '/bin/python')
+sys.path.insert(0, basePath + '/bin/python/lib_system')
+
+# Import our tools
+import tools
+
 # helper function used by two classes, so it's given global scope
 def get_gtksourceview_from_notebook(notebook):
 	s = notebook.get_nth_page(notebook.get_current_page())
@@ -56,24 +71,20 @@ def get_gtksourceview_from_notebook(notebook):
 			return (v,b)
 	return (None,None)
 
+def ourProjectConf () :
+	'''See if our project .conf is in the cwd'''
+
+	print tools.getProjectType(), 'jjjjjjjjjjjjjjjjjjjj'
+	if tools.getProjectType() != None :
+		return '.' + tools.getProjectType() + '.conf'
+	else :
+		return None
+
+
 class ConfigGUI (object) :
 	"""A GTK based configuration file editor."""
 
 	def __init__ (self) :
-		basePath = os.environ.get('PTXPLUS_BASE')
-		if not basePath:
-			basePath = "/usr/share/xetex-ptxplus"
-			self.binpath = ''
-		else :
-			self.binpath = basePath + "/bin/"
-
-		# Set our paths to application resources
-		sys.path.insert(0, basePath + '/bin/python')
-		sys.path.insert(0, basePath + '/bin/python/lib_system')
-
-		# Import our tools
-		import tools
-		self._tools = tools
 
 		# Some local settings
 		self.gladefile = basePath + "/bin/python/ptxplus-manager/ptxplus-manager.glade"
@@ -196,14 +207,8 @@ class ConfigGUI (object) :
 		self.cimport = ImportDialog(self.wTree, 'd_import', self)
 		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
 		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
-		self.ourProjectConf = 'none'
-		# FIXME: Make this next bit more generic
-		if os.access('.scripture.conf', os.R_OK) :
-			self.ourProjectConf = '.scripture.conf'
-		elif  os.access('.dictionary.conf', os.R_OK) :
-			self.ourProjectConf = '.dictionary.conf'
 
-		if os.access(self.ourProjectConf, os.R_OK) :
+		if os.access(ourProjectConf(), os.R_OK) :
 			self.init_dir()
 		else :
 			self.close_dir()        # to declare the attributes ;)
@@ -211,31 +216,31 @@ class ConfigGUI (object) :
 
 	def init_dir (self, bkid='') :
 
-		if not os.access(self.ourProjectConf, os.R_OK) :
+		if not os.access(self.ourProjectConf(), os.R_OK) :
 			self.close_dir()
 			return
 		if self.ceditor :
-			self.ceditor.new_config(self.ourProjectConf)
+			self.ceditor.new_config(self.ourProjectConf())
 		else :
-			self.ceditor = ConfigEditor(self.ourProjectConf, self.wTree, 'tv_sections', 'tv_keys')
+			self.ceditor = ConfigEditor(self.ourProjectConf(), self.wTree, 'tv_sections', 'tv_keys')
 
 		# Now that we have a config object we can set some
 		# global vars for other processes (add more as needed)
 		# NOTE: If there are problems we may need to use try/except
-		self._pathProcess = self._tools.pubInfoObject['Paths'].get('PATH_PROCESS')
+		self._pathProcess = tools.pubInfoObject['Paths'].get('PATH_PROCESS')
 		self._pathSource = self.ceditor.config['System']['Paths'].get('PATH_SOURCE')
-		self._pathTexts = self._tools.pubInfoObject['Paths'].get('PATH_TEXTS')
-		self._pathLog = self._tools.pubInfoObject['Paths'].get('PATH_LOG')
-		self._fileStyle = self._tools.pubInfoObject['Files'].get('FILE_TEX_STYLE')
-		self._fileTexCustom = self._tools.pubInfoObject['Files'].get('FILE_TEX_CUSTOM')
-		self._fileError = self._tools.pubInfoObject['Files'].get('FILE_PROJECT_ERROR')
-		self._extWork = self._tools.pubInfoObject['Extensions'].get('EXT_WORK')
-		self._extSource = self._tools.pubInfoObject['Extensions'].get('EXT_SOURCE')
-		self._extStyle = self._tools.pubInfoObject['Extensions'].get('EXT_STYLE')
-		self._extTex = self._tools.pubInfoObject['Extensions'].get('EXT_TEX')
-		self._extAdj = self._tools.pubInfoObject['Extensions'].get('EXT_ADJUSTMENT')
-		self._extPiclist = self._tools.pubInfoObject['Extensions'].get('EXT_PICLIST')
-		self._extLog = self._tools.pubInfoObject['Extensions'].get('EXT_LOG')
+		self._pathTexts = tools.pubInfoObject['Paths'].get('PATH_TEXTS')
+		self._pathLog = tools.pubInfoObject['Paths'].get('PATH_LOG')
+		self._fileStyle = tools.pubInfoObject['Files'].get('FILE_TEX_STYLE')
+		self._fileTexCustom = tools.pubInfoObject['Files'].get('FILE_TEX_CUSTOM')
+		self._fileError = tools.pubInfoObject['Files'].get('FILE_PROJECT_ERROR')
+		self._extWork = tools.pubInfoObject['Extensions'].get('EXT_WORK')
+		self._extSource = tools.pubInfoObject['Extensions'].get('EXT_SOURCE')
+		self._extStyle = tools.pubInfoObject['Extensions'].get('EXT_STYLE')
+		self._extTex = tools.pubInfoObject['Extensions'].get('EXT_TEX')
+		self._extAdj = tools.pubInfoObject['Extensions'].get('EXT_ADJUSTMENT')
+		self._extPiclist = tools.pubInfoObject['Extensions'].get('EXT_PICLIST')
+		self._extLog = tools.pubInfoObject['Extensions'].get('EXT_LOG')
 
 		# Get our title
 		try :
@@ -304,7 +309,7 @@ class ConfigGUI (object) :
 		self.b_view.set_label("_View-" + bkid)
 		self.b_check.set_label("_Check-" + bkid)
 		self.txtWork = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork, self.tv_txtWork, self.language_manager.get_language("latex"))
-		self.txtSource = FileEditor(self._pathSource + "/" + self._tools.getComponentSourceFileName(bkid), self.tv_txtSource, self.language_manager.get_language("latex"))
+		self.txtSource = FileEditor(self._pathSource + "/" + tools.getComponentSourceFileName(bkid), self.tv_txtSource, self.language_manager.get_language("latex"))
 		self.txtSource.readonly = True
 		self.styGlobal = FileEditor(self._pathProcess + "/" + self._fileStyle, self.tv_styGlobal, self.language_manager.get_language("latex"))
 		self.styComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extStyle, self.tv_styComponent, self.language_manager.get_language("latex"))
@@ -327,8 +332,8 @@ class ConfigGUI (object) :
 # updated in the UI.
 
 	def execute (self, command, *opts) :
-		if command == 'ptxplus' and self.binpath != '' :
-			command = self.binpath + command
+		if command == 'ptxplus' and binpath != '' :
+			command = binpath + command
 		str = "%s %s" % (command, " ".join(opts))
 		self.write_files()
 		self.vte.feed_child(str + "\n")
@@ -363,8 +368,10 @@ class ConfigGUI (object) :
 			fcd = gtk.FileChooserDialog(title, self.wTree.get_widget('w_main'),
 					action, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 							 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+
 			fcd.set_default_response(gtk.RESPONSE_OK)
 			res = fcd.run()
+
 			if res == gtk.RESPONSE_CANCEL :
 				fcd.destroy()
 				return None
@@ -372,8 +379,9 @@ class ConfigGUI (object) :
 			fcd.destroy()
 
 			if isProject :
-
-				if not os.access(os.path.join(newdir, self.ourProjectConf), os.R_OK) :
+				print os.path.join(newdir, self.ourProjectConf()), "sssssssssssssssssssssss"
+#                if not os.access(os.path.join(newdir, self.ourProjectConf()), os.R_OK) :
+				if not os.access(os.path.join(newdir, self.ourProjectConf()), os.R_OK) :
 					dialog = gtk.MessageDialog(None,
 						gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 						gtk.MESSAGE_ERROR, gtk.BUTTONS_OK_CANCEL,
@@ -540,10 +548,11 @@ class ConfigGUI (object) :
 		# a project in some other place than cwd.
 		self.execute("ptxplus", "setup", "scripture", ".")
 		self.init_dir()
-		self.ourProjectConf = ".scripture.conf"
 
 	def m_open (self, widget) :
+		# FIXME: Bug here, not opening projects like it should
 		self.execute("ptxplus", "open", ".")
+#        self.set_working_dir(tools.isProjectFolder())
 		self.set_working_dir(True)
 
 	def m_import (self, widget) :
