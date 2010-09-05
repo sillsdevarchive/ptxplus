@@ -71,18 +71,21 @@ def get_gtksourceview_from_notebook(notebook):
 			return (v,b)
 	return (None,None)
 
-def ourProjectConf () :
-	'''See if our project .conf is in the cwd'''
-
-	print tools.getProjectType(), 'jjjjjjjjjjjjjjjjjjjj'
-	if tools.getProjectType() != None :
-		return '.' + tools.getProjectType() + '.conf'
-	else :
-		return None
 
 
 class ConfigGUI (object) :
 	"""A GTK based configuration file editor."""
+
+
+	def ourProjectConf (self) :
+		'''See if our project .conf is in the cwd'''
+
+		print tools.getProjectType(), 'jjjjjjjjjjjjjjjjjjjj'
+		if tools.getProjectType() != None :
+			return '.' + tools.getProjectType() + '.conf'
+		else :
+			return None
+
 
 	def __init__ (self) :
 
@@ -208,7 +211,8 @@ class ConfigGUI (object) :
 		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
 		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
 
-		if os.access(ourProjectConf(), os.R_OK) :
+#        if os.access(ourProjectConf(), os.R_OK) :
+		if os.access('.scripture.conf', os.R_OK) :
 			self.init_dir()
 		else :
 			self.close_dir()        # to declare the attributes ;)
@@ -351,6 +355,7 @@ class ConfigGUI (object) :
 		if self.adjust          : self.adjust.write('')
 		if self.piclist         : self.piclist.write('')
 
+
 	def set_working_dir (self, isProject) :
 
 # I don't like the way this creates a folder when it doesn't find it. I hope
@@ -378,10 +383,20 @@ class ConfigGUI (object) :
 			newdir = fcd.get_filename()
 			fcd.destroy()
 
+########################################################################################
+
+# FIXME: The problem here is that all our utils go under the assumption that there is
+# a project, that may not be the case. And even if it is, we have no idea at this point
+# what kind of project it is. We need some new utils that explore the dir they have
+# been directed to and figure out if it is a project dir and what kind of project it is.
+
+#########################################################################################
+
+
 			if isProject :
-				print os.path.join(newdir, self.ourProjectConf()), "sssssssssssssssssssssss"
-#                if not os.access(os.path.join(newdir, self.ourProjectConf()), os.R_OK) :
-				if not os.access(os.path.join(newdir, self.ourProjectConf()), os.R_OK) :
+				print newdir, "sssssssssssssssssssssss"
+#                if not os.access(os.path.join(newdir, ourProjectConf()), os.R_OK) :
+				if not os.access(os.path.join(newdir + '/', '.scripture.conf'), os.R_OK) :
 					dialog = gtk.MessageDialog(None,
 						gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 						gtk.MESSAGE_ERROR, gtk.BUTTONS_OK_CANCEL,
