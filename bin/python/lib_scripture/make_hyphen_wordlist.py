@@ -60,14 +60,14 @@ class MakeHyphenWordlist (object) :
 #            self._encodingChain = TxtconvChain([s.strip() for s in self._encodingChain.split(',')])
 
 	def main (self) :
-		sourceMasterWordsFile = self._log_manager._settings['System']['Files']['FILE_MASTERWORDS']
+		sourceMasterWordsFile = tools.pubInfoObject['Files']['FILE_MASTERWORDS']
 		sourceHyphenatedWordsFile = self._log_manager._settings['Format']['Hyphenation']['sourceUserWordsFile']
 		sourceHyphenatedNamesFile = self._log_manager._settings['Format']['Hyphenation']['sourceUserNamesFile']
 		sourcePrefixListFile = self._log_manager._settings['Format']['Hyphenation']['sourcePrefixListFile']
 		sourceSuffixListFile = self._log_manager._settings['Format']['Hyphenation']['sourceSuffixListFile']
 		reportNonHypenatedWords = self._log_manager._settings['Format']['Hyphenation']['reportNonHypenatedWords']
-		pathHyphenation = self._log_manager._settings['System']['Paths']['PATH_HYPHENATION']
-		newHyphenationFile = pathHyphenation + '/' + self._log_manager._settings['System']['Files']['FILE_HYPHENATION_TXT']
+		pathHyphenation = tools.pubInfoObject['Paths']['PATH_HYPHENATION']
+		newHyphenationFile = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYPHENATION_TXT']
 		hyphenBreakRules = self._log_manager._settings['Format']['Hyphenation']['hyphenBreakRules'].decode('utf_8').decode('unicode_escape')
 		if hyphenBreakRules == "" :
 			self._log_manager.log("WARN", "There were no hyphenation break rules found in your project.conf file. This may be ok but keep in mind that if there were no other hyphenated words manually listed there will be no output to the file this script is creating. Sorry, I cannot read your mind.")

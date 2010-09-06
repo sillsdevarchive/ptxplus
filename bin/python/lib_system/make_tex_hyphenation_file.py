@@ -42,12 +42,12 @@ class MakeTexHyphenationFile (object) :
 
 	def main (self, log_manager) :
 		settings = tools.getSettingsObject()
-		hyphenPath = settings['System']['Paths']['PATH_HYPHENATION']
+		hyphenPath = tools.pubInfoObject['Paths']['PATH_HYPHENATION']
 
 		# Set the output file name and the wordlist file name
-		texHyphenFileName   = hyphenPath + '/' + settings['System']['Files']['FILE_HYPHENATION_TEX']
-		wordListFileName    =  hyphenPath + '/' + settings['System']['Files']['FILE_HYPHENATION_TXT']
-		lcCodeListFileName  = hyphenPath + '/' + settings['System']['Files']['FILE_LCCODELIST_TXT']
+		texHyphenFileName   = hyphenPath + '/' + tools.pubInfoObject['Files']['FILE_HYPHENATION_TEX']
+		wordListFileName    =  hyphenPath + '/' + tools.pubInfoObject['Files']['FILE_HYPHENATION_TXT']
+		lcCodeListFileName  = hyphenPath + '/' + tools.pubInfoObject['Files']['FILE_LCCODELIST_TXT']
 		# Get our project hyphenation commands
 		languageCode        = settings['ProjectText']['languageCode']
 		setHyphenCharacter  = settings['Format']['Hyphenation']['setHyphenCharacter']

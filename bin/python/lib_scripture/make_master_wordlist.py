@@ -39,8 +39,8 @@ class MakeWordlist (object) :
 		self._log_manager = log_manager
 		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'MasterWordlist'
-		reportPath = log_manager._settings['System']['Paths']['PATH_REPORTS']
-		masterReportFile = log_manager._settings['System']['Files']['FILE_MASTERWORDS']
+		reportPath = tools.pubInfoObject['Paths']['PATH_REPORTS']
+		masterReportFile = tools.pubInfoObject['Files']['FILE_MASTERWORDS']
 		masterWordlistFlag = False
 		masterWordlist = {}
 		bookWordlist = {}
