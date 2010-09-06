@@ -82,7 +82,7 @@ FILE_TEX_STYLE              = 'bible-format.sty'
 # the project as well as other possible uses. This
 # file should be in CSV format.
 #   Default: Reports/wordlist-master.csv
-FILE_MASTERWORDS            = Reports/wordlist-master.csv
+FILE_MASTERWORDS            = 'wordlist-master.csv'
 
 # TEX HYPHENATION FILE
 # A completed TeX hyphenation file, normally
@@ -272,6 +272,10 @@ MOD_MAKE_PICLIST            = 'make_piclist_file'
 # This is the module used to create a wordlist on a
 # single content component.
 MOD_MAKE_WORDLIST           = 'make_book_wordlist'
+
+# MAKE MASTER WORDLIST FILE
+# The module name that will create the master wordlist file.
+MOD_MAKE_MASTERWORDS        = 'make_master_wordlist'
 
 # MAKE TOC
 # The Table of Contents creation module.

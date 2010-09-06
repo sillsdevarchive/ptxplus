@@ -163,11 +163,11 @@ endif
 
 # Create a wordlist for a single book
 $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@echo INFO: Creating: $$@
 	@$$(call makewordlist,$(1))
 
 # Command to create a wordlist for a single book
 wordlist-make-$(1) : $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV)
-	@echo INFO: Creating: $$<
 
 # Remove a wordlist for a single book
 wordlist-remove-$(1) :
@@ -194,7 +194,15 @@ endef
 # building rule
 
 # This builds a rule (in memory) for each of the content components
-$(foreach v,$(GROUP_CONTENT), $(eval $(call content_rules,$(v))))
+$(foreach v,$(GROUP_CONTENT),$(eval $(call content_rules,$(v))))
+
+# Manual rule to create the master wordlist
+make-master-wordlist : $(PATH_REPORTS)/$(FILE_MASTERWORDS)
+
+# Create the master wordlist
+$(PATH_REPORTS)/$(FILE_MASTERWORDS) : $(foreach v,$(GROUP_CONTENT),$(PATH_REPORTS)/$(v)-wordlist.$(EXT_CSV))
+	@echo INFO: Creating: $@
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_MASTERWORDS)" "" "" "$@" ""
 
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
@@ -216,10 +224,6 @@ $(PATH_PROCESS)/GROUP_CONTENT.tex :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
 
-#$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
-#	@echo INFO: Creating: $@
-#	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
-
 # Rule for generating the content components. It will
 # also generate the TOC if that feature is turned on.
 $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
@@ -227,6 +231,7 @@ $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(v).$(EXT_WORK) \
 	$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
 	$(if $(findstring $(v),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
+	$(PATH_REPORTS)/$(FILE_MASTERWORDS) \
 	$(DEPENDENT_FILE_LIST) \
 	$(PATH_PROCESS)/GROUP_CONTENT.tex
 	@echo INFO: Creating: $@

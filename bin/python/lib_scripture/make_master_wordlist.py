@@ -37,17 +37,14 @@ class MakeWordlist (object) :
 	def main (self, log_manager) :
 
 		self._log_manager = log_manager
-		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'MasterWordlist'
 		reportPath = tools.pubInfoObject['Paths']['PATH_REPORTS']
-		masterReportFile = tools.pubInfoObject['Files']['FILE_MASTERWORDS']
+		masterReportFile = log_manager._currentOutput
 		masterWordlistFlag = False
 		masterWordlist = {}
 		bookWordlist = {}
 		uniqueWords = 0
 		totalWords = 0
-
-
 
 		# Use the defaultdict module to create the master word dictionary
 		# Info on this module can be found here:
@@ -78,6 +75,7 @@ class MakeWordlist (object) :
 
 		# Report what happened
 		self._log_manager.log("INFO", "Process complete. Total words = " + str(totalWords) + " / Unique words = " + str(uniqueWords))
+		self._log_manager.log("INFO", "Output sent to: " + masterReportFile)
 
 
 # This starts the whole process going
