@@ -80,6 +80,7 @@ endif
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
 	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
+	$(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) \
 	$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
 	$(if $(findstring $(1),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(1).$(EXT_PICLIST)) \
 	$(DEPENDENT_FILE_LIST)
@@ -114,6 +115,7 @@ pdf-remove-$(1) :
 # automate this process by setting a dependency
 
 adjlist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
+	@echo INFO: Creating: $$<
 
 # Call the adjustlist creation macro
 $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
@@ -135,6 +137,7 @@ endif
 # Make the piclist file if there is a need for it with
 # this component.
 piclist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
+	@echo INFO: Creating: $$<
 
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
@@ -157,6 +160,24 @@ ifeq ($(LOCKED),0)
 else
 	@echo INFO: Cannot remove: $(PATH_TEXTS)/$(1).$(EXT_PICLIST) because the project is locked.
 endif
+
+# Create a wordlist for a single book
+$(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@$$(call makewordlist,$(1))
+
+# Command to create a wordlist for a single book
+wordlist-make-$(1) : $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV)
+	@echo INFO: Creating: $$<
+
+# Remove a wordlist for a single book
+wordlist-remove-$(1) :
+ifeq ($(LOCKED),0)
+	@echo Removing: $(1)-wordlist.$(EXT_CSV)
+	@$$(call removewordlist,$(1))
+else
+	@echo INFO: Cannot remove: $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) because the project is locked.
+endif
+
 
 # End of the content_rules define
 endef
@@ -212,18 +233,6 @@ $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) GROUP_CONTENT.tex
 	$(call watermark,$@)
 	$(if $(findstring "toc",$(COMPONENTS_ALL)),@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)")
-
-#$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
-#	$(foreach v,$(GROUP_CONTENT), \
-#	$(PATH_TEXTS)/$(v).$(EXT_WORK) \
-#	$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
-#	$(if $(findstring $(v),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
-#	$(DEPENDENT_FILE_LIST) \
-#	$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX)
-#	@echo INFO: Creating: $@
-#	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
-#	$(call watermark,$@)
-#	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)"
 
 # The TOC data is made during the content creation. As such
 # the TOC file creation cannot happen until the content is made.
@@ -289,6 +298,11 @@ removepiclist = rm -f $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
 # Remove a single adjustment file
 removeadjlist = rm -f $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
 
+# Create a single wordlist
+makewordlist = $(MOD_RUN_PROCESS) "$(MOD_MAKE_WORDLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV)"
+
+# Remove a single wordlist
+removewordlist = rm -f $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV)
 
 ##############################################################
 #			Rules for handling piclist file creation

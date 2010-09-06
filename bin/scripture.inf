@@ -268,6 +268,11 @@ MOD_MAKE_TEX                = 'scripture_tex'
 #   Default = make_piclist_file
 MOD_MAKE_PICLIST            = 'make_piclist_file'
 
+# MAKE WORDLIST FILE
+# This is the module used to create a wordlist on a
+# single content component.
+MOD_MAKE_WORDLIST           = 'make_book_wordlist'
+
 # MAKE TOC
 # The Table of Contents creation module.
 #   Default = make_toc_file
