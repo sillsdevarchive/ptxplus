@@ -277,6 +277,11 @@ MOD_MAKE_WORDLIST           = 'make_book_wordlist'
 # The module name that will create the master wordlist file.
 MOD_MAKE_MASTERWORDS        = 'make_master_wordlist'
 
+# MAKE HYPHEN WORDLIST FILE
+# The module that will create a list of hyphenated words
+# based on the masterwords file.
+MOD_MAKE_HYPHENWORDS        = 'make_hyphen_wordlist'
+
 # MAKE TOC
 # The Table of Contents creation module.
 #   Default = make_toc_file

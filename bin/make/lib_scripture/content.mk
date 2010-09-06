@@ -204,6 +204,14 @@ $(PATH_REPORTS)/$(FILE_MASTERWORDS) : $(foreach v,$(GROUP_CONTENT),$(PATH_REPORT
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_MASTERWORDS)" "" "" "$@" ""
 
+# Rule name for the creating the hypheation file
+make-hyphen-wordlist: $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT)
+
+# Create the hypheation wordlist
+$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT) : $(PATH_REPORTS)/$(FILE_MASTERWORDS)
+	@echo INFO: Creating: $@
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_HYPHENWORDS)" "" "" "$@" ""
+
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
 # .project.sty file.
@@ -223,6 +231,10 @@ $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
 $(PATH_PROCESS)/GROUP_CONTENT.tex :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
+
+###########################################################################################
+# FIXME: Add an "if hypheation" rule here to make a dependency on hypheation if it is set
+
 
 # Rule for generating the content components. It will
 # also generate the TOC if that feature is turned on.

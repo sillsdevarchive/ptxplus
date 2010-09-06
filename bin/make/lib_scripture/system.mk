@@ -151,13 +151,13 @@ $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : make-tex-hyphens
 # do not overwrite any existing ones. This is the file that
 # is combined with the lccode.txt file to make the hyphenation.tex
 # that the system ues.
-$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT) : make-master-wordlist
-	@echo INFO: Creating a new hyphenation word list
-	@$(MOD_RUN_PROCESS) make_hyphen_wordlist
-	@$(EDITSFM) $@ &
+#$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT) : make-master-wordlist
+#	@echo INFO: Creating a new hyphenation word list
+#	@$(MOD_RUN_PROCESS) make_hyphen_wordlist
+#	@$(EDITSFM) $@ &
 
 # Rule name for the creating the hypheation file
-make-hyphen-wordlist: $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT)
+#make-hyphen-wordlist: $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT)
 
 # Manually create a master wordlist based on existing component
 # wordlists in the Reports file. Best to run this after
