@@ -78,12 +78,12 @@ endif
 # An even more special dependency is set on the piclist file too with an
 # [if] statement because not every component has to have a piclist.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
-	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
-	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
-	$(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) \
-	$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
-	$(if $(findstring $(1),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(1).$(EXT_PICLIST)) \
-	$(DEPENDENT_FILE_LIST)
+		$(PATH_TEXTS)/$(1).$(EXT_WORK) \
+		$(PATH_PROCESS)/$(1).$(EXT_TEX) \
+		$(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) \
+		$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
+		$(if $(findstring $(1),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(1).$(EXT_PICLIST)) \
+		$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $(1).$(EXT_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_TEX)
 	$(call watermark,$$@)
@@ -204,13 +204,48 @@ $(PATH_REPORTS)/$(FILE_MASTERWORDS) : $(foreach v,$(GROUP_CONTENT),$(PATH_REPORT
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_MASTERWORDS)" "" "" "$@" ""
 
-# Rule name for the creating the hypheation file
-make-hyphen-wordlist: $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT)
+# Manual rule name for the creating the hypheation file
+make-hyphen-wordlist: $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
 
 # Create the hypheation wordlist
-$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TXT) : $(PATH_REPORTS)/$(FILE_MASTERWORDS)
+$(PATH_HYPHENATION)/$(FILE_HYPHENATION) : $(PATH_REPORTS)/$(FILE_MASTERWORDS)
 	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_HYPHENWORDS)" "" "" "$@" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_HYPHENWORDS)" "SYS" "$<" "$@" ""
+
+# Manual rule name for the creating the TeX hypheation file
+# which controls hypheation for this publication.
+#make-tex-hyphens: $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
+make-tex-hyphens:
+	$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), )
+
+# Create the TeX hypheation file. We will use the overwrite
+# command because if any of the dependants have changed we
+# will need to rewrite it (I think). If we did not use that
+# the module would refuse to write out if the file existed.
+$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : | \
+		$(PATH_HYPHENATION)/$(FILE_HYPHENATION) \
+		$(PATH_HYPHENATION)/$(FILE_LCCODELIST) \
+		$(PATH_HYPHENATION)/$(FILE_HYCUSTOM) \
+		$(PATH_HYPHENATION)/$(FILE_HYPREFIX) \
+		$(PATH_HYPHENATION)/$(FILE_HYSUFFIX)
+	@echo INFO: Creating: $@
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEXHYPHEN)" "SYS" "$<" "$@" "overwrite"
+
+$(PATH_HYPHENATION)/$(FILE_LCCODELIST) :
+	@echo INFO: Creating: $@
+	$(call copysmart,$(PATH_RESOURCES_HYPHENATION)/$(FILE_LCCODELIST),$@)
+
+$(PATH_HYPHENATION)/$(FILE_HYCUSTOM) :
+	@echo INFO: Creating: $@
+	$(call copysmart,$(PATH_RESOURCES_HYPHENATION)/$(FILE_HYCUSTOM),$@)
+
+$(PATH_HYPHENATION)/$(FILE_HYPREFIX) :
+	@echo INFO: Creating: $@
+	$(call copysmart,$(PATH_RESOURCES_HYPHENATION)/$(FILE_HYPREFIX),$@)
+
+$(PATH_HYPHENATION)/$(FILE_HYSUFFIX) :
+	@echo INFO: Creating: $@
+	$(call copysmart,$(PATH_RESOURCES_HYPHENATION)/$(FILE_HYSUFFIX),$@)
 
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
@@ -232,20 +267,22 @@ $(PATH_PROCESS)/GROUP_CONTENT.tex :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
 
-###########################################################################################
-# FIXME: Add an "if hypheation" rule here to make a dependency on hypheation if it is set
+test:
+	$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), )
+
 
 
 # Rule for generating the content components. It will
 # also generate the TOC if that feature is turned on.
 $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
-	$(foreach v,$(GROUP_CONTENT), \
-	$(PATH_TEXTS)/$(v).$(EXT_WORK) \
-	$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
-	$(if $(findstring $(v),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
-	$(PATH_REPORTS)/$(FILE_MASTERWORDS) \
-	$(DEPENDENT_FILE_LIST) \
-	$(PATH_PROCESS)/GROUP_CONTENT.tex
+		$(foreach v,$(GROUP_CONTENT), \
+		$(PATH_TEXTS)/$(v).$(EXT_WORK) \
+		$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
+		$(if $(findstring $(v),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
+		$(PATH_REPORTS)/$(FILE_MASTERWORDS) \
+		$(DEPENDENT_FILE_LIST) \
+		$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), ) \
+		$(PATH_PROCESS)/GROUP_CONTENT.tex
 	@echo INFO: Creating: $@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) GROUP_CONTENT.tex
 	$(call watermark,$@)

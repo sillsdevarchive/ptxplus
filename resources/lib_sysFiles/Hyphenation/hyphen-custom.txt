@@ -1,0 +1,11 @@
+# CUSTOM HYPHEN WORD LIST
+# This is a simple list of words which contain hyphens
+# that denote where the word can be broken at the end
+# of a line. If not hyphen is used, then the word will
+# pass into the final list and will not be broken by
+# TeX when the line is set. This file can contain proper
+# names too, any word that might vary from the normal
+# rules that are set for this project.
+
+# Please remove these comments and replace them with
+# a list of one word per line.

@@ -1,0 +1,9 @@
+# HYPHEN SUFFIX LIST
+# Some projects can benifit from hyphenating words that have
+# suffixes. ptxplus will support this by auto-hyphenating
+# words that use certain specified word suffixes. All you
+# have to do is tell it where to find the file and it will
+# do the rest.
+
+# Please remove these comments and replace them with
+# a list of one word per line.

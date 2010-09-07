@@ -46,8 +46,8 @@ class MakeTexHyphenationFile (object) :
 
 		# Set the output file name and the wordlist file name
 		texHyphenFileName   = hyphenPath + '/' + tools.pubInfoObject['Files']['FILE_HYPHENATION_TEX']
-		wordListFileName    =  hyphenPath + '/' + tools.pubInfoObject['Files']['FILE_HYPHENATION_TXT']
-		lcCodeListFileName  = hyphenPath + '/' + tools.pubInfoObject['Files']['FILE_LCCODELIST_TXT']
+		wordListFileName    =  hyphenPath + '/' + tools.pubInfoObject['Files']['FILE_HYPHENATION']
+		lcCodeListFileName  = hyphenPath + '/' + tools.pubInfoObject['Files']['FILE_LCCODELIST']
 		# Get our project hyphenation commands
 		languageCode        = settings['ProjectText']['languageCode']
 		setHyphenCharacter  = settings['Format']['Hyphenation']['setHyphenCharacter']

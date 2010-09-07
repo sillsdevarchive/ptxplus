@@ -54,21 +54,14 @@ class MakeHyphenWordlist (object) :
 		self._hyphen = set()
 		self._hyphenCounts = {}
 		self._wordlistReport = set()
-#        self._encodingChain = log_manager._settings['Encoding']['Processing']['encodingChain']
-#        if self._encodingChain:
-#            # Build the encoding engine(s)
-#            self._encodingChain = TxtconvChain([s.strip() for s in self._encodingChain.split(',')])
 
 	def main (self) :
-		sourceMasterWordsFile = tools.pubInfoObject['Files']['FILE_MASTERWORDS']
-		sourceHyphenatedWordsFile = self._log_manager._settings['Format']['Hyphenation']['sourceUserWordsFile']
-		sourceHyphenatedNamesFile = self._log_manager._settings['Format']['Hyphenation']['sourceUserNamesFile']
-		sourcePrefixListFile = self._log_manager._settings['Format']['Hyphenation']['sourcePrefixListFile']
-		sourceSuffixListFile = self._log_manager._settings['Format']['Hyphenation']['sourceSuffixListFile']
-		reportNonHypenatedWords = self._log_manager._settings['Format']['Hyphenation']['reportNonHypenatedWords']
-		pathHyphenation = tools.pubInfoObject['Paths']['PATH_HYPHENATION']
-#        newHyphenationFile = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYPHENATION_TXT']
-		newHyphenationFile = ""
+		sourceHyphenatedWordsFile = tools.pubInfoObject['Files']['FILE_HYCUSTOM']
+		sourcePrefixListFile = tools.pubInfoObject['Files']['FILE_HYPREFIX']
+		sourceSuffixListFile = tools.pubInfoObject['Files']['FILE_HYSUFFIX']
+		reportNonHypenatedWords = tools.pubInfoObject['Files']['FILE_HYNOT']
+		sourceMasterWordsFile = self._log_manager._currentInput
+		newHyphenationFile = self._log_manager._currentOutput
 		hyphenBreakRules = self._log_manager._settings['Format']['Hyphenation']['hyphenBreakRules'].decode('utf_8').decode('unicode_escape')
 		if hyphenBreakRules == "" :
 			self._log_manager.log("WARN", "There were no hyphenation break rules found in your project.conf file. This may be ok but keep in mind that if there were no other hyphenated words manually listed there will be no output to the file this script is creating. Sorry, I cannot read your mind.")
@@ -81,8 +74,6 @@ class MakeHyphenWordlist (object) :
 			return
 
 		try:
-			# load the source user names hyphenation file is there is one.
-			self.loadPreHyphenatedWordList(sourceHyphenatedNamesFile)
 			# load the source user custom hyphenation file is there is one.
 			self.loadPreHyphenatedWordList(sourceHyphenatedWordsFile)
 
@@ -97,6 +88,7 @@ class MakeHyphenWordlist (object) :
 
 			#Debuging, write out words that could not be hyphenated
 			self.writeFailedWords(reportNonHypenatedWords)
+
 		except:
 			sys.exit(sys.argv[0] + ": Hyphenation auto-generation failed: please see log.")
 
@@ -194,6 +186,7 @@ class MakeHyphenWordlist (object) :
 		double_hyphens = re.compile(u'-{2,}')
 		hyphenkeys = list(set(self._hyphenations.itervalues()))
 		hyphenkeys.sort()
+		print newHyphenationFile
 		f = codecs.open(newHyphenationFile, "w", encoding='utf_8')
 		f.writelines(double_hyphens.sub('-',v).strip('-') +'\n' for v in hyphenkeys)
 		f.close()

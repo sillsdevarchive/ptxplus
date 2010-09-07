@@ -100,6 +100,9 @@ class MakeMakefile (object) :
 		useAdjustments = self._log_manager._settings['ProjectText']['WorkingText']['Features']['USE_ADJUSTMENTS']
 		makefileSettings += 'USE_ADJUSTMENTS=' + useAdjustments + '\n'
 
+		useHyphenation = self._log_manager._settings['Format']['Hyphenation']['useHyphenation']
+		makefileSettings += 'USE_HYPHENATION=' + useHyphenation + '\n'
+
 		# Pickup some other misc settings needed by makefile
 		sourceLock = self._log_manager._settings['ProjectText']['SourceText']['LOCKED']
 		makefileSettings += 'LOCKED=' + sourceLock + '\n'

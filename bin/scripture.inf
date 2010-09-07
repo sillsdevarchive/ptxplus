@@ -19,7 +19,6 @@ componentTypeList           = peripheral, content, map
 # the system outputs errors too for reporting at the end of
 # a process. This file is deleted at the start of every
 # process.
-#   Default = error.log
 FILE_PROJECT_ERROR          = 'error.log'
 
 # CAPTIONS FILE
@@ -28,14 +27,12 @@ FILE_PROJECT_ERROR          = 'error.log'
 # This is the key file so dependencies have to key off of this
 # file. This file is derived from the file of the same name in
 # the shared folder.
-#   Default = captions.csv
 FILE_ILLUSTRATION_CAPTIONS  = 'captions.csv'
 
 # MAIN TEX MACRO
 # The main TeX macro file name with lib path. This will
 # connect with any other necessary macros located in the
 # same folder.
-#   Default = paratext2.tex
 FILE_TEX_MACRO              = 'paratext2.tex'
 
 # MAIN GLOBAL SETTINGS
@@ -43,36 +40,30 @@ FILE_TEX_MACRO              = 'paratext2.tex'
 # is made automatically and should not be edited. Custom
 # settings should be added to the custom project settings
 # file.
-#   Default = .bible-settings.tex
 FILE_TEX_SETTINGS           = '.bible-settings.tex'
 
 # GLOBAL CUSTOM SETTINGS
 # TeX macro custom publication settings file. These are
 # settings which are for this specific project and not
 # found in the auto-generated setup file.
-#   Default = custom.tex
 FILE_TEX_CUSTOM             = 'custom-settings.tex'
 
 # COVER SETTINGS
 # TeX cover settings file.
-#   Default = .cover.tex
 FILE_TEX_COVER              = '.cover-settings.tex'
 
 # FRONT SETTINGS
 # TeX front matter peripheral settings file.
-#   Default = .front.tex
 FILE_TEX_FRONT              = '.front-settings.tex'
 
 # BACK SETTINGS
 # TeX back matter peripheral settings file.
-#   Default = .back.tex
 FILE_TEX_BACK               = '.back-settings.tex'
 
 # BIBLE STYLE FILE
 # This is the override style file for
 # a Scripture publication. This file
 # is meant to be edited by the user.
-#   Default = bible.sty
 FILE_TEX_STYLE              = 'bible-format.sty'
 
 # SOURCE MASTER WORD LIST
@@ -81,44 +72,68 @@ FILE_TEX_STYLE              = 'bible-format.sty'
 # It is used for generating a hyphenation list for
 # the project as well as other possible uses. This
 # file should be in CSV format.
-#   Default: Reports/wordlist-master.csv
 FILE_MASTERWORDS            = 'wordlist-master.csv'
 
 # TEX HYPHENATION FILE
 # A completed TeX hyphenation file, normally
 # auto-created by the system from a couple
 # other sources.
-#   Default = hyphenation.tex
 FILE_HYPHENATION_TEX        = 'hyphenation.tex'
 
 # HYPHENATED WORDS
 # The file name of complete list of hyphenated
 # words for this project.
-#   Defualt = hyphenation.txt
-FILE_HYPHENATION_TXT        = 'hyphenation.txt'
+FILE_HYPHENATION            = 'hyphenation.txt'
 
 # LCCODE LIST
 # A list of lccodes for this project. This will be
 # used to construct the TeX hyphenation file.
-#   Defualt = lccodelist.txt
-FILE_LCCODELIST_TXT         = 'lccodelist.txt'
+FILE_LCCODELIST             = 'lccodelist.txt'
+
+# NON-HYPHENATED WORDS LIST
+# This is a list of words that were not hyphenated
+# by the process. This is for auditing the process.
+FILE_HYNOT                  = 'hyphen-not.txt'
+
+# CUSTOM HYPHEN WORD LIST
+# This is a simple list of words which contain hyphens
+# that denote where the word can be broken at the end
+# of a line. If not hyphen is used, then the word will
+# pass into the final list and will not be broken by
+# TeX when the line is set. This file can contain proper
+# names too, any word that might vary from the normal
+# rules that are set for this project.
+FILE_HYCUSTOM               = 'hyphen-custom.txt'
+
+# HYPHEN PREFIX LIST
+# Some projects can benifit from hyphenating words that have
+# prefixes. ptxplus will support this by auto-hyphenating
+# words that use certain specified word prefixes. All you
+# have to do is tell it where to find the file and it will
+# do the rest.
+FILE_HYPREFIX               = 'hyphen-prefixes.txt'
+
+# HYPHEN SUFFIX LIST
+# Some projects can benifit from hyphenating words that have
+# suffixes. ptxplus will support this by auto-hyphenating
+# words that use certain specified word suffixes. All you
+# have to do is tell it where to find the file and it will
+# do the rest.
+FILE_HYSUFFIX               = 'hyphen-suffixes.txt'
 
 # MARGINAL VERSES MACRO
 # The file name of the TeX marginal verses macro used
 # in ptx2pdf.
-#   Default = ptxplus-marginalverses.tex
 FILE_MARGINAL_VERSES        = 'ptxplus-marginalverses.tex'
 
 # AUTO TOC FILE
 # When auto TOC generation is turned on the contents
 # for the final TOC file will be output to this file.
-#   Default = auto-toc.usfm
 FILE_TOC_AUTO               = 'auto-toc.usfm'
 
 # TOC USFM FILE
 # The main TOC content file which is created from
 # the FILE_TOC_AUTO file.
-#   Defalt = 'toc.usfm'
 FILE_TOC_USFM               = 'toc.usfm'
 
 # CONTENT TEX CONTROL FILE
@@ -222,6 +237,9 @@ PATH_RESOURCES_ILLUSTRATIONS = '__PTXPLUS__/resources/lib_illustrations'
 # The path to the ptxplus system Process folder
 PATH_RESOURCES_PROCESS       = '__PTXPLUS__/resources/lib_sysFiles/Process'
 
+# The path to the ptxplus system Hyphenation folder
+PATH_RESOURCES_HYPHENATION   = '__PTXPLUS__/resources/lib_sysFiles/Hyphenation'
+
 # The path to the new wiki pages
 PATH_WIKI_SOURCE             = '__PTXPLUS__/resources/lib_sysFiles/Admin/Wiki'
 
@@ -281,6 +299,10 @@ MOD_MAKE_MASTERWORDS        = 'make_master_wordlist'
 # The module that will create a list of hyphenated words
 # based on the masterwords file.
 MOD_MAKE_HYPHENWORDS        = 'make_hyphen_wordlist'
+
+# MAKE TEX HYPHEN FILE
+# This module will create the TeX Hyphenation file.
+MOD_MAKE_TEXHYPHEN          = 'make_tex_hyphenation_file'
 
 # MAKE TOC
 # The Table of Contents creation module.
