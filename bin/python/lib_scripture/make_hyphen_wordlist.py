@@ -56,11 +56,11 @@ class MakeHyphenWordlist (object) :
 		self._wordlistReport = set()
 
 	def main (self) :
-		pathHyphenation = os.getcwd() + "/" + tools.pubInfoObject['Path']['PATH_HYPHENATION']
+		pathHyphenation = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
 		sourceHyphenatedWordsFile = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYCUSTOM']
-		sourcePrefixListFile = pathHyphenation + '/' tools.pubInfoObject['Files']['FILE_HYPREFIX']
-		sourceSuffixListFile = pathHyphenation + '/' tools.pubInfoObject['Files']['FILE_HYSUFFIX']
-		reportNonHypenatedWords = pathHyphenation + '/' tools.pubInfoObject['Files']['FILE_HYNOT']
+		sourcePrefixListFile = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYPREFIX']
+		sourceSuffixListFile = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYSUFFIX']
+		reportNonHypenatedWords = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYNOT']
 		sourceMasterWordsFile = self._log_manager._currentInput
 		newHyphenationFile = self._log_manager._currentOutput
 		hyphenBreakRules = self._log_manager._settings['Format']['Hyphenation']['hyphenBreakRules'].decode('utf_8').decode('unicode_escape')
@@ -130,6 +130,8 @@ class MakeHyphenWordlist (object) :
 
 
 	def generatePrefixSuffixHyphenation(self,sourceMasterWordsFile,sourcePrefixListFile,suffixListPath):
+		'''Generate hyphenated words based on the prefix and suffix lists.'''
+
 		# Now we will look for and load all the peripheral files and report
 		# on what we found.
 		# Are there prefixList or suffixList to process?
@@ -163,7 +165,11 @@ class MakeHyphenWordlist (object) :
 				self._wordlistReport.discard(word)
 		self.logHyphenCount("prefix/suffix hyphenation")
 
+
 	def generateRuleBrokenHyphenations(self, hyphenBreakRules):
+		'''Generate hyphenated words based on a regexp rule supplied by
+			the conf file.'''
+
 		if hyphenBreakRules:
 			try:
 				hyphenBreaks = re.compile(hyphenBreakRules)
@@ -187,7 +193,6 @@ class MakeHyphenWordlist (object) :
 		double_hyphens = re.compile(u'-{2,}')
 		hyphenkeys = list(set(self._hyphenations.itervalues()))
 		hyphenkeys.sort()
-		print newHyphenationFile
 		f = codecs.open(newHyphenationFile, "w", encoding='utf_8')
 		f.writelines(double_hyphens.sub('-',v).strip('-') +'\n' for v in hyphenkeys)
 		f.close()

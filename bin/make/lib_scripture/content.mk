@@ -213,6 +213,7 @@ make-hyphen-wordlist: $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
 $(PATH_HYPHENATION)/$(FILE_HYPHENATION) : $(PATH_REPORTS)/$(FILE_MASTERWORDS)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_HYPHENWORDS)" "SYS" "$<" "$@" ""
+	@ln -sf $(PATH_LOG)/$(MOD_MAKE_HYPHENWORDS)-sys.log $(PATH_HYPHENATION)/
 
 # Manual rule name for the creating the TeX hypheation file
 # which controls hypheation for this publication.
