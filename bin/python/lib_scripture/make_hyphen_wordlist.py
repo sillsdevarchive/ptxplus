@@ -56,10 +56,11 @@ class MakeHyphenWordlist (object) :
 		self._wordlistReport = set()
 
 	def main (self) :
-		sourceHyphenatedWordsFile = tools.pubInfoObject['Files']['FILE_HYCUSTOM']
-		sourcePrefixListFile = tools.pubInfoObject['Files']['FILE_HYPREFIX']
-		sourceSuffixListFile = tools.pubInfoObject['Files']['FILE_HYSUFFIX']
-		reportNonHypenatedWords = tools.pubInfoObject['Files']['FILE_HYNOT']
+		pathHyphenation = os.getcwd() + "/" + tools.pubInfoObject['Path']['PATH_HYPHENATION']
+		sourceHyphenatedWordsFile = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYCUSTOM']
+		sourcePrefixListFile = pathHyphenation + '/' tools.pubInfoObject['Files']['FILE_HYPREFIX']
+		sourceSuffixListFile = pathHyphenation + '/' tools.pubInfoObject['Files']['FILE_HYSUFFIX']
+		reportNonHypenatedWords = pathHyphenation + '/' tools.pubInfoObject['Files']['FILE_HYNOT']
 		sourceMasterWordsFile = self._log_manager._currentInput
 		newHyphenationFile = self._log_manager._currentOutput
 		hyphenBreakRules = self._log_manager._settings['Format']['Hyphenation']['hyphenBreakRules'].decode('utf_8').decode('unicode_escape')
