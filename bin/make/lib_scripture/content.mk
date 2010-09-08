@@ -73,16 +73,18 @@ else
 	@echo INFO: Cannot create: $$@ This is because the project is locked.
 endif
 
-# Process a single component and produce the final PDF. A Special dependency
-# is set for the .$(EXT_ADJUSTMENT) file in case it has been altered.
-# An even more special dependency is set on the piclist file too with an
-# [if] statement because not every component has to have a piclist.
+# Process a single component and produce the final PDF. A Special
+# dependency is set for the .adj file in case it has been altered.
+# An even more special dependency is set on the piclist file and
+# hyphenation file too with an [if] statement because not every
+# component has to have a piclist or hypheation.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 		$(PATH_TEXTS)/$(1).$(EXT_WORK) \
 		$(PATH_PROCESS)/$(1).$(EXT_TEX) \
 		$(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) \
 		$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
 		$(if $(findstring $(1),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(1).$(EXT_PICLIST)) \
+		$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), ) \
 		$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating book PDF file: $(1).$(EXT_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(1).$(EXT_TEX)
