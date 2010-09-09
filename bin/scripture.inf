@@ -179,6 +179,13 @@ PATH_ADMIN                   = 'Admin'
 #   Default = Admin/Wiki
 PATH_ADMIN_WIKI              = 'Admin/Wiki'
 
+# BENCHMARK FOLDER
+# This is the folder where benchmark files will be kept from
+# the Texts folder so that comparisons can be made to find
+# errors from processes. This is normally a hidden file and
+# is in the root of the project.
+PATH_BENCHMARK              = '.benchmark'
+
 # PROJECT DELIVERABLES
 # Where the end products are found from processes that
 # are run. Normally PDF files ready for print.
