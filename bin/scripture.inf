@@ -280,6 +280,10 @@ EXT_SVG                     = 'svg'
 # These values use spaces to seperate different parameters.
 [Modules]
 
+# BENCHMARK TESTING
+# The benchmark testing module.
+MOD_BENCHMARK               = 'benchmark_tests'
+
 # MAKE TEX CONTROL FILE
 # TeX Control File Module
 # This is the module (Python script) which creates the

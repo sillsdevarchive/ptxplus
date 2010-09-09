@@ -322,7 +322,7 @@ postprocess-content :
 ifeq ($(LOCKED),0)
 	@echo INFO: Postprocessing all content components
 	@$(foreach v,$(GROUP_CONTENT), $(call postprocessing,$(v),$($(v)_content)) )
-	$(call makebenchmark)
+	$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "" "" ""
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
@@ -379,16 +379,6 @@ makewordlist = $(MOD_RUN_PROCESS) "$(MOD_MAKE_WORDLIST)" "$(1)" "$(PATH_TEXTS)/$
 # Remove a single wordlist
 removewordlist = rm -f $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV)
 
-define makebenchmark
-@if test -r "$(PATH_BENCHMARK)"; then \
-	echo INFO: Benchmark exists: $(PATH_BENCHMARK); \
-	echo INFO: Will do comparisons here with diff and Meld; \
-else \
-	echo INFO: Creating benchmark files in $(PATH_BENCHMARK); \
-	mkdir -p $(PATH_BENCHMARK); \
-	cp $(PATH_TEXTS)/* $(PATH_BENCHMARK); \
-fi
-endef
 ##############################################################
 #			Rules for handling piclist file creation
 ##############################################################
@@ -440,3 +430,6 @@ ifeq ($(LOCKED),0)
 else
 	@echo INFO: Cannot remove the adjustment files because the project is locked
 endif
+
+benchmark-test :
+	$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "" "" ""
