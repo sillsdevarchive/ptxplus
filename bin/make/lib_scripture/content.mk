@@ -198,6 +198,12 @@ endef
 # This builds a rule (in memory) for each of the content components
 $(foreach v,$(GROUP_CONTENT),$(eval $(call content_rules,$(v))))
 
+# WORD LIST COMMENTS
+# Word lists will be made on the working files and will be rerun
+# every time there is a change to one of them. In time we should
+# have processes in place to do some checking against past lists
+# to look for errors that may have happened in the
+
 # Manual rule to create the master wordlist
 make-master-wordlist : $(PATH_REPORTS)/$(FILE_MASTERWORDS)
 
@@ -206,20 +212,31 @@ $(PATH_REPORTS)/$(FILE_MASTERWORDS) : $(foreach v,$(GROUP_CONTENT),$(PATH_REPORT
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_MASTERWORDS)" "" "" "$@" ""
 
+# HYPHENATION COMMENTS
+# Hyphenation files are dependent on wordlist files but will
+# not be rewritten every time there is a change in a wordlist.
+# Once a hypheation file is in place it is expected that it will
+# stay there and not be changed unless a problem is encountered.
+# If the hyphenation is set to false then the files will not
+# be created and a warning will be set in the terminal.
+
 # Manual rule name for the creating the hypheation file
 make-hyphen-wordlist: $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
 
-# Create the hypheation wordlist
-$(PATH_HYPHENATION)/$(FILE_HYPHENATION) : $(PATH_REPORTS)/$(FILE_MASTERWORDS)
+# Create the hypheation wordlist and link the log to the
+# hypheation folder for easier access
+$(PATH_HYPHENATION)/$(FILE_HYPHENATION) : | $(PATH_REPORTS)/$(FILE_MASTERWORDS)
+ifeq ($(USE_HYPHENATION),true)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_HYPHENWORDS)" "SYS" "$<" "$@" ""
 	@ln -sf $(PATH_LOG)/$(MOD_MAKE_HYPHENWORDS)-sys.log $(PATH_HYPHENATION)/
+else
+	@echo WARN: $(FILE_HYPHENATION) cannot be made because Hyphenation is set to \"$(USE_HYPHENATION)\"
+endif
 
 # Manual rule name for the creating the TeX hypheation file
 # which controls hypheation for this publication.
-#make-tex-hyphens: $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
-make-tex-hyphens:
-	$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), )
+make-tex-hyphens: $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
 
 # Create the TeX hypheation file. We will use the overwrite
 # command because if any of the dependants have changed we
@@ -231,9 +248,14 @@ $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : | \
 		$(PATH_HYPHENATION)/$(FILE_HYCUSTOM) \
 		$(PATH_HYPHENATION)/$(FILE_HYPREFIX) \
 		$(PATH_HYPHENATION)/$(FILE_HYSUFFIX)
+ifeq ($(USE_HYPHENATION),true)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEXHYPHEN)" "SYS" "$<" "$@" "overwrite"
+else
+	@echo WARN: $(FILE_HYPHENATION_TEX) cannot be made because Hyphenation is set to \"$(USE_HYPHENATION)\"
+endif
 
+# Rules for creating some of the hyphenation dependent files
 $(PATH_HYPHENATION)/$(FILE_LCCODELIST) :
 	@echo INFO: Creating: $@
 	$(call copysmart,$(PATH_RESOURCES_HYPHENATION)/$(FILE_LCCODELIST),$@)
@@ -269,11 +291,6 @@ $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
 $(PATH_PROCESS)/GROUP_CONTENT.tex :
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
-
-test:
-	$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), )
-
-
 
 # Rule for generating the content components. It will
 # also generate the TOC if that feature is turned on.
