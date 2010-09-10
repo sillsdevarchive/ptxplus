@@ -56,9 +56,12 @@ else
 endif
 
 # Call a postprocessing function which will run all the postprocesses.
+# When the post processing is done we will run a benchmark test to
+# account for any changes made.
 postprocess-$(1) : $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
 	$$(call postprocessing,$(1),$($(1)_content))
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
@@ -180,6 +183,15 @@ else
 	@echo INFO: Cannot remove: $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
 
+# Benchmark test on the current component
+benchmark-$(1) :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
+
+# Set the current file as benchmark. This will overwrite
+# whatever might currently be in the benchmark folder.
+benchmark-set-$(1) :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
+
 
 # End of the content_rules define
 endef
@@ -197,6 +209,11 @@ endef
 
 # This builds a rule (in memory) for each of the content components
 $(foreach v,$(GROUP_CONTENT),$(eval $(call content_rules,$(v))))
+
+# BENCHMARK TESTING
+# Test all the working text against the stored benchmark text
+benchmark-all :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
 
 # WORD LIST COMMENTS
 # Word lists will be made on the working files and will be rerun
@@ -322,7 +339,7 @@ postprocess-content :
 ifeq ($(LOCKED),0)
 	@echo INFO: Postprocessing all content components
 	@$(foreach v,$(GROUP_CONTENT), $(call postprocessing,$(v),$($(v)_content)) )
-	$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "" "" ""
+	$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "" "" "auto"
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
@@ -420,8 +437,6 @@ else
 	@echo INFO: Cannot create the adjustment files because the project is locked
 endif
 
-##################################################################################
-
 # Remove all the adjustment files
 adjlist-remove-all :
 ifeq ($(LOCKED),0)
@@ -431,5 +446,3 @@ else
 	@echo INFO: Cannot remove the adjustment files because the project is locked
 endif
 
-benchmark-test :
-	$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "" "" ""

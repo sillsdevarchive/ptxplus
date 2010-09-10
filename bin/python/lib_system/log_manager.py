@@ -142,8 +142,7 @@ class LogManager (object) :
 			self._currentLocation = "BEGIN"
 
 
-# This is the new version of the logging function that uses the internal location tracking
-	def log (self, entryType, event) :
+	def log (self, entryType, event, toTerm = 'false') :
 		'''This will be a simple ini type output the value can be
 			parsed as simple CVS. The output params are:
 			entryType = ERRR, WARN, INFO
@@ -168,11 +167,18 @@ class LogManager (object) :
 		#Collect the entry
 		self._processLogObject.append(entry + "\n")
 
-		# If for some reason we fail to find a logModeProject setting we will default to debug output
+		# If for some reason we fail to find a logModeProject
+		# setting we will default to debug output
 		try :
 			if self._settings != None and self._settings['System']['General']['logModeProject'] == "debug" :
 				tools.userMessage(entryType + ": " + event)
 		except :
+			tools.userMessage(entryType + ": " + event)
+
+		# To save on code we will give the option to output
+		# this same message to the termina which could be
+		# very handy in many cases
+		if toTerm.lower() == 'true' :
 			tools.userMessage(entryType + ": " + event)
 
 		# Because there are so many ways to create errors

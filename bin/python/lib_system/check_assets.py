@@ -68,31 +68,29 @@ class CheckAssets (object) :
 
 		# Do some sanity testing
 		if not os.path.isdir(pathGraphics) :
-			tools.userMessage('ERROR: Check your configuration, no graphics source folder found. Halting process now!')
-			self._log_manager.log('ERRR', 'There is no graphics source folder. Please check your configuration.')
+			self._log_manager.log('ERRR', 'No graphics source folder. (Halting) Please check your configuration.', 'true')
 			sys.exit(1)
 
 		# Check/install folders we might need
 		if not os.path.isdir(pathSource) :
 			os.mkdir(pathSource)
-			tools.userMessage('INFO: Added folder: ' + pathSource)
+			self._log_manager.log('INFO', 'Added folder: ' + pathSource, 'true')
 
 		if not os.path.isdir(pathPeripheral) :
 			os.mkdir(pathPeripheral)
-			tools.userMessage('INFO: Added folder: ' + pathPeripheral)
+			self._log_manager.log('INFO', 'Added folder: ' + pathPeripheral, 'true')
 
 		if not os.path.isdir(pathIllustrations) :
 			os.mkdir(pathIllustrations)
-			tools.userMessage('INFO: Added folder: ' + pathIllustrations)
+			self._log_manager.log('INFO', 'Added folder: ' + pathIllustrations, 'true')
 
 		if not os.path.isdir(pathHyphenation) :
 			os.mkdir(pathHyphenation)
-			tools.userMessage('INFO: Added folder: ' + pathHyphenation)
+			self._log_manager.log('INFO', 'Added folder: ' + pathHyphenation, 'true')
 
 		if not os.path.isdir(pathProcess) :
 			os.mkdir(pathProcess)
-			tools.userMessage('INFO: Added folder: ' + pathProcess)
-			#@touch $(PATH_PROCESS)/.stamp
+			self._log_manager.log('INFO', 'Added folder: ' + pathProcess, 'true')
 
 
 		# Check/install system assets
@@ -119,8 +117,7 @@ class CheckAssets (object) :
 		elif self._mode == 'refresh' :
 				self.copyLink(source, destination, linkto, lib)
 		else :
-				self._log_manager.log('ERRR', 'Mode [' + self._mode + '] is not currently supported by the system. Cannot complete operation.')
-				tools.userMessage('ERROR: Mode [' + self._mode + '] is not currently supported by the system. Cannot complete operation.')
+				self._log_manager.log('ERRR', 'Mode [' + self._mode + '] is not supported. Cannot complete!', 'true')
 
 
 	def copyLink (self, source, destination, linkto, lib) :
@@ -133,14 +130,14 @@ class CheckAssets (object) :
 				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + source + "] has been copied to: [" + destination + "]")
 				self.justLink(destination, linkto)
 			else :
-				self._log_manager.log("ERRR", "File: " + destination + " failed to copy. Process incomplete.")
+				self._log_manager.log("ERRR", "Failed to copy: " + destination + " Process incomplete.", 'true')
 		else :
 			if os.path.isfile(lib) :
 				shutil.copy(lib, destination)
 				self._log_manager.log("INFO", "File: " + destination + " had to be copied from the system lib.")
 				self.justLink(destination, linkto)
 			else :
-				self._log_manager.log("ERRR", "File: " + destination + " could not be found anywhere. Process incomplete.")
+				self._log_manager.log("ERRR", "Not found: " + destination + " Process incomplete.", 'true')
 
 
 	def justLink (self, destination, linkto) :
@@ -151,7 +148,7 @@ class CheckAssets (object) :
 			if os.path.isfile(linkto) :
 				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + destination + "] has been linked to: [" + linkto + "]")
 			else :
-				self._log_manager.log("ERRR", "Mode = " + self._mode + " The file: [" + linkto + "] was not successfully linked.")
+				self._log_manager.log("ERRR", "Mode = " + self._mode + " File: [" + linkto + "] not linked.", 'true')
 
 
 # This starts the whole process going
