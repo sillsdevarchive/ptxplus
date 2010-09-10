@@ -339,7 +339,7 @@ postprocess-content :
 ifeq ($(LOCKED),0)
 	@echo INFO: Postprocessing all content components
 	@$(foreach v,$(GROUP_CONTENT), $(call postprocessing,$(v),$($(v)_content)) )
-	$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "" "" "auto"
+	$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
