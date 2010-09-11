@@ -116,6 +116,15 @@ pdf-remove-$(1) :
 	@echo INFO: Removing $$@
 	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
+# Benchmark test on the current component
+benchmark-$(1) :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
+
+# Set the current file as benchmark. This will overwrite
+# whatever might currently be in the benchmark folder.
+benchmark-set-$(1) :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
+
 # End to the periph_rules macro def
 endef
 

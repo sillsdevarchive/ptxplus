@@ -103,6 +103,9 @@ class ConfigGUI (object) :
 			"on_menu_preprocess_current_activate"       : self.m_preprocess_current,
 			"on_menu_postprocess_all_activate"          : self.m_postprocess_all,
 			"on_menu_postprocess_current_activate"      : self.m_postprocess_current,
+			"on_menu_benchmark_current"                 : self.m_benchmark_current,
+			"on_menu_benchmark_current_set"             : self.m_benchmark_current_set,
+			"on_menu_benchmark_all"                     : self.m_benchmark_all,
 			"on_menu_wordlist_activate"                 : self.m_wordlist,
 			"on_menu_hyphenlist_activate"               : self.m_hyphenlist,
 			"on_menu_make_tex_hyphen"                   : self.m_tex_hyphen,
@@ -642,6 +645,15 @@ class ConfigGUI (object) :
 
 	def m_postprocess_current (self, widget) :
 		self.execute("ptxplus", "postprocess-" + self.bkid)
+
+	def m_benchmark_current (self, widget) :
+		self.execute("ptxplus", "benchmark-" + self.bkid)
+
+	def m_benchmark_current_set (self, widget) :
+		self.execute("ptxplus", "benchmark-set" + self.bkid)
+
+	def m_benchmark_all (self, widget) :
+		self.execute("ptxplus", "benchmark-all")
 
 	def m_quit (self, widget) :
 		self.quit()
