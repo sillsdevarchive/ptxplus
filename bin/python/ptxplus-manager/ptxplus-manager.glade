@@ -934,21 +934,6 @@
 						<property name="position">2</property>
 					  </packing>
 					</child>
-					<child>
-					  <widget class="GtkButton" id="b_backup">
-						<property name="label" translatable="yes">_Backup</property>
-						<property name="visible">True</property>
-						<property name="can_focus">True</property>
-						<property name="receives_default">True</property>
-						<property name="use_underline">True</property>
-						<signal name="clicked" handler="on_b_backup_clicked"/>
-					  </widget>
-					  <packing>
-						<property name="expand">False</property>
-						<property name="fill">False</property>
-						<property name="position">3</property>
-					  </packing>
-					</child>
 				  </widget>
 				  <packing>
 					<property name="expand">False</property>
