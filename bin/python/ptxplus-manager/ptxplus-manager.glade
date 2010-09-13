@@ -867,11 +867,12 @@
 					</child>
 					<child>
 					  <widget class="GtkButton" id="b_reload">
-						<property name="label" translatable="yes">_Reload Settings</property>
+						<property name="label">gtk-refresh</property>
 						<property name="visible">True</property>
 						<property name="can_focus">True</property>
 						<property name="receives_default">True</property>
 						<property name="use_underline">True</property>
+						<property name="use_stock">True</property>
 						<signal name="clicked" handler="on_menu_reload_activate"/>
 					  </widget>
 					  <packing>

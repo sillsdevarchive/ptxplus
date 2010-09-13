@@ -650,7 +650,7 @@ class ConfigGUI (object) :
 		self.execute("ptxplus", "benchmark-" + self.bkid)
 
 	def m_benchmark_current_set (self, widget) :
-		self.execute("ptxplus", "benchmark-set" + self.bkid)
+		self.execute("ptxplus", "benchmark-set-" + self.bkid)
 
 	def m_benchmark_all (self, widget) :
 		self.execute("ptxplus", "benchmark-all")
