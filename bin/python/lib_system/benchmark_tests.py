@@ -140,8 +140,8 @@ class BenchmarkTests (object) :
 		# has been turned off.
 		if useViewer.lower() == 'true' :
 			self._log_manager.log('INFO', 'Problems found. Now opening Meld', 'true')
-			# Build the command
-			sysCommand = "meld " + newFile + " " + oldFile
+			# Build the command (try terminating with the "&" for better control, I think.)
+			sysCommand = "meld " + newFile + " " + oldFile + ' &'
 			self._log_manager.log('INFO', 'Opening Meld diff viewer', 'true')
 			# Send off the command return error code
 			os.system(sysCommand)
