@@ -38,7 +38,7 @@ class MakeWordlist (object) :
 
 		self._log_manager = log_manager
 		log_manager._currentSubProcess = 'MasterWordlist'
-		reportPath = tools.pubInfoObject['Paths']['PATH_REPORTS']
+		wordlistPath = tools.pubInfoObject['Paths']['PATH_WORDLISTS']
 		masterReportFile = log_manager._currentOutput
 		masterWordlistFlag = False
 		masterWordlist = {}
@@ -51,10 +51,10 @@ class MakeWordlist (object) :
 		# http://docs.python.org/library/collections.html?highlight=defaultdict#collections.defaultdict
 		masterWordlist = defaultdict(int)
 
-		fileList = os.listdir(reportPath)
+		fileList = os.listdir(wordlistPath)
 		for fileName in fileList :
 			if fileName.find('-wordlist.csv') > 0 :
-				rptObject = csv.reader(open(reportPath + "/" + fileName), dialect=csv.excel)
+				rptObject = csv.reader(open(wordlistPath + "/" + fileName), dialect=csv.excel)
 				for word,count in rptObject :
 					masterWordlist[word] += int(count)
 

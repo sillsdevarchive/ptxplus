@@ -55,16 +55,16 @@ class MakeBookWordlist (object) :
 		inputFile = log_manager._currentInput
 		bookFile = log_manager._currentOutput
 		log_manager._currentSubProcess = 'MkBkWrdlst'
-		reportPath = tools.pubInfoObject['Paths']['PATH_REPORTS']
-		bookReportFile = os.getcwd() + "/" + reportPath + "/" + log_manager._currentTargetID + "-wordlist.csv"
+		wordlistPath = tools.pubInfoObject['Paths']['PATH_WORDLISTS']
+		bookReportFile = os.getcwd() + "/" + wordlistPath + "/" + log_manager._currentTargetID + "-wordlist.csv"
 		bookWordlist = {}
 		wordlist = []
 		pre_wordlist = {}
 		raw_str = ''
 
 		# Make our Report folder if it isn't there
-		if not os.path.isdir(reportPath) :
-			os.mkdir(reportPath)
+		if not os.path.isdir(wordlistPath) :
+			os.mkdir(wordlistPath)
 
 		# This will pull its word data from the working text which should
 		# already have been run through all post processes and be ready

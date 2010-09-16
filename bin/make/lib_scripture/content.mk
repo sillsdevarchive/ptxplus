@@ -84,7 +84,7 @@ endif
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 		$(PATH_TEXTS)/$(1).$(EXT_WORK) \
 		$(PATH_PROCESS)/$(1).$(EXT_TEX) \
-		$(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) \
+		$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV) \
 		$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
 		$(if $(findstring $(1),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(1).$(EXT_PICLIST)) \
 		$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), ) \
@@ -167,12 +167,12 @@ else
 endif
 
 # Create a wordlist for a single book
-$(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
+$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@echo INFO: Creating: $$@
 	@$$(call makewordlist,$(1))
 
 # Command to create a wordlist for a single book
-wordlist-make-$(1) : $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV)
+wordlist-make-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
 
 # Remove a wordlist for a single book
 wordlist-remove-$(1) :
@@ -180,7 +180,7 @@ ifeq ($(LOCKED),0)
 	@echo Removing: $(1)-wordlist.$(EXT_CSV)
 	@$$(call removewordlist,$(1))
 else
-	@echo INFO: Cannot remove: $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV) because the project is locked.
+	@echo INFO: Cannot remove: $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
 
 # Benchmark test on the current component
@@ -210,11 +210,6 @@ endef
 # This builds a rule (in memory) for each of the content components
 $(foreach v,$(GROUP_CONTENT),$(eval $(call content_rules,$(v))))
 
-# BENCHMARK TESTING
-# Test all the working text against the stored benchmark text
-benchmark-all :
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
-
 # WORD LIST COMMENTS
 # Word lists will be made on the working files and will be rerun
 # every time there is a change to one of them. In time we should
@@ -222,12 +217,13 @@ benchmark-all :
 # to look for errors that may have happened in the
 
 # Manual rule to create the master wordlist
-make-master-wordlist : $(PATH_REPORTS)/$(FILE_MASTERWORDS)
+make-master-wordlist : $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 
 # Create the master wordlist
-$(PATH_REPORTS)/$(FILE_MASTERWORDS) : $(foreach v,$(GROUP_CONTENT),$(PATH_REPORTS)/$(v)-wordlist.$(EXT_CSV))
+$(PATH_WORDLISTS)/$(FILE_MASTERWORDS) : $(foreach v,$(GROUP_CONTENT),$(PATH_WORDLISTS)/$(v)-wordlist.$(EXT_CSV))
 	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_MASTERWORDS)" "" "" "$@" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_MASTERWORDS)" "SYS" "" "$@" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)" "" ""
 
 # HYPHENATION COMMENTS
 # Hyphenation files are dependent on wordlist files but will
@@ -242,11 +238,12 @@ make-hyphen-wordlist: $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
 
 # Create the hypheation wordlist and link the log to the
 # hypheation folder for easier access
-$(PATH_HYPHENATION)/$(FILE_HYPHENATION) : | $(PATH_REPORTS)/$(FILE_MASTERWORDS)
+$(PATH_HYPHENATION)/$(FILE_HYPHENATION) : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 ifeq ($(USE_HYPHENATION),true)
 	@echo INFO: Creating: $@
-	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_HYPHENWORDS)" "SYS" "$<" "$@" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_HYPHENWORDS)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "$@" ""
 	@ln -sf $(PATH_LOG)/$(MOD_MAKE_HYPHENWORDS)-sys.log $(PATH_HYPHENATION)/
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
 else
 	@echo WARN: $(FILE_HYPHENATION) cannot be made because Hyphenation is set to \"$(USE_HYPHENATION)\"
 endif
@@ -259,8 +256,7 @@ make-tex-hyphens: $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
 # command because if any of the dependants have changed we
 # will need to rewrite it (I think). If we did not use that
 # the module would refuse to write out if the file existed.
-$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : | \
-		$(PATH_HYPHENATION)/$(FILE_HYPHENATION) \
+$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : $(PATH_HYPHENATION)/$(FILE_HYPHENATION) | \
 		$(PATH_HYPHENATION)/$(FILE_LCCODELIST) \
 		$(PATH_HYPHENATION)/$(FILE_HYCUSTOM) \
 		$(PATH_HYPHENATION)/$(FILE_HYPREFIX) \
@@ -268,6 +264,7 @@ $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : | \
 ifeq ($(USE_HYPHENATION),true)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEXHYPHEN)" "SYS" "$<" "$@" "overwrite"
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" ""
 else
 	@echo WARN: $(FILE_HYPHENATION_TEX) cannot be made because Hyphenation is set to \"$(USE_HYPHENATION)\"
 endif
@@ -316,7 +313,7 @@ $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
 		$(PATH_TEXTS)/$(v).$(EXT_WORK) \
 		$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
 		$(if $(findstring $(v),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
-		$(PATH_REPORTS)/$(FILE_MASTERWORDS) \
+		$(PATH_WORDLISTS)/$(FILE_MASTERWORDS) \
 		$(DEPENDENT_FILE_LIST) \
 		$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), ) \
 		$(PATH_PROCESS)/GROUP_CONTENT.tex
@@ -390,11 +387,14 @@ removepiclist = rm -f $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
 # Remove a single adjustment file
 removeadjlist = rm -f $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
 
-# Create a single wordlist
-makewordlist = $(MOD_RUN_PROCESS) "$(MOD_MAKE_WORDLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV)"
+# Create a single wordlist - As these tests can be run multiple
+# times in short succession, we will not do benchmark testing
+# on single lists. We'll rely on the master wordlist benchmark
+# test to find problems
+makewordlist = $(MOD_RUN_PROCESS) "$(MOD_MAKE_WORDLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)"
 
 # Remove a single wordlist
-removewordlist = rm -f $(PATH_REPORTS)/$(1)-wordlist.$(EXT_CSV)
+removewordlist = rm -f $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
 
 ##############################################################
 #			Rules for handling piclist file creation
@@ -446,3 +446,28 @@ else
 	@echo INFO: Cannot remove the adjustment files because the project is locked
 endif
 
+#################################################################################
+
+# GLOBAL BENCHMARK TESTS
+
+# Most of these are automated but these commands are for the GUI.
+
+# Test all the working text against the stored benchmark text
+benchmark-all :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
+
+# Test the Hyphenation folder
+benchmark-hyphenation :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)" "" ""
+
+# Test the Hyphenation folder
+benchmark-hyphen-tex :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" ""
+
+# Test the Hyphenation folder
+benchmark-hyphen-txt :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
+
+# Test the Wordlists folder
+benchmark-wordlists :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)" "" ""

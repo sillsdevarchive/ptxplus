@@ -166,18 +166,18 @@ FILE_BOOK                   = 'final.pdf'
 # be the current working directory. The way we denote this
 # is with a '.' dot/period. This will be transformed into
 # an absolute path via Python. DO NOT CHANGE THIS!
-PATH_HOME                    = '.'
+PATH_HOME                   = '.'
 
 # PROJECT ADMIN FOLDER
 # This is the folder that contains all the administrative
 # stuff for the project.
 #   Default = Admin
-PATH_ADMIN                   = 'Admin'
+PATH_ADMIN                  = 'Admin'
 
 # ADMIN WIKI FOLDER
 # Path to the project Wiki which keeps notes and issues
 #   Default = Admin/Wiki
-PATH_ADMIN_WIKI              = 'Admin/Wiki'
+PATH_ADMIN_WIKI             = 'Admin/Wiki'
 
 # BENCHMARK FOLDER
 # This is the folder where benchmark files will be kept from
@@ -190,34 +190,41 @@ PATH_BENCHMARK              = '.benchmark'
 # Where the end products are found from processes that
 # are run. Normally PDF files ready for print.
 #   Default = Deliverables
-PATH_DELIVERABLES            = 'Deliverables'
+PATH_DELIVERABLES           = 'Deliverables'
 
 # FONT FOLDER
 # The folder where the project fonts are found.
 #   Default = Fonts
-PATH_FONTS                   = 'Fonts'
+PATH_FONTS                  = 'Fonts'
 
 # HYPHENATION PATH
 # Path to the TeX hyphenation files
 #   Default = Hyphenation
-PATH_HYPHENATION             = 'Hyphenation'
+PATH_HYPHENATION            = 'Hyphenation'
 
 # LOG PATH
 # Path to the project process log files
 #   Default = Log
-PATH_LOG                     = 'Log'
+PATH_LOG                    = 'Log'
 
 # PROCESS PATH
 # The path to the process folder
 #   Default = Process
-PATH_PROCESS                 = 'Process'
+PATH_PROCESS                = 'Process'
 
 # REPORTS PATH
 # The path to the reports folder. This is where
 # information that is distilled from the log files
 # is kept.
 #   Default = Reports
-PATH_REPORTS                 = 'Reports'
+PATH_REPORTS                = 'Reports'
+
+# WORDLISTS PATH
+# Because word lists can be a handy dignostic tool
+# we will put them in their own folder under Reports.
+# They will always be referenced by this path value.
+#   Default = Reports/Wordlists
+PATH_WORDLISTS              = 'Reports/Wordlists'
 
 # TEXT PATH
 # This is the path to where the project working text is

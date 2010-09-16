@@ -41,12 +41,33 @@ class BenchmarkTests (object) :
 		visualDiffChecking      = self._log_manager._settings['System']['General']['visualDiffChecking']
 		basePath                = os.environ.get('PTXPLUS_BASE')
 		pathHome                = os.path.abspath(tools.pubInfoObject['Paths']['PATH_HOME'])
-		pathTexts               = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_TEXTS']
-		pathBenchmark           = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_BENCHMARK'] + '/' + os.path.split(pathTexts)[-1]
-		target                  = self._log_manager._currentInput
+		pathBenchmark           = os.path.abspath(tools.pubInfoObject['Paths']['PATH_BENCHMARK'])
+		new                     = self._log_manager._currentInput
+		old                     = ''
 		newFile                 = ''
 		oldFile                 = ''
 		switch                  = self._log_manager._optionalPassedVariable
+
+		# SET TYPE (BUILD ADDITIONAL PATHS)
+		# Set the test type (if we don't know, we don't go)
+		if os.path.isfile(new) :
+			testType = 'file'
+			# Do some file name manipulation to get our old and new file names
+			# It is assumed that we are working in the "Texts" folder and no
+			# other. This might come back to bite us at some point.
+			head, tail = os.path.split(new)
+			old                     = pathBenchmark + '/' + head.split('/')[-1]
+			newFile = new
+			oldFile = old + '/' + tail
+			self._log_manager.log('INFO', 'Benchmark type is file (' + os.path.split(new)[-1] + ')', 'true')
+		elif os.path.isdir(new) :
+			testType = 'dir'
+			head, tail = os.path.split(new)
+			old                     = pathBenchmark + '/' + tail
+			self._log_manager.log('INFO', 'Benchmark type is folder (' + str(len(os.listdir(new))) + ' items)', 'true')
+		else :
+			self._log_manager.log('ERRR', 'Benchmark new target type unknown', 'true')
+			sys.exit(1)
 
 		# MASTER SWITCH
 		# Do not do anything if useBenchmarkTests is set to false
@@ -56,23 +77,6 @@ class BenchmarkTests (object) :
 		else :
 			tools.userMessage('INFO: Starting benchmark tests')
 
-		# SET TYPE
-		# Set the test type (if we don't know, we don't go)
-		if os.path.isfile(target) :
-			testType = 'file'
-			# Do some file name manipulation to get our old and new file names
-			# It is assumed that we are working in the "Texts" folder and no
-			# other. This might come back to bite us at some point.
-			newFile = target
-			oldFile = pathBenchmark + '/' + os.path.split(target)[-1]
-			self._log_manager.log('INFO', 'Target is file (' + os.path.split(target)[-1] + ')', 'true')
-		elif os.path.isdir(target) :
-			testType = 'dir'
-			self._log_manager.log('INFO', 'Target is folder (' + str(len(os.listdir(target))) + ' items)', 'true')
-		else :
-			self._log_manager.log('ERRR', 'Benchmark target unknown', 'true')
-			sys.exit(1)
-
 		# UTILITY FUNCTIONS
 		# There are some small tasks that can be done by this module
 		# and are triggered by an optionally passed switch var.
@@ -80,43 +84,50 @@ class BenchmarkTests (object) :
 		# Set the current component as the benchmark
 		if switch.lower() == 'set' :
 			shutil.copy(newFile, oldFile)
-			self._log_manager.log('INFO', 'Setting the current component as benchmark (' + os.path.split(target)[-1] + ')', 'true')
+			self._log_manager.log('INFO', 'Setting the current component as benchmark (' + os.path.split(new)[-1] + ')', 'true')
 			return
-
 
 		# SANITY TESTING
 		# If we survived to this point, do some sanity testing
-		# First see if there is a benchmark folder. If not, we
-		# make one, populate it, and then quite because there
-		# is really nothing to do.
-		if not os.path.isdir(pathBenchmark) :
+		# First see if the benchmark folder is there
+		if not os.path.isdir(old) :
 			self._log_manager.log('INFO', 'No benchmark found, creating benchmark', 'true')
-			os.makedirs(pathBenchmark)
-			tools.copyFiles(pathTexts, pathBenchmark)
+			os.makedirs(old)
+			tools.copyFiles(new, old)
 
-		# If there are absolutely no files in the benchmark for
-		# for some odd reason, copy them over from the target
-		if len(os.listdir(pathBenchmark)) == 0 :
-			self._log_manager.log('INFO', 'No items in benchmark, copying from target', 'true')
-			tools.copyFiles(pathTexts, pathBenchmark)
+		# Other tests for whole folder
+		if os.path.isdir(new) :
 
-		# If the number of files is unequal, alert the user and
-		# let them sort it out. It would be nice if this was more
-		# automated but it is better to be manual at this point to
-		# be safe.
-		if len(os.listdir(pathTexts)) != len(os.listdir(pathBenchmark)) :
-			self._log_manager.log('WARN', 'Benchmark out of sync with target', 'true')
-			self._log_manager.log('INFO', 'Target = ' + str(len(os.listdir(pathTexts))) + ' - Benchmark = ' +str(len(os.listdir(pathBenchmark))), 'true')
+			# If there are absolutely no files in the benchmark for
+			# for some odd reason, copy them over from the new target
+			if len(os.listdir(old)) == 0 :
+				self._log_manager.log('INFO', 'No items in benchmark, copying from new target', 'true')
+				tools.copyFiles(new, old)
+
+			# If the number of files is unequal, alert the user and
+			# let them sort it out. It would be nice if this was more
+			# automated but it is better to be manual at this point to
+			# be safe.
+			if len(os.listdir(new)) != len(os.listdir(old)) :
+				self._log_manager.log('WARN', 'Benchmark out of sync with new target', 'true')
+				self._log_manager.log('INFO', 'Target = ' + str(len(os.listdir(new))) + ' - Benchmark = ' +str(len(os.listdir(old))), 'true')
+
+		# Other tests for individual component
+		elif os.path.isfile(newFile) :
+			if not os.path.isfile(oldFile) :
+				self._log_manager.log('INFO', 'No benchmark file found, creating benchmark file', 'true')
+				shutil.copy(newFile, oldFile)
+
 
 		# DIFF CHECK
 		# Folder Diff test
 		if testType.lower() == 'dir' :
 			# Build the command
-			sysCommand = "diff " + pathTexts + " " + pathBenchmark
+			sysCommand = "diff " + new + " " + old
 			self._log_manager.log('INFO', 'Doing initial folder DIFF check', 'true')
 			# Send off the command return error code
 			if os.system(sysCommand) != 0 :
-				self.openMeld(pathTexts, pathBenchmark, visualDiffChecking)
+				self.openMeld(new, old, visualDiffChecking)
 			else :
 				self._log_manager.log('INFO', 'No problems found, benchmark check complete', 'true')
 		# File Diff test

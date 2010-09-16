@@ -55,6 +55,8 @@ class MakeTexHyphenationFile (object) :
 		setExHyphenPenalty  = settings['Format']['Hyphenation']['setExHyphenPenalty']
 		setPretolerance     = settings['Format']['Hyphenation']['setPretolerance']
 
+		print log_manager._optionalPassedVariable, "vvvvvvvvvvvvvvvvvvvvvvvvvv"
+
 		# If we see that the texHyphenFile exists we will check to see if
 		# the overwrite flag has been set.
 		if os.path.isfile(texHyphenFileName) == True and log_manager._optionalPassedVariable != 'overwrite' :
