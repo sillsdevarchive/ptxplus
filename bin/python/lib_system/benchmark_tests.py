@@ -123,7 +123,7 @@ class BenchmarkTests (object) :
 		# Folder Diff test
 		if testType.lower() == 'dir' :
 			# Build the command
-			sysCommand = "diff " + new + " " + old
+			sysCommand = "diff " + new + " " + old + " > /dev/null"
 			self._log_manager.log('INFO', 'Doing initial folder DIFF check', 'true')
 			# Send off the command return error code
 			if os.system(sysCommand) != 0 :
@@ -133,7 +133,7 @@ class BenchmarkTests (object) :
 		# File Diff test
 		elif testType.lower() == 'file' :
 			# Build the command
-			sysCommand = "diff " + newFile + " " + oldFile
+			sysCommand = "diff " + newFile + " " + oldFile + " > /dev/null"
 			self._log_manager.log('INFO', 'Doing initial file DIFF check', 'true')
 			# Send off the command return error code
 			if os.system(sysCommand) != 0 :

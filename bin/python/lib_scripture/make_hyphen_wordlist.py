@@ -36,13 +36,15 @@
 ######################### Shell Class #######################
 #############################################################
 
-import codecs, csv, sys
+import codecs, csv, sys, operator
 from collections import defaultdict
 from operator import itemgetter
 
 # Import supporting local classes
 from encoding_manager import *
+from itertools import *
 import tools
+from tools import normalize
 
 
 class MakeHyphenWordlist (object) :
@@ -74,24 +76,21 @@ class MakeHyphenWordlist (object) :
 			self._log_manager.log("ERRR", "Hyphenation auto-generation failed. Word list not read, due to: " + str(e))
 			return
 
-		try:
-			# load the source user custom hyphenation file is there is one.
-			self.loadPreHyphenatedWordList(sourceHyphenatedWordsFile)
+		# load the source user custom hyphenation file is there is one.
+		self.loadPreHyphenatedWordList(sourceHyphenatedWordsFile)
 
-			# Pass 1: This part is all about auto-generating hyphenated words. This can
-			# be done a number of ways.
-			self.generatePrefixSuffixHyphenation(sourceMasterWordsFile, sourcePrefixListFile, sourceSuffixListFile)
-			# Pass 2: Use the provided regexp to find automatic break points.
-			self.generateRuleBrokenHyphenations(hyphenBreakRules)
+		# Pass 1: This part is all about auto-generating hyphenated words. This can
+		# be done a number of ways.
+		self.generatePrefixSuffixHyphenation(sourceMasterWordsFile, sourcePrefixListFile, sourceSuffixListFile)
+		# Pass 2: Use the provided regexp to find automatic break points.
+		self.generateRuleBrokenHyphenations(hyphenBreakRules)
 
-			#write out the hyphenation list
-			self.writeHyphenationList(newHyphenationFile)
+		#write out the hyphenation list
+		self.writeHyphenationList(newHyphenationFile)
 
-			#Debuging, write out words that could not be hyphenated
-			self.writeFailedWords(reportNonHypenatedWords)
+		#Debuging, write out words that could not be hyphenated
+		self.writeFailedWords(reportNonHypenatedWords)
 
-		except:
-			sys.exit(sys.argv[0] + ": Hyphenation auto-generation failed: please see log.")
 
 	def loadPreHyphenatedWordList(self,filepath):
 		# Load the exsiting hyphen words source list if one is in the source folder.
@@ -115,10 +114,11 @@ class MakeHyphenWordlist (object) :
 	def loadWordlistReport(self,sourceMasterWordsFile):
 		# Read the sourceMasterWordsFile - Using utf_8_sig because
 		# the source might be coming from outside the system and we
-		# may need to be able to handle a BOM.
+		# may need to be able to handle a BOM. Also, in the process
+		# of bringing in our wordlist we will normalize it to NFD.
 		f = open(sourceMasterWordsFile)
 		wordlist_csv = csv.reader(f, dialect=csv.excel)
-		for w in (w.decode('utf_8_sig') for w,c in wordlist_csv):
+		for w in normalize(w.decode('utf_8_sig') for w,c in wordlist_csv):
 			# We are not always sure what to do with words that already
 			# contain a hyphen character. However we cannot just let them
 			# disapear so we will capture these specific words in the log
@@ -222,31 +222,30 @@ class MakeHyphenWordlist (object) :
 	def wordListFromFile(self, file_path):
 		word_list = []
 		if os.path.isfile(file_path) :
+
 			try :
 				# We don't know exactly what the encoding of this file is. It is probably
 				# Unicode, more than likely utf_8. As such, we'll bring in the text raw,
 				# then decode to Unicode. That should keep things working. We may need to
 				# adjust this at some point to utf_8_sig to be able to deal with BOMs.
-				f = open(file_path, 'rb')
+				# We also normalize the wordlist to NFD as we bring it in.
+				f = codecs.open(file_path, 'rb',encoding='utf_8_sig')
+				sourceHyphenListObject = normalize(f)
 
-				# Do an encoding conversion if necessary
-#                if self._encodingChain:
-#                    sourceHyphenListObject = self._encodingChain.convert(f.read()).decode('utf_8').split('\n')
-
-				sourceHyphenListObject = f.read().decode('utf_8').split('\n')
-
-				# Push it into a dictionary w/o line endings
-				word_list = [l for l in (line.strip() for line in sourceHyphenListObject) if l]
-
+				# Push it into a list w/o line endings
+				word_list = filter(bool,imap(operator.methodcaller('strip'), sourceHyphenListObject))
 				self._log_manager.log("INFO", file_path + " loaded, found " + str(len(word_list)) + " words.")
 
 			except UnicodeDecodeError, e :
 				self._log_manager.log("ERRR", file_path + ": " + str(e))
 				return []
+
 			finally :
 				f.close()
+
 		else :
-				self._log_manager.log("DBUG", file_path + " not found")
+			self._log_manager.log("DBUG", file_path + " not found")
+
 		return word_list
 
 

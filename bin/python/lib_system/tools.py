@@ -32,10 +32,11 @@
 #############################################################
 # Firstly, import all the modules we need for this process
 
-import re, os, shutil, codecs, csv, sys
+import re, os, shutil, codecs, csv, sys, unicodedata
 from configobj import ConfigObj
 from datetime import *
-
+from functools import partial
+from itertools import imap
 
 
 def taskRunner (log_manager, thisTask) :
@@ -778,21 +779,30 @@ def getSliceOfText (text, start, amount) :
 	else :
 		return text[left:right]
 
-class CSVtoDict(dict):
+
+def normalize (iterable, form='NFD') :
+	'''This will return an iterable object that will normalize a
+		file to the default of NFD. But you override by changing
+		'form' to NFC by the calling function.'''
+
+	return imap(partial(unicodedata.normalize,form),iterable)
+
+
+class CSVtoDict (dict):
 	'''This class provides a service which will convert a proper CSV file
 		that uses the excel dialect and has a header row, into a
 		dictionary object. The default record is ID but it can be
 		changed to whatever is needed by passing a different value
 		for recordkey.'''
 
-	def __init__(self, csv_file_path, recordkey='ID'):
+	def __init__ (self, csv_file_path, recordkey='ID') :
 		csvs = csv.DictReader(open(csv_file_path), dialect=csv.excel)
 		records = list((row.pop(recordkey),row) for row in csvs)
 		return super(CSVtoDict, self).__init__(records)
 
 
 #####################################################################################
-#               Declair Gobal Vars and Objects here
+#               Declare Gobal Vars and Objects here
 #####################################################################################
 
 # Get the ptxplus basePath, declair as global

@@ -71,22 +71,38 @@ class CopyFromSource (object) :
 		# Because we want to be able to customize the command if necessary the
 		# incoming command has placeholders for the input and output. We need
 		# to replace this here.
+		tempFile = inputFile + '.tmp'
 		copyCommand = copyCommand.replace('[infile]', inputFile)
-		copyCommand = copyCommand.replace('[outfile]', outputFile)
+		copyCommand = copyCommand.replace('[outfile]', tempFile)
+
 		# But just in case we'll look for mixed case on the placeholders
 		# This may not be enough but it will do for now.
 		copyCommand = copyCommand.replace('[inFile]', inputFile)
-		copyCommand = copyCommand.replace('[outFile]', outputFile)
+		copyCommand = copyCommand.replace('[outFile]', tempFile)
+		nfdCommand = 'txtconv -i ' + tempFile + ' -o ' + outputFile + ' -nfd '
 
 		# Try the command and check to see if it was successful
 		try :
 			os.system(copyCommand)
-			if os.path.isfile(outputFile) :
-				log_manager.log("INFO", "Copied from: " + inputFile + " ---To:--> " + outputFile + " Command used: " + copyCommand)
+			if os.path.isfile(tempFile) :
+				log_manager.log("INFO", "Copied from: " + inputFile + " ---To:--> " + tempFile + " Command used: " + copyCommand)
 			else :
 				log_manager.log("ERRR", "File not found. The Copy command was executed but seemed to fail. Command executed: " + copyCommand)
+
 		except :
-			log_manager.logIt("ERRR", "Failed to execute: " + copyCommand)
+			log_manager.log("ERRR", "Failed to execute: " + copyCommand)
+
+		# Apply the NFD to insure the text it usable in the system
+		# This relys on the TECKit txtconv utility to be present
+		try :
+			os.system(nfdCommand)
+			if os.path.isfile(outputFile) :
+				log_manager.log("INFO", "Normalized data to NFD in: " + outputFile)
+			else :
+				log_manager.log("ERRR", "File not found. The NFD normalization was executed but seemed to fail. Command executed: " + nfdCommand)
+
+		except :
+			log_manager.log("ERRR", "Failed to normalize to NFD: " + nfdCommand)
 
 
 # This starts the whole process going

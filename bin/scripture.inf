@@ -333,6 +333,14 @@ MOD_MAKE_TOC                = 'make_toc_file'
 # has a refresh mode. It is called like other modules.
 MOD_CHECK_ASSETS            = 'check_assets'
 
+# IMPORT TEXT
+# After preprocess checks are run the text will need to
+# be imported in to the project. This will be done by
+# a controling process that is very flexible. Note that
+# for internal purposes, the normaliztion of the text will
+# be NFD. All text in the system is assumed to be NFD.
+MOD_IMPORT                  = 'copy_from_source'
+
 # RUN PROCESS
 # This is the main module used to run all processes on the
 # system. This needs to have the full path in it.

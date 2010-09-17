@@ -370,7 +370,7 @@ endef
 define postprocessing
 $(call preprocessing ,$(1),$($(1)_content))
 @echo INFO: Copy to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
-@$(MOD_RUN_PROCESS) "copyIntoSystem" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+@$(MOD_RUN_PROCESS) "$(MOD_IMPORT)" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
 @echo INFO: Postprocessing: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'
 @$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
 endef

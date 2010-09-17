@@ -55,8 +55,6 @@ class MakeTexHyphenationFile (object) :
 		setExHyphenPenalty  = settings['Format']['Hyphenation']['setExHyphenPenalty']
 		setPretolerance     = settings['Format']['Hyphenation']['setPretolerance']
 
-		print log_manager._optionalPassedVariable, "vvvvvvvvvvvvvvvvvvvvvvvvvv"
-
 		# If we see that the texHyphenFile exists we will check to see if
 		# the overwrite flag has been set.
 		if os.path.isfile(texHyphenFileName) == True and log_manager._optionalPassedVariable != 'overwrite' :
@@ -70,7 +68,7 @@ class MakeTexHyphenationFile (object) :
 				word_list_in = codecs.open(wordListFileName, mode='w', encoding='utf_8')
 			else :
 				# Use utf_8_sig to open it in case it has a BOM in it!
-				word_list_in = codecs.open(wordListFileName, mode='r', encoding='utf_8_sig')
+				word_list_in = tools.normalize(codecs.open(wordListFileName, mode='r', encoding='utf_8_sig'))
 
 
 			# Make the TeX hyphen file
@@ -96,7 +94,7 @@ class MakeTexHyphenationFile (object) :
 			# It may be necessary to have an lcCodeList included. These codes are
 			# kept in an external file normally kept in the project hyphenation folder.
 			if os.path.isfile(lcCodeListFileName):
-				tex_hypens_out.writelines(codecs.open(lcCodeListFileName, 'r', encoding='utf_8'))
+				tex_hypens_out.writelines(tools.normalize(codecs.open(lcCodeListFileName, 'r', encoding='utf_8')))
 				tex_hypens_out.write('\n')
 
 			# The hyphenation word list is normally generated in another process
