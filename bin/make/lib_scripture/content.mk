@@ -183,14 +183,28 @@ else
 	@echo INFO: Cannot remove: $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
 
+# Set a wordlist for a single book as current
+benchmark-wordlist-set-$(1) :
+ifeq ($(LOCKED),0)
+	@echo Setting benchmark: $(1)-wordlist.$(EXT_CSV)
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" "set"
+else
+	@echo INFO: Cannot set benchmark: $(1)-wordlist.$(EXT_CSV) because the project is locked.
+endif
+
 # Benchmark test on the current component
-benchmark-$(1) :
+benchmark-text-$(1) :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
 
 # Set the current file as benchmark. This will overwrite
 # whatever might currently be in the benchmark folder.
-benchmark-set-$(1) :
+benchmark-text-set-$(1) :
+ifeq ($(LOCKED),0)
+	@echo Setting benchmark: $(1).$(EXT_WORK)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
+else
+	@echo INFO: Cannot set benchmark: $(1).$(EXT_WORK) because the project is locked.
+endif
 
 
 # End of the content_rules define
@@ -453,7 +467,7 @@ endif
 # Most of these are automated but these commands are for the GUI.
 
 # Test all the working text against the stored benchmark text
-benchmark-all :
+benchmark-text-all :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
 
 # Test the Hyphenation folder
@@ -469,5 +483,18 @@ benchmark-hyphen-txt :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
 
 # Test the Wordlists folder
-benchmark-wordlists :
+benchmark-wordlists-all :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)" "" ""
+
+# Test the Wordlist master file
+benchmark-wordlist-master :
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" ""
+
+# Set the master wordlist for project
+benchmark-wordlist-set-master :
+ifeq ($(LOCKED),0)
+	@echo Setting benchmark: $(FILE_MASTERWORDS)
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" "set"
+else
+	@echo INFO: Cannot set benchmark: $(1)-wordlist.$(EXT_CSV) because the project is locked.
+endif
