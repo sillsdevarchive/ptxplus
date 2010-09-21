@@ -192,6 +192,11 @@ else
 	@echo INFO: Cannot set benchmark: $(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
 
+# Benchmark test a wordlist for a single book
+benchmark-wordlist-$(1) :
+	@echo Benchmark testing: $(1)-wordlist.$(EXT_CSV)
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" ""
+
 # Benchmark test on the current component
 benchmark-text-$(1) :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
