@@ -74,10 +74,10 @@ endif
 # use flag which identifies the object as peripheral components.
 # For this we use the "periph" flag.
 $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
-	$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
-	$(PATH_PROCESS)/$(FILE_TEX_COVER) \
-	$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
-	$(PATH_PROCESS)/$(FILE_TEX_BACK)
+		$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
+		$(PATH_PROCESS)/$(FILE_TEX_COVER) \
+		$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
+		$(PATH_PROCESS)/$(FILE_TEX_BACK)
 	@echo INFO: Creating: $$@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "$(1)" "$$@" "periph"
 
@@ -87,9 +87,10 @@ $(PATH_PROCESS)/$(1).$(EXT_STYLE) :
 
 # Process a single peripheral item and produce the final PDF.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
-	$(PATH_TEXTS)/$(1).$(EXT_WORK) \
-	$(PATH_PROCESS)/$(1).$(EXT_TEX) \
-	$(PATH_PROCESS)/$(1).$(EXT_STYLE) | $(DEPENDENT_FILE_LIST)
+		$(PATH_TEXTS)/$(1).$(EXT_WORK) \
+		$(PATH_PROCESS)/$(1).$(EXT_TEX) \
+		$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
+		$(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $$@
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(1).$(EXT_TEX)
 	$(call watermark,$$@)
