@@ -67,9 +67,10 @@ class MakeWordlist (object) :
 		# Get some count info
 		uniqueWords = len(rows)
 		totalWords = sum(masterWordlist.values())
-		# Sort the list by the number, not the word. We want
-		# words of least occurance to appear at the top
-		rows.sort(key=itemgetter(1))
+		# Sort the list by case insensitive default unicode sort order.
+		# this makes it easier to compare wordlists by diff
+		rows.sort()
+		rows.sort(key=lambda (w,c): w.lower())
 		# Now write out the wordlist to the cvs file
 		cvsMasterFile.writerows(rows)
 

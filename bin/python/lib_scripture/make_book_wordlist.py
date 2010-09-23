@@ -39,7 +39,7 @@
 ######################### Shell Class #######################
 #############################################################
 
-import codecs, os, csv
+import codecs, os, operator, csv
 import parse_sfm
 
 # Import supporting local classes
@@ -59,7 +59,6 @@ class MakeBookWordlist (object) :
 		bookReportFile = os.getcwd() + "/" + wordlistPath + "/" + log_manager._currentTargetID + "-wordlist.csv"
 		bookWordlist = {}
 		wordlist = []
-		pre_wordlist = {}
 		raw_str = ''
 
 		# Make our Report folder if it isn't there
@@ -81,20 +80,24 @@ class MakeBookWordlist (object) :
 		parser.setHandler(handler)
 		parser.parse(bookObject)
 
-		pre_wordlist = [s.encode('utf_8') for s in handler._wordlist]
-
 		# Here we create a bookWordlist dict using the defaultdict mod. Then we
 		# we add the words we collected from the text handler and do the counting
 		# here as well
 		bookWordlist = defaultdict(int)
-		for word in handler._wordlist:
+		for word in wordlist:
 			bookWordlist[word] += 1
+
+		# Sort the list by case insensitive default unicode sort order.
+		# this makes it easier to compare wordlists by diff
+		bookWordlist = bookWordlist.items()
+		bookWordlist.sort()
+		bookWordlist.sort(key=lambda (w,c): w.lower())
 
 		# Write out the new csv book word count file
 		# More info on writing to csv is here:
 		#    http://docs.python.org/library/csv.html#writer-objects
 		cvsBookFile = csv.writer(open(bookReportFile, "wb"), dialect=csv.excel)
-		cvsBookFile.writerows(bookWordlist.items())
+		cvsBookFile.writerows(bookWordlist)
 
 		# Report what happened
 		log_manager.log("INFO", "Process complete. Total words found = " + str(len(handler._wordlist)) + " / Unique words = " + str(len(bookWordlist)))
