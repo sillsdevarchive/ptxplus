@@ -571,17 +571,41 @@ def doCustomProcess (processCommand) :
 		return False
 
 
-def copyFiles (src, dst) :
+def copyFiles (srcDir, dstDir) :
 	'''Copy all the files in a dir to another. It assumes the
 		destination dir exists and it will not copy
 		recursively.'''
 
-	names = os.listdir(src)
+	names = os.listdir(srcDir)
 	for name in names:
-		srcname = os.path.join(src, name)
-		dstname = os.path.join(dst, name)
+		srcname = os.path.join(srcDir, name)
+		dstname = os.path.join(dstDir, name)
 		if not os.path.isdir(srcname) :
 			shutil.copy(srcname, dstname)
+
+
+def chmodFiles (srcDir, mode) :
+	'''Change the permission on all the files in a dir to something else.
+		It assumes the destination dir exists and it will not work
+		recursively. For mode it depends on stat() to give it the
+		permission code. The calling function delivers this.'''
+
+	names = os.listdir(srcDir)
+	for name in names:
+		srcname = os.path.join(srcDir, name)
+		if os.path.isfile(srcname) :
+			os.chmod(srcname, mode)
+
+
+def unlinkFiles (srcDir) :
+	'''Remove all the files in a dir. It assumes the destination dir
+		exists and it will not work recursively.'''
+
+	names = os.listdir(srcDir)
+	for name in names:
+		srcname = os.path.join(srcDir, name)
+		if os.path.isfile(srcname) :
+			os.unlink(srcname)
 
 
 def copyAll (src, dst) :

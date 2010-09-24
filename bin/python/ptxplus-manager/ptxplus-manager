@@ -131,14 +131,16 @@ class ConfigGUI (object) :
 			"on_menu_benchmark_text_current"            : self.m_benchmark_text_current,
 			"on_menu_benchmark_text_current_set"        : self.m_benchmark_text_current_set,
 			"on_menu_benchmark_text_all"                : self.m_benchmark_text_all,
-			"on_menu_benchmark_hyphen_all"              : self.m_benchmark_hyphen_all,
-			"on_menu_benchmark_hyphen_tex"              : self.m_benchmark_hyphen_tex,
-			"on_menu_benchmark_hyphen_txt"              : self.m_benchmark_hyphen_txt,
-			"on_menu_benchmark_wordlist_all"            : self.m_benchmark_wordlist_all,
 			"on_menu_benchmark_wordlist_current"        : self.m_benchmark_wordlist_current,
 			"on_menu_benchmark_wordlist_set_current"    : self.m_benchmark_wordlist_set_current,
 			"on_menu_benchmark_wordlist_master"         : self.m_benchmark_wordlist_master,
 			"on_menu_benchmark_wordlist_set_master"     : self.m_benchmark_wordlist_set_master,
+			"on_menu_benchmark_wordlist_all"            : self.m_benchmark_wordlist_all,
+			"on_menu_benchmark_hyphen_tex"              : self.m_benchmark_hyphen_tex,
+			"on_menu_benchmark_hyphen_set_tex"          : self.m_benchmark_hyphen_set_tex,
+			"on_menu_benchmark_hyphen_txt"              : self.m_benchmark_hyphen_txt,
+			"on_menu_benchmark_hyphen_set_txt"          : self.m_benchmark_hyphen_set_txt,
+			"on_menu_benchmark_hyphen_all"              : self.m_benchmark_hyphen_all,
 
 			"on_menu_map_view_model"                    : self.m_map_view_model,
 			"on_menu_map_edit_data"                     : self.m_map_edit_data,
@@ -669,29 +671,35 @@ class ConfigGUI (object) :
 	def m_benchmark_text_all (self, widget) :
 		self.execute("ptxplus", "benchmark-text-all")
 
-	def m_benchmark_hyphen_all (self, widget) :
-		self.execute("ptxplus", "benchmark-hyphenation-all")
-
-	def m_benchmark_hyphen_tex (self, widget) :
-		self.execute("ptxplus", "benchmark-hyphen-tex")
-
-	def m_benchmark_hyphen_txt (self, widget) :
-		self.execute("ptxplus", "benchmark-hyphen-txt")
-
-	def m_benchmark_wordlist_all (self, widget) :
-		self.execute("ptxplus", "benchmark-wordlist-all")
-
 	def m_benchmark_wordlist_current (self, widget) :
-		self.execute("ptxplus", "benchmark-wordlist-current")
+		self.execute("ptxplus", "benchmark-wordlist-" + self.bkid)
 
 	def m_benchmark_wordlist_set_current (self, widget) :
-		self.execute("ptxplus", "benchmark-wordlist-set-current")
+		self.execute("ptxplus", "benchmark-wordlist-set-" + self.bkid)
 
 	def m_benchmark_wordlist_master (self, widget) :
 		self.execute("ptxplus", "benchmark-wordlist-master")
 
 	def m_benchmark_wordlist_set_master (self, widget) :
 		self.execute("ptxplus", "benchmark-wordlist-set-master")
+
+	def m_benchmark_wordlist_all (self, widget) :
+		self.execute("ptxplus", "benchmark-wordlist-all")
+
+	def m_benchmark_hyphen_tex (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-tex")
+
+	def m_benchmark_hyphen_set_tex (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-set-tex")
+
+	def m_benchmark_hyphen_txt (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-txt")
+
+	def m_benchmark_hyphen_set_txt (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-set-txt")
+
+	def m_benchmark_hyphen_all (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-all")
 
 	##### Menu - Maps
 

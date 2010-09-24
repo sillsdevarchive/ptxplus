@@ -575,11 +575,11 @@
 			  </widget>
 			</child>
 			<child>
-			  <widget class="GtkMenuItem" id="menu_benchmark">
+			  <widget class="GtkMenuItem" id="menu_regression">
 				<property name="visible">True</property>
-				<property name="label" translatable="yes">Benchmark</property>
+				<property name="label" translatable="yes">Regression</property>
 				<child>
-				  <widget class="GtkMenu" id="benchmark">
+				  <widget class="GtkMenu" id="regression">
 					<property name="visible">True</property>
 					<child>
 					  <widget class="GtkMenuItem" id="benchmark_text_current">
@@ -594,7 +594,7 @@
 					  <widget class="GtkMenuItem" id="benchmark_text_current_set">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Set the current text object to be the benchmark</property>
-						<property name="label" translatable="yes">Text Set (Current)</property>
+						<property name="label" translatable="yes">Text - Set (Current)</property>
 						<property name="use_underline">True</property>
 						<signal name="activate" handler="on_menu_benchmark_text_current_set"/>
 					  </widget>
@@ -626,7 +626,7 @@
 					  <widget class="GtkMenuItem" id="benchmark_wordlist_set_current">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Set current component wordlist as benchmark</property>
-						<property name="label" translatable="yes">Wordlist Set (Current)</property>
+						<property name="label" translatable="yes">Wordlist - Set (Current)</property>
 						<property name="use_underline">True</property>
 						<signal name="activate" handler="on_menu_benchmark_wordlist_set_current"/>
 					  </widget>
@@ -644,7 +644,7 @@
 					  <widget class="GtkMenuItem" id="benchmark_wordlist_set_master">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Set current master wordlist as the benchmark</property>
-						<property name="label" translatable="yes">Wordlist Master Set</property>
+						<property name="label" translatable="yes">Wordlist Master - Set</property>
 						<property name="use_underline">True</property>
 						<signal name="activate" handler="on_menu_benchmark_wordlist_set_master"/>
 					  </widget>
@@ -673,12 +673,30 @@
 					  </widget>
 					</child>
 					<child>
+					  <widget class="GtkMenuItem" id="benchmark_hyphen_set_tex">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Set current TeX hypheation file as benchmark</property>
+						<property name="label" translatable="yes">TeX Hyphenation - Set</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_hyphen_set_tex"/>
+					  </widget>
+					</child>
+					<child>
 					  <widget class="GtkMenuItem" id="benchmark_hyphen_txt">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Test hypheation wordlist only</property>
 						<property name="label" translatable="yes">Hyphenation Words</property>
 						<property name="use_underline">True</property>
 						<signal name="activate" handler="on_menu_benchmark_hyphen_txt"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_hyphen_set_txt">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Set current hypheation wordlist file as benchmark</property>
+						<property name="label" translatable="yes">Hyphenation Words - Set</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_hyphen_set_txt"/>
 					  </widget>
 					</child>
 					<child>

@@ -63,7 +63,7 @@ class MakeBookWordlist (object) :
 
 		# Make our Report folder if it isn't there
 		if not os.path.isdir(wordlistPath) :
-			os.mkdir(wordlistPath)
+			os.makedirs(wordlistPath)
 
 		# This will pull its word data from the working text which should
 		# already have been run through all post processes and be ready

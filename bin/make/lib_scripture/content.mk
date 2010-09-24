@@ -167,7 +167,7 @@ else
 endif
 
 # Create a wordlist for a single book
-$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
+$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV) : | $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@echo INFO: Creating: $$@
 	@$$(call makewordlist,$(1))
 
@@ -184,7 +184,7 @@ else
 endif
 
 # Set a wordlist for a single book as current
-benchmark-wordlist-set-$(1) :
+benchmark-wordlist-set-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
 ifeq ($(LOCKED),0)
 	@echo Setting benchmark: $(1)-wordlist.$(EXT_CSV)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" "set"
@@ -193,12 +193,12 @@ else
 endif
 
 # Benchmark test a wordlist for a single book
-benchmark-wordlist-$(1) :
+benchmark-wordlist-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
 	@echo Benchmark testing: $(1)-wordlist.$(EXT_CSV)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" ""
 
 # Benchmark test on the current component
-benchmark-text-$(1) :
+benchmark-text-$(1) : | $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
 
 # Set the current file as benchmark. This will overwrite
@@ -476,30 +476,48 @@ benchmark-text-all :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
 
 # Test the Hyphenation folder
-benchmark-hyphen-all :
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)" "" ""
-
-# Test the Hyphenation folder
-benchmark-hyphen-tex :
+benchmark-hyphen-tex : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" ""
 
-# Test the Hyphenation folder
-benchmark-hyphen-txt :
+# Set the current TeX hyphenation to be the benchmark
+benchmark-hyphen-set-tex : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
+ifeq ($(LOCKED),0)
+	@echo Setting benchmark: $(FILE_HYPHENATION_TEX)
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" "set"
+else
+	@echo INFO: Cannot set benchmark: $(FILE_HYPHENATION_TEX) because the project is locked.
+endif
+
+# Test the hyphenation wordlist file
+benchmark-hyphen-txt : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
 
-# Test the Wordlists folder
-benchmark-wordlist-all :
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)" "" ""
+# Set the current hyphenation wordlist file to be the benchmark
+benchmark-hyphen-set-txt : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
+ifeq ($(LOCKED),0)
+	@echo Setting benchmark: $(FILE_HYPHENATION_TEX)
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" "set"
+else
+	@echo INFO: Cannot set benchmark: $(FILE_HYPHENATION) because the project is locked.
+endif
+
+# Test the Hyphenation folder
+benchmark-hyphen-all : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)" "" ""
 
 # Test the Wordlist master file
-benchmark-wordlist-master :
+benchmark-wordlist-master : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" ""
 
 # Set the master wordlist for project
-benchmark-wordlist-set-master :
+benchmark-wordlist-set-master : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 ifeq ($(LOCKED),0)
 	@echo Setting benchmark: $(FILE_MASTERWORDS)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" "set"
 else
 	@echo INFO: Cannot set benchmark: $(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
+
+# Test the Wordlists folder
+benchmark-wordlist-all : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)" "" ""

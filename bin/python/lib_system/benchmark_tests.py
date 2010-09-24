@@ -25,7 +25,7 @@
 #############################################################
 # Firstly, import all the modules we need for this process
 
-import sys, os, shutil
+import sys, os, shutil, stat
 
 import tools
 
@@ -66,7 +66,7 @@ class BenchmarkTests (object) :
 			old                     = pathBenchmark + '/' + tail
 			self._log_manager.log('INFO', 'Benchmark type is folder (' + str(len(os.listdir(new))) + ' items)', 'true')
 		else :
-			self._log_manager.log('ERRR', 'Benchmark new target type unknown', 'true')
+			self._log_manager.log('ERRR', 'Benchmark for [' + new + '] target type unknown', 'true')
 			sys.exit(1)
 
 		# MASTER SWITCH
@@ -83,26 +83,49 @@ class BenchmarkTests (object) :
 
 		# Set the current component as the benchmark
 		if switch.lower() == 'set' :
+			# Deal with any exsiting file
+			if os.path.isfile(oldFile) :
+				os.unlink(oldFile)
+
+			# Copy file and set permission to read-only
 			shutil.copy(newFile, oldFile)
+			os.chmod(oldFile, stat.S_IREAD)
 			self._log_manager.log('INFO', 'Setting the current component as benchmark (' + os.path.split(new)[-1] + ')', 'true')
-			return
 
 		# SANITY TESTING
 		# If we survived to this point, do some sanity testing
-		# First see if the benchmark folder is there
+		# First see if the benchmark folder is there then copy
+		# whatever files are needed.
 		if not os.path.isdir(old) :
 			self._log_manager.log('INFO', 'No benchmark found, creating benchmark', 'true')
 			os.makedirs(old)
-			tools.copyFiles(new, old)
+			if testType == "file" :
+				# Copy one file and set to readonly
+				shutil.copy(newFile, oldFile)
+				os.chmod(oldFile, stat.S_IREAD)
+			elif testType == "dir" :
+				# Copy all the files and set all of them to readonly
+				tools.copyFiles(new, old)
+				tools.chmodFiles(old, stat.S_IREAD)
 
 		# Other tests for whole folder
 		if os.path.isdir(new) :
 
 			# If there are absolutely no files in the benchmark for
 			# for some odd reason, copy them over from the new target
+			# and make them all readonly
 			if len(os.listdir(old)) == 0 :
 				self._log_manager.log('INFO', 'No items in benchmark, copying from new target', 'true')
-				tools.copyFiles(new, old)
+				if testType == "file" :
+					# Copy one file and set to readonly
+					os.unlink(oldFile)
+					shutil.copy(newFile, oldFile)
+					os.chmod(oldFile, stat.S_IREAD)
+				elif testType == "dir" :
+					# Copy all the files and set all of them to readonly
+					tools.unlinkFiles(old)
+					tools.copyFiles(new, old)
+					tools.chmodFiles(old, stat.S_IREAD)
 
 			# If the number of files is unequal, alert the user and
 			# let them sort it out. It would be nice if this was more
@@ -117,32 +140,33 @@ class BenchmarkTests (object) :
 			if not os.path.isfile(oldFile) :
 				self._log_manager.log('INFO', 'No benchmark file found, creating benchmark file', 'true')
 				shutil.copy(newFile, oldFile)
+				os.chmod(oldFile, stat.S_IREAD)
 
 
 		# DIFF CHECK
 		# Folder Diff test
 		if testType.lower() == 'dir' :
 			# Build the command
-			sysCommand = "diff " + new + " " + old + " > /dev/null"
+			sysCommand = "diff " + old + " " + new + " > /dev/null"
 			self._log_manager.log('INFO', 'Doing initial folder DIFF check', 'true')
 			# Send off the command return error code
 			if os.system(sysCommand) != 0 :
-				self.openMeld(new, old, visualDiffChecking)
+				self.openMeld(old, new, visualDiffChecking)
 			else :
 				self._log_manager.log('INFO', 'No problems found, benchmark check complete', 'true')
 		# File Diff test
 		elif testType.lower() == 'file' :
 			# Build the command
-			sysCommand = "diff " + newFile + " " + oldFile + " > /dev/null"
+			sysCommand = "diff " + oldFile + " " + newFile + " > /dev/null"
 			self._log_manager.log('INFO', 'Doing initial file DIFF check', 'true')
 			# Send off the command return error code
 			if os.system(sysCommand) != 0 :
-				self.openMeld(newFile, oldFile, visualDiffChecking)
+				self.openMeld(oldFile, newFile, visualDiffChecking)
 			else :
 				self._log_manager.log('INFO', 'No problems found, benchmark check complete', 'true')
 
 
-	def openMeld (self, newFile, oldFile, useViewer) :
+	def openMeld (self, oldFile, newFile, useViewer) :
 		'''Open Meld to view the differences. NOTE: This may need to
 			be mademore generalized in the future.'''
 
@@ -152,7 +176,7 @@ class BenchmarkTests (object) :
 		if useViewer.lower() == 'true' :
 			self._log_manager.log('INFO', 'Problems found. Now opening Meld', 'true')
 			# Build the command (try terminating with the "&" for better control, I think.)
-			sysCommand = "meld " + newFile + " " + oldFile + ' &'
+			sysCommand = "meld " + oldFile + " " + newFile + ' &'
 			self._log_manager.log('INFO', 'Opening Meld diff viewer', 'true')
 			# Send off the command return error code
 			os.system(sysCommand)

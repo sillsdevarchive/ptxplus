@@ -46,6 +46,10 @@ class MakeWordlist (object) :
 		uniqueWords = 0
 		totalWords = 0
 
+		# Make our Report folder if it isn't there
+		if not os.path.isdir(wordlistPath) :
+			os.makedirs(wordlistPath)
+
 		# Use the defaultdict module to create the master word dictionary
 		# Info on this module can be found here:
 		# http://docs.python.org/library/collections.html?highlight=defaultdict#collections.defaultdict
