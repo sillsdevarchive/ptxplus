@@ -548,33 +548,6 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_current">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Do a benchmark test on the current component</property>
-						<property name="label" translatable="yes">Benchmark (Current)</property>
-						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_current"/>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkMenuItem" id="benchmark_current_set">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Set the current object to be the benchmark</property>
-						<property name="label" translatable="yes">Benchmark Set (Current)</property>
-						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_current_set"/>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkMenuItem" id="benchmark_all">
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Run benchmark tests on all components</property>
-						<property name="label" translatable="yes">Benchmark (All)</property>
-						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_all"/>
-					  </widget>
-					</child>
-					<child>
 					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem2">
 						<property name="visible">True</property>
 					  </widget>
@@ -584,7 +557,7 @@
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Create a test PDF file of the current component</property>
 						<property name="label" translatable="yes">View (Current)</property>
-						<signal name="activate" handler="on_b_view_clicked"/>
+						<signal name="activate" handler="on_menu_view_current"/>
 						<accelerator key="v" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
 					  </widget>
 					</child>
@@ -595,6 +568,126 @@
 						<property name="label" translatable="yes">Remove PDF (Current)</property>
 						<signal name="activate" handler="on_menu_remove_pdf_current_activate"/>
 						<accelerator key="Delete" signal="activate" modifiers="GDK_SHIFT_MASK"/>
+					  </widget>
+					</child>
+				  </widget>
+				</child>
+			  </widget>
+			</child>
+			<child>
+			  <widget class="GtkMenuItem" id="menu_benchmark">
+				<property name="visible">True</property>
+				<property name="label" translatable="yes">Benchmark</property>
+				<child>
+				  <widget class="GtkMenu" id="benchmark">
+					<property name="visible">True</property>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_text_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Do a benchmark test on the current text component</property>
+						<property name="label" translatable="yes">Text (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_text_current"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_text_current_set">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Set the current text object to be the benchmark</property>
+						<property name="label" translatable="yes">Text Set (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_text_current_set"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_text_all">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Run benchmark tests on all text components</property>
+						<property name="label" translatable="yes">Text (All)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_text_all"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="benchmarkseparatormenuitem1">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_wordlist_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Run benchmark test on current component wordlist</property>
+						<property name="label" translatable="yes">Wordlists (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_wordlist_current"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_wordlist_set_current">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Set current component wordlist as benchmark</property>
+						<property name="label" translatable="yes">Wordlist Set (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_wordlist_set_current"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_wordlist_master">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Run benchmark tests on master wordlist</property>
+						<property name="label" translatable="yes">Wordlist Master</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_wordlist_master"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_wordlist_set_master">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Set current master wordlist as the benchmark</property>
+						<property name="label" translatable="yes">Wordlist Master Set</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_wordlist_set_master"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_wordlist_all">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Run benchmark tests on all wordlists</property>
+						<property name="label" translatable="yes">Wordlists (All)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_wordlist_all"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkSeparatorMenuItem" id="benchmarkseparatormenuitem2">
+						<property name="visible">True</property>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_hyphen_tex">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Test TeX hypheation file only</property>
+						<property name="label" translatable="yes">TeX Hyphenation</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_hyphen_tex"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_hyphen_txt">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Test hypheation wordlist only</property>
+						<property name="label" translatable="yes">Hyphenation Words</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_hyphen_txt"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="benchmark_hyphen_all">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Test hypheation folder</property>
+						<property name="label" translatable="yes">Hyphenation (All)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_benchmark_hyphen_all"/>
 					  </widget>
 					</child>
 				  </widget>

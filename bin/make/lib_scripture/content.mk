@@ -476,7 +476,7 @@ benchmark-text-all :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
 
 # Test the Hyphenation folder
-benchmark-hyphenation :
+benchmark-hyphen-all :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)" "" ""
 
 # Test the Hyphenation folder
@@ -488,7 +488,7 @@ benchmark-hyphen-txt :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
 
 # Test the Wordlists folder
-benchmark-wordlists-all :
+benchmark-wordlist-all :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)" "" ""
 
 # Test the Wordlist master file
