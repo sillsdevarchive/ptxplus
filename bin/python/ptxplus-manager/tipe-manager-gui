@@ -1,0 +1,1171 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+########################################################################################
+# Todo:
+#    Add a dialog to confirm restore of a backup
+
+# History:
+# 20081023 - djd - Changed references to config object to reflect
+#       reorganization to the .project.conf file
+# 20081112 - djd - Added an example menu item
+# 20081229 - djd - Added menu items, Preprocess, Process and Bind
+# 20090914 - djd - Removed "-book" from preprocess-book to try to resolve
+#       a makefile conflict with the maps routine.
+# 20091201 - djd - Removed Preprocess menu item, added groups to the component list
+#       and a few other modifications for processing groups
+# 20091209 - djd - Added code for get-clip command
+# 20091214 - djd - Added some wordlist and hyphen list making commands
+# 20100609 - djd - Fixed a problem with list values that only have one element
+#       being messed up when saved by the UI. Thanks TimE
+# 20100629 - djd - More robust read and write in list form was added by TimE
+#       this enabled us to put a comma in a comma seperated list.
+# 20100728 - djd - A a menu item for running postprocesses only
+# 20100804 - djd - Added a fix to keep object types in place after they have
+#       been modified (TimE)
+
+########################################################################################
+
+
+import sys, re, os, time, htmlentitydefs
+from StringIO  import StringIO
+from configobj import ConfigObj
+
+try:
+	import pygtk
+	pygtk.require("2.0")
+except:
+	pass
+try:
+	import gtk
+	import gtk.glade
+except:
+	sys.exit(1)
+
+from configobj import ConfigObj
+import vte
+import gtksourceview2
+
+# helper function used by two classes, so it's given global scope
+def get_gtksourceview_from_notebook(notebook):
+	s = notebook.get_nth_page(notebook.get_current_page())
+	if type(s) == gtk.ScrolledWindow:
+		v = s.get_child()
+		if type(v) == gtksourceview2.View:
+			b = v.get_buffer()
+			return (v,b)
+	return (None,None)
+
+class ConfigGUI (object) :
+	"""A GTK based configuration file editor."""
+
+	def __init__ (self) :
+		basePath = os.environ.get('PTXPLUS_BASE')
+		if not basePath:
+			basePath = "/usr/share/xetex-ptxplus"
+			self.binpath = ''
+		else :
+			self.binpath = basePath + "/bin/"
+
+		# Set our paths to application resources
+		sys.path.insert(0, basePath + '/bin/python')
+		sys.path.insert(0, basePath + '/bin/python/lib_system')
+
+		# Import our tools
+		import tools
+		self._tools = tools
+
+		# Some local settings
+		self.gladefile = basePath + "/bin/python/ptxplus-manager/ptxplus-manager.glade"
+		self.iconfile = basePath + "/resources/icons/ptxplus.png"
+		self.bkid = ''
+		self.wTree = gtk.glade.XML(self.gladefile)
+		self.wTree.get_widget('w_main').set_icon_from_file(self.iconfile)
+
+		dic = {
+
+			"on_menu_new_activate"                      : self.m_new,
+			"on_gtk-open_activate"                      : self.m_open,
+			"on_menu_import_activate"                   : self.m_import,
+			"on_menu_archive_activate"                  : self.m_archive,
+			"on_menu_restore_activate"                  : self.m_restore,
+			"on_menu_backup_activate"                   : self.m_backup,
+			"on_menu_reload_activate"                   : self.m_reload,
+			"on_menu_reset_activate"                    : self.m_reset,
+			"on_menu_quit_activate"                     : self.quit,
+
+			"on_menu_cut_activate"                      : self.m_cut,
+			"on_menu_copy_activate"                     : self.m_copy,
+			"on_menu_paste_activate"                    : self.m_paste,
+			"on_menu_undo_activate"                     : self.m_undo,
+			"on_menu_redo_activate"                     : self.m_redo,
+			"on_menu_edit_activate"                     : self.m_edit,
+			"on_menu_find_activate"                     : self.m_find,
+			"on_menu_getclip_activate"                  : self.m_getclip,
+
+			"on_menu_next_tab_activate"                 : self.m_next_tab,
+			"on_menu_previous_tab_activate"             : self.m_previous_tab,
+			"on_checkmenu_wrap_activate"                : self.m_checkmenu_wrap,
+			"on_checkmenu_line_numbers_activate"        : self.m_checkmenu_line_numbers,
+
+			"on_menu_piclist_make_current_activate"     : self.m_make_piclist_current,
+			"on_menu_piclist_make_all_activate"         : self.m_make_piclist_all,
+			"on_menu_piclist_remove_current_activate"   : self.m_remove_piclist_current,
+			"on_menu_piclist_remove_all_activate"       : self.m_remove_piclist_all,
+			"on_menu_adjlist_make_current_activate"     : self.m_make_adjlist_current,
+			"on_menu_adjlist_make_all_activate"         : self.m_make_adjlist_all,
+			"on_menu_adjlist_remove_current_activate"   : self.m_remove_adjlist_current,
+			"on_menu_adjlist_remove_all_activate"       : self.m_remove_adjlist_all,
+			"on_menu_wordlist_activate"                 : self.m_wordlist,
+			"on_menu_hyphenlist_activate"               : self.m_hyphenlist,
+			"on_menu_make_tex_hyphen"                   : self.m_tex_hyphen,
+			"on_menu_overwrite_tex_hyphen"              : self.m_tex_hyphen_overwrite,
+
+			"on_menu_preprocess_all_activate"           : self.m_preprocess_all,
+			"on_menu_preprocess_current_activate"       : self.m_preprocess_current,
+			"on_menu_postprocess_all_activate"          : self.m_postprocess_all,
+			"on_menu_postprocess_current_activate"      : self.m_postprocess_current,
+			"on_menu_view_current"                      : self.view_current,
+			"on_menu_remove_pdf_current_activate"       : self.m_remove_pdf_current,
+
+			"on_menu_benchmark_text_current"            : self.m_benchmark_text_current,
+			"on_menu_benchmark_text_current_set"        : self.m_benchmark_text_current_set,
+			"on_menu_benchmark_text_all"                : self.m_benchmark_text_all,
+			"on_menu_benchmark_wordlist_current"        : self.m_benchmark_wordlist_current,
+			"on_menu_benchmark_wordlist_set_current"    : self.m_benchmark_wordlist_set_current,
+			"on_menu_benchmark_wordlist_master"         : self.m_benchmark_wordlist_master,
+			"on_menu_benchmark_wordlist_set_master"     : self.m_benchmark_wordlist_set_master,
+			"on_menu_benchmark_wordlist_all"            : self.m_benchmark_wordlist_all,
+			"on_menu_benchmark_hyphen_tex"              : self.m_benchmark_hyphen_tex,
+			"on_menu_benchmark_hyphen_set_tex"          : self.m_benchmark_hyphen_set_tex,
+			"on_menu_benchmark_hyphen_txt"              : self.m_benchmark_hyphen_txt,
+			"on_menu_benchmark_hyphen_set_txt"          : self.m_benchmark_hyphen_set_txt,
+			"on_menu_benchmark_hyphen_all"              : self.m_benchmark_hyphen_all,
+
+			"on_menu_map_view_model"                    : self.m_map_view_model,
+			"on_menu_map_edit_data"                     : self.m_map_edit_data,
+			"on_menu_map_view_template"                 : self.m_map_view_template,
+			"on_menu_map_edit_styles"                   : self.m_map_edit_styles,
+			"on_menu_map_merge_data"                    : self.m_map_merge_data,
+			"on_menu_map_create_rgb"                    : self.m_map_create_rgb,
+			"on_menu_map_create_cmyk"                   : self.m_map_create_cmyk,
+			"on_menu_map_delete_current"                : self.m_map_delete_current,
+			"on_menu_map_bind_maps_rgb"                 : self.m_map_bind_maps_rgb,
+			"on_menu_map_bind_maps_cmyk"                : self.m_map_bind_maps_cmyk,
+			"on_menu_map_remove_pdf"                    : self.m_map_remove_pdf,
+			"on_menu_map_remove_all"                    : self.m_map_remove_all,
+
+			"on_menu_help_activate"                     : self.m_help,
+			"on_menu_example_activate"                  : self.m_example,
+			"on_menu_about_activate"                    : self.m_about,
+
+			"on_b_view_clicked"                         : self.view_current,
+			"on_b_check_clicked"                        : self.b_check_clicked,
+			"on_b_wiki_clicked"                         : self.b_wiki_clicked,
+			"on_b_note_clicked"                         : self.b_note_clicked,
+			"on_b_issue_clicked"                        : self.b_issue_clicked,
+			"on_b_backup_clicked"                       : self.b_backup_clicked,
+
+			"on_notebook1_switch_page"                  : self.nb_switch_page,
+			"on_cb_components_changed"                  : self.cb_components_changed,
+			"on_w_main_destroy"                         : self.quit,
+			"on_w_main_delete_event"                    : self.quit
+
+		}
+
+
+		self.wTree.signal_autoconnect(dic)
+
+		# put some widgets into self object
+		self.notebook1 = self.wTree.get_widget('notebook1')
+		self.d_find = self.wTree.get_widget('d_find')
+		self.menu_undo = self.wTree.get_widget('menu_undo')
+		self.menu_redo = self.wTree.get_widget('menu_redo')
+		self.menu_find = self.wTree.get_widget('menu_find')
+		self.menu_find_next = self.wTree.get_widget('menu_find_next')
+		self.checkmenu_wrap = self.wTree.get_widget('checkmenu_wrap')
+		self.checkmenu_line_numbers = self.wTree.get_widget('checkmenu_line_numbers')
+
+		# replace TextView with SourceView
+		self.language_manager = gtksourceview2.LanguageManager()
+		sourceviews = ['txtWork', 'txtSource', 'styGlobal', 'styComponent', 'texCustom', 'texComponent', 'adj', 'piclist', 'errorLog', 'texLog']
+		for s in sourceviews:
+			sc = 'sc_'+s
+			tv = 'tv_'+s
+			b = gtksourceview2.Buffer()
+			sv = gtksourceview2.View(b)
+			self.wTree.get_widget(sc).add(sv)
+			setattr(self,tv,sv)
+			sv.show_all()
+
+		# initialize find dialog
+		self.find_dialog = FindDialog(self.wTree, self.d_find,self.notebook1, self.wTree.get_widget('te_find'))
+
+		self.b_view = self.wTree.get_widget('b_view')
+		self.b_check = self.wTree.get_widget('b_check')
+
+		self.vte = vte.Terminal()
+		self.vte.connect('child-exited', self.quit)
+		self.vte.fork_command()
+		self.wTree.get_widget('sc_session').add(self.vte)
+		self.vte.set_colors(gtk.gdk.color_parse('#000000'), gtk.gdk.color_parse('#FFFFFF'), [])
+		self.vte.set_scroll_on_output(True)
+		self.vte.set_scrollback_lines(1000)
+		self.vte.set_size(80, 19)
+		self.vte.show_all()
+
+		self.cb_components = self.wTree.get_widget('cb_components')
+		cell = gtk.CellRendererText()
+		self.cb_components.pack_start(cell, True)
+		self.cb_components.add_attribute(cell, 'text', 0)
+		self.ceditor = None
+		self.cimport = ImportDialog(self.wTree, 'd_import', self)
+		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
+		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
+		self.ourProjectConf = 'none'
+		# FIXME: Make this next bit more generic
+		if os.access('.scripture.conf', os.R_OK) :
+			self.ourProjectConf = '.scripture.conf'
+		elif  os.access('.dictionary.conf', os.R_OK) :
+			self.ourProjectConf = '.dictionary.conf'
+
+		if os.access(self.ourProjectConf, os.R_OK) :
+			self.init_dir()
+		else :
+			self.close_dir()        # to declare the attributes ;)
+
+
+	def init_dir (self, bkid='') :
+
+		if not os.access(self.ourProjectConf, os.R_OK) :
+			self.close_dir()
+			return
+		if self.ceditor :
+			self.ceditor.new_config(self.ourProjectConf)
+		else :
+			self.ceditor = ConfigEditor(self.ourProjectConf, self.wTree, 'tv_sections', 'tv_keys')
+
+		# Now that we have a config object we can set some
+		# global vars for other processes (add more as needed)
+		# NOTE: If there are problems we may need to use try/except
+		self._pathProcess = self._tools.pubInfoObject['Paths'].get('PATH_PROCESS')
+		self._pathSource = self.ceditor.config['System']['Paths'].get('PATH_SOURCE')
+		self._pathTexts = self._tools.pubInfoObject['Paths'].get('PATH_TEXTS')
+		self._pathLog = self._tools.pubInfoObject['Paths'].get('PATH_LOG')
+		self._fileStyle = self._tools.pubInfoObject['Files'].get('FILE_TEX_STYLE')
+		self._fileTexCustom = self._tools.pubInfoObject['Files'].get('FILE_TEX_CUSTOM')
+		self._fileError = self._tools.pubInfoObject['Files'].get('FILE_PROJECT_ERROR')
+		self._extWork = self._tools.pubInfoObject['Extensions'].get('EXT_WORK')
+		self._extSource = self._tools.pubInfoObject['Extensions'].get('EXT_SOURCE')
+		self._extStyle = self._tools.pubInfoObject['Extensions'].get('EXT_STYLE')
+		self._extTex = self._tools.pubInfoObject['Extensions'].get('EXT_TEX')
+		self._extAdj = self._tools.pubInfoObject['Extensions'].get('EXT_ADJUSTMENT')
+		self._extPiclist = self._tools.pubInfoObject['Extensions'].get('EXT_PICLIST')
+		self._extLog = self._tools.pubInfoObject['Extensions'].get('EXT_LOG')
+
+		# Get our title
+		try :
+			title = self.ceditor.config['Project']['ProjectInformation'].get('projectName')
+		except :
+			title = os.getcwd()
+
+		self.wTree.get_widget('w_main').set_title(title)
+		self.cb_components = self.wTree.get_widget('cb_components')
+		self.cs_components = gtk.ListStore(str)
+		self.cb_components.set_model(self.cs_components)
+		index = 0
+
+		# Get the data lists we will work with
+		self.binding_groups = self.ceditor.config['Format']['BindingGroups']
+		self.meta_groups = self.ceditor.config['Format']['MetaGroups']
+
+		# Here we grab the component names for building our component list
+		# To avoid duplicates in the list we use a set() to keep track of
+		# the components If one already exists it will not add it to the list.
+		component_list = set()
+		for group in self.binding_groups :
+			for item in self.binding_groups.get(group) :
+				if item == bkid :
+					index = len(self.cs_components)
+				if item and not item in component_list :
+					component_list.add(item)
+					self.cs_components.append([item])
+
+		# These are the binding groups we want to process
+		# There may be a better place for this but it goes
+		# in this list for now.
+		for group in self.binding_groups :
+			gName = self.getGroupName(group)
+			self.cs_components.append([gName.lower()])
+
+		# Add the meta groups (Probably only one)
+		for group in self.meta_groups :
+			mName = self.getGroupName(group)
+			self.cs_components.append([mName.lower()])
+
+		self.cb_components.set_active(index)
+
+
+	def getGroupName (self, group) :
+		# The last word in the group is (should be) the name
+		nList = group.split('_')
+		return nList[-1]
+
+
+	def close_dir (self) :
+		self.txtWork = None
+		self.txtSource = None
+		self.styGlobal = None
+		self.styComponent = None
+		self.adjust = None
+		self.piclist = None
+		self.texCustom = None
+		self.texComponent = None
+		self.texLog = None
+		self.errorLog = None
+
+
+	def set_component (self, bkid) :
+		self.bkid = bkid
+		self.b_view.set_label("_View-" + bkid)
+		self.b_check.set_label("_Check-" + bkid)
+		self.txtWork = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork, self.tv_txtWork, self.language_manager.get_language("latex"))
+		self.txtSource = FileEditor(self._pathSource + "/" + self._tools.getComponentSourceFileName(bkid), self.tv_txtSource, self.language_manager.get_language("latex"))
+		self.txtSource.readonly = True
+		self.styGlobal = FileEditor(self._pathProcess + "/" + self._fileStyle, self.tv_styGlobal, self.language_manager.get_language("latex"))
+		self.styComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extStyle, self.tv_styComponent, self.language_manager.get_language("latex"))
+		self.texCustom = FileEditor(self._pathProcess + "/" + self._fileTexCustom, self.tv_texCustom, self.language_manager.get_language("latex"))
+		self.texComponent = FileEditor(self._pathProcess + "/" + bkid + "." + self._extTex, self.tv_texComponent, self.language_manager.get_language("latex"))
+		self.adjust = FileEditor(self._pathTexts + "/" + bkid + "." + self._extAdj, self.tv_adj, self.language_manager.get_language("latex"))
+		self.piclist = FileEditor(self._pathTexts + "/" + bkid + "." + self._extPiclist, self.tv_piclist, self.language_manager.get_language("latex"))
+		self.errorLog = FileEditor(self._pathLog + "/" + self._fileError, self.tv_errorLog, None)
+		self.errorLog.readonly = True
+		self.texlog = FileEditor(self._pathProcess + "/" + bkid + "." + self._extLog, self.tv_texLog, None)
+		self.texlog.readonly = True
+
+######################################################################################################
+# FIXME: Major problem here!
+# What is needed is a reload call once the command is finished. However, this call only makes the call
+# blindly from the terminal. It has no idea of when the process is done. For this reason, we cannot
+# have calls after it. The execute command must be the last thing that is run in any instance.
+# It will take major work to make it any different. So, for now, to compensate for this we have a
+# reload button that theu user will need to push after most processes if they want to see anything
+# updated in the UI.
+
+	def execute (self, command, *opts) :
+		if command == 'ptxplus' and self.binpath != '' :
+			command = self.binpath + command
+		str = "%s %s" % (command, " ".join(opts))
+		self.write_files()
+		self.vte.feed_child(str + "\n")
+#        sys.stderr.write("Command fed: " + str)
+
+#######################################################################################################
+
+
+	def write_files (self) :
+		if self.txtWork         : self.txtWork.write('')
+		if self.styGlobal       : self.styGlobal.write('')
+		if self.styComponent    : self.styComponent.write('')
+		if self.texCustom       : self.texCustom.write('')
+		if self.texComponent    : self.texComponent.write('')
+		if self.adjust          : self.adjust.write('')
+		if self.piclist         : self.piclist.write('')
+
+	def set_working_dir (self, isProject) :
+
+# I don't like the way this creates a folder when it doesn't find it. I hope
+# a different way can be found so the new project setup can be more interactive.
+
+		newdir = None
+		while not newdir :
+			if isProject :
+				title = "ptxplus: Open Project Directory"
+				action = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER
+			else :
+				title = "ptxplus: Create Project Directory"
+				action = gtk.FILE_CHOOSER_ACTION_CREATE_FOLDER
+
+			fcd = gtk.FileChooserDialog(title, self.wTree.get_widget('w_main'),
+					action, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+							 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+			fcd.set_default_response(gtk.RESPONSE_OK)
+			res = fcd.run()
+			if res == gtk.RESPONSE_CANCEL :
+				fcd.destroy()
+				return None
+			newdir = fcd.get_filename()
+			fcd.destroy()
+
+			if isProject :
+
+				if not os.access(os.path.join(newdir, self.ourProjectConf), os.R_OK) :
+					dialog = gtk.MessageDialog(None,
+						gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+						gtk.MESSAGE_ERROR, gtk.BUTTONS_OK_CANCEL,
+						"Directory: %s has no .project.conf" % newdir)
+					res = dialog.run()
+					dialog.destroy()
+					if res == gtk.RESPONSE_CANCEL : return None
+					newdir = None
+			else :
+				try : os.makedirs(newdir)
+				except OSError : pass
+
+		self.chdir(newdir)
+
+	def chdir (self, newdir) :
+		self.close_dir()
+		os.chdir(newdir)
+		self.execute("cd", newdir)
+		self.init_dir()
+
+	def quit (self, widget, data=None) :
+		self.write_files()
+		gtk.main_quit()
+
+	def m_checkmenu_wrap (self, widget):
+		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
+		if v:
+			if self.checkmenu_wrap.get_active():
+				v.set_wrap_mode(gtk.WRAP_WORD)
+			else:
+				v.set_wrap_mode(gtk.WRAP_NONE)
+
+	def m_checkmenu_line_numbers (self, widget):
+		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
+		if v:
+			v.set_show_line_numbers(self.checkmenu_line_numbers.get_active())
+
+	def nb_switch_page (self,widget,dummy,pagenum) :
+		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
+		if b:
+			self.menu_undo.set_sensitive(b.can_undo())
+			self.menu_redo.set_sensitive(b.can_redo())
+			self.menu_find.set_sensitive(True)
+			self.menu_find_next.set_sensitive(True)
+			self.checkmenu_wrap.set_sensitive(True)
+			self.checkmenu_wrap.set_active(v.get_wrap_mode() == gtk.WRAP_WORD)
+			self.checkmenu_line_numbers.set_sensitive(True)
+			self.checkmenu_line_numbers.set_active(v.get_show_line_numbers())
+		else:
+			self.menu_undo.set_sensitive(False)
+			self.menu_redo.set_sensitive(False)
+			self.menu_find.set_sensitive(False)
+			self.menu_find_next.set_sensitive(False)
+			self.checkmenu_wrap.set_sensitive(False)
+			self.checkmenu_wrap.set_active(False)
+			self.checkmenu_line_numbers.set_sensitive(False)
+			self.checkmenu_line_numbers.set_active(False)
+
+	def m_next_tab (self, widget):
+		self.notebook1.next_page()
+
+	def m_previous_tab (self, widget):
+		self.notebook1.prev_page()
+
+	def m_find (self, widget) :
+		self.find_dialog.open()
+
+	def m_getclip (self, widget) :
+		self.execute('get-clip', '-p')
+
+	def m_undo (self, widget) :
+		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
+		if b:
+			if b.can_undo():
+				b.undo()
+			self.menu_undo.set_sensitive(b.can_undo())
+			self.menu_redo.set_sensitive(b.can_redo())
+
+	def m_redo (self, widget) :
+		(v,b) = get_gtksourceview_from_notebook(self.notebook1)
+		if b:
+			if b.can_redo():
+				b.redo()
+			self.menu_undo.set_sensitive(b.can_undo())
+			self.menu_redo.set_sensitive(b.can_redo())
+
+	def m_edit (self, widget) :
+		self.nb_switch_page(None,None,None)
+
+	def makeDir (self) :
+		fcd = gtk.FileChooserDialog("ptxplus: Project Directory", None,
+				gtk.FILE_CHOOSER_ACTION_CREATE_FOLDER,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		fcd.set_default_response(gtk.RESPONSE_OK)
+		res = fcd.run()
+		if res == gtk.RESPONSE_CANCEL :
+			fcd.destroy()
+			return
+		newdir = fcd.get_filename()
+		self.e_dir.set_text(newdir)
+		fcd.destroy()
+
+	def cb_components_changed (self, widget) :
+		index = widget.get_active()
+		bkid = self.cs_components[index][0]
+		self.set_component(bkid)
+
+
+	########## Menu Bar ##########
+
+	##### Menu - Project
+
+	def m_new (self, widget) :
+		self.set_working_dir(False)
+		# FIXME: The interface needs to ask the user what kind
+			# of project this will be. As nothing other than scripture
+			# is supported at this time, the default is set to that.
+		# FIXME: Also, I would like to see better project path
+			# information sent out. This is incase we want to setup
+			# a project in some other place than cwd.
+		self.execute("ptxplus", "setup", "scripture", ".")
+		self.init_dir()
+		self.ourProjectConf = ".scripture.conf"
+
+	def m_open (self, widget) :
+		self.execute("ptxplus", "open", ".")
+		self.set_working_dir(True)
+
+	def m_import (self, widget) :
+		self.cimport.run()
+
+	def do_import (self) :
+		# FIXME: We need to make a reload event happen here but it needs to wait until the
+			# archive is unpacked. See the note above on execute as to why this cannot
+			# easily be done.
+
+		if self.cimport.dir :
+			os.chdir(self.cimport.dir)
+			self.execute("cd", self.cimport.dir)
+			self.execute("ptxplus", "import", self.cimport.archive)
+			self.wTree.get_widget('menu_reload').emit('activate')
+
+	def m_archive (self, widget) :
+		fcd = gtk.FileChooserDialog("ptxplus: Name Archive File", None,
+				gtk.FILE_CHOOSER_ACTION_SAVE,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		fcd.set_default_response(gtk.RESPONSE_OK)
+		res = fcd.run()
+		if res == gtk.RESPONSE_CANCEL :
+			fcd.destroy()
+			return
+		newdir = fcd.get_filename()
+		fcd.destroy()
+		self.execute("ptxplus", "archive", newdir)
+
+	def m_restore (self, widget) :
+		self.execute("ptxplus", "restore")
+
+	def m_backup (self, widget) :
+		self.execute("ptxplus", "backup")
+
+	def m_reload (self, widget) :
+		self.init_dir(self.bkid)
+
+	def m_reset (self, widget) :
+		self.execute("ptxplus", "reset")
+
+	def m_quit (self, widget) :
+		self.quit()
+
+
+	##### Menu - Edit
+
+	def m_cut (self, widget) :
+		owner = self.clipPrimary.get_owner()
+		if owner:
+			if isinstance(owner, gtk.Editable) :
+				owner.cut_clipboard()
+			elif isinstance(owner, gtk.TextView) :
+				owner.get_buffer().cut_clipboard(self.clipboard, owner.get_editable())
+			else:
+				selectionText = self.clipPrimary.wait_for_text()
+				if selectionText:
+					self.clipboard.set_text(selectionText, -1)
+
+	def m_copy (self, widget) :
+		if self.clipPrimary.get_owner() :
+			selectionText = self.clipPrimary.wait_for_text()
+			if selectionText:
+				self.clipboard.set_text(selectionText, -1)
+
+	def m_paste (self, widget) :
+		entry = self.wTree.get_widget('w_main').focus_widget
+		if isinstance(entry, gtk.Editable) :
+			entry.paste_clipboard()
+		elif isinstance(entry, gtk.TextView) :
+			entry.get_buffer().paste_clipboard(self.clipboard, None, entry.get_editable())
+
+	##### Menu - Setup
+
+	def m_make_piclist_current (self, widget) :
+		self.execute("ptxplus", "piclist-make-" + self.bkid)
+
+	def m_make_piclist_all (self, widget) :
+		self.execute("ptxplus", "piclist-make-all")
+
+	def m_remove_piclist_current (self, widget) :
+		self.execute("ptxplus", "piclist-remove-" + self.bkid)
+
+	def m_remove_piclist_all (self, widget) :
+		self.execute("ptxplus", "piclist-remove-all")
+
+	def m_make_adjlist_current (self, widget) :
+		self.execute("ptxplus", "adjlist-make-" + self.bkid)
+
+	def m_make_adjlist_all (self, widget) :
+		self.execute("ptxplus", "adjlist-make-all")
+
+	def m_remove_adjlist_current (self, widget) :
+		self.execute("ptxplus", "adjlist-remove-" + self.bkid)
+
+	def m_remove_adjlist_all (self, widget) :
+		self.execute("ptxplus", "adjlist-remove-all")
+
+	def m_wordlist (self, widget) :
+		self.execute('ptxplus', 'make-master-wordlist')
+
+	def m_hyphenlist (self, widget) :
+		self.execute('ptxplus', 'make-hyphen-wordlist')
+
+	def m_tex_hyphen (self, widget) :
+		self.execute('ptxplus', 'make-tex-hyphens')
+
+	def m_tex_hyphen_overwrite (self, widget) :
+		self.execute('ptxplus', 'overwrite-tex-hyphens')
+
+	##### Menu - Process
+
+
+	def m_remove_pdf_current (self, widget) :
+		self.execute("ptxplus", "pdf-remove-" + self.bkid)
+
+
+
+
+
+	def m_preprocess_all (self, widget) :
+		self.execute("ptxplus", "preprocess-content")
+
+	def m_preprocess_current (self, widget) :
+		self.execute("ptxplus", "preprocess-" + self.bkid)
+
+	def m_postprocess_all (self, widget) :
+		self.execute("ptxplus", "postprocess-content")
+
+	def m_postprocess_current (self, widget) :
+		self.execute("ptxplus", "postprocess-" + self.bkid)
+
+	# Menu - Benchmark
+
+	def m_benchmark_text_current (self, widget) :
+		self.execute("ptxplus", "benchmark-text-" + self.bkid)
+
+	def m_benchmark_text_current_set (self, widget) :
+		self.execute("ptxplus", "benchmark-text-set-" + self.bkid)
+
+	def m_benchmark_text_all (self, widget) :
+		self.execute("ptxplus", "benchmark-text-all")
+
+	def m_benchmark_wordlist_current (self, widget) :
+		self.execute("ptxplus", "benchmark-wordlist-" + self.bkid)
+
+	def m_benchmark_wordlist_set_current (self, widget) :
+		self.execute("ptxplus", "benchmark-wordlist-set-" + self.bkid)
+
+	def m_benchmark_wordlist_master (self, widget) :
+		self.execute("ptxplus", "benchmark-wordlist-master")
+
+	def m_benchmark_wordlist_set_master (self, widget) :
+		self.execute("ptxplus", "benchmark-wordlist-set-master")
+
+	def m_benchmark_wordlist_all (self, widget) :
+		self.execute("ptxplus", "benchmark-wordlist-all")
+
+	def m_benchmark_hyphen_tex (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-tex")
+
+	def m_benchmark_hyphen_set_tex (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-set-tex")
+
+	def m_benchmark_hyphen_txt (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-txt")
+
+	def m_benchmark_hyphen_set_txt (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-set-txt")
+
+	def m_benchmark_hyphen_all (self, widget) :
+		self.execute("ptxplus", "benchmark-hyphen-all")
+
+	##### Menu - Maps
+
+	def m_map_view_model (self, widget) :
+		self.execute("ptxplus", "view-map-model-" + self.bkid)
+
+	def m_map_edit_data (self, widget) :
+		self.execute("ptxplus", "edit-map-data-" + self.bkid)
+
+	def m_map_view_template (self, widget) :
+		self.execute("ptxplus", "view-map-template-" + self.bkid)
+
+	def m_map_edit_styles (self, widget) :
+		self.execute("ptxplus", "edit-map-styles-" + self.bkid)
+
+	def m_map_merge_data (self, widget) :
+		self.execute("ptxplus", "preprocess-map-" + self.bkid)
+
+	def m_map_create_rgb (self, widget) :
+		self.execute("ptxplus", "view-map-" + self.bkid)
+
+	def m_map_create_cmyk (self, widget) :
+		self.execute("ptxplus", "cmyk-map-" + self.bkid)
+
+	def m_map_delete_current (self, widget) :
+		self.execute("ptxplus", "delete-map-" + self.bkid)
+
+	def m_map_bind_maps_rgb (self, widget) :
+		self.execute("ptxplus", "view-rgb-maps")
+
+	def m_map_bind_maps_cmyk (self, widget) :
+		self.execute("ptxplus", "view-cmyk-maps")
+
+	def m_map_remove_pdf (self, widget) :
+		self.execute("ptxplus", "remove-maps")
+
+	def m_map_remove_all (self, widget) :
+		self.execute("ptxplus", "clean-maps")
+
+	##### Menu - Help
+
+	def m_help (self, widget) :
+		self.execute('ptxplus', 'help')
+
+	def m_example (self, widget) :
+		'''This will install the example project to where the user
+		   chooses to have it, or just in a default folder in
+		   the current location.'''
+
+		# FIXME: The following code runs the dialog box. It should be made more
+		# generic and moved into a seperate function as it is used by several
+		# other functions.
+		dialog = gtk.FileChooserDialog("ptxplus: Install Example Project", None,
+			  gtk.FILE_CHOOSER_ACTION_SAVE,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		dialog.set_default_response(gtk.RESPONSE_OK)
+		dialog.set_current_name("ptxplus-example")
+		res = dialog.run()
+		if res == gtk.RESPONSE_CANCEL :
+			dialog.destroy()
+			return
+		newdir = dialog.get_filename()
+		dialog.destroy()
+		self.execute("ptxplus", "example", newdir)
+
+	def m_about (self, widget) :
+			self.execute('ptxplus', 'about')
+
+	########## Buttons ##########
+
+	def b_check_clicked (self, widget) :
+		self.execute("ptxplus", "preprocess-" + self.bkid)
+#        self.set_component(self.bkid)
+
+	def b_wiki_clicked (self, widget) :
+		self.execute("ptxplus", "wiki")
+
+	def b_note_clicked (self, widget) :
+		self.execute("ptxplus", "note")
+
+	def b_issue_clicked (self, widget) :
+		self.execute("ptxplus", "issue")
+
+	def b_backup_clicked (self, widget) :
+		self.execute("ptxplus", "backup")
+
+	########## Shared Functions ##########
+
+	def view_current (self, widget) :
+		self.execute("ptxplus", "view-" + self.bkid)
+#        self.set_component(self.bkid)
+
+
+
+
+class FindDialog (object) :
+	def __init__ (self, wTree, d_find, notebook, te_find):
+		wTree.signal_autoconnect(self)
+
+		self.d_find = d_find
+		self.notebook = notebook
+		self.te_find = te_find
+
+	def open (self):
+		(v,b) = get_gtksourceview_from_notebook(self.notebook)
+		if v:
+			self.te_find.set_text('')
+			self.d_find.show()
+			self.te_find.grab_focus()
+
+	def on_b_find_close_clicked(self,widget):
+		self.d_find.hide()
+
+	def on_b_find_previous_clicked(self,widget):
+		self.find('previous')
+
+	def on_b_find_next_clicked(self,widget):
+		self.find('next')
+
+	def on_menu_find_next_activate(self,widget):
+		self.find('next')
+
+	def find (self, direction) :
+		(v,b) = get_gtksourceview_from_notebook(self.notebook)
+		st = self.te_find.get_text()
+		if st and v:
+			if direction == 'previous':
+				m = b.get_insert()
+				iter_search = gtksourceview2.iter_backward_search
+				fallback_iter = b.get_end_iter()
+			else:
+				m = b.get_selection_bound()
+				iter_search = gtksourceview2.iter_forward_search
+				fallback_iter = b.get_start_iter()
+			if m:
+				i = b.get_iter_at_mark(m)
+			else:
+				i = fallback_iter
+
+			if i:
+				s = e = None
+				try:
+					s,e = iter_search(i,st,gtksourceview2.SEARCH_TEXT_ONLY|gtksourceview2.SEARCH_CASE_INSENSITIVE,None)
+				except TypeError:
+					# could not find, so try again from the top (or bottom) to wrap around
+					try:
+						s,e = iter_search(fallback_iter,st,gtksourceview2.SEARCH_TEXT_ONLY|gtksourceview2.SEARCH_CASE_INSENSITIVE,None)
+					except TypeError:
+						# could not find again, so give up
+						pass
+				if (s and e):
+					b.select_range(s,e)
+					v.scroll_to_iter(s,0.2)
+
+
+
+class configlist(list):
+		def __new__(cls,*args,**kwds):
+			return super(configlist,cls).__new__(cls,*args,**kwds)
+
+		def __init__(self,*args,**kwds):
+			super(configlist,self).__init__(*args,**kwds)
+			self._str_value = configobj_str(self)
+
+		def __str__(self):
+			return self._str_value
+
+def configobj_str(value):
+	c = ConfigObj(encoding="utf-8")
+	fstr = StringIO()
+	c['str'] = value
+	c.write(fstr)
+	return fstr.getvalue().split("=",1)[1].strip()
+
+class ConfigEditor (object) :
+
+	def __init__ (self, filename, wTree, sname, kname) :
+		import gobject
+		self.wTree = wTree
+		self.sections_tv = wTree.get_widget(sname)
+		cell = gtk.CellRendererText()
+		self.sections_tc = [gtk.TreeViewColumn('section', cell)]
+		self.sections_tc[0].set_cell_data_func(cell, self.sections_cell)
+		self.sections_tv.append_column(self.sections_tc[0])
+
+		cell_data_funcs = [self.keys_keycell, self.keys_valuecell]
+		cell_data_names = ['Property', 'Value']
+		self.keys_tv = wTree.get_widget(kname)
+		self.keys_tc = list()
+		for i in range(0,2) :
+			cell = gtk.CellRendererText()
+			self.keys_tc.append(gtk.TreeViewColumn(cell_data_names[i], cell))
+			self.keys_tc[i].set_cell_data_func(cell, cell_data_funcs[i])
+			self.keys_tv.append_column(self.keys_tc[i])
+		self.keys_ts = gtk.ListStore(str, gobject.TYPE_PYOBJECT)
+		self.keys_tv.set_model(self.keys_ts)
+		self.keys_tv.connect('cursor-changed', self.select_key)
+		self.keys_tv.connect("row-activated", self.active_row)
+
+		self.desc_l = wTree.get_widget("lab_desc")
+		self.entry_w = wTree.get_widget("d_entry")
+		self.entry_name = wTree.get_widget("te_name")
+		self.entry_type = wTree.get_widget("te_type")
+		self.entry_value = wTree.get_widget("te_value")
+
+		self.new_config(filename)
+
+	def new_config (self, filename) :
+		self.config = ConfigObj(filename,encoding='utf-8')
+		self.sections_ts = gtk.TreeStore(str)
+		self.pathtree = list()
+		self.sections_parents = {id(self.config) : None}
+		self.config.walk(self.sections_walk, call_on_sections=True)
+		self.sections_tv.set_model(self.sections_ts)
+		self.sections_tv.expand_row(0, False)
+		self.sections_tv.connect('cursor-changed', self.select_section)
+
+	def sections_walk (self, section, key) :
+		val = section[key]
+		if isinstance(val, (tuple, dict)) :
+			iter = self.sections_ts.append(self.sections_parents[id(section)], [key])
+			self.sections_parents[id(val)] = iter
+			self.set_pathkey(key, self.sections_ts.get_path(iter))
+
+	def sections_cell (self, column, cell, model, iter) :
+		cell.set_property('text', model.get_value(iter, 0))
+
+	def keys_keycell (self, column, cell, model, iter) :
+		cell.set_property('text', model.get_value(iter, 0))
+
+	def keys_valuecell (self, column, cell, model, iter) :
+		cell.set_property('text', model.get_value(iter, 1))
+
+	def select_section (self, widget) :
+		selection = widget.get_selection()
+		(model, iter) = selection.get_selected()
+		if iter :
+			section = self.get_section(model.get_path(iter))
+			self.keys_fill(section)
+
+	def set_pathkey (self, key, path_tuple) :
+		path = list(path_tuple)
+		last = path.pop()
+		curr = self.pathtree
+		while path :
+			i = path.pop(0)
+			while len(curr) <= i : curr.append(['', list()])
+			curr = curr[i][1]
+		while len(curr) < last + 1 : curr.append(['', list()])
+		if len(curr) <= last + 1:
+			curr[last] = [key, list()]
+		else:
+			curr[last][0] = key
+
+	def get_section (self, path_tuple) :
+		path = list(path_tuple)
+		curr = self.pathtree
+		sect = self.config
+		while path :
+			self.sections_parent = sect
+			i = path.pop(0)
+			name = curr[i][0]
+			sect = sect[name]
+			curr = curr[i][1]
+		self.sections_curr = sect
+		if i == 0 and self.sections_parent == self.config :
+			lines = self.config.initial_comment
+		else :
+			lines = self.sections_parent.comments[name]
+		self.desc_l.set_markup(self.parse(lines))
+		return sect
+
+	def keys_fill (self, section) :
+		self.keys_ts.clear()
+		for k in section.keys() :
+			v = section[k]
+			if isinstance(v, list) :
+				self.keys_ts.append([k, configlist(v)])
+			elif not isinstance(v, (dict, tuple)) :
+				self.keys_ts.append([k, v])
+
+	def select_key (self, widget) :
+		selection = widget.get_selection()
+		(model, iter) = selection.get_selected()
+		if iter :
+			key = self.keys_ts[iter][0]
+			if self.sections_curr.comments.has_key(key) :
+				self.desc_l.set_markup(self.parse(self.sections_curr.comments[key]))
+
+	def active_row (self, widget, path, column) :
+		k,v = self.keys_ts[path]
+		self.entry_name.set_text(k)
+		if isinstance(v, basestring): etype="String"
+		if isinstance(v, list):       etype="List"
+		if isinstance(v, bool):       etype="Boolean"
+		if isinstance(v, (int,long)): etype="Number"
+		self.entry_type.set_text(etype)
+		self.entry_value.set_text(str(v))
+		self.wTree.get_widget("bt_apply_entry").connect("clicked", self.entry_apply)
+		self.wTree.get_widget("bt_cancel_entry").connect("clicked", self.entry_cancel)
+		self.entry_w.show()
+
+# FIXME: There is something wrong here and it is adding extra "\" each time it saves out data
+
+	def entry_apply (self, widget) :
+		value = self.entry_value.get_text().strip()
+		etype = self.entry_type.get_text()
+		c = ConfigObj(["str = " + ('"%s"' % value if etype == "String" else value)], encoding="utf-8")
+		self.sections_curr[self.entry_name.get_text()] = c['str']
+		self.keys_fill(self.sections_curr)
+		# FIXME: Some error checking should be done here to catch
+		# the output before it is saved. At the least a simple
+		# try and except clause should be used.
+		self.save()
+
+	def entry_cancel (self, widget) :
+		self.entry_w.hide()
+
+	def save (self) :
+		self.config.write()
+
+
+
+
+	@staticmethod
+	def entity_prep(l):
+		return reduce(lambda r,c: r + ('&' + htmlentitydefs.codepoint2name[ord(c)] + ';' if ord(c) in htmlentitydefs.codepoint2name else c), l, "")
+
+	def parse (self, lines) :
+		inpara = 0
+		res = ''
+		for l in (self.entity_prep(re.sub("^#\s?", "", f.strip())) for f in lines) :
+			if re.match("^\s*$", l) and inpara != 0:
+				res = res + "\n\n"
+				inpara = 0
+			elif re.match("^\s+", l) :
+				if inpara != 0:
+					res = res + "\n"
+					inpara = 0
+				res = res + "<tt>" + l + "</tt>\n"
+			elif inpara != 0:
+				res = res + " " + l
+			else:
+				res = res + l
+				inpara = 1
+		return res
+
+class FileEditor (object) :
+	"""Edits a given file in a given textview with autosave on exit"""
+
+	def __init__ (self, filename, textview, language) :
+		# language is for syntax - None is no syntax highlighting
+		self.filename = filename
+		self.textview = textview
+		self.readonly = False
+		buff = textview.get_buffer()
+		buff.begin_not_undoable_action()
+		if (language):
+			buff.set_language(language)
+
+		try:
+			fin = file(filename)
+			textview.set_sensitive(False)
+			buff.set_text(fin.read())
+			fin.close()
+		except:
+			buff.set_text('')
+
+		buff.set_modified(False)
+		textview.set_sensitive(True)
+		buff.end_not_undoable_action()
+
+	def __del__ (self) :
+		self.write('')
+
+	def error (self, str) :
+		dialog = gtk.MessageDialog(None,
+				gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, str)
+		dialog.run()
+		dialog.destroy()
+
+	def write (self, filename) :
+
+		if self.readonly : return
+
+		if filename:
+			self.filename = filename
+
+		buff = self.textview.get_buffer()
+		if not buff.get_modified() : return
+		self.textview.set_sensitive(False)
+		text  = buff.get_text(buff.get_start_iter(), buff.get_end_iter())
+		self.textview.set_sensitive(True)
+		buff.set_modified(False)
+
+		try:
+			fout = file(self.filename, "w")
+			fout.write(text)
+			fout.close()
+		except:
+			self.error("Can't write to file: %s" % self.filename)
+
+class ImportDialog (object) :
+
+	def __init__ (self, wTree, dname, parent) :
+		dc = {
+			'b_browse_dir'         : self.browse_dir,
+			'b_browse_archive'     : self.browse_archive,
+			'b_import_ok'          : self.exit,
+			'b_import_cancel'      : self.quit}
+		for (k, v) in dc.items() :
+			wTree.get_widget(k).connect('clicked', v)
+		self.dia = wTree.get_widget(dname)
+		self.e_dir = wTree.get_widget('e_dir')
+		self.e_archive = wTree.get_widget('e_archive')
+		self.dir = ''
+		self.archive = ''
+		self.parent = parent
+
+	def run (self) :
+		self.dia.show()
+
+	def exit (self, widget) :
+		self.dir = self.e_dir.get_text()
+		self.archive = self.e_archive.get_text()
+		self.dia.hide()
+		self.parent.do_import()
+
+	def quit (self, widget) :
+		self.dir = ''
+		self.archive = ''
+		self.dia.hide()
+		self.parent.do_import()
+
+	def browse_dir (self, widget) :
+		fcd = gtk.FileChooserDialog("Project Directory", None,
+				gtk.FILE_CHOOSER_ACTION_CREATE_FOLDER,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		fcd.set_default_response(gtk.RESPONSE_OK)
+		res = fcd.run()
+		if res == gtk.RESPONSE_CANCEL :
+			fcd.destroy()
+			return
+		newdir = fcd.get_filename()
+		self.e_dir.set_text(newdir)
+		fcd.destroy()
+
+	def browse_archive (self, widget) :
+		fcd = gtk.FileChooserDialog("Archive File", None,
+				gtk.FILE_CHOOSER_ACTION_OPEN,
+				(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				 gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+		fcd.set_default_response(gtk.RESPONSE_OK)
+		res = fcd.run()
+		if res == gtk.RESPONSE_CANCEL :
+			fcd.destroy()
+			return
+		newdir = fcd.get_filename()
+		self.e_archive.set_text(newdir)
+		fcd.destroy()
+
+
+
+if __name__ == "__main__":
+	cg = ConfigGUI()
+	gtk.main()
