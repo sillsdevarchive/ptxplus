@@ -56,7 +56,7 @@ else
 endif
 
 # Call a postprocessing function which will run all the postprocesses.
-# When the post processing is done we will run a benchmark test to
+# When the post processing is done we will run a regression test to
 # account for any changes made.
 postprocess-$(1) : $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
@@ -167,12 +167,20 @@ else
 endif
 
 # Create a wordlist for a single book
+# (NOTE: The pipe is needed here because without it
+# a regression test will be run every time which is
+# not needed.)
 $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV) : | $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@echo INFO: Creating: $$@
 	@$$(call makewordlist,$(1))
 
 # Command to create a wordlist for a single book
 wordlist-make-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
+
+# Command to force the making of a single wordlist file.
+wordlist-make-$(1)-force :
+	@echo INFO: Creating: $(1)-wordlist.$(EXT_CSV)
+	@$$(call makewordlist,$(1))
 
 # Remove a wordlist for a single book
 wordlist-remove-$(1) :
@@ -184,31 +192,31 @@ else
 endif
 
 # Set a wordlist for a single book as current
-benchmark-wordlist-set-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
+regression-wordlist-set-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
 ifeq ($(LOCKED),0)
-	@echo Setting benchmark: $(1)-wordlist.$(EXT_CSV)
+	@echo Setting regression base: $(1)-wordlist.$(EXT_CSV)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" "set"
 else
-	@echo INFO: Cannot set benchmark: $(1)-wordlist.$(EXT_CSV) because the project is locked.
+	@echo INFO: Cannot set regression base: $(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
 
 # Benchmark test a wordlist for a single book
-benchmark-wordlist-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
+regression-wordlist-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
 	@echo Benchmark testing: $(1)-wordlist.$(EXT_CSV)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" ""
 
 # Benchmark test on the current component
-benchmark-text-$(1) : | $(PATH_TEXTS)/$(1).$(EXT_WORK)
+regression-component-$(1) : | $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
 
-# Set the current file as benchmark. This will overwrite
-# whatever might currently be in the benchmark folder.
-benchmark-text-set-$(1) :
+# Set the current file as regression base. This will overwrite
+# whatever might currently be in the regression base folder.
+regression-component-set-$(1) :
 ifeq ($(LOCKED),0)
-	@echo Setting benchmark: $(1).$(EXT_WORK)
+	@echo Setting regression base: $(1).$(EXT_WORK)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
 else
-	@echo INFO: Cannot set benchmark: $(1).$(EXT_WORK) because the project is locked.
+	@echo INFO: Cannot set regression base: $(1).$(EXT_WORK) because the project is locked.
 endif
 
 
@@ -407,9 +415,9 @@ removepiclist = rm -f $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
 removeadjlist = rm -f $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
 
 # Create a single wordlist - As these tests can be run multiple
-# times in short succession, we will not do benchmark testing
-# on single lists. We'll rely on the master wordlist benchmark
-# test to find problems
+# times in short succession, we will not do regression testing
+# on single lists. We'll rely on the master wordlist regression
+# base test to find problems
 makewordlist = $(MOD_RUN_PROCESS) "$(MOD_MAKE_WORDLIST)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)"
 
 # Remove a single wordlist
@@ -471,53 +479,53 @@ endif
 
 # Most of these are automated but these commands are for the GUI.
 
-# Test all the working text against the stored benchmark text
-benchmark-text-all :
+# Test all the working text against the stored regression base text
+regression-component-all :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
 
 # Test the Hyphenation folder
-benchmark-hyphen-tex : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
+regression-hyphen-tex : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" ""
 
-# Set the current TeX hyphenation to be the benchmark
-benchmark-hyphen-set-tex : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
+# Set the current TeX hyphenation to be the regression base
+regression-hyphen-set-tex : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
 ifeq ($(LOCKED),0)
-	@echo Setting benchmark: $(FILE_HYPHENATION_TEX)
+	@echo Setting regression base: $(FILE_HYPHENATION_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" "set"
 else
-	@echo INFO: Cannot set benchmark: $(FILE_HYPHENATION_TEX) because the project is locked.
+	@echo INFO: Cannot set regression base: $(FILE_HYPHENATION_TEX) because the project is locked.
 endif
 
 # Test the hyphenation wordlist file
-benchmark-hyphen-txt : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
+regression-hyphen-txt : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
 
-# Set the current hyphenation wordlist file to be the benchmark
-benchmark-hyphen-set-txt : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
+# Set the current hyphenation wordlist file to be the regression base
+regression-hyphen-set-txt : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
 ifeq ($(LOCKED),0)
-	@echo Setting benchmark: $(FILE_HYPHENATION_TEX)
+	@echo Setting regression base: $(FILE_HYPHENATION_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" "set"
 else
-	@echo INFO: Cannot set benchmark: $(FILE_HYPHENATION) because the project is locked.
+	@echo INFO: Cannot set regression base: $(FILE_HYPHENATION) because the project is locked.
 endif
 
 # Test the Hyphenation folder
-benchmark-hyphen-all : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
+regression-hyphen-all : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)" "" ""
 
 # Test the Wordlist master file
-benchmark-wordlist-master : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
+regression-wordlist-master : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" ""
 
 # Set the master wordlist for project
-benchmark-wordlist-set-master : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
+regression-wordlist-set-master : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 ifeq ($(LOCKED),0)
-	@echo Setting benchmark: $(FILE_MASTERWORDS)
+	@echo Setting regression base: $(FILE_MASTERWORDS)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" "set"
 else
-	@echo INFO: Cannot set benchmark: $(1)-wordlist.$(EXT_CSV) because the project is locked.
+	@echo INFO: Cannot set regression base: $(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
 
 # Test the Wordlists folder
-benchmark-wordlist-all : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
+regression-wordlist-all : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)" "" ""

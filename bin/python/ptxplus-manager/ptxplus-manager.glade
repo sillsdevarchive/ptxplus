@@ -446,12 +446,21 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_wordlist">
+					  <widget class="GtkMenuItem" id="menu_wordlist_make_current">
+						<property name="visible">True</property>
+						<property name="has_tooltip">True</property>
+						<property name="tooltip" translatable="yes">Create a word list from the current component in the Report folder</property>
+						<property name="label" translatable="yes">Make Word List (Current)</property>
+						<signal name="activate" handler="on_menu_wordlist_make_current_activate"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="menu_wordlist_make_master">
 						<property name="visible">True</property>
 						<property name="has_tooltip">True</property>
 						<property name="tooltip" translatable="yes">Create a master word list in the Report folder</property>
-						<property name="label" translatable="yes">Make Master Word List</property>
-						<signal name="activate" handler="on_menu_wordlist_activate"/>
+						<property name="label" translatable="yes">Make Word List (Master)</property>
+						<signal name="activate" handler="on_menu_wordlist_make_master_activate"/>
 					  </widget>
 					</child>
 					<child>
@@ -582,130 +591,130 @@
 				  <widget class="GtkMenu" id="regression">
 					<property name="visible">True</property>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_text_current">
+					  <widget class="GtkMenuItem" id="regression_component_current">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Do a benchmark test on the current text component</property>
+						<property name="tooltip" translatable="yes">Do a regression test on the current text component</property>
 						<property name="label" translatable="yes">Text (Current)</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_text_current"/>
+						<signal name="activate" handler="on_menu_regression_component_current"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_text_current_set">
+					  <widget class="GtkMenuItem" id="regression_component_current_set">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Set the current text object to be the benchmark</property>
+						<property name="tooltip" translatable="yes">Set the current text object to be the regression base file</property>
 						<property name="label" translatable="yes">Text - Set (Current)</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_text_current_set"/>
+						<signal name="activate" handler="on_menu_regression_component_current_set"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_text_all">
+					  <widget class="GtkMenuItem" id="regression_component_all">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Run benchmark tests on all text components</property>
+						<property name="tooltip" translatable="yes">Run regression tests on all text components</property>
 						<property name="label" translatable="yes">Text (All)</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_text_all"/>
+						<signal name="activate" handler="on_menu_regression_component_all"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkSeparatorMenuItem" id="benchmarkseparatormenuitem1">
+					  <widget class="GtkSeparatorMenuItem" id="regressionseparatormenuitem1">
 						<property name="visible">True</property>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_wordlist_current">
+					  <widget class="GtkMenuItem" id="regression_wordlist_current">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Run benchmark test on current component wordlist</property>
-						<property name="label" translatable="yes">Wordlists (Current)</property>
+						<property name="tooltip" translatable="yes">Run regression test on current component wordlist</property>
+						<property name="label" translatable="yes">Wordlist (Current)</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_wordlist_current"/>
+						<signal name="activate" handler="on_menu_regression_wordlist_current"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_wordlist_set_current">
+					  <widget class="GtkMenuItem" id="regression_wordlist_set_current">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Set current component wordlist as benchmark</property>
-						<property name="label" translatable="yes">Wordlist - Set (Current)</property>
+						<property name="tooltip" translatable="yes">Set current component wordlist as regression base file</property>
+						<property name="label" translatable="yes">Wordlist Set (Current)</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_wordlist_set_current"/>
+						<signal name="activate" handler="on_menu_regression_wordlist_set_current"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_wordlist_master">
+					  <widget class="GtkMenuItem" id="regression_wordlist_master">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Run benchmark tests on master wordlist</property>
-						<property name="label" translatable="yes">Wordlist Master</property>
+						<property name="tooltip" translatable="yes">Run a regression test on master wordlist</property>
+						<property name="label" translatable="yes">Wordlist (Master)</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_wordlist_master"/>
+						<signal name="activate" handler="on_menu_regression_wordlist_master"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_wordlist_set_master">
+					  <widget class="GtkMenuItem" id="regression_wordlist_set_master">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Set current master wordlist as the benchmark</property>
-						<property name="label" translatable="yes">Wordlist Master - Set</property>
+						<property name="tooltip" translatable="yes">Set current master wordlist as the regression base file</property>
+						<property name="label" translatable="yes">Wordlist Set (Master)</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_wordlist_set_master"/>
+						<signal name="activate" handler="on_menu_regression_wordlist_set_master"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_wordlist_all">
+					  <widget class="GtkMenuItem" id="regression_wordlist_all">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Run benchmark tests on all wordlists</property>
+						<property name="tooltip" translatable="yes">Run regression tests on all wordlists</property>
 						<property name="label" translatable="yes">Wordlists (All)</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_wordlist_all"/>
+						<signal name="activate" handler="on_menu_regression_wordlist_all"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkSeparatorMenuItem" id="benchmarkseparatormenuitem2">
+					  <widget class="GtkSeparatorMenuItem" id="regressionseparatormenuitem2">
 						<property name="visible">True</property>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_hyphen_tex">
+					  <widget class="GtkMenuItem" id="regression_hyphen_tex">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Test TeX hypheation file only</property>
 						<property name="label" translatable="yes">TeX Hyphenation</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_hyphen_tex"/>
+						<signal name="activate" handler="on_menu_regression_hyphen_tex"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_hyphen_set_tex">
+					  <widget class="GtkMenuItem" id="regression_hyphen_set_tex">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Set current TeX hypheation file as benchmark</property>
+						<property name="tooltip" translatable="yes">Set current TeX hypheation file as regression base file</property>
 						<property name="label" translatable="yes">TeX Hyphenation - Set</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_hyphen_set_tex"/>
+						<signal name="activate" handler="on_menu_regression_hyphen_set_tex"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_hyphen_txt">
+					  <widget class="GtkMenuItem" id="regression_hyphen_txt">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Test hypheation wordlist only</property>
 						<property name="label" translatable="yes">Hyphenation Words</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_hyphen_txt"/>
+						<signal name="activate" handler="on_menu_regression_hyphen_txt"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_hyphen_set_txt">
+					  <widget class="GtkMenuItem" id="regression_hyphen_set_txt">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Set current hypheation wordlist file as benchmark</property>
+						<property name="tooltip" translatable="yes">Set current hypheation wordlist file as regression base file</property>
 						<property name="label" translatable="yes">Hyphenation Words - Set</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_hyphen_set_txt"/>
+						<signal name="activate" handler="on_menu_regression_hyphen_set_txt"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="benchmark_hyphen_all">
+					  <widget class="GtkMenuItem" id="regression_hyphen_all">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Test hypheation folder</property>
 						<property name="label" translatable="yes">Hyphenation (All)</property>
 						<property name="use_underline">True</property>
-						<signal name="activate" handler="on_menu_benchmark_hyphen_all"/>
+						<signal name="activate" handler="on_menu_regression_hyphen_all"/>
 					  </widget>
 					</child>
 				  </widget>
