@@ -594,7 +594,7 @@
 					  <widget class="GtkMenuItem" id="regression_component_current">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Do a regression test on the current text component</property>
-						<property name="label" translatable="yes">Text (Current)</property>
+						<property name="label" translatable="yes">Component (Current)</property>
 						<property name="use_underline">True</property>
 						<signal name="activate" handler="on_menu_regression_component_current"/>
 					  </widget>
@@ -602,17 +602,26 @@
 					<child>
 					  <widget class="GtkMenuItem" id="regression_component_current_set">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Set the current text object to be the regression base file</property>
-						<property name="label" translatable="yes">Text - Set (Current)</property>
+						<property name="tooltip" translatable="yes">Set the current text component to be the regression base file</property>
+						<property name="label" translatable="yes">Component - Set (Current)</property>
 						<property name="use_underline">True</property>
 						<signal name="activate" handler="on_menu_regression_component_current_set"/>
+					  </widget>
+					</child>
+					<child>
+					  <widget class="GtkMenuItem" id="regression_component_current_group_set">
+						<property name="visible">True</property>
+						<property name="tooltip" translatable="yes">Set the current component group file set to be the regression base</property>
+						<property name="label" translatable="yes">Component Group - Set (Current)</property>
+						<property name="use_underline">True</property>
+						<signal name="activate" handler="on_menu_regression_component_current_group_set"/>
 					  </widget>
 					</child>
 					<child>
 					  <widget class="GtkMenuItem" id="regression_component_all">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">Run regression tests on all text components</property>
-						<property name="label" translatable="yes">Text (All)</property>
+						<property name="label" translatable="yes">Component (All)</property>
 						<property name="use_underline">True</property>
 						<signal name="activate" handler="on_menu_regression_component_all"/>
 					  </widget>

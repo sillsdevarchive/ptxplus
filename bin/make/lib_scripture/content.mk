@@ -219,6 +219,16 @@ else
 	@echo INFO: Cannot set regression base: $(1).$(EXT_WORK) because the project is locked.
 endif
 
+# Set the current working component group files as base
+regression-component-group-set-$(1) :
+ifeq ($(LOCKED),0)
+	@echo Setting regression base for group: $(1)
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_PICLIST)" "" "set"
+else
+	@echo INFO: Cannot set regression base for group: $(1) because the project is locked.
+endif
 
 # End of the content_rules define
 endef
