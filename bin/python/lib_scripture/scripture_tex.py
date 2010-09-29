@@ -542,6 +542,7 @@ class MakeTexControlFile (object) :
 		formatSettings = ''
 		headerSettings = ''
 		footerSettings = ''
+		generalSettings = ''
 
 		# Set some context sensitive things here
 		# Note that for now, we are going to put header and footer settings
@@ -593,6 +594,7 @@ class MakeTexControlFile (object) :
 					formatSettings + \
 					headerSettings + \
 					footerSettings + \
+					generalSettings + \
 					'\n'
 
 		self.writeOutTheFile(orderedContents)

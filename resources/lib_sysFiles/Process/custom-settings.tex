@@ -13,6 +13,20 @@
 % your publication throws you a curve, perhaps one of these
 % work-arounds might help you do what you want to do.
 
+
+%%%%% Baselineskip Adjustment Hook
+% This hook provides a means to adjust the baselineskip on a
+% specific style. (Does not work with some markers like \fig)
+% It provides a place to put the initial setting so the hook
+% can make the change and then go back to the initial setting
+% when done.
+\newdimen\remblskip \remblskip=\baselineskip
+
+% Baselineskip Adjustment Hook Example
+%\sethook{start}{s1}{\remblskip=\baselineskip \baselineskip=10pt}
+%\sethook{after}{s1}{\baselineskip=\remblskip}
+
+
 %%%%% Skip a line in the working text
 \def\skipline{\vskip\baselineskip}
 
