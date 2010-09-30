@@ -224,12 +224,14 @@ class ConfigGUI (object) :
 		self.cimport = ImportDialog(self.wTree, 'd_import', self)
 		self.clipboard = gtk.Clipboard(gtk.gdk.display_get_default(), 'CLIPBOARD')
 		self.clipPrimary = gtk.Clipboard(gtk.gdk.display_get_default(), 'PRIMARY')
-		self.ourProjectConf = 'none'
-		# FIXME: Make this next bit more generic
-		if os.access('.scripture.conf', os.R_OK) :
-			self.ourProjectConf = '.scripture.conf'
-		elif  os.access('.dictionary.conf', os.R_OK) :
-			self.ourProjectConf = '.dictionary.conf'
+
+		# Look in cwd for a .conf file
+		self.ourProjectConf = None
+		pType = tools.getProjectType()
+		if not pType :
+			tools.userMessage("ERROR: No .conf file found: " + os.getcwd())
+		else :
+			self.ourProjectConf = "." + pType + ".conf"
 
 		if os.access(self.ourProjectConf, os.R_OK) :
 			self.init_dir()

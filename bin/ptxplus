@@ -304,7 +304,7 @@ else :
 
 			# Right off we need to tell the user if the project is locked (only if it is locked)
 
-			# Update the .project.conf file if it needs it
+			# Update the project configuration file if it needs it
 			mod = __import__("update_project_settings")
 			mod.doIt()
 

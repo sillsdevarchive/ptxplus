@@ -212,13 +212,15 @@ def getSystemSettingsObject () :
 	return ConfigObj(os.environ.get('PTXPLUS_BASE') + "/bin/ptxplus.conf", encoding='utf_8')
 
 
-def getProjectType () :
+def getProjectType (path=os.getcwd()) :
 	'''Return the type of publication project this is.
 		We will do this by checkging to see what kind of
-		.conf object we have in the root of the project.'''
+		.conf object we have in the root of the project
+		which we assume to be the cwd unless something
+		else is specified.'''
 
 	for t in getSystemSettingsObject()['System']['pubTypeList'] :
-		if os.access('.' + t + '.conf', os.R_OK) :
+		if os.access(path + '/.' + t + '.conf', os.R_OK) :
 			return t
 
 
