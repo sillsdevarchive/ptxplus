@@ -123,7 +123,7 @@ adjlist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
 	@echo INFO: Creating: $$<
 
 # Call the adjustlist creation macro
-$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) : $(PATH_TEXTS)/$(1).$(EXT_WORK)
+$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) :
 ifeq ($(USE_ADJUSTMENTS),true)
 	@$$(call makeadjlist,$(1))
 else
@@ -200,13 +200,16 @@ else
 	@echo INFO: Cannot set regression base: $(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
 
-# Benchmark test a wordlist for a single book
+# Regression test a wordlist for a single book
 regression-wordlist-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
-	@echo Benchmark testing: $(1)-wordlist.$(EXT_CSV)
+	@echo Regression testing: $(1)-wordlist.$(EXT_CSV)
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" ""
 
-# Benchmark test on the current component
-regression-component-$(1) : | $(PATH_TEXTS)/$(1).$(EXT_WORK)
+# Regression test on the current component
+# One thing that would be nice here would be if the component didn't exisit, it
+# would make it. I was hoping that the "|" would enable that to happen but
+# testing shows confusing results so I'll leave it out for now.
+regression-component-$(1) :
 	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
 
 # Set the current file as regression base. This will overwrite
@@ -485,7 +488,7 @@ endif
 
 #################################################################################
 
-# GLOBAL BENCHMARK TESTS
+# GLOBAL REGRESSION TESTS
 
 # Most of these are automated but these commands are for the GUI.
 
