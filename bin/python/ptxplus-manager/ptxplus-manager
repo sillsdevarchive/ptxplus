@@ -229,14 +229,22 @@ class ConfigGUI (object) :
 		self.ourProjectConf = None
 		pType = tools.getProjectType()
 		if not pType :
-			tools.userMessage("ERROR: No .conf file found: " + os.getcwd())
+			tools.userMessageDialog ("No .conf file found: " + os.getcwd(), 'ERRR')
+			# FIXME: There should never be a hard-coded conf name but for now
+			# we use it as default. What is needed is a dialog that asks what
+			# type the new project is, or to just cancel the operation.
+			self.ourProjectConf = '.scripture.conf'
+			if self.ceditor :
+				self.ceditor.new_config(self.ourProjectConf)
+			else :
+				self.ceditor = ConfigEditor(self.ourProjectConf, self.wTree, 'tv_sections', 'tv_keys')
+
 		else :
 			self.ourProjectConf = "." + pType + ".conf"
-
-		if os.access(self.ourProjectConf, os.R_OK) :
-			self.init_dir()
-		else :
-			self.close_dir()        # to declare the attributes ;)
+			if os.access(self.ourProjectConf, os.R_OK) :
+				self.init_dir()
+			else :
+				self.close_dir()        # to declare the attributes ;)
 
 
 	def init_dir (self, bkid='') :
