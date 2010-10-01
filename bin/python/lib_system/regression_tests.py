@@ -51,23 +51,28 @@ class RegressionTests (object) :
 
 		# SET TYPE (BUILD ADDITIONAL PATHS)
 		# Set the test type (if we don't know, we don't go)
-		if os.path.isfile(new) :
-			testType = 'file'
-			# Do some file name manipulation to get our old and new file names
-			# It is assumed that we are working in the "Texts" folder and no
-			# other. This might come back to bite us at some point.
-			head, tail = os.path.split(new)
-			old                     = pathRegression + '/' + head.split('/')[-1]
-			newFile = new
-			oldFile = old + '/' + tail
-			self._log_manager.log('INFO', 'Regression type is file (' + os.path.split(new)[-1] + ')', 'true')
-		elif os.path.isdir(new) :
-			testType = 'dir'
-			head, tail = os.path.split(new)
-			old                     = pathRegression + '/' + tail
-			self._log_manager.log('INFO', 'Regression test type is folder (' + str(len(os.listdir(new))) + ' items)', 'true')
+		if os.path.exists(new) :
+			if os.path.isfile(new) :
+				testType = 'file'
+				# Do some file name manipulation to get our old and new file names
+				# It is assumed that we are working in the "Texts" folder and no
+				# other. This might come back to bite us at some point.
+				head, tail = os.path.split(new)
+				old                     = pathRegression + '/' + head.split('/')[-1]
+				newFile = new
+				oldFile = old + '/' + tail
+				self._log_manager.log('INFO', 'Regression type is file (' + os.path.split(new)[-1] + ')', 'true')
+			elif os.path.isdir(new) :
+				testType = 'dir'
+				head, tail = os.path.split(new)
+				old                     = pathRegression + '/' + tail
+				self._log_manager.log('INFO', 'Regression test type is folder (' + str(len(os.listdir(new))) + ' items)', 'true')
+			else :
+				self._log_manager.log('ERRR', 'Regression testing for [' + new + '] target type unknown', 'true')
+				sys.exit(1)
+
 		else :
-			self._log_manager.log('ERRR', 'Regression testing for [' + new + '] target type unknown', 'true')
+			self._log_manager.log('WARN', 'Regression test, target not found: [' + new + ']', 'true')
 			sys.exit(1)
 
 		# MASTER SWITCH
@@ -91,7 +96,7 @@ class RegressionTests (object) :
 			# Copy file and set permission to read-only
 			shutil.copy(newFile, oldFile)
 			os.chmod(oldFile, stat.S_IREAD)
-			self._log_manager.log('INFO', 'Setting the current component as regression base (' + os.path.split(new)[-1] + ')', 'true')
+			self._log_manager.log('INFO', 'Setting the current component as base (' + os.path.split(new)[-1] + ')', 'true')
 
 		# SANITY TESTING
 		# If we survived to this point, do some sanity testing
