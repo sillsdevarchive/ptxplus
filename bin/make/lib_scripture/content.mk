@@ -372,11 +372,15 @@ preprocess-content :
 	@$(foreach v,$(GROUP_CONTENT), $(call preprocessing,$(v),$($(v)_content)) )
 
 # This enables postprocesses on all the components processing each one independently.
-postprocess-content :
+postprocess-content : preprocess-content
 ifeq ($(LOCKED),0)
-	@echo INFO: Postprocessing all content components
-	@$(foreach v,$(GROUP_CONTENT), $(call postprocessing,$(v),$($(v)_content)) )
-	$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_TEXTS)" "" ""
+	@if zenity --question --text="By continuing with this process you will lose any work done to the working files in your publication. Are you sure you want to do this?"; then {\
+		echo INFO: Postprocessing all content components; \
+		$(foreach v,$(GROUP_CONTENT), $(call postprocessing,$(v),$($(v)_content)) ) \
+		$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_TEXTS)" "" ""; \
+	} else {\
+		echo INFO: Canceled content postprocessing ; \
+	} fi
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
@@ -397,22 +401,25 @@ pdf-remove-content :
 
 # Run preprocesses on the source text.
 define preprocessing
-@if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
-	echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
-	rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
-fi
-@echo INFO: Preprocessing: '$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)'
-@$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+{ \
+	if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
+		echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
+	fi; \
+	echo INFO: Preprocessing: '$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)'; \
+	$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""; \
+};
 endef
 
 # Run the postprocesses on working text, however, to be safe
 # we run the preprocesses as well.
 define postprocessing
-$(call preprocessing ,$(1),$($(1)_content))
-@echo INFO: Copy to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"
-@$(MOD_RUN_PROCESS) "$(MOD_IMPORT)" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
-@echo INFO: Postprocessing: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'
-@$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""
+{ \
+	echo INFO: Copy to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; \
+	$(MOD_RUN_PROCESS) "$(MOD_IMPORT)" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""; \
+	echo INFO: Postprocessing: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'; \
+	$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""; \
+};
 endef
 
 # Create a single adjustment file if adjustments are turned on
