@@ -61,7 +61,7 @@ endif
 postprocess-$(1) : $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) $(DEPENDENT_FILE_LIST)
 ifeq ($(LOCKED),0)
 	$$(call postprocessing,$(1),$($(1)_content))
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
@@ -195,7 +195,7 @@ endif
 regression-wordlist-set-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
 ifeq ($(LOCKED),0)
 	@echo Setting regression base: $(1)-wordlist.$(EXT_CSV)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" "set"
 else
 	@echo INFO: Cannot set regression base: $(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
@@ -203,21 +203,21 @@ endif
 # Regression test a wordlist for a single book
 regression-wordlist-$(1) : $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)
 	@echo Regression testing: $(1)-wordlist.$(EXT_CSV)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "$(1)" "$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV)" "" ""
 
 # Regression test on the current component
 # One thing that would be nice here would be if the component didn't exisit, it
 # would make it. I was hoping that the "|" would enable that to happen but
 # testing shows confusing results so I'll leave it out for now.
 regression-component-$(1) :
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" ""
 
 # Set the current file as regression base. This will overwrite
 # whatever might currently be in the regression base folder.
 regression-component-set-$(1) :
 ifeq ($(LOCKED),0)
 	@echo Setting regression base: $(1).$(EXT_WORK)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
 else
 	@echo INFO: Cannot set regression base: $(1).$(EXT_WORK) because the project is locked.
 endif
@@ -226,9 +226,9 @@ endif
 regression-component-group-set-$(1) :
 ifeq ($(LOCKED),0)
 	@echo Setting regression base for group: $(1)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)" "" "set"
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_PICLIST)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_PICLIST)" "" "set"
 else
 	@echo INFO: Cannot set regression base for group: $(1) because the project is locked.
 endif
@@ -263,7 +263,7 @@ make-master-wordlist : $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 $(PATH_WORDLISTS)/$(FILE_MASTERWORDS) : $(foreach v,$(GROUP_CONTENT),$(PATH_WORDLISTS)/$(v)-wordlist.$(EXT_CSV))
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_MASTERWORDS)" "SYS" "" "$@" ""
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_WORDLISTS)" "" ""
 
 # HYPHENATION COMMENTS
 # Hyphenation files are dependent on wordlist files but will
@@ -283,7 +283,7 @@ ifeq ($(USE_HYPHENATION),true)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_HYPHENWORDS)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "$@" ""
 	@ln -sf $(PATH_LOG)/$(MOD_MAKE_HYPHENWORDS)-sys.log $(PATH_HYPHENATION)/
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
 else
 	@echo WARN: $(FILE_HYPHENATION) cannot be made because Hyphenation is set to \"$(USE_HYPHENATION)\"
 endif
@@ -304,7 +304,7 @@ $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : $(PATH_HYPHENATION)/$(FILE_HYPHENA
 ifeq ($(USE_HYPHENATION),true)
 	@echo INFO: Creating: $@
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEXHYPHEN)" "SYS" "$<" "$@" "overwrite"
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" ""
 else
 	@echo WARN: $(FILE_HYPHENATION_TEX) cannot be made because Hyphenation is set to \"$(USE_HYPHENATION)\"
 endif
@@ -376,7 +376,7 @@ postprocess-content :
 ifeq ($(LOCKED),0)
 	@echo INFO: Postprocessing all content components
 	@$(foreach v,$(GROUP_CONTENT), $(call postprocessing,$(v),$($(v)_content)) )
-	$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
+	$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_TEXTS)" "" ""
 else
 	@echo INFO: Cannot post process: $(PATH_TEXTS)/$(1).$(EXT_WORK) because the project is locked.
 endif
@@ -494,51 +494,51 @@ endif
 
 # Test all the working text against the stored regression base text
 regression-component-all :
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_TEXTS)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_TEXTS)" "" ""
 
 # Test the Hyphenation folder
 regression-hyphen-tex : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" ""
 
 # Set the current TeX hyphenation to be the regression base
 regression-hyphen-set-tex : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
 ifeq ($(LOCKED),0)
 	@echo Setting regression base: $(FILE_HYPHENATION_TEX)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" "set"
 else
 	@echo INFO: Cannot set regression base: $(FILE_HYPHENATION_TEX) because the project is locked.
 endif
 
 # Test the hyphenation wordlist file
 regression-hyphen-txt : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
 
 # Set the current hyphenation wordlist file to be the regression base
 regression-hyphen-set-txt : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
 ifeq ($(LOCKED),0)
 	@echo Setting regression base: $(FILE_HYPHENATION_TEX)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" "set"
 else
 	@echo INFO: Cannot set regression base: $(FILE_HYPHENATION) because the project is locked.
 endif
 
 # Test the Hyphenation folder
 regression-hyphen-all : | $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_HYPHENATION)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_HYPHENATION)" "" ""
 
 # Test the Wordlist master file
 regression-wordlist-master : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" ""
 
 # Set the master wordlist for project
 regression-wordlist-set-master : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 ifeq ($(LOCKED),0)
 	@echo Setting regression base: $(FILE_MASTERWORDS)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" "set"
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "" "set"
 else
 	@echo INFO: Cannot set regression base: $(1)-wordlist.$(EXT_CSV) because the project is locked.
 endif
 
 # Test the Wordlists folder
 regression-wordlist-all : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
-	@$(MOD_RUN_PROCESS) "$(MOD_BENCHMARK)" "SYS" "$(PATH_WORDLISTS)" "" ""
+	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_WORDLISTS)" "" ""
