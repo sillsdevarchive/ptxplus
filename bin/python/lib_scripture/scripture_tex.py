@@ -212,7 +212,7 @@ class MakeTexControlFile (object) :
 			if self._inputID == 'content' :
 				componentScripture = self._contentGroup
 				if generateTOC == 'true' :
-					settings = settings + '\\GenerateTOC[' + tocTitle + ']{' + autoTocFile + '}\n'
+					settings = settings + '\\GenerateTOC{' + tocTitle + '}{' + autoTocFile + '}\n'
 			else :
 				if self._inputID :
 					componentScripture = [self._inputID]

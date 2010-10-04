@@ -49,19 +49,22 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_
 
 # Create the peripheral file by copying in the template. But if
 # the template files doesn't exsit, then create a dummy one to
-# serve as a placeholder. Note the line concatanation. This needs to
-# be exicuted as one long line. Also be aware that we do not generate
-# the TOC here as it is made by a seperate process.
+# serve as a placeholder.
+# If the peripheral component requires a special process the "if"
+# statement will direct it to the right rule. The toc is an example
+# of a component needing a special process.
 # NOTE: the use of the "|" in the dependency list. The pipe enables makefile
 # to check on the dependent target, in this case a directory, but
 # the current target doesn't have to be rebuilt if it has not changed.
 # This is very important here because a directory will always be
 # changing.
+ifeq ($(1),toc)
 $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK) : | $(PATH_SOURCE_PERIPH)
-ifeq ($(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK),$(PATH_SOURCE_PERIPH)/$(FILE_TOC_USFM))
 	@echo Creating TOC from: $(PATH_TEXTS)/$(FILE_TOC_AUTO)
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC) 'TOC' '$(PATH_PROCESS)/$(FILE_TOC_AUTO)' '$$@' ''
 else
+$(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK) : | $(PATH_SOURCE_PERIPH)
+	@echo [[[[[ $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK),$(PATH_SOURCE_PERIPH)/$(FILE_TOC_USFM) ]]]]]
 	@echo INFO: Creating: $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK)
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_peripheral).$(EXT_WORK),$$@)
 endif
@@ -139,6 +142,10 @@ $(if $(1),$(firstword $(1)) $(call uniq,$(filter-out $(firstword $(1)),$(1))),)
 endef
 
 # Bind all the components into a group PDF file
+# In theory, this should only bind together existing components and build any
+# which do not exist. Pre-existing components will be take as are, even if the
+# source has been updated, they will not be rebuilt. Each one has to be built
+# on its own to insure that no mistakes slip in.
 define group_binding
 
 ifneq ($($(1)),)

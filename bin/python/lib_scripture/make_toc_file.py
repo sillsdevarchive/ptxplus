@@ -87,7 +87,7 @@ class MakeTocFile (object) :
 			inFileObject = codecs.open(self._texTocFile, "r", encoding='utf_8')
 		else :
 			# If we don't have a SFM toc input file we're done now.
-			self._log_manager.log("ERRR", "The [" + self._texTocFile + "] file does not exist so the process has been halted.")
+			self._log_manager.log("ERRR", "The [" + os.path.split(self._texTocFile)[1] + "] file not found. Check settings and remake content file before running this process.", "true")
 			return
 
 		if os.path.isfile(self._outputFile) :
@@ -120,7 +120,7 @@ class MakeTocFile (object) :
 						bookName = row[2].replace(inputColOne, '').strip()
 						pageNum = row[3].replace(inputColTwo, '').strip()
 						content = content + tocRowFormatMarker + "{" + bookName + "}{" + pageNum + "}" + "\n"
-# This next elif is not tested, take this out when it is
+# This next elif is for three column and is not really tested yet, take this comment out when it is
 					elif columnFormat == 'tblthreewlrow' :
 						bookName = row[2].replace(inputColOne, '').strip()
 						bookAbbr = row[3].replace(inputColTwo, '').strip()
