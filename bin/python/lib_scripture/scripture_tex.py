@@ -155,33 +155,33 @@ class MakeTexControlFile (object) :
 		settings = '\\input \"' + self._texMacros + '\"\n'
 
 		# All local control files will link to the main settings file
-		settings = settings + '\\input \"' + self._biSettingsFile + '\"\n'
+		settings += '\\input \"' + self._biSettingsFile + '\"\n'
 
 		# Now link to the custom settings file. As this can override some
 		# settings it seems that it would be best for it to come near the end
 		# of the initialization process. The control file would be the best
 		# place to bing it in.
-		settings = settings + '\\input \"' + self._cmSettingsFile + '\"\n'
+		settings += '\\input \"' + self._cmSettingsFile + '\"\n'
 
 		# If there is no ID given then this is probably peripheral stuff
 		# which means we need to output general peripheral TeX settings
 		# file input for what ever kind of peripheral matter it is.
 		if self._inputID == '' :
 			if self._inputFile.split('/')[-1] in self._frontMatter :
-				settings = settings + '\\input \"' + self._fmSettingsFile + '\"\n'
+				settings += '\\input \"' + self._fmSettingsFile + '\"\n'
 
 			elif self._inputFile.split('/')[-1] in self._backMatter :
-				settings = settings + '\\input \"' + self._bmSettingsFile + '\"\n'
+				settings += '\\input \"' + self._bmSettingsFile + '\"\n'
 
 			elif self._inputFile.split('/')[-1] in self._coverMatter :
-				settings = settings + '\\input \"' + self._cvSettingsFile + '\"\n'
+				settings += '\\input \"' + self._cvSettingsFile + '\"\n'
 
 			else :
 				self._log_manager.log("ERRR", "Trying to Create: " + self._outputFile + " - This module thinks that input: [" + self._inputFile + "] is part of the peripheral matter but it cannot find it on either the cover, front or back matter binding groups. Process halted.")
 				return
 
 		# Add the global style sheet
-		settings = settings + '\\stylesheet{' + bibleStyleFile + '}\n'
+		settings += '\\stylesheet{' + bibleStyleFile + '}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
@@ -191,14 +191,14 @@ class MakeTexControlFile (object) :
 			# Hyphenation is optional project-wide so we will put it here. However,
 			# we might need to rethink this.
 			if useHyphenation.lower() == 'true' :
-				settings = settings + '\\input \"' + hyphenFile + '\"\n'
+				settings += '\\input \"' + hyphenFile + '\"\n'
 
 			# Are we using marginal verses?
 			# Really, we don't want to put this here but due to a problem with
 			# passing style params, we need to pull in the marginal verse macro
 			# code at this point.
 			if self._useMarginalVerses.lower() == 'true' :
-				settings = settings + '\\input \"' + marginalVersesMacro + '\"\n'
+				settings += '\\input \"' + marginalVersesMacro + '\"\n'
 
 			# Since we were passed here it is assmumed that the context
 			# flag will contain a book ID, or will represent the entire
@@ -212,7 +212,7 @@ class MakeTexControlFile (object) :
 			if self._inputID == 'content' :
 				componentScripture = self._contentGroup
 				if generateTOC == 'true' :
-					settings = settings + '\\GenerateTOC{' + tocTitle + '}{' + autoTocFile + '}\n'
+					settings += '\\GenerateTOC{' + tocTitle + '}{' + autoTocFile + '}\n'
 			else :
 				if self._inputID :
 					componentScripture = [self._inputID]
@@ -232,24 +232,24 @@ class MakeTexControlFile (object) :
 				thisBook = self._pathToText + '/' + book.lower() + '.' + self._extWork
 				bookInfo = self.parseThisBook(thisBook)
 				if (oneChapOmmitRule == 'true' and bookInfo['chapCount'] == 1) or omitAllChapterNumbers == 'true' :
-					settings = settings + '\\OmitChapterNumbertrue\n'
-					settings = settings + '\\ptxfile{' + thisBook + '}\n'
-					settings = settings + '\\OmitChapterNumberfalse\n'
+					settings += '\\OmitChapterNumbertrue\n'
+					settings += '\\ptxfile{' + thisBook + '}\n'
+					settings += '\\OmitChapterNumberfalse\n'
 				else :
-					settings = settings + '\\ptxfile{' + thisBook + '}\n'
+					settings += '\\ptxfile{' + thisBook + '}\n'
 
 		# If there was no context flag at all that means it has to be peripheral
 		# matter. But is is front or back matter. we'll need to test to see
 		else :
 			# Make a link to the custom override style sheet for peripheral material.
-			settings = settings + '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.' + self._extStyle + '}\n'
+			settings += '\\stylesheet{' + self._pathToProcess + "/" + self._inputFile + '.' + self._extStyle + '}\n'
 
 			# For peripheral matter we do not have to generate the name like
 			# with Scripture books
-			settings = settings + '\\ptxfile{' + self._pathToText + '/' + self._inputFile + '.' + self._extWork + '}\n'
+			settings += '\\ptxfile{' + self._pathToText + '/' + self._inputFile + '.' + self._extWork + '}\n'
 
 		# Combine the results
-		settings = settings + '\\bye\n'
+		settings += '\\bye\n'
 
 		# Ship the results, change order as needed
 		self.writeOutTheFile(settings)
@@ -369,147 +369,148 @@ class MakeTexControlFile (object) :
 		generalSettings = ''
 
 		# Create the file header
-		fileHeaderText =    "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
+		fileHeaderText +=    "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
 					"% should be made to the project.conf file or the custom TeX setup file.\n\n"
 		# Add format settings
-		formatSettings = '\\PaperHeight=' + pageHeight + '\n'
-		formatSettings = formatSettings + '\\PaperWidth=' + pageWidth + '\n'
+		formatSettings += '\\PaperHeight=' + pageHeight + '\n'
+		formatSettings += '\\PaperWidth=' + pageWidth + '\n'
 		if useCropmarks.lower() == 'true' :
-			formatSettings = formatSettings + '\\CropMarkstrue\n'
+			formatSettings += '\\CropMarkstrue\n'
 		if endBookNoEject.lower() == 'true' :
-			formatSettings = formatSettings + '\\endbooknoejecttrue\n'
+			formatSettings += '\\endbooknoejecttrue\n'
 		# Columns
-		formatSettings = formatSettings + '\\TitleColumns=' + titleColumns + '\n'
-		formatSettings = formatSettings + '\\IntroColumns=' + introColumns + '\n'
-		formatSettings = formatSettings + '\\BodyColumns=' + bodyColumns + '\n'
-		formatSettings = formatSettings + '\\def\\ColumnGutterFactor{' + columnGutterFactor + '}\n'
+		formatSettings += '\\TitleColumns=' + titleColumns + '\n'
+		formatSettings += '\\IntroColumns=' + introColumns + '\n'
+		formatSettings += '\\BodyColumns=' + bodyColumns + '\n'
+		formatSettings += '\\def\\ColumnGutterFactor{' + columnGutterFactor + '}\n'
 		if columnGutterRule.lower() == 'true' :
-			formatSettings = formatSettings + '\\ColumnGutterRuletrue\n'
-		formatSettings = formatSettings + '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + 'pt\n'
+			formatSettings += '\\ColumnGutterRuletrue\n'
+		formatSettings += '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + 'pt\n'
 
 		# Margins
-		formatSettings = formatSettings + '\\MarginUnit=' + marginUnit + '\n'
-		formatSettings = formatSettings + '\\def\\TopMarginFactor{' + topMarginFactor + '}\n'
-		formatSettings = formatSettings + '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
-		formatSettings = formatSettings + '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
+		formatSettings += '\\MarginUnit=' + marginUnit + '\n'
+		formatSettings += '\\def\\TopMarginFactor{' + topMarginFactor + '}\n'
+		formatSettings += '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
+		formatSettings += '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
 		if useBindingGutter.lower() == 'true' :
-			formatSettings = formatSettings + '\\BindingGuttertrue\n'
-			formatSettings = formatSettings + '\\BindingGutter=' + bindingGutter + '\n'
+			formatSettings += '\\BindingGuttertrue\n'
+			formatSettings += '\\BindingGutter=' + bindingGutter + '\n'
 
 		# Fonts
 		if xetexLineBreakLocale.lower() == 'true' :
-			fontSettings = fontSettings + '\\XeTeXlinebreaklocale \"G\"\n'
-		fontSettings = fontSettings + '\\def\\regular{\"' + fontDefRegular + '\"}\n'
-		fontSettings = fontSettings + '\\def\\bold{\"' + fontDefBold + '\"}\n'
-		fontSettings = fontSettings + '\\def\\italic{\"' + fontDefItalic + '\"}\n'
-		fontSettings = fontSettings + '\\def\\bolditalic{\"' + fontDefBoldItalic + '\"}\n'
+			fontSettings += '\\XeTeXlinebreaklocale \"G\"\n'
+		fontSettings += '\\def\\regular{\"' + fontDefRegular + '\"}\n'
+		fontSettings += '\\def\\bold{\"' + fontDefBold + '\"}\n'
+		fontSettings += '\\def\\italic{\"' + fontDefItalic + '\"}\n'
+		fontSettings += '\\def\\bolditalic{\"' + fontDefBoldItalic + '\"}\n'
 		if tracingLostCharacters.lower() == 'true' :
-			fontSettings = fontSettings + '\\tracinglostchars=1\n'
-		fontSettings = fontSettings + '\\FontSizeUnit=' + fontSizeUnit + 'pt\n'
-		fontSettings = fontSettings + '\\def\\LineSpacingFactor{' + lineSpacingFactor + '}\n'
-		fontSettings = fontSettings + '\\def\\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
+			fontSettings += '\\tracinglostchars=1\n'
+		fontSettings += '\\FontSizeUnit=' + fontSizeUnit + 'pt\n'
+		fontSettings += '\\def\\LineSpacingFactor{' + lineSpacingFactor + '}\n'
+		fontSettings += '\\def\\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
 
 		# Path to Illustration files (Note we add a "/" at the end so ptx2pdf can get it right.)
 		if useIllustrations.lower() == 'true' :
-			fileInput = fileInput + '\\PicPath={' + self._pathToIllustrations + '/}\n'
+			fileInput += '\\PicPath={' + self._pathToIllustrations + '/}\n'
 		# Will we use marginal verses? This setting is
 		# mainly for use with marginal verses
 		if self._useMarginalVerses.lower() == 'true' :
-			fileInput = fileInput + '\\columnshift=' + columnshift + 'pt\n'
+			fileInput += '\\columnshift=' + columnshift + 'pt\n'
 		# Do we want a page border?
 		if usePageBorder.lower() == 'true' :
 			if pageBorderScale == '' :
-				fileInput = fileInput + '\\def\\PageBorder{' + pageBorderFile + '}\n'
+				fileInput += '\\def\\PageBorder{' + pageBorderFile + '}\n'
 			else :
-				fileInput = fileInput + '\\def\\PageBorder{' + pageBorderFile + ' scaled ' + pageBorderScale + '}\n'
+				fileInput += '\\def\\PageBorder{' + pageBorderFile + ' scaled ' + pageBorderScale + '}\n'
+
 		# Verse/chapter settings
 		if verseRefs.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\VerseRefstrue\n'
+			verseChapterSettings += '\\VerseRefstrue\n'
 		if omitChapterNumber.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\OmitChapterNumberRHtrue\n'
+			verseChapterSettings += '\\OmitChapterNumberRHtrue\n'
 		if omitBookRef.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\OmitBookReftrue\n'
+			verseChapterSettings += '\\OmitBookReftrue\n'
 		if omitVerseNumberOne.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\OmitVerseNumberOnetrue\n'
+			verseChapterSettings += '\\OmitVerseNumberOnetrue\n'
 		if removeIndentAfterHeading.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\IndentAfterHeadingtrue\n'
+			verseChapterSettings += '\\IndentAfterHeadingtrue\n'
 		if adornVerseNumber.lower() == 'true' :
-			verseChapterSettings = verseChapterSettings + '\\def\\AdornVerseNumber#1{(#1)}\n'
-		verseChapterSettings = verseChapterSettings + '\\def\\VerseMarker{' + verseMarker + '}\n'
-		verseChapterSettings = verseChapterSettings + '\\def\\ChapterVerseSeparator{' + chapterVerseSeparator + '}\n'
-		verseChapterSettings = verseChapterSettings + '\\def\\AfterVerseSpaceFactor{' + afterVerseSpaceFactor + '}\n'
-		verseChapterSettings = verseChapterSettings + '\\def\\AfterChapterSpaceFactor{' + afterChapterSpaceFactor + '}\n'
+			verseChapterSettings += '\\def\\AdornVerseNumber#1{(#1)}\n'
+		verseChapterSettings += '\\def\\VerseMarker{' + verseMarker + '}\n'
+		verseChapterSettings += '\\def\\ChapterVerseSeparator{' + chapterVerseSeparator + '}\n'
+		verseChapterSettings += '\\def\\AfterVerseSpaceFactor{' + afterVerseSpaceFactor + '}\n'
+		verseChapterSettings += '\\def\\AfterChapterSpaceFactor{' + afterChapterSpaceFactor + '}\n'
 
 		# HeaderFooter
-		headerFooterSettings = headerFooterSettings + '\\def\\HeaderPosition{' + headerPosition + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\FooterPosition{' + footerPosition + '}\n'
+		headerFooterSettings += '\\def\\HeaderPosition{' + headerPosition + '}\n'
+		headerFooterSettings += '\\def\\FooterPosition{' + footerPosition + '}\n'
 		if useRunningHeaderRule.lower() == 'true' :
-			headerSettings = headerSettings + '\\RHruleposition=' + runningHeaderRulePosition + '\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RHtitleleft{\\' + runningHeaderTitleLeft + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RHtitlecenter{\\' + runningHeaderTitleCenter + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RHtitleright{\\' + runningHeaderTitleRight + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RHoddleft{\\' + runningHeaderOddLeft + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RHoddcenter{\\' + runningHeaderOddCenter + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RHoddright{\\' + runningHeaderOddRight + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RHevenleft{\\' + runningHeaderEvenLeft + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RHevencenter{\\' + runningHeaderOddCenter + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RHevenright{\\' + runningHeaderEvenRight + '}\n'
+			headerFooterSettings += '\\RHruleposition=' + runningHeaderRulePosition + '\n'
+		headerFooterSettings += '\\def\\RHtitleleft{\\' + runningHeaderTitleLeft + '}\n'
+		headerFooterSettings += '\\def\\RHtitlecenter{\\' + runningHeaderTitleCenter + '}\n'
+		headerFooterSettings += '\\def\\RHtitleright{\\' + runningHeaderTitleRight + '}\n'
+		headerFooterSettings += '\\def\\RHoddleft{\\' + runningHeaderOddLeft + '}\n'
+		headerFooterSettings += '\\def\\RHoddcenter{\\' + runningHeaderOddCenter + '}\n'
+		headerFooterSettings += '\\def\\RHoddright{\\' + runningHeaderOddRight + '}\n'
+		headerFooterSettings += '\\def\\RHevenleft{\\' + runningHeaderEvenLeft + '}\n'
+		headerFooterSettings += '\\def\\RHevencenter{\\' + runningHeaderOddCenter + '}\n'
+		headerFooterSettings += '\\def\\RHevenright{\\' + runningHeaderEvenRight + '}\n'
 
 		# Footer settings
-		headerFooterSettings = headerFooterSettings + '\\def\\RFtitleleft{\\' + runningFooterTitleLeft + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RFtitlecenter{\\' + runningFooterTitleCenter + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RFtitleright{\\' + runningFooterTitleRight + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RFoddleft{\\' + runningFooterOddLeft + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RFoddcenter{\\' + runningFooterOddCenter + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RFoddright{\\' + runningFooterOddRight + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RFevenleft{\\' + runningFooterEvenLeft + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RFevencenter{\\' + runningFooterEvenCenter + '}\n'
-		headerFooterSettings = headerFooterSettings + '\\def\\RFevenright{\\' + runningFooterEvenRight + '}\n'
+		headerFooterSettings += '\\def\\RFtitleleft{\\' + runningFooterTitleLeft + '}\n'
+		headerFooterSettings += '\\def\\RFtitlecenter{\\' + runningFooterTitleCenter + '}\n'
+		headerFooterSettings += '\\def\\RFtitleright{\\' + runningFooterTitleRight + '}\n'
+		headerFooterSettings += '\\def\\RFoddleft{\\' + runningFooterOddLeft + '}\n'
+		headerFooterSettings += '\\def\\RFoddcenter{\\' + runningFooterOddCenter + '}\n'
+		headerFooterSettings += '\\def\\RFoddright{\\' + runningFooterOddRight + '}\n'
+		headerFooterSettings += '\\def\\RFevenleft{\\' + runningFooterEvenLeft + '}\n'
+		headerFooterSettings += '\\def\\RFevencenter{\\' + runningFooterEvenCenter + '}\n'
+		headerFooterSettings += '\\def\\RFevenright{\\' + runningFooterEvenRight + '}\n'
 
 		# Footnote settings
 		# If we use Autocallers we need to leave out some other things and vise versa
 		if useAutoCallers == 'true' :
-			footnoteSettings = footnoteSettings + '\\AutoCallers{f}{' + autoCallerCharFn + '}\n'
-			footnoteSettings = footnoteSettings + '\\AutoCallers{x}{' + autoCallerCharCr + '}\n'
+			footnoteSettings += '\\AutoCallers{f}{' + autoCallerCharFn + '}\n'
+			footnoteSettings += '\\AutoCallers{x}{' + autoCallerCharCr + '}\n'
 		else :
-			footnoteSettings = footnoteSettings + '\\def\\AutoCallerStartChar{' + autoCallerStartChar + '}\n'
-			footnoteSettings = footnoteSettings + '\\def\\AutoCallerNumChars{' + autoCallerNumChars + '}\n'
+			footnoteSettings += '\\def\\AutoCallerStartChar{' + autoCallerStartChar + '}\n'
+			footnoteSettings += '\\def\\AutoCallerNumChars{' + autoCallerNumChars + '}\n'
 			if useNumericCallersFootnotes.lower() == 'true' :
-				footnoteSettings = footnoteSettings + '\\NumericCallers{f}\n'
+				footnoteSettings += '\\NumericCallers{f}\n'
 			if useNumericCallersCrossRefs.lower() == 'true' :
-				footnoteSettings = footnoteSettings + '\\NumericCallers{x}\n'
+				footnoteSettings += '\\NumericCallers{x}\n'
 			if pageResetCallersFootnotes.lower() == 'true' :
-				footnoteSettings = footnoteSettings + '\\PageResetCallers{f}\n'
+				footnoteSettings += '\\PageResetCallers{f}\n'
 			if pageResetCallersCrossRefs.lower() == 'true' :
-				footnoteSettings = footnoteSettings + '\\PageResetCallers{x}\n'
+				footnoteSettings += '\\PageResetCallers{x}\n'
 		# This seems to be an inconsistancy in ptxplus. If the footnoterule
 		# param is blank it will not put out anything. If it is not defined
 		# at all it will put out the default 4pt hrule. This hopefully makes
 		# it simpler to understand by the user.
 		if useFootnoteRule.lower() == 'true' :
 			if defineNewFootnoteRule != '' :
-				footnoteSettings = footnoteSettings + '\\def\\footnoterule{' + defineNewFootnoteRule + '}\n'
+				footnoteSettings += '\\def\\footnoterule{' + defineNewFootnoteRule + '}\n'
 			# The unstated else here is that if the user wants a footnote rule
 			# but did not define anything, the default is used.
 		else :
 			# In this case the footnote rule is turned off by defining the
 			# footnoterule to nothing
 
-			footnoteSettings = footnoteSettings + '\\def\\footnoterule{}\n'
+			footnoteSettings += '\\def\\footnoterule{}\n'
 		if omitCallerInFootnote.lower() == 'true' :
-			footnoteSettings = footnoteSettings + '\\OmitCallerInNote{f}\n'
+			footnoteSettings += '\\OmitCallerInNote{f}\n'
 		if omitCallerInCrossRefs.lower() == 'true' :
-			footnoteSettings = footnoteSettings + '\\OmitCallerInNote{x}\n'
+			footnoteSettings += '\\OmitCallerInNote{x}\n'
 		if paragraphedFootnotes.lower() == 'true' :
-			footnoteSettings = footnoteSettings + '\\ParagraphedNotes{f}\n'
+			footnoteSettings += '\\ParagraphedNotes{f}\n'
 		if paragraphedCrossRefs.lower() == 'true' :
-			footnoteSettings = footnoteSettings + '\\ParagraphedNotes{x}\n'
+			footnoteSettings += '\\ParagraphedNotes{x}\n'
 
 		# General settings
 		if useFigurePlaceholders.lower() == 'true' :
-			generalSettings = generalSettings + '\\FigurePlaceholderstrue\n'
+			generalSettings += '\\FigurePlaceholderstrue\n'
 		# Allow the use of digets in text
-		generalSettings = generalSettings + '\\catcode`@=11\n\\def\\makedigitsother{\\m@kedigitsother}\n\\def\\makedigitsletters{\\m@kedigitsletters}\n\\catcode `@=12\n'
+		generalSettings += '\\catcode`@=11\n\\def\\makedigitsother{\\m@kedigitsother}\n\\def\\makedigitsletters{\\m@kedigitsletters}\n\\catcode `@=12\n'
 
 
 		# Ship the results, change order as needed
@@ -551,27 +552,27 @@ class MakeTexControlFile (object) :
 			fileName = self._cvSettingsFile
 			# There is not much to a cover file but we know that we
 			# need to turn off all the header and footer output
-			formatSettings = formatSettings + '\\TitleColumns=1\n'
-			formatSettings = formatSettings + '\\IntroColumns=1\n'
-			formatSettings = formatSettings + '\\BodyColumns=1\n'
-			headerSettings = headerSettings + self.RemovePageNumbers(self._headerPositions)
-			footerSettings = footerSettings + self.RemovePageNumbers(self._footerPositions)
+			formatSettings += '\\TitleColumns=1\n'
+			formatSettings += '\\IntroColumns=1\n'
+			formatSettings += '\\BodyColumns=1\n'
+			headerSettings += self.RemovePageNumbers(self._headerPositions)
+			footerSettings += self.RemovePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'front' :
 			fileName = self._fmSettingsFile
-			formatSettings = formatSettings + '\\TitleColumns=1\n'
-			formatSettings = formatSettings + '\\IntroColumns=1\n'
-			formatSettings = formatSettings + '\\BodyColumns=1\n'
-			headerSettings = headerSettings + self.RemovePageNumbers(self._headerPositions)
-			footerSettings = footerSettings + self.RemovePageNumbers(self._footerPositions)
+			formatSettings += '\\TitleColumns=1\n'
+			formatSettings += '\\IntroColumns=1\n'
+			formatSettings += '\\BodyColumns=1\n'
+			headerSettings += self.RemovePageNumbers(self._headerPositions)
+			footerSettings += self.RemovePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'back' :
 			fileName = self._bmSettingsFile
-			formatSettings = formatSettings + '\\TitleColumns=1\n'
-			formatSettings = formatSettings + '\\IntroColumns=1\n'
-			formatSettings = formatSettings + '\\BodyColumns=1\n'
-			headerSettings = headerSettings + self.RemovePageNumbers(self._headerPositions)
-			footerSettings = footerSettings + self.RemovePageNumbers(self._footerPositions)
+			formatSettings += '\\TitleColumns=1\n'
+			formatSettings += '\\IntroColumns=1\n'
+			formatSettings += '\\BodyColumns=1\n'
+			headerSettings += self.RemovePageNumbers(self._headerPositions)
+			footerSettings += self.RemovePageNumbers(self._footerPositions)
 
 		else :
 			# If we can't figure out what this is we have a system level bug and we might as well quite here
@@ -579,7 +580,9 @@ class MakeTexControlFile (object) :
 			return
 
 		# The file header telling users not to touch it
-		fileHeaderText = '% File: ' + fileName + '\n\n' + \
+		# This must go a little out of order because the
+		# file name is being set above.
+		fileHeaderText += '% File: ' + fileName + '\n\n' + \
 			'% This file is auto generated. If you know what is good for you, will not edit it!\n\n'
 
 		# General settings
@@ -590,14 +593,19 @@ class MakeTexControlFile (object) :
 			generalSettings = generalSettings + '\\RTLtrue\n'
 
 		# Ship the results, change order as needed
-		orderedContents =     fileHeaderText + \
-					formatSettings + \
-					headerSettings + \
-					footerSettings + \
-					generalSettings + \
-					'\n'
+		orderedContents =   fileHeaderText + \
+							formatSettings + \
+							headerSettings + \
+							footerSettings + \
+							generalSettings + \
+							'\n'
 
-		self.writeOutTheFile(orderedContents)
+		# We don't want to write out at this point if the file want to
+		# write to already exists.
+		if not os.path.isfile(fileName) :
+			self.writeOutTheFile(orderedContents)
+		else :
+			self._log_manager.log("INFO", "Exists: " + os.path.split(self._outputFile)[1], "true")
 
 
 #########################################################################################

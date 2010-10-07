@@ -36,10 +36,10 @@ $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) :
 # the postprocessing function to do this.
 $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
 ifeq ($(LOCKED),0)
-	@echo INFO: Creating: $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@echo INFO: Creating: $(1).$(EXT_WORK)
 	$$(call postprocessing,$(1),$($(1)_content))
 else
-	@echo INFO: Cannot create: $$@ because the project is locked.
+	@echo INFO: Cannot create: $(1).$(EXT_WORK) because the project is locked.
 endif
 
 # This enables us to do the preprocessing on a single component and view the log file
@@ -70,7 +70,7 @@ endif
 # control file that will link to the other settings
 $(PATH_PROCESS)/$(1).$(EXT_TEX) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 ifeq ($(LOCKED),0)
-	@echo INFO: Creating: $$@
+	@echo INFO: Creating: $(1).$(EXT_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "$(1)" "$(1).$(EXT_WORK)" "$$@" ""
 else
 	@echo INFO: Cannot create: $$@ This is because the project is locked.
@@ -81,10 +81,12 @@ endif
 # An even more special dependency is set on the piclist file and
 # hyphenation file too with an [if] statement because not every
 # component has to have a piclist or hypheation.
+# Note: The wordlist dependency was removed to avoide creation
+# of all wordlists when only one was needed. Wordlist is a dignostic
+# tool and view is not dependent on it.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 		$(PATH_TEXTS)/$(1).$(EXT_WORK) \
 		$(PATH_PROCESS)/$(1).$(EXT_TEX) \
-		$(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV) \
 		$(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) \
 		$(if $(findstring $(1),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(1).$(EXT_PICLIST)) \
 		$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), ) \
@@ -112,7 +114,7 @@ $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Remove the PDF for this component only
 pdf-remove-$(1) :
-	@echo INFO: Removing: $(PATH_PROCESS)/$(1).$(EXT_PDF)
+	@echo INFO: Removing: $(1).$(EXT_PDF)
 	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Make adjustment file which is a dependent of the PDF process
@@ -120,7 +122,7 @@ pdf-remove-$(1) :
 # automate this process by setting a dependency
 
 adjlist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT)
-	@echo INFO: Creating: $$<
+	@echo INFO: Creating: $(1).$(EXT_ADJUSTMENT)
 
 # Call the adjustlist creation macro
 $(PATH_TEXTS)/$(1).$(EXT_ADJUSTMENT) :
@@ -142,7 +144,7 @@ endif
 # Make the piclist file if there is a need for it with
 # this component.
 piclist-make-$(1) : $(PATH_TEXTS)/$(1).$(EXT_PICLIST)
-	@echo INFO: Creating: $$<
+	@echo INFO: Creating: $(1).$(EXT_PICLIST)
 
 # Make illustrations file if illustrations are used in this pub
 # If there is a path/file listed in the illustrationsLib field
@@ -171,7 +173,7 @@ endif
 # a regression test will be run every time which is
 # not needed.)
 $(PATH_WORDLISTS)/$(1)-wordlist.$(EXT_CSV) : | $(PATH_TEXTS)/$(1).$(EXT_WORK)
-	@echo INFO: Creating: $$@
+	@echo INFO: Creating: $(1)-wordlist.$(EXT_CSV)
 	@$$(call makewordlist,$(1))
 
 # Command to create a wordlist for a single book
@@ -233,7 +235,7 @@ else
 	@echo INFO: Cannot set regression base for group: $(1) because the project is locked.
 endif
 
-# End of the content_rules define
+##### End of the content_rules define
 endef
 
 ######################## End Main Macro ######################
@@ -250,6 +252,7 @@ endef
 # This builds a rule (in memory) for each of the content components
 $(foreach v,$(GROUP_CONTENT),$(eval $(call content_rules,$(v))))
 
+
 # WORD LIST COMMENTS
 # Word lists will be made on the working files and will be rerun
 # every time there is a change to one of them. In time we should
@@ -261,7 +264,7 @@ make-master-wordlist : $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 
 # Create the master wordlist
 $(PATH_WORDLISTS)/$(FILE_MASTERWORDS) : $(foreach v,$(GROUP_CONTENT),$(PATH_WORDLISTS)/$(v)-wordlist.$(EXT_CSV))
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: $(FILE_MASTERWORDS)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_MASTERWORDS)" "SYS" "" "$@" ""
 	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_WORDLISTS)" "" ""
 
@@ -280,7 +283,7 @@ make-hyphen-wordlist: $(PATH_HYPHENATION)/$(FILE_HYPHENATION)
 # hypheation folder for easier access
 $(PATH_HYPHENATION)/$(FILE_HYPHENATION) : | $(PATH_WORDLISTS)/$(FILE_MASTERWORDS)
 ifeq ($(USE_HYPHENATION),true)
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: $(FILE_HYPHENATION)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_HYPHENWORDS)" "SYS" "$(PATH_WORDLISTS)/$(FILE_MASTERWORDS)" "$@" ""
 	@ln -sf $(PATH_LOG)/$(MOD_MAKE_HYPHENWORDS)-sys.log $(PATH_HYPHENATION)/
 	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION)" "" ""
@@ -302,7 +305,7 @@ $(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX) : $(PATH_HYPHENATION)/$(FILE_HYPHENA
 		$(PATH_HYPHENATION)/$(FILE_HYPREFIX) \
 		$(PATH_HYPHENATION)/$(FILE_HYSUFFIX)
 ifeq ($(USE_HYPHENATION),true)
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: $(FILE_HYPHENATION_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEXHYPHEN)" "SYS" "$<" "$@" "overwrite"
 	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "SYS" "$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX)" "" ""
 else
@@ -311,25 +314,26 @@ endif
 
 # Rules for creating some of the hyphenation dependent files
 $(PATH_HYPHENATION)/$(FILE_LCCODELIST) :
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: $(FILE_LCCODELIST)
 	$(call copysmart,$(PATH_RESOURCES_HYPHENATION)/$(FILE_LCCODELIST),$@)
 
 $(PATH_HYPHENATION)/$(FILE_HYCUSTOM) :
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: $(FILE_HYCUSTOM)
 	$(call copysmart,$(PATH_RESOURCES_HYPHENATION)/$(FILE_HYCUSTOM),$@)
 
 $(PATH_HYPHENATION)/$(FILE_HYPREFIX) :
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: /$(FILE_HYPREFIX)
 	$(call copysmart,$(PATH_RESOURCES_HYPHENATION)/$(FILE_HYPREFIX),$@)
 
 $(PATH_HYPHENATION)/$(FILE_HYSUFFIX) :
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: $(FILE_HYSUFFIX)
 	$(call copysmart,$(PATH_RESOURCES_HYPHENATION)/$(FILE_HYSUFFIX),$@)
 
 # The rule to create the bible override style sheet. This is
 # used to override styles for Scripture that come from the
 # .project.sty file.
 $(PATH_PROCESS)/$(FILE_TEX_STYLE) :
+	@echo INFO: Creating: $(FILE_TEX_STYLE)
 	$(call copysmart,$(PATH_RESOURCES_PROCESS)/$(FILE_TEX_STYLE),$@)
 
 # Rule for building the TeX settings file that is used for
@@ -337,27 +341,28 @@ $(PATH_PROCESS)/$(FILE_TEX_STYLE) :
 # be confused with the Bible control file which is a TeX
 # control file for processing the entire Bible.
 $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: $(FILE_TEX_SETTINGS)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" ""
 
 # Rule for building the GROUP_CONTENT control file. This is
 # not the same as TeX settings file above.
 $(PATH_PROCESS)/GROUP_CONTENT.tex :
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: GROUP_CONTENT.tex
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
 
 # Rule for generating the content components. It will
 # also generate the TOC if that feature is turned on.
+# Note: removed master wordlist dependency as view is
+# not really dependent on that.
 $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
 		$(foreach v,$(GROUP_CONTENT), \
 		$(PATH_TEXTS)/$(v).$(EXT_WORK) \
 		$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
 		$(if $(findstring $(v),$(HAS_ILLUSTRATIONS)),$(PATH_TEXTS)/$(v).$(EXT_PICLIST)) ) \
-		$(PATH_WORDLISTS)/$(FILE_MASTERWORDS) \
 		$(DEPENDENT_FILE_LIST) \
 		$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), ) \
 		$(PATH_PROCESS)/GROUP_CONTENT.tex
-	@echo INFO: Creating: $@
+	@echo INFO: Creating: GROUP_CONTENT.$(EXT_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) GROUP_CONTENT.tex
 	$(call watermark,$@)
 	$(if $(findstring "toc",$(COMPONENTS_ALL)),@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)")
@@ -401,12 +406,12 @@ pdf-remove-content :
 
 # Run preprocesses on the source text.
 define preprocessing
+echo INFO: Removing: $(1).$(EXT_WORK)
+echo INFO: Preprocessing: $(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
 { \
 	if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
-		echo INFO: Removing: $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 	fi; \
-	echo INFO: Preprocessing: '$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)'; \
 	$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""; \
 };
 endef
@@ -415,9 +420,9 @@ endef
 # we run the preprocesses as well.
 define postprocessing
 { \
-	echo INFO: Copy to: "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; \
+	echo INFO: Copy to: "$(1).$(EXT_WORK)"; \
 	$(MOD_RUN_PROCESS) "$(MOD_IMPORT)" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""; \
-	echo INFO: Postprocessing: '$(PATH_TEXTS)/$(1).$(EXT_WORK)'; \
+	echo INFO: Postprocessing: '$(1).$(EXT_WORK)'; \
 	$(MOD_RUN_PROCESS) "textProcesses" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""; \
 };
 endef

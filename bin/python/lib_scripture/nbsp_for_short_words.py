@@ -113,8 +113,13 @@ class NBSPForShortWordsHandler (parse_sfm.Handler) :
 		self._log_manager._currentContext = tools.getSliceOfText(text, 0, 10)
 
 		# Find a string of text that is not an inline container
+#        if info.isChar or info.isPara and not info.isEnd :
 		if info.isChar or info.isPara and not info.isEnd :
 
+
+			# There are two ways we can insert a nbsp where it is needed
+			# One is by counting words and characters. In that case, this
+			# code will work:
 			# What is the last word in this string, we want to test it
 			words = text.split()
 
@@ -125,10 +130,11 @@ class NBSPForShortWordsHandler (parse_sfm.Handler) :
 					lastWord = words[len(words)-1]
 					# If it is shorter or egual to wordLength we need to join it
 					if len(lastWord) <= self._wordLength :
-						# Since we know what the last word is find it and replace the
-						# space infront of it with a NBSP
-						text = text.replace(u'\u0020' + lastWord, u'\u00A0' + lastWord)
-						self._replacementCount +=1
+						# We only want to apply this in verse text
+						if tag == 'v' :
+							# Do a blind replacement on spaces in the effected text area
+							text = text[:-self._wordLength] + text[-self._wordLength:].replace(u'\u0020', u'\u00A0')
+							self._replacementCount +=1
 
 			except :
 				pass

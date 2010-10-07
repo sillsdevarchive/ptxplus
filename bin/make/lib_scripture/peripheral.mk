@@ -60,12 +60,11 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_
 # changing.
 ifeq ($(1),toc)
 $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK) : | $(PATH_SOURCE_PERIPH)
-	@echo Creating TOC from: $(PATH_TEXTS)/$(FILE_TOC_AUTO)
+	@echo Creating TOC from: $(FILE_TOC_AUTO)
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_TOC) 'TOC' '$(PATH_PROCESS)/$(FILE_TOC_AUTO)' '$$@' ''
 else
 $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK) : | $(PATH_SOURCE_PERIPH)
-	@echo [[[[[ $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK),$(PATH_SOURCE_PERIPH)/$(FILE_TOC_USFM) ]]]]]
-	@echo INFO: Creating: $(PATH_SOURCE_PERIPH)/$($(1)_peripheral).$(EXT_WORK)
+	@echo INFO: Creating: $($(1)_peripheral).$(EXT_WORK)
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_peripheral).$(EXT_WORK),$$@)
 endif
 
@@ -81,7 +80,7 @@ $(PATH_PROCESS)/$(1).$(EXT_TEX) : | \
 		$(PATH_PROCESS)/$(FILE_TEX_COVER) \
 		$(PATH_PROCESS)/$(FILE_TEX_FRONT) \
 		$(PATH_PROCESS)/$(FILE_TEX_BACK)
-	@echo INFO: Creating: $$@
+	@echo INFO: Creating: $(1).$(EXT_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "$(1)" "$$@" "periph"
 
 # The rule to create the override style sheet.
@@ -94,7 +93,7 @@ $(PATH_PROCESS)/$(1).$(EXT_PDF) : \
 		$(PATH_PROCESS)/$(1).$(EXT_TEX) \
 		$(PATH_PROCESS)/$(1).$(EXT_STYLE) \
 		$(DEPENDENT_FILE_LIST)
-	@echo INFO: Creating: $$@
+	@echo INFO: Creating: $(1).$(EXT_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(1).$(EXT_TEX)
 	$(call watermark,$$@)
 
@@ -117,7 +116,7 @@ $(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF) $(DEPENDENT_FILE_LIST)
 
 # Remove the PDF file for this source file
 pdf-remove-$(1) :
-	@echo INFO: Removing $$@
+	@echo INFO: Removing $(1).$(EXT_PDF)
 	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Regression test on the current component
@@ -129,7 +128,7 @@ regression-$(1) :
 regression-set-$(1) :
 	@$(MOD_RUN_PROCESS) "$(MOD_REGRESSION)" "$(1)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" "" "set"
 
-# End to the periph_rules macro def
+##### End to the periph_rules macro def
 endef
 
 
@@ -185,22 +184,22 @@ $(eval $(call group_binding,GROUP_BACK))
 # not really be needed but it seems to be the best way to handle
 # this proceedure and remain consistant with the rest of the
 # processes.
-$(PATH_PROCESS)/$(FILE_TEX_COVER) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
-	@echo INFO: Creating: $@
+$(PATH_PROCESS)/$(FILE_TEX_COVER) : | $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
+	@echo INFO: Creating: $(FILE_TEX_COVER)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "cover"
 
 # Most front group peripheral .tex files will have a dependency
 # on $(FILE_TEX_FRONT) even if it doesn't, there is a hard coded
 # dependency here that will be met if called on.
-$(PATH_PROCESS)/$(FILE_TEX_FRONT) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
-	@echo INFO: Creating: $@
+$(PATH_PROCESS)/$(FILE_TEX_FRONT) : | $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
+	@echo INFO: Creating: $(FILE_TEX_FRONT)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "front"
 
 # Most back group peripheral .tex files will have a dependency
 # on BACK_GROUP.tex even if it doesn't there is a hard coded
 # dependency here that will be met if called on.
-$(PATH_PROCESS)/$(FILE_TEX_BACK) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
-	@echo INFO: Creating: $@
+$(PATH_PROCESS)/$(FILE_TEX_BACK) : | $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
+	@echo INFO: Creating: $(FILE_TEX_BACK)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "back"
 
 # Produce all the outer cover material in one PDF file
