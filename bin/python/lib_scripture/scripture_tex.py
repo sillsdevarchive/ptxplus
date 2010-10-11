@@ -282,7 +282,7 @@ class MakeTexControlFile (object) :
 		useIllustrations = self._log_manager._settings['Format']['Illustrations']['USE_ILLUSTRATIONS']
 		usePageBorder = self._log_manager._settings['Format']['PageLayout']['USE_PAGE_BORDER']
 		pageBorderScale = self._log_manager._settings['Format']['PageLayout']['pageBorderScale']
-		pageBorderFile = self._log_manager._settings['System']['Files']['FILE_PAGE_BORDER']
+		pageBorderFile = self._log_manager._settings['Format']['PageLayout']['FILE_PAGE_BORDER']
 
 		# Format -> Scripture
 		useRunningHeaderRule = self._log_manager._settings['Format']['HeaderFooter']['useRunningHeaderRule']

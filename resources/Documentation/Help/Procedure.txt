@@ -1,7 +1,6 @@
 Content-Type: text/x-zim-wiki
-Wiki-Format: zim 0.26
+Wiki-Format: zim 0.4
 Creation-Date: Unknown
-Modification-Date: Wed, 28 Apr 2010 15:53:17 +0700
 
 ====== Procedure Guidelines ======
 
@@ -44,6 +43,23 @@ How to pull together the necessary peripheral matter of a Scripture publication.
 
 ==== Compositing ====
 Compositing is the process putting the components of a publication into their final resting place. This process, performed by the compositor (also known as the typesetter), goes right down to the character level. When complete, the translator, referred to here as the client (which could include a designee), agrees that the publication is ready for print.
+
+
+This is the (best practice) order of events in doing the entire composition procedure on the main content of the book:
+
+* (Before stuff)
+* Final tweaks to formating elements
+* Hyphenation setup and testing
+* Full test to obtain page count (readjust format to get signature balance)
+* Illustration placement
+* Column balancing by line skips and paragraph stretching
+* Regression test (reset base)
+* Word adjustments (if needed)
+* Regression test (reset base)
+* Check and adjust footnotes and cross references
+* Regression test (reset base)
+* (After stuff)
+
 
 ==== Freezing the Text ====
 The process begins with the "freezing" of the text. This means that no more edits are allowed to the text by the client. At this point, the only edits that will be made to the text will be made by the compositor, and only after consulting the translator. For efficiency's sake it is very important that the source text is stable at this point. Any significant edits done to the text at this point could set the project back days, if not weeks, and cause a lot of rework to be done.

@@ -163,8 +163,10 @@ class MakeMakefile (object) :
 			else :
 				makefileSettings += key + "=" + value + '\n'
 
-		for key, value, in self._log_manager._settings['System']['Files'].iteritems() :
-			makefileSettings += key + "=" + value + '\n'
+		# Get file names from project .scripture.conf file that are scattered around
+		makefileSettings += 'FILE_ILLUSTRATION_DATA=' + self._log_manager._settings['Format']['Illustrations']['FILE_ILLUSTRATION_DATA'] + '\n'
+		makefileSettings += 'FILE_PAGE_BORDER=' + self._log_manager._settings['Format']['PageLayout']['FILE_PAGE_BORDER'] + '\n'
+		makefileSettings += 'FILE_WATERMARK=' + self._log_manager._settings['Format']['PageLayout']['FILE_WATERMARK'] + '\n'
 
 		for key, value, in tools.pubInfoObject['TeX'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
