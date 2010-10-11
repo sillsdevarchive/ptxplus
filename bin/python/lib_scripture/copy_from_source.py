@@ -80,6 +80,7 @@ class CopyFromSource (object) :
 		copyCommand = copyCommand.replace('[inFile]', inputFile)
 		copyCommand = copyCommand.replace('[outFile]', tempFile)
 		nfdCommand = 'txtconv -i ' + tempFile + ' -o ' + outputFile + ' -nfd '
+		cleanCommand = 'rm ' + tempFile
 
 		# Try the command and check to see if it was successful
 		try :
@@ -103,6 +104,17 @@ class CopyFromSource (object) :
 
 		except :
 			log_manager.log("ERRR", "Failed to normalize to NFD: " + nfdCommand)
+
+		# Remeber to wipe your feet
+		try :
+			os.system(cleanCommand)
+			if not os.path.isfile(tempFile) :
+				log_manager.log("INFO", "Removed temp file: " + tempFile)
+			else :
+				log_manager.log("ERRR", "Temp file was not removed: " + tempFile)
+
+		except :
+			log_manager.log("ERRR", "Failed to remove temp file: " + tempFile)
 
 
 # This starts the whole process going
