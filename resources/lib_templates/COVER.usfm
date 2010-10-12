@@ -1,0 +1,21 @@
+\id OTH
+\ide UTF-8
+\periph Cover
+\mt1 Main Title
+\p
+\makedigitsother
+\vskip 0.1in
+\hfil\XeTeXpicfile cross-3.png width 200pt \hfil\par
+\vskip 0.5in
+\makedigitsletters
+\mt2 Sub Title
+\eject
+\p ​
+\makedigitsother
+\vskip 0.5in
+\hfil\XeTeXpdffile spine.pdf width 0.75in \hfil\par
+\vskip 1.5in
+\hfil\XeTeXpicfile cross-2.png width 36pt \hfil\par
+\makedigitsletters
+\eject
+\p ​

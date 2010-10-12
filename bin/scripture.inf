@@ -49,7 +49,8 @@ FILE_TEX_SETTINGS           = '.bible-settings.tex'
 FILE_TEX_CUSTOM             = 'custom-settings.tex'
 
 # COVER SETTINGS
-# TeX cover settings file.
+# TeX cover settings override file for producing
+# the publication cover.
 FILE_TEX_COVER              = '.cover-settings.tex'
 
 # FRONT SETTINGS
@@ -136,7 +137,7 @@ FILE_TOC_AUTO               = 'auto-toc.usfm'
 # the FILE_TOC_AUTO file.
 FILE_TOC_USFM               = 'toc.usfm'
 
-# CONTENT TEX CONTROL FILE
+# CONTENT GROUP CONTROL FILE
 # For generating Scripture content we need a special
 # TeX control file for TOC and page number generation.
 # It would be nice if this could be some kind of
@@ -145,7 +146,7 @@ FILE_TOC_USFM               = 'toc.usfm'
 # this binding group.
 FILE_GROUP_CONTENT_TEX      = 'GROUP_CONTENT.tex'
 
-# CONTENT PDF FILE
+# CONTENT GROUP PDF FILE
 # This is the final content file that is produced
 # by processing the Content TeX Control file.
 FILE_GROUP_CONTENT_PDF      = 'GROUP_CONTENT.pdf'
@@ -370,9 +371,7 @@ TEX_INPUTS                   = 'TEXINPUTS=$(PATH_HOME):$(PATH_HOME)/$(PATH_HYPHE
 bnk_peripheral              = 'BLANK_PAGE'
 con_peripheral              = 'CONCORDANCE'
 cop_peripheral              = 'COPYRIGHT_PAGE'
-cvb_peripheral              = 'COVER_BACK'
-cvf_peripheral              = 'COVER_FRONT'
-cvs_peripheral              = 'COVER_SPINE'
+cov_peripheral              = 'COVER'
 glo_peripheral              = 'GLOSSARY'
 ind_peripheral              = 'INDEX'
 int_peripheral              = 'INTRO'
@@ -504,9 +503,7 @@ blt_content                 = '93BLT'
 bnk_peripheral              = 'BLANK_PAGE'
 con_peripheral              = 'CONCORDANCE'
 cop_peripheral              = 'COPYRIGHT_PAGE'
-cvb_peripheral              = 'COVER_BACK'
-cvf_peripheral              = 'COVER_FRONT'
-cvs_peripheral              = 'COVER_SPINE'
+cov_peripheral              = 'COVER'
 glo_peripheral              = 'GLOSSARY'
 ind_peripheral              = 'INDEX'
 int_peripheral              = 'INTRO'
@@ -638,9 +635,7 @@ blt_content                 = 'Bel\ and\ the\ Dragon\ (Theodotion)'
 bnk_peripheral              = 'BLANK_PAGE'
 con_peripheral              = 'CONCORDANCE'
 cop_peripheral              = 'COPYRIGHT_PAGE'
-cvb_peripheral              = 'COVER_BACK'
-cvf_peripheral              = 'COVER_FRONT'
-cvs_peripheral              = 'COVER_SPINE'
+cov_peripheral              = 'COVER'
 glo_peripheral              = 'GLOSSARY'
 ind_peripheral              = 'INDEX'
 int_peripheral              = 'INTRO'
@@ -770,9 +765,7 @@ blt_content                 = ''
 bnk_peripheral              = 'Blank Page'
 con_peripheral              = 'Concordance'
 cop_peripheral              = 'Copyright Page'
-cvb_peripheral              = 'Cover Back'
-cvf_peripheral              = 'Cover Front'
-cvs_peripheral              = 'Cover Spine'
+cov_peripheral              = 'Book Cover'
 glo_peripheral              = 'Glossary'
 ind_peripheral              = 'Index'
 int_peripheral              = 'Intro'

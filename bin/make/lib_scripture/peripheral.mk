@@ -148,7 +148,7 @@ endef
 define group_binding
 
 ifneq ($($(1)),)
-$(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
+#$(1)_PDF = $(PATH_PROCESS)/$(1).$(EXT_PDF)
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : | $(foreach v,$($(1)),$(PATH_PROCESS)/$(v).$(EXT_PDF)) $(DEPENDENT_FILE_LIST)
 	@echo INFO: Creating: $(1).$(EXT_PDF) [Components: $($(1))]
 	@pdftk $(foreach v,$($(1)),$(v:%=$(PATH_PROCESS)/%.$(EXT_PDF))) cat output $$@
@@ -169,15 +169,15 @@ endef
 $(foreach v,$(call uniq,$(GROUP_COVER) $(GROUP_FRONT) $(GROUP_BACK)),$(eval $(call periph_rules,$(v))))
 
 # Cover group binding rules
-$(PATH_PROCESS)/$(GROUP_COVER).$(EXT_PDF) :
+$(PATH_PROCESS)/GROUP_COVER.$(EXT_PDF) :
 $(eval $(call group_binding,GROUP_COVER))
 
 # Front group binding rules
-$(PATH_PROCESS)/$(GROUP_FRONT).$(EXT_PDF) :
+$(PATH_PROCESS)/GROUP_FRONT.$(EXT_PDF) :
 $(eval $(call group_binding,GROUP_FRONT))
 
 # Back group binding rules
-$(PATH_PROCESS)/$(GROUP_BACK).$(EXT_PDF) :
+$(PATH_PROCESS)/GROUP_BACK.$(EXT_PDF) :
 $(eval $(call group_binding,GROUP_BACK))
 
 # This makes a simple TeX settings file for the cover. This may
