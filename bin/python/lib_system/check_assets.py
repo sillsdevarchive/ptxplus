@@ -57,9 +57,10 @@ class CheckAssets (object) :
 		pathHome                = os.path.abspath(tools.pubInfoObject['Paths']['PATH_HOME'])
 		pathHyphenation         = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
 		pathProcess             = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_PROCESS']
-		pathSource              = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
+		pathSource              = os.path.abspath(tools.pubInfoObject['Paths']['PATH_SOURCE'])
 		pathPeripheral          = pathSource + '/' + os.getcwd().split('/')[-1]
-		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
+		pathMaps                = pathPeripheral + '/Maps'
+		pathIllustrations       = os.path.abspath(tools.pubInfoObject['Paths']['PATH_ILLUSTRATIONS'])
 		pathGraphics            = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
 		pathIllustrationsLib    = tools.pubInfoObject['Paths']['PATH_RESOURCES_ILLUSTRATIONS'].replace('__PTXPLUS__', basePath)
 		fileWatermark           = self._log_manager._settings['Format']['PageLayout']['FILE_WATERMARK']
@@ -79,6 +80,10 @@ class CheckAssets (object) :
 		if not os.path.isdir(pathPeripheral) :
 			os.mkdir(pathPeripheral)
 			self._log_manager.log('INFO', 'Added folder: ' + pathPeripheral, 'true')
+
+		if not os.path.isdir(pathMaps) :
+			os.mkdir(pathMaps)
+			self._log_manager.log('INFO', 'Added folder: ' + pathMaps, 'true')
 
 		if not os.path.isdir(pathIllustrations) :
 			os.mkdir(pathIllustrations)
