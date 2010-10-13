@@ -224,18 +224,18 @@ view-back : $(PATH_PROCESS)/GROUP_BACK.$(EXT_PDF)
 
 # Remove the cover group PDF file
 pdf-remove-cover :
-	@echo INFO: Removing: $(GROUP_COVER_PDF)
-	@rm -f $(GROUP_COVER_PDF)
+	@echo INFO: Removing: GROUP_COVER.$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/GROUP_COVER.$(EXT_PDF)
 
 # Remove the front group PDF file
 pdf-remove-front :
-	@echo INFO: Removing: $(GROUP_FRONT_PDF)
-	@rm -f $(GROUP_FRONT_PDF)
+	@echo INFO: Removing: GROUP_FRONT.$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/GROUP_FRONT.$(EXT_PDF)
 
 # Remove the back group PDF file
 pdf-remove-back :
-	@echo INFO: Removing: $(GROUP_BACK_PDF)
-	@rm -f $(GROUP_BACK_PDF)
+	@echo INFO: Removing: GROUP_BACK.$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/GROUP_BACK.$(EXT_PDF)
 
 
 

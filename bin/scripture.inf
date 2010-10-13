@@ -61,6 +61,10 @@ FILE_TEX_FRONT              = '.front-settings.tex'
 # TeX back matter peripheral settings file.
 FILE_TEX_BACK               = '.back-settings.tex'
 
+# MAP SETTINGS
+# TeX map matter settings file.
+FILE_TEX_MAP                = '.map-settings.tex'
+
 # BIBLE STYLE FILE
 # This is the override style file for
 # a Scripture publication. This file
@@ -384,6 +388,7 @@ pti_peripheral              = 'TITLE_PAGE'
 toc_peripheral              = 'TOC'
 top_peripheral              = 'TOPICAL_INDEX'
 
+map_map                     = 'map'
 m01_map                     = 'm001'
 m02_map                     = 'm002'
 m03_map                     = 'm003'
@@ -516,6 +521,7 @@ pti_peripheral              = 'TITLE_PAGE'
 toc_peripheral              = 'TOC'
 top_peripheral              = 'TOPICAL_INDEX'
 
+map_map                     = 'map'
 m01_map                     = 'm001'
 m02_map                     = 'm002'
 m03_map                     = 'm003'
@@ -648,6 +654,7 @@ pti_peripheral              = 'TITLE_PAGE'
 toc_peripheral              = 'TOC'
 top_peripheral              = 'TOPICAL_INDEX'
 
+map_map                     = 'map'
 m01_map                     = 'm001'
 m02_map                     = 'm002'
 m03_map                     = 'm003'
@@ -778,6 +785,7 @@ pti_peripheral              = 'Title Page'
 toc_peripheral              = 'Table of Contents'
 top_peripheral              = 'Topical Index'
 
+map_map                     = 'Map Group'
 m01_map                     = 'World Map'
 m02_map                     = 'Ancient World'
 m03_map                     = 'Exodus'

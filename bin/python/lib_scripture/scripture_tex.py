@@ -77,15 +77,17 @@ class MakeTexControlFile (object) :
 		self._cvSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_COVER']
 		self._fmSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_FRONT']
 		self._bmSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_BACK']
+		self._mpSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_MAP']
 		self._cmSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_CUSTOM']
 		self._biSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_SETTINGS']
 		# Note we get the value from the input file field
 		self._contextFlag = log_manager._optionalPassedVariable
-		self._flags = ('cover', 'front', 'back', 'periph')
+		self._flags = ('cover', 'front', 'back', 'periph', 'map')
 		self._frontMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_FRONT']
 		self._backMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_BACK']
 		self._coverMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_COVER']
 		self._contentMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_CONTENT']
+		self._mapMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_MAP']
 		self._contentGroup = []
 		self._contentGroup.extend(self._contentMatter)
 		self._publicationType = log_manager._publicationType
@@ -175,6 +177,9 @@ class MakeTexControlFile (object) :
 
 			elif self._inputFile.split('/')[-1] in self._coverMatter :
 				settings += '\\input \"' + self._cvSettingsFile + '\"\n'
+
+			elif self._inputFile.split('/')[-1] in self._mapMatter :
+				settings += '\\input \"' + self._mpSettingsFile + '\"\n'
 
 			else :
 				self._log_manager.log("ERRR", "Trying to Create: " + self._outputFile + " - This module thinks that input: [" + self._inputFile + "] is part of the peripheral matter but it cannot find it on either the cover, front or back matter binding groups. Process halted.")

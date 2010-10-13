@@ -202,6 +202,13 @@
 
 \catcode `@=12
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Map Handling %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% Place The Map PDF File
+% This will place a PDF map file on the typeset page
+\catcode`@=11
+\def\domap#1{\vbox to \the\textheight{\vfil\noindent\hfil\XeTeXpdffile #1 width \the\textwidth \hfil\par\vfil}\eject}%
+\catcode `@=12
 
 
 %%%%% Page Size
