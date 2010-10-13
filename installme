@@ -39,6 +39,13 @@ Another suggested program would be a modified version of XeTeX. You may need thi
 
 That will remove the other version and replace it with version 3.1415926-2.2-0.999.7 or greater.
 
+TECKit Work-around:
+There is a dependency conflict created in the way the texlive package is currently put together. It will block TECKit from being able to install correctly. It may be some time before this is fixed so a work-around can be applied by doing the following:
+
+	sudo dpkg-divert --package teckit --add /usr/bin/teckit_compile
+
+You should now be able to install TECKit without any problems.
+
 Finally, log out and log back in again so the system will properly recognize the newly installed packages and the TortoiseHg package should work correctly.
 
 With all the above packages installed, we are ready to move on to installing ptxplus publishing package.
