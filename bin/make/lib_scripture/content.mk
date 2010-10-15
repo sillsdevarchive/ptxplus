@@ -406,12 +406,12 @@ pdf-remove-content :
 
 # Run preprocesses on the source text.
 define preprocessing
-echo INFO: Removing: $(1).$(EXT_WORK)
-echo INFO: Preprocessing: $(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
-{ \
+@{ \
 	if test -r "$(PATH_TEXTS)/$(1).$(EXT_WORK)"; then \
+		echo INFO: Removing: $(1).$(EXT_WORK) ; \
 		rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK); \
 	fi; \
+	echo INFO: Preprocessing: $(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) ; \
 	$(MOD_RUN_PROCESS) "preprocessChecks" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""; \
 };
 endef
@@ -419,7 +419,7 @@ endef
 # Run the postprocesses on working text, however, to be safe
 # we run the preprocesses as well.
 define postprocessing
-{ \
+@{ \
 	echo INFO: Copy to: "$(1).$(EXT_WORK)"; \
 	$(MOD_RUN_PROCESS) "$(MOD_IMPORT)" "$(1)" "$(PATH_SOURCE)/$(2)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)" "$(PATH_TEXTS)/$(1).$(EXT_WORK)" ""; \
 	echo INFO: Postprocessing: '$(1).$(EXT_WORK)'; \

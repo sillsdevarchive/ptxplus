@@ -44,7 +44,7 @@ class MakeMakefile (object) :
 
 		self._log_manager = log_manager
 		basePath = os.environ.get('PTXPLUS_BASE')
-		sourcePath = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_SOURCE'))
+		sourcePath = os.path.abspath(tools.pubInfoObject['Paths'].get('PATH_SOURCE'))
 
 		# Get the type of project this is
 		self._projectType = tools.getProjectType()
@@ -68,14 +68,14 @@ class MakeMakefile (object) :
 		makefileSettings = ""
 
 		# First grab some individual settings we need in the makefile
-		cMapVal = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CREATE_MAP',0)
-		makefileSettings += 'CREATE_MAP=' + cMapVal + '\n'
+#        cMapVal = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CREATE_MAP',0)
+#        makefileSettings += 'CREATE_MAP=' + cMapVal + '\n'
 
-		rgbPath = self._log_manager._settings['System']['Processes']['MapProcesses'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
-		makefileSettings += 'RGB_PROFILE=' + rgbPath + '\n'
+#        rgbPath = tools.pubInfoObject['Paths'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
+#        makefileSettings += 'PATH_RGB_PROFILE=' + rgbPath + '\n'
 
-		cmykPath = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
-		makefileSettings += 'CMYK_PROFILE=' + cmykPath + '\n'
+#        cmykPath = tools.pubInfoObject['Paths'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
+#        makefileSettings += 'PATH_CMYK_PROFILE=' + cmykPath + '\n'
 
 		# Output the helper commands
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
