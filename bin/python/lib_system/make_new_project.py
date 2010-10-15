@@ -65,18 +65,25 @@ class MakeNewProject (object) :
 	def main (self, projType, newFolderName) :
 		'''Create a new project at the specified path.'''
 
-		print projType, newFolderName
 
 		# Just in case it isn't already a full path
 		newProjectPath = os.path.abspath(newFolderName)
+		fileLib = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles"
 
 		# Check to see if we support this type of publication
 		if projType in tools.getSystemSettingsObject()['System']['pubTypeList'] and projType != 'dictionary' :
-			tools.userMessage('INFO: Creating new project at: ' + newProjectPath)
-			tools.makeNecessaryFiles(newProjectPath, projType)
-			tools.userMessage('INFO: Created new project at: ' + newProjectPath)
+			tools.userMessage('INFO: Creating new project at: ' + newProjectPath, 'true')
+			# To make a project all we really need is the .conf file
+			if projType in getSystemSettingsObject()['System']['pubTypeList'] :
+				if not os.access(newProjectPath + "/." + projType + ".conf", os.R_OK) :
+					shutil.copy(fileLib + "/." + projType + ".conf", newProjectPath + "/." + projType + ".conf")
+			else :
+				userMessage("ERRR: The project type: [" + projType + "] is unknown. Process halted!", 'true')
+				sys.exit(1)
+
+			tools.userMessage('INFO: Created new project at: ' + newProjectPath, 'true')
 		else :
-			tools.userMessage('ERRR: The [' + projType + '] publication type is not supported.')
+			tools.userMessage('ERRR: The [' + projType + '] publication type is not supported.', 'true')
 
 
 

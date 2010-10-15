@@ -53,13 +53,21 @@ class CheckAssets (object) :
 			self._mode = 'basic'
 
 		# Gather up the initial settings
+		fileLib = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles"
+
 		basePath                = os.environ.get('PTXPLUS_BASE')
+		baseSysLib              = basePath + '/resources/lib_sysFiles'
 		pathHome                = os.path.abspath(tools.pubInfoObject['Paths']['PATH_HOME'])
+		pathAdmin               = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_ADMIN']
+		pathWiki                = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_WIKI']
+		pathFonts               = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_FONTS']
 		pathHyphenation         = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
+		pathTexts               = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_TEXTS']
+		pathDeliverables        = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_DELIVERABLES']
 		pathProcess             = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_PROCESS']
 		pathSource              = os.path.abspath(tools.pubInfoObject['Paths']['PATH_SOURCE'])
 		pathPeripheral          = pathSource + '/' + os.getcwd().split('/')[-1]
-		pathMaps                = pathPeripheral + '/Maps'
+		pathMaps                = pathProcess + '/Maps'
 		pathIllustrations       = os.path.abspath(tools.pubInfoObject['Paths']['PATH_ILLUSTRATIONS'])
 		pathGraphics            = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
 		pathIllustrationsLib    = tools.pubInfoObject['Paths']['PATH_RESOURCES_ILLUSTRATIONS'].replace('__PTXPLUS__', basePath)
@@ -77,25 +85,97 @@ class CheckAssets (object) :
 			os.mkdir(pathSource)
 			self._log_manager.log('INFO', 'Added folder: ' + pathSource, 'true')
 
+		# Make the peripheral folder inside Source
 		if not os.path.isdir(pathPeripheral) :
 			os.mkdir(pathPeripheral)
 			self._log_manager.log('INFO', 'Added folder: ' + pathPeripheral, 'true')
 
-		if not os.path.isdir(pathMaps) :
-			os.mkdir(pathMaps)
-			self._log_manager.log('INFO', 'Added folder: ' + pathMaps, 'true')
+		# If there are no map components then there is no need to make the folder
+		if len(self._log_manager._settings['Format']['BindingGroups']['GROUP_MAP']) < 0 :
+			if not os.path.isdir(pathMaps) :
+				os.mkdir(pathMaps)
+				self._log_manager.log('INFO', 'Added folder: ' + pathMaps, 'true')
 
+		# Make the illustrations folder inside Source
 		if not os.path.isdir(pathIllustrations) :
 			os.mkdir(pathIllustrations)
 			self._log_manager.log('INFO', 'Added folder: ' + pathIllustrations, 'true')
 
-		if not os.path.isdir(pathHyphenation) :
-			os.mkdir(pathHyphenation)
-			self._log_manager.log('INFO', 'Added folder: ' + pathHyphenation, 'true')
+		# If it is turned on, make the hyphenation folder
+		# and populate it with the necessary files
+		if self._log_manager._settings['Format']['Hyphenation']['useHyphenation'].lower() == 'true' :
+			if not os.path.isdir(pathHyphenation) :
+				os.mkdir(pathHyphenation)
+				self._log_manager.log('INFO', 'Added folder: ' + pathHyphenation, 'true')
+				tools.copyAll(baseSysLib + '/Hyphenation', pathHyphenation)
+				self._log_manager.log('INFO', 'Copied hypheation files to project', 'true')
 
+		# Create the project wiki folder and populate
+		# it with the necessary files
+		if not os.path.isdir(pathWiki) :
+			os.mkdir(pathWiki)
+			self._log_manager.log('INFO', 'Added folder: ' + pathWiki, 'true')
+			tools.copyAll(baseSysLib + '/Wiki', pathWiki)
+			self._log_manager.log('INFO', 'Copied fresh wiki files to project', 'true')
+
+		# Make the Process folder, we will always need that
+		if not os.path.isdir(pathDeliverables) :
+			os.mkdir(pathDeliverables)
+			self._log_manager.log('INFO', 'Added folder: ' + pathDeliverables, 'true')
+
+		# Make the Process folder, we will always need that
 		if not os.path.isdir(pathProcess) :
 			os.mkdir(pathProcess)
 			self._log_manager.log('INFO', 'Added folder: ' + pathProcess, 'true')
+			tools.copyAll(baseSysLib + '/Process', pathProcess)
+			self._log_manager.log('INFO', 'Copied new process files to project', 'true')
+
+		# Make the Texts folder, we will always need that too
+		if not os.path.isdir(pathTexts) :
+			os.mkdir(pathTexts)
+			self._log_manager.log('INFO', 'Added folder: ' + pathTexts, 'true')
+
+		# Make the admin folder if an admin code has been given
+		eCode = self._log_manager._settings['Project']['enityCode'].lower()
+		if eCode != '' :
+			os.mkdir(pathAdmin)
+			self._log_manager.log('INFO', 'Added folder: ' + pathAdmin, 'true')
+			if eCode in tools.getSystemSettingsObject()['System']['entityCodeList'] :
+				tools.copyAll(baseSysLib + '/Admin/' + eCode, pathAdmin)
+				self._log_manager.log('INFO', 'Copied entity admin files to project', 'true')
+
+		# The font folder will be a little more complex
+		sysFontFolder = tools.pubInfoObject['Paths']['PATH_RESOURCES_FONTS']
+		resourceFonts = self._log_manager._settings['System']['Paths']['PATH_FONT_LIB']
+		fontList = self._log_manager._settings['Format']['FONTS']['fontFamilyList']
+		if not os.path.isdir(pathFonts) :
+			os.mkdir(pathFonts)
+			self._log_manager.log('INFO', 'Added folder: ' + pathFonts, 'true')
+			tools.copyFiles(sysFontFolder, pathFonts)
+			self._log_manager.log('INFO', 'Copied default font settings file(s)', 'true')
+			# We assume that the font which is in the users resource lib is best
+			for ff in fontList :
+				# First check our resource font folder
+				if is os.path.isdir(resourceFonts) :
+					# write this
+				# If not there, then get what you can from the system font folder
+				else :
+					# write this
+
+
+## Fonts folder
+#fontsFolder                  = 'Fonts'
+
+
+
+
+## Project font configuration
+#fontConfig                   = 'Fonts/fonts.conf'
+
+
+
+
+
 
 
 		# Check/install system assets

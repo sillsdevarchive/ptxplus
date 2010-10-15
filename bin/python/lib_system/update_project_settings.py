@@ -55,11 +55,6 @@ class UpdateProjectSettings (object) :
 
 	def main (self) :
 
-		# This is all about updating the .project.conf file. However, we
-		# should be sure that all the other files we need are there as well.
-		tools.makeNecessaryFiles(os.getcwd(), tools.getProjectType())
-
-
 		basePath = os.environ.get('PTXPLUS_BASE')
 		settings = tools.getSettingsObject()
 		# Before we do anything we need to check to see if the

@@ -196,7 +196,7 @@ PATH_ADMIN                  = 'Admin'
 # ADMIN WIKI FOLDER
 # Path to the project Wiki which keeps notes and issues
 #   Default = Admin/Wiki
-PATH_ADMIN_WIKI             = 'Admin/Wiki'
+PATH_WIKI             = '.wiki'
 
 # REGRESSION FOLDER
 # This is the folder where Regression base files will be kept
@@ -270,11 +270,14 @@ PATH_RESOURCES_ILLUSTRATIONS = '__PTXPLUS__/resources/lib_illustrations'
 # The path to the ptxplus system Process folder
 PATH_RESOURCES_PROCESS      = '__PTXPLUS__/resources/lib_sysFiles/Process'
 
+# The path to the ptxplus system default font folder
+PATH_RESOURCES_FONTS        = '__PTXPLUS__/resources/lib_sysFiles/Fonts'
+
 # The path to the ptxplus system Hyphenation folder
 PATH_RESOURCES_HYPHENATION  = '__PTXPLUS__/resources/lib_sysFiles/Hyphenation'
 
-# The path to the new wiki pages
-PATH_WIKI_SOURCE            = '__PTXPLUS__/resources/lib_sysFiles/Admin/Wiki'
+# The path to the new wiki pages (May not be needed)
+#PATH_WIKI_SOURCE           = '__PTXPLUS__/resources/lib_sysFiles/Wiki'
 
 # This is where the system help can be found
 PATH_SYSTEM_HELP            = '__PTXPLUS__/resources/Documentation/Help'
