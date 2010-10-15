@@ -43,6 +43,7 @@
 #        much simpler and will help things stay more
 #        consistant.
 # 20100826 - djd - Added some pub type checking
+# 20101015 - djd - Reduced process to copying only .conf file
 
 #############################################################
 ######################### Load Modules ######################
@@ -72,18 +73,17 @@ class MakeNewProject (object) :
 
 		# Check to see if we support this type of publication
 		if projType in tools.getSystemSettingsObject()['System']['pubTypeList'] and projType != 'dictionary' :
-			tools.userMessage('INFO: Creating new project at: ' + newProjectPath, 'true')
 			# To make a project all we really need is the .conf file
-			if projType in getSystemSettingsObject()['System']['pubTypeList'] :
+			if projType in tools.getSystemSettingsObject()['System']['pubTypeList'] :
 				if not os.access(newProjectPath + "/." + projType + ".conf", os.R_OK) :
 					shutil.copy(fileLib + "/." + projType + ".conf", newProjectPath + "/." + projType + ".conf")
 			else :
-				userMessage("ERRR: The project type: [" + projType + "] is unknown. Process halted!", 'true')
+				userMessage("ERRR: The project type: [" + projType + "] is unknown. Process halted!")
 				sys.exit(1)
 
-			tools.userMessage('INFO: Created new project at: ' + newProjectPath, 'true')
+			tools.userMessage('INFO: Created new project at: ' + newProjectPath)
 		else :
-			tools.userMessage('ERRR: The [' + projType + '] publication type is not supported.', 'true')
+			tools.userMessage('ERRR: The [' + projType + '] publication type is not supported.')
 
 
 

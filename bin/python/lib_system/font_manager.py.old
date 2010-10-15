@@ -42,8 +42,8 @@ class FontManager (object) :
 
 		if self._settings_project['System']['General'].get('debugMode', 'false').lower() == 'true' :
 
-			self.projectFontFamily = self._settings_project['Format']['Fonts'].get('projectFontFamily', 'GenBkBas')
-			self.projectFontsFolder = os.getcwd() + "/" + self._settings_project['System']['Paths'].get('PATH_FONTS', 'Fonts')
+			self.projectFontFamily = self._settings_project['Format']['Fonts'].get('projectFontFamily')
+			self.projectFontsFolder = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_FONTS']
 			self.pathToFontLibrary = self._settings_project['System']['Paths']['PATH_FONT_LIB']
 			if os.path.isdir(self.pathToFontLibrary) :
 				self.fontFamilySourceFolder = self.pathToFontLibrary + "/" + self.projectFontFamily
@@ -113,7 +113,7 @@ class FontManager (object) :
 		fileName = self.projectFontsFolder + "/fonts.conf"
 		# First lets check to see if the fonts.conf file exists
 		if os.path.isfile(fileName) == False :
-			srcname = os.environ.get('PTXPLUS_BASE') + "/resources/Fonts/fonts.conf"
+			srcname = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles/Fonts/fonts.conf"
 			# See if there is even a fonts folder to work with
 			if os.path.isdir(self.projectFontsFolder) == False :
 				os.mkdir(self.projectFontsFolder)
@@ -130,5 +130,3 @@ class FontManager (object) :
 
 		# Write out the new font.conf file
 		et.write(fileName, encoding = 'utf-8')
-
-

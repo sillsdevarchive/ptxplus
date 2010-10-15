@@ -308,31 +308,32 @@ else :
 			mod = __import__("update_project_settings")
 			mod.doIt()
 
-			# Next look to see if the fonts.conf file needs localizing
-			from font_manager import *
-			font_manager    = FontManager()
-			font_manager.localiseFontsConf()
-
 			# Check the project assets
 			log_manager.initializeLog("check_assets", "SYS", "", "", "basic")
 			tools.taskRunner(log_manager, "check_assets")
 			log_manager.closeOutSessionLog()
 
-			# Look for all the global processes that need to be run
-			taskList = []
-			taskList = log_manager._settings['System']['Processes']['globalProcesses']
-			# Get rid of the old error log files.
-			error_manager.deleteErrorLogs()
-			for thisTask in taskList :
+			# Make the makefile
+			log_manager.initializeLog("make_make", "SYS", "", "", "")
+			tools.taskRunner(log_manager, "make_make")
+			log_manager.closeOutSessionLog()
 
-				# Initialize the log manager to do its thing
-				log_manager.initializeLog(thisTask, "SYS", "", "", "")
+# This can be deprecated
+#            # Look for all the global processes that need to be run
+#            taskList = []
+#            taskList = log_manager._settings['System']['Processes']['globalProcesses']
+#            # Get rid of the old error log files.
+#            error_manager.deleteErrorLogs()
+#            for thisTask in taskList :
 
-				# For running each process we use one centralized task runner in tools.
-				tools.taskRunner(log_manager, thisTask)
+#                # Initialize the log manager to do its thing
+#                log_manager.initializeLog(thisTask, "SYS", "", "", "")
 
-				# Close out the process by reporting to the log file
-				log_manager.closeOutSessionLog()
+#                # For running each process we use one centralized task runner in tools.
+#                tools.taskRunner(log_manager, thisTask)
+
+#                # Close out the process by reporting to the log file
+#                log_manager.closeOutSessionLog()
 
 			# Anounce any errors we have found
 			warn = ""

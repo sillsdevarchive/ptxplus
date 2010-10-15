@@ -52,9 +52,9 @@ class CheckAssets (object) :
 		if self._mode == '' :
 			self._mode = 'basic'
 
-		# Gather up the initial settings
-		fileLib = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles"
 
+
+		# Gather up the initial settings
 		basePath                = os.environ.get('PTXPLUS_BASE')
 		baseSysLib              = basePath + '/resources/lib_sysFiles'
 		pathHome                = os.path.abspath(tools.pubInfoObject['Paths']['PATH_HOME'])
@@ -136,7 +136,7 @@ class CheckAssets (object) :
 			self._log_manager.log('INFO', 'Added folder: ' + pathTexts, 'true')
 
 		# Make the admin folder if an admin code has been given
-		eCode = self._log_manager._settings['Project']['enityCode'].lower()
+		eCode = self._log_manager._settings['Project']['entityCode'].lower()
 		if eCode != '' :
 			os.mkdir(pathAdmin)
 			self._log_manager.log('INFO', 'Added folder: ' + pathAdmin, 'true')
@@ -145,9 +145,9 @@ class CheckAssets (object) :
 				self._log_manager.log('INFO', 'Copied entity admin files to project', 'true')
 
 		# The font folder will be a little more complex
-		sysFontFolder = tools.pubInfoObject['Paths']['PATH_RESOURCES_FONTS']
-		resourceFonts = self._log_manager._settings['System']['Paths']['PATH_FONT_LIB']
-		fontList = self._log_manager._settings['Format']['FONTS']['fontFamilyList']
+		sysFontFolder = self.subBasePath(tools.pubInfoObject['Paths']['PATH_RESOURCES_FONTS'], basePath)
+		resourceFonts = self.subBasePath(self._log_manager._settings['System']['Paths']['PATH_FONT_LIB'], '')
+		fontList = self._log_manager._settings['Format']['Fonts']['fontFamilyList']
 		if not os.path.isdir(pathFonts) :
 			os.mkdir(pathFonts)
 			self._log_manager.log('INFO', 'Added folder: ' + pathFonts, 'true')
@@ -155,27 +155,21 @@ class CheckAssets (object) :
 			self._log_manager.log('INFO', 'Copied default font settings file(s)', 'true')
 			# We assume that the font which is in the users resource lib is best
 			for ff in fontList :
+				os.mkdir(pathFonts + '/' + ff)
 				# First check our resource font folder
-				if is os.path.isdir(resourceFonts) :
-					# write this
+				if os.path.isdir(resourceFonts + '/' + ff) :
+					tools.copyFiles(resourceFonts + '/' + ff, pathFonts + '/' + ff)
+					self._log_manager.log('INFO', 'Copied [' + ff + '] font family', 'true')
 				# If not there, then get what you can from the system font folder
 				else :
-					# write this
+					if os.path.isdir(sysFontFolder + '/' + ff) :
+						tools.copyFiles(sysFontFolder + '/' + ff, pathFonts + '/' + ff)
+						self._log_manager.log('INFO', 'Copied [' + ff + '] font family', 'true')
+					else :
+						self._log_manager.log('ERRR', 'Not able to copy [' + ff + '] font family', 'true')
 
-
-## Fonts folder
-#fontsFolder                  = 'Fonts'
-
-
-
-
-## Project font configuration
-#fontConfig                   = 'Fonts/fonts.conf'
-
-
-
-
-
+		# Now finish the font setup
+		self.localiseFontsConf(pathFonts, sysFontFolder)
 
 
 		# Check/install system assets
@@ -234,6 +228,39 @@ class CheckAssets (object) :
 				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + destination + "] has been linked to: [" + linkto + "]")
 			else :
 				self._log_manager.log("ERRR", "Mode = " + self._mode + " File: [" + linkto + "] not linked.", 'true')
+
+
+	def localiseFontsConf (self, pathFonts, sysFontFolder) :
+		'''Sets the <dir> and <cachdir> to be the directory in which
+			   the fonts.conf file exists. This helps to provide better
+			   seperation of our fonts from the host system.'''
+
+		fileName = pathFonts + '/fonts.conf'
+		scrName = sysFontFolder + '/fonts.conf'
+		# First lets check to see if the fonts.conf file exists
+		if os.path.isfile(fileName) == False :
+			shutil.copy(scrName, fileName)
+
+		# Import this module for this process only (May need to move it
+		# if other processes ever need it)
+		from xml.etree.cElementTree import ElementTree
+
+		et = ElementTree(file = fileName)
+		path = os.path.dirname(os.path.abspath(fileName))
+		for p in ('dir', 'cachedir') :
+			et.find(p).text = path
+
+		# Write out the new font.conf file
+		et.write(fileName, encoding = 'utf-8')
+
+
+	def subBasePath (self, thisPath, basePath) :
+		'''Substitute the base path marker with the real path.'''
+
+		if thisPath.split('/')[0] == '__PTXPLUS__' :
+			return thisPath.replace('__PTXPLUS__', basePath)
+		else :
+			return os.path.abspath(thisPath)
 
 
 # This starts the whole process going
