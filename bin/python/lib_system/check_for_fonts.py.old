@@ -53,3 +53,4 @@ def doIt(log_manager):
 
 	thisModule = CheckForFonts()
 	return thisModule.main(log_manager)
+

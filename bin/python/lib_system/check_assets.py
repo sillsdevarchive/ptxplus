@@ -83,30 +83,30 @@ class CheckAssets (object) :
 		# Check/install folders we might need
 		if not os.path.isdir(pathSource) :
 			os.mkdir(pathSource)
-			self._log_manager.log('INFO', 'Added folder: ' + pathSource, 'true')
+			self._log_manager.log('INFO', 'Added Source folder', 'true')
 
 		# Make the peripheral folder inside Source
 		if not os.path.isdir(pathPeripheral) :
 			os.mkdir(pathPeripheral)
-			self._log_manager.log('INFO', 'Added folder: ' + pathPeripheral, 'true')
+			self._log_manager.log('INFO', 'Added Peripheral matter folder (in Source):', 'true')
 
 		# If there are no map components then there is no need to make the folder
 		if len(self._log_manager._settings['Format']['BindingGroups']['GROUP_MAP']) < 0 :
 			if not os.path.isdir(pathMaps) :
 				os.mkdir(pathMaps)
-				self._log_manager.log('INFO', 'Added folder: ' + pathMaps, 'true')
+				self._log_manager.log('INFO', 'Added Maps folder', 'true')
 
 		# Make the illustrations folder inside Source
 		if not os.path.isdir(pathIllustrations) :
 			os.mkdir(pathIllustrations)
-			self._log_manager.log('INFO', 'Added folder: ' + pathIllustrations, 'true')
+			self._log_manager.log('INFO', 'Added shared Illustrations folder (in Source)', 'true')
 
 		# If it is turned on, make the hyphenation folder
 		# and populate it with the necessary files
 		if self._log_manager._settings['Format']['Hyphenation']['useHyphenation'].lower() == 'true' :
 			if not os.path.isdir(pathHyphenation) :
 				os.mkdir(pathHyphenation)
-				self._log_manager.log('INFO', 'Added folder: ' + pathHyphenation, 'true')
+				self._log_manager.log('INFO', 'Added Hyphenation folder', 'true')
 				tools.copyAll(baseSysLib + '/Hyphenation', pathHyphenation)
 				self._log_manager.log('INFO', 'Copied hypheation files to project', 'true')
 
@@ -114,32 +114,33 @@ class CheckAssets (object) :
 		# it with the necessary files
 		if not os.path.isdir(pathWiki) :
 			os.mkdir(pathWiki)
-			self._log_manager.log('INFO', 'Added folder: ' + pathWiki, 'true')
+			self._log_manager.log('INFO', 'Added .wiki folder (hidden)', 'true')
 			tools.copyAll(baseSysLib + '/Wiki', pathWiki)
 			self._log_manager.log('INFO', 'Copied fresh wiki files to project', 'true')
 
 		# Make the Process folder, we will always need that
 		if not os.path.isdir(pathDeliverables) :
 			os.mkdir(pathDeliverables)
-			self._log_manager.log('INFO', 'Added folder: ' + pathDeliverables, 'true')
+			self._log_manager.log('INFO', 'Added Deliverables folder', 'true')
 
 		# Make the Process folder, we will always need that
 		if not os.path.isdir(pathProcess) :
 			os.mkdir(pathProcess)
-			self._log_manager.log('INFO', 'Added folder: ' + pathProcess, 'true')
+			self._log_manager.log('INFO', 'Added Process folder', 'true')
 			tools.copyAll(baseSysLib + '/Process', pathProcess)
 			self._log_manager.log('INFO', 'Copied new process files to project', 'true')
 
 		# Make the Texts folder, we will always need that too
 		if not os.path.isdir(pathTexts) :
 			os.mkdir(pathTexts)
-			self._log_manager.log('INFO', 'Added folder: ' + pathTexts, 'true')
+			self._log_manager.log('INFO', 'Added Texts folder', 'true')
 
 		# Make the admin folder if an admin code has been given
 		eCode = self._log_manager._settings['Project']['entityCode'].lower()
 		if eCode != '' :
-			os.mkdir(pathAdmin)
-			self._log_manager.log('INFO', 'Added folder: ' + pathAdmin, 'true')
+			if not os.path.isdir(pathAdmin) :
+				os.mkdir(pathAdmin)
+				self._log_manager.log('INFO', 'Added Admin folder', 'true')
 			if eCode in tools.getSystemSettingsObject()['System']['entityCodeList'] :
 				tools.copyAll(baseSysLib + '/Admin/' + eCode, pathAdmin)
 				self._log_manager.log('INFO', 'Copied entity admin files to project', 'true')
@@ -150,26 +151,33 @@ class CheckAssets (object) :
 		fontList = self._log_manager._settings['Format']['Fonts']['fontFamilyList']
 		if not os.path.isdir(pathFonts) :
 			os.mkdir(pathFonts)
-			self._log_manager.log('INFO', 'Added folder: ' + pathFonts, 'true')
-			tools.copyFiles(sysFontFolder, pathFonts)
-			self._log_manager.log('INFO', 'Copied default font settings file(s)', 'true')
-			# We assume that the font which is in the users resource lib is best
+			self._log_manager.log('INFO', 'Added Fonts folder', 'true')
+			# We will not copy any files from the source folder now.
+			# At this point the only file there should be the font
+			# config file. That is copied in when the localizing is
+			# done to the fonts in the project (below).
+			# We assume that the font which is in the users resource
+			# lib is best so we will look there first for our fonts.
+			# If we don't find it there we will try to get it from
+			# the system font folder. We will report any that we
+			# don't find.
 			for ff in fontList :
 				os.mkdir(pathFonts + '/' + ff)
 				# First check our resource font folder
 				if os.path.isdir(resourceFonts + '/' + ff) :
 					tools.copyFiles(resourceFonts + '/' + ff, pathFonts + '/' + ff)
 					self._log_manager.log('INFO', 'Copied [' + ff + '] font family', 'true')
+					self.localiseFontsConf(pathFonts, sysFontFolder)
+
 				# If not there, then get what you can from the system font folder
 				else :
 					if os.path.isdir(sysFontFolder + '/' + ff) :
 						tools.copyFiles(sysFontFolder + '/' + ff, pathFonts + '/' + ff)
 						self._log_manager.log('INFO', 'Copied [' + ff + '] font family', 'true')
+						self.localiseFontsConf(pathFonts, sysFontFolder)
 					else :
 						self._log_manager.log('ERRR', 'Not able to copy [' + ff + '] font family', 'true')
 
-		# Now finish the font setup
-		self.localiseFontsConf(pathFonts, sysFontFolder)
 
 
 		# Check/install system assets
@@ -251,11 +259,15 @@ class CheckAssets (object) :
 			et.find(p).text = path
 
 		# Write out the new font.conf file
-		et.write(fileName, encoding = 'utf-8')
+		if et.write(fileName, encoding = 'utf-8') == None :
+			self._log_manager.log('INFO', 'Fonts have been localised', 'true')
+
+		return
 
 
 	def subBasePath (self, thisPath, basePath) :
-		'''Substitute the base path marker with the real path.'''
+		'''Substitute the base path marker with the real path.
+			Or, just provide the absolute path.'''
 
 		if thisPath.split('/')[0] == '__PTXPLUS__' :
 			return thisPath.replace('__PTXPLUS__', basePath)

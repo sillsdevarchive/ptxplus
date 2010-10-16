@@ -308,6 +308,9 @@ else :
 			mod = __import__("update_project_settings")
 			mod.doIt()
 
+			# Get rid of the old error log files.
+			error_manager.deleteErrorLogs()
+
 			# Check the project assets
 			log_manager.initializeLog("check_assets", "SYS", "", "", "basic")
 			tools.taskRunner(log_manager, "check_assets")

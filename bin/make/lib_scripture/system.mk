@@ -309,6 +309,31 @@ endef
 #		Manage Project Information
 ###############################################################
 
+# If for some reason the Wiki doesn't exist for this project
+# we'll make a fresh one now.
+$(PATH_WIKI) :
+	@echo INFO: Creating: $@
+	@mkdir -p $(PATH_WIKI)
+	@cp $(PATH_WIKI_SOURCE)/* $(PATH_WIKI)
+
+# Simple call to open the project wiki home page
+wiki : | $(PATH_WIKI)
+	@-$(CLOSEWIKI)
+	@$(VIEWWIKI) $(PATH_WIKI) Home &
+
+# Call on the project wiki notes
+# (At some point we'll add a date prepend routine before the wiki page call.)
+note : | $(PATH_WIKI)
+	@-$(CLOSEWIKI)
+	@$(TEXT_TO_WIKI) note $(PATH_WIKI)/Notes.$(EXT_TEXT)
+	@$(VIEWWIKI) $(PATH_WIKI) Notes &
+
+# Call on the project wiki issues page
+# (At some point we'll add a date prepend routine before the wiki page call.)
+issue : | $(PATH_WIKI)
+	@-$(CLOSEWIKI)
+	@$(TEXT_TO_WIKI) issue $(PATH_WIKI)/Issues.$(EXT_TEXT)
+	@$(VIEWWIKI) $(PATH_WIKI) Issues &
 
 # Call the system wiki help pages
 help :
