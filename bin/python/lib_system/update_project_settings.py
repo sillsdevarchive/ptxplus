@@ -64,7 +64,7 @@ class UpdateProjectSettings (object) :
 
 		except :
 			curVer = 0
-			tools.userMessage("Error: Could not determine the current system version. Hopefully this update will fix that problem. Setting current version to 0")
+			tools.userMessage("Errr: Could not determine the current system version. Hopefully this update will fix that problem. Setting current version to 0")
 
 		if settings['System']['systemVersion'] != curVer :
 
@@ -79,7 +79,7 @@ class UpdateProjectSettings (object) :
 			tempMasterConfFile = os.getcwd() + "/" + tools.getProjectConfigFileName()
 
 			if os.path.isfile(tempMasterConfFile) != True :
-				tools.userMessage("Error: Could not update project, [" + tempMasterConfFile + "] not found")
+				tools.userMessage("Errr: Could not update project, [" + tempMasterConfFile + "] not found")
 			else :
 				# Copy into the project folder
 				shutil.copy(systemProjectConfFile, tempMasterConfFile)

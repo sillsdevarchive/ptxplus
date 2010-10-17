@@ -162,7 +162,7 @@ def restoreFromBackup () :
 		mod = __import__("restore_project")
 		mod.doIt()
 	else :
-		tools.userMessage("ERROR: This project could not be restored from backup. No backup file found or project does not exist.")
+		tools.userMessage("ERRR: This project could not be restored from backup. No backup file found or project does not exist.")
 
 
 def importProject () :
@@ -246,7 +246,7 @@ elif command == "set-user" :
 		if sys.argv[2] :
 			tools.setSystemUser(sys.argv[2])
 	except :
-		tools.userMessage('ERROR: No user name given, try again.')
+		tools.userMessage('ERRR: No user name given, try again.')
 
 elif command == "set-source-home" :
 	# Set the source home folder
@@ -254,7 +254,7 @@ elif command == "set-source-home" :
 		tools.setSystemSourceHome(sys.argv[2])
 
 	except :
-		tools.userMessage('ERROR: Problem setting source path, please try again.')
+		tools.userMessage('ERRR: Problem setting source path, please try again.')
 
 elif command == "example" :
 	# This is a special instance of the import function to facilitate
@@ -295,7 +295,7 @@ else :
 		elif command == "open" :
 			openProject()
 		elif command == "import" or command == "setup" :
-			tools.userMessage('ERROR: Sorry, that command cannot be used in this location.')
+			tools.userMessage('ERRR: Sorry, that command cannot be used in this location.')
 
 		else :
 
@@ -325,7 +325,7 @@ else :
 			warn = ""
 			if log_manager._warningCount > 0 or log_manager._errorCount > 0 :
 				warn = " (Warnings = " + str(log_manager._warningCount) + ")"
-				tools.userMessage("ERROR: " + thisTask + " completed with " + str(log_manager._errorCount) + " errors" + warn)
+				tools.userMessage("ERRR: Task completed with " + str(log_manager._errorCount) + " errors" + warn)
 
 			# At this point we want to check to see if a few certain switches
 			# are set to false. If they are, we will run a couple makefile
@@ -349,7 +349,7 @@ else :
 			errorCode = tools.makefileCommand(command)
 
 			if errorCode != 0 :
-				tools.userMessage("ERROR: Makefile process failed. (Error code: " + str(errorCode) + ")")
+				tools.userMessage("ERRR: Makefile process failed. (Error code: " + str(errorCode) + ")")
 			else :
 				# If all went well with the makefile process, report any
 				# other errors we might have to the terminal
@@ -363,9 +363,9 @@ else :
 		elif command == "import" :
 			importProject()
 		else :
-			tools.userMessage("ERROR: There does not seem to be a valid project in this location and the [" + command + "] command is not recognized in this context.")
+			tools.userMessage("ERRR: There does not seem to be a valid project in this location and the [" + command + "] command is not recognized in this context.")
 	else :
-		tools.userMessage('ERROR: ' + noCommandMsg)
+		tools.userMessage('ERRR: ' + noCommandMsg)
 
 
 # All done

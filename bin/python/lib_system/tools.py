@@ -63,7 +63,7 @@ def taskRunner (log_manager, thisTask) :
 			module = __import__(thisTask, globals(), locals(), [])
 			log_manager.log("DBUG", "Imported module: " + thisTask)
 		except :
-			userMessage("ERROR: Hmmm, cannot seem to import the \"" + thisTask + "\" module. This will not bode well for the rest of the process.")
+			userMessage("ERRR: Hmmm, cannot seem to import the \"" + thisTask + "\" module. This will not bode well for the rest of the process.")
 			log_manager.log("ERRR", "Could not import module: " + thisTask)
 
 		# Run the module
@@ -71,7 +71,7 @@ def taskRunner (log_manager, thisTask) :
 			module.doIt(log_manager)
 			log_manager.log("DBUG", "Process completed: " + thisTask)
 		except :
-			userMessage("ERROR: Cannot run the \"" + thisTask + "\" module.")
+			userMessage("ERRR: Cannot run the \"" + thisTask + "\" module.")
 			log_manager.log("ERRR", "Cannot run the \"" + thisTask + "\" module.")
 
 # This is now deprecated
@@ -555,7 +555,7 @@ def makefileCommand (command) :
 			return os.system(sysCommand)
 
 		except :
-			userMessage('ERROR: Could not run makefile command. The ' + getProjectConfigFileName() + ' file may be corrupt.')
+			userMessage('ERRR: Could not run makefile command. The ' + getProjectConfigFileName() + ' file may be corrupt.')
 
 
 def doCustomProcess (processCommand) :

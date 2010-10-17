@@ -242,8 +242,7 @@ class MakeMakefile (object) :
 			try:
 				makefileSettings += tools.getComponentNameKey(cID) + '=' + tools.getComponentNameValue(cID) + '\n'
 			except:
-				tools.userMessage('ERROR: Component: ' + cID + ' is not known to the system')
-				self._log_manager.log('ERRR', 'Component: ' + cID + ' is not known to the system')
+				self._log_manager.log('ERRR', 'Component: ' + cID + ' is not known to the system', 'true')
 
 
 		# Create the final key/values for the file
