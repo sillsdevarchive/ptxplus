@@ -150,6 +150,10 @@ class MakeMakefile (object) :
 		# name given here. The user cannot change this.
 		makefileSettings += 'PATH_SOURCE_PERIPH=' + sourcePath + '/' + peripheralFolderName + '\n'
 
+		# The map processing folder is put in the Process folder
+		# like the peripheral folder.
+		makefileSettings += 'PATH_MAP=' + os.path.abspath(tools.pubInfoObject['Paths']['PATH_PROCESS']) + '/Maps\n'
+
 		# We will use a function to tell us what the project
 		# config name is.
 		makefileSettings += 'FILE_PROJECT_CONF=' + tools.getProjectConfigFileName() + '\n'

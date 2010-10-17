@@ -321,23 +321,6 @@ else :
 			tools.taskRunner(log_manager, "make_make")
 			log_manager.closeOutSessionLog()
 
-# This can be deprecated
-#            # Look for all the global processes that need to be run
-#            taskList = []
-#            taskList = log_manager._settings['System']['Processes']['globalProcesses']
-#            # Get rid of the old error log files.
-#            error_manager.deleteErrorLogs()
-#            for thisTask in taskList :
-
-#                # Initialize the log manager to do its thing
-#                log_manager.initializeLog(thisTask, "SYS", "", "", "")
-
-#                # For running each process we use one centralized task runner in tools.
-#                tools.taskRunner(log_manager, thisTask)
-
-#                # Close out the process by reporting to the log file
-#                log_manager.closeOutSessionLog()
-
 			# Anounce any errors we have found
 			warn = ""
 			if log_manager._warningCount > 0 or log_manager._errorCount > 0 :

@@ -91,7 +91,7 @@ class CheckAssets (object) :
 			self._log_manager.log('INFO', 'Added Peripheral matter folder (in Source):', 'true')
 
 		# If there are no map components then there is no need to make the folder
-		if len(self._log_manager._settings['Format']['BindingGroups']['GROUP_MAP']) < 0 :
+		if len(self._log_manager._settings['Format']['BindingGroups']['GROUP_MAP']) > 0 :
 			if not os.path.isdir(pathMaps) :
 				os.mkdir(pathMaps)
 				self._log_manager.log('INFO', 'Added Maps folder', 'true')
