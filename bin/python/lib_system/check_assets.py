@@ -69,16 +69,24 @@ class CheckAssets (object) :
 		pathPeripheral          = pathSource + '/' + os.getcwd().split('/')[-1]
 		pathMaps                = pathProcess + '/Maps'
 		pathIllustrations       = os.path.abspath(tools.pubInfoObject['Paths']['PATH_ILLUSTRATIONS'])
-		pathGraphics            = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
+		pathUserLibFonts        = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_FONT_LIB'])
+		pathUserLibGraphics     = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
+		pathUserLibIllustrations= os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
 		pathIllustrationsLib    = tools.pubInfoObject['Paths']['PATH_RESOURCES_ILLUSTRATIONS'].replace('__PTXPLUS__', basePath)
 		fileWatermark           = self._log_manager._settings['Format']['PageLayout']['FILE_WATERMARK']
 		filePageBorder          = self._log_manager._settings['Format']['PageLayout']['FILE_PAGE_BORDER']
 		listGraphics            = self._log_manager._settings['Format']['Illustrations']['LIST_GRAPHICS']
 
 		# Do some sanity testing
-		if not os.path.isdir(pathGraphics) :
-			self._log_manager.log('ERRR', 'No graphics source folder. (Halting) Please check your configuration.', 'true')
-			sys.exit(1)
+		if not os.path.isdir(pathUserLibFonts) :
+			self._log_manager.log('WARN', 'No user font library folder found. Please check your configuration.', 'true')
+
+		if not os.path.isdir(pathUserLibGraphics) :
+			self._log_manager.log('WARN', 'No user graphics library folder found. Please check your configuration.', 'true')
+
+		if not os.path.isdir(pathUserLibIllustrations) :
+			self._log_manager.log('WARN', 'No user Illustrations library folder found. Please check your configuration.', 'true')
+
 
 		# Check/install folders we might need
 		if not os.path.isdir(pathSource) :
@@ -89,6 +97,13 @@ class CheckAssets (object) :
 		if not os.path.isdir(pathPeripheral) :
 			os.mkdir(pathPeripheral)
 			self._log_manager.log('INFO', 'Added Peripheral matter folder (in Source):', 'true')
+
+		# Make the Process folder, we will always need that
+		if not os.path.isdir(pathProcess) :
+			os.mkdir(pathProcess)
+			self._log_manager.log('INFO', 'Added Process folder', 'true')
+			tools.copyAll(baseSysLib + '/Process', pathProcess)
+			self._log_manager.log('INFO', 'Copied new process files to project', 'true')
 
 		# If there are no map components then there is no need to make the folder
 		if len(self._log_manager._settings['Format']['BindingGroups']['GROUP_MAP']) > 0 :
@@ -123,13 +138,6 @@ class CheckAssets (object) :
 			os.mkdir(pathDeliverables)
 			self._log_manager.log('INFO', 'Added Deliverables folder', 'true')
 
-		# Make the Process folder, we will always need that
-		if not os.path.isdir(pathProcess) :
-			os.mkdir(pathProcess)
-			self._log_manager.log('INFO', 'Added Process folder', 'true')
-			tools.copyAll(baseSysLib + '/Process', pathProcess)
-			self._log_manager.log('INFO', 'Copied new process files to project', 'true')
-
 		# Make the Texts folder, we will always need that too
 		if not os.path.isdir(pathTexts) :
 			os.mkdir(pathTexts)
@@ -147,7 +155,6 @@ class CheckAssets (object) :
 
 		# The font folder will be a little more complex
 		sysFontFolder = self.subBasePath(tools.pubInfoObject['Paths']['PATH_RESOURCES_FONTS'], basePath)
-		resourceFonts = self.subBasePath(self._log_manager._settings['System']['Paths']['PATH_FONT_LIB'], '')
 		fontList = self._log_manager._settings['Format']['Fonts']['fontFamilyList']
 		if not os.path.isdir(pathFonts) :
 			os.mkdir(pathFonts)
@@ -164,8 +171,8 @@ class CheckAssets (object) :
 			for ff in fontList :
 				os.mkdir(pathFonts + '/' + ff)
 				# First check our resource font folder
-				if os.path.isdir(resourceFonts + '/' + ff) :
-					tools.copyFiles(resourceFonts + '/' + ff, pathFonts + '/' + ff)
+				if os.path.isdir(pathUserLibFonts + '/' + ff) :
+					tools.copyFiles(pathUserLibFonts + '/' + ff, pathFonts + '/' + ff)
 					self._log_manager.log('INFO', 'Copied [' + ff + '] font family', 'true')
 					self.localiseFontsConf(pathFonts, sysFontFolder)
 
@@ -179,16 +186,15 @@ class CheckAssets (object) :
 						self._log_manager.log('ERRR', 'Not able to copy [' + ff + '] font family', 'true')
 
 
-
 		# Check/install system assets
 
 		# Watermark
-		self.smartCopy(pathGraphics + '/' + fileWatermark, pathIllustrations + '/' + fileWatermark, pathProcess + '/' + fileWatermark, pathIllustrationsLib + '/' + fileWatermark)
+		self.smartCopy(pathUserLibGraphics + '/' + fileWatermark, pathIllustrations + '/' + fileWatermark, pathProcess + '/' + fileWatermark, pathIllustrationsLib + '/' + fileWatermark)
 		# Page border
-		self.smartCopy(pathGraphics + '/' + filePageBorder, pathIllustrations + '/' + filePageBorder, pathProcess + '/' + filePageBorder, pathIllustrationsLib + '/' + filePageBorder)
+		self.smartCopy(pathUserLibGraphics + '/' + filePageBorder, pathIllustrations + '/' + filePageBorder, pathProcess + '/' + filePageBorder, pathIllustrationsLib + '/' + filePageBorder)
 		# Graphics list
 		for graphic in listGraphics :
-			self.smartCopy(pathGraphics + '/' + graphic, pathIllustrations + '/' + graphic, pathProcess + '/' + graphic, pathIllustrationsLib + '/' + graphic)
+			self.smartCopy(pathUserLibGraphics + '/' + graphic, pathIllustrations + '/' + graphic, pathProcess + '/' + graphic, pathIllustrationsLib + '/' + graphic)
 
 	def smartCopy (self, source, destination, linkto, lib) :
 		'''Copies a file but does it according to the mode the
@@ -267,7 +273,7 @@ class CheckAssets (object) :
 
 	def subBasePath (self, thisPath, basePath) :
 		'''Substitute the base path marker with the real path.
-			Or, just provide the absolute path.'''
+			Or, for a fallback, just provide the absolute path.'''
 
 		if thisPath.split('/')[0] == '__PTXPLUS__' :
 			return thisPath.replace('__PTXPLUS__', basePath)

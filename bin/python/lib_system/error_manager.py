@@ -30,6 +30,7 @@ import tools
 
 # Get the ptxplus basePath
 basePath = os.environ.get('PTXPLUS_BASE')
+pathHome = os.path.abspath(tools.pubInfoObject['Paths']['PATH_HOME'])
 
 class ErrorManager (object) :
 
@@ -39,7 +40,7 @@ class ErrorManager (object) :
 		# We will just use the settings locally
 		self._settings = tools.getSettingsObject()
 		try :
-			self._logFolder = os.getcwd() + "/" + self._settings['Process']['Paths']['PATH_LOG']
+			self._logFolder = pathHome + "/" + tools.pubInfoObject['Paths']['PATH_LOG']
 
 		except :
 			self._logFolder = os.getcwd() + "/Log"
@@ -132,6 +133,10 @@ class ErrorManager (object) :
 	def recordError (self, event) :
 		'''Record an error report line to the error log object.'''
 
+		# Check for the Log folder and make it if it isn't there.
+		if not os.path.isdir(self._logFolder) :
+			os.mkdir(self._logFolder)
+			tools.userMessage("INFO: Created Log folder")
 
 		if os.path.isfile(self._errorLogFile) == True :
 			errorWriteObject = codecs.open(self._errorLogFile, "a", encoding='utf_8')
