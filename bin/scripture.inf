@@ -155,6 +155,9 @@ FILE_GROUP_CONTENT_TEX      = 'GROUP_CONTENT.tex'
 # by processing the Content TeX Control file.
 FILE_GROUP_CONTENT_PDF      = 'GROUP_CONTENT.pdf'
 
+FILE_GROUP_MAPS_PDF         = 'GROUP_MAPS.pdf'
+FILE_GROUP_MAPS_TEX         = 'GROUP_MAPS.tex'
+
 # BIBLE PDF FILE
 # This is the final file that has all groups that
 # are defined to be in the final publication PDF
@@ -421,7 +424,6 @@ pti_peripheral              = 'TITLE_PAGE'
 toc_peripheral              = 'TOC'
 top_peripheral              = 'TOPICAL_INDEX'
 
-map_maps                     = 'maps'
 m01_maps                     = 'm001'
 m02_maps                     = 'm002'
 m03_maps                     = 'm003'
@@ -554,7 +556,6 @@ pti_peripheral              = 'TITLE_PAGE'
 toc_peripheral              = 'TOC'
 top_peripheral              = 'TOPICAL_INDEX'
 
-map_maps                     = 'maps'
 m01_maps                     = 'm001'
 m02_maps                     = 'm002'
 m03_maps                     = 'm003'
@@ -687,7 +688,6 @@ pti_peripheral              = 'TITLE_PAGE'
 toc_peripheral              = 'TOC'
 top_peripheral              = 'TOPICAL_INDEX'
 
-map_maps                     = 'maps'
 m01_maps                     = 'm001'
 m02_maps                     = 'm002'
 m03_maps                     = 'm003'
