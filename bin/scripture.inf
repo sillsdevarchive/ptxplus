@@ -184,20 +184,6 @@ FILE_BOOK                   = 'final.pdf'
 # an absolute path via Python. DO NOT CHANGE THIS!
 PATH_HOME                   = '.'
 
-# SOURCE FOLDER
-# This is the path to point to where the source text
-# is kept for this project. Enter a relative path
-# only. It will be changed to an absolute path when
-# the system is run.
-#   Default = ../Source
-PATH_SOURCE                 = '../Source'
-
-# ILLUSTRATIONS PATH
-# Name of the illustrations folder which will
-# normally be located in the Source folder.
-#   Default = Illustrations
-PATH_ILLUSTRATIONS          = '../Source/Illustrations'
-
 # PROJECT ADMIN FOLDER
 # This is the folder that contains all the administrative
 # stuff for the project.
