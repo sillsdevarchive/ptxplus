@@ -66,9 +66,8 @@ class CheckAssets (object) :
 		pathDeliverables        = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_DELIVERABLES']
 		pathProcess             = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_PROCESS']
 		pathMaps                = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_MAPS']
-		pathSource              = os.path.abspath(tools.pubInfoObject['Paths']['PATH_SOURCE'])
-		pathPeripheral          = pathSource + '/' + os.getcwd().split('/')[-1]
-		pathIllustrations       = os.path.abspath(tools.pubInfoObject['Paths']['PATH_ILLUSTRATIONS'])
+		pathSource              = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
+		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		pathUserLibFonts        = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_FONT_LIB'])
 		pathUserLibGraphics     = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
 		pathUserLibIllustrations= os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
@@ -76,6 +75,7 @@ class CheckAssets (object) :
 		fileWatermark           = self._log_manager._settings['Format']['PageLayout']['FILE_WATERMARK']
 		filePageBorder          = self._log_manager._settings['Format']['PageLayout']['FILE_PAGE_BORDER']
 		listGraphics            = self._log_manager._settings['Format']['Illustrations']['LIST_GRAPHICS']
+		pathPeripheral          = pathSource + '/' + os.getcwd().split('/')[-1]
 
 		# Do some sanity testing
 		if not os.path.isdir(pathUserLibFonts) :

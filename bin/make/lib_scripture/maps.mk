@@ -46,19 +46,8 @@ $(PATH_MAPS)/$(1).$(EXT_SVG) : \
 $(PATH_MAPS)/$(1).$(EXT_PDF) : $(PATH_MAPS)/$(1).$(EXT_SVG)
 	@echo ERRR: Create map PDF is not working yet!
 
-edit-$(1) : $(PATH_MAPS)/$(1).$(EXT_SVG)
-	$(VIEWSVG) $(PATH_MAPS)/$(1).$(EXT_SVG)
-
-##### End SVG processing rules
-endef
-
-
-# Map page processing rules
-# This creates the rules for processing a map page.
-define map_page
-
-# As a slight addition to the
-$(PATH_TEXTS)/$(1).$(EXT_WORK) :
+# Create the map page
+$(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_MAPS)/$(1).$(EXT_PDF)
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
@@ -69,9 +58,13 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK) :
 	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6' >> $$@
 	@echo '\\domap{$(1).$(EXT_PDF)}' >> $$@
 
+edit-$(1) : $(PATH_MAPS)/$(1).$(EXT_SVG)
+	$(VIEWSVG) $(PATH_MAPS)/$(1).$(EXT_SVG)
 
-##### End of Map Page processing rules
+
+##### End SVG processing rules
 endef
+
 
 
 
@@ -85,9 +78,6 @@ endef
 # This builds a rule (in memory) for each of the maps
 $(foreach v,$(GROUP_MAPS),$(eval $(call svg_process,$(v))))
 
-# This builds a rule (in memory) for each of the map pages
-$(foreach v,$(GROUP_MAPS),$(eval $(call map_page,$(v))))
-
 # Create the final PDF file from the group component PDF files that have
 # been included in a special .tex file that inserts them directly which
 # avoids having to have an intermediat usfm file.
@@ -96,12 +86,18 @@ $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF) : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
 	$(call watermark,$$@)
 
+$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : \
+		$(foreach v,$(GROUP_MAPS),$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+		 $(PATH_PROCESS)/$(FILE_TEX_MAPS)
+	@echo INFO: Creating: $(FILE_GROUP_MAPS_TEX)
+	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "maps"
+
 # Create the .tex file which includes all the map components in PDF form.
 # This .tex file will be slightly different from most .tex files that are
 # produced by the makd tex module. Note, this is dependant on each of the
 # individual map components being produced first.
-$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : $(foreach v,$(GROUP_MAPS),$(PATH_MAPS)/$(v).$(EXT_PDF))
-	@echo INFO: Creating: $(FILE_GROUP_MAPS_TEX)
+$(PATH_PROCESS)/$(FILE_TEX_MAPS) :
+	@echo INFO: Creating: $(FILE_TEX_MAPS)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "maps"
 
 

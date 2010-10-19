@@ -70,9 +70,9 @@ class MakeTexControlFile (object) :
 		self._outputFile                = log_manager._currentOutput
 		self._inputID                   = log_manager._currentTargetID
 		self._pathToText                = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_TEXTS']
-		self._pathToSource              = os.path.abspath(tools.pubInfoObject['Paths']['PATH_SOURCE'])
+		self._pathToSource              = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
+		self._pathToIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		self._pathToProcess             = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_PROCESS']
-		self._pathToIllustrations       = os.path.abspath(tools.pubInfoObject['Paths']['PATH_ILLUSTRATIONS'])
 		self._texMacros                 = tools.pubInfoObject['Files']['FILE_TEX_MACRO']
 		self._cvSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_COVER']
 		self._fmSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_FRONT']

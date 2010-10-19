@@ -44,7 +44,7 @@ class MakeMakefile (object) :
 
 		self._log_manager = log_manager
 		basePath = os.environ.get('PTXPLUS_BASE')
-		sourcePath = os.path.abspath(tools.pubInfoObject['Paths'].get('PATH_SOURCE'))
+		sourcePath = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_SOURCE'))
 
 		# Get the type of project this is
 		self._projectType = tools.getProjectType()
