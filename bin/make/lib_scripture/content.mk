@@ -346,15 +346,15 @@ $(PATH_PROCESS)/$(FILE_TEX_SETTINGS) : $(FILE_PROJECT_CONF)
 
 # Rule for building the GROUP_CONTENT control file. This is
 # not the same as TeX settings file above.
-$(PATH_PROCESS)/GROUP_CONTENT.tex :
-	@echo INFO: Creating: GROUP_CONTENT.tex
+$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_TEX) :
+	@echo INFO: Creating: $(FILE_GROUP_CONTENT_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "content" "content" "$@" ""
 
 # Rule for generating the content components. It will
 # also generate the TOC if that feature is turned on.
 # Note: removed master wordlist dependency as view is
 # not really dependent on that.
-$(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
+$(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF) : \
 		$(foreach v,$(GROUP_CONTENT), \
 		$(PATH_TEXTS)/$(v).$(EXT_WORK) \
 		$(PATH_TEXTS)/$(v).$(EXT_ADJUSTMENT) \
@@ -362,14 +362,14 @@ $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF) : \
 		$(DEPENDENT_FILE_LIST) \
 		$(if $(findstring true,$(USE_HYPHENATION)),$(PATH_HYPHENATION)/$(FILE_HYPHENATION_TEX), ) \
 		$(PATH_PROCESS)/GROUP_CONTENT.tex
-	@echo INFO: Creating: GROUP_CONTENT.$(EXT_PDF)
-	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) GROUP_CONTENT.tex
+	@echo INFO: Creating: $(FILE_GROUP_CONTENT_PDF)
+	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(FILE_GROUP_CONTENT_TEX)
 	$(call watermark,$@)
 	$(if $(findstring "toc",$(COMPONENTS_ALL)),@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TOC)")
 
 # The TOC data is made during the content creation. As such
 # the TOC file creation cannot happen until the content is made.
-$(PATH_SOURCE_PERIPH)/$(FILE_TOC) : $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF)
+$(PATH_SOURCE_PERIPH)/$(FILE_TOC) : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 
 # This enables preprocess checks on all the components processing each one independently.
 preprocess-content :
@@ -391,12 +391,12 @@ else
 endif
 
 # Do a component section and veiw the resulting output
-view-content : $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF)
+view-content : $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 	@- $(CLOSEPDF)
 	@ $(VIEWPDF) $< &
 
 pdf-remove-content :
-	@echo INFO: Removing file: $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF)
+	@echo INFO: Removing file: $(PATH_PROCESS)/$(FILE_GROUP_CONTENT_PDF)
 	@rm -f $(PATH_PROCESS)/GROUP_CONTENT.$(EXT_PDF)
 
 

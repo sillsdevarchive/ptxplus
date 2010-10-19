@@ -65,9 +65,9 @@ class CheckAssets (object) :
 		pathTexts               = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_TEXTS']
 		pathDeliverables        = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_DELIVERABLES']
 		pathProcess             = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_PROCESS']
+		pathMaps                = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_MAPS']
 		pathSource              = os.path.abspath(tools.pubInfoObject['Paths']['PATH_SOURCE'])
 		pathPeripheral          = pathSource + '/' + os.getcwd().split('/')[-1]
-		pathMaps                = pathProcess + '/Maps'
 		pathIllustrations       = os.path.abspath(tools.pubInfoObject['Paths']['PATH_ILLUSTRATIONS'])
 		pathUserLibFonts        = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_FONT_LIB'])
 		pathUserLibGraphics     = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
@@ -106,7 +106,7 @@ class CheckAssets (object) :
 			self._log_manager.log('INFO', 'Copied new process files to project', 'true')
 
 		# If there are no map components then there is no need to make the folder
-		if len(self._log_manager._settings['Format']['BindingGroups']['GROUP_MAP']) > 0 :
+		if len(self._log_manager._settings['Format']['BindingGroups']['GROUP_MAPS']) > 0 :
 			if not os.path.isdir(pathMaps) :
 				os.mkdir(pathMaps)
 				self._log_manager.log('INFO', 'Added Maps folder', 'true')

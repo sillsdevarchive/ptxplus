@@ -63,7 +63,7 @@ FILE_TEX_BACK               = '.back-settings.tex'
 
 # MAP SETTINGS
 # TeX map matter settings file.
-FILE_TEX_MAP                = '.map-settings.tex'
+FILE_TEX_MAPS                = '.maps-settings.tex'
 
 # BIBLE STYLE FILE
 # This is the override style file for
@@ -155,8 +155,16 @@ FILE_GROUP_CONTENT_TEX      = 'GROUP_CONTENT.tex'
 # by processing the Content TeX Control file.
 FILE_GROUP_CONTENT_PDF      = 'GROUP_CONTENT.pdf'
 
-FILE_GROUP_MAPS_PDF         = 'GROUP_MAPS.pdf'
+# MAPS GROUP CONTROL FILE
+# For generating Map content we need yet another
+# special control file and the name for it is
+# hard-coded here.
 FILE_GROUP_MAPS_TEX         = 'GROUP_MAPS.tex'
+
+# MAP GROUP PDF FILE
+# This is the final map content file that was
+# generated from the map control file.
+FILE_GROUP_MAPS_PDF         = 'GROUP_MAPS.pdf'
 
 # BIBLE PDF FILE
 # This is the final file that has all groups that
@@ -233,6 +241,11 @@ PATH_LOG                    = 'Log'
 # The path to the process folder
 #   Default = Process
 PATH_PROCESS                = 'Process'
+
+# MAPS PATH
+# This is the explicit path to the Maps folder
+# which is normally inside the Process folder.
+PATH_MAPS                   = 'Process/Maps'
 
 # REPORTS PATH
 # The path to the reports folder. This is where

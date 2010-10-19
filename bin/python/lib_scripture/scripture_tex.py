@@ -64,48 +64,48 @@ class MakeTexControlFile (object) :
 			what kind of settings file needs to be made and then call the
 			right function to do it.'''
 
-		log_manager._currentSubProcess = 'MkTexContFile'
-		self._log_manager = log_manager
-		self._inputFile = log_manager._currentInput
-		self._outputFile = log_manager._currentOutput
-		self._inputID = log_manager._currentTargetID
-		self._pathToText = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_TEXTS']
-		self._pathToSource = os.path.abspath(tools.pubInfoObject['Paths']['PATH_SOURCE'])
-		self._pathToProcess = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_PROCESS']
-		self._pathToIllustrations = os.path.abspath(tools.pubInfoObject['Paths']['PATH_ILLUSTRATIONS'])
-		self._texMacros = tools.pubInfoObject['Files']['FILE_TEX_MACRO']
-		self._cvSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_COVER']
-		self._fmSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_FRONT']
-		self._bmSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_BACK']
-		self._mpSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_MAP']
-		self._cmSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_CUSTOM']
-		self._biSettingsFile = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_SETTINGS']
+		log_manager._currentSubProcess  = 'MkTexContFile'
+		self._log_manager               = log_manager
+		self._inputFile                 = log_manager._currentInput
+		self._outputFile                = log_manager._currentOutput
+		self._inputID                   = log_manager._currentTargetID
+		self._pathToText                = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_TEXTS']
+		self._pathToSource              = os.path.abspath(tools.pubInfoObject['Paths']['PATH_SOURCE'])
+		self._pathToProcess             = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_PROCESS']
+		self._pathToIllustrations       = os.path.abspath(tools.pubInfoObject['Paths']['PATH_ILLUSTRATIONS'])
+		self._texMacros                 = tools.pubInfoObject['Files']['FILE_TEX_MACRO']
+		self._cvSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_COVER']
+		self._fmSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_FRONT']
+		self._bmSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_BACK']
+		self._mpSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_MAPS']
+		self._cmSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_CUSTOM']
+		self._biSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_SETTINGS']
 		# Note we get the value from the input file field
-		self._contextFlag = log_manager._optionalPassedVariable
-		self._flags = ('cover', 'front', 'back', 'periph', 'map')
-		self._frontMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_FRONT']
-		self._backMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_BACK']
-		self._coverMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_COVER']
-		self._contentMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_CONTENT']
-		self._mapMatter = self._log_manager._settings['Format']['BindingGroups']['GROUP_MAP']
-		self._contentGroup = []
+		self._contextFlag               = log_manager._optionalPassedVariable
+		self._flags                     = ('cover', 'front', 'back', 'periph', 'maps')
+		self._frontMatter               = self._log_manager._settings['Format']['BindingGroups']['GROUP_FRONT']
+		self._backMatter                = self._log_manager._settings['Format']['BindingGroups']['GROUP_BACK']
+		self._coverMatter               = self._log_manager._settings['Format']['BindingGroups']['GROUP_COVER']
+		self._contentMatter             = self._log_manager._settings['Format']['BindingGroups']['GROUP_CONTENT']
+		self._mapMatter                 = self._log_manager._settings['Format']['BindingGroups']['GROUP_MAPS']
+		self._contentGroup              = []
 		self._contentGroup.extend(self._contentMatter)
-		self._publicationType = log_manager._publicationType
+		self._publicationType           = log_manager._publicationType
 		# File extentions (Expand this, more will be needed in the future)
-		self._extStyle = tools.pubInfoObject['Extensions']['EXT_STYLE']
-		self._extWork = tools.pubInfoObject['Extensions']['EXT_WORK']
+		self._extStyle                  = tools.pubInfoObject['Extensions']['EXT_STYLE']
+		self._extWork                   = tools.pubInfoObject['Extensions']['EXT_WORK']
+		self._extPDF                    = tools.pubInfoObject['Extensions']['EXT_PDF']
 		# Some lists
-		self._headerPositions = ['RHtitleleft', 'RHtitlecenter', 'RHtitleright', \
-						'RHoddleft', 'RHoddcenter', 'RHoddright', \
-						'RHevenleft', 'RHevencenter', 'RHevenright']
-		self._footerPositions = ['RFtitleleft', 'RFtitlecenter', 'RFtitleright', \
-						'RFoddleft', 'RFoddcenter', 'RFoddright', \
-						'RFevenleft', 'RFevencenter', 'RFevenright']
+		self._headerPositions           = ['RHtitleleft', 'RHtitlecenter', 'RHtitleright', \
+											'RHoddleft', 'RHoddcenter', 'RHoddright', \
+											'RHevenleft', 'RHevencenter', 'RHevenright']
+		self._footerPositions           = ['RFtitleleft', 'RFtitlecenter', 'RFtitleright', \
+											'RFoddleft', 'RFoddcenter', 'RFoddright', \
+											'RFevenleft', 'RFevencenter', 'RFevenright']
 		# Some global settings
-		self._useMarginalVerses = self._log_manager._settings['Format']['ChapterVerse']['useMarginalVerses']
+		self._useMarginalVerses         = self._log_manager._settings['Format']['ChapterVerse']['useMarginalVerses']
 
-
-
+		# Direct to the right context
 		if self._publicationType.lower() == 'scripture' :
 			# Decide which file we are needing to make, then direct it to
 			# the right function. (Assume the file name has the path in it.)
@@ -242,6 +242,16 @@ class MakeTexControlFile (object) :
 					settings += '\\OmitChapterNumberfalse\n'
 				else :
 					settings += '\\ptxfile{' + thisBook + '}\n'
+
+
+###############################################
+# Maybe here?
+
+#            for map in self._mapMatter :
+#                mapSettings += '\\domap ' + map + '.' + self._extPDF + '\n\eject\n'
+
+
+
 
 		# If there was no context flag at all that means it has to be peripheral
 		# matter. But is is front or back matter. we'll need to test to see
@@ -549,6 +559,7 @@ class MakeTexControlFile (object) :
 		headerSettings = ''
 		footerSettings = ''
 		generalSettings = ''
+		mapSettings = ''
 
 		# Set some context sensitive things here
 		# Note that for now, we are going to put header and footer settings
@@ -579,6 +590,19 @@ class MakeTexControlFile (object) :
 			headerSettings += self.RemovePageNumbers(self._headerPositions)
 			footerSettings += self.RemovePageNumbers(self._footerPositions)
 
+		# Maps are a very different process from other types of matter.
+		# The output here will be very different from the others.
+		elif self._contextFlag.lower() == 'maps' :
+			fileName = self._mpSettingsFile
+			formatSettings += '\\TitleColumns=1\n'
+			formatSettings += '\\IntroColumns=1\n'
+			formatSettings += '\\BodyColumns=1\n'
+			formatSettings += '\\def\TopMarginFactor{0}\n'
+			formatSettings += '\\def\SideMarginFactor{0}\n'
+			formatSettings += '\\def\BottomMarginFactor{0}\n'
+			headerSettings += self.RemovePageNumbers(self._headerPositions)
+			footerSettings += self.RemovePageNumbers(self._footerPositions)
+
 		else :
 			# If we can't figure out what this is we have a system level bug and we might as well quite here
 			self._log_manager.log("ERRR", "The context flag: " + self._contextFlag + " is not recognized by the system. Process halted.")
@@ -603,6 +627,7 @@ class MakeTexControlFile (object) :
 							headerSettings + \
 							footerSettings + \
 							generalSettings + \
+							mapSettings + \
 							'\n'
 
 		# We don't want to write out at this point if the file want to
