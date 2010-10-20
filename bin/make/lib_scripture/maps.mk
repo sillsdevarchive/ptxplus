@@ -43,17 +43,19 @@ $(PATH_MAPS)/$(1).$(EXT_SVG) : \
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-map.$(EXT_SVG),$$@)
 
 # Crate the PDF file from the SVG file
-$(PATH_MAPS)/$(1).$(EXT_PDF) : $(PATH_MAPS)/$(1).$(EXT_SVG)
-	@echo ERRR: Create map PDF is not working yet!
+$(PATH_PROCESS)/$(1).$(EXT_PDF) : $(PATH_MAPS)/$(1).$(EXT_SVG)
+	@echo INFO: Creating: $$@
+	@rm -f $(PATH_MAPS)/$(1).$(EXT_PDF)
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_MAPS)/$(1).$(EXT_SVG) --export-pdf=temp.pdf --export-text-to-path
 
 # Create the map page
-$(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_MAPS)/$(1).$(EXT_PDF)
+$(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@echo INFO: Creating: $$@
 	@echo \\id OTH > $$@
 	@echo \\ide UTF-8 >> $$@
 	@echo \\singlecolumn >> $$@
 	@echo \\periph Map Page >> $$@
-	@echo \\p ​ >> $$@
+	@echo \\pc ​ >> $$@
 	@echo '\\makedigitsother%' >> $$@
 	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
 	@echo '\\domap{$(1).$(EXT_PDF)}' >> $$@
@@ -97,16 +99,13 @@ $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : \
 
 $(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY) :
 	@echo INFO: Creating: $@
-	@echo \\Marker p > $@
+	@echo \\Marker pc > $@
 	@echo \\FontSize 1 >> $@
 	@echo \\LeftMargin 0 >> $@
 	@echo \\FirstLineIndent 0 >> $@
 	@echo \\RightMargin 0 >> $@
-	@echo \\Justification Center >> $@
 	@echo \\SpaceBefore 0 >> $@
 	@echo \\SpaceAfter 0 >> $@
-
-
 
 # View all the maps in the group in one PDF file
 view-maps : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)

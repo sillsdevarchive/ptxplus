@@ -594,7 +594,7 @@ class MakeTexControlFile (object) :
 			formatSettings += '\\IntroColumns=1\n'
 			formatSettings += '\\BodyColumns=1\n'
 			# The next three will need some auto-tweaking depending on page size
-			formatSettings += '\\def\TopMarginFactor{-1}\n'
+			formatSettings += '\\def\TopMarginFactor{0.4}\n'
 			formatSettings += '\\def\SideMarginFactor{1.5}\n'
 			formatSettings += '\\def\BottomMarginFactor{1}\n'
 			headerSettings += self.RemovePageNumbers(self._headerPositions)
