@@ -81,6 +81,7 @@ class MakeTexControlFile (object) :
 		self._cmSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_CUSTOM']
 		self._biSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_SETTINGS']
 		self._bibleStyleFile            = self._pathToProcess + '/' + tools.pubInfoObject['Files']['FILE_TEX_STYLE']
+		self._mapStyleFile              = self._pathToProcess + '/' + tools.pubInfoObject['Files']['FILE_GROUP_MAPS_STY']
 		# Note we get the value from the input file field
 		self._contextFlag               = log_manager._optionalPassedVariable
 		self._flags                     = ('cover', 'front', 'back', 'periph', 'maps')
@@ -588,12 +589,14 @@ class MakeTexControlFile (object) :
 			macroSettings += '\\input \"' + self._biSettingsFile + '\"\n'
 			macroSettings += '\\input \"' + self._cmSettingsFile + '\"\n'
 			macroSettings += '\\stylesheet{' + self._bibleStyleFile + '}\n'
+			macroSettings += '\\stylesheet{' + self._mapStyleFile + '}\n'
 			formatSettings += '\\TitleColumns=1\n'
 			formatSettings += '\\IntroColumns=1\n'
 			formatSettings += '\\BodyColumns=1\n'
-			formatSettings += '\\def\TopMarginFactor{0}\n'
-			formatSettings += '\\def\SideMarginFactor{0}\n'
-			formatSettings += '\\def\BottomMarginFactor{0}\n'
+			# The next three will need some auto-tweaking depending on page size
+			formatSettings += '\\def\TopMarginFactor{-1}\n'
+			formatSettings += '\\def\SideMarginFactor{1.5}\n'
+			formatSettings += '\\def\BottomMarginFactor{1}\n'
 			headerSettings += self.RemovePageNumbers(self._headerPositions)
 			footerSettings += self.RemovePageNumbers(self._footerPositions)
 

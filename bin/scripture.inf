@@ -155,6 +155,12 @@ FILE_GROUP_CONTENT_TEX      = 'GROUP_CONTENT.tex'
 # by processing the Content TeX Control file.
 FILE_GROUP_CONTENT_PDF      = 'GROUP_CONTENT.pdf'
 
+# MAPS STYLE FILE
+# This is the style file that will override any
+# styles that are used but do not work in their
+# default format.
+FILE_GROUP_MAPS_STY         = 'GROUP_MAPS.sty'
+
 # MAPS GROUP CONTROL FILE
 # For generating Map content we need yet another
 # special control file and the name for it is

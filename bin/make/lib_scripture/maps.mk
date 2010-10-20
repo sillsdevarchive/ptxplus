@@ -53,10 +53,12 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_MAPS)/$(1).$(EXT_PDF)
 	@echo \\ide UTF-8 >> $$@
 	@echo \\singlecolumn >> $$@
 	@echo \\periph Map Page >> $$@
-	@echo \\startmaps >> $$@
-	@echo '\\makedigitsother' >> $$@
-	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6' >> $$@
+	@echo \\p ​ >> $$@
+	@echo '\\makedigitsother%' >> $$@
+	@echo '\\catcode`{=1\\catcode`}=2\\catcode`#=6%' >> $$@
 	@echo '\\domap{$(1).$(EXT_PDF)}' >> $$@
+	@echo '\\catcode`{=11\\catcode`}=11\\makedigitsletters' >> $$@
+
 
 edit-$(1) : $(PATH_MAPS)/$(1).$(EXT_SVG)
 	$(VIEWSVG) $(PATH_MAPS)/$(1).$(EXT_SVG)
@@ -84,24 +86,36 @@ $(foreach v,$(GROUP_MAPS),$(eval $(call svg_process,$(v))))
 $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF) : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
 	@echo INFO: Creating: $(FILE_GROUP_MAPS_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
-	$(call watermark,$$@)
+	$(call watermark,$@)
 
-#$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : \
-#        $(foreach v,$(GROUP_MAPS),$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-#        $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
-$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
+$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : \
+		$(foreach v,$(GROUP_MAPS),$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+		$(PATH_PROCESS)/$(FILE_TEX_SETTINGS) \
+		$(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY)
 	@echo INFO: Creating: $(FILE_GROUP_MAPS_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "maps"
 
-# Create the .tex file which includes all the map components in PDF form.
-# This .tex file will be slightly different from most .tex files that are
-# produced by the makd tex module. Note, this is dependant on each of the
-# individual map components being produced first.
-#$(PATH_PROCESS)/$(FILE_TEX_MAPS) :
-#	@echo INFO: Creating: $(FILE_TEX_MAPS)
-#	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "maps"
+$(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY) :
+	@echo INFO: Creating: $@
+	@echo \\Marker p > $@
+	@echo \\FontSize 1 >> $@
+	@echo \\LeftMargin 0 >> $@
+	@echo \\FirstLineIndent 0 >> $@
+	@echo \\RightMargin 0 >> $@
+	@echo \\Justification Center >> $@
+	@echo \\SpaceBefore 0 >> $@
+	@echo \\SpaceAfter 0 >> $@
 
 
+
+# View all the maps in the group in one PDF file
 view-maps : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
+	@echo INFO: Viewing $(FILE_GROUP_MAPS_PDF)
+	@ $(VIEWPDF) $< &
+
+# Remove the Maps PDF file
+pdf-remove-maps :
+	@echo INFO: Removing: $(FILE_GROUP_MAPS_PDF)
+	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
 
 
