@@ -77,6 +77,13 @@ class MakeNewProject (object) :
 			if projType in tools.getSystemSettingsObject()['System']['pubTypeList'] :
 				if not os.access(newProjectPath + "/." + projType + ".conf", os.R_OK) :
 					shutil.copy(fileLib + "/." + projType + ".conf", newProjectPath + "/." + projType + ".conf")
+
+			# Now to give the user a clue as to what happened we will
+			# write out a little new project readme file with enough
+			# info to guide them on to the next step.
+			if not os.path.isfile (newProjectPath + "/README") :
+				shutil.copy(fileLib + "/README", newProjectPath + "/README")
+
 			else :
 				userMessage("ERRR: The project type: [" + projType + "] is unknown. Process halted!")
 				sys.exit(1)
