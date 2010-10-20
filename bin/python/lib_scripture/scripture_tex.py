@@ -77,9 +77,10 @@ class MakeTexControlFile (object) :
 		self._cvSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_COVER']
 		self._fmSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_FRONT']
 		self._bmSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_BACK']
-		self._mpSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_MAPS']
+#        self._mpSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_MAPS']
 		self._cmSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_CUSTOM']
 		self._biSettingsFile            = self._pathToProcess + "/" + tools.pubInfoObject['Files']['FILE_TEX_SETTINGS']
+		self._bibleStyleFile            = self._pathToProcess + '/' + tools.pubInfoObject['Files']['FILE_TEX_STYLE']
 		# Note we get the value from the input file field
 		self._contextFlag               = log_manager._optionalPassedVariable
 		self._flags                     = ('cover', 'front', 'back', 'periph', 'maps')
@@ -145,7 +146,6 @@ class MakeTexControlFile (object) :
 		useHyphenation = self._log_manager._settings['Format']['Hyphenation']['useHyphenation']
 		pathToHyphen = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
 		hyphenFile = pathToHyphen + "/" + tools.pubInfoObject['Files']['FILE_HYPHENATION_TEX']
-		bibleStyleFile = self._pathToProcess + '/' + tools.pubInfoObject['Files']['FILE_TEX_STYLE']
 		generateTOC = self._log_manager._settings['Format']['TOC']['generateTOC']
 		marginalVersesMacro = tools.pubInfoObject['Files']['FILE_MARGINAL_VERSES']
 
@@ -178,15 +178,14 @@ class MakeTexControlFile (object) :
 			elif self._inputFile.split('/')[-1] in self._coverMatter :
 				settings += '\\input \"' + self._cvSettingsFile + '\"\n'
 
-			elif self._inputFile.split('/')[-1] in self._mapMatter :
-				settings += '\\input \"' + self._mpSettingsFile + '\"\n'
+			# Note: this is not done for map matter
 
 			else :
 				self._log_manager.log("ERRR", "Trying to Create: " + self._outputFile + " - This module thinks that input: [" + self._inputFile + "] is part of the peripheral matter but it cannot find it on either the cover, front or back matter binding groups. Process halted.")
 				return
 
 		# Add the global style sheet
-		settings += '\\stylesheet{' + bibleStyleFile + '}\n'
+		settings += '\\stylesheet{' + self._bibleStyleFile + '}\n'
 
 		# Being passed here means the contextFlag was not empty. That
 		# being the case, it must be a scripture book. Otherwise, it is
@@ -242,16 +241,6 @@ class MakeTexControlFile (object) :
 					settings += '\\OmitChapterNumberfalse\n'
 				else :
 					settings += '\\ptxfile{' + thisBook + '}\n'
-
-
-###############################################
-# Maybe here?
-
-#            for map in self._mapMatter :
-#                mapSettings += '\\domap ' + map + '.' + self._extPDF + '\n\eject\n'
-
-
-
 
 		# If there was no context flag at all that means it has to be peripheral
 		# matter. But is is front or back matter. we'll need to test to see
@@ -554,6 +543,7 @@ class MakeTexControlFile (object) :
 		rightToLeft = self._log_manager._settings['Format']['TextElements']['rightToLeft']
 
 		# Build our output - These are the strings we will fill:
+		macroSettings = ''
 		fileHeaderText = ''
 		formatSettings = ''
 		headerSettings = ''
@@ -593,7 +583,11 @@ class MakeTexControlFile (object) :
 		# Maps are a very different process from other types of matter.
 		# The output here will be very different from the others.
 		elif self._contextFlag.lower() == 'maps' :
-			fileName = self._mpSettingsFile
+			fileName = self._outputFile
+			macroSettings += '\\input \"' + self._texMacros + '\"\n'
+			macroSettings += '\\input \"' + self._biSettingsFile + '\"\n'
+			macroSettings += '\\input \"' + self._cmSettingsFile + '\"\n'
+			macroSettings += '\\stylesheet{' + self._bibleStyleFile + '}\n'
 			formatSettings += '\\TitleColumns=1\n'
 			formatSettings += '\\IntroColumns=1\n'
 			formatSettings += '\\BodyColumns=1\n'
@@ -602,6 +596,11 @@ class MakeTexControlFile (object) :
 			formatSettings += '\\def\BottomMarginFactor{0}\n'
 			headerSettings += self.RemovePageNumbers(self._headerPositions)
 			footerSettings += self.RemovePageNumbers(self._footerPositions)
+
+			for map in self._mapMatter :
+				mapSettings += '\\ptxfile{' + self._pathToText + '/' + map + '.' + self._extWork + '}\n'
+
+			mapSettings += '\\bye\n'
 
 		else :
 			# If we can't figure out what this is we have a system level bug and we might as well quite here
@@ -623,6 +622,7 @@ class MakeTexControlFile (object) :
 
 		# Ship the results, change order as needed
 		orderedContents =   fileHeaderText + \
+							macroSettings + \
 							formatSettings + \
 							headerSettings + \
 							footerSettings + \

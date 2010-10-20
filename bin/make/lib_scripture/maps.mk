@@ -86,9 +86,10 @@ $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF) : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
 	$(call watermark,$$@)
 
-$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : \
-		$(foreach v,$(GROUP_MAPS),$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
-		 $(PATH_PROCESS)/$(FILE_TEX_MAPS)
+#$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : \
+#        $(foreach v,$(GROUP_MAPS),$(PATH_TEXTS)/$(v).$(EXT_WORK)) \
+#        $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
+$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : $(PATH_PROCESS)/$(FILE_TEX_SETTINGS)
 	@echo INFO: Creating: $(FILE_GROUP_MAPS_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "maps"
 
@@ -96,9 +97,9 @@ $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : \
 # This .tex file will be slightly different from most .tex files that are
 # produced by the makd tex module. Note, this is dependant on each of the
 # individual map components being produced first.
-$(PATH_PROCESS)/$(FILE_TEX_MAPS) :
-	@echo INFO: Creating: $(FILE_TEX_MAPS)
-	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "maps"
+#$(PATH_PROCESS)/$(FILE_TEX_MAPS) :
+#	@echo INFO: Creating: $(FILE_TEX_MAPS)
+#	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "maps"
 
 
 view-maps : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
