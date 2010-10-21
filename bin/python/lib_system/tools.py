@@ -74,38 +74,6 @@ def taskRunner (log_manager, thisTask) :
 			userMessage("ERRR: Cannot run the \"" + thisTask + "\" module.")
 			log_manager.log("ERRR", "Cannot run the \"" + thisTask + "\" module.")
 
-# This is now deprecated
-#def makeNecessaryFiles (path, projType) :
-#    '''Create all the necessary files and folders for a project.
-#        If they already exist, we will not touch the existings ones.
-#        This is driven from the info we get from the ptxplus.conf
-#        file in the system. It is only for basic project structure.
-#        For project asset management see the check_assets.py script.'''
-
-#    object = getSystemSettingsObject()
-#    fileLib = os.environ.get('PTXPLUS_BASE') + "/resources/lib_sysFiles"
-
-#    # Bring in the .conf file according to the type of project this is
-#    # but only if it doesn't already exist
-#    if projType in getSystemSettingsObject()['System']['pubTypeList'] :
-#        if not os.access(path + "/." + projType + ".conf", os.R_OK) :
-#            shutil.copy(fileLib + "/." + projType + ".conf", path + "/." + projType + ".conf")
-#    else :
-#        userMessage("ERROR: The project type: [" + projType + "] is unknown. Process halted!")
-#        sys.exit(1)
-
-#    # Make whatever folders are necessary
-#    for key, folder in object['ProjectStructure']['Folders'].iteritems() :
-#        if not os.path.isdir(path + '/' + folder) :
-#            os.mkdir(path + '/' + folder)
-#            userMessage('INFO: Added folder: ' + path + '/' + folder)
-
-#    # Now add whatever files we might need
-#    for key, file in object['ProjectStructure']['Files'].iteritems() :
-#        if not os.path.isfile(file) :
-#            shutil.copy(fileLib + "/" + file, path + '/' + file)
-#            userMessage('INFO: Added file: ' + path + '/' + file)
-
 
 def getModuleArguments () :
 	'''Return a list of arguments for the current module.

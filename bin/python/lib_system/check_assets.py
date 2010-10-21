@@ -67,7 +67,7 @@ class CheckAssets (object) :
 		pathProcess             = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_PROCESS']
 		pathMaps                = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_MAPS']
 		pathSource              = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_SOURCE', '../Source'))
-		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
+		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', '../Source/Illustrations'))
 		pathUserLibFonts        = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_FONT_LIB'])
 		pathUserLibGraphics     = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
 		pathUserLibIllustrations= os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
@@ -145,7 +145,7 @@ class CheckAssets (object) :
 
 		# Make the admin folder if an admin code has been given
 		# This should be a one-time event
-		eCode = self._log_manager._settings['Project']['entityCode'].lower()
+		eCode = self._log_manager._settings['Project'].get('entityCode', '').lower()
 		if eCode != '' :
 			if not os.path.isdir(pathAdmin) :
 				os.mkdir(pathAdmin)
@@ -155,8 +155,10 @@ class CheckAssets (object) :
 				self._log_manager.log('INFO', 'Copied entity admin files to project', 'true')
 
 		# The font folder will be a little more complex
+		# If no fonts are listed or the setting is missing for some
+		# reason we will run with the default of CharisSIL.
 		sysFontFolder = self.subBasePath(tools.pubInfoObject['Paths']['PATH_RESOURCES_FONTS'], basePath)
-		fontList = self._log_manager._settings['Format']['Fonts']['fontFamilyList']
+		fontList = self._log_manager._settings['Format']['Fonts'].get('fontFamilyList', 'CharisSIL')
 		if not os.path.isdir(pathFonts) :
 			os.mkdir(pathFonts)
 			self._log_manager.log('INFO', 'Added Fonts folder', 'true')
@@ -185,6 +187,8 @@ class CheckAssets (object) :
 						self.localiseFontsConf(pathFonts, sysFontFolder)
 					else :
 						self._log_manager.log('ERRR', 'Not able to copy [' + ff + '] font family', 'true')
+
+		self.localiseFontsConf(pathFonts, sysFontFolder)
 
 
 		# Check/install system assets
