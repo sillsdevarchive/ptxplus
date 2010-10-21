@@ -234,18 +234,21 @@ class CheckAssets (object) :
 				self._log_manager.log("ERRR", "Not found: " + destination + " Process incomplete.", 'true')
 
 
-	def justLink (self, destination, linkto) :
+	def justLink (self, source, linkto) :
 		'''Just check to see if a link is needed into the project.'''
-		print destination, linkto
+
 		if not os.path.isfile(linkto) :
 			try :
-				os.symlink(destination, linkto)
-			except :
+				# First remove any file residue that might be there
+				os.remove(linkto)
+				os.symlink(source, linkto)
+				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + source + "] has been linked to: [" + linkto + "]")
 
-			if os.path.isfile(linkto) :
-				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + destination + "] has been linked to: [" + linkto + "]")
-			else :
-				self._log_manager.log("ERRR", "Mode = " + self._mode + " File: [" + linkto + "] not linked.", 'true')
+			except :
+				if os.path.isfile(linkto) :
+					self._log_manager.log("INFO", "Mode = " + self._mode + " File: [" + linkto + "] already exists")
+				else :
+					self._log_manager.log("ERRR", "Mode = " + self._mode + " File: [" + linkto + "] not linked.", 'true')
 
 
 	def localiseFontsConf (self, pathFonts, sysFontFolder) :
