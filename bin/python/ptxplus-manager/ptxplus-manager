@@ -260,7 +260,8 @@ class ConfigGUI (object) :
 		# Now that we have a config object we can set some
 		# global vars for other processes (add more as needed)
 		# NOTE: If there are problems we may need to use try/except
-		self._pathSource = self.ceditor.config['System']['Paths'].get('PATH_SOURCE')
+		# or put in some default settings where appropreat.
+		self._pathSource = self.ceditor.config['System']['Paths'].get('PATH_SOURCE', '../Source')
 		self._pathProcess = self._tools.pubInfoObject['Paths'].get('PATH_PROCESS')
 		self._pathTexts = self._tools.pubInfoObject['Paths'].get('PATH_TEXTS')
 		self._pathLog = self._tools.pubInfoObject['Paths'].get('PATH_LOG')

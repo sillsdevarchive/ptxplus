@@ -66,7 +66,7 @@ class CheckAssets (object) :
 		pathDeliverables        = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_DELIVERABLES']
 		pathProcess             = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_PROCESS']
 		pathMaps                = pathHome + '/' + tools.pubInfoObject['Paths']['PATH_MAPS']
-		pathSource              = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_SOURCE'])
+		pathSource              = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_SOURCE', '../Source'))
 		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		pathUserLibFonts        = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_FONT_LIB'])
 		pathUserLibGraphics     = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
@@ -144,12 +144,13 @@ class CheckAssets (object) :
 			self._log_manager.log('INFO', 'Added Texts folder', 'true')
 
 		# Make the admin folder if an admin code has been given
+		# This should be a one-time event
 		eCode = self._log_manager._settings['Project']['entityCode'].lower()
 		if eCode != '' :
 			if not os.path.isdir(pathAdmin) :
 				os.mkdir(pathAdmin)
 				self._log_manager.log('INFO', 'Added Admin folder', 'true')
-			if eCode in tools.getSystemSettingsObject()['System']['entityCodeList'] :
+				# Now copy the files in that are for this entity
 				tools.copyAll(baseSysLib + '/Admin/' + eCode, pathAdmin)
 				self._log_manager.log('INFO', 'Copied entity admin files to project', 'true')
 
@@ -235,9 +236,12 @@ class CheckAssets (object) :
 
 	def justLink (self, destination, linkto) :
 		'''Just check to see if a link is needed into the project.'''
-
+		print destination, linkto
 		if not os.path.isfile(linkto) :
-			os.symlink(destination, linkto)
+			try :
+				os.symlink(destination, linkto)
+			except :
+
 			if os.path.isfile(linkto) :
 				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + destination + "] has been linked to: [" + linkto + "]")
 			else :
