@@ -43,10 +43,16 @@ $(PATH_MAPS)/$(1).$(EXT_SVG) : \
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-map.$(EXT_SVG),$$@)
 
 # Crate the PDF file from the SVG file
-$(PATH_PROCESS)/$(1).$(EXT_PDF) : $(PATH_MAPS)/$(1).$(EXT_SVG)
+$(PATH_MAPS)/$(1).$(EXT_PNG) : $(PATH_MAPS)/$(1).$(EXT_SVG)
 	@echo INFO: Creating: $$@
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_PDF)
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_MAPS)/$(1).$(EXT_SVG) --export-pdf=temp.pdf --export-text-to-path
+	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_MAPS)/$(1).$(EXT_SVG) --export-png=$(PATH_PROCESS)/$(1).$(EXT_PNG) --export-text-to-path
+
+# Crate the PDF file from the SVG file
+$(PATH_PROCESS)/$(1).$(EXT_PDF) : $(PATH_MAPS)/$(1).$(EXT_PNG)
+	@echo INFO: Creating: $$@
+	@rm -f $(PATH_MAPS)/$(1).$(EXT_PDF)
+	@ $($(PROCESS_MAP)-$(1))
 
 # Create the map page
 $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
@@ -97,6 +103,7 @@ $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : \
 	@echo INFO: Creating: $(FILE_GROUP_MAPS_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "maps"
 
+#
 $(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY) :
 	@echo INFO: Creating: $@
 	@echo \\Marker pc > $@

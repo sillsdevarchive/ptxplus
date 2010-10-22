@@ -177,17 +177,21 @@ class CheckAssets (object) :
 				if os.path.isdir(pathUserLibFonts + '/' + ff) :
 					tools.copyFiles(pathUserLibFonts + '/' + ff, pathFonts + '/' + ff)
 					self._log_manager.log('INFO', 'Copied [' + ff + '] font family', 'true')
-					self.localiseFontsConf(pathFonts, sysFontFolder)
 
 				# If not there, then get what you can from the system font folder
 				else :
 					if os.path.isdir(sysFontFolder + '/' + ff) :
 						tools.copyFiles(sysFontFolder + '/' + ff, pathFonts + '/' + ff)
 						self._log_manager.log('INFO', 'Copied [' + ff + '] font family', 'true')
-						self.localiseFontsConf(pathFonts, sysFontFolder)
 					else :
 						self._log_manager.log('ERRR', 'Not able to copy [' + ff + '] font family', 'true')
 
+		# FIXME:
+		# We don't need to localize the fonts every time but if there is a change
+		# to one of the font settings it would be good to do that. Also, the first
+		# time the project is run on another system it needs to be done too.
+		# However, we do not have a good way yet to determine either so we have to
+		# localize every time this is run, unfortunately.
 		self.localiseFontsConf(pathFonts, sysFontFolder)
 
 
@@ -244,7 +248,11 @@ class CheckAssets (object) :
 		if not os.path.isfile(linkto) :
 			try :
 				# First remove any file residue that might be there
-				os.remove(linkto)
+				try :
+					os.remove(linkto)
+				except :
+					pass
+
 				os.symlink(source, linkto)
 				self._log_manager.log("INFO", "Mode = " + self._mode + " The file: [" + source + "] has been linked to: [" + linkto + "]")
 

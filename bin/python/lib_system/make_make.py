@@ -67,16 +67,6 @@ class MakeMakefile (object) :
 		# at after another. There's probably a better way to do this but not today ;-)
 		makefileSettings = ""
 
-		# First grab some individual settings we need in the makefile
-#        cMapVal = self._log_manager._settings['System']['Processes']['MapProcesses'].get('CREATE_MAP',0)
-#        makefileSettings += 'CREATE_MAP=' + cMapVal + '\n'
-
-#        rgbPath = tools.pubInfoObject['Paths'].get('RGB_PROFILE','/usr/share/color/icc/sRGB.icm')
-#        makefileSettings += 'PATH_RGB_PROFILE=' + rgbPath + '\n'
-
-#        cmykPath = tools.pubInfoObject['Paths'].get('CMYK_PROFILE','/usr/share/color/icc/ISOcoated.icc')
-#        makefileSettings += 'PATH_CMYK_PROFILE=' + cmykPath + '\n'
-
 		# Output the helper commands
 		for key, value, in self._log_manager._settings['System']['HelperCommands'].iteritems() :
 			makefileSettings += key + "=" + value + '\n'
@@ -177,8 +167,16 @@ class MakeMakefile (object) :
 
 		# Build up all the component groupings
 
-		# Build component groups
-		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['BindingGroups'].iteritems()) + '\n'
+		# Build component groups (This worked until some of the list items had multiple items)
+		# makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['BindingGroups'].iteritems()) + '\n'
+		# Now we do this...
+		for key, value in self._log_manager._settings['Format']['BindingGroups'].iteritems() :
+			vList = []
+			for item in value :
+				# Take out any extra stuff
+				vList.append(item.split()[0])
+
+			makefileSettings += key + '=' + ' '.join(vList) + '\n'
 
 		# Get the book meta group (made up of component groups)
 		makefileSettings += '\n'.join(key + '=' + ' '.join(value) for key, value in self._log_manager._settings['Format']['MetaGroups'].iteritems()) + '\n'
@@ -200,9 +198,11 @@ class MakeMakefile (object) :
 		components = []
 		for group in self._log_manager._settings['Format']['BindingGroups'].iterkeys() :
 			for item in self._log_manager._settings['Format']['BindingGroups'].get(group) :
-				if item and not item in filterList :
-					filterList.add(item)
-					components.append(item)
+				# Some components may carry bagage, we separate that out here
+				ic = item.split()[0]
+				if ic and not item in filterList :
+					filterList.add(ic)
+					components.append(ic)
 
 		# Output all the components for makefile
 		makefileSettings += 'COMPONENTS_ALL=' + ' '.join(components) + '\n'
@@ -228,6 +228,28 @@ class MakeMakefile (object) :
 		except :
 			self._log_manager.log('INFO', 'Not illustrations found for this publication.')
 			makefileSettings += 'HAS_ILLUSTRATIONS=\n'
+
+		# Map components processes
+		rgbProfile = '-profile ' + tools.pubInfoObject['Paths']['PATH_RGB_PROFILE'] + ' '
+		cmykProfile = '-profile ' + tools.pubInfoObject['Paths']['PATH_CMYK_PROFILE'] + ' '
+		colorSpace = ' -colorspace ' + self._log_manager._settings['Format']['MapProcesses']['mapColorMode'] + ' '
+		for item in self._log_manager._settings['Format']['BindingGroups']['GROUP_MAPS'] :
+			source = ''
+			target = ''
+			rotate = ''
+			if item != '' :
+				try :
+					rotate = '-rotate ' + item.split()[1]
+				except :
+					pass
+
+				source = item.split()[0] + '.' + tools.pubInfoObject['Extensions']['EXT_PNG'] + ' '
+				target = 'pdf:' + item.split()[0] + '.' + tools.pubInfoObject['Extensions']['EXT_PDF'] + ' '
+				# This is a custom command, there might be a better place to keep some of these pieces
+				command = 'convert png:' + source + rgbProfile + cmykProfile + ' -compress zip -units PixelsPerInch ' + rotate + colorSpace + '-define pdf:use-cropbox=true ' + target
+				makefileSettings += 'PROCESS_MAP-' + item.split()[0] + '=' + command + '\n'
+
+
 
 
 		#######################################################################
