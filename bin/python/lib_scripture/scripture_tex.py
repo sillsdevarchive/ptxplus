@@ -600,8 +600,10 @@ class MakeTexControlFile (object) :
 			headerSettings += self.RemovePageNumbers(self._headerPositions)
 			footerSettings += self.RemovePageNumbers(self._footerPositions)
 
+			# In case the map has a rotation setting, just take the first part
+			# of the map var
 			for map in self._mapMatter :
-				mapSettings += '\\ptxfile{' + self._pathToText + '/' + map + '.' + self._extWork + '}\n'
+				mapSettings += '\\ptxfile{' + self._pathToText + '/' + map.split()[0] + '.' + self._extWork + '}\n'
 
 			mapSettings += '\\bye\n'
 

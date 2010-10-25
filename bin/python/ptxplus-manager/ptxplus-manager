@@ -145,17 +145,17 @@ class ConfigGUI (object) :
 			"on_menu_regression_hyphen_all"                     : self.m_regression_hyphen_all,
 
 			"on_menu_map_view_model"                            : self.m_map_view_model,
-			"on_menu_map_edit_data"                             : self.m_map_edit_data,
-			"on_menu_map_view_template"                         : self.m_map_view_template,
-			"on_menu_map_edit_styles"                           : self.m_map_edit_styles,
-			"on_menu_map_merge_data"                            : self.m_map_merge_data,
-			"on_menu_map_create_rgb"                            : self.m_map_create_rgb,
-			"on_menu_map_create_cmyk"                           : self.m_map_create_cmyk,
-			"on_menu_map_delete_current"                        : self.m_map_delete_current,
-			"on_menu_map_bind_maps_rgb"                         : self.m_map_bind_maps_rgb,
-			"on_menu_map_bind_maps_cmyk"                        : self.m_map_bind_maps_cmyk,
 			"on_menu_map_remove_pdf"                            : self.m_map_remove_pdf,
+			"on_menu_map_remove_svg"                            : self.m_map_remove_svg,
+			"on_menu_map_remove_csv_data"                       : self.m_map_remove_csv_data,
+			"on_menu_map_remove_csv_sty"                        : self.m_map_remove_csv_sty,
+			"on_menu_map_remove_png"                            : self.m_map_remove_png,
+			"on_menu_map_remove_work"                           : self.m_map_remove_work,
 			"on_menu_map_remove_all"                            : self.m_map_remove_all,
+			"on_menu_map_remove_group_pdf"                      : self.m_map_remove_group_pdf,
+			"on_menu_map_remove_group_tex"                      : self.m_map_remove_group_tex,
+			"on_menu_map_remove_group_sty"                      : self.m_map_remove_group_sty,
+			"on_menu_map_remove_group_all"                      : self.m_map_remove_group_all,
 
 			"on_menu_help_activate"                             : self.m_help,
 			"on_menu_example_activate"                          : self.m_example,
@@ -301,8 +301,9 @@ class ConfigGUI (object) :
 				if item == bkid :
 					index = len(self.cs_components)
 				if item and not item in component_list :
-					component_list.add(item)
-					self.cs_components.append([item])
+					# Strip out any params that might be attached to the component
+					component_list.add(item.split()[0])
+					self.cs_components.append([item.split()[0]])
 
 		# These are the binding groups we want to process
 		# There may be a better place for this but it goes
@@ -339,7 +340,8 @@ class ConfigGUI (object) :
 
 
 	def set_component (self, bkid) :
-		self.bkid = bkid
+		# In case the component ID has extra params
+		self.bkid = bkid.split()[0]
 		self.b_view.set_label("_View-" + bkid)
 		self.b_check.set_label("_Check-" + bkid)
 		self.txtWork = FileEditor(self._pathTexts + "/" + bkid + "." + self._extWork, self.tv_txtWork, self.language_manager.get_language("latex"))
@@ -720,38 +722,38 @@ class ConfigGUI (object) :
 	def m_map_view_model (self, widget) :
 		self.execute("ptxplus", "view-map-model-" + self.bkid)
 
-	def m_map_edit_data (self, widget) :
-		self.execute("ptxplus", "edit-map-data-" + self.bkid)
-
-	def m_map_view_template (self, widget) :
-		self.execute("ptxplus", "view-map-template-" + self.bkid)
-
-	def m_map_edit_styles (self, widget) :
-		self.execute("ptxplus", "edit-map-styles-" + self.bkid)
-
-	def m_map_merge_data (self, widget) :
-		self.execute("ptxplus", "preprocess-map-" + self.bkid)
-
-	def m_map_create_rgb (self, widget) :
-		self.execute("ptxplus", "view-map-" + self.bkid)
-
-	def m_map_create_cmyk (self, widget) :
-		self.execute("ptxplus", "cmyk-map-" + self.bkid)
-
-	def m_map_delete_current (self, widget) :
-		self.execute("ptxplus", "delete-map-" + self.bkid)
-
-	def m_map_bind_maps_rgb (self, widget) :
-		self.execute("ptxplus", "view-rgb-maps")
-
-	def m_map_bind_maps_cmyk (self, widget) :
-		self.execute("ptxplus", "view-cmyk-maps")
-
 	def m_map_remove_pdf (self, widget) :
-		self.execute("ptxplus", "remove-maps")
+		self.execute("ptxplus", "pdf-remove-" + self.bkid)
+
+	def m_map_remove_svg (self, widget) :
+		self.execute("ptxplus", "svg-remove-" + self.bkid)
+
+	def m_map_remove_csv_data (self, widget) :
+		self.execute("ptxplus", "csv-data-remove-" + self.bkid)
+
+	def m_map_remove_csv_sty (self, widget) :
+		self.execute("ptxplus", "csv-sty-remove-" + self.bkid)
+
+	def m_map_remove_png (self, widget) :
+		self.execute("ptxplus", "png-remove-" + self.bkid)
+
+	def m_map_remove_work (self, widget) :
+		self.execute("ptxplus", "usfm-remove-" + self.bkid)
 
 	def m_map_remove_all (self, widget) :
-		self.execute("ptxplus", "clean-maps")
+		self.execute("ptxplus", "all-remove-" + self.bkid)
+
+	def m_map_remove_group_pdf (self, widget) :
+		self.execute("ptxplus", "pdf-remove-maps")
+
+	def m_map_remove_group_tex (self, widget) :
+		self.execute("ptxplus", "tex-remove-maps")
+
+	def m_map_remove_group_sty (self, widget) :
+		self.execute("ptxplus", "sty-remove-maps")
+
+	def m_map_remove_group_all (self, widget) :
+		self.execute("ptxplus", "all-remove-maps")
 
 	##### Menu - Help
 

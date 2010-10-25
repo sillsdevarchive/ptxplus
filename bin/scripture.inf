@@ -290,22 +290,6 @@ PATH_RESOURCES_HYPHENATION  = '__PTXPLUS__/resources/lib_sysFiles/Hyphenation'
 # This is where the system help can be found
 PATH_SYSTEM_HELP            = '__PTXPLUS__/resources/Documentation/Help'
 
-# RGB COLOR PROFILE
-# The RGB color profile used to create graphics in RGB color mode.
-# The default is: /usr/share/color/icc/sRGB.icm This is dependant
-# on where the icc-profiles package puts the files. If you are
-# using a different package or you know you need a different
-# profile, you will want to change this setting.
-PATH_RGB_PROFILE            = '/usr/share/color/icc/sRGB.icm'
-
-# CMYK COLOR PROFILE
-# The CMYK color profile used to create graphics in CMYK color mode.
-# The default is: /usr/share/color/icc/ISOcoated.icc This is dependant
-# on where the icc-profiles package puts the files. If you are
-# using a different package or you know you need a different
-# profile, you will want to change this setting.
-PATH_CMYK_PROFILE           = '/usr/share/color/icc/ISOcoated.icc'
-
 # FILE EXTENSIONS
 # These are working extensions used by the system. The
 # only extention that needs adjusting on the average

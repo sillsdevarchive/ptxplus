@@ -229,27 +229,64 @@ class MakeMakefile (object) :
 			self._log_manager.log('INFO', 'Not illustrations found for this publication.')
 			makefileSettings += 'HAS_ILLUSTRATIONS=\n'
 
-		# Map components processes
-		rgbProfile = '-profile ' + tools.pubInfoObject['Paths']['PATH_RGB_PROFILE'] + ' '
-		cmykProfile = '-profile ' + tools.pubInfoObject['Paths']['PATH_CMYK_PROFILE'] + ' '
-		colorSpace = ' -colorspace ' + self._log_manager._settings['Format']['MapProcesses']['mapColorMode'] + ' '
+		# MAP COMPONENT PROCESSES
+		# Maps may or may not be used in any given publication. If they are
+		# this next bit will produce some process commands for each map according
+		# to settings in the system. A couple special map processes are created
+		# here and injected into the main make file to make map processing easier.
+		# The commands are then accessed by the makefile part of the process in
+		# the maps rules set. First we begin with some common params
+		processFolder       = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_PROCESS']
+		mapFolder           =  os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_MAPS']
+		fontFolder          =  os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_FONTS']
+		extPNG              = tools.pubInfoObject['Extensions']['EXT_PNG']
+		extPDF              = tools.pubInfoObject['Extensions']['EXT_PDF']
+		extSVG              = tools.pubInfoObject['Extensions']['EXT_SVG']
+
+		# INTERMEDIATE PNG PROCESS
+		# Before final effects are applied to the map image we create an intermediate
+		# version from the finalized SVG version which was edited in Inkscape. This
+		# will be created by the Inkscape command-line utility using the command we
+		# create here.
+		# First we point Inkscape to the right fonts
+		fontConfig          = 'FONTCONFIG_PATH=' + fontFolder
+		inkscape            = self._log_manager._settings['Format']['MapProcesses']['inkscape']
+		inkscapeCommands    = self._log_manager._settings['Format']['MapProcesses']['inkscapeCommands']
 		for item in self._log_manager._settings['Format']['BindingGroups']['GROUP_MAPS'] :
-			source = ''
-			target = ''
-			rotate = ''
+			source          = ''
+			target          = ''
 			if item != '' :
+				source      = '--file=' + mapFolder + '/' + item.split()[0] + '.' + extSVG
+				target      = '--export-png=' + mapFolder + '/' + item.split()[0] + '.' + extPNG
+				# Put it all together in a single command and output
+				command     = fontConfig + ' ' + inkscape + ' ' + inkscapeCommands + ' ' + source + ' ' + target
+				makefileSettings += 'PROCESS_MAP_PNG-' + item.split()[0] + '=' + command + '\n'
+
+		# FINAL COMPONENT PDF PROCESS
+		# This creates the final component PDF version which will be brought
+		# into the final map group file. Because some maps may need to be rotated
+		# this code will produce a custom command for each map that is being
+		# processed.
+		imageMagick         = self._log_manager._settings['Format']['MapProcesses']['imageMagick']
+		colorSpace          = self._log_manager._settings['Format']['MapProcesses']['colorSpace']
+		imageMagickCommands = self._log_manager._settings['Format']['MapProcesses']['imageMagickCommands']
+		for item in self._log_manager._settings['Format']['BindingGroups']['GROUP_MAPS'] :
+			source          = ''
+			target          = ''
+			rotate          = ''
+			if item != '' :
+				# If the component has a rotation parameter, it is in the
+				# second half of the component string.
 				try :
-					rotate = '-rotate ' + item.split()[1]
+					rotate  = '-rotate ' + item.split()[1]
 				except :
 					pass
 
-				source = item.split()[0] + '.' + tools.pubInfoObject['Extensions']['EXT_PNG'] + ' '
-				target = 'pdf:' + item.split()[0] + '.' + tools.pubInfoObject['Extensions']['EXT_PDF'] + ' '
-				# This is a custom command, there might be a better place to keep some of these pieces
-				command = 'convert png:' + source + rgbProfile + cmykProfile + ' -compress zip -units PixelsPerInch ' + rotate + colorSpace + '-define pdf:use-cropbox=true ' + target
-				makefileSettings += 'PROCESS_MAP-' + item.split()[0] + '=' + command + '\n'
-
-
+				source      = 'png:' + mapFolder + '/' + item.split()[0] + '.' + extPNG
+				target      = 'pdf:' + processFolder + '/' + item.split()[0] + '.' + extPDF
+				# Put it all together in a single command and output
+				command     = imageMagick + ' ' + source + ' ' + imageMagickCommands + ' ' + rotate + ' ' + colorSpace + ' ' + target
+				makefileSettings += 'PROCESS_MAP_PDF-' + item.split()[0] + '=' + command + '\n'
 
 
 		#######################################################################

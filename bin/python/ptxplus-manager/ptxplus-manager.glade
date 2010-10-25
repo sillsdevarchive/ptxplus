@@ -741,78 +741,64 @@
 					  <widget class="GtkMenuItem" id="menu_map_view_model">
 						<property name="visible">True</property>
 						<property name="tooltip" translatable="yes">View the original map graphic</property>
-						<property name="label" translatable="yes">View Model</property>
+						<property name="label" translatable="yes">View Model (Current)</property>
 						<signal name="activate" handler="on_menu_map_view_model"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_edit_data">
+					  <widget class="GtkMenuItem" id="menu_map_remove_pdf">
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Edit the map translation data</property>
-						<property name="label" translatable="yes">Edit Data</property>
-						<signal name="activate" handler="on_menu_map_edit_data"/>
+						<property name="tooltip" translatable="yes">Remove current component PDF file</property>
+						<property name="label" translatable="yes">Remove PDF (Current)</property>
+						<signal name="activate" handler="on_menu_map_remove_pdf"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_view_template">
+					  <widget class="GtkMenuItem" id="menu_map_remove_svg">
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">View the original map template</property>
-						<property name="label" translatable="yes">View Template</property>
-						<signal name="activate" handler="on_menu_map_view_template"/>
+						<property name="tooltip" translatable="yes">Remove current component SVG file</property>
+						<property name="label" translatable="yes">Remove SVG (Current)</property>
+						<signal name="activate" handler="on_menu_map_remove_svg"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_edit_styles">
+					  <widget class="GtkMenuItem" id="menu_map_remove_csv_data">
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Edit the text styles for this map</property>
-						<property name="label" translatable="yes">Edit Styles</property>
-						<signal name="activate" handler="on_menu_map_edit_styles"/>
+						<property name="tooltip" translatable="yes">Remove current component CSV data file</property>
+						<property name="label" translatable="yes">Remove CSV-Data (Current)</property>
+						<signal name="activate" handler="on_menu_map_remove_csv_data"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_merge_data">
+					  <widget class="GtkMenuItem" id="menu_map_remove_csv_sty">
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Merge the map data with the SVG template</property>
-						<property name="label" translatable="yes">Merge Data</property>
-						<signal name="activate" handler="on_menu_map_merge_data"/>
+						<property name="tooltip" translatable="yes">Remove current component CSV style file</property>
+						<property name="label" translatable="yes">Remove CSV-Style (Current)</property>
+						<signal name="activate" handler="on_menu_map_remove_csv_sty"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_create_rgb_pdf">
+					  <widget class="GtkMenuItem" id="menu_map_remove_png">
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Create an RGB/PDF version of the map</property>
-						<property name="label" translatable="yes">Create RGB PDF</property>
-						<signal name="activate" handler="on_menu_map_create_rgb"/>
+						<property name="tooltip" translatable="yes">Remove current component intermediate PNG file</property>
+						<property name="label" translatable="yes">Remove PNG (Current)</property>
+						<signal name="activate" handler="on_menu_map_remove_png"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_create_cmyk_pdf">
+					  <widget class="GtkMenuItem" id="menu_map_remove_work">
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Create a CMYK/PDF version of this map</property>
-						<property name="label" translatable="yes">Create CMYK PDF</property>
-						<signal name="activate" handler="on_menu_map_create_cmyk"/>
+						<property name="tooltip" translatable="yes">Remove current component USFM file </property>
+						<property name="label" translatable="yes">Remove USFM (Current)</property>
+						<signal name="activate" handler="on_menu_map_remove_work"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkImageMenuItem" id="menu_map_delete_current">
-						<property name="label">Reset Map</property>
+					  <widget class="GtkMenuItem" id="menu_map_remove_all">
 						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Delete the current set of project files for this map set</property>
-						<property name="use_stock">False</property>
-						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_map_delete_current"/>
-						<child internal-child="image">
-						  <widget class="GtkImage" id="image101">
-							<property name="visible">True</property>
-							<property name="stock">gtk-dialog-warning</property>
-						  </widget>
-						</child>
+						<property name="tooltip" translatable="yes">Remove all current map components</property>
+						<property name="label" translatable="yes">Remove All (Current)</property>
+						<signal name="activate" handler="on_menu_map_remove_all"/>
 					  </widget>
 					</child>
 					<child>
@@ -821,51 +807,35 @@
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_bind_maps_rgb">
+					  <widget class="GtkMenuItem" id="menu_map_remove_group_pdf">
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Bind project RGB maps together in one PDF file</property>
-						<property name="label" translatable="yes">Bind RGB Maps</property>
-						<signal name="activate" handler="on_menu_map_bind_maps_rgb"/>
+						<property name="tooltip" translatable="yes">Remove map group PDF file</property>
+						<property name="label" translatable="yes">Remove PDF (Group)</property>
+						<signal name="activate" handler="on_menu_map_remove_group_pdf"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_bind_maps_cmyk">
+					  <widget class="GtkMenuItem" id="menu_map_remove_group_tex">
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Bind project CMYK maps together in one PDF file</property>
-						<property name="label" translatable="yes">Bind CMYK Maps</property>
-						<signal name="activate" handler="on_menu_map_bind_maps_cmyk"/>
+						<property name="tooltip" translatable="yes">Remove map group TeX control file</property>
+						<property name="label" translatable="yes">Remove TeX (Group)</property>
+						<signal name="activate" handler="on_menu_map_remove_group_tex"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkMenuItem" id="menu_map_remove_pdf">
+					  <widget class="GtkMenuItem" id="menu_map_remove_group_sty">
 						<property name="visible">True</property>
-						<property name="has_tooltip">True</property>
-						<property name="tooltip" translatable="yes">Delete both RGB and CMYK bound map files</property>
-						<property name="label" translatable="yes">Remove PDF</property>
-						<signal name="activate" handler="on_menu_map_remove_pdf"/>
+						<property name="tooltip" translatable="yes">Remove map group style file</property>
+						<property name="label" translatable="yes">Remove Style (Group)</property>
+						<signal name="activate" handler="on_menu_map_remove_group_sty"/>
 					  </widget>
 					</child>
 					<child>
-					  <widget class="GtkSeparatorMenuItem" id="separatormenuitem_maps2">
+					  <widget class="GtkMenuItem" id="menu_map_remove_group_all">
 						<property name="visible">True</property>
-					  </widget>
-					</child>
-					<child>
-					  <widget class="GtkImageMenuItem" id="menu_map_remove_all">
-						<property name="label" translatable="yes">Remove Everything!</property>
-						<property name="visible">True</property>
-						<property name="tooltip" translatable="yes">Remove all the files for all the maps (Caution!)</property>
-						<property name="use_stock">False</property>
-						<property name="always_show_image">True</property>
-						<signal name="activate" handler="on_menu_map_remove_all"/>
-						<child internal-child="image">
-						  <widget class="GtkImage" id="image102">
-							<property name="visible">True</property>
-							<property name="stock">gtk-dialog-warning</property>
-						  </widget>
-						</child>
+						<property name="tooltip" translatable="yes">Remove all map group files</property>
+						<property name="label" translatable="yes">Remove All (Group)</property>
+						<signal name="activate" handler="on_menu_map_remove_group_all"/>
 					  </widget>
 					</child>
 				  </widget>

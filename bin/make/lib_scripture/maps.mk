@@ -6,7 +6,7 @@
 define svg_process
 
 # Copy in the original data file into the periph folder.
-$(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_PNG)
+$(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV) : $(PATH_ILLUSTRATIONS)/$(1).$(EXT_PNG)
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-data.$(EXT_CSV),$$@)
 
 # Link the data CSV file from the original in the Source
@@ -19,20 +19,21 @@ $(PATH_MAPS)/$(1).$(EXT_CSV) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV)
 # it will be copied into the Illustrations folder and later
 # linked to the Maps folder in Process.
 $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd.$(EXT_PNG) :
-	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-bkgrnd-cl.$(EXT_PNG),$$@)
+	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-bkgrnd.$(EXT_PNG),$$@)
 
 # Link the map background file to the Maps folder.
 $(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) : $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd.$(EXT_PNG)
 	@echo INFO: Linking map background file: $(1).$(EXT_PNG)
 	@ln -sf $$(shell readlink -f -- $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd.$(EXT_PNG)) $$@
 
-# Copy in the map's svg style file right into the
-# Process folder
+# Copy in the map's svg style file right into the Process folder
 $(PATH_MAPS)/$(1)-sty.$(EXT_CSV) :
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-styles.$(EXT_CSV),$$@)
 
-# Bring in the original model file
-$(PATH_SOURCE_PERIPH)/$(1).$(EXT_PNG) :
+# Bring in the original model file and park it in
+# the Illustrations folder so other projects can
+# use it if they need to.
+$(PATH_ILLUSTRATIONS)/$(1).$(EXT_PNG) :
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-org.$(EXT_PNG),$$@)
 
 # Copy the final SVG file into the Maps folder
@@ -42,17 +43,28 @@ $(PATH_MAPS)/$(1).$(EXT_SVG) : \
 		$(PATH_MAPS)/$(1)-sty.$(EXT_CSV)
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-map.$(EXT_SVG),$$@)
 
-# Crate the PDF file from the SVG file
+# Crate the intermediate PNG file from the SVG file.
+# Note that this uses a special command that was created by
+# the make_make process which has all the necessary commands
+# needed for Inkscape (at the command line)to convert the
+# SVG file, which has been edited into its final form, to
+# the PNG intermediate file that will be converted to the
+# final component PDF form via Imagemagick.
 $(PATH_MAPS)/$(1).$(EXT_PNG) : $(PATH_MAPS)/$(1).$(EXT_SVG)
 	@echo INFO: Creating: $$@
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_PDF)
-	@ FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(EXPORTSVG) --file=$(PATH_MAPS)/$(1).$(EXT_SVG) --export-png=$(PATH_PROCESS)/$(1).$(EXT_PNG) --export-text-to-path
+	@ $(PROCESS_MAP_PNG-$(1))
 
-# Crate the PDF file from the SVG file
+# Crate the PDF file from the intermediate PNG file.
+# Note that this uses a special command that was created by
+# the make_make process which has all the necessary commands
+# needed for Imagemagick to convert this intermediate file
+# which was exported from Inkscape into the final PDF file.
+# The process includes rotate and colorspace commands.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : $(PATH_MAPS)/$(1).$(EXT_PNG)
 	@echo INFO: Creating: $$@
-	@rm -f $(PATH_MAPS)/$(1).$(EXT_PDF)
-	@ $($(PROCESS_MAP)-$(1))
+	@rm -f $$@
+	@ $(PROCESS_MAP_PDF-$(1))
 
 # Create the map page
 $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
@@ -67,9 +79,53 @@ $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@echo '\\domap{$(1).$(EXT_PDF)}' >> $$@
 	@echo '\\catcode`{=11\\catcode`}=11\\makedigitsletters' >> $$@
 
+# View the PDF file of this component
+view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
+	@echo INFO: Viewing $(1).$(EXT_PDF)
+	@ $(VIEWPDF) $$< &
 
-edit-$(1) : $(PATH_MAPS)/$(1).$(EXT_SVG)
-	$(VIEWSVG) $(PATH_MAPS)/$(1).$(EXT_SVG)
+# Open up the map svg file in Inkscape (or whatever editor you are using)
+preprocess-$(1) : $(PATH_MAPS)/$(1).$(EXT_SVG)
+	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$<
+
+# View the original model map for reference
+view-map-model-$(1) : $(PATH_ILLUSTRATIONS)/$(1).$(EXT_PNG)
+	@echo INFO: Viewing: $$<
+	@ $(VIEWIMG) $$<
+
+# Remove pieces of a component
+pdf-remove-$(1) :
+	@echo WARNING: Removing: $(1).$(EXT_PDF)
+	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
+
+svg-remove-$(1) :
+	@echo WARNING: Removing: $(1).$(EXT_SVG)
+	@rm -f $(PATH_MAPS)/$(1).$(EXT_SVG)
+
+csv-data-remove-$(1) :
+	@echo WARNING: Removing: $(1).$(EXT_CSV) - data
+	@rm -f $(PATH_MAPS)/$(1).$(EXT_CSV)
+
+csv-sty-remove-$(1) :
+	@echo WARNING: Removing: $(1).$(EXT_CSV) - style
+	@rm -f $(PATH_MAPS)/$(1)-sty.$(EXT_CSV)
+
+png-remove-$(1) :
+	@echo WARNING: Removing: $(1).$(EXT_PNG)
+	@rm -f $(PATH_MAPS)/$(1).$(EXT_PNG)
+
+usfm-remove-$(1) :
+	@echo WARNING: Removing: $(1).$(EXT_WORK)
+	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
+
+all-remove-$(1) :
+	@echo WARNING: Removing all the files for the $(1) component
+	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
+	@rm -f $(PATH_MAPS)/$(1).$(EXT_SVG)
+	@rm -f $(PATH_MAPS)/$(1).$(EXT_CSV)
+	@rm -f $(PATH_MAPS)/$(1)-sty.$(EXT_CSV)
+	@rm -f $(PATH_MAPS)/$(1).$(EXT_PNG)
+	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
 
 
 ##### End SVG processing rules
@@ -91,7 +147,9 @@ $(foreach v,$(GROUP_MAPS),$(eval $(call svg_process,$(v))))
 # Create the final PDF file from the group component PDF files that have
 # been included in a special .tex file that inserts them directly which
 # avoids having to have an intermediat usfm file.
-$(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF) : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
+$(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF) : \
+		$(foreach v,$(GROUP_MAPS),$(PATH_PROCESS)/$(v).$(EXT_PDF)) \
+		$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
 	@echo INFO: Creating: $(FILE_GROUP_MAPS_PDF)
 	@cd $(PATH_PROCESS) && $(TEX_INPUTS) $(TEX_ENGINE) $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
 	$(call watermark,$@)
@@ -103,7 +161,7 @@ $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX) : \
 	@echo INFO: Creating: $(FILE_GROUP_MAPS_TEX)
 	@$(MOD_RUN_PROCESS) "$(MOD_MAKE_TEX)" "" "" "$@" "maps"
 
-#
+# Create the group style file for any custom styles.
 $(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY) :
 	@echo INFO: Creating: $@
 	@echo \\Marker pc > $@
@@ -115,13 +173,32 @@ $(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY) :
 	@echo \\SpaceAfter 0 >> $@
 
 # View all the maps in the group in one PDF file
+# We will remove the previous one in case there
+# have been changes
 view-maps : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
 	@echo INFO: Viewing $(FILE_GROUP_MAPS_PDF)
 	@ $(VIEWPDF) $< &
 
-# Remove the Maps PDF file
+# Warn the user this can't be done
+view-map-model-maps :
+	@echo WARN: Sorry, no view option for combined map group
+
+# Remove map group components
 pdf-remove-maps :
 	@echo INFO: Removing: $(FILE_GROUP_MAPS_PDF)
 	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
 
+tex-remove-maps :
+	@echo INFO: Removing: $(FILE_GROUP_MAPS_TEX)
+	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
+
+sty-remove-maps :
+	@echo INFO: Removing: $(FILE_GROUP_MAPS_STY)
+	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY)
+
+all-remove-maps :
+	@echo INFO: Removing all map group components
+	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
+	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
+	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY)
 
