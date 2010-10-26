@@ -115,7 +115,6 @@ make-template :
 define watermark
 @if [ "$(USE_WATERMARK)" = "true" ] ; then \
 	echo INFO: Adding watermark; \
-	echo  $(1) background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.$(EXT_PDF); \
 	pdftk $(1) background $(PATH_PROCESS)/$(FILE_WATERMARK) output $(PATH_PROCESS)/tmp.$(EXT_PDF); \
 	cp $(PATH_PROCESS)/tmp.$(EXT_PDF) $(1); \
 	rm -f $(PATH_PROCESS)/tmp.$(EXT_PDF); \
