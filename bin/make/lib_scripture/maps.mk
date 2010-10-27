@@ -41,10 +41,11 @@ $(PATH_MAPS)/$(1).$(EXT_SVG) : \
 		$(PATH_MAPS)/$(1).$(EXT_CSV) \
 		$(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) \
 		$(PATH_MAPS)/$(1)-sty.$(EXT_CSV)
-	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-map.$(EXT_SVG),$(PATH_MAPS)/temp.svg)
+#################### This is not right yet! #####################
 	@rm -f $$@
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_MAP) "" "$(PATH_MAPS)/temp.svg" "$$@" ""
-	@rm -f $(PATH_MAPS)/temp.svg
+	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-map.$(EXT_SVG),$(PATH_MAPS)/temp.$(EXT_SVG))
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_MAP) "" "$(PATH_MAPS)/temp.$(EXT_SVG)" "$$@" ""
+	@rm -f $(PATH_MAPS)/temp.$(EXT_SVG)
 
 # Crate the intermediate PNG file from the SVG file.
 # Note that this uses a special command that was created by
