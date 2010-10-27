@@ -35,7 +35,7 @@
 # Firstly, import all the standard Python modules we need for
 # this process
 
-import os, shutil
+import os, shutil, re
 
 # Import supporting local classes
 import tools
@@ -43,7 +43,6 @@ from csv import reader
 from xml.etree.ElementTree import XMLID, ElementTree
 
 # Instantiate local classes
-tools        = Tools()
 elementtree    = ElementTree()
 
 
@@ -52,35 +51,13 @@ class MakeMapFile (object) :
 	def main (self, log_manager) :
 
 		# Pull in all the relevant vars and settings
-		basePath = os.environ.get('PTXPLUS_BASE')
-		mapProject = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_TEXTS']
-		mapTemplate = log_manager._settings['Process']['Paths']['PATH_MAP_TEMPLATES']
-		mapTemplate = mapTemplate.replace( '$(PTXPLUS_BASE)', basePath)
-		colorMode = log_manager._settings['General']['MapProcesses']['mapColorMode']
-		inputFile = log_manager._currentInput
-		(head, tail) = os.path.split(inputFile)
-		dataFileName =  mapProject + "/" + tail.replace('map.svg', 'data.csv')
-		styleFileName = mapProject + "/" + tail.replace('map.svg', 'styles.csv')
-		styleFileSource = mapTemplate + "/" + tail.replace('map.svg', 'styles.csv')
-		mapSourceFile = mapTemplate + "/" + tail
-		dataSourceFile = mapTemplate + "/" + tail.replace('.svg', 'data.csv')
-		outputFile = mapProject + "/" + tail.replace('map.svg', 'map-post.svg')
-		# This may be optional but we'll build a file name for it anyway
-		# Where this falls down is when the illustration is greyscale but the project
-		# calls for color. The work-around for now is to make the svg file work with
-		# both kinds.
-		if colorMode == "true" :
-			mapBackgroundImageFile = tail.replace('map.svg', 'bkgrnd-cl.png')
-			mapBackgroundImageFileSource = mapTemplate + "/" + tail.replace('map.svg', 'bkgrnd-cl.png')
-		else :
-			mapBackgroundImageFile = inputFile.replace('map.svg', 'bkgrnd-gr.png')
-			mapBackgroundImageFileSource = mapTemplate + "/" + tail.replace('map.svg', 'bkgrnd-gr.png')
-
-		# Does this map need a background image, is it there?
-		if not os.path.isfile(mapBackgroundImageFile) :
-			if os.path.isfile(mapBackgroundImageFileSource) :
-				shutil.copy(mapBackgroundImageFileSource, mapProject + "/" + mapBackgroundImageFile)
-
+		basePath        = os.environ.get('PTXPLUS_BASE')
+		mapProject      =  os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_MAPS']
+		inputFile       = log_manager._currentInput
+		outputFile      = log_manager._currentOutput
+		(head, tail)    = os.path.split(outputFile)
+		dataFileName    =  mapProject + "/" + tail.replace('.svg', '.csv')
+		styleFileName   = mapProject + "/" + tail.replace('.svg', '-sty.csv')
 
 ############################################################################################################################
 # There's a problem with working with namespaces. The solution, or at least part of it, migh be if we use
@@ -116,26 +93,6 @@ class MakeMapFile (object) :
 		for row in styleData:
 			if row and row[0] != "StyleName" :
 				styles[row[0]] = row[1]
-
-#####################################################################################
-
-		# Replace background image file name (if needed)
-# See note above first...
-# This does not work yet there is a problem with setting the background image
-# file name. It doesn't like xlink:href or something like that.
-# Not sure what to do at this point as this seems to be a namespace issue
-# which could be a part of a larger issue. For now, the file name of the
-# background image has to be set by hand.
-# In the syntax below using set() it is important to use the {} around the
-# name for it to be generated right. See:
-# http://docs.python.org/library/xml.etree.elementtree.html#the-element-interface
-# for more info.
-
-		if dXML.has_key('BackgroundImage') :
-			dXML['BackgroundImage'].set('{http://www.w3.org/1999/xlink}href', mapBackgroundImageFile)
-
-######################################################################################
-
 
 		# Replace the key fields in the XML data with the new map data
 		for key in map.keys() :

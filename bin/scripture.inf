@@ -377,6 +377,10 @@ MOD_IMPORT                  = 'copy_from_source'
 #   Default = $(PTXPLUS_BASE)/bin/python/lib_system/run_process.py
 MOD_RUN_PROCESS             = '$(PTXPLUS_BASE)/bin/python/lib_system/run_process.py'
 
+# MAKE MAP FILE
+# Run the map data merge module on a single SVG map file.
+MOD_MAKE_MAP                = 'make_map_file'
+
 # TEX
 # These are general TeX settings used by the system for
 # processing project files. TeX settings for specific

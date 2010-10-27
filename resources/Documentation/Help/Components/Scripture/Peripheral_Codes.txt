@@ -5,20 +5,19 @@ Creation-Date: 2010-08-23T16:00:18.570544
 ====== Peripheral Codes ======
 To follow is a list of peripheral components that are supported in the system to some extent.
 
-bnk		Blank Page
-con		Concordance
-cop		Copyright Page
-cvb		Cover Back
-cvf		Cover Front
-cvs		Cover Spine
-glo		Glossary
-ind		Index
-int		Intro
-pcv		Cover Page
-pre		Preface
-pub		Publisher Page
-ptn		Title Page NT
-pto		Title Page OT
-pti		Title Page
-toc		Table of Contents
-top		Topical Index
+**Code     Description**		      **Mapped File**
+bnk		Blank Page			BLANK.usfm
+con		Concordance			CONCORDANCE.usfm
+cop		Copyright Page		COPYRIGHT_PAGE.usfm
+cov		Cover				COVER.usfm
+glo		Glossary				GLOSSARY.usfm
+ind		Index				INDEX.usfm
+int		Intro				INTRO.usfm
+pcv		Cover Page			COVER_PAGE.usfm
+pre		Preface				PREFACE.usfm
+pub		Publisher Page		PUBLISHER.usfm
+ptn		Title Page NT			TITLE_NT.usfm
+pto		Title Page OT			TITLE_OT.usfm
+pti		Title Page			TITLE_PAGE.usfm
+toc		Table of Contents		TOC.usfm
+top		Topical Index			TOPICAL_INDEX.usfm
