@@ -324,33 +324,34 @@ class MakeTexControlFile (object) :
 		runningFooterEvenRight = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterEvenRight']
 
 		# Footnotes
-		useAutoCallers = self._log_manager._settings['Format']['Footnotes']['useAutoCallers']
-		autoCallerCharFn = self._log_manager._settings['Format']['Footnotes']['autoCallerCharFn']
-		autoCallerCharCr = self._log_manager._settings['Format']['Footnotes']['autoCallerCharCr']
-		autoCallerStartChar = self._log_manager._settings['Format']['Footnotes']['autoCallerStartChar']
-		autoCallerNumChars = self._log_manager._settings['Format']['Footnotes']['autoCallerNumChars']
-		useNumericCallersFootnotes = self._log_manager._settings['Format']['Footnotes']['useNumericCallersFootnotes']
-		useNumericCallersCrossRefs = self._log_manager._settings['Format']['Footnotes']['useNumericCallersCrossRefs']
-		pageResetCallersFootnotes = self._log_manager._settings['Format']['Footnotes']['pageResetCallersFootnotes']
-		pageResetCallersCrossRefs = self._log_manager._settings['Format']['Footnotes']['pageResetCallersCrossRefs']
-		omitCallerInFootnote = self._log_manager._settings['Format']['Footnotes']['omitCallerInFootnote']
-		omitCallerInCrossRefs = self._log_manager._settings['Format']['Footnotes']['omitCallerInCrossRefs']
-		paragraphedFootnotes = self._log_manager._settings['Format']['Footnotes']['paragraphedFootnotes']
-		paragraphedCrossRefs = self._log_manager._settings['Format']['Footnotes']['paragraphedCrossRefs']
-		useFootnoteRule = self._log_manager._settings['Format']['Footnotes']['useFootnoteRule']
-		defineNewFootnoteRule = self._log_manager._settings['Format']['Footnotes']['defineNewFootnoteRule']
+		useAutoCallers              = self._log_manager._settings['Format']['Footnotes']['useAutoCallers']
+		autoCallerCharFn            = self._log_manager._settings['Format']['Footnotes']['autoCallerCharFn']
+		autoCallerCharCr            = self._log_manager._settings['Format']['Footnotes']['autoCallerCharCr']
+		autoCallerStartChar         = self._log_manager._settings['Format']['Footnotes']['autoCallerStartChar']
+		autoCallerNumChars          = self._log_manager._settings['Format']['Footnotes']['autoCallerNumChars']
+		useNumericCallersFootnotes  = self._log_manager._settings['Format']['Footnotes']['useNumericCallersFootnotes']
+		useNumericCallersCrossRefs  = self._log_manager._settings['Format']['Footnotes']['useNumericCallersCrossRefs']
+		pageResetCallersFootnotes   = self._log_manager._settings['Format']['Footnotes']['pageResetCallersFootnotes']
+		pageResetCallersCrossRefs   = self._log_manager._settings['Format']['Footnotes']['pageResetCallersCrossRefs']
+		omitCallerInFootnote        = self._log_manager._settings['Format']['Footnotes']['omitCallerInFootnote']
+		omitCallerInCrossRefs       = self._log_manager._settings['Format']['Footnotes']['omitCallerInCrossRefs']
+		paragraphedFootnotes        = self._log_manager._settings['Format']['Footnotes']['paragraphedFootnotes']
+		paragraphedCrossRefs        = self._log_manager._settings['Format']['Footnotes']['paragraphedCrossRefs']
+		useFootnoteRule             = self._log_manager._settings['Format']['Footnotes']['useFootnoteRule']
+		defineNewFootnoteRule       = self._log_manager._settings['Format']['Footnotes']['defineNewFootnoteRule']
 
 		# Margins
-		marginUnit = self._log_manager._settings['Format']['Margins']['marginUnit']
-		topMarginFactor = self._log_manager._settings['Format']['Margins']['topMarginFactor']
-		bottomMarginFactor = self._log_manager._settings['Format']['Margins']['bottomMarginFactor']
-		sideMarginFactor = self._log_manager._settings['Format']['Margins']['sideMarginFactor']
-		useBindingGutter = self._log_manager._settings['Format']['Margins']['useBindingGutter']
-		bindingGutter = self._log_manager._settings['Format']['Margins']['bindingGutter']
+		marginUnit                  = self._log_manager._settings['Format']['Margins']['marginUnit']
+		topMarginFactor             = self._log_manager._settings['Format']['Margins']['topMarginFactor']
+		bottomMarginFactor          = self._log_manager._settings['Format']['Margins']['bottomMarginFactor']
+		sideMarginFactor            = self._log_manager._settings['Format']['Margins']['sideMarginFactor']
+		useBindingGutter            = self._log_manager._settings['Format']['Margins']['useBindingGutter']
+		extraRightMargin            = self._log_manager._settings['Format']['Margins']['extraRightMargin']
+		bindingGutter               = self._log_manager._settings['Format']['Margins']['bindingGutter']
 
 		# Header/Footer
-		headerPosition = self._log_manager._settings['Format']['HeaderFooter']['headerPosition']
-		footerPosition = self._log_manager._settings['Format']['HeaderFooter']['footerPosition']
+		headerPosition              = self._log_manager._settings['Format']['HeaderFooter']['headerPosition']
+		footerPosition              = self._log_manager._settings['Format']['HeaderFooter']['footerPosition']
 
 		# Fonts and text
 		xetexLineBreakLocale = self._log_manager._settings['Format']['Fonts']['xetexLineBreakLocale']
@@ -377,8 +378,8 @@ class MakeTexControlFile (object) :
 		fileHeaderText +=    "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
 					"% should be made to the project.conf file or the custom TeX setup file.\n\n"
 		# Add format settings
-		formatSettings += '\\PaperHeight=' + pageHeight + '\n'
-		formatSettings += '\\PaperWidth=' + pageWidth + '\n'
+		formatSettings += '\\PaperHeight=' + pageHeight + 'mm\n'
+		formatSettings += '\\PaperWidth=' + pageWidth + 'mm\n'
 		if useCropmarks.lower() == 'true' :
 			formatSettings += '\\CropMarkstrue\n'
 		if endBookNoEject.lower() == 'true' :
@@ -390,16 +391,17 @@ class MakeTexControlFile (object) :
 		formatSettings += '\\def\\ColumnGutterFactor{' + columnGutterFactor + '}\n'
 		if columnGutterRule.lower() == 'true' :
 			formatSettings += '\\ColumnGutterRuletrue\n'
-		formatSettings += '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + 'pt\n'
+		formatSettings += '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + 'mm\n'
 
 		# Margins
-		formatSettings += '\\MarginUnit=' + marginUnit + '\n'
+		formatSettings += '\\MarginUnit=' + marginUnit + 'mm\n'
 		formatSettings += '\\def\\TopMarginFactor{' + topMarginFactor + '}\n'
 		formatSettings += '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
 		formatSettings += '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
+		formatSettings += '\\def\\ExtraRMargin=' + extraRightMargin + 'mm\n'
 		if useBindingGutter.lower() == 'true' :
 			formatSettings += '\\BindingGuttertrue\n'
-			formatSettings += '\\BindingGutter=' + bindingGutter + '\n'
+			formatSettings += '\\BindingGutter=' + bindingGutter + 'mm\n'
 
 		# Fonts
 		if xetexLineBreakLocale.lower() == 'true' :
@@ -420,7 +422,7 @@ class MakeTexControlFile (object) :
 		# Will we use marginal verses? This setting is
 		# mainly for use with marginal verses
 		if self._useMarginalVerses.lower() == 'true' :
-			fileInput += '\\columnshift=' + columnshift + 'pt\n'
+			fileInput += '\\columnshift=' + columnshift + 'mm\n'
 		# Do we want a page border?
 		if usePageBorder.lower() == 'true' :
 			if pageBorderScale == '' :
