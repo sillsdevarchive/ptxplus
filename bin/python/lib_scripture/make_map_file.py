@@ -1,5 +1,5 @@
-#!/usr/bin/python2
-# -*- coding: utf_8 -*-
+#!/usr/bin/python2.5
+# -*- coding: utf-8 -*-
 # version: 20080423
 # By Dennis Drescher (dennis_drescher at sil.org)
 
@@ -23,10 +23,6 @@
 #        problem in a copy routine
 # 20090914 - djd - Removed code that was duplicating makefile
 #        functions like creating the Maps folder, etc.
-# 20100113 - djd - Added code for processing maps with seperate
-#        style files
-# 20100116 - djd - Changed from over-writing the original svg
-#        file to creating a new seperate one.
 
 
 #############################################################
@@ -38,11 +34,13 @@
 import os, shutil, re
 
 # Import supporting local classes
+#from tools import *
 import tools
 from csv import reader
 from xml.etree.ElementTree import XMLID, ElementTree
 
 # Instantiate local classes
+#tools        = Tools()
 elementtree    = ElementTree()
 
 
@@ -59,13 +57,14 @@ class MakeMapFile (object) :
 		dataFileName    =  mapProject + "/" + tail.replace('.svg', '.csv')
 		styleFileName   = mapProject + "/" + tail.replace('.svg', '-sty.csv')
 
+
 ############################################################################################################################
 # There's a problem with working with namespaces. The solution, or at least part of it, migh be if we use
 # ElementTree.parse() (or something close to that) which will help it work better with namespaces.
 # Another possible solution could be using a call from ElementTree called qname. This might help it
 # better keep track of namespaces and get the data needed in the righ place.
 
-		# Open and read XML/SVG file
+		# Open and read XML file
 		fhXML = file(inputFile)
 		txtXML = ''.join(fhXML)
 		fhXML.close
@@ -91,19 +90,39 @@ class MakeMapFile (object) :
 		# Gather the new style data
 		styles = {}
 		for row in styleData:
-			if row and row[0] != "StyleName" :
+			if len(row) > 0 and row[0] != "StyleName" :
 				styles[row[0]] = row[1]
+
+#####################################################################################
+
+		# Replace background image file name (if needed)
+# See note above first...
+# This does not work yet there is a problem with setting the background image
+# file name. It doesn't like xlink:href or something like that.
+# Not sure what to do at this point as this seems to be a namespace issue
+# which could be a part of a larger issue. For now, the file name of the
+# background image has to be set by hand.
+# In the syntax below using set() it is important to use the {} around the
+# name for it to be generated right. See:
+# http://docs.python.org/library/xml.etree.elementtree.html#the-element-interface
+# for more info.
+
+		if dXML.has_key('BackgroundImage') :
+			dXML['BackgroundImage'].set('{http://www.w3.org/1999/xlink}href', mapBackgroundImageFile)
+
+######################################################################################
+
 
 		# Replace the key fields in the XML data with the new map data
 		for key in map.keys() :
 			if dXML.has_key(key) :
-				dXML[key].text = unicode(map[key], 'utf_8')
+				dXML[key].text = unicode(map[key], 'utf-8')
 				temp = re.sub("_.*$", '', key)
 				if styles.has_key(temp) :
 					dXML[key].set('style', styles[temp])
 
-		# Write the new data out to the new SVG file
-		ElementTree(element = eXML).write(outputFile, encoding = 'utf_8')
+		# Overwrite the original SVG file with the new data
+		ElementTree(element = eXML).write(outputFile, encoding = 'UTF-8')
 
 
 # This starts the whole process going
