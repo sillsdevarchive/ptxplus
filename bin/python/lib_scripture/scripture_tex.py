@@ -398,7 +398,7 @@ class MakeTexControlFile (object) :
 		formatSettings += '\\def\\TopMarginFactor{' + topMarginFactor + '}\n'
 		formatSettings += '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
 		formatSettings += '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
-		formatSettings += '\\def\\ExtraRMargin=' + extraRightMargin + 'mm\n'
+		formatSettings += '\\ExtraRMargin=' + extraRightMargin + 'mm\n'
 		if useBindingGutter.lower() == 'true' :
 			formatSettings += '\\BindingGuttertrue\n'
 			formatSettings += '\\BindingGutter=' + bindingGutter + 'mm\n'
