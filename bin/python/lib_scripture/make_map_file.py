@@ -34,12 +34,13 @@
 import os, shutil
 
 # Import supporting local classes
-from tools import *
+#from tools import *
+import tools
 from csv import reader
 from xml.etree.ElementTree import XMLID, ElementTree
 
 # Instantiate local classes
-tools		= Tools()
+#tools		= Tools()
 elementtree	= ElementTree()
 
 
@@ -49,10 +50,10 @@ class MakeMapFile (object) :
 
 		# Pull in all the relevant vars and settings
 		basePath = os.environ.get('PTXPLUS_BASE')
-		mapProject = os.getcwd() + "/" + log_manager._settings['Process']['Paths']['PATH_TEXTS']
-		mapSource = log_manager._settings['Process']['Paths']['PATH_MAP_TEMPLATES']
+		mapProject = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_MAPS']
+		mapSource = tools.pubInfoObject['Paths']['PATH_RESOURCES_MAPS']
 		mapSource = mapSource.replace( '$(PTXPLUS_BASE)', basePath)
-		colorMode = log_manager._settings['General']['MapProcesses']['mapColorMode']
+		colorMode = log_manager._settings['Format']['MapProcesses']['colorSpace']
 		inputFile = log_manager._currentInput
 		(head, tail) = os.path.split(inputFile)
 		csvFileName =  mapProject + "/" + tail.replace('.svg', '.csv')
