@@ -17,12 +17,12 @@
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081029 - djd - Removed system logging, messages only now
 # 20081030 - djd - Added total dependence on log_manager.
-#		This script will not run without it because
-#		it handles all the parameters it needs.
+#        This script will not run without it because
+#        it handles all the parameters it needs.
 # 20090909 - te - Fixed bug in XML namespaces and a path
-#		problem in a copy routine
+#        problem in a copy routine
 # 20090914 - djd - Removed code that was duplicating makefile
-#		functions like creating the Maps folder, etc.
+#        functions like creating the Maps folder, etc.
 
 
 #############################################################
@@ -31,7 +31,7 @@
 # Firstly, import all the standard Python modules we need for
 # this process
 
-import os, shutil
+import os, shutil, re
 
 # Import supporting local classes
 #from tools import *
@@ -40,8 +40,8 @@ from csv import reader
 from xml.etree.ElementTree import XMLID, ElementTree
 
 # Instantiate local classes
-#tools		= Tools()
-elementtree	= ElementTree()
+#tools        = Tools()
+elementtree    = ElementTree()
 
 
 class MakeMapFile (object) :
@@ -49,33 +49,13 @@ class MakeMapFile (object) :
 	def main (self, log_manager) :
 
 		# Pull in all the relevant vars and settings
-		basePath = os.environ.get('PTXPLUS_BASE')
-		mapProject = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_MAPS']
-		mapSource = tools.pubInfoObject['Paths']['PATH_RESOURCES_MAPS']
-		mapSource = mapSource.replace( '$(PTXPLUS_BASE)', basePath)
-		colorMode = log_manager._settings['Format']['MapProcesses']['colorSpace']
-		inputFile = log_manager._currentInput
-		(head, tail) = os.path.split(inputFile)
-		csvFileName =  mapProject + "/" + tail.replace('.svg', '.csv')
-		csvStyleFileName = mapProject + "/map-styles.csv"
-		csvStyleFileSource = mapSource + "/map-styles.csv"
-		svgSourceFile = mapSource + "/" + tail
-		csvSourceFile = mapSource + "/" + tail.replace('.svg', '.csv')
-		# This may be optional but we'll build a file name for it anyway
-		# Where this falls down is when the illustration is greyscale but the project
-		# calls for color. The work-around for now is to make the svg file work with
-		# both kinds.
-		if colorMode == "true" :
-			mapBackgroundImageFile = tail.replace('.svg', '-bkgrnd-cl.png')
-			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-cl.png')
-		else :
-			mapBackgroundImageFile = inputFile.replace('.svg', '-bkgrnd-gr.png')
-			mapBackgroundImageFileSource = mapSource + "/" + tail.replace('.svg', '-bkgrnd-gr.png')
-
-		# Does this map need a background image, is it there?
-		if not os.path.isfile(mapBackgroundImageFile) :
-			if os.path.isfile(mapBackgroundImageFileSource) :
-				shutil.copy(mapBackgroundImageFileSource, mapProject + "/" + mapBackgroundImageFile)
+		basePath        = os.environ.get('PTXPLUS_BASE')
+		mapProject      =  os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_MAPS']
+		inputFile       = log_manager._currentInput
+		outputFile      = log_manager._currentOutput
+		(head, tail)    = os.path.split(outputFile)
+		dataFileName    =  mapProject + "/" + tail.replace('.svg', '.csv')
+		styleFileName   = mapProject + "/" + tail.replace('.svg', '-sty.csv')
 
 
 ############################################################################################################################
@@ -94,11 +74,11 @@ class MakeMapFile (object) :
 
 
 		# Pull in the CSV map point data
-		csvMapData = file(csvFileName)
+		csvMapData = file(dataFileName)
 		mapData = reader(csvMapData, dialect = 'excel')
 
 		# Pull in the CSV style data
-		csvStyleData = file(csvStyleFileName)
+		csvStyleData = file(styleFileName)
 		styleData = reader(csvStyleData, dialect = 'excel')
 
 		# Gather the new map point data
@@ -110,7 +90,7 @@ class MakeMapFile (object) :
 		# Gather the new style data
 		styles = {}
 		for row in styleData:
-			if row[0] != "StyleName" :
+			if len(row) > 0 and row[0] != "StyleName" :
 				styles[row[0]] = row[1]
 
 #####################################################################################
@@ -142,7 +122,7 @@ class MakeMapFile (object) :
 					dXML[key].set('style', styles[temp])
 
 		# Overwrite the original SVG file with the new data
-		ElementTree(element = eXML).write(inputFile, encoding = 'UTF-8')
+		ElementTree(element = eXML).write(outputFile, encoding = 'UTF-8')
 
 
 # This starts the whole process going

@@ -36,21 +36,20 @@ $(PATH_MAPS)/$(1)-sty.$(EXT_CSV) :
 $(PATH_ILLUSTRATIONS)/$(1).$(EXT_PNG) :
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-org.$(EXT_PNG),$$@)
 
+# Copy into the project the temporary svg file that
+# will be processed
+$(PATH_MAPS)/$(1)-temp.$(EXT_SVG) :
+	@echo INFO: Creating: $(1)-temp.$(EXT_SVG)
+	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-map.$(EXT_SVG),$$@)
+
 # Copy the final SVG file into the Maps folder
 $(PATH_MAPS)/$(1).$(EXT_SVG) : \
 		$(PATH_MAPS)/$(1).$(EXT_CSV) \
 		$(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) \
-		$(PATH_MAPS)/$(1)-sty.$(EXT_CSV)
-	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-map.$(EXT_SVG),$(PATH_MAPS)/temp.$(EXT_SVG))
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_MAP) "" "$(PATH_MAPS)/temp.$(EXT_SVG)" "$$@" ""
-
-
-
-#################### This is not right yet! #####################
-	@rm -f $$@
-	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-map.$(EXT_SVG),$(PATH_MAPS)/temp.$(EXT_SVG))
-	@$(MOD_RUN_PROCESS) $(MOD_MAKE_MAP) "" "$(PATH_MAPS)/temp.$(EXT_SVG)" "$$@" ""
-	@rm -f $(PATH_MAPS)/temp.$(EXT_SVG)
+		$(PATH_MAPS)/$(1)-sty.$(EXT_CSV) \
+		$(PATH_MAPS)/$(1)-temp.$(EXT_SVG)
+	@echo INFO: Creating: $$@
+	@$(MOD_RUN_PROCESS) $(MOD_MAKE_MAP) "" "$(PATH_MAPS)/$(1)-temp.$(EXT_SVG)" "$$@" ""
 
 # Crate the intermediate PNG file from the SVG file.
 # Note that this uses a special command that was created by
@@ -95,6 +94,7 @@ view-$(1) : $(PATH_PROCESS)/$(1).$(EXT_PDF)
 
 # Open up the map svg file in Inkscape (or whatever editor you are using)
 preprocess-$(1) : $(PATH_MAPS)/$(1).$(EXT_SVG)
+	@echo INFO: Opening for editing: $(1).$(EXT_SVG)
 	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$<
 
 # View the original model map for reference
@@ -135,6 +135,7 @@ all-remove-$(1) :
 	@rm -f $(PATH_MAPS)/$(1)-sty.$(EXT_CSV)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_PNG)
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@rm -f $(PATH_MAPS)/$(1)-temp.$(EXT_SVG)
 
 
 ##### End SVG processing rules
