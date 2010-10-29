@@ -3,51 +3,45 @@
 # version: 20090120
 # By Dennis Drescher (dennis_drescher at sil.org)
 
-# This script has been tested on Python 2.5.1 (Ubuntu)
-# it may not work right with earlier versions.
+# This script has been tested on Python 2.5.1 (Ubuntu) it may not work right
+# with earlier versions.
 
-#############################################################
-################ Description/Documentation ##################
-#############################################################
+###############################################################################
+######################### Description/Documentation ###########################
+###############################################################################
 
-# Generate a TeX control file for Scripture processing. The
-# data for this proccess is all kept in the project.conf file.
-# There are 4 types of TeX control (setup) files needed.
+# Generate a TeX control file for Scripture processing.  The data for this
+# proccess is all kept in the project.conf file.  There are 4 types of TeX
+# control (setup) files needed.
 #
-#   1) The first one is the common global settins file that
-#      controls the parameters for the publication like fonts
-#      and page size.
+#   1) The first one is the common global settins file that controls the
+#   parameters for the publication like fonts and page size.
 #
-#   2) The second is the main control file for each type of
-#      text such as front matter, back matter and main
-#      contents. This will contain settings for each of these
-#      types of text and control things like columns, verse
-#      number formats, etc.
+#   2) The second is the main control file for each type of text such as front
+#   matter, back matter and main contents.  This will contain settings for each
+#   of these types of text and control things like columns, verse number
+#   formats, etc.
 #
-#   3) The third type is the custom control file which contains
-#      settings and macros for the project. This file can be
-#      used to override settings in the first two if necessary
-#      but that is not recomended.
+#   3) The third type is the custom control file which contains settings and
+#   macros for the project.  This file can be used to override settings in the
+#   first two if necessary but that is not recomended.
 #
-#   4) The fourth type is the control file for the specific
-#      object that is being typeset. This is a simple file
-#      that contains links to the other three types of
-#      control files. Except for the custom control file,
-#      all are auto generated and should not be edited for any
-#      reason.
+#   4) The fourth type is the control file for the specific object that is being
+#   typeset.  This is a simple file that contains links to the other three types
+#   of control files.  Except for the custom control file, all are auto
+#   generated and should not be edited for any reason.
 # BTW, this will only work with the ptx2pdf macro package.
 
 
 # History:
 # 20090209 - djd - Initial draft
 # 20100212 - djd - Add in auto-TOC code
-# 20100630 - djd - Combine the main settings file with the
-#       Bible settings file
+# 20100630 - djd - Combine the main settings file with the Bible settings file
 
 
-#############################################################
-######################### Shell Class #######################
-#############################################################
+###############################################################################
+################################### Shell Class ###############################
+###############################################################################
 
 import codecs, os
 import parse_sfm
@@ -60,9 +54,9 @@ import tools
 class MakeTexControlFile (object) :
 
 	def main (self, log_manager) :
-		'''This part is all about direction. In this function we will figure out
-			what kind of settings file needs to be made and then call the
-			right function to do it.'''
+		'''This part is all about direction.  In this function we will figure
+		out what kind of settings file needs to be made and then call the right
+		function to do it.'''
 
 		log_manager._currentSubProcess  = 'MkTexContFile'
 		self._log_manager               = log_manager
@@ -131,15 +125,13 @@ class MakeTexControlFile (object) :
 			self._log_manager.log("ERRR", "Publication type: " + self._publicationType + " is unknown. Process halted.")
 			return
 
-#########################################################################################
+###############################################################################
 
 	def makeTheControlFile (self) :
-		'''This is the control file for a specific object that we
-			will be typesetting. This contains pointers to the
-			other control files that contain the settings
-			TeX will work with and it may contain specific
-			instructions for this object that can be added
-			in an automated way.'''
+		'''This is the control file for a specific object that we will be
+		typesetting.  This contains pointers to the other control files that
+		contain the settings TeX will work with and it may contain specific
+		instructions for this object that can be added in an automated way.'''
 
 		# Get a couple settings
 		oneChapOmmitRule = self._log_manager._settings['Format']['ChapterVerse']['shortBookChapterOmit']
@@ -259,15 +251,14 @@ class MakeTexControlFile (object) :
 		# Ship the results, change order as needed
 		self.writeOutTheFile(settings)
 
-#########################################################################################
+###############################################################################
 
 	def makeTheSettingsFile (self) :
-		'''This will create the global settings file that other control
-			files will link to. This setting file will contain
-			settings that are universal to the project. Settings
-			for specific parts of the project are found in setup
-			files that are made by the makeTheContentSettingsFile()
-			elsewhere in this module.'''
+		'''This will create the global settings file that other control files
+		will link to.  This setting file will contain settings that are
+		universal to the project.  Settings for specific parts of the project
+		are found in setup files that are made by the
+		makeTheContentSettingsFile() elsewhere in this module.'''
 
 		# Bring in page format settings
 		useCropmarks = self._log_manager._settings['Format']['PageLayout']['USE_CROPMARKS']
@@ -534,12 +525,12 @@ class MakeTexControlFile (object) :
 		self.writeOutTheFile(orderedContents)
 
 
-#########################################################################################
+###############################################################################
 
 	def makeTheContextSettingsFile (self) :
-		'''For each context that we render text in we need to tell TeX
-			what the settings are for that context. This is a context
-			sensitive settings file output routine.'''
+		'''For each context that we render text in we need to tell TeX what the
+		settings are for that context.  This is a context sensitive settings
+		file output routine.'''
 
 		# Bring in settings we need
 		justifyPars = self._log_manager._settings['Format']['TextElements']['justifyPars']
@@ -599,6 +590,8 @@ class MakeTexControlFile (object) :
 			formatSettings += '\\def\TopMarginFactor{0.4}\n'
 			formatSettings += '\\def\SideMarginFactor{1.5}\n'
 			formatSettings += '\\def\BottomMarginFactor{1}\n'
+			formatSettings += '\\ExtraRMargin=0mm\n'
+			formatSettings += '\\columnshift=0mm\n'
 			headerSettings += self.RemovePageNumbers(self._headerPositions)
 			footerSettings += self.RemovePageNumbers(self._footerPositions)
 
@@ -645,7 +638,7 @@ class MakeTexControlFile (object) :
 			self._log_manager.log("INFO", "Exists: " + os.path.split(self._outputFile)[1], "true")
 
 
-#########################################################################################
+###############################################################################
 
 	def RemovePageNumbers (self, positions) :
 		'''This will simply return a list of page header or footer
@@ -700,8 +693,8 @@ class MakeTexControlFileHandler (parse_sfm.Handler) :
 
 
 	def start (self, tag, num, info, prefix) :
-		'''This tells us when a tag starts. We will use this information to set location
-			and trigger events.'''
+		'''This tells us when a tag starts.  We will use this information to set
+		location and trigger events.'''
 
 		# Track the location
 		self._log_manager.setLocation(self._book, tag, num)
@@ -728,8 +721,8 @@ class MakeTexControlFileHandler (parse_sfm.Handler) :
 
 
 	def end (self, tag, ctag, info) :
-		'''This function tells us when an element is closed. We will
-			use this to mark the end of events.'''
+		'''This function tells us when an element is closed.  We will use this
+		to mark the end of events.'''
 
 		# Is this a real closing tag?
 		if tag + "*" == ctag :

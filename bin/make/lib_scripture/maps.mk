@@ -9,15 +9,14 @@ define svg_process
 $(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV) : $(PATH_ILLUSTRATIONS)/$(1).$(EXT_PNG)
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-data.$(EXT_CSV),$$@)
 
-# Link the data CSV file from the original in the Source
-# Peripheral folder to the Maps folder.
+# Link the data CSV file from the original in the Source Peripheral folder to
+# the Maps folder.
 $(PATH_MAPS)/$(1).$(EXT_CSV) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV)
 	@echo INFO: Linking map CSV: $(1).$(EXT_CSV)
 	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE_PERIPH)/$(1)).$(EXT_CSV) $$@
 
-# Bring in the map background. This is a shared resource so
-# it will be copied into the Illustrations folder and later
-# linked to the Maps folder in Process.
+# Bring in the map background.  This is a shared resource so it will be copied
+# into the Illustrations folder and later linked to the Maps folder in Process.
 $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd.$(EXT_PNG) :
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-bkgrnd.$(EXT_PNG),$$@)
 
@@ -51,24 +50,21 @@ $(PATH_MAPS)/$(1).$(EXT_SVG) : \
 	@echo INFO: Creating: $$@
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_MAP) "" "$(PATH_MAPS)/$(1)-temp.$(EXT_SVG)" "$$@" ""
 
-# Crate the intermediate PNG file from the SVG file.
-# Note that this uses a special command that was created by
-# the make_make process which has all the necessary commands
-# needed for Inkscape (at the command line)to convert the
-# SVG file, which has been edited into its final form, to
-# the PNG intermediate file that will be converted to the
-# final component PDF form via Imagemagick.
+# Crate the intermediate PNG file from the SVG file.  Note that this uses a
+# special command that was created by the make_make process which has all the
+# necessary commands needed for Inkscape (at the command line)to convert the SVG
+# file, which has been edited into its final form, to the PNG intermediate file
+# that will be converted to the final component PDF form via Imagemagick.
 $(PATH_MAPS)/$(1).$(EXT_PNG) : $(PATH_MAPS)/$(1).$(EXT_SVG)
 	@echo INFO: Creating: $$@
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_PDF)
 	@ $(PROCESS_MAP_PNG-$(1))
 
-# Crate the PDF file from the intermediate PNG file.
-# Note that this uses a special command that was created by
-# the make_make process which has all the necessary commands
-# needed for Imagemagick to convert this intermediate file
-# which was exported from Inkscape into the final PDF file.
-# The process includes rotate and colorspace commands.
+# Crate the PDF file from the intermediate PNG file.  Note that this uses a
+# special command that was created by the make_make process which has all the
+# necessary commands needed for Imagemagick to convert this intermediate file
+# which was exported from Inkscape into the final PDF file.  The process
+# includes rotate and colorspace commands.
 $(PATH_PROCESS)/$(1).$(EXT_PDF) : $(PATH_MAPS)/$(1).$(EXT_PNG)
 	@echo INFO: Creating: $$@
 	@rm -f $$@
@@ -144,19 +140,19 @@ endef
 
 
 
-####################### Start Main Process ###################
+############################### Start Main Process ############################
 
-# Assembling the maps will be different from other processes. There is no
-# need for a USFM .sty sheet, or for USFM files. The PDF file handles will
-# be inserted into a single .tex file which will be processed and produce
-# the final group file. That will be added to other groups if needed.
+# Assembling the maps will be different from other processes.  There is no need
+# for a USFM .sty sheet, or for USFM files.  The PDF file handles will be
+# inserted into a single .tex file which will be processed and produce the final
+# group file.  That will be added to other groups if needed.
 
 # This builds a rule (in memory) for each of the maps
 $(foreach v,$(GROUP_MAPS),$(eval $(call svg_process,$(v))))
 
-# Create the final PDF file from the group component PDF files that have
-# been included in a special .tex file that inserts them directly which
-# avoids having to have an intermediat usfm file.
+# Create the final PDF file from the group component PDF files that have been
+# included in a special .tex file that inserts them directly which avoids having
+# to have an intermediat usfm file.
 $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF) : \
 		$(foreach v,$(GROUP_MAPS),$(PATH_PROCESS)/$(v).$(EXT_PDF)) \
 		$(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
@@ -182,9 +178,8 @@ $(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY) :
 	@echo \\SpaceBefore 0 >> $@
 	@echo \\SpaceAfter 0 >> $@
 
-# View all the maps in the group in one PDF file
-# We will remove the previous one in case there
-# have been changes
+# View all the maps in the group in one PDF file We will remove the previous one
+# in case there have been changes
 view-maps : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
 	@echo INFO: Viewing $(FILE_GROUP_MAPS_PDF)
 	@ $(VIEWPDF) $< &
@@ -192,6 +187,10 @@ view-maps : $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
 # Warn the user this can't be done
 view-map-model-maps :
 	@echo WARN: Sorry, no view option for combined map group
+
+# Warn the user this can't be done
+preprocess-maps :
+	@echo WARN: Sorry, no edit/check option for combined map group
 
 # Remove map group components
 pdf-remove-maps :

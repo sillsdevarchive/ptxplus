@@ -3,31 +3,30 @@
 # version: 20080423
 # By Dennis Drescher (dennis_drescher at sil.org)
 
-# This script has been tested on Python 2.5.1 (Ubuntu)
-# it may not work right with earlier versions.
+# This script has been tested on Python 2.5.1 (Ubuntu) it may not work right
+# with earlier versions.
 
-#############################################################
-################ Description/Documentation ##################
-#############################################################
+###############################################################################
+######################### Description/Documentation ###########################
+###############################################################################
 
-# This script will modify an existing map template with map
-# data from this project
+# This script will modify an existing map template with map data from this
+# project
 
 # 20080925 - djd - Initial draft
 # 20081023 - djd - Refactored due to changes in project.conf
 # 20081029 - djd - Removed system logging, messages only now
-# 20081030 - djd - Added total dependence on log_manager.
-#        This script will not run without it because
-#        it handles all the parameters it needs.
-# 20090909 - te - Fixed bug in XML namespaces and a path
-#        problem in a copy routine
-# 20090914 - djd - Removed code that was duplicating makefile
-#        functions like creating the Maps folder, etc.
+# 20081030 - djd - Added total dependence on log_manager.  This script will not
+# run without it because it handles all the parameters it needs.
+# 20090909 - te - Fixed bug in XML namespaces and a path problem in a copy
+# routine
+# 20090914 - djd - Removed code that was duplicating makefile functions like
+# creating the Maps folder, etc.
 
 
-#############################################################
-######################### Load Modules ######################
-#############################################################
+###############################################################################
+################################## Load Modules ###############################
+###############################################################################
 # Firstly, import all the standard Python modules we need for
 # this process
 
@@ -58,11 +57,16 @@ class MakeMapFile (object) :
 		styleFileName   = mapProject + "/" + tail.replace('.svg', '-sty.csv')
 
 
-############################################################################################################################
-# There's a problem with working with namespaces. The solution, or at least part of it, migh be if we use
-# ElementTree.parse() (or something close to that) which will help it work better with namespaces.
-# Another possible solution could be using a call from ElementTree called qname. This might help it
+###############################################################################
+# There's a problem with working with namespaces.  The solution, or at least
+# part of it, migh be if we use ElementTree.parse() (or something close to that)
+# which will help it work better with namespaces.  Another possible solution
+# could be using a call from ElementTree called qname.  This might help it
 # better keep track of namespaces and get the data needed in the righ place.
+# For now we use XMLID to pull out the element tag names so we can work with
+# them and change the data. For more info on ElementTree go to:
+# http://docs.python.org/library/xml.etree.elementtree.html#the-element-interface
+
 
 		# Open and read XML file
 		fhXML = file(inputFile)
@@ -70,7 +74,7 @@ class MakeMapFile (object) :
 		fhXML.close
 		(eXML, dXML) = XMLID(txtXML)
 
-############################################################################################################################
+###############################################################################
 
 
 		# Pull in the CSV map point data
@@ -92,26 +96,6 @@ class MakeMapFile (object) :
 		for row in styleData:
 			if len(row) > 0 and row[0] != "StyleName" :
 				styles[row[0]] = row[1]
-
-#####################################################################################
-
-		# Replace background image file name (if needed)
-# See note above first...
-# This does not work yet there is a problem with setting the background image
-# file name. It doesn't like xlink:href or something like that.
-# Not sure what to do at this point as this seems to be a namespace issue
-# which could be a part of a larger issue. For now, the file name of the
-# background image has to be set by hand.
-# In the syntax below using set() it is important to use the {} around the
-# name for it to be generated right. See:
-# http://docs.python.org/library/xml.etree.elementtree.html#the-element-interface
-# for more info.
-
-		if dXML.has_key('BackgroundImage') :
-			dXML['BackgroundImage'].set('{http://www.w3.org/1999/xlink}href', mapBackgroundImageFile)
-
-######################################################################################
-
 
 		# Replace the key fields in the XML data with the new map data
 		for key in map.keys() :

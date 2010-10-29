@@ -1,56 +1,48 @@
 # COMPONENTS
-# This contains information about components used in this
-# type of publication.
+# This contains information about components used in this type of publication.
 [Components]
 
 # COMPONENT TYPES
-# The types of components that can be found in this kind of
-# publication. The type of component has more to do with
-# how it is processed.
+# The types of components that can be found in this kind of publication.  The
+# type of component has more to do with how it is processed.
 componentTypeList           = peripheral, content, maps
 
 # FILE NAMES (HARD-CODDED)
-# These are names of files for this publication type which are
-# pretty much hard-codded and immutable.
+# These are names of files for this publication type which are pretty much
+# hard-codded and immutable.
 [Files]
 
 # PROJECT ERROR FILE
-# The name of the project error file. This is the file that
-# the system outputs errors too for reporting at the end of
-# a process. This file is deleted at the start of every
-# process.
+# The name of the project error file.  This is the file that the system outputs
+# errors too for reporting at the end of a process.  This file is deleted at the
+# start of every process.
 FILE_PROJECT_ERROR          = 'error.log'
 
 # CAPTIONS FILE
-# Project Illustrations caption file name. Normally this will
-# not need to be edited. The default is: captions.csv
-# This is the key file so dependencies have to key off of this
-# file. This file is derived from the file of the same name in
-# the shared folder.
+# Project Illustrations caption file name.  Normally this will not need to be
+# edited.  The default is: captions.csv This is the key file so dependencies
+# have to key off of this file.  This file is derived from the file of the same
+# name in the shared folder.
 FILE_ILLUSTRATION_CAPTIONS  = 'captions.csv'
 
 # MAIN TEX MACRO
-# The main TeX macro file name with lib path. This will
-# connect with any other necessary macros located in the
-# same folder.
+# The main TeX macro file name with lib path.  This will connect with any other
+# necessary macros located in the same folder.
 FILE_TEX_MACRO              = 'paratext2.tex'
 
 # MAIN GLOBAL SETTINGS
-# TeX macro setup file for a Bible publication. This file
-# is made automatically and should not be edited. Custom
-# settings should be added to the custom project settings
-# file.
+# TeX macro setup file for a Bible publication.  This file is made automatically
+# and should not be edited.  Custom settings should be added to the custom
+# project settings file.
 FILE_TEX_SETTINGS           = '.bible-settings.tex'
 
 # GLOBAL CUSTOM SETTINGS
-# TeX macro custom publication settings file. These are
-# settings which are for this specific project and not
-# found in the auto-generated setup file.
+# TeX macro custom publication settings file.  These are settings which are for
+# this specific project and not found in the auto-generated setup file.
 FILE_TEX_CUSTOM             = 'custom-settings.tex'
 
 # COVER SETTINGS
-# TeX cover settings override file for producing
-# the publication cover.
+# TeX cover settings override file for producing the publication cover.
 FILE_TEX_COVER              = '.cover-settings.tex'
 
 # FRONT SETTINGS
@@ -66,117 +58,101 @@ FILE_TEX_BACK               = '.back-settings.tex'
 FILE_TEX_MAPS                = '.maps-settings.tex'
 
 # BIBLE STYLE FILE
-# This is the override style file for
-# a Scripture publication. This file
-# is meant to be edited by the user.
+# This is the override style file for a Scripture publication.  This file is
+# meant to be edited by the user.
 FILE_TEX_STYLE              = 'bible-format.sty'
 
 # SOURCE MASTER WORD LIST
-# This is an automatically generated word list
-# of (hopefully) all the project source files.
-# It is used for generating a hyphenation list for
-# the project as well as other possible uses. This
-# file should be in CSV format.
+# This is an automatically generated word list of (hopefully) all the project
+# source files.  It is used for generating a hyphenation list for the project as
+# well as other possible uses.  This file should be in CSV format.
 FILE_MASTERWORDS            = 'wordlist-master.csv'
 
 # TEX HYPHENATION FILE
-# A completed TeX hyphenation file, normally
-# auto-created by the system from a couple
-# other sources.
+# A completed TeX hyphenation file, normally auto-created by the system from a
+# couple other sources.
 FILE_HYPHENATION_TEX        = 'hyphenation.tex'
 
 # HYPHENATED WORDS
-# The file name of complete list of hyphenated
-# words for this project.
+# The file name of complete list of hyphenated words for this project.
 FILE_HYPHENATION            = 'hyphenation.txt'
 
 # LCCODE LIST
-# A list of lccodes for this project. This will be
-# used to construct the TeX hyphenation file.
+# A list of lccodes for this project.  This will be used to construct the TeX
+# hyphenation file.
 FILE_LCCODELIST             = 'lccodelist.txt'
 
 # NON-HYPHENATED WORDS LIST
-# This is a list of words that were not hyphenated
-# by the process. This is for auditing the process.
+# This is a list of words that were not hyphenated by the process.  This is for
+# auditing the process.
 FILE_HYNOT                  = 'hyphen-not.txt'
 
 # CUSTOM HYPHEN WORD LIST
-# This is a simple list of words which contain hyphens
-# that denote where the word can be broken at the end
-# of a line. If not hyphen is used, then the word will
-# pass into the final list and will not be broken by
-# TeX when the line is set. This file can contain proper
-# names too, any word that might vary from the normal
-# rules that are set for this project.
+# This is a simple list of words which contain hyphens that denote where the
+# word can be broken at the end of a line.  If not hyphen is used, then the word
+# will pass into the final list and will not be broken by TeX when the line is
+# set.  This file can contain proper names too, any word that might vary from
+# the normal rules that are set for this project.
 FILE_HYCUSTOM               = 'hyphen-custom.txt'
 
 # HYPHEN PREFIX LIST
-# Some projects can benifit from hyphenating words that have
-# prefixes. ptxplus will support this by auto-hyphenating
-# words that use certain specified word prefixes. All you
-# have to do is tell it where to find the file and it will
-# do the rest.
+# Some projects can benifit from hyphenating words that have prefixes. ptxplus
+# will support this by auto-hyphenating words that use certain specified word
+# prefixes.  All you have to do is tell it where to find the file and it will do
+# the rest.
 FILE_HYPREFIX               = 'hyphen-prefixes.txt'
 
 # HYPHEN SUFFIX LIST
-# Some projects can benifit from hyphenating words that have
-# suffixes. ptxplus will support this by auto-hyphenating
-# words that use certain specified word suffixes. All you
-# have to do is tell it where to find the file and it will
-# do the rest.
+# Some projects can benifit from hyphenating words that have suffixes. ptxplus
+# will support this by auto-hyphenating words that use certain specified word
+# suffixes.  All you have to do is tell it where to find the file and it will do
+# the rest.
 FILE_HYSUFFIX               = 'hyphen-suffixes.txt'
 
 # MARGINAL VERSES MACRO
-# The file name of the TeX marginal verses macro used
-# in ptx2pdf.
+# The file name of the TeX marginal verses macro used in ptx2pdf.
 FILE_MARGINAL_VERSES        = 'ptxplus-marginalverses.tex'
 
 # AUTO TOC FILE
-# When auto TOC generation is turned on the contents
-# for the final TOC file will be output to this file.
+# When auto TOC generation is turned on the contents for the final TOC file will
+# be output to this file.
 FILE_TOC_AUTO               = 'auto-toc.usfm'
 
 # TOC USFM FILE
-# The main TOC content file which is created from
-# the FILE_TOC_AUTO file.
+# The main TOC content file which is created from the FILE_TOC_AUTO file.
 FILE_TOC_USFM               = 'toc.usfm'
 
 # CONTENT GROUP CONTROL FILE
-# For generating Scripture content we need a special
-# TeX control file for TOC and page number generation.
-# It would be nice if this could be some kind of
-# autogenerated thing in makefile but it is just
-# easier to put it here. Same with any files for
-# this binding group.
+# For generating Scripture content we need a special TeX control file for TOC
+# and page number generation.  It would be nice if this could be some kind of
+# autogenerated thing in makefile but it is just easier to put it here.  Same
+# with any files for this binding group.
 FILE_GROUP_CONTENT_TEX      = 'GROUP_CONTENT.tex'
 
 # CONTENT GROUP PDF FILE
-# This is the final content file that is produced
-# by processing the Content TeX Control file.
+# This is the final content file that is produced by processing the Content TeX
+# Control file.
 FILE_GROUP_CONTENT_PDF      = 'GROUP_CONTENT.pdf'
 
 # MAPS STYLE FILE
-# This is the style file that will override any
-# styles that are used but do not work in their
-# default format.
+# This is the style file that will override any styles that are used but do not
+# work in their default format.
 FILE_GROUP_MAPS_STY         = 'GROUP_MAPS.sty'
 
 # MAPS GROUP CONTROL FILE
-# For generating Map content we need yet another
-# special control file and the name for it is
-# hard-coded here.
+# For generating Map content we need yet another special control file and the
+# name for it is hard-coded here.
 FILE_GROUP_MAPS_TEX         = 'GROUP_MAPS.tex'
 
 # MAP GROUP PDF FILE
-# This is the final map content file that was
-# generated from the map control file.
+# This is the final map content file that was generated from the map control
+# file.
 FILE_GROUP_MAPS_PDF         = 'GROUP_MAPS.pdf'
 
 # BIBLE PDF FILE
-# This is the final file that has all groups that
-# are defined to be in the final publication PDF
-# file. It should land in the deliverables folder
-# and the system will refine the name some more.
+# This is the final file that has all groups that are defined to be in the final
+# publication PDF file.  It should land in the deliverables folder and the
+# system will refine the name some more.
 FILE_BOOK                   = 'final.pdf'
 
 # PATHS
