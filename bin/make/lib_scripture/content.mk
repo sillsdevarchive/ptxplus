@@ -14,26 +14,24 @@
 #		Rules for publication Scripture content
 ##############################################################
 
-# Before we can typeset we have to copy the source text
-# into the Source folder. After that further preprocessing
-# is needed. Any predictable process will be done here.
-# The list of processes can be edited in the project ini
-# ini under the [Preproces] section.
+# Before we can typeset we have to copy the source text into the Source folder.
+# After that further preprocessing is needed.  Any predictable process will be
+# done here.  The list of processes can be edited in the project ini ini under
+# the [Preproces] section.
 
-# Define the main macro for what it takes to process an
-# individual component.
+# Define the main macro for what it takes to process an individual component.
 
 define content_rules
 
-# Define our source file rule here. The idea is we do not want the
-# user to get a file not found error when they process a file.
-# Rather a dummy file will be created telling them the file is missing
-# and hopefully some helpful instructions on what to do.
+# Define our source file rule here.  The idea is we do not want the user to get
+# a file not found error when they process a file.  Rather a dummy file will be
+# created telling them the file is missing and hopefully some helpful
+# instructions on what to do.
 $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE) :
 	$(call copysmart,$(PATH_RESOURCES_TEMPLATES)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE),$$@)
 
-# This is the rule for creating the working text. We will use
-# the postprocessing function to do this.
+# This is the rule for creating the working text.  We will use the
+# postprocessing function to do this.
 $(PATH_TEXTS)/$(1).$(EXT_WORK) : $(PATH_SOURCE)/$($(1)_content)$(NAME_SOURCE_ORIGINAL).$(EXT_SOURCE)
 ifeq ($(LOCKED),0)
 	@echo INFO: Creating: $(1).$(EXT_WORK)
