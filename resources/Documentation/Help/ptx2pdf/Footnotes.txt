@@ -5,3 +5,8 @@ Creation-Date: 2010-11-08T11:18:13.207121
 ====== Footnotes ======
 
 How to handle Footnotes in ptx2pdf.
+
+Until recently the default (hardwired) was for footnotes to be ragged
+right.  Now, Justification can be set in the marker \f (and \x).  The
+default is now fully justified.  Earlier behaviour can be returned
+with \Justification Left.
