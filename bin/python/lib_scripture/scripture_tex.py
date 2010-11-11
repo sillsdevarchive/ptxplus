@@ -261,58 +261,59 @@ class MakeTexControlFile (object) :
 		makeTheContentSettingsFile() elsewhere in this module.'''
 
 		# Bring in page format settings
-		useCropmarks = self._log_manager._settings['Format']['PageLayout']['USE_CROPMARKS']
-		pageHeight = self._log_manager._settings['Format']['PageLayout']['pageHeight']
-		pageWidth = self._log_manager._settings['Format']['PageLayout']['pageWidth']
-		endBookNoEject = self._log_manager._settings['Format']['PageLayout']['endBookNoEject']
-		titleColumns = self._log_manager._settings['Format']['Columns']['titleColumns']
-		introColumns = self._log_manager._settings['Format']['Columns']['introColumns']
-		bodyColumns = self._log_manager._settings['Format']['Columns']['bodyColumns']
-		columnGutterFactor = self._log_manager._settings['Format']['Columns']['columnGutterFactor']
-		columnGutterRule = self._log_manager._settings['Format']['Columns']['columnGutterRule']
-		columnGutterRuleSkip = self._log_manager._settings['Format']['Columns']['columnGutterRuleSkip']
-		columnshift = self._log_manager._settings['Format']['Columns']['columnshift']
+		useCropmarks                = self._log_manager._settings['Format']['PageLayout']['USE_CROPMARKS']
+		pageHeight                  = self._log_manager._settings['Format']['PageLayout']['pageHeight']
+		pageWidth                   = self._log_manager._settings['Format']['PageLayout']['pageWidth']
+		endBookNoEject              = self._log_manager._settings['Format']['PageLayout']['endBookNoEject']
+		titleColumns                = self._log_manager._settings['Format']['Columns']['titleColumns']
+		introColumns                = self._log_manager._settings['Format']['Columns']['introColumns']
+		bodyColumns                 = self._log_manager._settings['Format']['Columns']['bodyColumns']
+		columnGutterFactor          = self._log_manager._settings['Format']['Columns']['columnGutterFactor']
+		columnGutterRule            = self._log_manager._settings['Format']['Columns']['columnGutterRule']
+		columnGutterRuleSkip        = self._log_manager._settings['Format']['Columns']['columnGutterRuleSkip']
+		columnshift                 = self._log_manager._settings['Format']['Columns']['columnshift']
 
 		# Format -> PageLayout
-		useFigurePlaceholders = self._log_manager._settings['Format']['Illustrations']['USE_PLACEHOLDERS']
-		useIllustrations = self._log_manager._settings['Format']['Illustrations']['USE_ILLUSTRATIONS']
-		usePageBorder = self._log_manager._settings['Format']['PageLayout']['USE_PAGE_BORDER']
-		pageBorderScale = self._log_manager._settings['Format']['PageLayout']['pageBorderScale']
-		pageBorderFile = self._log_manager._settings['Format']['PageLayout']['FILE_PAGE_BORDER']
+		useFigurePlaceholders       = self._log_manager._settings['Format']['Illustrations']['USE_PLACEHOLDERS']
+		useIllustrations            = self._log_manager._settings['Format']['Illustrations']['USE_ILLUSTRATIONS']
+		usePageBorder               = self._log_manager._settings['Format']['PageLayout']['USE_PAGE_BORDER']
+		pageBorderScale             = self._log_manager._settings['Format']['PageLayout']['pageBorderScale']
+		pageBorderFile              = self._log_manager._settings['Format']['PageLayout']['FILE_PAGE_BORDER']
 
 		# Format -> Scripture
-		useRunningHeaderRule = self._log_manager._settings['Format']['HeaderFooter']['useRunningHeaderRule']
-		runningHeaderRulePosition = self._log_manager._settings['Format']['HeaderFooter']['runningHeaderRulePosition']
-		verseRefs = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['verseRefs']
-		omitBookRef = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['omitBookRef']
-		chapterVerseSeparator = self._log_manager._settings['Format']['ChapterVerse']['chapterVerseSeparator']
-		omitChapterNumber = self._log_manager._settings['Format']['ChapterVerse']['omitAllChapterNumbers']
-		omitVerseNumberOne = self._log_manager._settings['Format']['ChapterVerse']['omitVerseNumberOne']
-		afterVerseSpaceFactor = self._log_manager._settings['Format']['ChapterVerse']['afterVerseSpaceFactor']
-		afterChapterSpaceFactor = self._log_manager._settings['Format']['ChapterVerse']['afterChapterSpaceFactor']
-		removeIndentAfterHeading = self._log_manager._settings['Format']['ChapterVerse']['removeIndentAfterHeading']
-		adornVerseNumber = self._log_manager._settings['Format']['ChapterVerse']['adornVerseNumber']
-		verseMarker = self._log_manager._settings['Format']['ChapterVerse']['verseMarker']
+		useRunningHeaderRule        = self._log_manager._settings['Format']['HeaderFooter']['useRunningHeaderRule']
+		runningHeaderRulePosition   = self._log_manager._settings['Format']['HeaderFooter']['runningHeaderRulePosition']
+		verseRefs                   = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['verseRefs']
+		omitBookRef                 = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['omitBookRef']
+		chapterVerseSeparator       = self._log_manager._settings['Format']['ChapterVerse']['chapterVerseSeparator']
+		omitChapterNumber           = self._log_manager._settings['Format']['ChapterVerse']['omitAllChapterNumbers']
+		omitVerseNumberOne          = self._log_manager._settings['Format']['ChapterVerse']['omitVerseNumberOne']
+		afterVerseSpaceFactor       = self._log_manager._settings['Format']['ChapterVerse']['afterVerseSpaceFactor']
+		afterChapterSpaceFactor     = self._log_manager._settings['Format']['ChapterVerse']['afterChapterSpaceFactor']
+		removeIndentAfterHeading    = self._log_manager._settings['Format']['ChapterVerse']['removeIndentAfterHeading']
+		adornVerseNumber            = self._log_manager._settings['Format']['ChapterVerse']['adornVerseNumber']
+		verseMarker                 = self._log_manager._settings['Format']['ChapterVerse']['verseMarker']
+		quoteKernAmount             = self._log_manager._settings['Format']['TextElements']['quoteKernAmount']
 
 		# Running Header
-		runningHeaderTitleLeft = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderTitleLeft']
-		runningHeaderTitleCenter = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderTitleCenter']
-		runningHeaderTitleRight = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderTitleRight']
-		runningHeaderOddLeft = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderOddLeft']
-		runningHeaderOddCenter = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderOddCenter']
-		runningHeaderOddRight = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderOddRight']
-		runningHeaderEvenLeft = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderEvenLeft']
-		runningHeaderOddCenter = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderOddCenter']
-		runningHeaderEvenRight = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderEvenRight']
-		runningFooterTitleLeft = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterTitleLeft']
-		runningFooterTitleCenter = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterTitleCenter']
-		runningFooterTitleRight = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterTitleRight']
-		runningFooterOddLeft = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterOddLeft']
-		runningFooterOddCenter = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterOddCenter']
-		runningFooterOddRight = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterOddRight']
-		runningFooterEvenLeft = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterEvenLeft']
-		runningFooterEvenCenter = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterEvenCenter']
-		runningFooterEvenRight = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterEvenRight']
+		runningHeaderTitleLeft      = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderTitleLeft']
+		runningHeaderTitleCenter    = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderTitleCenter']
+		runningHeaderTitleRight     = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderTitleRight']
+		runningHeaderOddLeft        = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderOddLeft']
+		runningHeaderOddCenter      = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderOddCenter']
+		runningHeaderOddRight       = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderOddRight']
+		runningHeaderEvenLeft       = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderEvenLeft']
+		runningHeaderOddCenter      = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderOddCenter']
+		runningHeaderEvenRight      = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderEvenRight']
+		runningFooterTitleLeft      = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterTitleLeft']
+		runningFooterTitleCenter    = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterTitleCenter']
+		runningFooterTitleRight     = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterTitleRight']
+		runningFooterOddLeft        = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterOddLeft']
+		runningFooterOddCenter      = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterOddCenter']
+		runningFooterOddRight       = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterOddRight']
+		runningFooterEvenLeft       = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterEvenLeft']
+		runningFooterEvenCenter     = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterEvenCenter']
+		runningFooterEvenRight      = self._log_manager._settings['Format']['HeaderFooter']['FooterContent']['runningFooterEvenRight']
 
 		# Footnotes
 		useAutoCallers              = self._log_manager._settings['Format']['Footnotes']['useAutoCallers']
@@ -344,81 +345,88 @@ class MakeTexControlFile (object) :
 		footerPosition              = self._log_manager._settings['Format']['HeaderFooter']['footerPosition']
 
 		# Fonts and text
-		xetexLineBreakLocale = self._log_manager._settings['Format']['Fonts']['xetexLineBreakLocale']
-		fontDefRegular = self._log_manager._settings['Format']['Fonts']['fontDefRegular']
-		fontDefBold = self._log_manager._settings['Format']['Fonts']['fontDefBold']
-		fontDefItalic = self._log_manager._settings['Format']['Fonts']['fontDefItalic']
-		fontDefBoldItalic = self._log_manager._settings['Format']['Fonts']['fontDefBoldItalic']
-		tracingLostCharacters = self._log_manager._settings['Format']['Fonts']['tracingLostCharacters']
-		fontSizeUnit = self._log_manager._settings['Format']['Fonts']['fontSizeUnit']
-		lineSpacingFactor = self._log_manager._settings['Format']['Fonts']['lineSpacingFactor']
-		verticalSpaceFactor = self._log_manager._settings['Format']['Fonts']['verticalSpaceFactor']
+		xetexLineBreakLocale        = self._log_manager._settings['Format']['Fonts']['xetexLineBreakLocale']
+		fontDefRegular              = self._log_manager._settings['Format']['Fonts']['fontDefRegular']
+		fontDefBold                 = self._log_manager._settings['Format']['Fonts']['fontDefBold']
+		fontDefItalic               = self._log_manager._settings['Format']['Fonts']['fontDefItalic']
+		fontDefBoldItalic           = self._log_manager._settings['Format']['Fonts']['fontDefBoldItalic']
+		tracingLostCharacters       = self._log_manager._settings['Format']['Fonts']['tracingLostCharacters']
+		fontSizeUnit                = self._log_manager._settings['Format']['Fonts']['fontSizeUnit']
+		lineSpacingFactor           = self._log_manager._settings['Format']['Fonts']['lineSpacingFactor']
+		verticalSpaceFactor         = self._log_manager._settings['Format']['Fonts']['verticalSpaceFactor']
 
 		# Build our output - These are the strings we will fill:
-		fileHeaderText = ''
-		fileInput = ''
-		formatSettings = ''
-		verseChapterSettings = ''
-		headerFooterSettings = ''
-		footnoteSettings = ''
-		fontSettings = ''
-		generalSettings = ''
+		fileHeaderText              = ''
+		fileInput                   = ''
+		formatSettings              = ''
+		verseChapterSettings        = ''
+		headerFooterSettings        = ''
+		footnoteSettings            = ''
+		fontSettings                = ''
+		generalSettings             = ''
 
 		# Create the file header
-		fileHeaderText +=    "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
+		fileHeaderText      +=    "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
 					"% should be made to the project.conf file or the custom TeX setup file.\n\n"
 		# Add format settings
-		formatSettings += '\\PaperHeight=' + pageHeight + 'mm\n'
-		formatSettings += '\\PaperWidth=' + pageWidth + 'mm\n'
+		formatSettings      += '\\PaperHeight=' + pageHeight + 'mm\n'
+		formatSettings      += '\\PaperWidth=' + pageWidth + 'mm\n'
 		if useCropmarks.lower() == 'true' :
-			formatSettings += '\\CropMarkstrue\n'
+			formatSettings  += '\\CropMarkstrue\n'
 		if endBookNoEject.lower() == 'true' :
-			formatSettings += '\\endbooknoejecttrue\n'
+			formatSettings  += '\\endbooknoejecttrue\n'
 		# Columns
-		formatSettings += '\\TitleColumns=' + titleColumns + '\n'
-		formatSettings += '\\IntroColumns=' + introColumns + '\n'
-		formatSettings += '\\BodyColumns=' + bodyColumns + '\n'
-		formatSettings += '\\def\\ColumnGutterFactor{' + columnGutterFactor + '}\n'
+		formatSettings      += '\\TitleColumns=' + titleColumns + '\n'
+		formatSettings      += '\\IntroColumns=' + introColumns + '\n'
+		formatSettings      += '\\BodyColumns=' + bodyColumns + '\n'
+		formatSettings      += '\\def\\ColumnGutterFactor{' + columnGutterFactor + '}\n'
 		if columnGutterRule.lower() == 'true' :
-			formatSettings += '\\ColumnGutterRuletrue\n'
-		formatSettings += '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + 'mm\n'
+			formatSettings  += '\\ColumnGutterRuletrue\n'
+		formatSettings      += '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + 'mm\n'
 
 		# Margins
-		formatSettings += '\\MarginUnit=' + marginUnit + 'mm\n'
-		formatSettings += '\\def\\TopMarginFactor{' + topMarginFactor + '}\n'
-		formatSettings += '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
-		formatSettings += '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
-		formatSettings += '\\ExtraRMargin=' + extraRightMargin + 'mm\n'
+		formatSettings      += '\\MarginUnit=' + marginUnit + 'mm\n'
+		formatSettings      += '\\def\\TopMarginFactor{' + topMarginFactor + '}\n'
+		formatSettings      += '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
+		formatSettings      += '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
+		formatSettings      += '\\ExtraRMargin=' + extraRightMargin + 'mm\n'
 		if bindingGutter != '' and bindingGutter > 0 :
-			formatSettings += '\\BindingGuttertrue\n'
-			formatSettings += '\\BindingGutter=' + bindingGutter + 'mm\n'
+			formatSettings  += '\\BindingGuttertrue\n'
+			formatSettings  += '\\BindingGutter=' + bindingGutter + 'mm\n'
 
 		# Fonts
 		if xetexLineBreakLocale.lower() == 'true' :
-			fontSettings += '\\XeTeXlinebreaklocale \"G\"\n'
-		fontSettings += '\\def\\regular{\"' + fontDefRegular + '\"}\n'
-		fontSettings += '\\def\\bold{\"' + fontDefBold + '\"}\n'
-		fontSettings += '\\def\\italic{\"' + fontDefItalic + '\"}\n'
-		fontSettings += '\\def\\bolditalic{\"' + fontDefBoldItalic + '\"}\n'
+			fontSettings    += '\\XeTeXlinebreaklocale \"G\"\n'
+		fontSettings        += '\\def\\regular{\"' + fontDefRegular + '\"}\n'
+		fontSettings        += '\\def\\bold{\"' + fontDefBold + '\"}\n'
+		fontSettings        += '\\def\\italic{\"' + fontDefItalic + '\"}\n'
+		fontSettings        += '\\def\\bolditalic{\"' + fontDefBoldItalic + '\"}\n'
 		if tracingLostCharacters.lower() == 'true' :
-			fontSettings += '\\tracinglostchars=1\n'
-		fontSettings += '\\FontSizeUnit=' + fontSizeUnit + 'pt\n'
-		fontSettings += '\\def\\LineSpacingFactor{' + lineSpacingFactor + '}\n'
-		fontSettings += '\\def\\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
+			fontSettings    += '\\tracinglostchars=1\n'
+		fontSettings        += '\\FontSizeUnit=' + fontSizeUnit + 'pt\n'
+		fontSettings        += '\\def\\LineSpacingFactor{' + lineSpacingFactor + '}\n'
+		fontSettings        += '\\def\\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
+
+##########################################################################################
+
+		if str(quoteKernAmount) != '0' or quoteKernAmount != '' :
+			fontSettings    += '\\quotekernamount=' + quoteKernAmount + 'em\n'
+
+##########################################################################################
 
 		# Path to Illustration files (Note we add a "/" at the end so ptx2pdf can get it right.)
 		if useIllustrations.lower() == 'true' :
-			fileInput += '\\PicPath={' + self._pathToIllustrations + '/}\n'
+			fileInput       += '\\PicPath={' + self._pathToIllustrations + '/}\n'
 		# Will we use marginal verses? This setting is
 		# mainly for use with marginal verses
 		if self._useMarginalVerses.lower() == 'true' :
-			fileInput += '\\columnshift=' + columnshift + 'mm\n'
+			fileInput       += '\\columnshift=' + columnshift + 'mm\n'
 		# Do we want a page border?
 		if usePageBorder.lower() == 'true' :
 			if pageBorderScale == '' :
-				fileInput += '\\def\\PageBorder{' + pageBorderFile + '}\n'
+				fileInput   += '\\def\\PageBorder{' + pageBorderFile + '}\n'
 			else :
-				fileInput += '\\def\\PageBorder{' + pageBorderFile + ' scaled ' + pageBorderScale + '}\n'
+				fileInput   += '\\def\\PageBorder{' + pageBorderFile + ' scaled ' + pageBorderScale + '}\n'
 
 		# Verse/chapter settings
 		if verseRefs.lower() == 'true' :
@@ -532,8 +540,9 @@ class MakeTexControlFile (object) :
 		file output routine.'''
 
 		# Bring in settings we need
-		justifyPars = self._log_manager._settings['Format']['TextElements']['justifyPars']
-		rightToLeft = self._log_manager._settings['Format']['TextElements']['rightToLeft']
+		justifyPars             = self._log_manager._settings['Format']['TextElements']['justifyPars']
+		rightToLeft             = self._log_manager._settings['Format']['TextElements']['rightToLeft']
+		quoteKernAmount         = self._log_manager._settings['Format']['TextElements']['quoteKernAmount']
 
 		# Build our output - These are the strings we will fill:
 		macroSettings = ''
@@ -544,34 +553,35 @@ class MakeTexControlFile (object) :
 		generalSettings = ''
 		mapSettings = ''
 
-		# Set some context sensitive things here
-		# Note that for now, we are going to put header and footer settings
-		# only in the 'bible' context.
+		# Set some context sensitive things here. Note that for now, we are going
+		# to put header and footer settings only in the 'bible' context.
 		if self._contextFlag.lower() == 'cover' :
-			fileName = self._cvSettingsFile
-			# There is not much to a cover file but we know that we
-			# need to turn off all the header and footer output
-			formatSettings += '\\TitleColumns=1\n'
-			formatSettings += '\\IntroColumns=1\n'
-			formatSettings += '\\BodyColumns=1\n'
-			headerSettings += self.RemovePageNumbers(self._headerPositions)
-			footerSettings += self.RemovePageNumbers(self._footerPositions)
+			fileName            = self._cvSettingsFile
+			# There is not much to a cover file but we know that we need to turn
+			# off all the header and footer output
+			formatSettings      += '\\TitleColumns=1\n'
+			formatSettings      += '\\IntroColumns=1\n'
+			formatSettings      += '\\BodyColumns=1\n'
+			headerSettings      += self.RemovePageNumbers(self._headerPositions)
+			footerSettings      += self.RemovePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'front' :
-			fileName = self._fmSettingsFile
-			formatSettings += '\\TitleColumns=1\n'
-			formatSettings += '\\IntroColumns=1\n'
-			formatSettings += '\\BodyColumns=1\n'
-			headerSettings += self.RemovePageNumbers(self._headerPositions)
-			footerSettings += self.RemovePageNumbers(self._footerPositions)
+			fileName            = self._fmSettingsFile
+			formatSettings      += '\\TitleColumns=1\n'
+			formatSettings      += '\\IntroColumns=1\n'
+			formatSettings      += '\\BodyColumns=1\n'
+			if quoteKernAmount < 0 or quoteKernAmount != '' :
+				formatSettings  += '\\quotekernamount=' + quoteKernAmount + 'em\n'
+			headerSettings      += self.RemovePageNumbers(self._headerPositions)
+			footerSettings      += self.RemovePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'back' :
 			fileName = self._bmSettingsFile
-			formatSettings += '\\TitleColumns=1\n'
-			formatSettings += '\\IntroColumns=1\n'
-			formatSettings += '\\BodyColumns=1\n'
-			headerSettings += self.RemovePageNumbers(self._headerPositions)
-			footerSettings += self.RemovePageNumbers(self._footerPositions)
+			formatSettings      += '\\TitleColumns=1\n'
+			formatSettings      += '\\IntroColumns=1\n'
+			formatSettings      += '\\BodyColumns=1\n'
+			headerSettings      += self.RemovePageNumbers(self._headerPositions)
+			footerSettings      += self.RemovePageNumbers(self._footerPositions)
 
 		# Maps are a very different process from other types of matter.
 		# The output here will be very different from the others.
@@ -629,20 +639,25 @@ class MakeTexControlFile (object) :
 							mapSettings + \
 							'\n'
 
-		# We don't want to write out at this point if the file want to
-		# write to already exists.
-		if not os.path.isfile(fileName) :
-			self.writeOutTheFile(orderedContents)
-		else :
-			self._log_manager.log("INFO", "Exists: " + os.path.split(self._outputFile)[1], "true")
+		# Do we want to write out at this point if the file already exists? At
+		# this point, I'm saying no.  It is auto-generated so if changes are
+		# made to the .conf file we want them reflected here if they are for
+		# this particular file.  I may need to revisit this and think about it
+		# some more if that doesn't seem to work.
+#        if not os.path.isfile(fileName) :
+#            self.writeOutTheFile(orderedContents)
+#        else :
+#            self._log_manager.log("INFO", "Exists: " + os.path.split(self._outputFile)[1], "true")
+
+		self.writeOutTheFile(orderedContents)
 
 
 ###############################################################################
 
 	def RemovePageNumbers (self, positions) :
-		'''This will simply return a list of page header or footer
-			positions with \empty in them this takes out page
-			numbers on peripheral matter pages.'''
+		'''This will simply return a list of page header or footer positions
+		with \empty in them this takes out page numbers on peripheral matter
+		pages.'''
 
 		texCode = ''
 		for place in positions :

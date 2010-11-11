@@ -51,21 +51,21 @@ class MakeHyphenWordlist (object) :
 	_hyphens_re = re.compile(u'\u002D|\u00AD|\u2010') # Don't include U+2011 so we don't break on it.
 
 	def __init__(self, log_manager):
-		self._log_manager = log_manager
-		self._hyphenations={}
-		self._hyphen = set()
-		self._hyphenCounts = {}
-		self._wordlistReport = set()
+		self._log_manager       = log_manager
+		self._hyphenations      ={}
+		self._hyphen            = set()
+		self._hyphenCounts      = {}
+		self._wordlistReport    = set()
 
 	def main (self) :
-		pathHyphenation = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
-		sourceHyphenatedWordsFile = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYCUSTOM']
-		sourcePrefixListFile = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYPREFIX']
-		sourceSuffixListFile = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYSUFFIX']
-		reportNonHypenatedWords = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYNOT']
-		sourceMasterWordsFile = self._log_manager._currentInput
-		newHyphenationFile = self._log_manager._currentOutput
-		hyphenBreakRules = self._log_manager._settings['Format']['Hyphenation']['hyphenBreakRules'].decode('utf_8').decode('unicode_escape')
+		pathHyphenation             = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
+		sourceHyphenatedWordsFile   = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYCUSTOM']
+		sourcePrefixListFile        = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYPREFIX']
+		sourceSuffixListFile        = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYSUFFIX']
+		reportNonHyphenatedWords    = pathHyphenation + '/' + tools.pubInfoObject['Files']['FILE_HYNOT']
+		sourceMasterWordsFile       = self._log_manager._currentInput
+		newHyphenationFile          = self._log_manager._currentOutput
+		hyphenBreakRules            = self._log_manager._settings['Format']['Hyphenation']['hyphenBreakRules'].decode('utf_8').decode('unicode_escape')
 		if hyphenBreakRules == "" :
 			self._log_manager.log("WARN", "There were no hyphenation break rules found in your project.conf file. This may be ok but keep in mind that if there were no other hyphenated words manually listed there will be no output to the file this script is creating. Sorry, I cannot read your mind.")
 
@@ -89,7 +89,7 @@ class MakeHyphenWordlist (object) :
 		self.writeHyphenationList(newHyphenationFile)
 
 		#Debuging, write out words that could not be hyphenated
-		self.writeFailedWords(reportNonHypenatedWords)
+		self.writeFailedWords(reportNonHyphenatedWords)
 
 
 	def loadPreHyphenatedWordList(self,filepath):
