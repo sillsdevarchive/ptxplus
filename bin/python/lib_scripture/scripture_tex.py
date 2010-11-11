@@ -336,7 +336,6 @@ class MakeTexControlFile (object) :
 		topMarginFactor             = self._log_manager._settings['Format']['Margins']['topMarginFactor']
 		bottomMarginFactor          = self._log_manager._settings['Format']['Margins']['bottomMarginFactor']
 		sideMarginFactor            = self._log_manager._settings['Format']['Margins']['sideMarginFactor']
-		useBindingGutter            = self._log_manager._settings['Format']['Margins']['useBindingGutter']
 		extraRightMargin            = self._log_manager._settings['Format']['Margins']['extraRightMargin']
 		bindingGutter               = self._log_manager._settings['Format']['Margins']['bindingGutter']
 
@@ -390,7 +389,7 @@ class MakeTexControlFile (object) :
 		formatSettings += '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
 		formatSettings += '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
 		formatSettings += '\\ExtraRMargin=' + extraRightMargin + 'mm\n'
-		if useBindingGutter.lower() == 'true' :
+		if bindingGutter != '' and bindingGutter > 0 :
 			formatSettings += '\\BindingGuttertrue\n'
 			formatSettings += '\\BindingGutter=' + bindingGutter + 'mm\n'
 
