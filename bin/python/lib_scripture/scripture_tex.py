@@ -100,6 +100,10 @@ class MakeTexControlFile (object) :
 											'RFevenleft', 'RFevencenter', 'RFevenright']
 		# Some global settings
 		self._useMarginalVerses         = self._log_manager._settings['Format']['ChapterVerse']['useMarginalVerses']
+		try :
+			self._quoteKernAmount           = float(self._log_manager._settings['Format']['TextElements']['quoteKernAmount'])
+		except :
+			self._quoteKernAmount = 0
 
 		# Direct to the right context
 		if self._publicationType.lower() == 'scripture' :
@@ -293,7 +297,6 @@ class MakeTexControlFile (object) :
 		removeIndentAfterHeading    = self._log_manager._settings['Format']['ChapterVerse']['removeIndentAfterHeading']
 		adornVerseNumber            = self._log_manager._settings['Format']['ChapterVerse']['adornVerseNumber']
 		verseMarker                 = self._log_manager._settings['Format']['ChapterVerse']['verseMarker']
-		quoteKernAmount             = self._log_manager._settings['Format']['TextElements']['quoteKernAmount']
 
 		# Running Header
 		runningHeaderTitleLeft      = self._log_manager._settings['Format']['HeaderFooter']['HeaderContent']['runningHeaderTitleLeft']
@@ -406,13 +409,8 @@ class MakeTexControlFile (object) :
 		fontSettings        += '\\FontSizeUnit=' + fontSizeUnit + 'pt\n'
 		fontSettings        += '\\def\\LineSpacingFactor{' + lineSpacingFactor + '}\n'
 		fontSettings        += '\\def\\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
-
-##########################################################################################
-
-		if str(quoteKernAmount) != '0' or quoteKernAmount != '' :
-			fontSettings    += '\\quotekernamount=' + quoteKernAmount + 'em\n'
-
-##########################################################################################
+		if self._quoteKernAmount :
+			formatSettings  += '\\quotekernamount=' + str(self._quoteKernAmount) + 'em\n'
 
 		# Path to Illustration files (Note we add a "/" at the end so ptx2pdf can get it right.)
 		if useIllustrations.lower() == 'true' :
@@ -542,7 +540,6 @@ class MakeTexControlFile (object) :
 		# Bring in settings we need
 		justifyPars             = self._log_manager._settings['Format']['TextElements']['justifyPars']
 		rightToLeft             = self._log_manager._settings['Format']['TextElements']['rightToLeft']
-		quoteKernAmount         = self._log_manager._settings['Format']['TextElements']['quoteKernAmount']
 
 		# Build our output - These are the strings we will fill:
 		macroSettings = ''
@@ -570,8 +567,8 @@ class MakeTexControlFile (object) :
 			formatSettings      += '\\TitleColumns=1\n'
 			formatSettings      += '\\IntroColumns=1\n'
 			formatSettings      += '\\BodyColumns=1\n'
-			if quoteKernAmount < 0 or quoteKernAmount != '' :
-				formatSettings  += '\\quotekernamount=' + quoteKernAmount + 'em\n'
+			if self._quoteKernAmount :
+				formatSettings  += '\\quotekernamount=' + str(self._quoteKernAmount) + 'em\n'
 			headerSettings      += self.RemovePageNumbers(self._headerPositions)
 			footerSettings      += self.RemovePageNumbers(self._footerPositions)
 
@@ -580,6 +577,8 @@ class MakeTexControlFile (object) :
 			formatSettings      += '\\TitleColumns=1\n'
 			formatSettings      += '\\IntroColumns=1\n'
 			formatSettings      += '\\BodyColumns=1\n'
+			if self._quoteKernAmount :
+				formatSettings  += '\\quotekernamount=' + str(self._quoteKernAmount) + 'em\n'
 			headerSettings      += self.RemovePageNumbers(self._headerPositions)
 			footerSettings      += self.RemovePageNumbers(self._footerPositions)
 
