@@ -24,6 +24,10 @@ If the CMYK color space is desired replace 'rgb' with 'cmyk' and follow with fou
 
 This will give you green cmyk(100%, 0%, 100%, 50%)
 
+A CMYK color chart can be found here:
+http://www.december.com/html/spec/colorcmyk.html
+
+
 ==== Font Handling ====
 Some tips for working with fonts.
 
