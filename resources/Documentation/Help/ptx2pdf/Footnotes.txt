@@ -4,9 +4,17 @@ Creation-Date: 2010-11-08T11:18:13.207121
 
 ====== Footnotes ======
 
-How to handle Footnotes in ptx2pdf.
-
+==== Justification ====
 Until recently the default (hardwired) was for footnotes to be ragged
 right.  Now, Justification can be set in the marker \f (and \x).  The
-default is now fully justified.  Earlier behaviour can be returned
+default is now fully justified.  Earlier behavior can be returned
 with \Justification Left.
+
+==== Line Spacing ====
+To adjust the vertical line spacing for footnotes add "\BaseLine 10pt" (or whatever pt size it needs to be) to the \f marker in the .sty file. the same would work for cross references (\x).
+
+==== Footnote Rule ====
+To change or adjust the footnote rule you need to use or adjust the \def\footnoterule{} setting. [Note, this has not been tested but you should be able to change the rule character by entering another character in the setting like \footnoterule{*} should change it to be all asterisk, not that you would want to do that. If you leave the setting in the setup file but do not put a character in it, the rule will not be used at all - in theory.]
+
+==== Flying Verse Numbers ====
+To set the vertical distance between verse numbers when using flying verse numbers. You need to insert in the [[.sty]] this command in the verse marker: \BaseLine 10pt This can help prevent clashing when using number systems in which the character baseline can vary from number to number. The default behavior is to use the font size. If this is too close you will want to change the number as desired.

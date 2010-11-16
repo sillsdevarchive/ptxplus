@@ -1,0 +1,43 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2010-11-16T14:19:56.271832
+
+====== Fonts ======
+
+==== Adding Color to Styles ====
+To add an RGB color to a specific style you need to add a hook to the style such as this:
+
+\sethook{start}{v}{\special{color push rgb 0.13 0.54 0.13}}
+\sethook{end}{v}{\special{color pop}}
+
+This gives you Forest Green on the selected style. The numbers are percentage of R, G, and B. Go here for an RGB color chart:
+http://www.december.com/html/spec/colorcodes.html
+
+Whereas 100% = 1, 13% = 0.13, etc...
+
+This will push an RGB color to the color stack. Then, after the marker is over, it pops the color off the stack so the following text will be back to the previous color.
+
+If the CMYK color space is desired replace 'rgb' with 'cmyk' and follow with four percentage numbers rather than three. Example:
+
+\sethook{start}{v}{\special{color push cmyk 1 0 1 0.5}}
+\sethook{end}{v}{\special{color pop}}
+
+This will give you green cmyk(100%, 0%, 100%, 50%)
+
+==== Font Handling ====
+Some tips for working with fonts.
+
+Fonts to use for "plain", "bold", "italic", and "bold italic" from the Paratext stylesheet (they need not really be italic, etc, of course) There are also some extra options that can be added to the font def command they would be:
+	embolden=n	Fake bold command, start with 2
+	letterspace=n	Extra character space, start with 5
+
+These commands go after the font name. Remember to put a ":" between the name and the first command and a ";" between commands.
+
+This is an example of how to use system fonts. If you do this you need to comment out the line above to avoid errors. SIL Charis - Installed in the OS system fonts folder
+	\def\regular{"Charis SIL"}	\def\bold{"Charis SIL/B"}
+	\def\italic{"Charis SIL/I"}	\def\bolditalic{"Charis SIL/BI"}
+
+To force TeX to make a font "bold" use a command something like:
+\def\bold{"My Font Name:embolden=2"}
+
+Change the embolden setting as needed

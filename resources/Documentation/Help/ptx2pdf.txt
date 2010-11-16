@@ -1,7 +1,6 @@
 Content-Type: text/x-zim-wiki
-Wiki-Format: zim 0.26
+Wiki-Format: zim 0.4
 Creation-Date: Thu, 11 Mar 2010 14:37:10 +0700
-Modification-Date: Mon, 24 May 2010 21:00:58 +0700
 
 ====== Ptx2pdf ======
 
@@ -32,29 +31,4 @@ For some audiences, it is helpful to have a page number on the first page. For n
 
 Similar code could be applied to the footer as well.
 
-==== Footnote Handling Tweaks ====
-To adjust the vertical line spacing for footnotes add "\BaseLine 10pt" (or whatever pt size it needs to be) to the \f marker in the .sty file. the same would work for cross references (\x).
 
-==== Footnote Rule ====
-To change or adjust the footnote rule you need to use or adjust the \def\footnoterule{} setting. [Note, this has not been tested but you should be able to change the rule character by entering another character in the setting like \footnoterule{*} should change it to be all asterisk, not that you would want to do that. If you leave the setting in the setup file but do not put a character in it, the rule will not be used at all - in theory.]
-
-==== Flying Verse Numbers ====
-To set the vertical distance between verse numbers when using flying verse numbers. You need to insert in the [[.sty]] this command in the verse marker: \BaseLine 10pt This can help prevent clashing when using number systems in which the character baseline can vary from number to number. The default behavior is to use the font size. If this is too close you will want to change the number as desired.
-
-==== Font Handling ====
-Some tips for working with fonts. These tweaks should be applied in the font setup file
-
-Fonts to use for "plain", "bold", "italic", and "bold italic" from the Paratext stylesheet (they need not really be italic, etc, of course) There are also some extra options that can be added to the font def command they would be:
-	embolden=n	Fake bold command, start with 2
-	letterspace=n	Extra character space, start with 5
-
-These commands go after the font name. Remember to put a ":" between the name and the first command and a ";" between commands.
-
-This is an example of how to use system fonts. If you do this you need to comment out the line above to avoid errors. SIL Charis - Installed in the OS system fonts folder
-	\def\regular{"Charis SIL"}	\def\bold{"Charis SIL/B"}
-	\def\italic{"Charis SIL/I"}	\def\bolditalic{"Charis SIL/BI"}
-
-To force TeX to make a font "bold" use a command something like:
-\def\bold{"My Font Name:embolden=2"}
-
-Change the embolden setting as needed
