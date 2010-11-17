@@ -167,29 +167,26 @@ class LogManager (object) :
 		#Collect the entry
 		self._processLogObject.append(entry + "\n")
 
-		# If for some reason we fail to find a logModeProject
-		# setting we will default to debug output
+		# If for some reason we fail to find a debugMode setting we will default
+		# to debug output
 		try :
-			if self._settings != None and self._settings['System']['General']['logModeProject'] == "debug" :
+			if self._settings != None and self._settings['System']['ErrorHandling']['Python']['debugMode'] == 'true' :
 				tools.userMessage(entryType + ": " + event)
 		except :
 			tools.userMessage(entryType + ": " + event)
 
-		# To save on code we will give the option to output
-		# this same message to the termina which could be
-		# very handy in many cases
+		# To save on code we will give the option to output this same message to
+		# the termina which could be very handy in many cases
 		if toTerm.lower() == 'true' :
 			tools.userMessage(entryType + ": " + event)
 
-		# Because there are so many ways to create errors
-		# we need just a simple way to track them across
-		# seperate processes. This will be done with a
-		# simple error.log. Each time an error is found
-		# it will be added to the object. The object will
-		# be written out at the end of the process. The
-		# error.log file will continue to colect error
-		# repors until the series of processes are done
-		# then the system will collect them all and report.
+		# Because there are so many ways to create errors we need just a simple
+		# way to track them across seperate processes.  This will be done with a
+		# simple error.log.  Each time an error is found it will be added to the
+		# object.  The object will be written out at the end of the process.
+		# The error.log file will continue to colect error repors until the
+		# series of processes are done then the system will collect them all and
+		# report.
 
 		if entryType == "ERRR" or entryType == "WARN" :
 			errorID = self._logProcessID + "." + entryID
@@ -205,10 +202,9 @@ class LogManager (object) :
 
 
 	def closeOutSessionLog (self) :
-		'''This will write out all the logged entries to the log files
-			at the end of a process. However, we will first check
-			to see if we are in a valid project area. If not, it
-			all comes to a crashing halt.'''
+		'''This will write out all the logged entries to the log files at the
+		end of a process.  However, we will first check to see if we are in a
+		valid project area.  If not, it all comes to a crashing halt.'''
 
 		if tools.isProjectFolder() == True :
 

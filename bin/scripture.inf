@@ -358,16 +358,25 @@ MOD_RUN_PROCESS             = '$(PTXPLUS_BASE)/bin/python/lib_system/run_process
 MOD_MAKE_MAP                = 'make_map_file'
 
 # TEX
-# These are general TeX settings used by the system for
-# processing project files. TeX settings for specific
-# purposes can be found in their respective sections.
+# These are general TeX settings used by the system for processing project
+# files.  TeX settings for specific purposes can be found in their respective
+# sections.
 [TeX]
 
+# TEX ENGINE
 # The TeX program that the system is using.
 TEX_ENGINE                   = 'xetex'
 
-# TeX inputs setting
+# TEX INPUTS SETTING
+# Initial settings that will be fed into TeX when it starts a job.
 TEX_INPUTS                   = 'TEXINPUTS=$(PATH_HOME):$(PATH_HOME)/$(PATH_HYPHENATION):$(PTXPLUS_BASE)/bin/tex/lib_scripture:.'
+
+# DEFAULT MEASUREMENT UNIT
+# This is the default unit of measurement used by most of the TeX settings.
+# However, it is good to keep in mind that some measurements will differ
+# depending on the context.  Enter the abreviation for the unit used.  For
+# example, for millimeters we use: 'mm'.
+defaultMeasure              = 'mm'
 
 # COMPONENT SOURCE NAME (PTX)
 # Source names for all the components handled by this system.

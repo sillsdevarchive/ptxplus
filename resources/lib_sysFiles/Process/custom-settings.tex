@@ -1,25 +1,23 @@
 % custom_tex.txt
 %
-% Custom TeX setup file for the ptx2pdf macro package.
-% This file is loaded in after the auto_tex.txt settings
-% file is compleated loading.
+% Custom TeX setup file for the ptx2pdf macro package.  This file is loaded in
+% after the auto_tex.txt settings file is compleated loading.
 
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%  Extra Tweaks %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Extra Tweaks %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% In a perfect world none of these would be needed but when
-% your publication throws you a curve, perhaps one of these
-% work-arounds might help you do what you want to do.
+% In a perfect world none of these would be needed but when your publication
+% throws you a curve, perhaps one of these work-arounds might help you do what
+% you want to do.
 
 
 %%%%% Baselineskip Adjustment Hook
-% This hook provides a means to adjust the baselineskip on a
-% specific style. (Does not work with some markers like \fig)
-% It provides a place to put the initial setting so the hook
-% can make the change and then go back to the initial setting
-% when done.
+% This hook provides a means to adjust the baselineskip on a specific style.
+% (Does not work with some markers like \fig) It provides a place to put the
+% initial setting so the hook can make the change and then go back to the
+% initial setting when done.
 \newdimen\remblskip \remblskip=\baselineskip
 
 % Baselineskip Adjustment Hook Example
@@ -34,10 +32,9 @@
 \def\skiphalfline{\vskip 0.5\baselineskip}
 
 %%%%% Additional Marginal Verse Settings
-% For marginal verse output we need to insert this right here.
-% This should be temporary. It allows one stylesheet to undo
-% superscript in a previous one It needs to go right here to
-% keep everything else working
+% For marginal verse output we need to insert this right here.  This should be
+% temporary.  It allows one stylesheet to undo superscript in a previous one It
+% needs to go right here to keep everything else working
 %
 % This is needed to turn off superscript in the override stylesheet
 %\catcode`\@=11
@@ -53,35 +50,34 @@
 % \NoSuperscript
 
 %%%%% Header output
-% To adjust the size of the page number in the header or footer
-% use the following code. Adjust font name and size as necessary.
-%\font\mysmallfont="[../Fonts/CharisSIL/CharisSILB.ttf]" at 10pt
+% To adjust the size of the page number in the header or footer use the
+% following code.  Adjust font name and size as necessary.
+% \font\mysmallfont="[../Fonts/CharisSIL/CharisSILB.ttf]" at 10pt
 %\def\pagenumber{{\mysmallfont \folio}}
 
-% This will output only the book name in the header that is
-% found in \h. (This should be added to ptx2pdf.)
+% This will output only the book name in the header that is found in \h. (This
+% should be added to ptx2pdf.)
 \catcode`\@=11
 \def\bookname{\x@\extr@ctfirst\p@gefirstmark\relax\@book}
 \catcode`\@=12
 
 %%%%% Footnote tweaks
-% Footnote caller kerning - To adjust space around the
-% footnote caller use the following code Adjust the kern
-% amounts as necessary
+% Footnote caller kerning - To adjust space around the footnote caller use the
+% following code Adjust the kern amounts as necessary
 \let\OriginalGetCaller=\getcaller
 \def\getcaller#1#2{%
   \kern0.2em\OriginalGetCaller{#1}{#2}\kern0.4em}
 
-% Inter Note Skip - Adjust the horizontal space between footnotes,
-% both paragraphed and non-paragraphed
+% Inter Note Skip - Adjust the horizontal space between footnotes, both
+% paragraphed and non-paragraphed
 \catcode`\@=11
   \intern@teskip=10pt
 \catcode`\@=12
 
-% Inter-note Penalty - Control the amount of "tension" between
-% parts of a footnote to help control line breaking. If you
-% use the highest setting, 10000, it will never break. A lower
-% setting, like 9999, will lossen it up. Default is 9999.
+% Inter-note Penalty - Control the amount of "tension" between parts of a
+% footnote to help control line breaking.  If you use the highest setting,
+% 10000, it will never break.  A lower setting, like 9999, will lossen it up.
+% Default is 9999.
 \def\internotepenalty{9999}
 
 
@@ -90,30 +86,27 @@
 %\quotekernamount = 0.1em
 
 %%%%% Substituting Characters
-% Some times, when a character does not exist in a font
-% you can substitute from another if no special rendering
-% is needed. This code will do that. Uncomment and modify
-% as needed. This will put more cwi in your life :-)
+% Some times, when a character does not exist in a font you can substitute from
+% another if no special rendering is needed.  This code will do that.  Uncomment
+% and modify as needed.  This will put more cwi in your life :-)
 %\font\cwi="[../Fonts/Padauk/Padauk.ttf]" at 10pt
 %\catcode"A92E=\active				% Make U+A92E an active character
 %\def^^^^a92e{\leavevmode{\cwi\char"A92E}}	% Define it to print itself  in \cwi
 
 %%%%% Non-standard Spaces
-% Some publications may use non-standard (U+0020) between words.
-% But TeX (and XeTeX) will treat spaces other than U+0020 as
-% non-breaking which messes up your justification. This is a
-% work around to force TeX to break and stretch words with
-% another space character in a controled way.
+% Some publications may use non-standard (U+0020) between words.  But TeX (and
+% XeTeX) will treat spaces other than U+0020 as non-breaking which messes up
+% your justification.  This is a work around to force TeX to break and stretch
+% words with another space character in a controled way.
 %\catcode"2009=13
 %\def^^^^2009{\hskip .2em plus.1em minus.1em\relax}
 
 %%%%% Heading space
-% There always seems to be problems with extra space between
-% the section heading and the top of the column when the
-% section head is at the top of the column. To take up the
-% slack this code will usually help. Any adjustments needed
-% should be done in the .sty and \VerticalSpaceFactor.
-% Trying to adjust this code doesn't seem to make any dif.
+% There always seems to be problems with extra space between the section heading
+% and the top of the column when the section head is at the top of the column.
+% To take up the slack this code will usually help.  Any adjustments needed
+% should be done in the .sty and \VerticalSpaceFactor.  Trying to adjust this
+% code doesn't seem to make any dif.
 \catcode`\@=11
 \def\gridb@x#1{%
  \setbox0=\ifgridp@c\vbox{\box#1}\else\killd@scenders#1\fi%
@@ -130,33 +123,20 @@
 }
 \catcode`\@=12
 
-%%%%% Get Rid of Over Full Warnings
-% Surpress (if necessary) the vbox over full warning when
-% when line spacing gets tight. If you use it edit the pt
-% according to what you need. Keep in mind that you might
-% be able to prevent an overful \vbox by changing your top
-% and/or bottom margins.
-%\vfuzz = 2.5pt
-
-%%%%% Get Rid of Uggly Black Boxes
-% This might help prevent the black boxes from appearing
-% at the end of some lines if that is a problem. Edit as
-% needed.
-%\hfuzz=0.75pt
 
 %%%%% Get more verbose output in the logs for debugging
-%\tracingmacros=1
-%\def\pton{\tracingparagraphs=1}
-%\def\ptoff{\tracingparagraphs=0}
+% Insert into your text the \pton to turn on tracing of paragraph output and
+% \ptoff to turn it off when not needed.  This is for debuging text and macros.
+\def\pton{\tracingparagraphs=1}
+\def\ptoff{\tracingparagraphs=0}
 
 
-%%%%%%%%%%%%%%%%%%%%% TOC Generation %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TOC Generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% The following code controls the layout of the TOC file
-% This code can be addjusted to get the right look to your
-% TOC. You can also adjust the \toc<n> styles found in
-% the .sty file. The functions that are embedded in the
-% TOC file are:
+% The following code controls the layout of the TOC file This code can be
+% addjusted to get the right look to your TOC.  You can also adjust the \toc<n>
+% styles found in the .sty file.  The functions that are embedded in the TOC
+% file are:
 %	\tbltwowlheader{lable1}{label3}
 %	\tbltwowlrow{val1}{val3}
 % Or, if you wish a three column layout you could use this:
@@ -168,18 +148,14 @@
 
 \catcode`@=11
 
-\def\makedigitsother{\m@kedigitsother}
-\def\makedigitsletters{\m@kedigitsletters}
-
-% These are custom settings that can go in the .tex file to
-% adjust elements on the page
+% These are custom settings that can go in the .tex file to adjust elements on
+% the page. The defaults are set here.
 \def\myleader{.}		% The leader character
 \def\leaderspace{0.6em}		% The space between the leader characters
 \def\tblmarginright{0in}	% The width of the table's right margin
 \def\tblheaderspace{4pt}	% The space between the header and the first row
 \def\tblrowspace{4pt}		% The space between rows of the table
 \def\tblthreewcolmngap{.75in}	% The space between col 1 & 2 on a three col table
-
 
 % Macro code for leadered two colum layout:
 \newdimen\tbltwowllabel
@@ -202,7 +178,8 @@
 
 \catcode `@=12
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Map Handling %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Map Handling %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% Place The Map PDF File
 % This will place a PDF map file on the typeset page
@@ -213,9 +190,8 @@
 
 %%%%% Page Size
 
-% This is controled from the project.conf file. However,
-% as there is a wide range of paper sizes, we will store
-% that information here (for now).
+% This is controled from the project.conf file.  However, as there is a wide
+% range of paper sizes, we will store that information here (for now).
 
 % Page/Paper Dimensions - Trimmed
 % ISO A4 (default)
