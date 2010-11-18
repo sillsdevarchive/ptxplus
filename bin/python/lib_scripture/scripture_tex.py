@@ -354,7 +354,6 @@ class MakeTexControlFile (object) :
 		fontDefBold                 = self._log_manager._settings['Format']['Fonts']['fontDefBold']
 		fontDefItalic               = self._log_manager._settings['Format']['Fonts']['fontDefItalic']
 		fontDefBoldItalic           = self._log_manager._settings['Format']['Fonts']['fontDefBoldItalic']
-		tracingLostCharacters       = self._log_manager._settings['Format']['Fonts']['tracingLostCharacters']
 		fontSizeUnit                = self._log_manager._settings['Format']['Fonts']['fontSizeUnit']
 		lineSpacingFactor           = self._log_manager._settings['Format']['Fonts']['lineSpacingFactor']
 		verticalSpaceFactor         = self._log_manager._settings['Format']['Fonts']['verticalSpaceFactor']

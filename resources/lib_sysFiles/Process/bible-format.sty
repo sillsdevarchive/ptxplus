@@ -587,6 +587,8 @@
 \TextType ChapterNumber
 \TextProperties chapter
 \StyleType Paragraph
+\sethook{start}{c}{\special{color push rgb 0.13 0.54 0.13}}
+\sethook{end}{c}{\special{color pop}}
 \Bold
 \FontSize 18
 \SpaceBefore 8
@@ -648,6 +650,9 @@
 \TextType VerseNumber
 \TextProperties verse
 \StyleType Character
+% Example of a special hook for adding color to verse numbers (comment out if necessary)
+\sethook{start}{v}{\special{color push rgb 0.13 0.54 0.13}}
+\sethook{end}{v}{\special{color pop}}
 \FontSize 12
 \Superscript
 
@@ -1561,7 +1566,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Note
-\FontSize 12
+\FontSize 10
 
 \Marker fe
 \Endmarker fe*
@@ -1571,7 +1576,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Note
-\FontSize 12
+\FontSize 10
 
 \Marker fr
 \Endmarker fr*
@@ -1581,7 +1586,7 @@
 \TextType NoteText
 \TextProperties publishable vernacular note
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Bold
 
 \Marker ft
@@ -1592,7 +1597,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 
 \Marker fk
 \Endmarker fk*
@@ -1602,7 +1607,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Bold
 \Italic
 
@@ -1614,7 +1619,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Italic
 
 \Marker fqa
@@ -1625,7 +1630,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Italic
 
 \Marker fl
@@ -1636,7 +1641,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Italic
 \Bold
 
@@ -1648,7 +1653,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 
 \Marker fv
 \Endmarker fv*
@@ -1658,7 +1663,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Superscript
 
 \Marker fdc
@@ -1669,7 +1674,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 
 \Marker fm
 \Endmarker fm*
@@ -1679,7 +1684,7 @@
 \TextType Other
 \TextProperties paragraph publishable vernacular
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Superscript
 
 # Cross References
@@ -1692,7 +1697,7 @@
 \TextProperties publishable vernacular note crossreference
 \TextType NoteText
 \StyleType Note
-\FontSize 12
+\FontSize 10
 
 \Marker xo
 \Endmarker xo*
@@ -1702,7 +1707,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Bold
 
 \Marker xt
@@ -1713,7 +1718,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 
 \Marker xk
 \Endmarker xk*
@@ -1723,7 +1728,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Italic
 
 \Marker xq
@@ -1734,7 +1739,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 \Italic
 
 \Marker xot
@@ -1745,7 +1750,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 
 \Marker xnt
 \Endmarker xnt*
@@ -1765,7 +1770,7 @@
 \TextProperties publishable vernacular note
 \TextType NoteText
 \StyleType Character
-\FontSize 12
+\FontSize 10
 
 \Marker rq
 \Endmarker rq*

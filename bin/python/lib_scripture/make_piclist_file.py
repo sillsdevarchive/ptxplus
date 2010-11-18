@@ -37,6 +37,7 @@
 #       from a shared folder to the project.
 # 20100616 - djd - Adjusted conf call due to conf file
 #       reorg. Also removed tabs.
+# 20101118 - djd - Fixed illustration data file naming problem.
 
 
 #############################################################
@@ -54,7 +55,7 @@ import tools
 
 class MakePiclistFile (object) :
 	'''This class will create a .piclist file from a captions and data file for
-		a set of illustrations.'''
+	a set of illustrations.'''
 
 	def __init__(self, log_manager) :
 		'''Intitate everything we need for this class here.'''
@@ -76,10 +77,10 @@ class MakePiclistFile (object) :
 		self._outFileObject = {}
 		self._sourcePath = os.path.abspath(self._settings['System']['Paths']['PATH_SOURCE'])
 		self._captionsFileName = tools.pubInfoObject['Files']['FILE_ILLUSTRATION_CAPTIONS']
-		self._sourceIllustrationsLibDataFileName = self._settings['System']['Files']['FILE_ILLUSTRATION_DATA']
-		self._projectIllustrationsPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		self._sourceIllustrationsLibPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
+		self._sourceIllustrationsLibDataFileName = self._sourceIllustrationsLibPath.split('/')[-1] + '_data.csv'
 		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + self._sourceIllustrationsLibDataFileName
+		self._projectIllustrationsPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		# The folder name for peripheral material is auto created here
 		self._projectPeripheralFolderName = os.getcwd().split('/')[-1]
 		self._projectPeripheralFolderPath = self._sourcePath + '/' + self._projectPeripheralFolderName
