@@ -47,7 +47,7 @@ def taskRunner (log_manager, thisTask) :
 	# Tell the log what we're doing.
 	log_manager.log("DBUG", "INFO: Starting process: " + thisTask)
 
-	if log_manager._settings['System']['General'].get('debugMode', 'false').lower() == 'true' :
+	if log_manager._settings['System']['ErrorHandling']['Python'].get('debugMode', 'false').lower() == 'true' :
 		# Import the module
 		module = __import__(thisTask, globals(), locals(), [])
 		log_manager.log("DBUG", "Imported module: " + thisTask)
@@ -501,7 +501,7 @@ def makefileCommand (command) :
 	'''Send off a makefile command.'''
 
 
-	if getSettingsObject()['System']['General'].get('debugMode', 'false').lower() == 'true' :
+	if getSettingsObject()['System']['ErrorHandling']['Python'].get('debugMode', 'false').lower() == 'true' :
 		params = getSettingsObject()['System']['MakefileSettings']['makeFileParams']
 
 		# Build the command

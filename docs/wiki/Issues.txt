@@ -4,8 +4,16 @@ Creation-Date: Unknown
 
 ====== Issues ======
 
-**Thu 11 Nov 2010 2:18 PM ICT**
+**Thu 18 Nov 2010 2:11 PM ICT**
 Status: Open
+The hook for adding color to a style does not work for the \c marker. This needs to be fixed at some point.
+
+**Thu 18 Nov 2010 11:42 AM ICT**
+Status: Open
+swap_quotes module would seem to be really broken right now.
+
+**Thu 11 Nov 2010 2:18 PM ICT**
+Status: **Closed**
 Currently two bugs in the ptx2pdf macro packages when text is being set in two column format.
 
 1) The horizontal line is not extending to the top of the columns.

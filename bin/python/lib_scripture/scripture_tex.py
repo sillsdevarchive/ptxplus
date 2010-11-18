@@ -99,6 +99,7 @@ class MakeTexControlFile (object) :
 											'RFoddleft', 'RFoddcenter', 'RFoddright', \
 											'RFevenleft', 'RFevencenter', 'RFevenright']
 		# Some global settings
+		self._defaultMeasure            = tools.pubInfoObject['TeX']['defaultMeasure']
 		self._useMarginalVerses         = self._log_manager._settings['Format']['ChapterVerse']['useMarginalVerses']
 		try :
 			self._quoteKernAmount           = float(self._log_manager._settings['Format']['TextElements']['quoteKernAmount'])
@@ -266,16 +267,16 @@ class MakeTexControlFile (object) :
 
 		# Bring in page format settings
 		useCropmarks                = self._log_manager._settings['Format']['PageLayout']['USE_CROPMARKS']
-		pageHeight                  = self._log_manager._settings['Format']['PageLayout']['pageHeight']
-		pageWidth                   = self._log_manager._settings['Format']['PageLayout']['pageWidth']
+		pageHeight                  = float(self._log_manager._settings['Format']['PageLayout']['pageHeight'])
+		pageWidth                   = float(self._log_manager._settings['Format']['PageLayout']['pageWidth'])
 		endBookNoEject              = self._log_manager._settings['Format']['PageLayout']['endBookNoEject']
 		titleColumns                = self._log_manager._settings['Format']['Columns']['titleColumns']
 		introColumns                = self._log_manager._settings['Format']['Columns']['introColumns']
 		bodyColumns                 = self._log_manager._settings['Format']['Columns']['bodyColumns']
 		columnGutterFactor          = self._log_manager._settings['Format']['Columns']['columnGutterFactor']
 		columnGutterRule            = self._log_manager._settings['Format']['Columns']['columnGutterRule']
-		columnGutterRuleSkip        = self._log_manager._settings['Format']['Columns']['columnGutterRuleSkip']
-		columnshift                 = self._log_manager._settings['Format']['Columns']['columnshift']
+		columnGutterRuleSkip        = float(self._log_manager._settings['Format']['Columns']['columnGutterRuleSkip'])
+		columnshift                 = float(self._log_manager._settings['Format']['Columns']['columnshift'])
 
 		# Format -> PageLayout
 		useFigurePlaceholders       = self._log_manager._settings['Format']['Illustrations']['USE_PLACEHOLDERS']
@@ -295,7 +296,7 @@ class MakeTexControlFile (object) :
 		afterVerseSpaceFactor       = self._log_manager._settings['Format']['ChapterVerse']['afterVerseSpaceFactor']
 		afterChapterSpaceFactor     = self._log_manager._settings['Format']['ChapterVerse']['afterChapterSpaceFactor']
 		removeIndentAfterHeading    = self._log_manager._settings['Format']['ChapterVerse']['removeIndentAfterHeading']
-		adornVerseNumber            = self._log_manager._settings['Format']['ChapterVerse']['adornVerseNumber']
+		adornVerseSetting           = self._log_manager._settings['Format']['ChapterVerse']['adornVerseSetting']
 		verseMarker                 = self._log_manager._settings['Format']['ChapterVerse']['verseMarker']
 
 		# Running Header
@@ -336,12 +337,12 @@ class MakeTexControlFile (object) :
 		defineNewFootnoteRule       = self._log_manager._settings['Format']['Footnotes']['defineNewFootnoteRule']
 
 		# Margins
-		marginUnit                  = self._log_manager._settings['Format']['Margins']['marginUnit']
+		marginUnit                  = float(self._log_manager._settings['Format']['Margins']['marginUnit'])
 		topMarginFactor             = self._log_manager._settings['Format']['Margins']['topMarginFactor']
 		bottomMarginFactor          = self._log_manager._settings['Format']['Margins']['bottomMarginFactor']
 		sideMarginFactor            = self._log_manager._settings['Format']['Margins']['sideMarginFactor']
-		extraRightMargin            = self._log_manager._settings['Format']['Margins']['extraRightMargin']
-		bindingGutter               = self._log_manager._settings['Format']['Margins']['bindingGutter']
+		extraRightMargin            = float(self._log_manager._settings['Format']['Margins']['extraRightMargin'])
+		bindingGutter               = float(self._log_manager._settings['Format']['Margins']['bindingGutter'])
 
 		# Header/Footer
 		headerPosition              = self._log_manager._settings['Format']['HeaderFooter']['headerPosition']
@@ -353,10 +354,34 @@ class MakeTexControlFile (object) :
 		fontDefBold                 = self._log_manager._settings['Format']['Fonts']['fontDefBold']
 		fontDefItalic               = self._log_manager._settings['Format']['Fonts']['fontDefItalic']
 		fontDefBoldItalic           = self._log_manager._settings['Format']['Fonts']['fontDefBoldItalic']
-		tracingLostCharacters       = self._log_manager._settings['Format']['Fonts']['tracingLostCharacters']
 		fontSizeUnit                = self._log_manager._settings['Format']['Fonts']['fontSizeUnit']
 		lineSpacingFactor           = self._log_manager._settings['Format']['Fonts']['lineSpacingFactor']
 		verticalSpaceFactor         = self._log_manager._settings['Format']['Fonts']['verticalSpaceFactor']
+
+		# Error Handling
+		tracingAll                  = self._log_manager._settings['System']['ErrorHandling']['TeX'].get('tracingAll', 'false')
+		tracingOutput               = self.errorSwitch('tracingoutput', self._log_manager._settings['System']['ErrorHandling']['TeX'].get('tracingOutput', 'false'))
+		tracingMacros               = self.errorSwitch('tracingmacros', self._log_manager._settings['System']['ErrorHandling']['TeX'].get('tracingMacros', 'false'))
+		tracingLostChars            = self.errorSwitch('tracinglostchars', self._log_manager._settings['System']['ErrorHandling']['TeX'].get('tracingLostChars', 'false'))
+		tracingPages                = self.errorSwitch('tracingpages', self._log_manager._settings['System']['ErrorHandling']['TeX'].get('tracingPages', 'false'))
+		tracingParagraphs           = self.errorSwitch('tracingparagraphs', self._log_manager._settings['System']['ErrorHandling']['TeX'].get('tracingParagraphs', 'false'))
+		tracingStats                = self.errorSwitch('tracingstats', self._log_manager._settings['System']['ErrorHandling']['TeX'].get('tracingStats', 'false'))
+		try :
+			showBoxBreadth          = int(self._log_manager._settings['System']['ErrorHandling']['TeX']['showBoxBreadth'])
+		except :
+			showBoxBreadth = 0
+		try :
+			showBoxDepth            = int(self._log_manager._settings['System']['ErrorHandling']['TeX']['showBoxDepth'])
+		except :
+			showBoxDepth = 0
+		try :
+			vFuzz                   = float(self._log_manager._settings['System']['ErrorHandling']['TeX']['vFuzz'])
+		except :
+			vFuzz = 0
+		try :
+			hFuzz                   = float(self._log_manager._settings['System']['ErrorHandling']['TeX']['hFuzz'])
+		except :
+			hFuzz = 0
 
 		# Build our output - These are the strings we will fill:
 		fileHeaderText              = ''
@@ -367,13 +392,14 @@ class MakeTexControlFile (object) :
 		footnoteSettings            = ''
 		fontSettings                = ''
 		generalSettings             = ''
+		errorSettings               = ''
 
 		# Create the file header
 		fileHeaderText      +=    "% tex_settings.txt\n\n% This is an auto-generated file, do not edit. Any necessary changes\n" + \
 					"% should be made to the project.conf file or the custom TeX setup file.\n\n"
 		# Add format settings
-		formatSettings      += '\\PaperHeight=' + pageHeight + 'mm\n'
-		formatSettings      += '\\PaperWidth=' + pageWidth + 'mm\n'
+		formatSettings      += '\\PaperHeight=' + str(pageHeight) + self._defaultMeasure + '\n'
+		formatSettings      += '\\PaperWidth=' + str(pageWidth) + self._defaultMeasure + '\n'
 		if useCropmarks.lower() == 'true' :
 			formatSettings  += '\\CropMarkstrue\n'
 		if endBookNoEject.lower() == 'true' :
@@ -385,17 +411,17 @@ class MakeTexControlFile (object) :
 		formatSettings      += '\\def\\ColumnGutterFactor{' + columnGutterFactor + '}\n'
 		if columnGutterRule.lower() == 'true' :
 			formatSettings  += '\\ColumnGutterRuletrue\n'
-		formatSettings      += '\\ColumnGutterRuleSkip=' + columnGutterRuleSkip + 'mm\n'
+		formatSettings      += '\\ColumnGutterRuleSkip=' + str(columnGutterRuleSkip) + self._defaultMeasure + '\n'
 
 		# Margins
-		formatSettings      += '\\MarginUnit=' + marginUnit + 'mm\n'
+		formatSettings      += '\\MarginUnit=' + str(marginUnit) + self._defaultMeasure + '\n'
 		formatSettings      += '\\def\\TopMarginFactor{' + topMarginFactor + '}\n'
 		formatSettings      += '\\def\\BottomMarginFactor{' + bottomMarginFactor + '}\n'
 		formatSettings      += '\\def\\SideMarginFactor{' + sideMarginFactor + '}\n'
-		formatSettings      += '\\ExtraRMargin=' + extraRightMargin + 'mm\n'
-		if bindingGutter != '' and bindingGutter > 0 :
+		formatSettings      += '\\ExtraRMargin=' + str(extraRightMargin) + self._defaultMeasure + '\n'
+		if bindingGutter :
 			formatSettings  += '\\BindingGuttertrue\n'
-			formatSettings  += '\\BindingGutter=' + bindingGutter + 'mm\n'
+			formatSettings  += '\\BindingGutter=' + str(bindingGutter) + self._defaultMeasure + '\n'
 
 		# Fonts
 		if xetexLineBreakLocale.lower() == 'true' :
@@ -404,21 +430,21 @@ class MakeTexControlFile (object) :
 		fontSettings        += '\\def\\bold{\"' + fontDefBold + '\"}\n'
 		fontSettings        += '\\def\\italic{\"' + fontDefItalic + '\"}\n'
 		fontSettings        += '\\def\\bolditalic{\"' + fontDefBoldItalic + '\"}\n'
-		if tracingLostCharacters.lower() == 'true' :
-			fontSettings    += '\\tracinglostchars=1\n'
 		fontSettings        += '\\FontSizeUnit=' + fontSizeUnit + 'pt\n'
 		fontSettings        += '\\def\\LineSpacingFactor{' + lineSpacingFactor + '}\n'
 		fontSettings        += '\\def\\VerticalSpaceFactor{' + verticalSpaceFactor + '}\n'
 		if self._quoteKernAmount :
 			formatSettings  += '\\quotekernamount=' + str(self._quoteKernAmount) + 'em\n'
 
-		# Path to Illustration files (Note we add a "/" at the end so ptx2pdf can get it right.)
+		# Path to Illustration files (Note we add a "/" at the end so ptx2pdf
+		# can get it right.)
 		if useIllustrations.lower() == 'true' :
 			fileInput       += '\\PicPath={' + self._pathToIllustrations + '/}\n'
-		# Will we use marginal verses? This setting is
-		# mainly for use with marginal verses
+		# Will we use marginal verses? This setting is mainly for use with
+		# marginal verses.  We might think about makeing this availible for two
+		# col as well but I don't knwo what that will do.
 		if self._useMarginalVerses.lower() == 'true' :
-			fileInput       += '\\columnshift=' + columnshift + 'mm\n'
+			fileInput       += '\\columnshift=' + str(columnshift) + self._defaultMeasure + '\n'
 		# Do we want a page border?
 		if usePageBorder.lower() == 'true' :
 			if pageBorderScale == '' :
@@ -437,8 +463,8 @@ class MakeTexControlFile (object) :
 			verseChapterSettings += '\\OmitVerseNumberOnetrue\n'
 		if removeIndentAfterHeading.lower() == 'true' :
 			verseChapterSettings += '\\IndentAfterHeadingtrue\n'
-		if adornVerseNumber.lower() == 'true' :
-			verseChapterSettings += '\\def\\AdornVerseNumber#1{(#1)}\n'
+		if adornVerseSetting != '' :
+			verseChapterSettings += '\\def\\AdornVerseNumber#1{' + adornVerseSetting + '}\n'
 		verseChapterSettings += '\\def\\VerseMarker{' + verseMarker + '}\n'
 		verseChapterSettings += '\\def\\ChapterVerseSeparator{' + chapterVerseSeparator + '}\n'
 		verseChapterSettings += '\\def\\AfterVerseSpaceFactor{' + afterVerseSpaceFactor + '}\n'
@@ -515,6 +541,23 @@ class MakeTexControlFile (object) :
 		# Allow the use of digets in text
 		generalSettings += '\\catcode`@=11\n\\def\\makedigitsother{\\m@kedigitsother}\n\\def\\makedigitsletters{\\m@kedigitsletters}\n\\catcode `@=12\n'
 
+		# Error Handling (several have been preprocessed)
+		if tracingAll.lower() != 'false' :
+			errorSettings       += '\\tracingall\n'
+		errorSettings       += tracingOutput
+		errorSettings       += tracingMacros
+		errorSettings       += tracingLostChars
+		errorSettings       += tracingPages
+		errorSettings       += tracingParagraphs
+		errorSettings       += tracingStats
+		if showBoxBreadth :
+			errorSettings   += '\\showboxbreadth=' + str(showBoxBreadth) + '\n'
+		if showBoxDepth :
+			errorSettings   += '\\showboxdepth=' + str(showBoxDepth) + '\n'
+		if vFuzz :
+			errorSettings   += '\\vfuzz=' + str(vFuzz) + 'pt\n'
+		if hFuzz :
+			errorSettings   += '\\hfuzz=' + str(hFuzz) + 'pt\n'
 
 		# Ship the results, change order as needed
 		orderedContents =     fileHeaderText + \
@@ -525,6 +568,7 @@ class MakeTexControlFile (object) :
 					verseChapterSettings + \
 					footnoteSettings + \
 					generalSettings + \
+					errorSettings + \
 					'\n'
 
 		self.writeOutTheFile(orderedContents)
@@ -559,8 +603,8 @@ class MakeTexControlFile (object) :
 			formatSettings      += '\\TitleColumns=1\n'
 			formatSettings      += '\\IntroColumns=1\n'
 			formatSettings      += '\\BodyColumns=1\n'
-			headerSettings      += self.RemovePageNumbers(self._headerPositions)
-			footerSettings      += self.RemovePageNumbers(self._footerPositions)
+			headerSettings      += self.removePageNumbers(self._headerPositions)
+			footerSettings      += self.removePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'front' :
 			fileName            = self._fmSettingsFile
@@ -569,8 +613,8 @@ class MakeTexControlFile (object) :
 			formatSettings      += '\\BodyColumns=1\n'
 			if self._quoteKernAmount :
 				formatSettings  += '\\quotekernamount=' + str(self._quoteKernAmount) + 'em\n'
-			headerSettings      += self.RemovePageNumbers(self._headerPositions)
-			footerSettings      += self.RemovePageNumbers(self._footerPositions)
+			headerSettings      += self.removePageNumbers(self._headerPositions)
+			footerSettings      += self.removePageNumbers(self._footerPositions)
 
 		elif self._contextFlag.lower() == 'back' :
 			fileName = self._bmSettingsFile
@@ -579,8 +623,8 @@ class MakeTexControlFile (object) :
 			formatSettings      += '\\BodyColumns=1\n'
 			if self._quoteKernAmount :
 				formatSettings  += '\\quotekernamount=' + str(self._quoteKernAmount) + 'em\n'
-			headerSettings      += self.RemovePageNumbers(self._headerPositions)
-			footerSettings      += self.RemovePageNumbers(self._footerPositions)
+			headerSettings      += self.removePageNumbers(self._headerPositions)
+			footerSettings      += self.removePageNumbers(self._footerPositions)
 
 		# Maps are a very different process from other types of matter.
 		# The output here will be very different from the others.
@@ -598,10 +642,10 @@ class MakeTexControlFile (object) :
 			formatSettings += '\\def\TopMarginFactor{0.4}\n'
 			formatSettings += '\\def\SideMarginFactor{1.5}\n'
 			formatSettings += '\\def\BottomMarginFactor{1}\n'
-			formatSettings += '\\ExtraRMargin=0mm\n'
-			formatSettings += '\\columnshift=0mm\n'
-			headerSettings += self.RemovePageNumbers(self._headerPositions)
-			footerSettings += self.RemovePageNumbers(self._footerPositions)
+			formatSettings += '\\ExtraRMargin=0' + self._defaultMeasure + '\n'
+			formatSettings += '\\columnshift=0' + self._defaultMeasure + '\n'
+			headerSettings += self.removePageNumbers(self._headerPositions)
+			footerSettings += self.removePageNumbers(self._footerPositions)
 
 			# In case the map has a rotation setting, just take the first part
 			# of the map var
@@ -652,8 +696,21 @@ class MakeTexControlFile (object) :
 
 
 ###############################################################################
+# MISC INTERNAL FUNCTIONS
+###############################################################################
 
-	def RemovePageNumbers (self, positions) :
+	def errorSwitch (self, switch, position) :
+		'''Simply create a ready to deliver TeX boul command whereas '0' =
+		false.  If the setting is false, nothing will be returned so nothing
+		will be output in the settings file.'''
+
+		if position.lower() != 'false' :
+			return '\\' + switch + '=1\n'
+		else :
+			return ''
+
+
+	def removePageNumbers (self, positions) :
 		'''This will simply return a list of page header or footer positions
 		with \empty in them this takes out page numbers on peripheral matter
 		pages.'''
@@ -664,6 +721,7 @@ class MakeTexControlFile (object) :
 
 		return texCode
 
+
 	def writeOutTheFile (self, contents) :
 		'''Write out the file.'''
 
@@ -671,6 +729,7 @@ class MakeTexControlFile (object) :
 		texControlObject.write(contents)
 		texControlObject.close()
 		self._log_manager.log("DBUG", "Wrote out the file: " + self._outputFile)
+
 
 	def parseThisBook (self, book) :
 		'''Parse a specific book based on ID then return relevant info.'''
