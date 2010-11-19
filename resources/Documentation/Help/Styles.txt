@@ -1,7 +1,6 @@
 Content-Type: text/x-zim-wiki
-Wiki-Format: zim 0.26
+Wiki-Format: zim 0.4
 Creation-Date: Fri, 11 Dec 2009 16:18:39 +0700
-Modification-Date: Fri, 23 Apr 2010 11:18:18 +0700
 
 ====== Styles ======
 
@@ -24,9 +23,47 @@ It should be possible to get the 'Selah' of Psalms, marked up as \qs selah\qs* t
 
 	\sethook{before}{qs}{\hfill\null\nobreak\hfill}
 
+
 ===== Overriding Typeface Styles =====
 If you are using custom style files that are dependent on a parent style file, you might find it necessary to override the typeface style. For example, if you had the typeface set to bold but you wanted to override with italic, you might find that in the end you will end up with bold-italic. To overcome this, you can simply slip a "Regular" in the override style and then follow it with bold. The override would look something like this:
 
 	\Marker s2
 	\Regular
 	\Bold
+
+
+
+===== Adding Color to Styles =====
+To add an RGB color to a specific style you need to add a hook to the style such as this:
+
+\sethook{start}{v}{\special{color push rgb 0.13 0.54 0.13}}
+
+
+\sethook{end}{v}{\special{color pop}}
+
+This gives you Forest Green on the selected style. The numbers are percentage of R, G, and B. Go here for an RGB color chart:
+
+
+http://www.december.com/html/spec/colorcodes.html
+
+Whereas 100% = 1, 13% = 0.13, etc...
+
+This will push an RGB color to the color stack. Then, after the marker is over, it pops the color off the stack so the following text will be back to the previous color.
+
+If the CMYK color space is desired replace 'rgb' with 'cmyk' and follow with four percentage numbers rather than three. Example:
+
+\sethook{start}{v}{\special{color push cmyk 1 0 1 0.5}}
+
+
+\sethook{end}{v}{\special{color pop}}
+
+This will give you green cmyk(100%, 0%, 100%, 50%)
+
+A CMYK color chart can be found here:
+
+
+http://www.december.com/html/spec/colorcmyk.html
+
+
+==== Flying Verse Numbers ====
+To set the vertical distance between verse numbers when using flying verse numbers. You need to insert in the [[.sty]] this command in the verse marker: \BaseLine 10pt This can help prevent clashing when using number systems in which the character baseline can vary from number to number. The default behavior is to use the font size. If this is too close you will want to change the number as desired.

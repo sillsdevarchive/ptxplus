@@ -4,31 +4,6 @@ Creation-Date: 2010-11-16T14:19:56.271832
 
 ====== Fonts ======
 
-==== Adding Color to Styles ====
-To add an RGB color to a specific style you need to add a hook to the style such as this:
-
-\sethook{start}{v}{\special{color push rgb 0.13 0.54 0.13}}
-\sethook{end}{v}{\special{color pop}}
-
-This gives you Forest Green on the selected style. The numbers are percentage of R, G, and B. Go here for an RGB color chart:
-http://www.december.com/html/spec/colorcodes.html
-
-Whereas 100% = 1, 13% = 0.13, etc...
-
-This will push an RGB color to the color stack. Then, after the marker is over, it pops the color off the stack so the following text will be back to the previous color.
-
-If the CMYK color space is desired replace 'rgb' with 'cmyk' and follow with four percentage numbers rather than three. Example:
-
-\sethook{start}{v}{\special{color push cmyk 1 0 1 0.5}}
-\sethook{end}{v}{\special{color pop}}
-
-This will give you green cmyk(100%, 0%, 100%, 50%)
-
-A CMYK color chart can be found here:
-http://www.december.com/html/spec/colorcmyk.html
-
-(**Note:** This currently does not work with \c (chapter numbers))
-
 ==== Font Handling ====
 Some tips for working with fonts.
 
