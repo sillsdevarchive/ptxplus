@@ -276,7 +276,13 @@ class MakeTexControlFile (object) :
 		columnGutterFactor          = self._log_manager._settings['Format']['Columns']['columnGutterFactor']
 		columnGutterRule            = self._log_manager._settings['Format']['Columns']['columnGutterRule']
 		columnGutterRuleSkip        = float(self._log_manager._settings['Format']['Columns']['columnGutterRuleSkip'])
+
+################################################################################################
+
 		columnshift                 = float(self._log_manager._settings['Format']['Columns']['columnshift'])
+
+################################################################################################
+
 
 		# Format -> PageLayout
 		useFigurePlaceholders       = self._log_manager._settings['Format']['Illustrations']['USE_PLACEHOLDERS']
@@ -440,11 +446,17 @@ class MakeTexControlFile (object) :
 		# can get it right.)
 		if useIllustrations.lower() == 'true' :
 			fileInput       += '\\PicPath={' + self._pathToIllustrations + '/}\n'
+
+################################################################################################
+
 		# Will we use marginal verses? This setting is mainly for use with
 		# marginal verses.  We might think about makeing this availible for two
 		# col as well but I don't knwo what that will do.
 		if self._useMarginalVerses.lower() == 'true' :
 			fileInput       += '\\columnshift=' + str(columnshift) + self._defaultMeasure + '\n'
+
+################################################################################################
+
 		# Do we want a page border?
 		if usePageBorder.lower() == 'true' :
 			if pageBorderScale == '' :
@@ -456,7 +468,7 @@ class MakeTexControlFile (object) :
 		if verseRefs.lower() == 'true' :
 			verseChapterSettings += '\\VerseRefstrue\n'
 		if omitChapterNumber.lower() == 'true' :
-			verseChapterSettings += '\\OmitChapterNumberRHtrue\n'
+			verseChapterSettings += '\\def\\OmitChapterNumberRHtrue\n'
 		if omitBookRef.lower() == 'true' :
 			verseChapterSettings += '\\OmitBookReftrue\n'
 		if omitVerseNumberOne.lower() == 'true' :
@@ -643,7 +655,13 @@ class MakeTexControlFile (object) :
 			formatSettings += '\\def\SideMarginFactor{1.5}\n'
 			formatSettings += '\\def\BottomMarginFactor{1}\n'
 			formatSettings += '\\ExtraRMargin=0' + self._defaultMeasure + '\n'
+
+################################################################################################
+
 			formatSettings += '\\columnshift=0' + self._defaultMeasure + '\n'
+
+################################################################################################
+
 			headerSettings += self.removePageNumbers(self._headerPositions)
 			footerSettings += self.removePageNumbers(self._footerPositions)
 
