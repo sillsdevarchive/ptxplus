@@ -270,19 +270,13 @@ class MakeTexControlFile (object) :
 		pageHeight                  = float(self._log_manager._settings['Format']['PageLayout']['pageHeight'])
 		pageWidth                   = float(self._log_manager._settings['Format']['PageLayout']['pageWidth'])
 		endBookNoEject              = self._log_manager._settings['Format']['PageLayout']['endBookNoEject']
-		titleColumns                = self._log_manager._settings['Format']['Columns']['titleColumns']
-		introColumns                = self._log_manager._settings['Format']['Columns']['introColumns']
-		bodyColumns                 = self._log_manager._settings['Format']['Columns']['bodyColumns']
+		titleColumns                = int(self._log_manager._settings['Format']['Columns']['titleColumns'])
+		introColumns                = int(self._log_manager._settings['Format']['Columns']['introColumns'])
+		bodyColumns                 = int(self._log_manager._settings['Format']['Columns']['bodyColumns'])
 		columnGutterFactor          = self._log_manager._settings['Format']['Columns']['columnGutterFactor']
 		columnGutterRule            = self._log_manager._settings['Format']['Columns']['columnGutterRule']
 		columnGutterRuleSkip        = float(self._log_manager._settings['Format']['Columns']['columnGutterRuleSkip'])
-
-################################################################################################
-
-		columnshift                 = float(self._log_manager._settings['Format']['Columns']['columnshift'])
-
-################################################################################################
-
+		columnShift                 = float(self._log_manager._settings['Format']['Columns']['columnShift'])
 
 		# Format -> PageLayout
 		useFigurePlaceholders       = self._log_manager._settings['Format']['Illustrations']['USE_PLACEHOLDERS']
@@ -377,10 +371,6 @@ class MakeTexControlFile (object) :
 		except :
 			showBoxBreadth = 0
 		try :
-			showBoxDepth            = int(self._log_manager._settings['System']['ErrorHandling']['TeX']['showBoxDepth'])
-		except :
-			showBoxDepth = 0
-		try :
 			vFuzz                   = float(self._log_manager._settings['System']['ErrorHandling']['TeX']['vFuzz'])
 		except :
 			vFuzz = 0
@@ -411,9 +401,9 @@ class MakeTexControlFile (object) :
 		if endBookNoEject.lower() == 'true' :
 			formatSettings  += '\\endbooknoejecttrue\n'
 		# Columns
-		formatSettings      += '\\TitleColumns=' + titleColumns + '\n'
-		formatSettings      += '\\IntroColumns=' + introColumns + '\n'
-		formatSettings      += '\\BodyColumns=' + bodyColumns + '\n'
+		formatSettings      += '\\TitleColumns=' + str(titleColumns) + '\n'
+		formatSettings      += '\\IntroColumns=' + str(introColumns) + '\n'
+		formatSettings      += '\\BodyColumns=' + str(bodyColumns) + '\n'
 		formatSettings      += '\\def\\ColumnGutterFactor{' + columnGutterFactor + '}\n'
 		if columnGutterRule.lower() == 'true' :
 			formatSettings  += '\\ColumnGutterRuletrue\n'
@@ -447,15 +437,18 @@ class MakeTexControlFile (object) :
 		if useIllustrations.lower() == 'true' :
 			fileInput       += '\\PicPath={' + self._pathToIllustrations + '/}\n'
 
-################################################################################################
-
-		# Will we use marginal verses? This setting is mainly for use with
-		# marginal verses.  We might think about makeing this availible for two
-		# col as well but I don't knwo what that will do.
-		if self._useMarginalVerses.lower() == 'true' :
-			fileInput       += '\\columnshift=' + str(columnshift) + self._defaultMeasure + '\n'
-
-################################################################################################
+		# Column shift is a contextual setting and depends on if the body text
+		# is single or multi column.  This will output the right TeX commands
+		# depending on which it is.  This assumes that if the bodyColumns is not
+		# greater than one it is just a single column publication.  Therefore
+		# both \columnshift and \singlecolumnshift will be the same, the amount of
+		# the incoming columnShift value.
+		if bodyColumns > 1 :
+			fileInput       += '\\columnshift=' + str(columnShift) + self._defaultMeasure + '\n'
+			fileInput       += '\\singlecolumnshift=0' + self._defaultMeasure + '\n'
+		else :
+			fileInput       += '\\columnshift=' + str(columnShift) + self._defaultMeasure + '\n'
+			fileInput       += '\\singlecolumnshift=' + str(columnShift) + self._defaultMeasure + '\n'
 
 		# Do we want a page border?
 		if usePageBorder.lower() == 'true' :
@@ -562,10 +555,9 @@ class MakeTexControlFile (object) :
 		errorSettings       += tracingPages
 		errorSettings       += tracingParagraphs
 		errorSettings       += tracingStats
-		if showBoxBreadth :
-			errorSettings   += '\\showboxbreadth=' + str(showBoxBreadth) + '\n'
-		if showBoxDepth :
-			errorSettings   += '\\showboxdepth=' + str(showBoxDepth) + '\n'
+		if tracingAll.lower() != 'false' or tracingOutput != '' :
+			if showBoxBreadth :
+				errorSettings   += '\\showboxbreadth=' + str(showBoxBreadth) + '\n'
 		if vFuzz :
 			errorSettings   += '\\vfuzz=' + str(vFuzz) + 'pt\n'
 		if hFuzz :
@@ -655,13 +647,8 @@ class MakeTexControlFile (object) :
 			formatSettings += '\\def\SideMarginFactor{1.5}\n'
 			formatSettings += '\\def\BottomMarginFactor{1}\n'
 			formatSettings += '\\ExtraRMargin=0' + self._defaultMeasure + '\n'
-
-################################################################################################
-
 			formatSettings += '\\columnshift=0' + self._defaultMeasure + '\n'
-
-################################################################################################
-
+			formatSettings += '\\singlecolumnshift=0' + self._defaultMeasure + '\n'
 			headerSettings += self.removePageNumbers(self._headerPositions)
 			footerSettings += self.removePageNumbers(self._footerPositions)
 
