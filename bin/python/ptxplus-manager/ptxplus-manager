@@ -916,7 +916,10 @@ class ConfigEditor (object) :
 		self.keys_tv.connect('cursor-changed', self.select_key)
 		self.keys_tv.connect("row-activated", self.active_row)
 
-		self.desc_l = wTree.get_widget("lab_desc")
+		self.desc_l = gtk.TextBuffer()
+		tv = wTree.get_widget("lab_desc")
+		tv.set_buffer(self.desc_l)
+		tv.set_style(wTree.get_widget("label1").get_style())
 		self.entry_w = wTree.get_widget("d_entry")
 		self.entry_name = wTree.get_widget("te_name")
 		self.entry_type = wTree.get_widget("te_type")
@@ -986,7 +989,7 @@ class ConfigEditor (object) :
 			lines = self.config.initial_comment
 		else :
 			lines = self.sections_parent.comments[name]
-		self.desc_l.set_markup(self.parse(lines))
+		self.desc_l.set_text(self.parse(lines))
 		return sect
 
 	def keys_fill (self, section) :
@@ -1004,7 +1007,7 @@ class ConfigEditor (object) :
 		if iter :
 			key = self.keys_ts[iter][0]
 			if self.sections_curr.comments.has_key(key) :
-				self.desc_l.set_markup(self.parse(self.sections_curr.comments[key]))
+				self.desc_l.set_text(self.parse(self.sections_curr.comments[key]))
 
 	def active_row (self, widget, path, column) :
 		k,v = self.keys_ts[path]
