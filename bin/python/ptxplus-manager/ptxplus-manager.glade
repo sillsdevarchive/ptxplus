@@ -1132,15 +1132,17 @@
 				  <widget class="GtkHPaned" id="sc_system">
 					<property name="visible">True</property>
 					<property name="can_focus">True</property>
+					<property name="position">200</property>
+					<property name="position_set">True</property>
 					<child>
 					  <widget class="GtkScrolledWindow" id="scrolledwindow1">
+						<property name="width_request">100</property>
 						<property name="visible">True</property>
 						<property name="can_focus">True</property>
 						<property name="hscrollbar_policy">automatic</property>
 						<property name="vscrollbar_policy">automatic</property>
 						<child>
 						  <widget class="GtkTreeView" id="tv_sections">
-							<property name="width_request">150</property>
 							<property name="visible">True</property>
 							<property name="can_focus">True</property>
 							<property name="headers_visible">False</property>
@@ -1202,19 +1204,22 @@
 							  </packing>
 							</child>
 							<child>
-							  <widget class="GtkLabel" id="lab_desc">
-								<property name="height_request">150</property>
+							  <widget class="GtkScrolledWindow" id="scrolledwindow3">
 								<property name="visible">True</property>
-								<property name="xalign">0</property>
-								<property name="yalign">0</property>
-								<property name="xpad">20</property>
-								<property name="label" translatable="yes">Description</property>
-								<property name="use_markup">True</property>
-								<property name="wrap">True</property>
-								<property name="wrap_mode">word-char</property>
-								<property name="selectable">True</property>
-								<property name="width_chars">50</property>
-								<property name="max_width_chars">40</property>
+								<property name="can_focus">True</property>
+								<property name="hscrollbar_policy">automatic</property>
+								<property name="vscrollbar_policy">automatic</property>
+								<child>
+								  <widget class="GtkTextView" id="lab_desc">
+									<property name="height_request">150</property>
+									<property name="visible">True</property>
+									<property name="can_focus">True</property>
+									<property name="editable">False</property>
+									<property name="wrap_mode">word-char</property>
+									<property name="left_margin">5</property>
+									<property name="right_margin">5</property>
+								  </widget>
+								</child>
 							  </widget>
 							  <packing>
 								<property name="position">1</property>
