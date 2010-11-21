@@ -1,14 +1,27 @@
 Content-Type: text/x-zim-wiki
-Wiki-Format: zim 0.26
+Wiki-Format: zim 0.4
 Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
-Modification-Date: Wed, 17 Mar 2010 10:39:01 +0630
 
 ====== ToDo ======
 
 Here we will collect a list of things that need doing. Hopefully we can keep them up. If they are a big task then it would be good to create a separate page and link to this one.
 
-===== Checks =====
+===== Chapter Number Style =====
+A control needs to be added to the GUI that would make changing the style of the chapter number easier. It would need to be done in one location with just a couple settings.
 
+When switching to Drop Chap from Chap Labels there would need to be some kind of script that would go through the working files and either remove or comment out the \cl marker. If switching to Chap Labels a script would have to insert the \cl marker into the working text files.
+
+===== Style Sheet Control =====
+**Hook File**
+If it is possible, we need to separate out the hooks that are in the style file and put them in a file that gets loaded as a style file after the regular styles.
+
+**Override Style for Content**
+For changes from the default styles provided in the PTX usfm.sty file we need to have a global style override file that can override things like indents and font settings
+
+**Default Style File**
+So that unnecessary styles are loaded, we need to have a style file that is created based on the marker inventory of the incoming source file. This would provide a basic set of default styles that would be added to or overridden in the override style sheet.
+
+===== Checks =====
 **ID Check**
 Need to have an ID check. Make sure that the code in the \id conforms to standard, i.e. uc and 3 known characters
 
@@ -27,12 +40,10 @@ It would be nice if we packaged up all the checks we have developed independentl
 This tool could also help with conversion to XML formats as well.
 
 ===== Encoding =====
-
 **Project Startup**
 There needs to be a way to deal with non-Unicode data on project startup. The way the system works now, it needs to have all text in Unicode. If it isn't checks that are performed on the text before it is imported into the project (at which time it could be converted) fail because the Python scripts fail. We either need to draw a hard-line on not accepting non-Unicode text, or we need to be able to do conversions to the text before it is checked. Both have their pros and cons.
 
 ===== pdf2ptx Work =====
-
 **Page Number Control**
 There needs to be better control of page numbers on peripheral material. Right now it is necessary to insert a "dummy" \v in an introduction section to get the page number to appear on the second page of a section.
 
@@ -40,7 +51,6 @@ There needs to be better control of page numbers on peripheral material. Right n
 In cases like 1 Thess. 5:16-17 verses can be really short so that it will cause verse 16 and 17 to be over-printed. We need to find a way to auto-bridge in these instances.
 
 ===== Makefile Work =====
-
 **matter_peripheral.mk**
 Come up with a way to process the TOC separately for the NT and OT. And while we're at it, find a way to generate a TOC for both together if a switch is set.
 
@@ -48,14 +58,12 @@ Come up with a way to process the TOC separately for the NT and OT. And while we
 Typically, when drafting a project, crop marks are used and the word "Draft" is watermarked on the page. We need to have some kind of "mode" that will automatically do the right thing for the publication when in Draft mode (or not). It might be that the best way would be to have separate settings for the draft watermark and the crop marks and then just turn them both on when it is needed that way. More thought needs to go into this.
 
 ===== Templates =====
-
 **COVER_SPINE.USFM/TEX**
 This template exists but it needs to be modified with some [[TeX]] code that will allow you to paste in the text you want on the spine of the cover. Then when it is processed, it will turn the text the right way. After that you could control the size of the text and the horizontal and vertical positions from the [[.tex]] file. This would greatly simplify making the cover spine page.
 
 To do this, it looks like we may need to get a [[LaTeX]] module that supports text rotation and integrate it into the system. It may not be easy.
 
 ===== Maps =====
-
 **All Map Backgrounds**
 The backgrounds need to be redone so that the maximum resolution is used. Also, they need to be properly sized. The optimal map size seems to be 120 x 200 mm. The border needs to be about 1-1.5 pts~.
 

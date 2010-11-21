@@ -5,7 +5,7 @@ Creation-Date: Unknown
 ====== Issues ======
 
 **Thu 18 Nov 2010 2:11 PM ICT**
-Status: Open
+Status: **Closed**
 The hook for adding color to a style does not work for the \c marker. This needs to be fixed at some point.
 
 **Thu 18 Nov 2010 11:42 AM ICT**
