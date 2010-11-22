@@ -4,6 +4,10 @@ Creation-Date: Unknown
 
 ====== Issues ======
 
+**Mon 22 Nov 2010 01:57:13 PM ICT**
+Status: Open
+In ptxplus-manager there is a conflict in displaying characters that use HTML entity refs. When that is enabled it cannot display in the GUI characters such as ¶ or §. For this reason the function that assignes HTML entity refs has been disabled. The name of the function in ptxplus-manager is entity_prep().
+
 **Thu 18 Nov 2010 2:11 PM ICT**
 Status: **Closed**
 The hook for adding color to a style does not work for the \c marker. This needs to be fixed at some point.
@@ -40,7 +44,7 @@ Text processes need a way to be applied to the specific files they were intended
 
 **Mon 29 Dec 2008 03:40 PM ICT**
 Status: Open
-ptx2pdf - The macro is allowing orphaned words to occur on a line. The default should be two or more words (or maybe 10-15% of the line) on a line at the least.
+ptx2pdf - The macro is allowing orphaned words to occur on a line. The default should be two or more words (or maybe 10-15% of the line) on a line at the least. A work around is to either insert a NBSP between the words you want to pull down or use the .adj file to try to pull up a line. Often it will push a couple words down on the last line which is not what you would expect.
 
 **Mon 29 Dec 2008 03:40 PM ICT**
 Status: **Closed**

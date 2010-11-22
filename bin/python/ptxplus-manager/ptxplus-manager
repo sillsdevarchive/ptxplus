@@ -56,6 +56,15 @@ def get_gtksourceview_from_notebook(notebook):
 			return (v,b)
 	return (None,None)
 
+
+def configobj_str(value):
+	c = ConfigObj(encoding="utf-8")
+	fstr = StringIO()
+	c['str'] = value
+	c.write(fstr)
+	return fstr.getvalue().split("=",1)[1].strip()
+
+
 class ConfigGUI (object) :
 	"""A GTK based configuration file editor."""
 
@@ -810,8 +819,6 @@ class ConfigGUI (object) :
 #        self.set_component(self.bkid)
 
 
-
-
 class FindDialog (object) :
 	def __init__ (self, wTree, d_find, notebook, te_find):
 		wTree.signal_autoconnect(self)
@@ -820,6 +827,7 @@ class FindDialog (object) :
 		self.notebook = notebook
 		self.te_find = te_find
 
+
 	def open (self):
 		(v,b) = get_gtksourceview_from_notebook(self.notebook)
 		if v:
@@ -827,17 +835,22 @@ class FindDialog (object) :
 			self.d_find.show()
 			self.te_find.grab_focus()
 
+
 	def on_b_find_close_clicked(self,widget):
 		self.d_find.hide()
+
 
 	def on_b_find_previous_clicked(self,widget):
 		self.find('previous')
 
+
 	def on_b_find_next_clicked(self,widget):
 		self.find('next')
 
+
 	def on_menu_find_next_activate(self,widget):
 		self.find('next')
+
 
 	def find (self, direction) :
 		(v,b) = get_gtksourceview_from_notebook(self.notebook)
@@ -872,24 +885,20 @@ class FindDialog (object) :
 					v.scroll_to_iter(s,0.2)
 
 
-
 class configlist(list):
+
 		def __new__(cls,*args,**kwds):
 			return super(configlist,cls).__new__(cls,*args,**kwds)
+
 
 		def __init__(self,*args,**kwds):
 			super(configlist,self).__init__(*args,**kwds)
 			self._str_value = configobj_str(self)
 
+
 		def __str__(self):
 			return self._str_value
 
-def configobj_str(value):
-	c = ConfigObj(encoding="utf-8")
-	fstr = StringIO()
-	c['str'] = value
-	c.write(fstr)
-	return fstr.getvalue().split("=",1)[1].strip()
 
 class ConfigEditor (object) :
 
@@ -915,20 +924,16 @@ class ConfigEditor (object) :
 		self.keys_tv.set_model(self.keys_ts)
 		self.keys_tv.connect('cursor-changed', self.select_key)
 		self.keys_tv.connect("row-activated", self.active_row)
-
-		self.desc_l = gtk.TextBuffer()
-		tv = wTree.get_widget("lab_desc")
-		tv.set_buffer(self.desc_l)
-		tv.set_style(wTree.get_widget("label1").get_style())
+		self.desc_l = wTree.get_widget("lab_desc")
 		self.entry_w = wTree.get_widget("d_entry")
 		self.entry_name = wTree.get_widget("te_name")
 		self.entry_type = wTree.get_widget("te_type")
 		self.entry_value = wTree.get_widget("te_value")
-
 		self.new_config(filename)
 
+
 	def new_config (self, filename) :
-		self.config = ConfigObj(filename,encoding='utf-8')
+		self.config = ConfigObj(filename,encoding='UTF8')
 		self.sections_ts = gtk.TreeStore(str)
 		self.pathtree = list()
 		self.sections_parents = {id(self.config) : None}
@@ -937,6 +942,7 @@ class ConfigEditor (object) :
 		self.sections_tv.expand_row(0, False)
 		self.sections_tv.connect('cursor-changed', self.select_section)
 
+
 	def sections_walk (self, section, key) :
 		val = section[key]
 		if isinstance(val, (tuple, dict)) :
@@ -944,14 +950,18 @@ class ConfigEditor (object) :
 			self.sections_parents[id(val)] = iter
 			self.set_pathkey(key, self.sections_ts.get_path(iter))
 
+
 	def sections_cell (self, column, cell, model, iter) :
 		cell.set_property('text', model.get_value(iter, 0))
+
 
 	def keys_keycell (self, column, cell, model, iter) :
 		cell.set_property('text', model.get_value(iter, 0))
 
+
 	def keys_valuecell (self, column, cell, model, iter) :
 		cell.set_property('text', model.get_value(iter, 1))
+
 
 	def select_section (self, widget) :
 		selection = widget.get_selection()
@@ -959,6 +969,7 @@ class ConfigEditor (object) :
 		if iter :
 			section = self.get_section(model.get_path(iter))
 			self.keys_fill(section)
+
 
 	def set_pathkey (self, key, path_tuple) :
 		path = list(path_tuple)
@@ -973,6 +984,7 @@ class ConfigEditor (object) :
 			curr[last] = [key, list()]
 		else:
 			curr[last][0] = key
+
 
 	def get_section (self, path_tuple) :
 		path = list(path_tuple)
@@ -989,8 +1001,9 @@ class ConfigEditor (object) :
 			lines = self.config.initial_comment
 		else :
 			lines = self.sections_parent.comments[name]
-		self.desc_l.set_text(self.parse(lines))
+		self.desc_l.set_markup(self.parse(lines))
 		return sect
+
 
 	def keys_fill (self, section) :
 		self.keys_ts.clear()
@@ -1001,13 +1014,15 @@ class ConfigEditor (object) :
 			elif not isinstance(v, (dict, tuple)) :
 				self.keys_ts.append([k, v])
 
+
 	def select_key (self, widget) :
 		selection = widget.get_selection()
 		(model, iter) = selection.get_selected()
 		if iter :
 			key = self.keys_ts[iter][0]
 			if self.sections_curr.comments.has_key(key) :
-				self.desc_l.set_text(self.parse(self.sections_curr.comments[key]))
+				self.desc_l.set_markup(self.parse(self.sections_curr.comments[key]))
+
 
 	def active_row (self, widget, path, column) :
 		k,v = self.keys_ts[path]
@@ -1035,18 +1050,31 @@ class ConfigEditor (object) :
 		# try and except clause should be used.
 		self.save()
 
+
 	def entry_cancel (self, widget) :
 		self.entry_w.hide()
+
 
 	def save (self) :
 		self.config.write()
 
 
-
-
 	@staticmethod
 	def entity_prep(l):
-		return reduce(lambda r,c: r + ('&' + htmlentitydefs.codepoint2name[ord(c)] + ';' if ord(c) in htmlentitydefs.codepoint2name else c), l, "")
+		'''Prepare special character output by turning them into HTML entity
+		refs so the GUI displays correctly.'''
+
+		# FIXME:
+		# There is a noted problem with this.  Do to some changes made to the
+		# GUI to enable a scroling window in the description output, HTML
+		# entities are not displaying right.  As such the following line has
+		# been disabled.
+#        return reduce(lambda r,c: r + ('&' + htmlentitydefs.codepoint2name[ord(c)] + ';' if ord(c) in htmlentitydefs.codepoint2name else c), l, "")
+
+		# To get the output to work right we had to just basically pass the var
+		# through.  This will need to be fixed at some point.
+		return l
+
 
 	def parse (self, lines) :
 		inpara = 0
@@ -1066,6 +1094,7 @@ class ConfigEditor (object) :
 				res = res + l
 				inpara = 1
 		return res
+
 
 class FileEditor (object) :
 	"""Edits a given file in a given textview with autosave on exit"""
@@ -1092,8 +1121,10 @@ class FileEditor (object) :
 		textview.set_sensitive(True)
 		buff.end_not_undoable_action()
 
+
 	def __del__ (self) :
 		self.write('')
+
 
 	def error (self, str) :
 		dialog = gtk.MessageDialog(None,
@@ -1101,6 +1132,7 @@ class FileEditor (object) :
 				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, str)
 		dialog.run()
 		dialog.destroy()
+
 
 	def write (self, filename) :
 
@@ -1123,6 +1155,7 @@ class FileEditor (object) :
 		except:
 			self.error("Can't write to file: %s" % self.filename)
 
+
 class ImportDialog (object) :
 
 	def __init__ (self, wTree, dname, parent) :
@@ -1140,8 +1173,10 @@ class ImportDialog (object) :
 		self.archive = ''
 		self.parent = parent
 
+
 	def run (self) :
 		self.dia.show()
+
 
 	def exit (self, widget) :
 		self.dir = self.e_dir.get_text()
@@ -1149,11 +1184,13 @@ class ImportDialog (object) :
 		self.dia.hide()
 		self.parent.do_import()
 
+
 	def quit (self, widget) :
 		self.dir = ''
 		self.archive = ''
 		self.dia.hide()
 		self.parent.do_import()
+
 
 	def browse_dir (self, widget) :
 		fcd = gtk.FileChooserDialog("Project Directory", None,
@@ -1168,6 +1205,7 @@ class ImportDialog (object) :
 		newdir = fcd.get_filename()
 		self.e_dir.set_text(newdir)
 		fcd.destroy()
+
 
 	def browse_archive (self, widget) :
 		fcd = gtk.FileChooserDialog("Archive File", None,

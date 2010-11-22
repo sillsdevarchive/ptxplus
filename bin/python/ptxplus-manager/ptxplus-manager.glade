@@ -5,6 +5,8 @@
   <widget class="GtkWindow" id="w_main">
 	<property name="visible">True</property>
 	<property name="title" translatable="yes">ptxplus-manager</property>
+	<property name="default_width">600</property>
+	<property name="default_height">600</property>
 	<signal name="delete_event" handler="on_w_main_delete_event"/>
 	<child>
 	  <widget class="GtkVBox" id="vbox1">
@@ -1164,6 +1166,7 @@
 						  <widget class="GtkScrolledWindow" id="scrolledwindow2">
 							<property name="visible">True</property>
 							<property name="can_focus">True</property>
+							<property name="vadjustment">0 0 227 22.700000000000003 204.30000000000001 227</property>
 							<property name="hscrollbar_policy">automatic</property>
 							<property name="vscrollbar_policy">automatic</property>
 							<child>
@@ -1207,17 +1210,25 @@
 							  <widget class="GtkScrolledWindow" id="scrolledwindow3">
 								<property name="visible">True</property>
 								<property name="can_focus">True</property>
+								<property name="vadjustment">0 0 131 13.100000000000001 117.90000000000001 131</property>
 								<property name="hscrollbar_policy">automatic</property>
 								<property name="vscrollbar_policy">automatic</property>
 								<child>
-								  <widget class="GtkTextView" id="lab_desc">
-									<property name="height_request">150</property>
+								  <widget class="GtkViewport" id="viewport1">
 									<property name="visible">True</property>
-									<property name="can_focus">True</property>
-									<property name="editable">False</property>
-									<property name="wrap_mode">word-char</property>
-									<property name="left_margin">5</property>
-									<property name="right_margin">5</property>
+									<property name="resize_mode">queue</property>
+									<child>
+									  <widget class="GtkLabel" id="lab_desc">
+										<property name="visible">True</property>
+										<property name="xalign">0</property>
+										<property name="yalign">0</property>
+										<property name="xpad">10</property>
+										<property name="ypad">10</property>
+										<property name="use_markup">True</property>
+										<property name="wrap">True</property>
+										<property name="selectable">True</property>
+									  </widget>
+									</child>
 								  </widget>
 								</child>
 							  </widget>
