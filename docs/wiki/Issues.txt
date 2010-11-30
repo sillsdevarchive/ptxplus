@@ -4,6 +4,14 @@ Creation-Date: Unknown
 
 ====== Issues ======
 
+**Tue 30 Nov 2010 03:53:48 PM ICT**
+Status: Open
+Fonts do not seem to be being copied into the project from the system font lib. The whole font handling sub-system needs to gone over.
+
+**Tue 30 Nov 2010 01:14:49 PM ICT**
+Status: Open
+Refresh button does not work on GUI. It does not behave right and resets the interface back to the top component. You cannot view current component setting files.
+
 **Mon 29 Nov 2010 03:25:46 PM ICT**
 Status: Open
 Open project does not work. When you want to open a project from the File menu the Open option does not work.
