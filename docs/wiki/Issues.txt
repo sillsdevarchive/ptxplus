@@ -4,6 +4,10 @@ Creation-Date: Unknown
 
 ====== Issues ======
 
+**Wed 01 Dec 2010 02:38:49 PM ICT**
+Status: Open
+Map menu items are not working, at least the view current model isn't. Suspect the rest are not working either.
+
 **Tue 30 Nov 2010 03:53:48 PM ICT**
 Status: Open
 Fonts do not seem to be being copied into the project from the system font lib. The whole font handling sub-system needs to gone over.
