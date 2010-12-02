@@ -67,6 +67,9 @@ class CopyFromSource (object) :
 
 		# Pull in the command from the project.conf file
 		copyCommand = settings['System']['Processes']['copyCommand']
+		# Fix any case problems in the file placeholders (we want lc)
+		copyCommand = copyCommand.replace('[inFile]', '[infile]')
+		copyCommand = copyCommand.replace('[outFile]', '[outfile]')
 
 		# Because we want to be able to customize the command if necessary the
 		# incoming command has placeholders for the input and output. We need
@@ -74,11 +77,6 @@ class CopyFromSource (object) :
 		tempFile = inputFile + '.tmp'
 		copyCommand = copyCommand.replace('[infile]', inputFile)
 		copyCommand = copyCommand.replace('[outfile]', tempFile)
-
-		# But just in case we'll look for mixed case on the placeholders
-		# This may not be enough but it will do for now.
-		copyCommand = copyCommand.replace('[inFile]', inputFile)
-		copyCommand = copyCommand.replace('[outFile]', tempFile)
 		nfdCommand = 'txtconv -i ' + tempFile + ' -o ' + outputFile + ' -nfd '
 		cleanCommand = 'rm ' + tempFile
 
