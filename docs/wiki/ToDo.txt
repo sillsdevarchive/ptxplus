@@ -43,12 +43,17 @@ This tool could also help with conversion to XML formats as well.
 **Project Startup**
 There needs to be a way to deal with non-Unicode data on project startup. The way the system works now, it needs to have all text in Unicode. If it isn't checks that are performed on the text before it is imported into the project (at which time it could be converted) fail because the Python scripts fail. We either need to draw a hard-line on not accepting non-Unicode text, or we need to be able to do conversions to the text before it is checked. Both have their pros and cons.
 
-===== pdf2ptx Work =====
+===== ptx2pdf Work (usfmTeX) =====
 **Page Number Control**
 There needs to be better control of page numbers on peripheral material. Right now it is necessary to insert a "dummy" \v in an introduction section to get the page number to appear on the second page of a section.
 
 **Flying Verses (auto-bridge needed)**
 In cases like 1 Thess. 5:16-17 verses can be really short so that it will cause verse 16 and 17 to be over-printed. We need to find a way to auto-bridge in these instances.
+
+**NoFont setting needed**
+Styles cannot inherit style information from the parent it resides in. Ultimately, it would be good to have this kind of control. However, if a "NoFont" setting could be added to the styles, which would not require the current style to have a font defined for it, then it could take font information from the previous style which is presumed to be the parent.
+
+Initial tests with this additional property show it is possible but some issues need to be worked around like a way to exclude some styles like \v which will not be easy.
 
 ===== Makefile Work =====
 **matter_peripheral.mk**
