@@ -31,4 +31,5 @@ For some audiences, it is helpful to have a page number on the first page. For n
 
 Similar code could be applied to the footer as well.
 
-
+==== Peripheral Page Numbers ====
+Depending on the markup used, it may be difficult to get a page number to work right on peripheral matter. The problem seems to revolve around the use of \ixx markers for introductory material. The page output routine does not seem to recognize what is going on. One work-around is to put a \v_ZWSP (\v followed by a space and then a ZWSP character). This may fool ptx2pdf to output page numbers as desired by the header/footer settings.

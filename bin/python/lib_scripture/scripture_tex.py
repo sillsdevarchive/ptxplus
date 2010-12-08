@@ -688,16 +688,15 @@ class MakeTexControlFile (object) :
 							'\n'
 
 		# Do we want to write out at this point if the file already exists? At
-		# this point, I'm saying no.  It is auto-generated so if changes are
-		# made to the .conf file we want them reflected here if they are for
-		# this particular file.  I may need to revisit this and think about it
-		# some more if that doesn't seem to work.
-#        if not os.path.isfile(fileName) :
-#            self.writeOutTheFile(orderedContents)
-#        else :
-#            self._log_manager.log("INFO", "Exists: " + os.path.split(self._outputFile)[1], "true")
-
-		self.writeOutTheFile(orderedContents)
+		# this point, in general, I'm saying no.  However, we have no interface
+		# for making changes.  What happens is it will overwrite any custom
+		# settings you might have put in the file and this is not good.  So, for
+		# now, we need to test to see if the file is there.  If it is, we don't
+		# touch it.
+		if not os.path.isfile(fileName) :
+			self.writeOutTheFile(orderedContents)
+		else :
+			self._log_manager.log("INFO", "Exists: " + os.path.split(self._outputFile)[1], "true")
 
 
 ###############################################################################

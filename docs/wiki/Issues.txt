@@ -14,7 +14,7 @@ Fonts do not seem to be being copied into the project from the system font lib. 
 
 **Tue 30 Nov 2010 01:14:49 PM ICT**
 Status: Open
-Refresh button does not work on GUI. It does not behave right and resets the interface back to the top component. You cannot view current component setting files.
+Refresh button does not work on GUI. It does not behave right and resets the interface back to the top component. You cannot always view the current component setting files. Things like group components do not seem to be showing.
 
 **Mon 29 Nov 2010 03:25:46 PM ICT**
 Status: Open
