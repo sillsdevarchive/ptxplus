@@ -137,6 +137,7 @@ class ConfigGUI (object) :
 			"on_menu_postprocess_current_activate"              : self.m_postprocess_current,
 			"on_menu_view_current"                              : self.view_current,
 			"on_menu_remove_pdf_current_activate"               : self.m_remove_pdf_current,
+			"on_menu_remove_pdf_all_activate"                   : self.m_remove_pdf_all,
 
 			"on_menu_regression_component_current"              : self.m_regression_component_current,
 			"on_menu_regression_component_current_set"          : self.m_regression_component_current_set,
@@ -681,6 +682,9 @@ class ConfigGUI (object) :
 
 	def m_remove_pdf_current (self, widget) :
 		self.execute("ptxplus", "pdf-remove-" + self.bkid)
+
+	def m_remove_pdf_all (self, widget) :
+		self.execute("ptxplus", "pdf-remove-all")
 
 	# Menu - Regression
 

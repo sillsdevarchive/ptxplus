@@ -165,6 +165,9 @@ view-book : $(DEPENDENT_FILE_LIST) $(PATH_DELIVERABLES)/$(FILE_BOOK)
 pdf-remove-book :
 	$(call pdf-remove-book)
 
+pdf-remove-all :
+	$(call pdf-remove-all)
+
 log-clean :
 	$(call log-clean)
 
@@ -213,6 +216,17 @@ endif
 define pdf-remove-book
 	@echo WARN: Deleting: $(PATH_DELIVERABLES)/$(FILE_BOOK)
 	@rm -f $(PATH_DELIVERABLES)/$(FILE_BOOK)
+endef
+
+# This will clean out all the generated PDF files in the project.  This is good
+# when your are doing a fresh book generation.
+define pdf-remove-all
+@if zenity --question --text="By continuing with this process you will delete all the current PDF files in the process folder. Are you sure you want to do this?"; then \
+	echo WARN: Cleaning out PDF files from: $(PATH_PROCESS) ; \
+	rm -f $(PATH_PROCESS)/*.$(EXT_PDF) ; \
+else \
+	echo "INFO: Deletion of PDF files has been canceled." ; \
+fi
 endef
 
 # Clean out the log files

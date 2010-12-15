@@ -4,6 +4,18 @@ Creation-Date: Unknown
 
 ====== Issues ======
 
+**Regression testing of peripheral**
+Wed 15 Dec 2010 04:05:49 PM ICT
+Status: Open
+Can't seem to do regression testing on peripheral material. This probably can't be fixed until peripheral material is moved into the project.
+
+**Spill-over caption bold**
+Wed 15 Dec 2010 01:13:38 PM ICT
+Status: Open
+On single column layout (maybe even two column), we are having two problems:
+1) The caption is always bold and cannot be reset to \Regular in the .sty. It can be changed to bold/italic though, just not regular.
+2) When the illustration is at the top of the page, the caption text, which is bold, will spill over into the first line of regular text on the page that follows the caption will be in bold. After that it is regular.
+
 **Wed 01 Dec 2010 02:38:49 PM ICT**
 Status: Open
 Map menu items are not working, at least the view current model isn't. Suspect the rest are not working either.

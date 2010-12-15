@@ -6,6 +6,7 @@ Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
 
 Here we will collect a list of things that need doing. Hopefully we can keep them up. If they are a big task then it would be good to create a separate page and link to this one.
 
+
 ===== Settings to Add =====
 **Start Page Number**
 Add a field so that the number of the page that is output to the header or footer can be defined for any given component.
@@ -24,6 +25,9 @@ For changes from the default styles provided in the PTX usfm.sty file we need to
 
 **Default Style File**
 So that unnecessary styles are loaded, we need to have a style file that is created based on the marker inventory of the incoming source file. This would provide a basic set of default styles that would be added to or overridden in the override style sheet.
+
+**Group Styles**
+To added to the mix of request above in this area would be an override style sheet for groups of components, for example, back and front matter.
 
 ===== Checks =====
 **ID Check**
