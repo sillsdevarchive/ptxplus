@@ -6,6 +6,10 @@ Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
 
 Here we will collect a list of things that need doing. Hopefully we can keep them up. If they are a big task then it would be good to create a separate page and link to this one.
 
+===== Settings to Add =====
+**Start Page Number**
+Add a field so that the number of the page that is output to the header or footer can be defined for any given component.
+
 ===== Chapter Number Style =====
 A control needs to be added to the GUI that would make changing the style of the chapter number easier. It would need to be done in one location with just a couple settings.
 
