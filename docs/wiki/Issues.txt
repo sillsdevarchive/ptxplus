@@ -4,6 +4,21 @@ Creation-Date: Unknown
 
 ====== Issues ======
 
+**Hard paths in mutable setting files**
+Thu 16 Dec 2010 07:34:56 PM ICT
+Status: Open
+Setting files that are editable and are saved in the repo have problems when they are brought into other systems because currently the paths in these files are hard-coded. Relative file names should be used in all files that are going to go into the repo.
+
+**Project locking not complete**
+Thu 16 Dec 2010 07:35:03 PM ICT
+Status: Open
+When a project is locked, the control does not extend to all files. For example, the group files (GROUP_XXX.tex) can be overwritten when it should be protected.
+
+**Remove PDF takes too much**
+Wed 15 Dec 2010 04:51:29 PM ICT
+Status: Open
+When you run the pdf-remove-all rule it takes out everything in the spine and watermark files. This may not be desirable. A better way should be found. Maybe PDF files that are "immutable" should go in another folder?
+
 **Regression testing of peripheral**
 Wed 15 Dec 2010 04:05:49 PM ICT
 Status: Open
@@ -16,19 +31,23 @@ On single column layout (maybe even two column), we are having two problems:
 1) The caption is always bold and cannot be reset to \Regular in the .sty. It can be changed to bold/italic though, just not regular.
 2) When the illustration is at the top of the page, the caption text, which is bold, will spill over into the first line of regular text on the page that follows the caption will be in bold. After that it is regular.
 
-**Wed 01 Dec 2010 02:38:49 PM ICT**
+**Map Menu Incomplete**
+Wed 01 Dec 2010 02:38:49 PM ICT
 Status: Open
 Map menu items are not working, at least the view current model isn't. Suspect the rest are not working either.
 
-**Tue 30 Nov 2010 03:53:48 PM ICT**
+**Check Font Family Copy**
+Tue 30 Nov 2010 03:53:48 PM ICT
 Status: Open
 Fonts do not seem to be being copied into the project from the system font lib. The whole font handling sub-system needs to gone over.
 
-**Tue 30 Nov 2010 01:14:49 PM ICT**
+**Refresh Not Working**
+Tue 30 Nov 2010 01:14:49 PM ICT
 Status: Open
 Refresh button does not work on GUI. It does not behave right and resets the interface back to the top component. You cannot always view the current component setting files. Things like group components do not seem to be showing.
 
-**Mon 29 Nov 2010 03:25:46 PM ICT**
+**Project Open Does Not Work**
+Mon 29 Nov 2010 03:25:46 PM ICT
 Status: Open
 Open project does not work. When you want to open a project from the File menu the Open option does not work.
 

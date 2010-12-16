@@ -1267,7 +1267,7 @@
 				  <widget class="GtkLabel" id="tab_system">
 					<property name="visible">True</property>
 					<property name="tooltip" translatable="yes">Main system settings configuration tab</property>
-					<property name="label" translatable="yes">System</property>
+					<property name="label" translatable="yes">Settings</property>
 				  </widget>
 				  <packing>
 					<property name="position">3</property>

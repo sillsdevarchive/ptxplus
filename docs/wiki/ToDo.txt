@@ -7,6 +7,11 @@ Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
 Here we will collect a list of things that need doing. Hopefully we can keep them up. If they are a big task then it would be good to create a separate page and link to this one.
 
 
+===== Repository Features =====
+**Adding files to the Repo**
+Need to find a way to make it simple to add files to the repo. Make it almost automatic.
+
+
 ===== Settings to Add =====
 **Start Page Number**
 Add a field so that the number of the page that is output to the header or footer can be defined for any given component.
