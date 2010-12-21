@@ -378,6 +378,82 @@ TEX_INPUTS                   = 'TEXINPUTS=$(PATH_HOME):$(PATH_HOME)/$(PATH_HYPHE
 # example, for millimeters we use: 'mm'.
 defaultMeasure              = 'mm'
 
+# PERIPHERAL COMPONENT NAMES
+# This section will provid the system with name mappings and descriptions to map
+# all peripheral component template files. (The mapping to the source file names
+# are provided by the user and stored in the project.conf file, the actual file
+# name mapping is there.) The presence of a '#' symbole indicates that this
+# component can have multiple instances which contain different content.  The
+# type of component is the same but the content might be in a different script
+# or language.
+[PeripheralComponents]
+
+# COMPONENT TEMPLATE NAME
+# This maps the component name to the template name.  No extention is used
+# because there could be mulitple template elements needed for specific
+# peripheral components.  The system will provide the extention name when
+# building the file name.
+[[Template]]
+bnk_peripheral              = 'BLANK_PAGE'
+con_peripheral              = 'CONCORDANCE'
+con#_peripheral             = 'CONCORDANCE'
+cop_peripheral              = 'COPYRIGHT_PAGE'
+cop#_peripheral             = 'COPYRIGHT_PAGE'
+cov_peripheral              = 'COVER'
+cov#_peripheral             = 'COVER'
+glo_peripheral              = 'GLOSSARY'
+glo#_peripheral             = 'GLOSSARY'
+gos_peripheral              = 'GOSPEL'
+gos#_peripheral             = 'GOSPEL'
+ind_peripheral              = 'INDEX'
+ind#_peripheral             = 'INDEX'
+int_peripheral              = 'INTRO'
+int#_peripheral             = 'INTRO'
+ntp_peripheral              = 'NOTE_PAGE'
+pcv_peripheral              = 'COVER_PAGE'
+pre_peripheral              = 'PREFACE'
+pre#_peripheral             = 'PREFACE'
+pub_peripheral              = 'PUBLISHER'
+ptn_peripheral              = 'TITLE_NT'
+pto_peripheral              = 'TITLE_OT'
+pti_peripheral              = 'TITLE_PAGE'
+toc_peripheral              = 'TOC'
+top_peripheral              = 'TOPICAL_INDEX'
+top#_peripheral             = 'TOPICAL_INDEX'
+
+# COMPONENT DESCRIPTION
+# This provides a description of each of the components that are mapped to
+# templates in the system.  The presence of '[#]' indicates the order of a
+# component that has multiple instances, such as first, second, etc.  It will
+# use a number to indicate order. For example: 'Intro 1'
+[[Description_ENG]]
+bnk_peripheral              = 'Blank Page'
+con_peripheral              = 'Concordance'
+con#_peripheral             = 'Concordance [#]'
+cop_peripheral              = 'Copyright Page'
+cop#_peripheral             = 'Copyright Page [#]'
+cov_peripheral              = 'Book Cover'
+cov#_peripheral             = 'Book Cover [#]'
+glo_peripheral              = 'Glossary'
+glo#_peripheral             = 'Glossary [#]'
+gos_peripheral              = 'Gospel Presentation'
+gos#_peripheral             = 'Gospel Presentation [#]'
+ind_peripheral              = 'Index'
+ind#_peripheral             = 'Index [#]'
+ntp_peripheral              = 'Note Page'
+int_peripheral              = 'Intro'
+int#_peripheral             = 'Intro [#]'
+pcv_peripheral              = 'Cover Page'
+pre_peripheral              = 'Preface'
+pre#_peripheral             = 'Preface [#]'
+pub_peripheral              = 'Publisher Page'
+ptn_peripheral              = 'Title Page NT'
+pto_peripheral              = 'Title Page OT'
+pti_peripheral              = 'Title Page'
+toc_peripheral              = 'Table of Contents'
+top_peripheral              = 'Topical Index'
+top#_peripheral             = 'Topical Index [#]'
+
 # COMPONENT SOURCE NAME (PTX)
 # Source names for all the components handled by this system.
 # for this type of publication. This maps the internal system
