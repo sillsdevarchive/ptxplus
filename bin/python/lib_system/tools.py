@@ -47,7 +47,7 @@ def taskRunner (log_manager, thisTask) :
 	# Tell the log what we're doing.
 	log_manager.log("DBUG", "INFO: Starting process: " + thisTask)
 
-	if log_manager._settings['System']['ErrorHandling']['Python'].get('debugMode', 'false').lower() == 'true' :
+	if log_manager._settings['System']['General'].get('debugMode', 'false').lower() == 'true' :
 		# Import the module
 		module = __import__(thisTask, globals(), locals(), [])
 		log_manager.log("DBUG", "Imported module: " + thisTask)
@@ -262,12 +262,25 @@ def getComponentNameValue (compID) :
 def getComponentNameKey (compID) :
 	'''Return the value for a given component ID.'''
 
+	# If a digit exists on the end of this component ID then we have a situation
+	# where there can be multiple instances of the same component type.
+#    if isdigit(compID[-1]) :
+
+	#self.getComponentType(compID)
 	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
 	# Check all types of components
 	for key, value in pubInfoObject['ComponentSourceName_' + editor.upper()].iteritems() :
 		for compType in pubInfoObject['Components']['componentTypeList'] :
 			if compID + '_' + compType == key :
 				return key
+
+
+def getComponentType (compID) :
+	'''Confirm if this is a valid component.'''
+
+	for key in pubInfoObject['Components']['Template'].iteritems() :
+		comp = compID.split('_')[3:]
+		print comp
 
 
 def getProjectConfigFileName () :
@@ -501,7 +514,7 @@ def makefileCommand (command) :
 	'''Send off a makefile command.'''
 
 
-	if getSettingsObject()['System']['ErrorHandling']['Python'].get('debugMode', 'false').lower() == 'true' :
+	if getSettingsObject()['System']['General'].get('debugMode', 'false').lower() == 'true' :
 		params = getSettingsObject()['System']['MakefileSettings']['makeFileParams']
 
 		# Build the command
