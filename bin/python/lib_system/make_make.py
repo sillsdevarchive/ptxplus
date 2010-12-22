@@ -6,23 +6,22 @@
 # This script has been tested on Python 2.5.1 (Ubuntu)
 # it may not work right with earlier versions.
 
-#############################################################
-################ Description/Documentation ##################
-#############################################################
+###############################################################################
+######################### Description/Documentation ###########################
+###############################################################################
 
-# This script will auto-generate the system make file based
-# on settings found in the .conf file. It is supposed to be
-# generic and build for the type of publishing project it is.
-# It does this every time the typeset file is used with valid
-# commands.
+# This script will auto-generate the system makefile based on settings found in
+# the .conf file.  It is supposed to be generic and build for the type of
+# publishing project it is.  It does this every time the typeset file is used
+# with valid commands.
 
 # History:
 # 20100823 - djd - Initial draft (Started with make_scripture.py)
 
 
-#############################################################
-######################### Load Modules ######################
-#############################################################
+###############################################################################
+################################## Load Modules ###############################
+###############################################################################
 # Firstly, import all the modules we need for this process
 
 import sys, os, codecs, operator, csv
@@ -34,10 +33,10 @@ import tools
 class MakeMakefile (object) :
 
 
-# FIXME: There are no doubt much leftover code from the make_scripture.py
-# that will make this module less then generic. As we find code like this
-# it needs to be replaced so this module will work with any recognized
-# type in the system.
+# FIXME: There are no doubt much leftover code from the make_scripture.py that
+# will make this module less then generic.  As we find code like this it needs
+# to be replaced so this module will work with any recognized type in the
+# system.
 
 	def main (self, log_manager) :
 		'''This is the main process function for generating the makefile.'''
@@ -290,10 +289,10 @@ class MakeMakefile (object) :
 
 
 		#######################################################################
-		# At this point it would be good to add a couple more 'HAS_' lists
-		# which could be used by makefile to use more generic rules so that
-		# components can all be processed by the same rules. More code will
-		# need to be written like above.
+		# At this point it would be good to add a couple more 'HAS_' lists which
+		# could be used by makefile to use more generic rules so that components
+		# can all be processed by the same rules.  More code will need to be
+		# written like above.
 		#######################################################################
 
 		# Output a list of all component key names and names
