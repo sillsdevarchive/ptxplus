@@ -225,16 +225,15 @@ def getSystemSettingsOverrideObject () :
 
 
 def getComponentSourceFileName (compID) :
-	'''Return the file name of a source file as determined by
-		by the Scripture editor. If the ID is not recognized
-		it will return nothing'''
+	'''Return the file name of a source file as determined by by the Scripture
+	editor.  If the ID is not recognized it will return nothing'''
 
 	settingsProject = getProjectSettingsObject()
 	settingsSystem = getSystemSettingsObject()
 	suffix = settingsProject['ProjectText']['SourceText'].get('NAME_SOURCE_ORIGINAL')
 	extention = settingsProject['ProjectText']['SourceText'].get('EXT_SOURCE')
-	value = getComponentNameValue(compID)
-	key = getComponentNameKey(compID)
+	value = getComponentTargetName(compID)
+	key = getComponentKeyName(compID)
 
 	# The suffix is only a Paratext naming convention. It is not
 	# needed for peripheral files and will not be present for other
@@ -248,39 +247,59 @@ def getComponentSourceFileName (compID) :
 		return value + "." + extention
 
 
-def getComponentNameValue (compID) :
-	'''Return the key for a given component ID.'''
+def getComponentKeyName (compID) :
+	'''Return the key for a given component ID.  If the component ID has a
+	number suffix it will pass that through.'''
 
-	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
-	# Check all types of components
-	for key, value in pubInfoObject['ComponentSourceName_' + editor.upper()].iteritems() :
+	instance = ''
+	rawID = compID
+
+	# Check to see if this is a component that has mulitple instances
+	# and adjust ID if it does.  The first three letters are what we
+	# need for look-up info.
+	if len(compID) == 4 :
+		instance = compID[-1]
+		rawID = compID[0:3]
+
+	# Check all types of components.  The template list has all the components
+	# in it so we draw from that list.
+	for key, value in pubInfoObject['Components']['Template'].iteritems() :
 		for compType in pubInfoObject['Components']['componentTypeList'] :
-			if compID + '_' + compType == key :
-				return value
+			if rawID + '_' + compType == key :
+				return rawID + instance + '_' + compType
 
 
-def getComponentNameKey (compID) :
-	'''Return the value for a given component ID.'''
+def getComponentTargetName (compID) :
+	'''Return the value for a given component ID key.  The value equates to the
+	template name that is used for this component.  If there is more than one
+	instance of this type of component it will add that to the value (template)
+	name.'''
 
-	# If a digit exists on the end of this component ID then we have a situation
-	# where there can be multiple instances of the same component type.
-#    if isdigit(compID[-1]) :
+	instance = ''
+	rawID = compID
 
-	#self.getComponentType(compID)
-	editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
-	# Check all types of components
-	for key, value in pubInfoObject['ComponentSourceName_' + editor.upper()].iteritems() :
+	# Check to see if this is a component that has mulitple instances and adjust
+	# ID if it does.  The first three letters are what we need for look-up info.
+	if len(compID) == 4 :
+		instance = compID[-1]
+		rawID = compID[0:3]
+
+	# Check all types of components.  The template list has all the components
+	# in it so we draw from that list.
+	for key, value in pubInfoObject['Components']['Template'].iteritems() :
 		for compType in pubInfoObject['Components']['componentTypeList'] :
-			if compID + '_' + compType == key :
-				return key
+			# When dealing with content objects the source file name can be
+			# different depending on the editor used to create it.  This will
+			# sort that out as long as it is a known editor.
+			if compType == 'content' :
+				editor = getProjectSettingsObject()['ProjectText']['SourceText']['Features'].get('projectEditor')
+				for k, v in pubInfoObject['Components']['NameMap_' + editor.upper()].iteritems() :
+					if k == rawID + '_' + compType :
+						return v + instance
 
-
-def getComponentType (compID) :
-	'''Confirm if this is a valid component.'''
-
-	for key in pubInfoObject['Components']['Template'].iteritems() :
-		comp = compID.split('_')[3:]
-		print comp
+			else :
+				if rawID + '_' + compType == key :
+					return value + instance
 
 
 def getProjectConfigFileName () :

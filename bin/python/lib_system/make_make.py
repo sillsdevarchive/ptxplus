@@ -297,10 +297,11 @@ class MakeMakefile (object) :
 
 		# Output a list of all component key names and names
 		for cID in components :
+
 			try:
-				makefileSettings += tools.getComponentNameKey(cID) + '=' + tools.getComponentNameValue(cID) + '\n'
+				makefileSettings += tools.getComponentKeyName(cID) + '=' + tools.getComponentTargetName(cID) + '\n'
 			except:
-				self._log_manager.log('ERRR', 'Component: ' + cID + ' is not known to the system', 'true')
+				self._log_manager.log('ERRR', 'Component: [' + cID + '] is not known to the system', 'true')
 
 
 		# Create the final key/values for the file
