@@ -600,6 +600,7 @@ componentTypeList           = peripheral, content, maps
 # building the file name.
 [[Template]]
 bnk_peripheral              = 'BLANK_PAGE'
+bst_peripheral              = 'BIBLE_STUDY'
 con_peripheral              = 'CONCORDANCE'
 cop_peripheral              = 'COPYRIGHT_PAGE'
 cov_peripheral              = 'COVER'
@@ -729,6 +730,7 @@ blt_content                 = 'SCRIPTURE'
 # use a number to indicate order. For example: 'Intro 1'
 [[Description_ENG]]
 bnk_peripheral              = 'Blank Page'
+bst_peripheral              = 'Bible Study Material'
 con_peripheral              = 'Concordance'
 cop_peripheral              = 'Copyright Page'
 cov_peripheral              = 'Book Cover'

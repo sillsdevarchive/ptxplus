@@ -6,6 +6,28 @@ Creation-Date: Unknown
 
 There are a number of different types of matter used in every Scripture publication. This page give information on the current procedure of how to do each one (if I've kept up with the documentation).
 
+===== Component Codes =====
+The binding list requires that a code be entered into it to set the order and know how to process the individual components. This is a recognized list of component codes and the templates they map to:
+
+bnk = BLANK_PAGE
+con = CONCORDANCE
+cop = COPYRIGHT_PAGE
+cov = COVER
+glo = GLOSSARY
+gos = GOSPEL (presentation)
+ind = INDEX
+int = INTRO
+key = KEY_TERMS
+ntp = NOTE_PAGE
+pcv = COVER_PAGE
+pre = PREFACE
+pub = PUBLISHER (like copyright page)
+ptn = TITLE_NT
+pto = TITLE_OT
+pti = TITLE_PAGE
+toc = TOC
+top = TOPICAL_INDEX
+
 ===== Outer Cover =====
 The production of the outer cover is somewhat separate from the rest of the publication. This is because the content can vary greatly. Here are some basic tips on how to use functions built in for this purpose.
 
@@ -38,6 +60,7 @@ To create a basic table of contents you will need to make a USFM file and embed 
 '''
 \p
 '''
+
 
 '''
 \makedigitsother\catcode`{=1 \catcode`}=2
