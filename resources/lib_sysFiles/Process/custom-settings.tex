@@ -13,7 +13,7 @@
 % you want to do.
 
 
-%%%%% Baselineskip Adjustment Hook
+%%%%% BASELINESKIP ADJUSTMENT HOOK
 % This hook provides a means to adjust the baselineskip on a specific style.
 % (Does not work with some markers like \fig) It provides a place to put the
 % initial setting so the hook can make the change and then go back to the
@@ -25,13 +25,14 @@
 %\sethook{after}{s1}{\baselineskip=\remblskip}
 
 
-%%%%% Skip a line in the working text
+%%%%% WORKING TEXT LINE SKIPPING
+% Skip one line
 \def\skipline{\vskip\baselineskip}
 
-%%%%% Skip just half a line in the working text (use carefully)
+% Skip just half a line (use carefully)
 \def\skiphalfline{\vskip 0.5\baselineskip}
 
-%%%%% Additional Marginal Verse Settings
+%%%%% ADDITIONAL MARGINAL VERSE SETTINGS
 % For marginal verse output we need to insert this right here.  This should be
 % temporary.  It allows one stylesheet to undo superscript in a previous one It
 % needs to go right here to keep everything else working
@@ -49,7 +50,7 @@
 % \Bold
 % \NoSuperscript
 
-%%%%% Header output
+%%%%% HEADER OUTPUT
 % To adjust the size of the page number in the header or footer use the
 % following code.  Adjust font name and size as necessary.
 % \font\mysmallfont="[../Fonts/CharisSIL/CharisSILB.ttf]" at 10pt
@@ -61,31 +62,33 @@
 \def\bookname{\x@\extr@ctfirst\p@gefirstmark\relax\@book}
 \catcode`\@=12
 
-%%%%% Footnote tweaks
+%%%%% FOOTNOTE TWEAKS
 % Footnote caller kerning - To adjust space around the footnote caller use the
 % following code Adjust the kern amounts as necessary
 \let\OriginalGetCaller=\getcaller
 \def\getcaller#1#2{%
   \kern0.2em\OriginalGetCaller{#1}{#2}\kern0.4em}
 
-% Inter Note Skip - Adjust the horizontal space between footnotes, both
-% paragraphed and non-paragraphed
+% INTER NOTE SKIP
+% Adjust the horizontal space between footnotes, both paragraphed and
+% non-paragraphed
 \catcode`\@=11
   \intern@teskip=10pt
 \catcode`\@=12
 
-% Inter-note Penalty - Control the amount of "tension" between parts of a
-% footnote to help control line breaking.  If you use the highest setting,
-% 10000, it will never break.  A lower setting, like 9999, will lossen it up.
-% Default is 9999.
+% INTER-NOTE PENALTY
+% Control the amount of "tension" between parts of a footnote to help control
+% line breaking.  If you use the highest setting, 10000, it will never break.  A
+% lower setting, like 9999, will lossen it up.  Default is 9999.
 \def\internotepenalty{9999}
 
 
-%%%%% Quote Character Kerning
+%%%%% QUOTE CHARACTER KERNING
 % Add some space between quote marks that are together.
 %\quotekernamount = 0.1em
 
-%%%%% Substituting Characters
+
+%%%%% SUBSTITUTING CHARACTERS
 % Some times, when a character does not exist in a font you can substitute from
 % another if no special rendering is needed.  This code will do that.  Uncomment
 % and modify as needed.  This will put more cwi in your life :-)
@@ -93,7 +96,8 @@
 %\catcode"A92E=\active				% Make U+A92E an active character
 %\def^^^^a92e{\leavevmode{\cwi\char"A92E}}	% Define it to print itself  in \cwi
 
-%%%%% Non-standard Spaces
+
+%%%%% NON-STANDARD SPACES
 % Some publications may use non-standard (U+0020) between words.  But TeX (and
 % XeTeX) will treat spaces other than U+0020 as non-breaking which messes up
 % your justification.  This is a work around to force TeX to break and stretch
@@ -101,7 +105,15 @@
 %\catcode"2009=13
 %\def^^^^2009{\hskip .2em plus.1em minus.1em\relax}
 
-%%%%% Heading space
+
+%%%%% LINE BREAKING
+% Some Graphite fonts can break lines on syllables.  Burmese script would be an
+% example of this.  To get lines to break where you need them (if that service
+% exists in the font) uncomment the following command.
+%\XeTeXlinebreaklocale "G"
+
+
+%%%%% HEADING SPACE
 % There always seems to be problems with extra space between the section heading
 % and the top of the column when the section head is at the top of the column.
 % To take up the slack this code will usually help.  Any adjustments needed
@@ -181,14 +193,14 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Map Handling %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%% Place The Map PDF File
+%%%%% PLACE THE MAP PDF FILE
 % This will place a PDF map file on the typeset page
 \catcode`@=11
 \def\domap#1{\vbox to \the\textheight{\vfil\noindent\hfil\XeTeXpdffile #1 width \the\textwidth \hfil\par\vfil}\eject}%
 \catcode `@=12
 
 
-%%%%% Page Size
+%%%%% PAGE SIZE
 
 % This is controled from the project.conf file.  However, as there is a wide
 % range of paper sizes, we will store that information here (for now).
