@@ -101,6 +101,7 @@ class MakeTexControlFile (object) :
 		# Some global settings
 		self._defaultMeasure            = tools.pubInfoObject['TeX']['defaultMeasure']
 		self._useMarginalVerses         = self._log_manager._settings['Format']['ChapterVerse']['useMarginalVerses']
+		self._useHyphenation            = self._log_manager._settings['Format']['Hyphenation']['useHyphenation']
 		try :
 			self._quoteKernAmount           = float(self._log_manager._settings['Format']['TextElements']['quoteKernAmount'])
 		except :
@@ -141,7 +142,7 @@ class MakeTexControlFile (object) :
 		# Get a couple settings
 		oneChapOmmitRule = self._log_manager._settings['Format']['ChapterVerse']['shortBookChapterOmit']
 		omitAllChapterNumbers = self._log_manager._settings['Format']['ChapterVerse']['omitAllChapterNumbers']
-		useHyphenation = self._log_manager._settings['Format']['Hyphenation']['useHyphenation']
+#        useHyphenation = self._log_manager._settings['Format']['Hyphenation']['useHyphenation']
 		pathToHyphen = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
 		hyphenFile = pathToHyphen + "/" + tools.pubInfoObject['Files']['FILE_HYPHENATION_TEX']
 		generateTOC = self._log_manager._settings['Format']['TOC']['generateTOC']
@@ -192,7 +193,7 @@ class MakeTexControlFile (object) :
 
 			# Hyphenation is optional project-wide so we will put it here. However,
 			# we might need to rethink this.
-			if useHyphenation.lower() == 'true' :
+			if self._useHyphenation.lower() == 'true' :
 				settings += '\\input \"' + hyphenFile + '\"\n'
 
 			# Are we using marginal verses?
@@ -542,6 +543,13 @@ class MakeTexControlFile (object) :
 		# General settings
 		if useFigurePlaceholders.lower() == 'true' :
 			generalSettings += '\\FigurePlaceholderstrue\n'
+
+		# If no hyphenation is wanted we need to supress the default hyphenation
+		# that TeX likes to do when we are not looking.
+		if self._useHyphenation.lower() == 'false' :
+			generalSettings += '\hyphenpenalty=10000\n'
+			generalSettings += '\exhyphenpenalty=10000\n'
+
 		# Allow the use of digets in text
 		generalSettings += '\\catcode`@=11\n\\def\\makedigitsother{\\m@kedigitsother}\n\\def\\makedigitsletters{\\m@kedigitsletters}\n\\catcode `@=12\n'
 
