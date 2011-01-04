@@ -333,8 +333,9 @@ class MakeTexControlFile (object) :
 		omitCallerInCrossRefs       = self._log_manager._settings['Format']['Footnotes']['omitCallerInCrossRefs']
 		paragraphedFootnotes        = self._log_manager._settings['Format']['Footnotes']['paragraphedFootnotes']
 		paragraphedCrossRefs        = self._log_manager._settings['Format']['Footnotes']['paragraphedCrossRefs']
-		useFootnoteRule             = self._log_manager._settings['Format']['Footnotes']['useFootnoteRule']
-		defineNewFootnoteRule       = self._log_manager._settings['Format']['Footnotes']['defineNewFootnoteRule']
+#        useFootnoteRule             = self._log_manager._settings['Format']['Footnotes']['useFootnoteRule']
+#        defineNewFootnoteRule       = self._log_manager._settings['Format']['Footnotes']['defineNewFootnoteRule']
+		defineFootnoteRule       = self._log_manager._settings['Format']['Footnotes']['defineFootnoteRule']
 
 		# Margins
 		marginUnit                  = float(self._log_manager._settings['Format']['Margins']['marginUnit'])
@@ -517,20 +518,18 @@ class MakeTexControlFile (object) :
 				footnoteSettings += '\\PageResetCallers{f}\n'
 			if pageResetCallersCrossRefs.lower() == 'true' :
 				footnoteSettings += '\\PageResetCallers{x}\n'
-		# This seems to be an inconsistancy in ptxplus. If the footnoterule
-		# param is blank it will not put out anything. If it is not defined
-		# at all it will put out the default 4pt hrule. This hopefully makes
-		# it simpler to understand by the user.
-		if useFootnoteRule.lower() == 'true' :
-			if defineNewFootnoteRule != '' :
-				footnoteSettings += '\\def\\footnoterule{' + defineNewFootnoteRule + '}\n'
-			# The unstated else here is that if the user wants a footnote rule
-			# but did not define anything, the default is used.
-		else :
-			# In this case the footnote rule is turned off by defining the
-			# footnoterule to nothing
 
-			footnoteSettings += '\\def\\footnoterule{}\n'
+		# The footnote hrule will be used if something exists in the
+		# defineFootnoteRule field.  If nothing is there the user is indicating
+		# that they do not want a footnote rule.  However, the system will put a
+		# default \hrule in if the command "\footnoterule{}" is not found in the
+		# settings file.  For this reason we add the command but leave it blank
+		# to override the macro default.
+		if defineFootnoteRule != '' :
+			footnoteSettings += '\\def\\footnoterule{' + defineFootnoteRule + '}\n'
+		else :
+			footnoteSettings += '\\def\\footnoterule{''}\n'
+
 		if omitCallerInFootnote.lower() == 'true' :
 			footnoteSettings += '\\OmitCallerInNote{f}\n'
 		if omitCallerInCrossRefs.lower() == 'true' :
