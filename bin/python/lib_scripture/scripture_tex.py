@@ -142,11 +142,11 @@ class MakeTexControlFile (object) :
 		# Get a couple settings
 		oneChapOmmitRule = self._log_manager._settings['Format']['ChapterVerse']['shortBookChapterOmit']
 		omitAllChapterNumbers = self._log_manager._settings['Format']['ChapterVerse']['omitAllChapterNumbers']
-#        useHyphenation = self._log_manager._settings['Format']['Hyphenation']['useHyphenation']
 		pathToHyphen = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_HYPHENATION']
 		hyphenFile = pathToHyphen + "/" + tools.pubInfoObject['Files']['FILE_HYPHENATION_TEX']
 		generateTOC = self._log_manager._settings['Format']['TOC']['generateTOC']
 		marginalVersesMacro = tools.pubInfoObject['Files']['FILE_MARGINAL_VERSES']
+		pageNumberBegin = self._log_manager._settings['Format']['PageLayout']['pageNumberBegin']
 
 		# TOC Process
 		autoTocFile = tools.pubInfoObject['Files']['FILE_TOC_AUTO']
@@ -203,6 +203,10 @@ class MakeTexControlFile (object) :
 			if self._useMarginalVerses.lower() == 'true' :
 				settings += '\\input \"' + marginalVersesMacro + '\"\n'
 
+			# If a custom page number is needed that will be inserted here
+			if pageNumberBegin != '' :
+				settings += '\pageno=' + pageNumberBegin + '\n'
+
 			# Since we were passed here it is assmumed that the context
 			# flag will contain a book ID, or will represent the entire
 			# content group.
@@ -251,11 +255,33 @@ class MakeTexControlFile (object) :
 			# with Scripture books
 			settings += '\\ptxfile{' + self._pathToText + '/' + self._inputFile + '.' + self._extWork + '}\n'
 
-		# Combine the results
+		# Close the TeX session
 		settings += '\\bye\n'
+
+
+
+
+
+
+
+
+# FIXME: We need to look at how to overwrite some files where there is change
+# but not others, can we list them? Should we? Thinking mainly of the content
+# control file which probably can be overwritten every time.
+
 
 		# Ship the results, change order as needed
 		self.writeOutTheFile(settings)
+
+
+
+
+
+
+
+
+
+
 
 ###############################################################################
 
