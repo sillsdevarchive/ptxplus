@@ -269,6 +269,16 @@ class MakeMakefile (object) :
 		imageMagick         = self._log_manager._settings['Format']['MapProcesses']['imageMagick']
 		colorSpace          = self._log_manager._settings['Format']['MapProcesses']['colorSpace']
 		imageMagickCommands = self._log_manager._settings['Format']['MapProcesses']['imageMagickCommands']
+		# Add a map color mode for reference for map processes outside
+		# ImageMagick
+		makefileSettings += 'MAP_COLOR_MODE=' + colorSpace.split()[1].lower() + '\n'
+
+		# The use of bw is not valid for a colorspace but we need to do this to
+		# select the right background in aother operation.  This will change it
+		# to gray so ImageMagick doesn't choke.
+		if colorSpace == '-colorspace bw' :
+			colorSpace = '-colorspace gray'
+
 		for item in self._log_manager._settings['Format']['BindingGroups']['GROUP_MAPS'] :
 			source          = ''
 			target          = ''

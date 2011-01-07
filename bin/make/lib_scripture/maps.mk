@@ -17,13 +17,13 @@ $(PATH_MAPS)/$(1).$(EXT_CSV) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV)
 
 # Bring in the map background.  This is a shared resource so it will be copied
 # into the Illustrations folder and later linked to the Maps folder in Process.
-$(PATH_ILLUSTRATIONS)/$(1)-bkgrnd.$(EXT_PNG) :
-	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-bkgrnd.$(EXT_PNG),$$@)
+$(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG) :
+	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG),$$@)
 
 # Link the map background file to the Maps folder.
-$(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) : $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd.$(EXT_PNG)
+$(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) : $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG)
 	@echo INFO: Linking map background file: $(1).$(EXT_PNG)
-	@ln -sf $$(shell readlink -f -- $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd.$(EXT_PNG)) $$@
+	@ln -sf $$(shell readlink -f -- $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG)) $$@
 
 # Copy in the map's svg style file right into the Process folder
 $(PATH_MAPS)/$(1)-sty.$(EXT_CSV) :

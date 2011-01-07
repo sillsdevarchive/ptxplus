@@ -18,7 +18,7 @@
    xml:space="preserve"
    style="overflow:visible"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="m08a.svg"><metadata
+   sodipodi:docname="m08a-map.svg"><metadata
    id="metadata424"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
@@ -164,22 +164,21 @@
    inkscape:window-height="877"
    id="namedview420"
    showgrid="false"
-   inkscape:zoom="2.7785332"
-   inkscape:cx="203.92863"
-   inkscape:cy="166.28934"
+   inkscape:zoom="1.7474369"
+   inkscape:cx="71.170953"
+   inkscape:cy="176.16603"
    inkscape:window-x="1440"
    inkscape:window-y="0"
    inkscape:window-maximized="1"
    inkscape:current-layer="svg2" />
 
 <image
-   xlink:href="/home/dennis/Publishing/PDU/LATN-ACTTH/Process/Maps/m08a-bkgrnd-bw.png"
-   id="image13712"
-   height="203.5253"
-   width="250.19511"
-   y="-0.82991183"
+   xlink:href="m08a-bkgrnd.png"
    x="0.064135969"
-   sodipodi:absref="/home/dennis/Publishing/PDU/LATN-ACTTH/Process/Maps/m08-bkgrnd-bw.png" /><polygon
+   y="-0.82991183"
+   width="250.19511"
+   height="203.5253"
+   id="image13712" /><polygon
    points="505.122,305.347 505.122,305.347 506.547,306.549 507.694,308.855 506.266,307.648 506.367,309.516 505.22,307.209 "
    transform="matrix(0.69804323,0,0,0.6414587,-241.8584,-118.51704)"
    id="polygon18"
@@ -539,6 +538,7 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">EGYPT</text>
 
 
+
 <text
    x="173.36156"
    y="186.8811"
@@ -546,11 +546,13 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">ARABIA</text>
 
 
+
 <text
    x="209.12794"
    y="83.037308"
    id="Region_Syria"
    style="font-size:6px;fill:#ff0000;font-family:Arial">SYRIA</text>
+
 
 
 <text
@@ -561,6 +563,7 @@
    style="font-size:6.09881687px;fill:#ff0000;font-family:Arial">PAMPHYLIA</text>
 
 
+
 <text
    x="71.143448"
    y="65.364975"
@@ -568,11 +571,13 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">LYCIA</text>
 
 
+
 <text
    x="155.52136"
    y="13.674906"
    id="Region_Cappadocia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">CAPPADOCIA</text>
+
 
 
 <text
@@ -583,11 +588,13 @@
 
 
 
+
 <text
    x="66.579765"
    y="118.31829"
    id="Sea_Mediterranean"
    style="font-size:6px;fill:#ff0000;font-family:Arial">MEDITERRANEAN SEA</text>
+
 
 
 <text
@@ -597,12 +604,13 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">PISIDIA</text>
 
 
+
 <text
    x="150.5659"
    y="104.33669"
    id="Island_Cyprus"
-   style="font-size:6px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;stroke:#ffffff;stroke-width:0.20855646;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-   sodipodi:linespacing="125%">Cyprus</text>
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Cyprus</text>
+
 
 
 <text
@@ -612,6 +620,7 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">Crete</text>
 
 
+
 <text
    x="200.24754"
    y="156.65797"
@@ -619,20 +628,21 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">Jerusalem</text>
 
 
+
 <text
    x="121.54552"
    y="90.145447"
    id="City_Paphos"
-   style="font-size:5.99999996000000024px;fill:#ff0000;stroke:#ffffff;stroke-width:0.20855646;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Arial;-inkscape-font-specification:Arial Bold;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
-   sodipodi:linespacing="125%">Paphos</text>
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Paphos</text>
+
 
 
 <text
    x="163.68456"
    y="88.357109"
    id="City_Salamis"
-   style="font-size:6px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;stroke:#ffffff;stroke-width:0.20855646;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-   sodipodi:linespacing="125%">Salamis</text>
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Salamis</text>
+
 
 
 <text
@@ -642,11 +652,13 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">Seleucia</text>
 
 
+
 <text
    x="196.16914"
    y="52.687069"
    id="City_Antioch-A"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Antioch</text>
+
 
 
 <text
@@ -656,11 +668,13 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">Derbe</text>
 
 
+
 <text
    x="129.75313"
    y="40.785305"
    id="City_Lystra"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Lystra</text>
+
 
 
 <text
@@ -670,11 +684,13 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">Iconium</text>
 
 
+
 <text
    x="111.69518"
    y="22.126547"
    id="City_Antioch-B"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Antioch</text>
+
 
 
 <text
@@ -684,11 +700,13 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial">Perga</text>
 
 
+
 <text
    x="78.991013"
    y="56.955654"
    id="City_Attalia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Attalia</text>
+
 
 
 
@@ -792,11 +810,13 @@
    id="Scale_K_Number_A"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">0</text>
 
+
 <text
    x="43.377083"
    y="146.13577"
    id="Scale_K_Number_B"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">100</text>
+
 
 <text
    x="62.829563"
@@ -804,11 +824,13 @@
    id="Scale_K_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">200</text>
 
+
 <text
    x="82.380096"
    y="146.13577"
    id="Scale_K_Number_D"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">300</text>
+
 
 <text
    x="101.73645"
@@ -816,11 +838,13 @@
    id="Scale_K_Number_E"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">400</text>
 
+
 <text
    x="56.379826"
    y="150.88858"
    id="Scale_K_DistanceKey"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">Kilometers</text>
+
 
 <text
    x="33.606636"
@@ -828,11 +852,13 @@
    id="Scale_M_Number_A"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">0</text>
 
+
 <text
    x="48.896366"
    y="161.8035"
    id="Scale_M_Number_B"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">50</text>
+
 
 <text
    x="62.424015"
@@ -840,11 +866,13 @@
    id="Scale_M_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">100</text>
 
+
 <text
    x="79.999603"
    y="161.8035"
    id="Scale_M_Number_D"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">150</text>
+
 
 <text
    x="96.393623"
@@ -852,16 +880,12 @@
    id="Scale_M_Number_E"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">200</text>
 
+
 <text
    x="64.67984"
    y="167.94672"
    id="Scale_M_DistanceKey"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">Miles</text>
 
-<text
-   sodipodi:linespacing="125%"
-   style="font-size:6px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;stroke:#ffffff;stroke-width:0.20855646;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-   id="text2947"
-   y="104.33669"
-   x="150.5659">Cyprus</text>
+
 </svg>
