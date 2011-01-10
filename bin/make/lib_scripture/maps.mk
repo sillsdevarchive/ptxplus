@@ -20,8 +20,10 @@ $(PATH_MAPS)/$(1).$(EXT_CSV) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV)
 $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG) :
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG),$$@)
 
-# Link the map background file to the Maps folder.
-$(PATH_MAPS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG) : $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG)
+# Link the map background file to the Maps folder.  Because of a limitation in
+# our data remapping scrit, we need to have the background image name to be a
+# little generic.
+$(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) : $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG)
 	@echo INFO: Linking map background file: $(1).$(EXT_PNG)
 	@ln -sf $$(shell readlink -f -- $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG)) $$@
 
@@ -44,7 +46,7 @@ $(PATH_MAPS)/$(1)-temp.$(EXT_SVG) :
 # Copy the final SVG file into the Maps folder
 $(PATH_MAPS)/$(1).$(EXT_SVG) : \
 		$(PATH_MAPS)/$(1).$(EXT_CSV) \
-		$(PATH_MAPS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG) \
+		$(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) \
 		$(PATH_MAPS)/$(1)-sty.$(EXT_CSV) \
 		$(PATH_MAPS)/$(1)-temp.$(EXT_SVG)
 	@echo INFO: Creating: $$@
