@@ -48,13 +48,17 @@ class MakeMapFile (object) :
 	def main (self, log_manager) :
 
 		# Pull in all the relevant vars and settings
+		# FIXME: Might want to replace hard coded extentions with system vars
+		# for file types
 		basePath        = os.environ.get('PTXPLUS_BASE')
-		mapProject      =  os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_MAPS']
+		mapProject      = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_MAPS']
+		colorSpace      = log_manager._settings['Format']['MapProcesses']['colorSpace']
 		inputFile       = log_manager._currentInput
 		outputFile      = log_manager._currentOutput
 		(head, tail)    = os.path.split(outputFile)
-		dataFileName    =  mapProject + "/" + tail.replace('.svg', '.csv')
+		dataFileName    = mapProject + "/" + tail.replace('.svg', '.csv')
 		styleFileName   = mapProject + "/" + tail.replace('.svg', '-sty.csv')
+		backgroundFile  = tail.replace('.svg', '-bkgrnd-' + colorSpace.split()[1].lower() + '.png')
 
 
 ###############################################################################
@@ -91,19 +95,38 @@ class MakeMapFile (object) :
 			if len(row) > 0 and row[0] != "MapPointData" :
 				map[row[0]] = row[1]
 
+		# To get the right background file image, we need to insert the key and
+		# file name into the style data list.  Encode the backgroundFile string
+		# to be Unicode utf-8
+#        map['background'] = backgroundFile.encode('utf-8')
+
 		# Gather the new style data
 		styles = {}
 		for row in styleData:
 			if len(row) > 0 and row[0] != "StyleName" :
 				styles[row[0]] = row[1]
 
+		# To get the right background file image, we need to insert the key and
+		# file name into the style data list.  Encode the backgroundFile string
+		# to be Unicode utf-8
+#        styles['background'] = backgroundFile.encode('utf-8')
+
 		# Replace the key fields in the XML data with the new map data
 		for key in map.keys() :
 			if dXML.has_key(key) :
 				dXML[key].text = unicode(map[key], 'utf-8')
 				temp = re.sub("_.*$", '', key)
+				# Set the style for each map point key
 				if styles.has_key(temp) :
 					dXML[key].set('style', styles[temp])
+
+		dXML['background'].set('href', backgroundFile.encode('utf-8'))
+		dXML['background'].set('xlink:href', backgroundFile.encode('utf-8'))
+
+		# Set the background once
+#        if dXML.has_key('background') :
+#            dXML['background'].image = unicode(map[key], 'utf-8')
+#            dXML['background'].set('href', backgroundFile.encode('utf-8'))
 
 		# Overwrite the original SVG file with the new data
 		ElementTree(element = eXML).write(outputFile, encoding = 'UTF-8')
