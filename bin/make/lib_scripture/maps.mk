@@ -10,8 +10,8 @@ $(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV) : $(PATH_ILLUSTRATIONS)/$(1).$(EXT_PNG)
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-data.$(EXT_CSV),$$@)
 
 # Link the data CSV file from the original in the Source Peripheral folder to
-# the Maps folder.
-$(PATH_MAPS)/$(1).$(EXT_CSV) : $(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV)
+# the Maps folder. (Note if this exists already we don't want to overwrite.)
+$(PATH_MAPS)/$(1).$(EXT_CSV) : | $(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV)
 	@echo INFO: Linking map CSV: $(1).$(EXT_CSV)
 	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE_PERIPH)/$(1)).$(EXT_CSV) $$@
 
