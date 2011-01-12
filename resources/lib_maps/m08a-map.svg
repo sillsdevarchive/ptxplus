@@ -311,8 +311,7 @@
    width="250.19511"
    y="-0.82991183"
    x="0.064135969"
-   xlink:href="/home/dennis/Projects/ptxplus/resources/lib_maps/m08a-bkgrnd.png"
-   sodipodi:absref="/home/dennis/Projects/ptxplus/resources/lib_maps/m08a-bkgrnd.png" /><path
+   xlink:href="m08a-bkgrnd.png" /><path
    sodipodi:nodetypes="cc"
    id="path4188"
    d="m 97.410335,56.998466 c 2.877265,5.219943 7.085065,7.48327 7.085065,7.48327"

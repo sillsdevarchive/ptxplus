@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="460.36569"
+   height="340.04468"
+   viewBox="0 0 320.0408 234.51527"
+   id="svg2"
+   xml:space="preserve"
+   style="overflow:visible"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="m08b-map.svg"><metadata
+   id="metadata424"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs422"><inkscape:perspective
+     sodipodi:type="inkscape:persp3d"
+     inkscape:vp_x="0 : 212.59842 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_z="708.66138 : 212.59842 : 1"
+     inkscape:persp3d-origin="354.33069 : 141.73228 : 1"
+     id="perspective426" /><inkscape:perspective
+     id="perspective3144"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /><inkscape:perspective
+     id="perspective3168"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /><inkscape:perspective
+     id="perspective3192"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /></defs><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1440"
+   inkscape:window-height="877"
+   id="namedview420"
+   showgrid="false"
+   inkscape:zoom="2.2090202"
+   inkscape:cx="199.75925"
+   inkscape:cy="184.4798"
+   inkscape:window-x="1440"
+   inkscape:window-y="0"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg2" />
+   
+
+<image
+   sodipodi:absref="/home/dennis/Projects/ptxplus/resources/lib_maps/m08b-bkgrnd.png"
+   xlink:href="m08b-bkgrnd.png"
+   x="0.6023984"
+   y="-0.89967525"
+   width="318.48389"
+   height="235.4243"
+   id="image13712" />
+
+<g
+   transform="matrix(0.57540967,0,0,0.6414587,-150.51682,-135.84634)"
+   id="g2848"
+   style="overflow:visible">
+
+<rect
+   width="29.139"
+   height="3.1889999"
+   x="460.48499"
+   y="505.80399"
+   id="rect2850"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2586;stroke-miterlimit:2.41420007" />
+
+<g
+   id="g2852">
+
+<rect
+   width="29.139999"
+   height="3.1889999"
+   x="431.353"
+   y="505.80399"
+   id="rect2854"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2579;stroke-miterlimit:2.41420007" />
+
+<line
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007"
+   y2="507.39801"
+   x2="460.49301"
+   y1="507.39801"
+   x1="431.353"
+   stroke-miterlimit="2.4142"
+   id="line2856" />
+	</g>
+
+<rect
+   width="29.139999"
+   height="3.1889999"
+   x="402.21301"
+   y="505.80399"
+   id="rect2858"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2586;stroke-miterlimit:2.41420007" />
+
+<g
+   id="g2860">
+
+<rect
+   width="29.141001"
+   height="3.1889999"
+   x="373.073"
+   y="505.80399"
+   id="rect2862"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2579;stroke-miterlimit:2.41420007" />
+
+<line
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007"
+   y2="507.39801"
+   x2="402.32101"
+   y1="507.39801"
+   x1="373.181"
+   stroke-miterlimit="2.4142"
+   id="line2864" />
+	</g>
+
+	</g>
+
+<polygon
+   points="294.63,190.865 295.181,189.078 295.459,191.639 294.908,193.42 294.908,193.42 293.986,191.799 293.707,189.238 "
+   transform="matrix(0.69804323,0,0,0.6414587,-174.33918,-89.910576)"
+   id="polygon98"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="441.431,299.714 443.178,301.606 443.794,303.366 443.794,303.366 442.088,302.611 440.342,300.72 442.051,301.479 "
+   transform="matrix(0.68745523,-0.12111839,0.11130033,0.63172898,-194.38216,-22.483065)"
+   id="polygon100"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="518.793,353.755 516.596,352.411 518.448,352.675 517.37,351.146 519.567,352.49 520.641,354.016 520.641,354.016 "
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="polygon102"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="575.369,254.767 577.682,253.637 576.465,255.057 578.333,254.969 576.019,256.099 574.156,256.185 574.156,256.185 "
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="polygon104"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="481.654,209.1 483.465,210.931 481.731,210.231 482.411,211.974 480.6,210.143 479.923,208.404 479.923,208.404 "
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="polygon106"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="626.849,329.913 628.247,328.677 628.247,328.677 628.192,330.542 627.099,332.874 627.157,331.005 625.756,332.245 "
+   transform="matrix(0.66719309,-0.20522605,0.18859009,0.61310932,-212.7666,52.951816)"
+   id="polygon108"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="329.066,275.457 326.492,275.397 328.225,274.696 326.526,273.916 329.101,273.975 330.795,274.755 330.795,274.755 "
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="polygon110"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="297.21,168.365 297.21,168.365 298.195,169.949 300.312,171.416 299.323,169.829 301.157,170.197 299.04,168.73 "
+   transform="matrix(0.64516476,-0.2665085,0.24490489,0.59286664,-197.37314,-1.8166493)"
+   id="polygon112"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="358.472,165.223 357.569,163.586 359.379,164.051 357.344,162.474 355.537,162.012 355.537,162.012 356.436,163.646 "
+   transform="matrix(0.69804323,0,0,0.6414587,-167.7535,-87.995592)"
+   id="polygon114"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="329.062,259.448 328.404,256.958 328.126,258.808 326.971,257.337 327.628,259.827 328.783,261.292 328.783,261.292 "
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="polygon116"
+   style="fill:#007dbe;fill-rule:evenodd" /><polygon
+   points="397.227,183.688 397.227,183.688 399.087,183.821 401.518,182.969 399.653,182.838 401.028,181.57 398.596,182.422 "
+   transform="matrix(0.69672791,0.04430493,-0.03935983,0.66226963,-162.58286,-112.24855)"
+   id="polygon118"
+   style="fill:#007dbe;fill-rule:evenodd" /><g
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="g120">
+
+<g
+   id="g122">
+	<path
+   d="M 453.54646,314.0908 C 482.99956,333.97539 489.194,337.07 512.943,349.652"
+   id="path124"
+   style="fill:none;stroke:#007dbe;stroke-width:1.50010002;stroke-miterlimit:2.41420007" />
+	<polygon
+   points="512.748,347.8 511.32,350.495 511.32,350.495 517.063,351.813 "
+   id="polygon126"
+   style="fill:#007dbe" />
+	</g>
+
+	</g><path
+   d="m 56.033599,89.517056 c 2.35869,0.0783 7.4036,1.87228 10.2586,2.13256 0.0251,0.003 5.1823,1.68184 8.36624,-5.34544 8.15215,-12.26482 28.793931,-10.75873 32.183631,-13.18216 l -0.0133,0.077 c -1.94545,3.73137 -1.6011,7.25716 -4.70111,8.77999 -2.385911,1.17258 -3.415421,2.61866 -3.348411,4.18575 0.16055,3.77691 -2.62705,6.66354 -2.80645,9.66749 -0.15636,2.62164 2.88082,8.943224 8.138481,9.487824 5.74141,0.59463 10.50783,3.39973 18.95622,-0.94999 11.69703,-6.022314 10.30545,4.79882 16.23575,7.79549"
+   id="path132"
+   style="fill:none;stroke:#007dbe;stroke-width:1.00379658;stroke-miterlimit:2.41420007" /><polygon
+   points="438.867,295.443 436.537,297.412 436.537,297.412 441.375,300.774 "
+   transform="matrix(0.66685776,-0.20631305,0.18958898,0.61280118,-209.0569,20.608247)"
+   id="polygon134"
+   style="fill:#007dbe" /><g
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="g136">
+
+<g
+   id="g138">
+	<path
+   d="m 293.09804,258.40605 c 4.743,2.756 12.17896,1.06595 15.44696,5.56795 1.697,2.339 3.173,4.678 6.614,8.729 1.081,1.273 3.292,1.578 7.346,1.741"
+   id="path140"
+   style="fill:none;stroke:#007dbe;stroke-width:1.50010002;stroke-miterlimit:2.41420007" />
+	<polygon
+   points="321.527,272.861 321.404,275.908 321.404,275.908 327.153,274.614 "
+   id="polygon142"
+   style="fill:#007dbe" />
+	</g>
+
+	</g><path
+   d="m 35.126009,76.928256 c 3.72057,-1.11165 7.13155,2.41124 8.9695,2.92376 -0.24013,2.12452 2.61491,3.02101 4.05637,4.63941 1.00379,1.1264 2.33482,1.56154 3.55849,2.01505 2.88362,1.06932 4.36621,-1.2015 4.82483,-2.46004 0.39788,-1.08984 -0.0542,-3.09798 -0.53371,-4.76513"
+   id="path148"
+   style="fill:none;stroke:#007dbe;stroke-width:1.00379658;stroke-miterlimit:2.41420007" /><polygon
+   points="301.201,251.64 301.201,251.64 296.259,254.85 302.144,254.541 "
+   transform="matrix(0.69804323,0,0,0.6414587,-175.22661,-85.473418)"
+   id="polygon150"
+   style="fill:#007dbe" />
+
+<g
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="g154">
+	<path
+   d="m 292.8154,186.497 c 0.904,8.304 15.7706,21.906 14.9526,30.939 -0.402,4.447 -3.592,2.843 -5.75,3.13 -2.404,0.321 -3.811,3.807 -5.399,4.515 -1.587,0.71 -3.707,1.576 -3.538,3.007 0.169,1.431 2.006,1.645 4.362,1.779 2.356,0.134 5.631,2.339 8.048,4.155 1.629,1.224 4.009,2.5 5.091,3.763 1.083,1.263 2.621,3.2 4.743,4.212 2.123,1.012 4.645,0.78 6.126,1.734 1.482,0.954 1.895,4.235 3.412,5.271 1.517,1.035 1.1,2.927 1.6,4.473"
+   id="path156"
+   style="fill:none;stroke:#007dbe;stroke-width:1.50010002;stroke-miterlimit:2.41420007" />
+	<polygon
+   points="324.709,252.948 327.913,257.893 327.611,252.008 324.709,252.948 "
+   id="polygon158"
+   style="fill:#007dbe" />
+	</g><path
+   d="m 30.782219,28.860114 c -0.44954,-3.009724 -3.5282,-7.601876 -6.70849,-7.604442 1.87425,-1.100101 3.89557,-2.811135 5.05942,-3.046704 1.98498,-0.401765 4.59456,0.299382 7.75188,0.79834"
+   id="path164"
+   style="fill:none;stroke:#007dbe;stroke-width:1.00379658;stroke-miterlimit:2.41420007" /><polygon
+   points="294.502,189.836 295.24,183.99 292.218,184.404 292.218,184.404 "
+   transform="matrix(0.69804323,0,0,0.6414587,-174.33918,-90.00399)"
+   id="polygon166"
+   style="fill:#007dbe" /><path
+   d="m 41.618449,20.036838 c 1.34164,0.751148 3.74096,0.37871 4.21144,-1.038914 2.40616,-1.032749 0.34123,-5.513391 4.18047,-4.853971 -0.097,-2.338759 13.37056,0.02131 14.12654,-1.65867 4.0655,1.909904 4.00837,2.401576 6.12858,2.395163 3.84402,-0.01163 3.65169,-1.092591 4.96718,-1.180819 1.09698,-0.07357 1.41914,-0.485626 6.55883,3.173254"
+   id="path172"
+   style="fill:none;stroke:#007dbe;stroke-width:1.00379658;stroke-miterlimit:2.41420007" /><polygon
+   points="305.561,171.895 305.561,171.895 299.907,170.236 303.974,174.5 "
+   transform="matrix(0.6696489,-0.19706521,0.18109078,0.61536606,-193.71137,-26.431952)"
+   id="polygon174"
+   style="fill:#007dbe" /><path
+   d="m 84.335719,19.199571 c 1.64527,2.253991 2.45154,3.190354 1.71549,5.874076 -0.5446,1.985699 -1.52482,3.709867 1.11937,5.550212 3.10769,-0.421438 17.822891,-2.923755 21.062511,-3.967408"
+   id="path180"
+   style="fill:none;stroke:#007dbe;stroke-width:1.00379658;stroke-miterlimit:2.41420007" /><polygon
+   points="361.627,169.175 363.65,166.892 363.65,166.892 358.378,164.259 "
+   transform="matrix(0.69551071,0.05940709,-0.05459145,0.63913147,-157.97144,-109.1011)"
+   id="polygon182"
+   style="fill:#007dbe" /><path
+   d="M 163.27328,48.200066 C 154.6555,40.629466 144.03398,19.144048 112.8226,25.356717"
+   id="path188"
+   style="fill:none;stroke:#007dbe;stroke-width:1.00379658;stroke-miterlimit:2.41420007" /><polygon
+   points="406.307,179.141 401.383,182.377 407.266,182.036 406.307,179.141 "
+   transform="matrix(0.69804323,0,0,0.6414587,-170.83616,-90.564473)"
+   id="polygon190"
+   style="fill:#007dbe" /><g
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="g192">
+
+<g
+   id="g194">
+	<path
+   d="m 576.53,255.024 c -6.313,3.084 -7.375,11.169 -16.066,10.729 -7.467,-0.379 -15.599,-5.849 -22.994,-12.079 -3.438,-4.526 -8.206,-6.296 -10.971,-7.086 1.505,-2.505 3.551,-2.119 4.458,-8.735 -7.966,1.607 -22.019,-22.127 -29.896,-19.383 -3.775,-5.208 -10.87,-0.798 -14.737,-4.127"
+   id="path196"
+   style="fill:none;stroke:#007dbe;stroke-width:1.50010002;stroke-miterlimit:2.41420007" />
+	<polygon
+   points="486.105,216.191 488.095,213.88 488.095,213.88 482.787,211.322 "
+   id="polygon198"
+   style="fill:#007dbe" />
+	</g>
+
+	</g><g
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="g200">
+
+<g
+   id="g202">
+	<path
+   d="m 623.901,266.896 c -6.855,-0.39 10.061,-31.584 -4.723,-25.149 -6.927,3.015 -8.938,15.495 -16.635,16.59 -5.23,0.744 -6.31,-4.358 -10.388,-6.398 -2.176,-1.087 -7.616,-0.439 -10.128,0.65"
+   id="path204"
+   style="fill:none;stroke:#007dbe;stroke-width:1.50010002;stroke-miterlimit:2.41420007" />
+	<polygon
+   points="583.596,253.59 582.383,250.792 582.383,250.792 577.768,254.456 "
+   id="polygon206"
+   style="fill:#007dbe" />
+	</g>
+
+	</g><path
+   d="m 268.16377,126.67074 c 0.88034,-7.6866 -4.20033,-14.03342 -4.88741,-22.06013 -0.60719,-7.093354 1.76379,-12.536724 0.99566,-15.526634"
+   id="path212"
+   style="fill:none;stroke:#007dbe;stroke-width:1.00379658;stroke-miterlimit:2.41420007" /><polygon
+   points="627.399,274.308 627.399,274.308 625.389,268.769 624.36,274.57 "
+   transform="matrix(0.67880732,-0.16274203,0.14954989,0.62378209,-201.62017,19.971299)"
+   id="polygon214"
+   style="fill:#007dbe" /><path
+   d="m 188.82445,139.51428 c 11.2036,6.29527 32.52254,13.80804 39.26424,15.78886 9.51503,2.79548 21.52833,7.49379 26.37071,14.21701 3.72021,5.16516 2.64567,18.33966 7.98081,20.82531 l 0.88755,-0.67593 c -2.84034,-9.73542 -4.4311,-28.29281 -1.75759,-37.58113 0.72387,-2.51388 2.69132,-6.14396 3.05709,-9.15881 0.4656,-3.84106 0.85782,-7.88629 2.06839,-11.72401"
+   id="path220"
+   style="fill:none;stroke:#007dbe;stroke-width:1.00379658;stroke-miterlimit:2.41420007" /><polygon
+   points="626.584,332.222 622.907,336.826 625.701,338.048 625.701,338.048 "
+   transform="matrix(0.69517895,-0.06317104,0.05805029,0.6388266,-186.99762,-44.622473)"
+   id="polygon222"
+   style="fill:#007dbe" /><circle
+   cx="621.10699"
+   cy="412.50299"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-170.25713,-74.071566)"
+   id="Jerusalem"
+   style="fill-rule:evenodd"
+   sodipodi:cx="621.10699"
+   sodipodi:cy="412.50299"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="609.30902"
+   cy="389.771"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-170.38924,-80.742977)"
+   id="Caesarea"
+   style="fill-rule:evenodd"
+   sodipodi:cx="609.30902"
+   sodipodi:cy="389.771"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="623.84998"
+   cy="267.202"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="Antioch_x2C__Syria_1_"
+   style="fill-rule:evenodd"
+   sodipodi:cx="623.84998"
+   sodipodi:cy="267.202"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="593.59497"
+   cy="253.104"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="Tarsus"
+   style="fill-rule:evenodd"
+   sodipodi:cx="593.59497"
+   sodipodi:cy="253.104"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="537.67401"
+   cy="253.524"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="Derbe"
+   style="fill-rule:evenodd"
+   sodipodi:cx="537.67401"
+   sodipodi:cy="253.524"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="526.51801"
+   cy="246.505"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="Lystra"
+   style="fill-rule:evenodd"
+   sodipodi:cx="526.51801"
+   sodipodi:cy="246.505"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="530.77002"
+   cy="237.853"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="Iconium"
+   style="fill-rule:evenodd"
+   sodipodi:cx="530.77002"
+   sodipodi:cy="237.853"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="406.10599"
+   cy="288.021"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-171.71031,-83.649334)"
+   id="Cnidus"
+   style="fill-rule:evenodd"
+   sodipodi:cx="406.10599"
+   sodipodi:cy="288.021"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="400.979"
+   cy="249.20399"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-86.687798)"
+   id="Ephesus"
+   style="fill-rule:evenodd"
+   sodipodi:cx="400.979"
+   sodipodi:cy="249.20399"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="415.47699"
+   cy="219.011"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-173.45175,-86.781212)"
+   id="Thyatira"
+   style="fill-rule:evenodd"
+   sodipodi:cx="415.47699"
+   sodipodi:cy="219.011"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="370.491"
+   cy="191.22099"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-171.63018,-90.704593)"
+   id="Troas"
+   style="fill-rule:evenodd"
+   sodipodi:cx="370.491"
+   sodipodi:cy="191.22099"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="332.06601"
+   cy="158.619"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-167.87888,-92.558357)"
+   id="Neapolis"
+   style="fill-rule:evenodd"
+   sodipodi:cx="332.06601"
+   sodipodi:cy="158.619"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="323.64999"
+   cy="154.763"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-166.71869,-92.583068)"
+   id="Philipi"
+   style="fill-rule:evenodd"
+   sodipodi:cx="323.64999"
+   sodipodi:cy="154.763"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="317.41299"
+   cy="166.08299"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-170.4158,-91.171663)"
+   id="Amphipolis"
+   style="fill-rule:evenodd"
+   sodipodi:cx="317.41299"
+   sodipodi:cy="166.08299"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="309.12799"
+   cy="169.937"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-171.13975,-91.054896)"
+   id="Apollonia"
+   style="fill-rule:evenodd"
+   sodipodi:cx="309.12799"
+   sodipodi:cy="169.937"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="296.586"
+   cy="168.70599"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-171.53676,-89.863869)"
+   id="Thessalonica"
+   style="fill-rule:evenodd"
+   sodipodi:cx="296.586"
+   sodipodi:cy="168.70599"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="283.12799"
+   cy="176.071"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-174.61942,-91.918974)"
+   id="Berea"
+   style="fill-rule:evenodd"
+   sodipodi:cx="283.12799"
+   sodipodi:cy="176.071"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="312.905"
+   cy="254.343"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-173.03138,-84.259038)"
+   id="Athens"
+   style="fill-rule:evenodd"
+   sodipodi:cx="312.905"
+   sodipodi:cy="254.343"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" /><circle
+   cx="294.59299"
+   cy="254.634"
+   r="1.556"
+   transform="matrix(0.69804323,0,0,0.6414587,-175.1799,-84.819521)"
+   id="Corinth"
+   style="fill-rule:evenodd"
+   sodipodi:cx="294.59299"
+   sodipodi:cy="254.634"
+   sodipodi:rx="1.556"
+   sodipodi:ry="1.556" />
+   
+
+   
+
+   
+
+   
+
+   
+<line
+   id="Apollonia_line"
+   stroke-miterlimit="2.4142"
+   x1="47.102398"
+   y1="27.965696"
+   x2="45.88728"
+   y2="20.771238"
+   style="fill:none;stroke:#000000;stroke-width:0.34759411;stroke-miterlimit:2.41420007;stroke-dasharray:none"
+   mask="none" />
+
+
+<g
+   transform="matrix(0.69804323,0,0,0.6414587,-205.57009,-152.50752)"
+   id="Scale_Bar">
+
+<rect
+   width="29.139"
+   height="3.1889999"
+   x="460.48499"
+   y="505.80399"
+   id="Far_Right"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2586;stroke-miterlimit:2.41420007" />
+
+<g
+   id="Right_Center">
+
+<rect
+   width="29.139999"
+   height="3.1889999"
+   x="431.353"
+   y="505.80399"
+   id="Outside_2_"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2579;stroke-miterlimit:2.41420007" />
+
+<line
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007"
+   y2="507.39801"
+   x2="460.49301"
+   y1="507.39801"
+   x1="431.353"
+   stroke-miterlimit="2.4142"
+   id="Inside_1_" />
+	</g>
+
+<rect
+   width="29.139999"
+   height="3.1889999"
+   x="402.21301"
+   y="505.80399"
+   id="Left_Center"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2586;stroke-miterlimit:2.41420007" />
+
+<g
+   id="Far_Left">
+
+<rect
+   width="29.141001"
+   height="3.1889999"
+   x="373.073"
+   y="505.80399"
+   id="Outside"
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2579;stroke-miterlimit:2.41420007" />
+
+<line
+   style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007"
+   y2="507.39801"
+   x2="402.32101"
+   y1="507.39801"
+   x1="373.181"
+   stroke-miterlimit="2.4142"
+   id="Inside" />
+	</g>
+
+	</g>
+
+
+<text
+   x="157.81856"
+   y="229.31551"
+   id="Region_Egypt"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">EGYPT</text>
+
+
+
+
+
+<text
+   x="246.19411"
+   y="222.27083"
+   id="Region_Arabia"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">ARABIA</text>
+
+
+
+
+
+<text
+   x="278.13141"
+   y="113.07468"
+   id="Region_Syria"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">SYRIA</text>
+
+
+
+
+
+<text
+   x="193.44713"
+   y="-21.972458"
+   transform="matrix(0.86982776,0.50703453,-0.52153554,0.84564267,0,0)"
+   id="Region_Pamphylia"
+   style="font-size:6.09881687px;fill:#ff0000;font-family:Arial">PAMPHYLIA</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="210.01167"
+   y="26.2974"
+   id="Region_Galatia"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">GALATIA</text>
+
+
+
+
+
+
+
+
+
+
+<text
+   x="152.02342"
+   y="15.311033"
+   id="Region_Bithynia"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">BITHYNIA</text>
+
+
+
+
+
+<text
+   x="133.25432"
+   y="57.85704"
+   id="Region_Asia"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">ASIA</text>
+
+
+
+
+
+
+
+
+
+
+<text
+   x="8.1951256"
+   y="95.48703"
+   id="Region_Achaia"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Achaia</text>
+
+
+
+
+
+<text
+   x="4.342526"
+   y="7.4956112"
+   id="Region_Macedonia"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">MACEDONIA</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="118.3094"
+   y="166.20213"
+   id="Sea_Mediterranean"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">MEDITERRANEAN SEA</text>
+
+
+
+
+
+
+
+
+
+<text
+   x="170.20821"
+   y="72.742188"
+   id="Region_Pisidia"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">PISIDIA</text>
+
+
+
+
+
+<text
+   x="114.23523"
+   y="204.83954"
+   transform="matrix(0.80932735,-0.59422457,0.61121919,0.78682444,0,0)"
+   id="Region_Cilicia"
+   style="font-size:6.09881687px;fill:#ff0000;font-family:Arial">CILICIA</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="114.55615"
+   y="219.72357"
+   id="Island_Cyprus"
+   style="font-size:6px;fill:#ff0000;font-family:Arial"
+   transform="matrix(0.86138538,-0.507952,0.507952,0.86138538,0,0)">Cyprus</text>
+
+
+
+
+
+<text
+   x="58.379818"
+   y="134.79283"
+   id="Island_Crete"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Crete</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="227.45689"
+   y="174.21527"
+   id="City_Caesarea"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Caesarea</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="265.34036"
+   y="192.71928"
+   id="City_Jerusalem"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Jerusalem</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="265.99194"
+   y="86.383408"
+   id="City_Antioch-A"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Antioch</text>
+
+
+
+
+
+<text
+   x="227.25865"
+   y="73.080978"
+   id="City_Tarsus"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Tarsus</text>
+
+
+
+
+
+<text
+   x="208.15898"
+   y="76.064178"
+   id="City_Derbe"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Derbe</text>
+
+
+
+
+
+<text
+   x="201.56749"
+   y="70.871933"
+   id="City_Lystra"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Lystra</text>
+
+
+
+
+
+<text
+   x="199.45815"
+   y="64.228958"
+   id="City_Iconium"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Iconium</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="106.14665"
+   y="51.686005"
+   id="City_Thyatira"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Thyatira</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="101.71922"
+   y="70.074707"
+   id="City_Ephesus"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Ephesus</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="91.459244"
+   y="35.011101"
+   id="City_Troas"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Troas</text>
+
+
+
+
+
+<text
+   x="67.226852"
+   y="8.1687603"
+   id="City_Neapolis"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Neapolis</text>
+
+
+
+
+
+<text
+   x="48.303829"
+   y="4.608572"
+   id="City_Philipi"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Philipi</text>
+
+
+
+
+
+<text
+   x="51.039989"
+   y="22.426374"
+   id="City_Amphipolis"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Amphipolis</text>
+
+
+
+
+
+<text
+   x="45.018429"
+   y="32.937881"
+   id="City_Apollonia"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Apollonia</text>
+
+
+
+
+
+<text
+   x="1.2125669"
+   y="14.081114"
+   id="City_Thessalonica"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Thessalonica</text>
+
+
+
+
+
+<text
+   x="6.5591702"
+   y="26.97296"
+   id="City_Berea"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Berea</text>
+
+
+
+
+
+<text
+   x="22.66885"
+   y="72.37381"
+   id="City_Athens"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Athens</text>
+
+
+
+
+
+<text
+   x="10.465466"
+   y="84.586975"
+   id="City_Corinth"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Corinth</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<text
+   x="53.582546"
+   y="180.41182"
+   id="Scale_K_Number_A"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">0</text>
+
+
+
+
+
+<text
+   x="70.847214"
+   y="180.41182"
+   id="Scale_K_Number_B"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">100</text>
+
+
+
+
+
+<text
+   x="90.299698"
+   y="180.41182"
+   id="Scale_K_Number_C"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">200</text>
+
+
+
+
+
+<text
+   x="109.85023"
+   y="180.41182"
+   id="Scale_K_Number_D"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">300</text>
+
+
+
+
+
+<text
+   x="129.20659"
+   y="180.41182"
+   id="Scale_K_Number_E"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">400</text>
+
+
+
+
+
+<text
+   x="83.84996"
+   y="185.16463"
+   id="Scale_K_DistanceKey"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">Kilometers</text>
+
+
+
+
+
+<text
+   x="61.076763"
+   y="196.07954"
+   id="Scale_M_Number_A"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">0</text>
+
+
+
+
+
+<text
+   x="76.366501"
+   y="196.07954"
+   id="Scale_M_Number_B"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">50</text>
+
+
+
+
+
+<text
+   x="89.89415"
+   y="196.07954"
+   id="Scale_M_Number_C"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">100</text>
+
+
+
+
+
+<text
+   x="107.46974"
+   y="196.07954"
+   id="Scale_M_Number_D"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">150</text>
+
+
+
+
+
+<text
+   x="123.86375"
+   y="196.07954"
+   id="Scale_M_Number_E"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">200</text>
+
+
+
+
+
+<text
+   x="92.149979"
+   y="202.22276"
+   id="Scale_M_DistanceKey"
+   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">Miles</text>
+
+
+
+
+
+
+
+<rect
+   style="opacity:0.98000004;fill:none;stroke:#000000;stroke-width:1.39800358;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+   id="rect3232"
+   width="318.64279"
+   height="234.99704"
+   x="0.69900179"
+   y="-0.47625145" /><text
+   x="115.89665"
+   y="30.609709"
+   id="Region_Mysia"
+   style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
+   sodipodi:linespacing="125%"><tspan
+     sodipodi:role="line"
+     id="tspan3158"
+     x="115.89665"
+     y="30.609709">Mysia</tspan></text>
+<text
+   x="162.74144"
+   y="43.516426"
+   id="Region_Phrygia"
+   style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
+   sodipodi:linespacing="125%"><tspan
+     sodipodi:role="line"
+     id="tspan3182"
+     x="162.74144"
+     y="43.516426">PHRYGIA</tspan></text>
+<text
+   x="57.632565"
+   y="27.904211"
+   id="Island_Samothrace"
+   style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
+   sodipodi:linespacing="125%"><tspan
+     sodipodi:role="line"
+     id="tspan3206"
+     x="57.632565"
+     y="27.904211">Samothrace</tspan></text>
+</svg>
