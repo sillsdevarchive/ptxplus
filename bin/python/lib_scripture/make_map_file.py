@@ -56,8 +56,8 @@ class MakeMapFile (object) :
 		inputFile       = log_manager._currentInput
 		outputFile      = log_manager._currentOutput
 		(head, tail)    = os.path.split(outputFile)
-		dataFileName    = mapProject + "/" + tail.replace('.svg', '.csv')
-		styleFileName   = mapProject + "/" + tail.replace('.svg', '-sty.csv')
+		dataFileName    = mapProject + "/" + tail.replace('.svg', '-data.csv')
+		styleFileName   = mapProject + "/" + tail.replace('.svg', '-style.csv')
 		backgroundFile  = tail.replace('.svg', '-bkgrnd-' + colorSpace.split()[1].lower() + '.png')
 
 
@@ -106,7 +106,7 @@ class MakeMapFile (object) :
 			if len(row) > 0 and row[0] != "StyleName" :
 				styles[row[0]] = row[1]
 
-		# To get the right background file image, we need to insert the key and
+		# FIXME: To get the right background file image, we need to insert the key and
 		# file name into the style data list.  Encode the backgroundFile string
 		# to be Unicode utf-8
 #        styles['background'] = backgroundFile.encode('utf-8')
@@ -120,10 +120,8 @@ class MakeMapFile (object) :
 				if styles.has_key(temp) :
 					dXML[key].set('style', styles[temp])
 
-		dXML['background'].set('href', backgroundFile.encode('utf-8'))
-		dXML['background'].set('xlink:href', backgroundFile.encode('utf-8'))
 
-		# Set the background once
+		# FIXME: Set the background once
 #        if dXML.has_key('background') :
 #            dXML['background'].image = unicode(map[key], 'utf-8')
 #            dXML['background'].set('href', backgroundFile.encode('utf-8'))

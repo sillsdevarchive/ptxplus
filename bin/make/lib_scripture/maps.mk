@@ -5,15 +5,9 @@
 # This processes a single map file
 define svg_process
 
-# Copy in the original data file into the periph folder.
-$(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV) : $(PATH_ILLUSTRATIONS)/$(1).$(EXT_PNG)
+# Copy in the original data file into the map folder.
+$(PATH_MAPS)/$(1)-data.$(EXT_CSV) :
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-data.$(EXT_CSV),$$@)
-
-# Link the data CSV file from the original in the Source Peripheral folder to
-# the Maps folder. (Note if this exists already we don't want to overwrite.)
-$(PATH_MAPS)/$(1).$(EXT_CSV) : | $(PATH_SOURCE_PERIPH)/$(1).$(EXT_CSV)
-	@echo INFO: Linking map CSV: $(1).$(EXT_CSV)
-	@ln -sf $$(shell readlink -f -- $(PATH_SOURCE_PERIPH)/$(1)).$(EXT_CSV) $$@
 
 # Bring in the map background.  This is a shared resource so it will be copied
 # into the Illustrations folder and later linked to the Maps folder in Process.
@@ -28,27 +22,25 @@ $(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) : $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_CO
 	@ln -sf $$(shell readlink -f -- $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG)) $$@
 
 # Copy in the map's svg style file right into the Process folder
-$(PATH_MAPS)/$(1)-sty.$(EXT_CSV) :
-	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-styles.$(EXT_CSV),$$@)
+$(PATH_MAPS)/$(1)-style.$(EXT_CSV) :
+	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-style.$(EXT_CSV),$$@)
 
-# Bring in the original model file and park it in
-# the Illustrations folder so other projects can
-# use it if they need to.
-$(PATH_ILLUSTRATIONS)/$(1).$(EXT_PNG) :
+# Bring in the original model file and park it in the Maps for reference.
+$(PATH_MAPS)/$(1)-org.$(EXT_PNG) :
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-org.$(EXT_PNG),$$@)
 
-# Copy into the project the temporary svg file that
-# will be processed
+# Copy into the project the temporary svg file that will be processed
 $(PATH_MAPS)/$(1)-temp.$(EXT_SVG) :
 	@echo INFO: Creating: $(1)-temp.$(EXT_SVG)
 	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-map.$(EXT_SVG),$$@)
 
 # Copy the final SVG file into the Maps folder
 $(PATH_MAPS)/$(1).$(EXT_SVG) : \
-		$(PATH_MAPS)/$(1).$(EXT_CSV) \
 		$(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) \
-		$(PATH_MAPS)/$(1)-sty.$(EXT_CSV) \
-		$(PATH_MAPS)/$(1)-temp.$(EXT_SVG)
+		$(PATH_MAPS)/$(1)-temp.$(EXT_SVG) \
+		| $(PATH_MAPS)/$(1)-data.$(EXT_CSV) \
+		  $(PATH_MAPS)/$(1)-style.$(EXT_CSV) \
+		  $(PATH_MAPS)/$(1)-org.$(EXT_PNG)
 	@echo INFO: Creating: $$@
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_MAP) "" "$(PATH_MAPS)/$(1)-temp.$(EXT_SVG)" "$$@" ""
 
@@ -110,12 +102,12 @@ svg-remove-$(1) :
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_SVG)
 
 csv-data-remove-$(1) :
-	@echo WARNING: Removing: $(1).$(EXT_CSV) - data
-	@rm -f $(PATH_MAPS)/$(1).$(EXT_CSV)
+	@echo WARNING: Removing: $(1)-data.$(EXT_CSV)
+	@rm -f $(PATH_MAPS)/$(1)-data.$(EXT_CSV)
 
-csv-sty-remove-$(1) :
-	@echo WARNING: Removing: $(1).$(EXT_CSV) - style
-	@rm -f $(PATH_MAPS)/$(1)-sty.$(EXT_CSV)
+csv-style-remove-$(1) :
+	@echo WARNING: Removing: $(1)-style.$(EXT_CSV) - style
+	@rm -f $(PATH_MAPS)/$(1)-style.$(EXT_CSV)
 
 png-remove-$(1) :
 	@echo WARNING: Removing: $(1).$(EXT_PNG)
@@ -129,8 +121,8 @@ all-remove-$(1) :
 	@echo WARNING: Removing all the files for the $(1) component
 	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_SVG)
-	@rm -f $(PATH_MAPS)/$(1).$(EXT_CSV)
-	@rm -f $(PATH_MAPS)/$(1)-sty.$(EXT_CSV)
+	@rm -f $(PATH_MAPS)/$(1)-data.$(EXT_CSV)
+	@rm -f $(PATH_MAPS)/$(1)-style.$(EXT_CSV)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_PNG)
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
 	@rm -f $(PATH_MAPS)/$(1)-temp.$(EXT_SVG)
