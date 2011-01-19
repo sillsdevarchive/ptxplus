@@ -16,28 +16,25 @@
 
 # History:
 # 20080623 - djd - Initial draft
-# 20080904 - djd - Changed to output .piclist file even if
-#       there are no pictures to process. This solves
-#       a dependency problem in makefile
+# 20080904 - djd - Changed to output .piclist file even if there are no pictures
+# to process.  This solves a dependency problem in makefile
 # 20081023 - djd - Refactored due to changes in project.conf
-# 20081030 - djd - Added total dependence on log_manager.
-#       This script will not run without it because
-#       it handles all the parameters it needs.
-# 20081230 - djd - Changed over to work stand-alone instead
-#       of through version control.
+# 20081030 - djd - Added total dependence on log_manager.  This script will not
+# run without it because it handles all the parameters it needs.
+# 20081230 - djd - Changed over to work stand-alone instead of through version
+# control.
 # 20090504 - djd - Added a filter for peripheral matter files
-# 20091214 - djd - Added a check for missing lib info. If not
-#       found then it is reported and the process is
-#       halted.
-# 20100414 - djd - Changed the way process works by adding a
-#       lib data file and limiting the project file to
-#       only containing caption and location info.
-# 20100512 - djd - Changes to the caption copy process and
-#       illustration handling. There is now linking
-#       from a shared folder to the project.
-# 20100616 - djd - Adjusted conf call due to conf file
-#       reorg. Also removed tabs.
+# 20091214 - djd - Added a check for missing lib info.  If not found then it is
+# reported and the process is halted.
+# 20100414 - djd - Changed the way process works by adding a lib data file and
+# limiting the project file to only containing caption and location info.
+# 20100512 - djd - Changes to the caption copy process and illustration
+# handling.  There is now linking from a shared folder to the project.
+# 20100616 - djd - Adjusted conf call due to conf file reorg.  Also removed
+# tabs.
 # 20101118 - djd - Fixed illustration data file naming problem.
+# 20110118 - djd - Expanded scope to illustrations outside the defined lib.
+# Hopefully someday we can pull from mixed libs.
 
 
 #############################################################
@@ -114,11 +111,21 @@ class MakePiclistFile (object) :
 
 		# Get the file name from the illustration data
 		def_fileName = "FILE NAME MISSING!"
-		fileName = self._libData[illID].get('FileName', def_fileName)
+		# Like below, in case the ID give is not in the target lib we will try
+		# to work around that because it might be a special illustration brought
+		# in from the outside.  It might be nice in the future to allow for
+		# mixed libraries.
+		try :
+			fileName = self._libData[illID].get('FileName', def_fileName)
+		except :
+			fileName = illID + '.png'
 
 		# Get the copyright information from the illustration data
 		def_copyright = "COPYRIGHT INFORMATION IS MISSING!"
-		copyright = self._libData[illID].get('Copyright', def_copyright)
+		try :
+			copyright = self._libData[illID].get('Copyright', def_copyright)
+		except :
+			copyright = def_copyright
 
 		# Build the caption
 		caption = eCap
@@ -147,7 +154,14 @@ class MakePiclistFile (object) :
 
 		# Get the file name from the illustration data
 		def_fileName = "FILE NAME MISSING!"
-		fileName = self._libData[illID].get('FileName', def_fileName)
+		# In case the ID give is not in the target lib we will try to work
+		# around that because it might be a special illustration brought in from
+		# the outside.  It might be nice in the future to allow for mixed
+		# libraries.
+		try :
+			fileName = self._libData[illID].get('FileName', def_fileName)
+		except :
+			fileName = illID + '.png'
 
 		# Build the file names, they should be all absolute paths
 		source = self._sourceIllustrationsLibPath + "/" + fileName
