@@ -494,8 +494,10 @@ class MakeTexControlFile (object) :
 			verseChapterSettings += '\\OmitBookReftrue\n'
 		if omitVerseNumberOne.lower() == 'true' :
 			verseChapterSettings += '\\OmitVerseNumberOnetrue\n'
+		# FIXME: This next setting doesn't even seem to be working in the TeX
+		# macros at this point.  This needs review and fixing or removing.
 		if removeIndentAfterHeading.lower() == 'true' :
-			verseChapterSettings += '\\IndentAfterHeadingtrue\n'
+			verseChapterSettings += '\\def\\IndentAfterHeadingtrue\n'
 		if adornVerseSetting != '' :
 			verseChapterSettings += '\\def\\AdornVerseNumber#1{' + adornVerseSetting + '}\n'
 		verseChapterSettings += '\\def\\VerseMarker{' + verseMarker + '}\n'
