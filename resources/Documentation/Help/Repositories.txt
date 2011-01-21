@@ -1,7 +1,6 @@
 Content-Type: text/x-zim-wiki
-Wiki-Format: zim 0.26
+Wiki-Format: zim 0.4
 Creation-Date: Fri, 28 Aug 2009 14:44:38 +0700
-Modification-Date: Fri, 19 Feb 2010 09:52:47 +0700
 
 ====== Repositories ======
 
@@ -13,7 +12,20 @@ An important place to start is with the project Identifier (ID). It is important
 So now, the first thing you need to do is think up a project ID and write it down somewhere so you have it during the rest of the project setup.
 
 ===== Repository Creation =====
-Actually, I have no idea how this is done. You need to go to your local administrator to have this done. Have him/her set up a Mercurial repository using the language ID as the name, for example, "eng".
+(Assumed Mercurial is being used.)
+Repository creation is a manual process and it needs to be done by someone with root access to the server being used. This is basically how it is done.
+
+First, using SSH, log into the root of the server and then navigate to the directory where the repos are kept. Following the naming conventions used in that context, create the repo with these basic steps:
+
+1) mkdir <dirName>
+2) hg init <dirName> (this creates a blank repo)
+3) chown -R www-data:hg <dirName>
+
+Then look to see if the owner has been changed with:
+
+	ls -al
+
+There is still the issue of permissions for access to be done. For that, in the context of TIPE, we use Redmine on our server. Setup steps to follow.
 
 ===== Redmine Project Setup =====
 For everything to work a project needs to be set up on the Redmine system. Without great detail as to how the website interface works, this is basically what needs to be done:
@@ -28,11 +40,11 @@ For everything to work a project needs to be set up on the Redmine system. Witho
 
 4) Add the empty repository (made by your administrator) to the project. The SCM should be set to Mercurial and the URL should be something like this:
 
-	[[/var/vcs/mseag.org_hg/eng]]
+	[[/var/vcs/mseag.org_hg/<dirName]]>
 
-Where the "eng" is the language code for the project that you used to set it up earlier. Change it to suite your context. After you complete this, everything should be ready to work.
+Where the "<dirName>" is the name of the repository folder setup for this project. Change it to suite your context. After you complete this, everything should be ready to work.
 
-Of course for this all to work, you need to have administration privileges. If you do not, you will need to get them or find someone who has them.
+Of course for this all to work, you need to have administration privileges. If you do not, you will need to get them or find someone who has them. Also, you will need to add everyone to the project that needs to be involved so they can have access.
 
 ===== Cloning A Project =====
 If this is not a new project setup (covered below) you can clone an existing project from a repository. Assuming that you have [[TortoiseHg]] installed all you need to do is right-click and follow the instructions in the dialogs to follow. You will be asked to enter the path to the repository. In the MSEAG context that would look like this:
@@ -50,12 +62,14 @@ Once the above steps have been completed and you have a repository and project a
 
 3) Once the folders are in place, they need to be populated with the initial data. In the Text folder put the source text for the project. In the project folder, e.g. "LATN-BIBA" begin a new ptxplus project and allow it to create all the initial data.
 
-4) Next, open a terminal in the project folder at the text and project level. Then, enter these commands for Mercurial:
+4) There are several ways to start a repo. One would be to create it on the server and clone it on your local machine (recommended). Then push the first change-set to it to give it a real identity as a project. If this is done with a collaborative partner, be sure you determine who will push first. Only one person can make the initial push. After that is done, the second person can then pull, add their changes, then push.
+
+Another way to do it would be to push from your local machine and establish the repo project identity. Again, only one person should do this before anyone else starts working with the repo. Then the other people should pull first before making any changes. To create and push locally, use these steps for a Mercurial repo:
 
 	hg init
 	hg add
 	hg commit -m "import"
-	hg push https://hg.mseag.org/eng
+	hg push https://hg.mseag.org/%3CdirName>
 
 Again, edit the project language as needed but once this is done, your initial project data will be pushed up to the repository. If it is necessary to have the source linked in from another repository the above instructions will need to be modified, but I'm not yet sure in what way. :-(
 
