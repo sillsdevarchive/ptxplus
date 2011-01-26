@@ -25,12 +25,17 @@
 %\sethook{after}{s1}{\baselineskip=\remblskip}
 
 
-%%%%% WORKING TEXT LINE SKIPPING
-% Skip one line
-\def\skipline{\vskip\baselineskip}
+%%%%% WORKING TEXT LINE SPACING
+%%%%% Take out a little space between lines in working text
+\def\suckupline{\vskip -\baselineskip}
+\def\suckuphalfline{\vskip -0.5\baselineskip}
+\def\suckupqline{\vskip -0.25\baselineskip}
 
-% Skip just half a line (use carefully)
+%%%%% Skip some space in the working text
+\def\skipline{\vskip\baselineskip}
 \def\skiphalfline{\vskip 0.5\baselineskip}
+\def\skipqline{\vskip 0.25\baselineskip}
+
 
 %%%%% ADDITIONAL MARGINAL VERSE SETTINGS
 % For marginal verse output we need to insert this right here.  This should be
@@ -170,6 +175,15 @@
 \def\tblthreewcolmngap{.75in}	% The space between col 1 & 2 on a three col table
 
 % Macro code for leadered two colum layout:
+% FIXME: There is a problem with \tbltwowllabel not being set when there is no
+% \tbltwowlheader used.  Something has to be done with
+% "\tbltwowllabel=\wd0\box0\par\vskip \tblheaderspace" that needs to be set
+% because it is used in \tbltwowlrow.  If that doesn't get set you end up with
+% overfull boxes on your page numbers. There needs to be a way this can be set
+% independent from \tbltwowlheader. A work around for now is when you have a TOC
+% which does not need a header row, put an em space (U+2001) in place of any
+% data you would put in there. This way it just prints out the row with nothing
+% in it and it just takes up space.
 \newdimen\tbltwowllabel
 \def\tbltwowlheader#1#2{\parfillskip=\tblmarginright\toch #1\toch*\hfil
   \setbox0=\hbox{\toch #2\toch*}\tbltwowllabel=\wd0\box0\par\vskip \tblheaderspace}
