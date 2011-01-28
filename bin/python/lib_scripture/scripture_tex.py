@@ -322,7 +322,6 @@ class MakeTexControlFile (object) :
 		omitVerseNumberOne          = self._log_manager._settings['Format']['ChapterVerse']['omitVerseNumberOne']
 		afterVerseSpaceFactor       = self._log_manager._settings['Format']['ChapterVerse']['afterVerseSpaceFactor']
 		afterChapterSpaceFactor     = self._log_manager._settings['Format']['ChapterVerse']['afterChapterSpaceFactor']
-		removeIndentAfterHeading    = self._log_manager._settings['Format']['ChapterVerse']['removeIndentAfterHeading']
 		adornVerseSetting           = self._log_manager._settings['Format']['ChapterVerse']['adornVerseSetting']
 		verseMarker                 = self._log_manager._settings['Format']['ChapterVerse']['verseMarker']
 
@@ -494,10 +493,6 @@ class MakeTexControlFile (object) :
 			verseChapterSettings += '\\OmitBookReftrue\n'
 		if omitVerseNumberOne.lower() == 'true' :
 			verseChapterSettings += '\\OmitVerseNumberOnetrue\n'
-		# FIXME: This next setting doesn't even seem to be working in the TeX
-		# macros at this point.  This needs review and fixing or removing.
-		if removeIndentAfterHeading.lower() == 'true' :
-			verseChapterSettings += '\\def\\IndentAfterHeadingtrue\n'
 		if adornVerseSetting != '' :
 			verseChapterSettings += '\\def\\AdornVerseNumber#1{' + adornVerseSetting + '}\n'
 		verseChapterSettings += '\\def\\VerseMarker{' + verseMarker + '}\n'

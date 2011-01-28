@@ -9,12 +9,15 @@ Here we will collect a list of things that need doing. Hopefully we can keep the
 
 ===== Repository Features =====
 **Adding files to the Repo**
-Need to find a way to make it simple to add files to the repo. Make it almost automatic.
+Need to find a way to make it simple to add files to the repo. Make it almost automatic. There needs to be some kind of include and exclude list that will guide the process.
 
 
 ===== Settings to Add =====
 **Start Page Number**
 Add a field so that the number of the page that is output to the header or footer can be defined for any given component.
+
+**removeIndentAfterHeading**
+This setting was in the .conf but it doesn't seem to correspond to any real code to make it happen. It would be good to have some [[TeX]] code that would remove the indent of a paragraph that follows a section heading. This convention is used some times. Once implemented, this setting could be put back into the .conf file again.
 
 ===== Chapter Number Style =====
 A control needs to be added to the GUI that would make changing the style of the chapter number easier. It would need to be done in one location with just a couple settings.

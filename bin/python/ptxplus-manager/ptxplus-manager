@@ -1025,7 +1025,13 @@ class ConfigEditor (object) :
 		if iter :
 			key = self.keys_ts[iter][0]
 			if self.sections_curr.comments.has_key(key) :
-				self.desc_l.set_markup(self.parse(self.sections_curr.comments[key]))
+				# Output a warning for any empty comments which would indicate
+				# that the setting has been deprecated in the current version.
+				if self.sections_curr.comments[key] :
+					self.desc_l.set_markup(self.parse(self.sections_curr.comments[key]))
+				else :
+					# FIXME: This produces a messy looking warning in the dialog (but at least it works)
+					self.desc_l.set_markup(self.parse('WARNING! This setting may have been deprecated.'))
 
 
 	def active_row (self, widget, path, column) :
