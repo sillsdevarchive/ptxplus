@@ -70,7 +70,12 @@ class CheckAssets (object) :
 		pathIllustrations       = os.path.abspath(self._log_manager._settings['System']['Paths'].get('PATH_ILLUSTRATIONS', '../Source/Illustrations'))
 		pathUserLibFonts        = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_FONT_LIB'])
 		pathUserLibGraphics     = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_GRAPHICS_LIB'])
-		pathUserLibIllustrations= os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
+		# This can be optional if a custom illustration lib is used
+		if self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'] != '' :
+			pathUserLibIllustrations = os.path.abspath(self._log_manager._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
+		else :
+			pathUserLibIllustrations = ''
+
 		pathIllustrationsLib    = tools.pubInfoObject['Paths']['PATH_RESOURCES_ILLUSTRATIONS'].replace('__PTXPLUS__', basePath)
 		fileWatermark           = self._log_manager._settings['Format']['PageLayout']['FILE_WATERMARK']
 		filePageBorder          = self._log_manager._settings['Format']['PageLayout']['FILE_PAGE_BORDER']
@@ -84,8 +89,10 @@ class CheckAssets (object) :
 		if not os.path.isdir(pathUserLibGraphics) :
 			self._log_manager.log('WARN', 'No user graphics library folder found. Please check your configuration.', 'true')
 
-		if not os.path.isdir(pathUserLibIllustrations) :
-			self._log_manager.log('WARN', 'No user Illustrations library folder found. Please check your configuration.', 'true')
+		# Don't bother doing the test if this is set to null
+		if pathUserLibIllustrations != '' :
+			if not os.path.isdir(pathUserLibIllustrations) :
+				self._log_manager.log('WARN', 'No user Illustrations library folder found. Please check your configuration.', 'true')
 
 
 		# Check/install folders we might need

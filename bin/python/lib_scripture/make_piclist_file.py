@@ -74,9 +74,18 @@ class MakePiclistFile (object) :
 		self._outFileObject = {}
 		self._sourcePath = os.path.abspath(self._settings['System']['Paths']['PATH_SOURCE'])
 		self._captionsFileName = tools.pubInfoObject['Files']['FILE_ILLUSTRATION_CAPTIONS']
-		self._sourceIllustrationsLibPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
-		self._sourceIllustrationsLibDataFileName = self._sourceIllustrationsLibPath.split('/')[-1] + '_data.csv'
-		self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + self._sourceIllustrationsLibDataFileName
+		# If a custom lib is being used we want this var null
+		if self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'] != '' :
+			self._sourceIllustrationsLibPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS_LIB'])
+		else :
+			self._sourceIllustrationsLibPath = ''
+		# Same with this var
+		if self._sourceIllustrationsLibPath != '' :
+			self._sourceIllustrationsLibDataFileName = self._sourceIllustrationsLibPath.split('/')[-1] + '_data.csv'
+			self._sourceIllustrationsLibData = self._sourceIllustrationsLibPath + "/" + self._sourceIllustrationsLibDataFileName
+		else :
+			self._sourceIllustrationsLibDataFileName = ''
+			self._sourceIllustrationsLibData = ''
 		self._projectIllustrationsPath = os.path.abspath(self._settings['System']['Paths']['PATH_ILLUSTRATIONS'])
 		# The folder name for peripheral material is auto created here
 		self._projectPeripheralFolderName = os.getcwd().split('/')[-1]
@@ -113,12 +122,16 @@ class MakePiclistFile (object) :
 		def_fileName = "FILE NAME MISSING!"
 		# Like below, in case the ID give is not in the target lib we will try
 		# to work around that because it might be a special illustration brought
-		# in from the outside.  It might be nice in the future to allow for
-		# mixed libraries.
+		# in from the outside.  If this is a mixed or custom lib the next few
+		# trys should fail and the defaults passed on.
 		try :
 			fileName = self._libData[illID].get('FileName', def_fileName)
 		except :
-			fileName = illID + '.png'
+			if not illID.endswith('png'.lower()) :
+				fileName = illID + '.png'
+			else :
+				fileName = illID
+
 
 		# Get the copyright information from the illustration data
 		def_copyright = "COPYRIGHT INFORMATION IS MISSING!"
@@ -156,33 +169,40 @@ class MakePiclistFile (object) :
 		def_fileName = "FILE NAME MISSING!"
 		# In case the ID give is not in the target lib we will try to work
 		# around that because it might be a special illustration brought in from
-		# the outside.  It might be nice in the future to allow for mixed
-		# libraries.
+		# the outside.  If this is a mixed or custom lib the next few
+		# trys should fail and the defaults passed on.
 		try :
 			fileName = self._libData[illID].get('FileName', def_fileName)
 		except :
-			fileName = illID + '.png'
+			if not illID.endswith('png'.lower()) :
+				fileName = illID + '.png'
+			else :
+				fileName = illID
 
 		# Build the file names, they should be all absolute paths
 		source = self._sourceIllustrationsLibPath + "/" + fileName
 		target = self._projectIllustrationsPath + "/" + fileName
 
-		# Sanity test, we want to throw an error if the source
-		# file isn't there
-		if not os.path.isfile(source) :
-			self._log_manager.log("ERRR", "The file: " + source + " was not found.")
+		# If we are using a custom lib we want to check the Illustrations folder
+		# first to see if the file already exists, if it does, then we really
+		# don't have to do anything else about copying it.
+		if not os.path.isfile(target) :
+			# Sanity test, we want to throw an error if the source
+			# file isn't there
+			if not os.path.isfile(source) :
+				self._log_manager.log("ERRR", "The file: " + source + " was not found.")
 
-		# Copy the picture file from the source to the target location
-		# if it doesn't exist there already
-		if os.path.isfile(target) :
-			self._log_manager.log("DBUG", "The file: " + target + " already exists. This process will NOT overwrite it.")
-		else :
-			# copy and test (why is a successful return form shutil.copy "None" not helpful)
-			x = shutil.copy(source, target)
+			# Copy the picture file from the source to the target location
+			# if it doesn't exist there already
 			if os.path.isfile(target) :
-				self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
+				self._log_manager.log("DBUG", "The file: " + target + " already exists. This process will NOT overwrite it.")
 			else :
-				self._log_manager.log("ERRR", "Failed to copy from: " + source + " ---To:--> " + target)
+				# copy and test (why is a successful return form shutil.copy "None" not helpful)
+				x = shutil.copy(source, target)
+				if os.path.isfile(target) :
+					self._log_manager.log("DBUG", "Copied from: " + source + " ---To:--> " + target)
+				else :
+					self._log_manager.log("ERRR", "Failed to copy from: " + source + " ---To:--> " + target)
 
 
 	def main(self):
@@ -208,25 +228,36 @@ class MakePiclistFile (object) :
 			self._log_manager.log("ERRR", "The illustration caption file (" + self._projectIllustrationsCaptions + ") is missing from the project. This process cannot work without it.")
 			self._errors +=1
 
-		# Check to see if the path to the illustrations lib is good.
-		if not os.path.isdir(self._sourceIllustrationsLibPath) :
-			self._log_manager.log("ERRR", "The path to the illustrations library (" + self._sourceIllustrationsLibPath + ") does not seem to be correct. This process cannot work without it.")
-			self._errors +=1
+		# If a path is defined, check to see if the path to the illustrations
+		# lib is good. If there is no path then we assume a custom lib is being
+		# used and that is handled different.
+		if self._sourceIllustrationsLibPath != '' :
+			if not os.path.isdir(self._sourceIllustrationsLibPath) :
+				self._log_manager.log("ERRR", "The path to the illustrations library (" + self._sourceIllustrationsLibPath + ") does not seem to be correct. This process cannot work without it.")
+				self._errors +=1
 
-		# Check to see if the data file exists. If it doesn't we're done because we need that too
-		if not os.path.isfile(self._sourceIllustrationsLibData) :
-			self._log_manager.log("ERRR", "The illustration data file (" + self._sourceIllustrationsLibDataFileName + ") seems to be missing from the library. This process cannot work without it.")
-			self._errors +=1
+		# If a data file is defined, check to see if the data file exists.  If
+		# it doesn't we're done because we need that too.  Again, if there is no
+		# file assigned, we are assuming a custom set of images.
+		if self._sourceIllustrationsLibData != '' :
+			if not os.path.isfile(self._sourceIllustrationsLibData) :
+				self._log_manager.log("ERRR", "The illustration data file (" + self._sourceIllustrationsLibDataFileName + ") seems to be missing from the library. This process cannot work without it.")
+				self._errors +=1
 
 		# If we get an error we really can't go on at this point
 		if self._errors != 0 :
 			return
 
-		# Pull in the library data file using the CSVtoDict class in tools
-		try :
-			self._libData = tools.CSVtoDict(self._sourceIllustrationsLibData)
-		except :
-			self._log_manager.log("ERRR", "Not able to find (" + self._sourceIllustrationsLibData + "). More than likely the file is missing or the path is wrong.")
+		# If we are not in custom lib mode, pull in the library data file using
+		# the CSVtoDict class in tools
+		if self._sourceIllustrationsLibData != '' :
+			try :
+				self._libData = tools.CSVtoDict(self._sourceIllustrationsLibData)
+			except :
+				self._log_manager.log("ERRR", "Not able to find (" + self._sourceIllustrationsLibData + "). More than likely the file is missing or the path is wrong.")
+		else :
+			# If there is not lib, then this file needs to be empty.
+			self._libData = ''
 
 		# If we didn't bail out right above, we'll go ahead and open the data file
 		# The assumption here is that the encoding of the pieces of the csv are
@@ -238,20 +269,19 @@ class MakePiclistFile (object) :
 		try :
 			inFileData = filter(lambda l: l[1].lower() == self._bookID.lower(),
 					csv.reader(open(self._projectIllustrationsCaptions), dialect=csv.excel))
+			# Right here we will sort the list by BCV. This should prevent unsorted
+			# data from getting out into the piclist.
+			inFileData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
+			# Do not process unless we are in the right book and
+			# keep track of the hits for this book
+			hits = 0
+			for line in inFileData :
+				if self._bookID.upper() == line[1].upper() :
+					hits +=1
+					# If this next process fails, should we stop here? Hmmm...
+					self.processIllustrationFile(line[0])
 		except :
 			self._log_manager.log("ERRR", "Failed to process all the lines in the source illustrations file. (Check for a blank on the end of the file.)")
-
-		# Right here we will sort the list by BCV. This should prevent unsorted
-		# data from getting out into the piclist.
-		inFileData.sort(cmp=lambda x,y: cmp(x[1],y[1]) or cmp(int(x[2]),int(y[2])) or cmp(int(x[3]),int(y[3])))
-		# Do not process unless we are in the right book and
-		# keep track of the hits for this book
-		hits = 0
-		for line in inFileData :
-			if self._bookID.upper() == line[1].upper() :
-				hits +=1
-				# If this next process fails, should we stop here? Hmmm...
-				self.processIllustrationFile(line[0])
 
 		# Now we need output anything we might have collected. If nothing was
 		# found, we will just send a simple message to the terminal to tell the
