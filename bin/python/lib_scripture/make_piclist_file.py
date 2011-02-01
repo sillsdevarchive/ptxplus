@@ -266,6 +266,7 @@ class MakePiclistFile (object) :
 		# Filter out any IDs that do not have anything to do with this book
 		# This fails when there is a blank line at the end of the CSV file.
 		# We'll put a try statement to catch it.
+		hits = ""
 		try :
 			inFileData = filter(lambda l: l[1].lower() == self._bookID.lower(),
 					csv.reader(open(self._projectIllustrationsCaptions), dialect=csv.excel))
