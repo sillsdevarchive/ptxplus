@@ -2,17 +2,82 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
    width="708.66138"
    height="425.19684"
    viewBox="0 0 492.65303 293.24132"
    id="svg2"
    xml:space="preserve"
-   style="overflow:visible"><defs
-   id="defs422" />
+   style="overflow:visible"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="m08d-map.svg"><metadata
+   id="metadata3653"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1235"
+   inkscape:window-height="737"
+   id="namedview3651"
+   showgrid="false"
+   inkscape:zoom="8.1783952"
+   inkscape:cx="93.602783"
+   inkscape:cy="340.34386"
+   inkscape:window-x="124"
+   inkscape:window-y="53"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="svg2" /><defs
+   id="defs422"><inkscape:perspective
+     sodipodi:type="inkscape:persp3d"
+     inkscape:vp_x="0 : 212.59842 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_z="708.66138 : 212.59842 : 1"
+     inkscape:persp3d-origin="354.33069 : 141.73228 : 1"
+     id="perspective3655" /><inkscape:perspective
+     id="perspective3665"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /><inkscape:perspective
+     id="perspective3239"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /><inkscape:perspective
+     id="perspective4118"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /><inkscape:perspective
+     id="perspective5005"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /><inkscape:perspective
+     id="perspective5005-5"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /></defs>
    
 
 <image
@@ -1523,6 +1588,26 @@
 
 
 
+
+
+
+
+
+<text
+   x="205.53496"
+   y="274.79965"
+   id="Region_Libya"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">LYBYA</text>
+
+
+
+
+
+
+
+
+
+
 <text
    x="415.75534"
    y="278.60229"
@@ -1531,11 +1616,41 @@
 
 
 
+
+
+
+
+
+
+
+<text
+   x="-48.605114"
+   y="497.32626"
+   id="Region_Judea"
+   style="font-size:6px;fill:#ff0000;font-family:Arial"
+   transform="matrix(0.4245698,-0.90539521,0.90539521,0.4245698,0,0)">Judea</text>
+
+
+
+
+
+
+
+
+
+
 <text
    x="437.4563"
    y="169.40616"
    id="Region_Syria"
    style="font-size:6px;fill:#ff0000;font-family:Arial">SYRIA</text>
+
+
+
+
+
+
+
 
 
 
@@ -1548,11 +1663,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="310.5499"
    y="155.34355"
    id="Region_Lycia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">LYCIA</text>
+
+
+
+
+
+
+
 
 
 
@@ -1564,11 +1693,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="429.53812"
    y="80.265335"
    id="Region_Armenia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">ARMENIA</text>
+
+
+
+
+
+
+
 
 
 
@@ -1580,11 +1723,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="353.52078"
    y="58.632183"
    id="Region_Pontus"
    style="font-size:6px;fill:#ff0000;font-family:Arial">PONTUS</text>
+
+
+
+
+
+
+
 
 
 
@@ -1596,11 +1753,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="315.05469"
    y="107.06758"
    id="Region_Asia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">ASIA</text>
+
+
+
+
+
+
+
 
 
 
@@ -1612,11 +1783,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="187.1026"
    y="155.82404"
    id="Region_Achaia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Achaia</text>
+
+
+
+
+
+
+
 
 
 
@@ -1628,11 +1813,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="178.86331"
    y="19.111572"
    id="Region_Illyricum"
    style="font-size:6px;fill:#ff0000;font-family:Arial">ILLYRICUM</text>
+
+
+
+
+
+
+
 
 
 
@@ -1644,11 +1843,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="51.048183"
    y="144.19048"
    id="Region_Sicily"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Sicily</text>
+
+
+
+
+
+
+
 
 
 
@@ -1660,11 +1873,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="291.87616"
    y="226.09409"
    id="Sea_Mediterranean"
    style="font-size:6px;fill:#ff0000;font-family:Arial">MEDITERRANEAN SEA</text>
+
+
+
+
+
+
+
 
 
 
@@ -1676,11 +1903,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="343.77496"
    y="132.63414"
    id="Region_Pisidia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">PISIDIA</text>
+
+
+
+
+
+
+
 
 
 
@@ -1693,11 +1934,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="288.50784"
    y="181.74507"
    id="Island_Rhodes"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Rhodes</text>
+
+
+
+
+
+
+
 
 
 
@@ -1709,11 +1964,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="240.29233"
    y="127.61345"
    id="Island_Chios"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Chios</text>
+
+
+
+
+
+
+
 
 
 
@@ -1725,11 +1994,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="391.97757"
    y="196.35104"
    id="Island_Cyprus"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Cyprus</text>
+
+
+
+
+
+
+
 
 
 
@@ -1741,11 +2024,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="218.13551"
    y="201.11528"
    id="Island_Clauda"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Clauda</text>
+
+
+
+
+
+
+
 
 
 
@@ -1757,11 +2054,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="407.22739"
    y="258.69614"
    id="City_Gaza"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Gaza</text>
+
+
+
+
+
+
+
 
 
 
@@ -1773,11 +2084,55 @@
 
 
 
+
+
+
+
+
+
+
+<text
+   x="435.35095"
+   y="241.61992"
+   id="City_Antipatris"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Antipatris</text>
+
+
+
+
+
+
+
+
+
+
 <text
    x="401.02365"
    y="234.10722"
    id="City_Caesarea"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Caesarea</text>
+
+
+
+
+
+
+
+
+
+
+<text
+   x="437.23618"
+   y="228.77475"
+   id="City_Nazareth"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Nazareth</text>
+
+
+
+
+
+
+
 
 
 
@@ -1789,11 +2144,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="455.09027"
    y="212.97577"
    id="City_Damascus"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Damascus</text>
+
+
+
+
+
+
+
 
 
 
@@ -1805,11 +2174,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="438.90714"
    y="252.61124"
    id="City_Jerusalem"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Jerusalem</text>
+
+
+
+
+
+
+
 
 
 
@@ -1821,11 +2204,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="365.72058"
    y="184.43959"
    id="City_Paphos"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Paphos</text>
+
+
+
+
+
+
+
 
 
 
@@ -1837,11 +2234,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="437.85797"
    y="155.71747"
    id="City_Seleucia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Seleucia</text>
+
+
+
+
+
+
+
 
 
 
@@ -1853,11 +2264,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="400.82541"
    y="132.97293"
    id="City_Tarsus"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Tarsus</text>
+
+
+
+
+
+
+
 
 
 
@@ -1869,11 +2294,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="375.13425"
    y="130.76389"
    id="City_Lystra"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Lystra</text>
+
+
+
+
+
+
+
 
 
 
@@ -1885,11 +2324,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="350.35477"
    y="110.48698"
    id="City_Antioch-B"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Antioch</text>
+
+
+
+
+
+
+
 
 
 
@@ -1901,11 +2354,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="319.64307"
    y="135.83804"
    id="City_Colossae"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Colossae</text>
+
+
+
+
+
+
+
 
 
 
@@ -1917,11 +2384,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="298.00708"
    y="120.03527"
    id="City_Sardis"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Sardis</text>
+
+
+
+
+
+
+
 
 
 
@@ -1933,11 +2414,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="288.14203"
    y="98.276817"
    id="City_Pergamum"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Pergamum</text>
+
+
+
+
+
+
+
 
 
 
@@ -1949,11 +2444,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="321.01138"
    y="149.17474"
    id="City_Attalia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Attalia</text>
+
+
+
+
+
+
+
 
 
 
@@ -1965,11 +2474,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="310.79776"
    y="163.11931"
    id="City_Patara"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Patara</text>
+
+
+
+
+
+
+
 
 
 
@@ -1981,11 +2504,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="285.0582"
    y="147.51669"
    id="City_Miletus"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Miletus</text>
+
+
+
+
+
+
+
 
 
 
@@ -1997,11 +2534,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="269.57559"
    y="121.13741"
    id="City_Smyrna"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Smyrna</text>
+
+
+
+
+
+
+
 
 
 
@@ -2013,11 +2564,40 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="242.69174"
    y="103.82388"
    id="City_Assos"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Assos</text>
+
+
+
+
+
+
+
+
+
+
+<text
+   x="273.10019"
+   y="103.65027"
+   id="City_Adramyttium"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Adramyttium</text>
+
+
+
+
+
+
+
 
 
 
@@ -2029,11 +2609,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="240.79361"
    y="68.060715"
    id="City_Neapolis"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Neapolis</text>
+
+
+
+
+
+
+
 
 
 
@@ -2045,11 +2639,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="224.60675"
    y="82.318329"
    id="City_Amphipolis"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Amphipolis</text>
+
+
+
+
+
+
+
 
 
 
@@ -2061,11 +2669,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="174.77933"
    y="73.973068"
    id="City_Thessalonica"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Thessalonica</text>
+
+
+
+
+
+
+
 
 
 
@@ -2077,11 +2699,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="196.23561"
    y="132.26576"
    id="City_Athens"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Athens</text>
+
+
+
+
+
+
+
 
 
 
@@ -2093,11 +2729,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="242.59354"
    y="190.67105"
    id="City_Salmone"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Salmone</text>
+
+
+
+
+
+
+
 
 
 
@@ -2109,11 +2759,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="237.46272"
    y="215.20607"
    id="City_FairHavens"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Fair Havens</text>
+
+
+
+
+
+
+
 
 
 
@@ -2125,11 +2789,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="141.849"
    y="117.89658"
    id="City_Nicopolis"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Nicopolis</text>
+
+
+
+
+
+
+
 
 
 
@@ -2141,11 +2819,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="86.266449"
    y="139.2621"
    id="City_Rhegium"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Rhegium</text>
+
+
+
+
+
+
+
 
 
 
@@ -2157,11 +2849,47 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="41.272835"
    y="49.939644"
    id="City_Rome"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Rome</text>
+
+
+
+
+
+
+<text
+   x="53.16029"
+   y="59.980564"
+   id="City_Appius"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Forum Appius</text>
+
+
+
+
+
+
+<text
+   x="46.809959"
+   y="54.744991"
+   id="City_ThreeInns"
+   style="font-size:6px;fill:#ff0000;font-family:Arial">Three Inns</text>
+
+
+
+
+
+
+
 
 
 
@@ -2173,11 +2901,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="18.289196"
    y="253.44379"
    id="Key_A"
    style="font-size:6px;fill:#ff0000;font-family:Arial-Bold">1. Paul’s First Journey (Acts 13:4–14:28</text>
+
+
+
+
+
+
+
 
 
 
@@ -2189,11 +2931,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="17.88969"
    y="271.10706"
    id="Key_C"
    style="font-size:6px;fill:#ff0000;font-family:Arial-Bold">3. Paul's Third Journey (Acts 18:23–21:16)</text>
+
+
+
+
+
+
+
 
 
 
@@ -2205,11 +2961,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="227.14931"
    y="240.30377"
    id="Scale_K_Number_A"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">0</text>
+
+
+
+
+
+
+
 
 
 
@@ -2221,11 +2991,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="263.86646"
    y="240.30377"
    id="Scale_K_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">200</text>
+
+
+
+
+
+
+
 
 
 
@@ -2237,11 +3021,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="302.77335"
    y="240.30377"
    id="Scale_K_Number_E"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">400</text>
+
+
+
+
+
+
+
 
 
 
@@ -2253,11 +3051,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="234.64352"
    y="255.9715"
    id="Scale_M_Number_A"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">0</text>
+
+
+
+
+
+
+
 
 
 
@@ -2269,11 +3081,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="263.46091"
    y="255.9715"
    id="Scale_M_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">100</text>
+
+
+
+
+
+
+
 
 
 
@@ -2285,6 +3111,13 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="297.43051"
    y="255.9715"
@@ -2293,11 +3126,25 @@
 
 
 
+
+
+
+
+
+
+
 <text
    x="265.71674"
    y="262.11472"
    id="Scale_M_DistanceKey"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">Miles</text>
+
+
+
+
+
+
+
 
 
 
@@ -2317,4 +3164,56 @@
    x2="307.83469"
    y2="136.16895"
    style="fill:none;stroke:#000000;stroke-width:0.34759411;stroke-miterlimit:2.41420007;stroke-dasharray:none;overflow:visible"
-   mask="none" /></svg>
+   mask="none" /><circle
+   sodipodi:ry="1.556"
+   sodipodi:rx="1.556"
+   sodipodi:cy="422.802"
+   sodipodi:cx="604.40503"
+   cx="604.40503"
+   cy="422.802"
+   r="1.556"
+   transform="matrix(0.6980432,0,0,0.6414587,9.9144734,-30.855364)"
+   id="Antipatris"
+   style="fill-rule:evenodd;overflow:visible" /><circle
+   sodipodi:ry="1.556"
+   sodipodi:rx="1.556"
+   sodipodi:cy="389.771"
+   sodipodi:cx="609.30902"
+   cx="609.30902"
+   cy="389.771"
+   r="1.556"
+   transform="matrix(0.6980432,0,0,0.6414587,9.8913947,-23.692835)"
+   id="Nazareth"
+   style="fill-rule:evenodd;overflow:visible"
+   inkscape:label="Nazareth" /><circle
+   sodipodi:ry="1.556"
+   sodipodi:rx="1.556"
+   sodipodi:cy="202.47701"
+   sodipodi:cx="374.293"
+   cx="374.293"
+   cy="202.47701"
+   r="1.556"
+   transform="matrix(0.6980432,0,0,0.6414587,13.287041,-31.310999)"
+   id="Adramyttium"
+   style="fill-rule:evenodd;overflow:visible"
+   inkscape:label="Adramyttium" /><circle
+   sodipodi:ry="1.556"
+   sodipodi:rx="1.556"
+   sodipodi:cy="161.15199"
+   sodipodi:cx="86.838997"
+   cx="86.838997"
+   cy="161.15199"
+   r="1.556"
+   transform="matrix(0.6980432,0,0,0.6414587,-15.650779,-49.599294)"
+   id="ThreeInns"
+   style="fill-rule:evenodd;overflow:visible" /><circle
+   sodipodi:ry="1.556"
+   sodipodi:rx="1.556"
+   sodipodi:cy="161.15199"
+   sodipodi:cx="86.838997"
+   cx="86.838997"
+   cy="161.15199"
+   r="1.556"
+   transform="matrix(0.6980432,0,0,0.6414587,-9.5305626,-46.709192)"
+   id="Puteoli-8"
+   style="fill-rule:evenodd;overflow:visible" /></svg>
