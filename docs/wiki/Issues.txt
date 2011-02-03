@@ -4,6 +4,12 @@ Creation-Date: Unknown
 
 ====== Issues ======
 
+**Illustrations do not turn off**
+Thu 03 Feb 2011 03:11:29 PM ICT
+Status: Open
+When you have illustrations in a pub and you set [[USE_ILLUSTRATIONS]] to "false", it doesn't take the illustrations out. This is because the macros are still reading the .piclist files. This needs to change. Whenever this is disabled, the pictures should drop out. Maybe the pointer to the .piclist file should be set to nothing? When this setting is set to true, and there are .piclist files, then the illustrations should reaper.
+
+
 **Hard paths in mutable setting files**
 Thu 16 Dec 2010 07:34:56 PM ICT
 Status: Open
