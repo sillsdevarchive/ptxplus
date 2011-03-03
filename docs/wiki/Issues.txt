@@ -4,6 +4,11 @@ Creation-Date: Unknown
 
 ====== Issues ======
 
+**Fails to find python2**
+Thu 03 Mar 2011 09:23:38 AM ICT
+Status: Open
+This problem showed up on a new installation in Maverick. It seems that our trick to just put "#!/usr/bin/env python2" in the header of the scripts, rather than "#!/usr/bin/env python2.n" does not work in Ubuntu after Lucid. We need to look into this more and figure out if there is a better way to generically specify that any flavor of Python in the 2.0 range will be okay.
+
 **Illustrations do not turn off**
 Thu 03 Feb 2011 03:11:29 PM ICT
 Status: Open

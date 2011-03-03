@@ -6,6 +6,13 @@ Creation-Date: Fri, 12 Feb 2010 16:00:19 +0700
 
 Here we will collect a list of things that need doing. Hopefully we can keep them up. If they are a big task then it would be good to create a separate page and link to this one.
 
+===== Image Handling =====
+**Enable multiple kinds of images**
+Right now, the only type of images that it will handle are PNG. [[XeTeX]] can handle a number of other types so TIPE should handle them too. Also, it would be good if image types could be mixed. Not sure what is needed for that at this point, though.
+
+**Make caption.csv file menu item**
+Right now, when you want to create a captions.csv file for a new project you need to have a Scripture component selected and (I think) have USE_ILLUSTRATIONS set to true. Then you can select Make Illustrations List (Current). This is goofy and needs to change. What is needed is a menu item to edit the captions.csv. If we had this, then the actual captions.csv could be created if it didn't exist, then opened in the editor (OO) for editing. This would be much more intuitive.
+
 ===== Hyphenation =====
 **End of page checking (Flip's Idea)**
 One way we could check for words being hyphenated at the end of a right-hand page would be to color the word that is being hyphenated some color like red. This way the compositor would have a way to visually see when this was happening. There may be cases where this will need to be allowed (tolerated) for those cases, it would be good to have an additional feature where you would be able to turn the coloring of these words off. It would probably be easiest to track this on all pages that end with a hyphenated word but it would be harder to know if it was a left or right hand page. For this reason the color would need to be the same for either. However, it would be ideal if the last word on the left-hand page could be yellow and the word on the right-hand page could be red.
