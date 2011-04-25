@@ -544,15 +544,13 @@ class MakeTexControlFile (object) :
 				footnoteSettings += '\\PageResetCallers{x}\n'
 
 		# The footnote hrule will be used if something exists in the
-		# defineFootnoteRule field.  If nothing is there the user is indicating
-		# that they do not want a footnote rule.  However, the system will put a
-		# default \hrule in if the command "\footnoterule{}" is not found in the
-		# settings file.  For this reason we add the command but leave it blank
-		# to override the macro default.
+		# defineFootnoteRule field.  If nothing is there the default macro
+		# footnote rule will be used.  If the user wishes to not have a rule at
+		# all then they can insert a command in the field like \smallskip or
+		# something similar so the rule will be enforced but no \hrule will be
+		# output.
 		if defineFootnoteRule != '' :
 			footnoteSettings += '\\def\\footnoterule{' + defineFootnoteRule + '}\n'
-		else :
-			footnoteSettings += '\\def\\footnoterule{''}\n'
 
 		if omitCallerInFootnote.lower() == 'true' :
 			footnoteSettings += '\\OmitCallerInNote{f}\n'
