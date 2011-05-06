@@ -34,9 +34,9 @@
    inkscape:window-height="877"
    id="namedview421"
    showgrid="false"
-   inkscape:zoom="2.6105106"
-   inkscape:cx="234.54264"
-   inkscape:cy="136.49337"
+   inkscape:zoom="1.6417664"
+   inkscape:cx="259.53136"
+   inkscape:cy="180.89678"
    inkscape:window-x="1440"
    inkscape:window-y="0"
    inkscape:window-maximized="1"
@@ -49,6 +49,18 @@
      inkscape:persp3d-origin="354.33069 : 141.73228 : 1"
      id="perspective425" /><inkscape:perspective
      id="perspective3320"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /><inkscape:perspective
+     id="perspective3139"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /><inkscape:perspective
+     id="perspective3236"
      inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
      inkscape:vp_z="1 : 0.5 : 1"
      inkscape:vp_y="0 : 1000 : 0"
@@ -320,16 +332,6 @@
 	</g>
 
 	</g><circle
-   cx="604.40503"
-   cy="422.802"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-142.0758,-52.485748)"
-   id="Gaza"
-   style="fill-rule:evenodd"
-   sodipodi:cx="604.40503"
-   sodipodi:cy="422.802"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
@@ -338,16 +340,6 @@
    style="fill-rule:evenodd"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="607.74902"
-   cy="402.936"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-141.28316,-55.524212)"
-   id="Joppa"
-   style="fill-rule:evenodd"
-   sodipodi:cx="607.74902"
-   sodipodi:cy="402.936"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
    cx="609.30902"
@@ -380,36 +372,6 @@
    sodipodi:cy="367.957"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
-   cx="644.29602"
-   cy="359.10599"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-142.14186,-57.770033)"
-   id="Damascus"
-   style="fill-rule:evenodd"
-   sodipodi:cx="644.29602"
-   sodipodi:cy="359.10599"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="616.375"
-   cy="356.32999"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-140.29236,-60.67639)"
-   id="Sidon"
-   style="fill-rule:evenodd"
-   sodipodi:cx="616.375"
-   sodipodi:cy="356.32999"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="618.64001"
-   cy="277.90701"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-65.168033)"
-   id="Selucia"
-   style="fill-rule:evenodd"
-   sodipodi:cx="618.64001"
-   sodipodi:cy="277.90701"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
    cx="623.84998"
    cy="267.202"
    r="1.556"
@@ -420,16 +382,6 @@
    sodipodi:cy="267.202"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
-   cx="593.59497"
-   cy="253.104"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-65.168033)"
-   id="Tarsus"
-   style="fill-rule:evenodd"
-   sodipodi:cx="593.59497"
-   sodipodi:cy="253.104"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
    cx="537.67401"
    cy="253.524"
    r="1.556"
@@ -438,66 +390,6 @@
    style="fill-rule:evenodd"
    sodipodi:cx="537.67401"
    sodipodi:cy="253.524"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="526.51801"
-   cy="246.505"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-65.168033)"
-   id="Lystra"
-   style="fill-rule:evenodd"
-   sodipodi:cx="526.51801"
-   sodipodi:cy="246.505"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="530.77002"
-   cy="237.853"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-65.168033)"
-   id="Iconium"
-   style="fill-rule:evenodd"
-   sodipodi:cx="530.77002"
-   sodipodi:cy="237.853"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="501.15302"
-   cy="218.34399"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-65.168033)"
-   id="Antioch_x2C__Pisidia"
-   style="fill-rule:evenodd"
-   sodipodi:cx="501.15302"
-   sodipodi:cy="218.34399"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="491.80099"
-   cy="268.34201"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-65.168033)"
-   id="Perga"
-   style="fill-rule:evenodd"
-   sodipodi:cx="491.80099"
-   sodipodi:cy="268.34201"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="486.10101"
-   cy="271.78601"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-65.168033)"
-   id="Attalia"
-   style="fill-rule:evenodd"
-   sodipodi:cx="486.10101"
-   sodipodi:cy="271.78601"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="472.62201"
-   cy="293.63501"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-142.83834,-61.618307)"
-   id="Myra"
-   style="fill-rule:evenodd"
-   sodipodi:cx="472.62201"
-   sodipodi:cy="293.63501"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
    cx="454.15302"
@@ -513,21 +405,11 @@
    cx="426.91299"
    cy="292.82001"
    r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-143.58451,-60.727223)"
+   transform="matrix(0.69804323,0,0,0.6414587,-144.74897,-61.785822)"
    id="Rhodes"
    style="fill-rule:evenodd"
    sodipodi:cx="426.91299"
    sodipodi:cy="292.82001"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="406.10599"
-   cy="288.021"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-143.19871,-62.129569)"
-   id="Cnidus"
-   style="fill-rule:evenodd"
-   sodipodi:cx="406.10599"
-   sodipodi:cy="288.021"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
    cx="402.37"
@@ -540,26 +422,6 @@
    sodipodi:cy="260.70001"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
-   cx="456.52301"
-   cy="245.38499"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-65.168033)"
-   id="Colossae_1_"
-   style="fill-rule:evenodd"
-   sodipodi:cx="456.52301"
-   sodipodi:cy="245.38499"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="449.763"
-   cy="245.05"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-143.85925,-65.696462)"
-   id="Laodicea"
-   style="fill-rule:evenodd"
-   sodipodi:cx="449.763"
-   sodipodi:cy="245.05"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
    cx="400.979"
    cy="249.20399"
    r="1.556"
@@ -568,66 +430,6 @@
    style="fill-rule:evenodd"
    sodipodi:cx="400.979"
    sodipodi:cy="249.20399"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="434.01401"
-   cy="236.104"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-65.168033)"
-   id="Philadelphia"
-   style="fill-rule:evenodd"
-   sodipodi:cx="434.01401"
-   sodipodi:cy="236.104"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="423.85001"
-   cy="230.106"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-143.58565,-64.887791)"
-   id="Sardis"
-   style="fill-rule:evenodd"
-   sodipodi:cx="423.85001"
-   sodipodi:cy="230.106"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="394.88699"
-   cy="235.00999"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-143.39882,-66.569241)"
-   id="Smyrna"
-   style="fill-rule:evenodd"
-   sodipodi:cx="394.88699"
-   sodipodi:cy="235.00999"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="415.47699"
-   cy="219.011"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.94015,-65.261447)"
-   id="Thyatira"
-   style="fill-rule:evenodd"
-   sodipodi:cx="415.47699"
-   sodipodi:cy="219.011"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="395.573"
-   cy="214.717"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-143.16528,-66.989603)"
-   id="Pergamum"
-   style="fill-rule:evenodd"
-   sodipodi:cx="395.573"
-   sodipodi:cy="214.717"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="381.82999"
-   cy="214.06"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-145.54734,-67.03631)"
-   id="Mytelene"
-   style="fill-rule:evenodd"
-   sodipodi:cx="381.82999"
-   sodipodi:cy="214.06"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
    cx="374.293"
@@ -650,16 +452,6 @@
    sodipodi:cy="191.22099"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
-   cx="332.06601"
-   cy="158.619"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-139.28861,-69.46507)"
-   id="Neapolis"
-   style="fill-rule:evenodd"
-   sodipodi:cx="332.06601"
-   sodipodi:cy="158.619"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
    cx="323.64999"
    cy="154.763"
    r="1.556"
@@ -668,26 +460,6 @@
    style="fill-rule:evenodd"
    sodipodi:cx="323.64999"
    sodipodi:cy="154.763"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="317.41299"
-   cy="166.08299"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-141.9042,-69.651898)"
-   id="Amphipolis"
-   style="fill-rule:evenodd"
-   sodipodi:cx="317.41299"
-   sodipodi:cy="166.08299"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
-   cx="309.12799"
-   cy="169.937"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-142.62816,-69.535131)"
-   id="Apollonia"
-   style="fill-rule:evenodd"
-   sodipodi:cx="309.12799"
-   sodipodi:cy="169.937"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
    cx="296.586"
@@ -710,16 +482,6 @@
    sodipodi:cy="176.071"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556" /><circle
-   cx="312.905"
-   cy="254.343"
-   r="1.556"
-   transform="matrix(0.69804323,0,0,0.6414587,-144.51979,-62.739273)"
-   id="Athens"
-   style="fill-rule:evenodd"
-   sodipodi:cx="312.905"
-   sodipodi:cy="254.343"
-   sodipodi:rx="1.556"
-   sodipodi:ry="1.556" /><circle
    cx="294.59299"
    cy="254.634"
    r="1.556"
@@ -733,15 +495,7 @@
    
 
    
-<line
-   id="Patmos_line"
-   stroke-miterlimit="2.4142"
-   x1="122.96843"
-   y1="111.36772"
-   x2="115.96687"
-   y2="115.98592"
-   style="fill:none;stroke:#000000;stroke-width:0.34759411;stroke-miterlimit:2.41420007;stroke-dasharray:none"
-   mask="none" />
+
    
 <line
    id="Mytelene_line"
@@ -753,25 +507,9 @@
    style="fill:none;stroke:#000000;stroke-width:0.35724351;stroke-miterlimit:2.41420007"
    mask="none" />
    
-<line
-   id="Pergamum_line"
-   stroke-miterlimit="2.4142"
-   x1="142.74944"
-   y1="60.702"
-   x2="133.93407"
-   y2="69.600945"
-   style="fill:none;stroke:#000000;stroke-width:0.34759411;stroke-miterlimit:2.41420007;stroke-dasharray:none"
-   mask="none" />
+
    
-<line
-   id="Apollonia_line"
-   stroke-miterlimit="2.4142"
-   x1="75.613998"
-   y1="49.485462"
-   x2="74.39888"
-   y2="42.291004"
-   style="fill:none;stroke:#000000;stroke-width:0.34759411;stroke-miterlimit:2.41420007;stroke-dasharray:none"
-   mask="none" />
+
 
 
 
@@ -782,6 +520,7 @@
    y="249.51338"
    id="Region_Egypt"
    style="font-size:6px;fill:#ff0000;font-family:Arial">EGYPT</text>
+
 
 
 
@@ -807,11 +546,13 @@
 
 
 
+
 <text
    x="292.40112"
    y="131.03398"
    id="Region_Syria"
    style="font-size:6px;fill:#ff0000;font-family:Arial">SYRIA</text>
+
 
 
 
@@ -824,6 +565,7 @@
    transform="matrix(0.15749508,-0.98751977,0.98751977,0.15749508,0,0)">PHOENICIA</text>
 
 
+
    
 
 
@@ -833,6 +575,7 @@
    id="Region_Judea"
    style="font-size:6px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.57386812,-0.81894773,0.81894773,0.57386812,0,0)">JUDEA</text>
+
 
 
 
@@ -859,11 +602,13 @@
 
 
 
+
 <text
    x="165.49474"
    y="116.97137"
    id="Region_Lycia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">LYCIA</text>
+
 
 
 
@@ -889,11 +634,13 @@
 
 
 
+
 <text
    x="293.00961"
    y="42.840557"
    id="Region_Armenia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">ARMENIA</text>
+
 
 
 
@@ -919,6 +666,7 @@
 
 
 
+
 <text
    x="208.46562"
    y="20.259995"
@@ -934,11 +682,13 @@
 
 
 
+
 <text
    x="182.31526"
    y="36.830799"
    id="Region_Bithynia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">BITHYNIA</text>
+
 
 
 
@@ -974,6 +724,7 @@
 
 
 
+
 <text
    x="42.047436"
    y="117.45184"
@@ -989,11 +740,13 @@
 
 
 
+
 <text
    x="5.1439795"
    y="19.77866"
    id="Region_Macedonia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">MACEDONIA</text>
+
 
 
 
@@ -1069,11 +822,13 @@
 
 
 
+
 <text
    x="198.7198"
    y="94.261948"
    id="Region_Pisidia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">PISIDIA</text>
+
 
 
 
@@ -1100,6 +855,7 @@
 
 
 
+
 <text
    x="143.45268"
    y="143.37289"
@@ -1112,11 +868,13 @@
 
 
 
+
 <text
    x="123.20662"
    y="125.15253"
    id="Island_Cos"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Cos</text>
+
 
 
 
@@ -1137,11 +895,8 @@
 
 
 
-<text
-   x="102.03027"
-   y="119.89162"
-   id="Island_Patmos"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Patmos</text>
+
+
 
 
 
@@ -1177,12 +932,14 @@
 
 
 
+
 <text
    x="111.70312"
    y="262.36996"
    id="Island_Cyprus"
    style="font-size:6px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.82298735,-0.5680597,0.5680597,0.82298735,0,0)">Cyprus</text>
+
 
 
 
@@ -1228,11 +985,6 @@
 
 
 
-<text
-   x="262.17221"
-   y="220.32396"
-   id="City_Gaza"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Gaza</text>
 
 
 
@@ -1243,11 +995,9 @@
 
 
 
-<text
-   x="263.92264"
-   y="204.6532"
-   id="City_Joppa"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Joppa</text>
+
+
+
 
 
 
@@ -1273,6 +1023,7 @@
 
 
 
+
 <text
    x="289.63885"
    y="184.61929"
@@ -1288,11 +1039,8 @@
 
 
 
-<text
-   x="310.0351"
-   y="174.60359"
-   id="City_Damascus"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Damascus</text>
+
+
 
 
 
@@ -1318,6 +1066,7 @@
 
 
 
+
 <text
    x="293.85196"
    y="214.23906"
@@ -1333,11 +1082,6 @@
 
 
 
-<text
-   x="294.03339"
-   y="168.95691"
-   id="City_Sidon"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Sidon</text>
 
 
 
@@ -1368,11 +1112,9 @@
 
 
 
-<text
-   x="292.8028"
-   y="117.34528"
-   id="City_Seleucia"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Seleucia</text>
+
+
+
 
 
 
@@ -1398,11 +1140,8 @@
 
 
 
-<text
-   x="255.77025"
-   y="94.600739"
-   id="City_Tarsus"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Tarsus</text>
+
+
 
 
 
@@ -1428,11 +1167,6 @@
 
 
 
-<text
-   x="230.07909"
-   y="92.391693"
-   id="City_Lystra"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Lystra</text>
 
 
 
@@ -1443,11 +1177,6 @@
 
 
 
-<text
-   x="227.96974"
-   y="85.748718"
-   id="City_Iconium"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Iconium</text>
 
 
 
@@ -1458,11 +1187,6 @@
 
 
 
-<text
-   x="205.29961"
-   y="72.114784"
-   id="City_Antioch-B"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Antioch</text>
 
 
 
@@ -1473,11 +1197,6 @@
 
 
 
-<text
-   x="147.3271"
-   y="101.82727"
-   id="City_Laodicea"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Laodicea</text>
 
 
 
@@ -1488,11 +1207,6 @@
 
 
 
-<text
-   x="174.58791"
-   y="97.465851"
-   id="City_Colossae"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Colossae</text>
 
 
 
@@ -1503,11 +1217,6 @@
 
 
 
-<text
-   x="160.12926"
-   y="88.103714"
-   id="City_Philadelphia"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Philadelphia</text>
 
 
 
@@ -1518,11 +1227,6 @@
 
 
 
-<text
-   x="152.95192"
-   y="81.663078"
-   id="City_Sardis"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Sardis</text>
 
 
 
@@ -1533,11 +1237,6 @@
 
 
 
-<text
-   x="142.66933"
-   y="73.428299"
-   id="City_Thyatira"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Thyatira</text>
 
 
 
@@ -1548,11 +1247,6 @@
 
 
 
-<text
-   x="143.08687"
-   y="59.904629"
-   id="City_Pergamum"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Pergamum</text>
 
 
 
@@ -1563,11 +1257,6 @@
 
 
 
-<text
-   x="201.46553"
-   y="113.14326"
-   id="City_Perga"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Perga</text>
 
 
 
@@ -1578,11 +1267,6 @@
 
 
 
-<text
-   x="175.95622"
-   y="110.80255"
-   id="City_Attalia"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Attalia</text>
 
 
 
@@ -1593,11 +1277,19 @@
 
 
 
-<text
-   x="189.71675"
-   y="125.02343"
-   id="City_Myra"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Myra</text>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1623,11 +1315,8 @@
 
 
 
-<text
-   x="140.45122"
-   y="120.55157"
-   id="City_Cnidus"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Cnidus</text>
+
+
 
 
 
@@ -1653,6 +1342,7 @@
 
 
 
+
 <text
    x="122.66481"
    y="92.262054"
@@ -1668,11 +1358,6 @@
 
 
 
-<text
-   x="124.52043"
-   y="82.765221"
-   id="City_Smyrna"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Smyrna</text>
 
 
 
@@ -1683,11 +1368,9 @@
 
 
 
-<text
-   x="91.115509"
-   y="75.998421"
-   id="City_Mitylene"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Mitylene</text>
+
+
+
 
 
 
@@ -1713,6 +1396,7 @@
 
 
 
+
 <text
    x="119.97084"
    y="56.530865"
@@ -1728,11 +1412,8 @@
 
 
 
-<text
-   x="95.738449"
-   y="29.688526"
-   id="City_Neapolis"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Neapolis</text>
+
+
 
 
 
@@ -1758,11 +1439,6 @@
 
 
 
-<text
-   x="79.55159"
-   y="43.94614"
-   id="City_Amphipolis"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Amphipolis</text>
 
 
 
@@ -1773,11 +1449,9 @@
 
 
 
-<text
-   x="73.530029"
-   y="54.457645"
-   id="City_Apollonia"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Apollonia</text>
+
+
+
 
 
 
@@ -1803,6 +1477,7 @@
 
 
 
+
 <text
    x="33.811947"
    y="44.244221"
@@ -1818,11 +1493,8 @@
 
 
 
-<text
-   x="51.180447"
-   y="93.89357"
-   id="City_Athens"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Athens</text>
+
+
 
 
 
@@ -2030,6 +1702,7 @@
 
 
 
+
 <rect
    width="346.20749"
    height="255.83304"
@@ -2038,12 +1711,163 @@
    id="Map_Border"
    style="fill:none;stroke:#000000;stroke-width:1.39037645;stroke-miterlimit:2.41420007;stroke-dasharray:none" />
 
-<line
-   id="Pergamum_line-4"
-   stroke-miterlimit="2.4142"
-   x1="169.07054"
-   y1="92.346893"
-   x2="162.77953"
-   y2="97.796753"
-   style="fill:none;stroke:#000000;stroke-width:0.34759411;stroke-miterlimit:2.41420007;stroke-dasharray:none;overflow:visible"
-   mask="none" /></svg>
+<g
+   style="overflow:visible"
+   id="g2976"
+   transform="translate(22.052017,5.5726078)"><g
+     id="g2852"
+     transform="matrix(0.57540967,0,0,0.6414587,-175.64325,-133.84114)"><rect
+       height="3.1889999"
+       id="rect2854"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2579;stroke-miterlimit:2.41420007"
+       width="29.139999"
+       x="431.353"
+       y="505.80399" /><line
+       id="line2856"
+       stroke-miterlimit="2.4142"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007"
+       x1="431.353"
+       x2="460.49301"
+       y1="507.39801"
+       y2="507.39801" /></g><rect
+     height="2.0456116"
+     id="rect2858"
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.15710914;stroke-miterlimit:2.41420007"
+     width="16.767437"
+     x="55.794006"
+     y="190.61122" /><g
+     id="g2860"
+     transform="matrix(0.57540967,0,0,0.6414587,-175.64325,-133.84114)"><rect
+       height="3.1889999"
+       id="rect2862"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2579;stroke-miterlimit:2.41420007"
+       width="29.141001"
+       x="373.073"
+       y="505.80399" /><line
+       id="line2864"
+       stroke-miterlimit="2.4142"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007"
+       x1="373.181"
+       x2="402.32101"
+       y1="507.39801"
+       y2="507.39801" /></g></g><g
+   transform="translate(24.83277,4.1822378)"
+   style="overflow:visible"
+   id="g2959"><g
+     id="Right_Center"
+     transform="matrix(0.69804323,0,0,0.6414587,-229.30614,-153.28308)"><rect
+       height="3.1889999"
+       id="Outside_2_"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2579;stroke-miterlimit:2.41420007"
+       width="29.139999"
+       x="431.353"
+       y="505.80399" /><line
+       id="Inside_1_"
+       stroke-miterlimit="2.4142"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007"
+       x1="431.353"
+       x2="460.49301"
+       y1="507.39801"
+       y2="507.39801" /></g><rect
+     height="2.0456116"
+     id="Left_Center"
+     style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.173043;stroke-miterlimit:2.41420007"
+     width="20.340979"
+     x="51.455929"
+     y="171.16928" /><g
+     id="Far_Left"
+     transform="matrix(0.69804323,0,0,0.6414587,-229.30614,-153.28308)"><rect
+       height="3.1889999"
+       id="Outside"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.2579;stroke-miterlimit:2.41420007"
+       width="29.141001"
+       x="373.073"
+       y="505.80399" /><line
+       id="Inside"
+       stroke-miterlimit="2.4142"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007"
+       x1="373.181"
+       x2="402.32101"
+       y1="507.39801"
+       y2="507.39801" /></g></g><text
+   sodipodi:linespacing="100%"
+   id="Scale_K_Number_A"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="54.679272"
+   y="183.81853">0</text>
+<text
+   sodipodi:linespacing="100%"
+   id="Scale_K_Number_B"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="71.52562"
+   y="183.81853">100</text>
+<text
+   sodipodi:linespacing="100%"
+   id="Scale_K_Number_C"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="92.159309"
+   y="183.81853">200</text>
+<text
+   sodipodi:linespacing="100%"
+   id="Scale_K_Number_D"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="112.2019"
+   y="183.81853">300</text>
+<text
+   sodipodi:linespacing="100%"
+   id="Scale_K_DistanceKey"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="75.116165"
+   y="189.82625">Kilometers</text>
+<text
+   sodipodi:linespacing="100%"
+   id="Scale_M_Number_A"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="59.811054"
+   y="203.65739">0</text>
+<text
+   sodipodi:linespacing="100%"
+   id="Scale_M_Number_B"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="74.75621"
+   y="203.65739">50</text>
+<text
+   sodipodi:linespacing="100%"
+   id="Scale_M_Number_C"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="89.957146"
+   y="203.65739">100</text>
+<text
+   sodipodi:linespacing="100%"
+   id="Scale_M_Number_D"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="106.69611"
+   y="203.65739">150</text>
+<text
+   sodipodi:linespacing="100%"
+   id="Scale_M_DistanceKey"
+   style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;overflow:visible;font-family:Charis SIL;-inkscape-font-specification:Charis SIL"
+   x="80.314995"
+   y="210.84637">Miles</text>
+<rect
+   height="24.174969"
+   id="rect3027"
+   style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.69439477;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
+   width="115.82113"
+   x="12.905137"
+   y="224.20782" />
+
+<text
+   x="69.376801"
+   y="235.5477"
+   style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
+   id="Title-m08c_Main"
+   sodipodi:linespacing="100%">Paul’s Third Missionary Journey</text>
+<text
+   x="69.192459"
+   y="244.58035"
+   style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
+   id="Ref-m08c_Title"
+   sodipodi:linespacing="100%">Acts 18:26–21:16</text>
+
+</svg>

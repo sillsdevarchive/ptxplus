@@ -21,7 +21,7 @@
    sodipodi:docname="m08a-map.svg"><metadata
    id="metadata97"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -31,15 +31,15 @@
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
    inkscape:window-width="1440"
-   inkscape:window-height="900"
+   inkscape:window-height="877"
    id="namedview95"
    showgrid="false"
-   inkscape:zoom="0.97648079"
-   inkscape:cx="304.90072"
-   inkscape:cy="150.38627"
+   inkscape:zoom="1.3333333"
+   inkscape:cx="233.87975"
+   inkscape:cy="195.16523"
    inkscape:window-x="1440"
    inkscape:window-y="0"
-   inkscape:window-maximized="0"
+   inkscape:window-maximized="1"
    inkscape:current-layer="svg2"
    inkscape:snap-global="false" /><defs
    id="defs422"><inkscape:perspective
@@ -117,12 +117,13 @@
    sodipodi:type="inkscape:persp3d" /></defs>
 
 <image
+   sodipodi:absref="/home/dennis/Projects/ptxplus/resources/lib_maps/m08a-bkgrnd.png"
    xlink:href="m08a-bkgrnd.png"
-   id="background"
-   height="278.07529"
-   width="347.59409"
+   x="7.1533204e-06"
    y="-1.1056185"
-   x="7.1533204e-06" /><path
+   width="347.59409"
+   height="278.07529"
+   id="background" /><path
    d="m 135.41133,78.166464 c 3.98966,7.11509 9.52014,10.026343 9.52014,10.026343"
    id="path4188"
    style="fill:none;stroke:#ffffff;stroke-width:3.47594094;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -206,12 +207,14 @@
 
 
 
+
 <text
    x="238.37135"
    y="257.47189"
    id="Region_Arabia"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">ARABIA</text>
+
 
 
 
@@ -252,12 +255,14 @@
 
 
 
+
 <text
    x="169.59689"
    y="-24.796371"
    transform="matrix(0.87731314,0.50270843,-0.52602366,0.83842751,0,0)"
    id="Region_Pamphylia"
    style="font-size:8.38458729px;fill:#ff0000;font-family:Arial">PAMPHYLIA</text>
+
 
 
 
@@ -298,12 +303,14 @@
 
 
 
+
 <text
    x="213.84483"
    y="19.349915"
    id="Region_Cappadocia"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">CAPPADOCIA</text>
+
 
 
 
@@ -345,12 +352,14 @@
 
 
 
+
 <text
    x="93.308197"
    y="178.43159"
    id="Sea_Mediterranean"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">MEDITERRANEAN SEA</text>
+
 
 
 
@@ -391,12 +400,14 @@
 
 
 
+
 <text
    x="168.44081"
    y="123.01012"
    id="Island_Cyprus"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Cyprus</text>
+
 
 
 
@@ -437,12 +448,14 @@
 
 
 
+
 <text
    x="278.09097"
    y="213.11678"
    id="City_Jerusalem"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Jerusalem</text>
+
 
 
 
@@ -483,12 +496,14 @@
 
 
 
+
 <text
    x="229.64867"
    y="127.34888"
    id="City_Salamis"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Salamis</text>
+
 
 
 
@@ -529,12 +544,14 @@
 
 
 
+
 <text
    x="275.07623"
    y="72.620239"
    id="City_Antioch-A"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Antioch</text>
+
 
 
 
@@ -575,12 +592,14 @@
 
 
 
+
 <text
    x="178.8848"
    y="57.319798"
    id="City_Lystra"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Lystra</text>
+
 
 
 
@@ -621,12 +640,14 @@
 
 
 
+
 <text
    x="135.15619"
    y="25.729828"
    id="City_Antioch-B"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Antioch</text>
+
 
 
 
@@ -667,12 +688,14 @@
 
 
 
+
 <text
    x="104.71586"
    y="76.673462"
    id="City_Attalia"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Attalia</text>
+
 
 
 
@@ -797,6 +820,7 @@
 
 
 
+
 <text
    x="59.182716"
    y="200.05334"
@@ -819,12 +843,14 @@
 
 
 
+
 <text
    x="87.387917"
    y="200.05334"
    id="Scale_K_Number_C"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">200</text>
+
 
 
 
@@ -878,12 +904,14 @@
 
 
 
+
 <text
    x="63.510067"
    y="208.07478"
    id="Scale_K_DistanceKey"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">Kilometers</text>
+
 
 
 
@@ -922,6 +950,7 @@
 
 
 
+
 <text
    x="62.314888"
    y="227.69829"
@@ -944,12 +973,14 @@
 
 
 
+
 <text
    x="83.105759"
    y="227.69829"
    id="Scale_M_Number_C"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">100</text>
+
 
 
 
@@ -1003,12 +1034,14 @@
 
 
 
+
 <text
    x="71.036156"
    y="237.05049"
    id="Scale_M_DistanceKey"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">Miles</text>
+
 
 
 
@@ -1138,24 +1171,24 @@
    sodipodi:ry="1.556" /><rect
    width="93.038322"
    height="21.85704"
-   x="10.611504"
-   y="246.39574"
+   x="10.980183"
+   y="246.58008"
    id="rect3736"
-   style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.97155648;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:3.7799999" /><text
-   x="56.778217"
-   y="259.13364"
-   id="text3746"
-   xml:space="preserve"
-   style="font-size:9.55737209px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-   sodipodi:linespacing="100%"
-   transform="scale(1.0086056,0.99146782)"><tspan
-     x="56.778217"
-     y="259.13364"
-     id="Title_Main">Paul’s First Journey</tspan><tspan
-     x="56.778217"
-     y="267.18619"
-     id="Ref_Title"
-     style="font-size:7.64589834px">Acts 13:4–14:28</tspan></text>
+   style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.97155648;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:3.7799999" />
+   <text
+   x="57.331238"
+   y="256.36853"
+   style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+   id="Title-m08a_Main"
+   sodipodi:linespacing="100%">Paul’s First Missionary Journey</text>
+
+   <text
+   x="57.146896"
+   y="265.40118"
+   style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+   id="Ref-m08a_Title"
+   sodipodi:linespacing="100%">Acts 13:4–14:28</text>
+
 
 
 <path

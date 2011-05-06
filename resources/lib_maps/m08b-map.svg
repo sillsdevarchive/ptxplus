@@ -21,7 +21,7 @@
    sodipodi:docname="m08b-map.svg"><metadata
    id="metadata143"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -31,17 +31,17 @@
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
    inkscape:window-width="1440"
-   inkscape:window-height="900"
+   inkscape:window-height="877"
    id="namedview141"
    showgrid="false"
    showguides="true"
    inkscape:guide-bbox="true"
-   inkscape:zoom="1.3528978"
+   inkscape:zoom="1.3062462"
    inkscape:cx="207.0441"
    inkscape:cy="201.6958"
    inkscape:window-x="1440"
    inkscape:window-y="0"
-   inkscape:window-maximized="0"
+   inkscape:window-maximized="1"
    inkscape:current-layer="svg2" /><defs
    id="defs422"><inkscape:perspective
    sodipodi:type="inkscape:persp3d"
@@ -116,17 +116,24 @@
 
 
 
-	</defs>
+	<inkscape:perspective
+   id="perspective2914"
+   inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+   inkscape:vp_z="1 : 0.5 : 1"
+   inkscape:vp_y="0 : 1000 : 0"
+   inkscape:vp_x="0 : 0.5 : 1"
+   sodipodi:type="inkscape:persp3d" /></defs>
    
 
 <image
+   sodipodi:absref="/home/dennis/Projects/ptxplus/resources/lib_maps/m08b-bkgrnd.png"
    xlink:href="m08b-bkgrnd.png"
-   x="0"
-   y="-1.0212154"
-   width="347.59412"
-   height="257.21964"
+   style="fill:none;stroke:none"
    id="Background"
-   style="fill:none;stroke:none" /><path
+   height="257.21964"
+   width="347.59412"
+   y="-1.0212154"
+   x="0" /><path
    d="m 77.656512,85.338619 c 0,0 16.408453,3.59039 20.344264,11.31996 3.460844,6.937961 3.586174,16.867681 8.232694,18.286091 4.80241,2.42759 8.61203,2.01438 11.00332,3.08727 4.25688,1.90991 6.20516,3.74836 8.47018,6.49116 2.81776,3.41214 3.49752,6.89478 5.14543,11.2408 -0.0118,3.61103 -1.49248,8.25683 -4.74962,9.81591 -11.50621,0.79147 -12.10316,-3.76883 -18.36758,-4.09804 -3.37207,-0.1772 -8.964656,0.15375 -13.151083,1.55328 -4.723319,1.57902 -5.505441,1.61216 -8.15888,4.99 -0.529991,6.01753 6.882853,4.37756 12.554759,6.14072 6.562814,0.71683 11.869624,9.16235 25.222924,6.77118"
    transform="matrix(0.6951882,0,0,0.6951882,0,-1.022687)"
    id="path3003"
@@ -342,11 +349,13 @@
 
 
 
+
 <text
    x="277.95383"
    y="243.94464"
    id="Region_Arabia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">ARABIA</text>
+
 
 
 
@@ -370,12 +379,14 @@
 
 
 
+
 <text
    x="229.65794"
    y="-17.578764"
    transform="matrix(0.86982776,0.50703453,-0.52153554,0.84564267,0,0)"
    id="Region_Pamphylia"
    style="font-size:6.09881687px;fill:#ff0000;font-family:Arial">PAMPHYLIA</text>
+
 
 
 
@@ -402,6 +413,7 @@
 
 
 
+
 <text
    x="217.13889"
    y="-116.39249"
@@ -409,6 +421,7 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.80930789,0.58738465,-0.58738465,0.80930789,0,0)"
    inkscape:transform-center-y="3.4039161">GALATIA</text>
+
 
 
 
@@ -433,11 +446,13 @@
 
 
 
+
 <text
    x="151.20169"
    y="46.15976"
    id="Region_Mysia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Mysia</text>
+
 
 
 
@@ -469,12 +484,14 @@
 
 
 
+
 <text
    x="110.55775"
    y="42.792519"
    id="Region_Achaia"
    style="font-size:6px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.67164041,0.74087729,-0.74087729,0.67164041,0,0)">Achaia</text>
+
 
 
 
@@ -498,6 +515,7 @@
 
 
 
+
 <text
    x="150.06912"
    y="187.87595"
@@ -512,11 +530,13 @@
 
 
 
+
 <text
    x="194.92712"
    y="94.120193"
    id="Region_Pisidia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">PISIDIA</text>
+
 
 
 
@@ -541,12 +561,14 @@
 
 
 
+
 <text
    x="130.08594"
    y="252.23593"
    transform="matrix(0.86138538,-0.507952,0.507952,0.86138538,0,0)"
    id="Island_Cyprus"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Cyprus</text>
+
 
 
 
@@ -570,11 +592,13 @@
 
 
 
+
 <text
    x="70.926819"
    y="68.773705"
    id="Island_Samothrace"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Samothrace</text>
+
 
 
 
@@ -598,11 +622,13 @@
 
 
 
+
 <text
    x="297.55304"
    y="210.31633"
    id="City_Jerusalem"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Jerusalem</text>
+
 
 
 
@@ -626,11 +652,13 @@
 
 
 
+
 <text
    x="264.08618"
    y="120.94479"
    id="City_Tarsus"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Tarsus</text>
+
 
 
 
@@ -654,11 +682,13 @@
 
 
 
+
 <text
    x="232.49576"
    y="91.009613"
    id="City_Lystra"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Lystra</text>
+
 
 
 
@@ -682,11 +712,13 @@
 
 
 
+
 <text
    x="141.006"
    y="66.600555"
    id="City_Thyatira"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Thyatira</text>
+
 
 
 
@@ -710,11 +742,13 @@
 
 
 
+
 <text
    x="118.38856"
    y="51.693302"
    id="City_Troas"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Troas</text>
+
 
 
 
@@ -745,6 +779,7 @@
 
 
 
+
 <text
    x="88.691643"
    y="21.608358"
@@ -759,11 +794,13 @@
 
 
 
+
 <text
    x="48.520267"
    y="20.705465"
    id="City_Amphipolis"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Amphipolis</text>
+
 
 
 
@@ -793,6 +830,7 @@
 
 
 
+
 <text
    x="11.711654"
    y="29.282618"
@@ -807,11 +845,13 @@
 
 
 
+
 <text
    x="23.977659"
    y="42.092209"
    id="City_Berea"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Berea</text>
+
 
 
 
@@ -841,11 +881,13 @@
 
 
 
+
 <text
    x="35.215542"
    y="104.21257"
    id="City_Corinth"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Corinth</text>
+
 
 
 
@@ -869,6 +911,7 @@
 
 
 
+
 <text
    x="46.692852"
    y="179.63629"
@@ -883,11 +926,13 @@
 
 
 
+
 <text
    x="67.326538"
    y="179.63629"
    id="Scale_K_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">200</text>
+
 
 
 
@@ -918,11 +963,13 @@
 
 
 
+
 <text
    x="50.283398"
    y="185.64401"
    id="Scale_K_DistanceKey"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">Kilometers</text>
+
 
 
 
@@ -946,6 +993,7 @@
 
 
 
+
 <text
    x="49.923439"
    y="199.47516"
@@ -960,11 +1008,13 @@
 
 
 
+
 <text
    x="65.124374"
    y="199.47516"
    id="Scale_M_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">100</text>
+
 
 
 
@@ -995,11 +1045,13 @@
 
 
 
+
 <text
    x="55.482224"
    y="206.66414"
    id="Scale_M_DistanceKey"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">Miles</text>
+
 
 
 
@@ -1237,26 +1289,6 @@
    id="rect3027"
    style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.69439477;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
 
-   <text
-   x="66.243179"
-   y="236.2654"
-   id="MainTitleBox"
-   xml:space="preserve"
-   style="font-size:6.95188189px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-   sodipodi:linespacing="110%"><tspan
-     x="66.243179"
-     y="236.2654"
-     id="Title_Main">Paul’s Second Missionary Journey</tspan><tspan
-     x="66.243179"
-     y="243.91246"
-     id="Ref_Title">Acts 15:36–18:22</tspan></text>
-
-
-
-
-
-
-
 
 <rect
    width="346.21024"
@@ -1264,4 +1296,17 @@
    x="0.6919322"
    y="-0.33075482"
    id="rect3843"
-   style="fill:none;stroke:#000000;stroke-width:1.38386822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" /></svg>
+   style="fill:none;stroke:#000000;stroke-width:1.38386822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+<text
+   x="69.376801"
+   y="235.5477"
+   style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
+   id="Title-m08b_Main"
+   sodipodi:linespacing="100%">Paul’s Second Missionary Journey</text>
+<text
+   x="69.192459"
+   y="244.58035"
+   style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
+   id="Ref-m08b_Title"
+   sodipodi:linespacing="100%">Acts 15:36–18:22</text>
+</svg>
