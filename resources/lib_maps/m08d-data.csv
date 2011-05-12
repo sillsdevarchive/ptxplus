@@ -32,15 +32,12 @@
 "Region_Pamphylia","PAMPHYLIA",
 "Region_Lycia","LYCIA",
 "Region_Libya","LIBYA",
-"Region_Arabia","ARABIA",
 "Region_Egypt","EGYPT",
 "Region_Sicily","SICILY",
-"Region_Syria","SYRIA",
 "Island_Cyprus","Cyprus",
 "Island_Crete","Crete",
 "Island_Clauda","Clauda","An island near Crete (Acts 27:16)"
 "Island_Malta","Malta","Paul was ship is wrecked on Malta (Acts 27:14-44)"
-"Sea_BlackSea","BLACK SEA",
 "Sea_Mediterranean","MEDITERRANEAN SEA",
 "Scale_K_Number_A",0,
 "Scale_K_Number_B",100,
