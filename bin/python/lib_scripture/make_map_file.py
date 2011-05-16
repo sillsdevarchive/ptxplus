@@ -22,6 +22,7 @@
 # routine
 # 20090914 - djd - Removed code that was duplicating makefile functions like
 # creating the Maps folder, etc.
+# 20110516 - djd - Modify to handle master data file for map data.
 
 
 ###############################################################################
@@ -56,7 +57,10 @@ class MakeMapFile (object) :
 		inputFile       = log_manager._currentInput
 		outputFile      = log_manager._currentOutput
 		(head, tail)    = os.path.split(outputFile)
-		dataFileName    = mapProject + "/" + tail.replace('.svg', '-data.csv')
+		mapSetType      = tail[0]
+		mapID           = tail.replace('.svg', '')
+		dataFileName    = mapProject + "/" + mapSetType + "00-data.csv"
+#        dataFileName    = mapProject + "/" + tail.replace('.svg', '-data.csv')
 		styleFileName   = mapProject + "/" + tail.replace('.svg', '-style.csv')
 		backgroundFile  = tail.replace('.svg', '-bkgrnd-' + colorSpace.split()[1].lower() + '.png')
 
@@ -92,8 +96,9 @@ class MakeMapFile (object) :
 		# Gather the new map point data
 		map = {}
 		for row in mapData:
-			if len(row) > 0 and row[0] != "MapPointData" :
-				map[row[0]] = row[1]
+			if len(row) > 0 and row[0] != "MapPointID" :
+				if row[3].find(mapID) != -1 :
+					map[row[0]] = row[2]
 
 		# To get the right background file image, we need to insert the key and
 		# file name into the style data list.  Encode the backgroundFile string

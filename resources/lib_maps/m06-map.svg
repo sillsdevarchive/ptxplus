@@ -2,17 +2,52 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
    width="425.19684"
    height="708.66138"
    viewBox="0 0 1260.1288 2194.8256"
    id="svg2"
    xml:space="preserve"
-   style="overflow:visible"><defs
-   id="defs275" />
+   style="overflow:visible"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="m06-map.svg"><metadata
+   id="metadata104"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1089"
+   inkscape:window-height="766"
+   id="namedview102"
+   showgrid="false"
+   inkscape:zoom="2.7734508"
+   inkscape:cx="190.17057"
+   inkscape:cy="212.37295"
+   inkscape:window-x="0"
+   inkscape:window-y="24"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="svg2" /><defs
+   id="defs275"><inkscape:perspective
+     sodipodi:type="inkscape:persp3d"
+     inkscape:vp_x="0 : 354.33069 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_z="425.19684 : 354.33069 : 1"
+     inkscape:persp3d-origin="212.59842 : 236.22046 : 1"
+     id="perspective106" /></defs>
 
 
 <g
@@ -22,12 +57,13 @@
 
 
 <image
+   sodipodi:absref="/home/dennis/Projects/ptxplus/resources/lib_maps/m06-bkgrnd.png"
    xlink:href="m06-bkgrnd.png"
-   id="BackgroundImage"
-   height="2179.1465"
-   width="1302.592"
+   x="-21.203154"
    y="8.0630331"
-   x="-21.203154" />
+   width="1302.592"
+   height="2179.1465"
+   id="BackgroundImage" />
    
 <rect
    width="1244.2"
@@ -102,11 +138,13 @@
 
 
 
+
 <text
    x="249.40062"
    y="457.60208"
    id="Scale_K_Number_B"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">20</text>
+
 
 
 
@@ -124,11 +162,13 @@
 
 
 
+
 <text
    x="503.07843"
    y="457.60208"
    id="Scale_K_Number_D"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">60</text>
+
 
 
 
@@ -146,11 +186,13 @@
 
 
 
+
 <text
    x="128.24156"
    y="550.74274"
    id="Scale_M_Number_A"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">0</text>
+
 
 
 
@@ -168,11 +210,13 @@
 
 
 
+
 <text
    x="319.88318"
    y="550.74274"
    id="Scale_M_Number_C"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">20</text>
+
 
 
 
@@ -190,11 +234,13 @@
 
 
 
+
 <text
    x="254.55684"
    y="600.66461"
    id="Scale_M_DistanceKey"
    style="font-size:22px;line-height:100%;fill:#ff0000;font-family:Arial">Miles</text>
+
 
 
 
@@ -231,8 +277,9 @@
 <text
    x="459.1254"
    y="236.57866"
-   id="Title_Main"
+   id="Title-m06_Main"
    style="font-size:58px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:150%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;font-family:Arial;-inkscape-font-specification:Arial Bold">The Holy Land in the Time of Jesus Christ</text>
+
 
 
 
@@ -250,11 +297,13 @@
 
 
 
+
 <text
    x="970.88245"
    y="392.53958"
    id="City_Damascus"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Damascus</text>
+
 
 
 
@@ -272,11 +321,13 @@
 
 
 
+
 <text
    x="724.77295"
    y="744.26617"
    id="City_Chorazin"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Chorazin</text>
+
 
 
 
@@ -294,11 +345,13 @@
 
 
 
+
 <text
    x="931.47089"
    y="770.74274"
    id="City_Bethsaida"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Bethsaida</text>
+
 
 
 
@@ -316,11 +369,13 @@
 
 
 
+
 <text
    x="689.65778"
    y="896.55524"
    id="City_Magadan"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Magadan</text>
+
 
 
 
@@ -338,11 +393,13 @@
 
 
 
+
 <text
    x="529.92426"
    y="946.33649"
    id="City_Nazareth"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Nazareth</text>
+
 
 
 
@@ -360,11 +417,13 @@
 
 
 
+
 <text
    x="928.21002"
    y="956.19586"
    id="City_Gadara"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Gadara</text>
+
 
 
 
@@ -382,11 +441,13 @@
 
 
 
+
 <text
    x="697.50354"
    y="1261.6567"
    id="City_Shechem"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Shechem</text>
+
 
 
 
@@ -404,11 +465,13 @@
 
 
 
+
 <text
    x="373.02075"
    y="1338.2505"
    id="City_Joppa"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Joppa</text>
+
 
 
 
@@ -426,11 +489,13 @@
 
 
 
+
 <text
    x="385.83755"
    y="1527.6255"
    id="City_Emmaus"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Emmaus</text>
+
 
 
 
@@ -448,6 +513,7 @@
 
 
 
+
 <text
    x="478.30649"
    y="1575.4927"
@@ -459,11 +525,13 @@
 
 
 
+
 <text
    x="698.8703"
    y="1567.688"
-   id="City_Bethphage"
+   id="City_Bathphage"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Bathphage</text>
+
 
 
 
@@ -481,11 +549,13 @@
 
 
 
+
 <text
    x="455.47375"
    y="1633.7817"
    id="City_Bethlehem"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Bethlehem</text>
+
 
 
 
@@ -503,11 +573,13 @@
 
 
 
+
 <text
    x="963.55957"
    y="532.64117"
    id="City_CaesareaPhilippi"
    style="font-size:36px;line-height:100%;fill:#ff0000;font-family:Arial">Caesarea Philippi</text>
+
 
 
 
@@ -525,11 +597,13 @@
 
 
 
+
 <text
    x="882.42426"
    y="823.97711"
    id="Lake_SeaOfGalilee"
    style="font-size:32px;font-weight:bold;line-height:100%;fill:#ff0000;font-family:Arial Bold">Sea of Galilee</text>
+
 
 
 
@@ -548,12 +622,14 @@
 
 
 
+
 <text
    x="-1030.8983"
    y="435.03613"
    transform="matrix(0.21284596,-0.97708577,0.97708577,0.21284596,0,0)"
-   id="Sea_MediterraneanSea"
+   id="Sea_Mediterranean"
    style="font-size:38px;font-weight:bold;line-height:100%;fill:#ff0000;font-family:Arial Bold">Mediterranean Sea</text>
+
 
 
 
@@ -572,6 +648,7 @@
 
 
 
+
 <text
    x="533.75403"
    y="1182.3364"
@@ -583,11 +660,13 @@
 
 
 
+
 <text
    x="505.6441"
    y="1739.7505"
    id="Region_Judea"
    style="font-size:48px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">JUDEA</text>
+
 
 
 
@@ -606,12 +685,14 @@
 
 
 
+
 <text
    x="-73.534683"
    y="1333.6132"
    transform="matrix(0.46021401,-0.88780801,0.88780801,0.46021401,0,0)"
    id="Region_Syria"
    style="font-size:48px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">SYRIA</text>
+
 
 
 
@@ -630,12 +711,14 @@
 
 
 
+
 <text
    x="1407.021"
    y="115.4456"
    transform="matrix(0.73980703,0.67281911,-0.67281911,0.73980703,0,0)"
    id="Region_Decapolis"
    style="font-size:48px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;font-family:Arial;-inkscape-font-specification:Arial Bold Italic">DECAPOLIS</text>
+
 
 
 
