@@ -34,13 +34,15 @@
    inkscape:window-height="877"
    id="namedview3651"
    showgrid="false"
-   inkscape:zoom="3.2860891"
-   inkscape:cx="545.51812"
-   inkscape:cy="182.87938"
+   inkscape:zoom="1.2578125"
+   inkscape:cx="341.30496"
+   inkscape:cy="201.92899"
    inkscape:window-x="1440"
    inkscape:window-y="0"
    inkscape:window-maximized="1"
-   inkscape:current-layer="svg2" /><defs
+   inkscape:current-layer="svg2"
+   showguides="true"
+   inkscape:guide-bbox="true" /><defs
    id="defs422"><inkscape:perspective
      sodipodi:type="inkscape:persp3d"
      inkscape:vp_x="0 : 212.59842 : 1"
@@ -263,6 +265,12 @@
      inkscape:vp_z="1 : 0.5 : 1"
      inkscape:vp_y="0 : 1000 : 0"
      inkscape:vp_x="0 : 0.5 : 1"
+     sodipodi:type="inkscape:persp3d" /><inkscape:perspective
+     id="perspective3734"
+     inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+     inkscape:vp_z="1 : 0.5 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_x="0 : 0.5 : 1"
      sodipodi:type="inkscape:persp3d" /></defs>
    
 
@@ -276,7 +284,7 @@
    x="-7.8271487e-06" />
 
 <g
-   transform="matrix(0.57540967,0,0,0.6414587,-151.71624,-88.874843)"
+   transform="matrix(0.57540967,0,0,0.6414587,-151.71624,-81.922963)"
    id="g2848"
    style="overflow:visible">
 
@@ -340,9 +348,6 @@
 
 	</g>
 
-
-
-
    
 
    
@@ -352,11 +357,9 @@
    
 
    
-
-
 
 <g
-   transform="matrix(0.69804323,0,0,0.6414587,-206.76952,-105.53602)"
+   transform="matrix(0.69804323,0,0,0.6414587,-217.89256,-109.70716)"
    id="Scale_Bar">
 
 <rect
@@ -419,10 +422,11 @@
 
 	</g>
 <text
-   x="350.25049"
-   y="282.68625"
+   x="347.75296"
+   y="286.96774"
    id="Region_Egypt"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">EGYPT</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">EGYPT</text>
+
 
 
 
@@ -431,35 +435,30 @@
    x="201.94475"
    y="277.7915"
    id="Region_Libya"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">LYBYA</text>
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">LYBYA</text>
 
 
 
 
 
 <text
-   x="-93.928543"
-   y="492.95532"
+   x="-111.5876"
+   y="495.96625"
    id="Region_Judea"
-   style="font-size:6px;fill:#ff0000;font-family:Arial"
+   style="font-size:10px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.34839573,-0.93734754,0.93734754,0.34839573,0,0)">Judea</text>
 
 
 
 
 
-
-
-
 <text
-   x="371.45837"
-   y="-57.881115"
+   x="352.10599"
+   y="-58.232021"
    transform="matrix(0.86982776,0.50703453,-0.52153554,0.84564267,0,0)"
    id="Region_Pamphylia"
-   style="font-size:6.09881687px;fill:#ff0000;font-family:Arial">PAMPHYLIA</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">PAMPHYLIA</text>
+
 
 
 
@@ -468,18 +467,7 @@
    x="310.5499"
    y="155.34355"
    id="Region_Lycia"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">LYCIA</text>
-
-
-
-
-
-
-
-
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">LYCIA</text>
 
 
 
@@ -489,33 +477,28 @@
    x="323.33365"
    y="108.94917"
    id="Region_Asia"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">ASIA</text>
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">ASIA</text>
 
 
 
 
 
 <text
-   x="162.16649"
-   y="58.150848"
+   x="165.73439"
+   y="52.085407"
    id="Region_Macedonia"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">MACEDONIA</text>
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">MACEDONIA</text>
 
 
 
 
 
 <text
-   x="49.851448"
-   y="147.18231"
+   x="43.667076"
+   y="145.87408"
    id="Region_Sicily"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Sicily</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Sicily</text>
+
 
 
 
@@ -524,47 +507,39 @@
    x="77.141411"
    y="74.040382"
    id="Region_Italy"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">ITALY</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">ITALY</text>
+
 
 
 
 
 <text
-   x="291.87616"
-   y="226.09409"
+   x="228.12958"
+   y="240.89798"
    id="Sea_Mediterranean"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">MEDITERRANEAN SEA</text>
-
-
-
-
-
+   style="font-size:14px;fill:#ff0000;font-family:Arial">MEDITERRANEAN SEA</text>
 
 
 
 
 
 <text
-   x="152.30098"
-   y="390.50305"
+   x="152.83752"
+   y="387.55356"
    transform="matrix(0.70060237,-0.7192148,0.73227792,0.67561131,0,0)"
    id="Region_Cilicia"
-   style="font-size:6.09881687px;fill:#ff0000;font-family:Arial">CILICIA</text>
-
-
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">CILICIA</text>
 
 
 
 
 
 <text
-   x="38.812138"
-   y="183.68001"
+   x="37.860695"
+   y="192.24298"
    id="Island_Malta"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Malta</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Malta</text>
+
 
 
 
@@ -573,8 +548,9 @@
    x="222.73067"
    y="368.72275"
    id="Island_Cyprus"
-   style="font-size:6px;fill:#ff0000;font-family:Arial"
+   style="font-size:10px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.84343248,-0.53723519,0.53723519,0.84343248,0,0)">Cyprus</text>
+
 
 
 
@@ -583,127 +559,97 @@
    x="227.87917"
    y="184.4155"
    id="Island_Crete"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Crete</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Crete</text>
+
 
 
 
 
 <text
-   x="217.28929"
-   y="210.42369"
+   x="194.01793"
+   y="227.03557"
    id="Island_Clauda"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Clauda</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Clauda</text>
+
 
 
 
 
 <text
-   x="313.76987"
-   y="272.61758"
+   x="293.07602"
+   y="272.37973"
    id="City_Alexandria"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Alexandria</text>
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Alexandria</text>
 
 
 
 
 
 <text
-   x="435.52164"
-   y="240.93063"
+   x="439.80313"
+   y="240.89798"
    id="City_Antipatris"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Antipatris</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Antipatris</text>
+
 
 
 
 
 <text
-   x="401.02365"
-   y="234.10722"
+   x="382.23267"
+   y="235.41545"
    id="City_Caesarea"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Caesarea</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Caesarea</text>
+
 
 
 
 
 <text
-   x="438.47031"
-   y="228.73735"
+   x="442.15714"
+   y="226.83447"
    id="City_Nazareth"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Nazareth</text>
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Nazareth</text>
 
 
 
 
 
 <text
-   x="455.80084"
-   y="213.20015"
+   x="456.39551"
+   y="214.27052"
    id="City_Damascus"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Damascus</text>
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Damascus</text>
 
 
 
 
 
 <text
-   x="440.66483"
+   x="443.51917"
    y="249.99338"
    id="City_Jerusalem"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Jerusalem</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Jerusalem</text>
+
 
 
 
 
 <text
-   x="439.08856"
-   y="207.32909"
+   x="439.80215"
+   y="202.09616"
    id="City_Sidon"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Sidon</text>
-
-
-
-
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Sidon</text>
 
 
 
 
 
 <text
-   x="400.22705"
-   y="130.57947"
+   x="420.08841"
+   y="134.26631"
    id="City_Tarsus"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Tarsus</text>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Tarsus</text>
 
 
 
@@ -713,19 +659,17 @@
    x="334.77191"
    y="163.39563"
    id="City_Myra"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Myra</text>
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Myra</text>
 
 
 
 
 
 <text
-   x="261.76639"
-   y="164.04158"
+   x="248.92192"
+   y="163.328"
    id="City_Cnidus"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Cnidus</text>
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Cnidus</text>
 
 
 
@@ -735,130 +679,118 @@
    x="284.27597"
    y="128.91193"
    id="City_Ephesus"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Ephesus</text>
-
-
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Ephesus</text>
 
 
 
 
 
 <text
-   x="276.90817"
-   y="94.34185"
+   x="277.74069"
+   y="92.795761"
    id="City_Adramyttium"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Adramyttium</text>
-
-
-
-
-
-
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Adramyttium</text>
 
 
 
 
 
 <text
-   x="169.23839"
-   y="78.060654"
+   x="170.30876"
+   y="72.352005"
    id="City_Thessalonica"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Thessalonica</text>
-
-
-
-
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Thessalonica</text>
 
 
 
 
 
 <text
-   x="245.71397"
-   y="187.55061"
+   x="275.32761"
+   y="195.99466"
    id="City_Salmone"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Salmone</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Salmone</text>
+
 
 
 
 
 <text
-   x="249.54823"
-   y="202.82961"
+   x="252.04576"
+   y="204.73248"
    id="City_Lasea"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Lasea</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Lasea</text>
+
 
 
 
 
 <text
-   x="248.51646"
-   y="221.1825"
+   x="250.77614"
+   y="225.48207"
    id="City_FairHavens"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Fair Havens</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Fair Havens</text>
+
 
 
 
 
 <text
-   x="198.32697"
-   y="191.80128"
+   x="180.48744"
+   y="197.74779"
    id="City_Phoenix"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Phoenix</text>
-
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Phoenix</text>
 
 
 
 
 
 <text
-   x="77.729324"
-   y="160.89825"
+   x="78.561836"
+   y="162.20648"
    id="City_Syracuse"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Syracuse</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Syracuse</text>
+
 
 
 
 
 <text
-   x="86.266449"
-   y="139.2621"
+   x="86.861099"
+   y="139.85675"
    id="City_Rhegium"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Rhegium</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Rhegium</text>
+
 
 
 
 
 <text
-   x="38.11731"
-   y="75.837616"
+   x="25.034986"
+   y="80.356964"
    id="City_Puteoli"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Puteoli</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Puteoli</text>
+
 
 
 
 
 <text
-   x="41.801723"
-   y="47.083652"
+   x="43.109955"
+   y="45.06184"
    id="City_Rome"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Rome</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Rome</text>
+
 
 
 
 
 <text
-   x="55.275837"
-   y="60.456562"
+   x="56.34621"
+   y="61.170143"
    id="City_Appius"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Forum Appius</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Forum Appius</text>
+
 
 
 
@@ -867,121 +799,134 @@
    x="48.185066"
    y="53.264107"
    id="City_ThreeInns"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Three Inns</text>
+   style="font-size:10px;fill:#ff0000;font-family:Arial">Three Inns</text>
+
 
 
 
 
 <text
-   x="52.383121"
-   y="227.38332"
+   x="40.427593"
+   y="213.06831"
    id="Scale_K_Number_A"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">0</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">0</text>
+
 
 
 
 
 <text
-   x="69.647781"
-   y="227.38332"
+   x="54.956875"
+   y="213.06831"
    id="Scale_K_Number_B"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">100</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">100</text>
+
 
 
 
 
 <text
-   x="89.100266"
-   y="227.38332"
+   x="75.598679"
+   y="213.06831"
    id="Scale_K_Number_C"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">200</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">200</text>
+
 
 
 
 
 <text
-   x="108.6508"
-   y="227.38332"
+   x="95.862793"
+   y="213.06831"
    id="Scale_K_Number_D"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">300</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">300</text>
+
 
 
 
 
 <text
-   x="128.00716"
-   y="227.38332"
+   x="116.05166"
+   y="213.06831"
    id="Scale_K_Number_E"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">400</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">400</text>
+
 
 
 
 
 <text
-   x="82.650528"
-   y="232.13612"
+   x="62.013123"
+   y="225.46745"
    id="Scale_K_DistanceKey"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">Kilometers</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">Kilometers</text>
+
 
 
 
 
 <text
-   x="59.877338"
-   y="243.05104"
+   x="60.353058"
+   y="240.89798"
    id="Scale_M_Number_A"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">0</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">0</text>
+
 
 
 
 
 <text
-   x="75.167068"
-   y="243.05104"
+   x="74.334557"
+   y="240.89798"
    id="Scale_M_Number_B"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">50</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">50</text>
+
 
 
 
 
 <text
-   x="88.694717"
-   y="243.05104"
+   x="88.813652"
+   y="240.89798"
    id="Scale_M_Number_C"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">100</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">100</text>
+
 
 
 
 
 <text
-   x="106.27031"
-   y="243.05104"
+   x="105.4378"
+   y="240.89798"
    id="Scale_M_Number_D"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">150</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">150</text>
+
 
 
 
 
 <text
-   x="122.66432"
-   y="243.05104"
+   x="122.06966"
+   y="240.89798"
    id="Scale_M_Number_E"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">200</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">200</text>
+
 
 
 
 
 <text
-   x="90.950546"
-   y="249.19426"
+   x="86.074409"
+   y="253.41077"
    id="Scale_M_DistanceKey"
-   style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">Miles</text>
+   style="font-size:8px;fill:#ff0000;font-family:Arial-Bold">Miles</text>
+
 
 
 
 
 <path
-   style="fill:none;stroke:#ffffff;stroke-width:5.50000002999999982;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;opacity:1"
+   style="fill:none;stroke:#ffffff;stroke-width:8.00000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;opacity:1"
    d="m 618.90494,332.7285 c -27.32338,-16.52056 -11.86076,-34.29519 7.07645,-34.32426 -20.44106,-12.7248 -9.37431,-64.95106 -29.71245,-64.71926 -43.79296,14.4338 -101.54937,31.24526 -118.56496,6.60862 -7.76277,28.08291 -41.39624,-6.08825 -66.68018,-4.97681 -28.085,11.04749 -9.26648,54.61142 -31.76772,62.49776 -10.09122,3.80347 -15.1737,9.18617 -33.45307,-10.43902 -110.82144,34.25329 -200.00287,-4.02653 -254.488193,-25.45698 20.357703,-5.48424 27.869623,-17.39518 13.669743,-35.85885 9.47013,-1.03394 16.90199,-15.4794 14.36037,-25.84158 C 119.17031,166.6163 93.120772,122.77826 86.529824,104.05213 76.280784,86.617093 74.475069,85.134083 74.475069,85.134083 l -9.00029,-6.577568 -11.033772,-7.333848"
    id="path4069"
    transform="matrix(0.6951882,0,0,0.6951882,0,-1.1752532)"
@@ -989,43 +934,45 @@
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-730.28973,-567.8182)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1110.1023,-820.13552)"
    id="Jerusalem-9-96-6-1"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><rect
+   inkscape:transform-center-x="0.24141651"
+   inkscape:transform-center-y="-1.1124082e-05" /><rect
    width="491.90619"
    height="294.84497"
    x="0.37342051"
    y="-0.80182534"
    id="Map_Border"
-   style="fill:none;stroke:#000000;stroke-width:0.74687064;stroke-miterlimit:2.41420007;stroke-dasharray:none" />
+   style="fill:none;stroke:#000000;stroke-width:2.08556461;stroke-miterlimit:2.41420007;stroke-dasharray:none" />
 
 <rect
-   height="24.174969"
+   height="24.086885"
    id="rect3027"
-   style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.69439477;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
-   width="115.82113"
-   x="19.705378"
-   y="259.56909" />
+   style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.78247845;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
+   width="147.60634"
+   x="12.375747"
+   y="259.61313" />
 
 <text
-   x="76.17704"
+   x="84.519279"
    y="270.90897"
-   style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
+   style="font-size:12.51338768px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial Bold"
    id="Title-m08d_Main"
    sodipodi:linespacing="100%">Paul’s Fourth Missionary Journey</text>
 
 
 
 
+
 <text
-   x="75.992699"
+   x="84.334938"
    y="279.94162"
-   style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
+   style="font-size:11.12301159px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    id="Ref-m08d_Title"
    sodipodi:linespacing="100%">Acts 21:17–28:31</text>
 
@@ -1037,274 +984,298 @@
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-735.79851,-544.19927)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1115.4921,-796.63552)"
    id="Jerusalem-9-96-6-03"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24144528"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-833.34877,-607.92654)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1214.2318,-862.54001)"
    id="Jerusalem-9-96-6-9"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><path
-   d="m 77.044459,100.20556 -6.212627,-5.209947 -0.854562,8.183467 7.067168,-2.97358 z"
+   inkscape:transform-center-x="0.24150282"
+   inkscape:transform-center-y="-1.1124082e-05" /><path
+   d="m 78.534333,99.417071 -8.692404,-6.487496 -1.274391,10.305515 9.966768,-3.818099 z"
    id="path4683-0-4"
-   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.69518822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
-   d="m 105.14502,192.87263 -8.001804,1.30795 5.643414,5.98758 2.35836,-7.29556 z"
+   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.92478657;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
+   d="m 115.71811,194.50275 -10.24833,2.17727 7.5089,7.96239 2.73939,-10.13968 z"
    id="path4683-0-4-2"
-   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.69518822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
-   d="m 207.35638,202.28036 -6.59261,4.71993 7.71313,2.86496 -1.12061,-7.58497 z"
+   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.92527556;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
+   d="m 188.01866,202.81643 -9.24355,5.54669 9.81438,4.74068 -0.57095,-10.28749 z"
    id="path4683-0-4-7"
-   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.69518822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
-   d="m 374.10519,168.48842 -6.34489,5.04802 7.84841,2.47031 -1.50363,-7.51842 z"
+   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.92672712;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
+   d="m 370.58791,167.74328 -8.16969,6.9392 10.23634,3.23835 -2.0668,-10.17769 z"
    id="path4683-0-4-8"
-   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.69518822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
-   d="m 429.5416,186.9281 -4.87974,-6.4752 -2.67555,7.7808 7.55527,-1.30567 z"
+   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.92309237;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
+   d="m 430.82206,185.7125 -6.5868,-8.48707 -3.61153,10.19833 10.19831,-1.71136 z"
    id="path4683-0-4-76"
-   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.69518822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
-   d="m 428.44895,224.03876 -7.63554,-2.72749 2.04135,7.97071 5.5942,-5.24329 z"
+   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.92468441;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
+   d="m 427.67262,221.57093 -9.84534,-5.02732 1.06186,10.31924 8.78352,-5.29201 z"
    id="path4683-0-4-6"
-   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.69518822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
-   d="m 277.43388,182.24215 -8.05102,-0.95974 3.76401,7.31649 4.28694,-6.35678 z"
+   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.91724908;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
+   d="m 283.55564,170.00993 -10.09159,-4.61027 0.76951,10.2099 9.32201,-5.5997 z"
    id="path4683-0-4-3"
-   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.69518822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
-   d="m 71.549231,181.05145 3.758649,-7.18422 -8.176613,0.91774 4.418076,6.2664 z"
+   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.93250084;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
+   d="m 80.893456,173.44207 -2.72959,-10.04287 -7.280518,8.28772 10.01017,1.75501 z"
    id="path4683-0-4-1"
-   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.69518822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
-   style="fill:none;stroke:#000000;stroke-width:1.94652694000000004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:15.57221550999999948, 1.94652694000000004;stroke-dashoffset:0"
+   style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.91477251;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible" /><path
+   style="fill:none;stroke:#000000;stroke-width:2.78075282;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:22.24602253,2.78075282;stroke-dashoffset:0"
    d="m 429.32686,229.43926 c 0,0 -11.39959,-8.11867 -9.82439,-13.95319 2.1757,-8.05876 7.3968,-6.25033 14.40464,-9.45152 -13.31355,-11.42872 -4.63001,-51.02336 -24.87607,-43.35443 -36.44624,13.80535 -70.76026,16.42629 -76.66804,3.27444 -7.70681,19.7975 -24.64061,-4.28834 -47.942,-3.57362 -18.67345,12.88694 -4.18082,33.77112 -19.74614,42.78328 -15.56532,9.01215 -19.33138,-4.38806 -24.44232,-6.32823 -5.06301,-1.92196 -63.72517,31.56325 -178.791106,-18.04773 21.953155,-5.99554 16.180038,-18.40762 11.783021,-24.38347 7.126292,-2.2612 10.232474,-9.81735 9.858824,-18.88175 C 82.143247,114.71877 63.164448,79.179489 60.065683,70.949295 52.538842,58.7809 51.319873,58.082188 51.319873,58.082188 l -5.912639,-4.428907 -7.812873,-5.036994"
    id="path2964"
    sodipodi:nodetypes="cscscczzccscccc" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-728.27024,-525.55849)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1108.0828,-779.30297)"
    id="Jerusalem-9-96"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.37656826" /><circle
+   inkscape:transform-center-x="0.49948211"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-733.80514,-533.74865)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1114.0934,-787.84992)"
    id="Jerusalem-9-96-6"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.2618007" /><circle
+   inkscape:transform-center-x="0.34723943"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-730.17754,-547.5111)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1110.5845,-803.15846)"
    id="Jerusalem-9-96-6-0"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24148843"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-712.86227,-563.06866)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1093.5074,-815.8617)"
    id="Jerusalem-9-96-6-8"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24150282"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-880.1024,-612.27871)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1259.5582,-866.02319)"
    id="Jerusalem-9-96-6-18"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24145966"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-898.56057,-581.97346)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1280.0382,-834.17185)"
    id="Jerusalem-9-96-6-96"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24150282"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-918.76407,-577.63658)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1298.2199,-831.26213)"
    id="Jerusalem-9-96-6-16"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24150282"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-925.1636,-575.89125)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1306.4034,-829.99252)"
    id="Jerusalem-9-96-6-84"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24145966"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-942.29954,-580.12235)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1322.8257,-833.03432)"
    id="Jerusalem-9-96-6-07"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24140212"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-1092.7151,-617.77912)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1472.5277,-871.16679)"
    id="Jerusalem-9-96-6-12"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24146327"
+   inkscape:transform-center-y="1.9575821e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-1082.5608,-636.60751)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1462.9544,-889.84424)"
    id="Jerusalem-9-96-6-6"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24145966"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-1105.1968,-703.03574)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1486.2215,-955.94771)"
    id="Jerusalem-9-96-6-01"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24145966"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-1113.9237,-716.04638)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1493.8232,-967.82392)"
    id="Jerusalem-9-96-6-3"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24145966"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-1120.0056,-720.38324)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1500.5546,-973.08019)"
    id="Jerusalem-9-96-6-7"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24145966"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-1127.4101,-725.46056)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1506.1523,-978.61039)"
    id="Jerusalem-9-96-6-2"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.18201565" /><circle
+   inkscape:transform-center-x="0.24145966"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-956.26217,-696.47754)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1336.1937,-949.7463)"
    id="Jerusalem-9-96-6-3-4"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.12655002" /><circle
+   inkscape:transform-center-x="0.16792596"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-890.68015,-676.37982)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1271.0873,-929.76751)"
    id="Jerusalem-9-96-6-3-3"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.12655002" /><circle
+   inkscape:transform-center-x="0.16781089"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-884.54506,-641.68482)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1265.0713,-895.4293)"
    id="Jerusalem-9-96-6-3-6"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.12655002" /><circle
+   inkscape:transform-center-x="0.16794035"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-749.99615,-639.14616)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1129.214,-892.89064)"
    id="Jerusalem-9-96-6-3-8"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.12655002" /><circle
+   inkscape:transform-center-x="0.16781089"
+   inkscape:transform-center-y="-1.1124082e-05" /><circle
    cx="621.10699"
    cy="412.50299"
    r="1.556"
-   transform="matrix(1.8764721,0,0,1.8764721,-819.33327,-501.26527)"
+   transform="matrix(2.4891976,0,0,2.4891976,-1199.7405,-754.4151)"
    id="Jerusalem-9-96-6-3-0"
    style="fill-rule:evenodd;stroke:#ffffff;stroke-width:0.51866663;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
    sodipodi:cx="621.10699"
    sodipodi:cy="412.50299"
    sodipodi:rx="1.556"
    sodipodi:ry="1.556"
-   inkscape:transform-center-x="0.12655002" /><path
-   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="m 345.85185,291.75554 14.60703,20.69329 0.15216,-0.15216"
-   id="path4071"
-   transform="matrix(0.6951882,0,0,0.6951882,0,-1.1752532)" /></svg>
+   inkscape:transform-center-x="0.16792596"
+   inkscape:transform-center-y="-1.1124082e-05" /><path
+   style="fill:none;stroke:#000000;stroke-width:1.39037641000000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+   d="m 241.83219,203.44068 7.35629,15.99847 0.12332,-0.0847"
+   id="path4071" /><path
+   style="fill:none;stroke:#000000;stroke-width:1.39037645;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;overflow:visible"
+   d="m 233.19184,203.87755 -8.30212,15.52871 0.142,0.0471"
+   id="path4071-7" /></svg>

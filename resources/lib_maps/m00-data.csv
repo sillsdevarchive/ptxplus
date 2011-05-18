@@ -25,7 +25,7 @@
 "Continent_Australia","Australia",,"m01",,
 ,,,,,
 "Region_Achaia","ACHAIA",,"m08 m08b m08c",,
-"Region_Arabia","ARABIA",,"m08 m08a m08b",,
+"Region_Arabia","ARABIA",,"m08 m08b",,
 "Region_Armenia","ARMENIA",,"m08",,
 "Region_Asia","ASIA",,"m08 m08a m08b m08c m08d",,
 "Region_Bithynia","BITHYNIA",,"m08 m08b",,
@@ -33,7 +33,7 @@
 "Region_Cilicia","CILICIA",,"m08 m08b m08d",,
 "Region_Dalmatia","DALMATIA",,"m08 ",,
 "Region_Decapolis","DECAPOLIS",,"m06",,
-"Region_Egypt","EGYPT",,"m08 m08a m08b m08d",,
+"Region_Egypt","EGYPT",,"m08 m08d",,
 "Region_Galatia","GALATIA",,"m08 m08b m08c",,
 "Region_Galilee","GALILEE",,"m06",,
 "Region_Illyricum","ILLYRICUM",,"m08",,
@@ -56,7 +56,7 @@
 "Island_Chios","Chios",,"m08 m08c",,
 "Island_Clauda","Clauda",,"m08 m08d","Acts 27:16","An island near Crete"
 "Island_Cos","Cos",,"m08c",,
-"Island_Crete","Crete",,"m08 m08a m08b m08d",,
+"Island_Crete","Crete",,"m08 m08d",,
 "Island_Cyprus","Cyprus",,"m08 m08a m08b m08c m08d",,
 "Island_Malta","Malta",,"m08 m08d","Acts 27:14-44","Paul was ship is wrecked on Malta"
 "Island_Patmos","Patmos",,"m08 ",,

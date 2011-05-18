@@ -36,9 +36,9 @@
    showgrid="false"
    showguides="true"
    inkscape:guide-bbox="true"
-   inkscape:zoom="1.3062462"
-   inkscape:cx="207.0441"
-   inkscape:cy="201.6958"
+   inkscape:zoom="1.3523909"
+   inkscape:cx="260.231"
+   inkscape:cy="185.39408"
    inkscape:window-x="1440"
    inkscape:window-y="0"
    inkscape:window-maximized="1"
@@ -224,7 +224,7 @@
 
 <g
    id="g2976"
-   transform="translate(-2.7807528,1.3903764)"><g
+   transform="translate(-1.6473984,6.951882)"><g
      transform="matrix(0.57540967,0,0,0.6414587,-175.64325,-133.84114)"
      id="g2852">
 
@@ -286,7 +286,8 @@
 
 
 <g
-   id="g2959"><g
+   id="g2959"
+   transform="translate(0.87633244,1.3903764)"><g
      transform="matrix(0.69804323,0,0,0.6414587,-229.30614,-153.28308)"
      id="Right_Center">
 
@@ -335,11 +336,6 @@
 	</g></g>
 
 
-<text
-   x="189.57828"
-   y="250.98932"
-   id="Region_Egypt"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">EGYPT</text>
 
 
 
@@ -350,11 +346,10 @@
 
 
 
-<text
-   x="277.95383"
-   y="243.94464"
-   id="Region_Arabia"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">ARABIA</text>
+
+
+
+
 
 
 
@@ -380,12 +375,16 @@
 
 
 
+
+
 <text
    x="229.65794"
    y="-17.578764"
    transform="matrix(0.86982776,0.50703453,-0.52153554,0.84564267,0,0)"
    id="Region_Pamphylia"
    style="font-size:6.09881687px;fill:#ff0000;font-family:Arial">PAMPHYLIA</text>
+
+
 
 
 
@@ -414,6 +413,8 @@
 
 
 
+
+
 <text
    x="217.13889"
    y="-116.39249"
@@ -421,6 +422,8 @@
    style="font-size:6px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.80930789,0.58738465,-0.58738465,0.80930789,0,0)"
    inkscape:transform-center-y="3.4039161">GALATIA</text>
+
+
 
 
 
@@ -447,11 +450,15 @@
 
 
 
+
+
 <text
    x="151.20169"
    y="46.15976"
    id="Region_Mysia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Mysia</text>
+
+
 
 
 
@@ -485,12 +492,16 @@
 
 
 
+
+
 <text
    x="110.55775"
    y="42.792519"
    id="Region_Achaia"
    style="font-size:6px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.67164041,0.74087729,-0.74087729,0.67164041,0,0)">Achaia</text>
+
+
 
 
 
@@ -516,6 +527,8 @@
 
 
 
+
+
 <text
    x="150.06912"
    y="187.87595"
@@ -531,11 +544,15 @@
 
 
 
+
+
 <text
    x="194.92712"
    y="94.120193"
    id="Region_Pisidia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">PISIDIA</text>
+
+
 
 
 
@@ -562,6 +579,8 @@
 
 
 
+
+
 <text
    x="130.08594"
    y="252.23593"
@@ -578,11 +597,9 @@
 
 
 
-<text
-   x="90.139534"
-   y="156.46664"
-   id="Island_Crete"
-   style="font-size:6px;fill:#ff0000;font-family:Arial">Crete</text>
+
+
+
 
 
 
@@ -608,11 +625,15 @@
 
 
 
+
+
 <text
    x="251.81552"
    y="192.23384"
    id="City_Caesarea"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Caesarea</text>
+
+
 
 
 
@@ -638,11 +659,15 @@
 
 
 
+
+
 <text
    x="297.75165"
    y="108.0572"
    id="City_Antioch-A"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Antioch</text>
+
+
 
 
 
@@ -668,11 +693,15 @@
 
 
 
+
+
 <text
    x="237.82375"
    y="99.608337"
    id="City_Derbe"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Derbe</text>
+
+
 
 
 
@@ -698,11 +727,15 @@
 
 
 
+
+
 <text
    x="204.54572"
    y="83.64032"
    id="City_Iconium"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Iconium</text>
+
+
 
 
 
@@ -728,6 +761,8 @@
 
 
 
+
+
 <text
    x="135.23994"
    y="91.638443"
@@ -743,11 +778,15 @@
 
 
 
+
+
 <text
    x="118.38856"
    y="51.693302"
    id="City_Troas"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Troas</text>
+
+
 
 
 
@@ -780,6 +819,8 @@
 
 
 
+
+
 <text
    x="88.691643"
    y="21.608358"
@@ -795,11 +836,15 @@
 
 
 
+
+
 <text
    x="48.520267"
    y="20.705465"
    id="City_Amphipolis"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Amphipolis</text>
+
+
 
 
 
@@ -831,6 +876,8 @@
 
 
 
+
+
 <text
    x="11.711654"
    y="29.282618"
@@ -846,11 +893,15 @@
 
 
 
+
+
 <text
    x="23.977659"
    y="42.092209"
    id="City_Berea"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Berea</text>
+
+
 
 
 
@@ -882,6 +933,8 @@
 
 
 
+
+
 <text
    x="35.215542"
    y="104.21257"
@@ -897,9 +950,11 @@
 
 
 
+
+
 <text
-   x="29.8465"
-   y="179.63629"
+   x="30.746077"
+   y="170.28191"
    id="Scale_K_Number_A"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">0</text>
 
@@ -912,9 +967,11 @@
 
 
 
+
+
 <text
-   x="46.692852"
-   y="179.63629"
+   x="47.977962"
+   y="170.28191"
    id="Scale_K_Number_B"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">100</text>
 
@@ -927,9 +984,11 @@
 
 
 
+
+
 <text
-   x="67.326538"
-   y="179.63629"
+   x="68.22612"
+   y="170.28191"
    id="Scale_K_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">200</text>
 
@@ -942,9 +1001,11 @@
 
 
 
+
+
 <text
-   x="87.369133"
-   y="179.63629"
+   x="88.397224"
+   y="170.28191"
    id="Scale_K_Number_D"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">300</text>
 
@@ -964,9 +1025,11 @@
 
 
 
+
+
 <text
    x="50.283398"
-   y="185.64401"
+   y="179.95398"
    id="Scale_K_DistanceKey"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">Kilometers</text>
 
@@ -979,9 +1042,11 @@
 
 
 
+
+
 <text
-   x="34.978283"
-   y="199.47516"
+   x="36.13488"
+   y="195.3183"
    id="Scale_M_Number_A"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">0</text>
 
@@ -994,9 +1059,11 @@
 
 
 
+
+
 <text
-   x="49.923439"
-   y="199.47516"
+   x="51.208553"
+   y="195.3183"
    id="Scale_M_Number_B"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">50</text>
 
@@ -1009,9 +1076,11 @@
 
 
 
+
+
 <text
-   x="65.124374"
-   y="199.47516"
+   x="66.409485"
+   y="195.3183"
    id="Scale_M_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">100</text>
 
@@ -1024,9 +1093,11 @@
 
 
 
+
+
 <text
-   x="81.863335"
-   y="199.47516"
+   x="83.019943"
+   y="195.3183"
    id="Scale_M_Number_D"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">150</text>
 
@@ -1046,11 +1117,15 @@
 
 
 
+
+
 <text
-   x="55.482224"
-   y="206.66414"
+   x="56.615582"
+   y="205.27376"
    id="Scale_M_DistanceKey"
    style="font-size:4.57411242px;fill:#ff0000;font-family:Arial-Bold">Miles</text>
+
+
 
 
 
@@ -1296,17 +1371,21 @@
    x="0.6919322"
    y="-0.33075482"
    id="rect3843"
-   style="fill:none;stroke:#000000;stroke-width:1.38386822;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+   style="fill:none;stroke:#000000;stroke-width:2.0855646;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
 <text
    x="69.376801"
    y="235.5477"
    style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    id="Title-m08b_Main"
    sodipodi:linespacing="100%">Paul’s Second Missionary Journey</text>
+
+
 <text
    x="69.192459"
    y="244.58035"
    style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;overflow:visible;font-family:Arial;-inkscape-font-specification:Arial"
    id="Ref-m08b_Title"
    sodipodi:linespacing="100%">Acts 15:36–18:22</text>
+
+
 </svg>

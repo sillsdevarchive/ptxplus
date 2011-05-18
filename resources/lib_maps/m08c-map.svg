@@ -30,17 +30,19 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1024"
-   inkscape:window-height="697"
+   inkscape:window-width="1440"
+   inkscape:window-height="877"
    id="namedview421"
    showgrid="false"
-   inkscape:zoom="1.6034961"
-   inkscape:cx="267.92596"
-   inkscape:cy="241.77565"
-   inkscape:window-x="0"
-   inkscape:window-y="24"
+   inkscape:zoom="1.0084487"
+   inkscape:cx="173.7263"
+   inkscape:cy="286.83844"
+   inkscape:window-x="1440"
+   inkscape:window-y="0"
    inkscape:window-maximized="1"
-   inkscape:current-layer="svg2" /><defs
+   inkscape:current-layer="svg2"
+   showguides="true"
+   inkscape:guide-bbox="true" /><defs
    id="defs422"><inkscape:perspective
      sodipodi:type="inkscape:persp3d"
      inkscape:vp_x="0 : 212.59842 : 1"
@@ -361,12 +363,14 @@
 
 
 
+
 <text
    x="-152.30228"
    y="328.98093"
    id="Region_Phoenicia"
    style="font-size:6px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.15749508,-0.98751977,0.98751977,0.15749508,0,0)">PHOENICIA</text>
+
 
 
 
@@ -385,6 +389,7 @@
    id="Region_Judea"
    style="font-size:6px;fill:#ff0000;font-family:Arial"
    transform="matrix(0.57386812,-0.81894773,0.81894773,0.57386812,0,0)">JUDEA</text>
+
 
 
 
@@ -520,11 +525,13 @@
 
 
 
+
 <text
    x="167.12813"
    y="61.877583"
    id="Region_Asia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">ASIA</text>
+
 
 
 
@@ -577,11 +584,13 @@
 
 
 
+
 <text
    x="5.1439795"
    y="15.849655"
    id="Region_Macedonia"
    style="font-size:6px;fill:#ff0000;font-family:Arial">MACEDONIA</text>
+
 
 
 
@@ -703,6 +712,7 @@
 
 
 
+
 <text
    x="143.45268"
    y="143.37289"
@@ -722,11 +732,13 @@
 
 
 
+
 <text
    x="123.20662"
    y="125.15253"
    id="Island_Cos"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Cos</text>
+
 
 
 
@@ -772,11 +784,13 @@
 
 
 
+
 <text
    x="94.254913"
    y="84.526451"
    id="Island_Chios"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Chios</text>
+
 
 
 
@@ -885,11 +899,13 @@
 
 
 
+
 <text
    x="255.62547"
    y="190.36105"
    id="City_Caesarea"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Caesarea</text>
+
 
 
 
@@ -940,11 +956,13 @@
 
 
 
+
 <text
    x="272.33737"
    y="173.96393"
    id="City_Tyre"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Tyre</text>
+
 
 
 
@@ -1026,11 +1044,13 @@
 
 
 
+
 <text
    x="297.24771"
    y="107.4458"
    id="City_Antioch-A"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Antioch</text>
+
 
 
 
@@ -1213,6 +1233,7 @@
 
 
 
+
 <text
    x="170.65385"
    y="123.37197"
@@ -1246,11 +1267,13 @@
 
 
 
+
 <text
    x="141.77109"
    y="110.51965"
    id="City_Miletus"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Miletus</text>
+
 
 
 
@@ -1312,11 +1335,13 @@
 
 
 
+
 <text
    x="98.436966"
    y="62.593185"
    id="City_Assos"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Assos</text>
+
 
 
 
@@ -1340,11 +1365,13 @@
 
 
 
+
 <text
    x="118.37008"
    y="52.18594"
    id="City_Troas"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Troas</text>
+
 
 
 
@@ -1417,6 +1444,7 @@
 
 
 
+
 <text
    x="29.724165"
    y="35.60088"
@@ -1439,11 +1467,13 @@
 
 
 
+
 <text
    x="35.202324"
    y="42.853844"
    id="City_Berea"
    style="font-size:6px;fill:#ff0000;font-family:Arial">Berea</text>
+
 
 
 
@@ -1676,13 +1706,14 @@
 
 
 
+
 <rect
    width="346.20749"
    height="255.83304"
    x="0.69518822"
    y="-0.48384136"
    id="Map_Border"
-   style="fill:none;stroke:#000000;stroke-width:1.39037645;stroke-miterlimit:2.41420007;stroke-dasharray:none" />
+   style="fill:none;stroke:#000000;stroke-width:2.0855646;stroke-miterlimit:2.41420007;stroke-dasharray:none" />
 
 
 
@@ -1714,6 +1745,7 @@
 
 
 
+
 <text
    x="69.192459"
    y="244.58035"
@@ -1727,10 +1759,11 @@
 
 
 
+
 <g
    style="overflow:visible"
    id="g2976"
-   transform="translate(0.22789796,2.6986169)"><g
+   transform="translate(-0.116784,11.040875)"><g
      transform="matrix(0.57540967,0,0,0.6414587,-175.64325,-133.84114)"
      id="g2852"><rect
        width="29.139999"
@@ -1767,7 +1800,7 @@
        x2="402.32101"
        y2="507.39801"
        style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007" /></g></g><g
-   transform="translate(3.008651,1.3082469)"
+   transform="translate(2.4054575,13.821634)"
    style="overflow:visible"
    id="g2959"><g
      transform="matrix(0.69804323,0,0,0.6414587,-229.30614,-153.28308)"
@@ -1806,8 +1839,8 @@
        x2="402.32101"
        y2="507.39801"
        style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007" /></g></g><text
-   x="32.855152"
-   y="180.94453"
+   x="32.07962"
+   y="183.0569"
    id="Scale_K_Number_A"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">0</text>
 
@@ -1815,9 +1848,10 @@
 
 
 
+
 <text
-   x="49.701504"
-   y="180.94453"
+   x="49.356823"
+   y="183.0569"
    id="Scale_K_Number_B"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">100</text>
 
@@ -1825,9 +1859,10 @@
 
 
 
+
 <text
-   x="70.33519"
-   y="180.94453"
+   x="69.731979"
+   y="183.0569"
    id="Scale_K_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">200</text>
 
@@ -1835,9 +1870,10 @@
 
 
 
+
 <text
-   x="90.377785"
-   y="180.94453"
+   x="90.205467"
+   y="183.0569"
    id="Scale_K_Number_D"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">300</text>
 
@@ -1845,11 +1881,13 @@
 
 
 
+
 <text
-   x="53.292049"
-   y="186.95226"
+   x="51.827156"
+   y="191.99678"
    id="Scale_K_DistanceKey"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">Kilometers</text>
+
 
 <path
    style="fill:none;stroke:#ffffff;stroke-width:5.50000000000000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
@@ -1902,8 +1940,8 @@
 
 
 <text
-   x="37.986935"
-   y="200.7834"
+   x="37.383743"
+   y="199.8252"
    id="Scale_M_Number_A"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">0</text>
 
@@ -1911,9 +1949,10 @@
 
 
 
+
 <text
-   x="52.932091"
-   y="200.7834"
+   x="52.67358"
+   y="199.8252"
    id="Scale_M_Number_B"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">50</text>
 
@@ -1921,9 +1960,10 @@
 
 
 
+
 <text
-   x="68.133026"
-   y="200.7834"
+   x="67.874504"
+   y="199.8252"
    id="Scale_M_Number_C"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">100</text>
 
@@ -1931,9 +1971,10 @@
 
 
 
+
 <text
-   x="84.871986"
-   y="200.7834"
+   x="84.613464"
+   y="199.8252"
    id="Scale_M_Number_D"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">150</text>
 
@@ -1941,11 +1982,13 @@
 
 
 
+
 <text
-   x="58.490875"
-   y="207.97238"
+   x="58.232365"
+   y="208.57555"
    id="Scale_M_DistanceKey"
    style="font-size:4.57411242px;fill:#ff0000;overflow:visible;font-family:Arial-Bold">Miles</text>
+
 
 
 
@@ -1961,6 +2004,7 @@
    transform="matrix(0.86807054,0.49644087,-0.49644087,0.86807054,0,0)"
    inkscape:transform-center-x="-4.8389284"
    inkscape:transform-center-y="-3.4670146">PHRYGIA</text>
+
 
 
 <circle

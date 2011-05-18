@@ -34,14 +34,16 @@
    inkscape:window-height="877"
    id="namedview95"
    showgrid="false"
-   inkscape:zoom="1.3333333"
-   inkscape:cx="233.87975"
-   inkscape:cy="195.16523"
+   inkscape:zoom="1.2277695"
+   inkscape:cx="443.31223"
+   inkscape:cy="200.09948"
    inkscape:window-x="1440"
    inkscape:window-y="0"
    inkscape:window-maximized="1"
    inkscape:current-layer="svg2"
-   inkscape:snap-global="false" /><defs
+   inkscape:snap-global="false"
+   showguides="true"
+   inkscape:guide-bbox="true" /><defs
    id="defs422"><inkscape:perspective
    sodipodi:type="inkscape:persp3d"
    inkscape:vp_x="0 : 146.46721 : 1"
@@ -119,11 +121,11 @@
 <image
    sodipodi:absref="/home/dennis/Projects/ptxplus/resources/lib_maps/m08a-bkgrnd.png"
    xlink:href="m08a-bkgrnd.png"
-   x="7.1533204e-06"
-   y="-1.1056185"
-   width="347.59409"
+   id="background"
    height="278.07529"
-   id="background" /><path
+   width="347.59409"
+   y="-1.1056185"
+   x="7.1533204e-06" /><path
    d="m 135.41133,78.166464 c 3.98966,7.11509 9.52014,10.026343 9.52014,10.026343"
    id="path4188"
    style="fill:none;stroke:#ffffff;stroke-width:3.47594094;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -208,12 +210,18 @@
 
 
 
+
+
+
 <text
    x="238.37135"
    y="257.47189"
    id="Region_Arabia"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">ARABIA</text>
+
+
+
 
 
 
@@ -256,12 +264,18 @@
 
 
 
+
+
+
 <text
    x="169.59689"
    y="-24.796371"
    transform="matrix(0.87731314,0.50270843,-0.52602366,0.83842751,0,0)"
    id="Region_Pamphylia"
    style="font-size:8.38458729px;fill:#ff0000;font-family:Arial">PAMPHYLIA</text>
+
+
+
 
 
 
@@ -304,12 +318,18 @@
 
 
 
+
+
+
 <text
    x="213.84483"
    y="19.349915"
    id="Region_Cappadocia"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">CAPPADOCIA</text>
+
+
+
 
 
 
@@ -353,12 +373,18 @@
 
 
 
+
+
+
 <text
    x="93.308197"
    y="178.43159"
    id="Sea_Mediterranean"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">MEDITERRANEAN SEA</text>
+
+
+
 
 
 
@@ -401,6 +427,9 @@
 
 
 
+
+
+
 <text
    x="168.44081"
    y="123.01012"
@@ -425,12 +454,10 @@
 
 
 
-<text
-   x="3.2765784"
-   y="143.7404"
-   id="Island_Crete"
-   style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
-   transform="scale(1.0086056,0.99146782)">Crete</text>
+
+
+
+
 
 
 
@@ -473,12 +500,18 @@
 
 
 
+
+
+
 <text
    x="190.97635"
    y="151.74329"
    id="City_Paphos"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Paphos</text>
+
+
+
 
 
 
@@ -521,12 +554,18 @@
 
 
 
+
+
+
 <text
    x="269.48688"
    y="89.145309"
    id="City_Seleucia"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Seleucia</text>
+
+
+
 
 
 
@@ -569,12 +608,18 @@
 
 
 
+
+
+
 <text
    x="189.52495"
    y="70.100395"
    id="City_Derbe"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Derbe</text>
+
+
+
 
 
 
@@ -617,12 +662,18 @@
 
 
 
+
+
+
 <text
    x="179.62598"
    y="45.092579"
    id="City_Iconium"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Iconium</text>
+
+
+
 
 
 
@@ -665,12 +716,18 @@
 
 
 
+
+
+
 <text
    x="144.59755"
    y="74.504021"
    id="City_Perga"
    style="font-size:8.24873543px;fill:#ff0000;font-family:Arial"
    transform="scale(1.0086056,0.99146782)">Perga</text>
+
+
+
 
 
 
@@ -714,17 +771,20 @@
 
 
 
+
+
+
 <rect
    width="345.68845"
    height="276.16962"
    x="0.95282692"
    y="-0.15277873"
    id="Map_Border"
-   style="fill:none;stroke:#000000;stroke-width:1.90565407;stroke-miterlimit:2.41420007;stroke-dasharray:none" />
+   style="fill:none;stroke:#000000;stroke-width:2.0855646;stroke-miterlimit:2.41420007;stroke-dasharray:none" />
 
 <g
    id="g4044"
-   transform="translate(-6.951882,4.1711292)"><g
+   transform="translate(-4.5957945,12.513387)"><g
      transform="matrix(0.79787456,0,0,0.87434618,-246.76422,-231.34177)"
      id="g2852"><rect
        width="29.139999"
@@ -762,7 +822,7 @@
        y2="507.39801"
        style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007" /></g></g><g
    id="g4027"
-   transform="translate(0,-1.3903764)"><g
+   transform="translate(0.82415598,6.951882)"><g
      transform="matrix(0.96792068,0,0,0.87434618,-323.1022,-254.05195)"
      id="Right_Center"><rect
        width="29.139999"
@@ -799,8 +859,8 @@
        x2="402.32101"
        y2="507.39801"
        style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18560004;stroke-miterlimit:2.41420007" /></g></g><text
-   x="35.934822"
-   y="200.05334"
+   x="36.49622"
+   y="193.47621"
    id="Scale_K_Number_A"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">0</text>
@@ -821,9 +881,12 @@
 
 
 
+
+
+
 <text
-   x="59.182716"
-   y="200.05334"
+   x="60.445843"
+   y="193.33344"
    id="Scale_K_Number_B"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">100</text>
@@ -844,9 +907,12 @@
 
 
 
+
+
+
 <text
-   x="87.387917"
-   y="200.05334"
+   x="88.370346"
+   y="193.33344"
    id="Scale_K_Number_C"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">200</text>
@@ -867,9 +933,12 @@
 
 
 
+
+
+
 <text
-   x="114.99684"
-   y="200.05334"
+   x="116.25996"
+   y="193.33344"
    id="Scale_K_Number_D"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">300</text>
@@ -905,9 +974,12 @@
 
 
 
+
+
+
 <text
    x="63.510067"
-   y="208.07478"
+   y="206.67244"
    id="Scale_K_DistanceKey"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">Kilometers</text>
@@ -928,9 +1000,12 @@
 
 
 
+
+
+
 <text
-   x="41.294762"
-   y="227.69829"
+   x="42.417538"
+   y="222.40613"
    id="Scale_M_Number_A"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">0</text>
@@ -951,9 +1026,12 @@
 
 
 
+
+
+
 <text
-   x="62.314888"
-   y="227.69829"
+   x="64.841141"
+   y="222.26334"
    id="Scale_M_Number_B"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">50</text>
@@ -974,9 +1052,12 @@
 
 
 
+
+
+
 <text
-   x="83.105759"
-   y="227.69829"
+   x="86.053055"
+   y="222.40611"
    id="Scale_M_Number_C"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">100</text>
@@ -997,9 +1078,12 @@
 
 
 
+
+
+
 <text
-   x="106.05"
-   y="227.69829"
+   x="108.9973"
+   y="222.26334"
    id="Scale_M_Number_D"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">150</text>
@@ -1035,12 +1119,18 @@
 
 
 
+
+
+
 <text
-   x="71.036156"
-   y="237.05049"
+   x="72.414665"
+   y="235.64815"
    id="Scale_M_DistanceKey"
    style="font-size:6.28844023px;fill:#ff0000;overflow:visible;font-family:Arial-Bold"
    transform="scale(1.0086056,0.99146782)">Miles</text>
+
+
+
 
 
 
@@ -1182,12 +1272,18 @@
    id="Title-m08a_Main"
    sodipodi:linespacing="100%">Paul’s First Missionary Journey</text>
 
+
+
+
    <text
    x="57.146896"
    y="265.40118"
    style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:100%;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
    id="Ref-m08a_Title"
    sodipodi:linespacing="100%">Acts 13:4–14:28</text>
+
+
+
 
 
 
