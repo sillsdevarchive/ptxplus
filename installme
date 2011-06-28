@@ -133,12 +133,17 @@ Then, to check the user name type:
 
 QUICK START GUIDE
 -----------------------------------------
-Ptxplus has a Wiki help system which, as we are able to update it, gives the user documentaion on the system. This can be accessed by cliking on Help -> Help in the main ptxplus menu. There is a quick start guide under Examples called "Role Your Own" that will help you get started.
+Ptxplus has a Wiki help system which, as we are able to update it, gives the user documentaion on the system. This can be accessed by cliking on Help -> Help in the main ptxplus menu. There is a quick start guide under Examples called "Role Your Own" that will help you get started. However, there is a bug that doesn't allow you to open the help wiki when there isn't a project present. You will need to open an existing project or start a new one to open the help wiki, which kind of defeats the purpose of the Help system in the first place. Look below to find out how to open a project or begin a new one.
 
 
 OPENING A PROJECT
 -----------------------------------------
 In a terminal, to start ptxplus on an existing project, start it from the root of a project folder. It will find the confguraton (.scripture.conf or .dictionary.conf) file and automatically load that project. Also, because a special Nautilus script was installed (above) You can start ptxplus with a right-click from the file browser.
 
-At this point you may need to load some projects on your local system or start a new project. To do this, start ptxplus and open the system help with Help->System Help. You can then look at the Repository section to get a better idea of how to get going.
+
+STARTING A NEW PROJECT
+-----------------------------------------
+Navigate to an empty folder on your system. Right-click and open ptxplus in the folder. You should get an error that says "No .conf file found: ~/pathtofolder". Just click OK to close the message and ptxplus will start.
+
+Once ptxplus is running click File->New to get a dialog box. Enter the name of the project and click OK. That will create a folder with the name you gave it. Inside that folder is a README file which explains that a hidden project file was created in the directory too. If you press Ctrl H you will see it. At this point you need to close ptxplus, and navigate to the project you just created. There, right-click to start ptxplus again, this time you will open your new project.
 
