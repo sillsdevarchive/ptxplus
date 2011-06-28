@@ -133,12 +133,12 @@ Then, to check the user name type:
 
 QUICK START GUIDE
 -----------------------------------------
-Ptxplus has a Wiki help system which, as we are able to update it, gives the user documentaion on the system. This can be accessed by cliking on Help -> Help in the main ptxplus menu. There is a quick start guide under Examples called "Role Your Own" that will help you get started. However, there is a bug that doesn't allow you to open the help wiki when there isn't a project present. You will need to open an existing project or start a new one to open the help wiki, which kind of defeats the purpose of the Help system in the first place. Look below to find out how to open a project or begin a new one.
+Ptxplus has a Wiki help system which, as we are able to update it, gives the user documentation on the system. This can be accessed by clicking on Help -> Help in the main ptxplus menu. There is a quick start guide under Examples called "Role Your Own" that will help you get started. However, there is a bug that doesn't allow you to open the help wiki when there isn't a project present. You will need to open an existing project or start a new one to open the help wiki, which kind of defeats the purpose of the Help system in the first place. Look below to find out how to open a project or begin a new one.
 
 
 OPENING A PROJECT
 -----------------------------------------
-In a terminal, to start ptxplus on an existing project, start it from the root of a project folder. It will find the confguraton (.scripture.conf or .dictionary.conf) file and automatically load that project. Also, because a special Nautilus script was installed (above) You can start ptxplus with a right-click from the file browser.
+In a terminal, to start ptxplus on an existing project, start it from the root of a project folder. It will find the configuration (.scripture.conf or .dictionary.conf) file and automatically load that project. Also, because a special Nautilus script was installed (above) You can start ptxplus with a right-click from the file browser.
 
 
 STARTING A NEW PROJECT
