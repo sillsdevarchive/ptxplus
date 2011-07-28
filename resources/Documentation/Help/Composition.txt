@@ -1,0 +1,53 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2011-07-28T08:54:14.885979
+
+====== Composition ======
+Created Thursday 28 July 2011
+
+Composition (a.k.a. typesetting) in the context of ptxplus the process of adding commands to the working text to enable the [[TeX]] rendering system to produce text that looks better and is easier for the audience to read. There are two basic methods that are commonly used, paragraph adjustments and inserted textual commands.
+
+==== Paragraph Adjustments ====
+To make adjustments to the paragraph click on the Comp. Adj. (Component Adjustment) tab. If the selected component is Scripture, you should see references along the left. Find the reference for the paragraph you need to adjust. Remove the comment (percent sign '%') from the beginning of the line to put the adjustment rule into effect. The amount of the adjustment is set to a default of +1 (add one line). Adjust this as necessary by increasing the number. If you want to take out lines, change the '+' to '-' to subtract lines. Remember, to the [[TeX]] renderer, these adjustment rules are really only suggestions. [[TeX]] may ignore you. :-)
+
+==== Inserted Commands ====
+To control the flow of text there are a number of manual commands that can be inserted in the working text found in the 'Working' tab. Here are some basic commands and their descriptions:
+
+== General TeX Commands ==
+These are some general standard [[TeX]] commands that can be used. There are many more than these listed here.
+
+**\break**
+To break a line of text in a certain place insert this command. Be warned that due to paragraph format this might not work as you desire.
+
+**\eject**
+To force a new page insert this command on a separate line. just before the text you want 'pushed' to the next page.
+
+== Blank Line Control ==
+Here are some specially defined control command that we have added to ptxplus to control blank line spacing. This can be helpful for adjusting spacing on section heads, etc.
+
+**\skipline**
+
+
+**\skiphalfline**
+
+
+**\skipqline**
+
+
+**\suckupline**
+
+
+**\suckuphalfline**
+
+
+**\suckupqline**
+
+== Word Spacing Controls ==
+Some times it is necessary to insert controls as the word level. Several custom commands have been made to facilitate this. These are:
+
+**\nbsp**
+
+
+**\zwsp**
+
+Additional commands for inserting characters like these can easily be defined in the global command file found under the '[[TeX]] Global' tab.
