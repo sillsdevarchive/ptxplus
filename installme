@@ -44,7 +44,15 @@ There is a dependency conflict created in the way the texlive package is current
 
 	sudo dpkg-divert --package teckit --add /usr/bin/teckit_compile
 
-You should now be able to install TECKit without any problems.
+TeX Live XeTeX Snapshot Work-around:
+Another dependency conflict may be encountered with the texlive XeTeX package. The fix is similar.
+
+	sudo dpkg-divert --package  texlive-xetex-snapshot --add /usr/share/doc/texlive-doc/generic/ifxetex/README
+	sudo dpkg-divert --package  texlive-xetex-snapshot --add /usr/share/texmf-texlive/tex/generic/ifxetex/ifxetex.sty
+	sudo dpkg-divert --package  texlive-xetex-snapshot --add /usr/bin/xdvipdfmx
+	sudo dpkg-divert --package  texlive-xetex-snapshot --add /usr/bin/xetex
+
+You should now be able to install TECKit and TeX Live XeTeX Snapshot without any problems.
 
 Finally, log out and log back in again so the system will properly recognize the newly installed packages and the TortoiseHg package should work correctly.
 
@@ -98,7 +106,7 @@ Test to see if the system recognizes the additional path with:
 
 After running this command you should see a path that leads to ptxplus.
 
-Next we need link ptxplus (main program) to /usr/local/bin so it can be started from any location like a real program would. First, varify that you have a bin folder. If you do not, create it in your terminal with this command:
+Next we need link ptxplus (main program) to /usr/local/bin so it can be started from any location like a real program would. First, verify that you have a bin folder. If you do not, create it in your terminal with this command:
 
 	mkdir ~/bin
 

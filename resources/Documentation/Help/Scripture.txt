@@ -12,7 +12,7 @@ Before text can be processed by the system it needs to go through a number of pr
 
 There is one kind of master check called check_book.py which connects to a number of checking modules. These are considered to be fundamental checks that every SFM file should undergo. Right now it handles basic SFM checking, punctuation checks and quote checks. More may be added in the future. If you find a certain check that you consider to be fundamental is not included, please let us know and we'll add it. Likewise, if you see a particular problem being missed by the checks we want to know about that too.
 
-Checks can be run, or not run, depending on if the particular check has been activated (value set to 'true') in the system configuration. To see what pre-process checks are available click on the Config tab, then General and PreprocessChecks. You can then see what checks are activated and what they do.
+Checks can be run, or not run, depending on if the particular check has been activated (value set to 'true') in the system configuration. To see what pre-process checks are available click on the Settings tab, then General and PreprocessChecks. You can then see what checks are activated and what they do.
 
 It is always possible to add more pre-processing checks to the system. However, to do this you will need to 'poke around under the hood.' First, it is good to have an understanding of how the ptxplus libraries work. If you do, you can save yourself a lot of time and effort. However, the library goes beyond the scope of this documentation. But, even if you don't, you can still write free-standing checks which work independently from the system. Regardless of how you choose to write your checks, the process to hook them into the system is the same.
 

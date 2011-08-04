@@ -8,7 +8,7 @@ This page contains information on finer points of the ptx2pdf macro package
 
 If what you need is not on this page you might want to check out the iCap ptx2pdf forum page. It has lots of useful information on using the ptx2pdf macros. However, remember that some features of ptxplus will not be covered there as they are not part of the original ptx2pdf macro package. The iCap ptx2pdf forum can be found here:
 
-http://wiki.ubs-icap.org/Resources/Documentation/ptx2pdf/
+http://confluence.ubs-icap.org/display/TTT/Home
 
 
 ==== Hanging Verse Numbers ====

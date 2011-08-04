@@ -14,17 +14,17 @@ Ptxplus is a system which helps you carry out and manage a publication project. 
 
 4) Next click **Project -> Open**, it should be located in your new project, if not, find it, then click Open.
 
-5) You are now in your test "New Nameless Project". Check out the Config tab, that is the "DNA" of the publication. Also, look at the folders and files that ptxplus has created. Familiarize yourself with what is in them.
+5) You are now in your test "New Nameless Project". Check out the Settings tab, that is the "DNA" of the publication. Also, look at the folders and files that ptxplus has created. Familiarize yourself with what is in them.
 
 6) Now click on the **View-COVERFRONT.USFM** button. In a few seconds a PDF file should appear with a draft of your project's front cover.
 
 7) As the file was just freshly generated it is still warm, so don't touch it yet. While you are waiting for it to cool, look around the project files again and see what has changed since you ran this first typesetting operation.
 
-8) Next, in the Config tab find **Format -> Binding -> MATTER_NT.** Double click on the field and a small dialog will appear where you can change the setting. Initially, the setting will be "," (this indicates it is a list field). Replace this with "jas," (note the comma) and click **Apply**. Then click **Close**. In the main window click on the Reload Settings button. Now in the Component list (upper left), click the button and a list should appear of all the components that the system recognizes for this project. Click on **jas**. You are now ready to process the Book of James.
+8) Next, in the Settings tab find **Format -> Binding -> MATTER_NT.** Double click on the field and a small dialog will appear where you can change the setting. Initially, the setting will be "," (this indicates it is a list field). Replace this with "jas," (note the comma) and click **Apply**. Then click **Close**. In the main window click on the Reload Settings button. Now in the Component list (upper left), click the button and a list should appear of all the components that the system recognizes for this project. Click on **jas**. You are now ready to process the Book of James.
 
 9) Click on the **Session** tab, then click on the View-jas button. A bunch of text will fly by in the session window then you will see the freshly created jas.usfm.pdf file. The source that created this PDF is a test file that is included with the system for testing purposes and was imported into the Source folder of the project when it found there was none there. Take a look at the PDF. Notice that it uses //"dumb"// quotes. Now close it and look for the error log window. There should have been some. Close that window and look at the project folder again and notice the changes that were made.
 
-10) Now we will change the dumb quotes to smart ones. Go to the Config tab and under **ProjectText -> SourceText -> Features**, change **dumbQuotes**, **contractionMarkers** and **possessiveMarkers** all to "true". Next go to **System -> Processes** and add the "swap_quotes" process to the **textProcesses** list. (Remember to put a comma "," after it so ptxplus sees this field as a list.) Now run **View-jas** again and all the quote markers including contraction and possessive markers, should be changed to be //typesetter's quotes//.
+10) Now we will change the dumb quotes to smart ones. Go to the Settings tab and under **ProjectText -> SourceText -> Features**, change **dumbQuotes**, **contractionMarkers** and **possessiveMarkers** all to "true". Next go to **System -> Processes** and add the "swap_quotes" process to the **textProcesses** list. (Remember to put a comma "," after it so ptxplus sees this field as a list.) Now run **View-jas** again and all the quote markers including contraction and possessive markers, should be changed to be //typesetter's quotes//.
 
 There is much more that can be done with this data set but if we did it all then this wouldn't be a //quick start//, would it?
 

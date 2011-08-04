@@ -7,7 +7,7 @@ Modification-Date: Fri, 16 Apr 2010 21:10:46 +0700
 
 Inserting illustrations into books that are being typeset is currently being done automatically only. The process goes basically like this.
 
-First, there needs to be a valid illustrations library that contains a valid data file that enables automated parts of the process. The path to the library goes in the project.conf file. In the Config tab of ptxplus, go to Process -> Paths -> PATH_ILLUSTRATIONS_LIB and set the path to where the library is. For portability, use a relitive path like this:
+First, there needs to be a valid illustrations library that contains a valid data file that enables automated parts of the process. The path to the library goes in the project.conf file. In the Settings tab of ptxplus, go to Process -> Paths -> PATH_ILLUSTRATIONS_LIB and set the path to where the library is. For portability, use a relitive path like this:
 
 	[[../../_resources/lib_illustrations/Knowles-600]]
 
