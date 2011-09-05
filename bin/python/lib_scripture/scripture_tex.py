@@ -504,7 +504,7 @@ class MakeTexControlFile (object) :
 		headerFooterSettings += '\\def\\HeaderPosition{' + headerPosition + '}\n'
 		headerFooterSettings += '\\def\\FooterPosition{' + footerPosition + '}\n'
 		if useRunningHeaderRule.lower() == 'true' :
-			headerFooterSettings += '\\RHruleposition=' + runningHeaderRulePosition + '\n'
+			headerFooterSettings += '\\RHruleposition=' + runningHeaderRulePosition + 'mm\n'
 		headerFooterSettings += '\\def\\RHtitleleft{\\' + runningHeaderTitleLeft + '}\n'
 		headerFooterSettings += '\\def\\RHtitlecenter{\\' + runningHeaderTitleCenter + '}\n'
 		headerFooterSettings += '\\def\\RHtitleright{\\' + runningHeaderTitleRight + '}\n'
