@@ -67,3 +67,9 @@ http://www.december.com/html/spec/colorcmyk.html
 
 ==== Flying Verse Numbers ====
 To set the vertical distance between verse numbers when using flying verse numbers. You need to insert in the [[.sty]] this command in the verse marker: \BaseLine 10pt This can help prevent clashing when using number systems in which the character baseline can vary from number to number. The default behavior is to use the font size. If this is too close you will want to change the number as desired.
+
+==== Adding Leading to Section Heads ====
+A simple hook that will add leading (space between the lines) of section headings works like this:
+\sethook{start}{s1}{\baselineskip=14pt \relax}
+
+Change the {s1} to whatever marker you are working with and change the pt setting to suite the font and space you desire.
