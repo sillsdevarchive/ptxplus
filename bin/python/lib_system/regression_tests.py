@@ -32,6 +32,20 @@ import tools
 
 class RegressionTests (object) :
 
+	def buildFolderPath (self, path) :
+		'''Check for folders on a given path and create them if needed.'''
+
+		if not os.path.isdir(path) :
+			folderList = path.split('/')
+			testPath = os.path.join('/', folderList[1])
+			folderList.pop(1)
+			for f in folderList :
+				testPath = os.path.join(testPath, f)
+				if not os.path.isdir(testPath) :
+					os.mkdir(testPath)
+		else :
+			return True
+
 
 	def main (self, log_manager) :
 		'''This is the main process function for regression testing.'''
@@ -50,6 +64,9 @@ class RegressionTests (object) :
 		switch                  = self._log_manager._optionalPassedVariable
 
 		# SET TYPE (BUILD ADDITIONAL PATHS)
+		self.buildFolderPath(pathRegression)
+
+
 		# Set the test type (if we don't know, we don't go)
 		if os.path.exists(new) :
 			if os.path.isfile(new) :
@@ -58,14 +75,16 @@ class RegressionTests (object) :
 				# It is assumed that we are working in the "Texts" folder and no
 				# other. This might come back to bite us at some point.
 				head, tail = os.path.split(new)
-				old                     = pathRegression + '/' + head.split('/')[-1]
+				old = pathRegression + '/' + head.split('/')[-1]
+				# Build the folder path if needed so processes below will not fail
+				self.buildFolderPath(old)
 				newFile = new
 				oldFile = old + '/' + tail
 				self._log_manager.log('INFO', 'Regression type is file (' + os.path.split(new)[-1] + ')', 'true')
 			elif os.path.isdir(new) :
 				testType = 'dir'
 				head, tail = os.path.split(new)
-				old                     = pathRegression + '/' + tail
+				old = pathRegression + '/' + tail
 				self._log_manager.log('INFO', 'Regression test type is folder (' + str(len(os.listdir(new))) + ' items)', 'true')
 			else :
 				self._log_manager.log('ERRR', 'Regression testing for [' + new + '] target type unknown', 'true')
