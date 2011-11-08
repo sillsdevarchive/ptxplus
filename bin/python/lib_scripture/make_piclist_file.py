@@ -108,6 +108,9 @@ class MakePiclistFile (object) :
 			to that goes the translation field "vCap" which holds the
 			vernacular version of the caption field.'''
 
+		# Shift the ID to lower case for consistency
+		illID = illID.lower()
+
 		# Build the cv location ref (it must be in this format to work)
 		loc = chapNum + "." + verseNum
 
@@ -164,6 +167,10 @@ class MakePiclistFile (object) :
 			projects. The link file is located in the Illustrations
 			folder and points back to the shared folder in the
 			source area.'''
+
+		# Shift the ID to lower case for consistency.  File names are all
+		# lowercase in the lib.
+		illID = illID.lower()
 
 		# Get the file name from the illustration data
 		def_fileName = "FILE NAME MISSING!"
