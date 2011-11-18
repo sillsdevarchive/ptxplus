@@ -1,9 +1,9 @@
 Manual installation instructions for the developer version of the ptxplus package
 	By Dennis Drescher (dennis_drescher@sil.org)
-	Last edited: 15/07/2010
+	Last edited: 18/11/2011
 
 
-These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently Lucid, 10.04). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
+These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently oneiric, 11.10ubuntu). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
 
 
 REQUIRED PACKAGES
@@ -12,9 +12,9 @@ There are a number of packages that need to be installed for ptxplus to work. So
 
 	sudo gedit /etc/apt/sources.list
 
-Next, in gedit in the file you just opened, go to the bottom of the file and add this line if it does not already exist in the file:
+Next, in gedit in the file you just opened, add this line to the third party developers section if it does not already exist in the file:
 
-	deb http://packages.sil.org/ubuntu lucid main
+	deb http://packages.sil.org/ubuntu oneiric main
 
 Save the file and close it.
 
@@ -121,12 +121,6 @@ Now, you will need to link a couple utilities that are good to run globally out 
 This should complete the manual installation of ptxplus. Now you should be able to start the program from your terminal at any location with:
 
 	ptxplus
-
-Note: If you have an error that says some thing like cannot find "python2" you may need to make a link to work around it. It may be that newer versions of Ubuntu (untested) may require the full Python version number. Our scripts use "Python2" meaning that any version in the 2.0 range is acceptable. This used to work but may no longer. The work around is to create a link from your Python exacutable in /usr/bin to python2. This should work:
-
-	sudo ln -s /usr/bin/python2.n python2
-
-Replace "n" with the installed version you are using. This should map it correctly.
 
 Go a head, give it a try. What you should see is a ptxplus control panel come up but there will obviously be no project displayed. Work needs to be done to the display to gray-out parts of the display that are not relevant when there is no project but it works for now.
 
