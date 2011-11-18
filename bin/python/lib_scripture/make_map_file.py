@@ -22,7 +22,7 @@
 # routine
 # 20090914 - djd - Removed code that was duplicating makefile functions like
 # creating the Maps folder, etc.
-# 20110516 - djd - Modify to handle master data file for map data.
+# 20111118 - djd - Added data file copy from makefile script
 
 
 ###############################################################################
@@ -52,18 +52,22 @@ class MakeMapFile (object) :
 		# FIXME: Might want to replace hard coded extentions with system vars
 		# for file types
 		basePath        = os.environ.get('PTXPLUS_BASE')
-		mapProject      = os.getcwd() + "/" + tools.pubInfoObject['Paths']['PATH_MAPS']
+		mapProject      = os.path.join(os.getcwd(), tools.pubInfoObject['Paths']['PATH_MAPS'])
 		colorSpace      = log_manager._settings['Format']['MapProcesses']['colorSpace']
 		inputFile       = log_manager._currentInput
 		outputFile      = log_manager._currentOutput
 		(head, tail)    = os.path.split(outputFile)
-		mapSetType      = tail[0]
 		mapID           = tail.replace('.svg', '')
-		dataFileName    = mapProject + "/" + mapSetType + "00-data.csv"
-#        dataFileName    = mapProject + "/" + tail.replace('.svg', '-data.csv')
-		styleFileName   = mapProject + "/" + tail.replace('.svg', '-style.csv')
+		dataFileSource  = os.path.join(basePath, 'resources', 'lib_maps', tail[0] + '00-data.csv')
+		dataFileProj    = os.path.join(mapProject, tail[0] + '00-data.csv')
+		styleFileName   = os.path.join(mapProject,  tail.replace('.svg', '-style.csv'))
 		backgroundFile  = tail.replace('.svg', '-bkgrnd-' + colorSpace.split()[1].lower() + '.png')
 
+		# Copy the data file into the project.  Normally this is done by
+		# makefile but it is easier to do here
+		if not os.path.isfile(dataFileProj) :
+			if not shutil.copy(dataFileSource, dataFileProj) :
+				log_manager.log('ERRR', 'Data file not copied into project!', 'true')
 
 ###############################################################################
 # There's a problem with working with namespaces.  The solution, or at least
@@ -86,7 +90,7 @@ class MakeMapFile (object) :
 
 
 		# Pull in the CSV map point data
-		csvMapData = file(dataFileName)
+		csvMapData = file(dataFileProj)
 		mapData = reader(csvMapData, dialect = 'excel')
 
 		# Pull in the CSV style data
@@ -100,36 +104,21 @@ class MakeMapFile (object) :
 				if row[3].find(mapID) != -1 :
 					map[row[0]] = row[2]
 
-		# To get the right background file image, we need to insert the key and
-		# file name into the style data list.  Encode the backgroundFile string
-		# to be Unicode utf-8
-#        map['background'] = backgroundFile.encode('utf-8')
-
 		# Gather the new style data
 		styles = {}
 		for row in styleData:
 			if len(row) > 0 and row[0] != "StyleName" :
 				styles[row[0]] = row[1]
 
-		# FIXME: To get the right background file image, we need to insert the key and
-		# file name into the style data list.  Encode the backgroundFile string
-		# to be Unicode utf-8
-#        styles['background'] = backgroundFile.encode('utf-8')
-
 		# Replace the key fields in the XML data with the new map data
 		for key in map.keys() :
 			if dXML.has_key(key) :
 				dXML[key].text = unicode(map[key], 'utf-8')
-				temp = re.sub("_.*$", '', key)
-				# Set the style for each map point key
-				if styles.has_key(temp) :
-					dXML[key].set('style', styles[temp])
-
-
-		# FIXME: Set the background once
-#        if dXML.has_key('background') :
-#            dXML['background'].image = unicode(map[key], 'utf-8')
-#            dXML['background'].set('href', backgroundFile.encode('utf-8'))
+				if dXML[key].text != '' :
+					temp = re.sub("_.*$", '', key)
+					# Set the style for each map point key
+					if styles.has_key(temp) :
+						dXML[key].set('style', styles[temp])
 
 		# Overwrite the original SVG file with the new data
 		ElementTree(element = eXML).write(outputFile, encoding = 'UTF-8')

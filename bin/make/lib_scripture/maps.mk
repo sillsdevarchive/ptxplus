@@ -6,8 +6,9 @@
 define svg_process
 
 # Copy in the original data file into the map folder.
-$(PATH_MAPS)/$(1)-data.$(EXT_CSV) :
-	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-data.$(EXT_CSV),$$@)
+# NOTE: This was depricated when we moved to a single data source for a series of maps
+#$(PATH_MAPS)/$(1)-data.$(EXT_CSV) :
+#	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-data.$(EXT_CSV),$$@)
 
 # Bring in the map background.  This is a shared resource so it will be copied
 # into the Illustrations folder and later linked to the Maps folder in Process.
@@ -38,8 +39,7 @@ $(PATH_MAPS)/$(1)-temp.$(EXT_SVG) :
 $(PATH_MAPS)/$(1).$(EXT_SVG) : \
 		$(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG) \
 		$(PATH_MAPS)/$(1)-temp.$(EXT_SVG) \
-		| $(PATH_MAPS)/$(1)-data.$(EXT_CSV) \
-		  $(PATH_MAPS)/$(1)-style.$(EXT_CSV) \
+		|  $(PATH_MAPS)/$(1)-style.$(EXT_CSV) \
 		  $(PATH_MAPS)/$(1)-org.$(EXT_PNG)
 	@echo INFO: Creating: $$@
 	@$(MOD_RUN_PROCESS) $(MOD_MAKE_MAP) "" "$(PATH_MAPS)/$(1)-temp.$(EXT_SVG)" "$$@" ""
@@ -101,9 +101,10 @@ svg-remove-$(1) :
 	@echo WARNING: Removing: $(1).$(EXT_SVG)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_SVG)
 
-csv-data-remove-$(1) :
-	@echo WARNING: Removing: $(1)-data.$(EXT_CSV)
-	@rm -f $(PATH_MAPS)/$(1)-data.$(EXT_CSV)
+# Depricated
+#csv-data-remove-$(1) :
+#	@echo WARNING: Removing: $(1)-data.$(EXT_CSV)
+#	@rm -f $(PATH_MAPS)/$(1)-data.$(EXT_CSV)
 
 csv-style-remove-$(1) :
 	@echo WARNING: Removing: $(1)-style.$(EXT_CSV) - style
@@ -121,7 +122,6 @@ all-remove-$(1) :
 	@echo WARNING: Removing all the files for the $(1) component
 	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_SVG)
-	@rm -f $(PATH_MAPS)/$(1)-data.$(EXT_CSV)
 	@rm -f $(PATH_MAPS)/$(1)-style.$(EXT_CSV)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_PNG)
 	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
