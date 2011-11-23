@@ -23,6 +23,7 @@
 # 20100728 - djd - A a menu item for running postprocesses only
 # 20100804 - djd - Added a fix to keep object types in place after they have
 #       been modified (TimE)
+# 20111123 - djd - Added to the map menu a way to view the map template
 
 ########################################################################################
 
@@ -155,17 +156,12 @@ class ConfigGUI (object) :
 			"on_menu_regression_hyphen_all"                     : self.m_regression_hyphen_all,
 
 			"on_menu_map_view_model"                            : self.m_map_view_model,
+			"on_menu_map_view_template"                         : self.m_map_view_template,
 			"on_menu_map_remove_pdf"                            : self.m_map_remove_pdf,
 			"on_menu_map_remove_svg"                            : self.m_map_remove_svg,
-			"on_menu_map_remove_csv_data"                       : self.m_map_remove_csv_data,
 			"on_menu_map_remove_csv_sty"                        : self.m_map_remove_csv_sty,
 			"on_menu_map_remove_png"                            : self.m_map_remove_png,
-			"on_menu_map_remove_work"                           : self.m_map_remove_work,
 			"on_menu_map_remove_all"                            : self.m_map_remove_all,
-			"on_menu_map_remove_group_pdf"                      : self.m_map_remove_group_pdf,
-			"on_menu_map_remove_group_tex"                      : self.m_map_remove_group_tex,
-			"on_menu_map_remove_group_sty"                      : self.m_map_remove_group_sty,
-			"on_menu_map_remove_group_all"                      : self.m_map_remove_group_all,
 
 			"on_menu_help_activate"                             : self.m_help,
 			"on_menu_example_activate"                          : self.m_example,
@@ -735,14 +731,14 @@ class ConfigGUI (object) :
 	def m_map_view_model (self, widget) :
 		self.execute("ptxplus", "view-map-model-" + self.bkid)
 
+	def m_map_view_template (self, widget) :
+		self.execute("ptxplus", "view-map-template-" + self.bkid)
+
 	def m_map_remove_pdf (self, widget) :
 		self.execute("ptxplus", "pdf-remove-" + self.bkid)
 
 	def m_map_remove_svg (self, widget) :
 		self.execute("ptxplus", "svg-remove-" + self.bkid)
-
-	def m_map_remove_csv_data (self, widget) :
-		self.execute("ptxplus", "csv-data-remove-" + self.bkid)
 
 	def m_map_remove_csv_sty (self, widget) :
 		self.execute("ptxplus", "csv-sty-remove-" + self.bkid)
@@ -750,23 +746,8 @@ class ConfigGUI (object) :
 	def m_map_remove_png (self, widget) :
 		self.execute("ptxplus", "png-remove-" + self.bkid)
 
-	def m_map_remove_work (self, widget) :
-		self.execute("ptxplus", "usfm-remove-" + self.bkid)
-
 	def m_map_remove_all (self, widget) :
 		self.execute("ptxplus", "all-remove-" + self.bkid)
-
-	def m_map_remove_group_pdf (self, widget) :
-		self.execute("ptxplus", "pdf-remove-maps")
-
-	def m_map_remove_group_tex (self, widget) :
-		self.execute("ptxplus", "tex-remove-maps")
-
-	def m_map_remove_group_sty (self, widget) :
-		self.execute("ptxplus", "sty-remove-maps")
-
-	def m_map_remove_group_all (self, widget) :
-		self.execute("ptxplus", "all-remove-maps")
 
 	##### Menu - Help
 
