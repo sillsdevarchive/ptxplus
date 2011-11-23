@@ -5,11 +5,6 @@
 # This processes a single map file
 define svg_process
 
-# Copy in the original data file into the map folder.
-# NOTE: This was depricated when we moved to a single data source for a series of maps
-#$(PATH_MAPS)/$(1)-data.$(EXT_CSV) :
-#	$(call copysmart,$(PATH_RESOURCES_MAPS)/$($(1)_maps)-data.$(EXT_CSV),$$@)
-
 # Bring in the map background.  This is a shared resource so it will be copied
 # into the Illustrations folder and later linked to the Maps folder in Process.
 $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG) :
@@ -88,9 +83,14 @@ preprocess-$(1) : $(PATH_MAPS)/$(1).$(EXT_SVG)
 	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$<
 
 # View the original model map for reference
-view-map-model-$(1) : $(PATH_ILLUSTRATIONS)/$(1).$(EXT_PNG)
+view-map-model-$(1) : $(PATH_MAPS)/$(1)-org.$(EXT_PNG)
 	@echo INFO: Viewing: $$<
 	@ $(VIEWIMG) $$<
+
+# View the original map template for reference
+view-map-template-$(1) : $(PATH_MAPS)/$(1)-temp.$(EXT_SVG)
+	@echo INFO: Opening for viewing: $(1)-temp.$(EXT_SVG)
+	@FONTCONFIG_PATH=$(PATH_HOME)/$(PATH_FONTS) $(VIEWSVG) $$<
 
 # Remove pieces of a component
 pdf-remove-$(1) :
@@ -101,11 +101,6 @@ svg-remove-$(1) :
 	@echo WARNING: Removing: $(1).$(EXT_SVG)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_SVG)
 
-# Depricated
-#csv-data-remove-$(1) :
-#	@echo WARNING: Removing: $(1)-data.$(EXT_CSV)
-#	@rm -f $(PATH_MAPS)/$(1)-data.$(EXT_CSV)
-
 csv-style-remove-$(1) :
 	@echo WARNING: Removing: $(1)-style.$(EXT_CSV) - style
 	@rm -f $(PATH_MAPS)/$(1)-style.$(EXT_CSV)
@@ -114,17 +109,14 @@ png-remove-$(1) :
 	@echo WARNING: Removing: $(1).$(EXT_PNG)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_PNG)
 
-usfm-remove-$(1) :
-	@echo WARNING: Removing: $(1).$(EXT_WORK)
-	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
-
 all-remove-$(1) :
 	@echo WARNING: Removing all the files for the $(1) component
 	@rm -f $(PATH_PROCESS)/$(1).$(EXT_PDF)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_SVG)
 	@rm -f $(PATH_MAPS)/$(1)-style.$(EXT_CSV)
 	@rm -f $(PATH_MAPS)/$(1).$(EXT_PNG)
-	@rm -f $(PATH_TEXTS)/$(1).$(EXT_WORK)
+	@rm -f $(PATH_MAPS)/$(1)-org.$(EXT_PNG)
+	@rm -f $(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG)
 	@rm -f $(PATH_MAPS)/$(1)-temp.$(EXT_SVG)
 
 
@@ -186,22 +178,4 @@ view-map-model-maps :
 preprocess-maps :
 	@echo WARN: Sorry, no edit/check option for combined map group
 
-# Remove map group components
-pdf-remove-maps :
-	@echo INFO: Removing: $(FILE_GROUP_MAPS_PDF)
-	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
-
-tex-remove-maps :
-	@echo INFO: Removing: $(FILE_GROUP_MAPS_TEX)
-	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
-
-sty-remove-maps :
-	@echo INFO: Removing: $(FILE_GROUP_MAPS_STY)
-	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY)
-
-all-remove-maps :
-	@echo INFO: Removing all map group components
-	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_PDF)
-	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_TEX)
-	@rm -f $(PATH_PROCESS)/$(FILE_GROUP_MAPS_STY)
 
