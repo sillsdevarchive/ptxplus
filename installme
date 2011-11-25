@@ -3,7 +3,7 @@ Manual installation instructions for the developer version of the ptxplus packag
 	Last edited: 18/11/2011
 
 
-These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently oneiric, 11.10ubuntu). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
+These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently oneiric, 11.10). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
 
 
 REQUIRED PACKAGES
@@ -31,13 +31,24 @@ Required:
 
 Suggested:
 
-	sudo apt-get install libgtk2-spell-perl libteckit-perl teckit mercurial meld tortoisehg tortoisehg-nautilus libfont-ttf-scripts-perl
+	sudo apt-get install libgtk2-spell-perl libteckit-perl teckit mercurial meld tortoisehg libfont-ttf-scripts-perl
 
 Another suggested program would be a modified version of XeTeX. You may need this if you are processing complex scripts. This version includes the latest features and bug fixes.
 
 	sudo apt-get install texlive-xetex-snapshot
 
 That will remove the other version and replace it with version 3.1415926-2.2-0.999.7 or greater.
+
+SIL Repository:
+Often, critical packages can not be obtained in a normal straightforward way from the SIL repo. The work around is to use your web browser and poke around in older repos until you find the package you need. Then try installing it and see if it works. (Editorial comment: This really sucks but it is all that can be done until we take open source software seriously in this organization. - djd) The main repo entrance can be found here:
+
+http://packages.sil.org/ubuntu/dists/
+
+Packages you may need to find are:
+
+teckit
+texlive-xetex-snapshot
+
 
 TECKit Work-around:
 There is a dependency conflict created in the way the texlive package is currently put together. It will block TECKit from being able to install correctly. It may be some time before this is fixed so a work-around can be applied by doing the following:
