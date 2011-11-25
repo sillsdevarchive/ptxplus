@@ -2,6 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -10,15 +13,18 @@
    height="744.09448"
    viewBox="0 0 524.40944 744.09451"
    id="svg2"
-   xml:space="preserve"><defs
+   xml:space="preserve"><metadata
+   id="metadata31"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
    id="defs63">
 		
 <pattern
-   width="1583.1101"
-   patternUnits="userSpaceOnUse"
-   patternTransform="translate(-202.13817,-137.77371)"
+   height="950.00003"
    id="pattern3879"
-   height="950.00003">
+   patternTransform="translate(-202.13817,-137.77371)"
+   patternUnits="userSpaceOnUse"
+   width="1583.1101">
 
 </pattern></defs>
 
@@ -124,7 +130,8 @@
    y="264.80118"
    transform="scale(0.99841672,1.0015858)"
    id="Region_Asia"
-   style="font-size:24px;font-weight:bold;line-height:100%;fill:#934711;font-family:Arial">ASIA MINOR</text>
+   style="font-size:24px;font-weight:bold;line-height:100%;fill:#ff0000;font-family:Arial">ASIA MINOR</text>
+
 
 
 
@@ -136,7 +143,8 @@
    y="652.91492"
    transform="scale(0.99841672,1.0015858)"
    id="Title-m10_Main"
-   style="font-size:24px;line-height:100%;font-family:Arial">7 Churches of Revelation</text>
+   style="font-size:24px;line-height:100%;fill:#ff0000;font-family:Arial">7 Churches of Revelation</text>
+
 
 
 
@@ -148,7 +156,8 @@
    y="435.56369"
    transform="scale(0.99841672,1.0015858)"
    id="Island_Patmos"
-   style="font-size:10px;line-height:100%;font-family:Arial">Patmos</text>
+   style="font-size:10px;line-height:100%;fill:#ff0000;font-family:Arial">Patmos</text>
+
 
 
 
@@ -160,7 +169,8 @@
    y="353.87589"
    transform="scale(0.99841672,1.0015858)"
    id="City_Laodicea"
-   style="font-size:10px;line-height:100%;font-family:Arial">Laodicea</text>
+   style="font-size:10px;line-height:100%;fill:#ff0000;font-family:Arial">Laodicea</text>
+
 
 
 
@@ -172,7 +182,8 @@
    y="364.06891"
    transform="scale(0.99841672,1.0015858)"
    id="City_Ephesus"
-   style="font-size:10px;line-height:100%;font-family:Arial">Ephesus</text>
+   style="font-size:10px;line-height:100%;fill:#ff0000;font-family:Arial">Ephesus</text>
+
 
 
 
@@ -184,7 +195,8 @@
    y="331.97073"
    transform="scale(0.99841672,1.0015858)"
    id="City_Smyrna"
-   style="font-size:10px;line-height:100%;font-family:Arial">Smyrna</text>
+   style="font-size:10px;line-height:100%;fill:#ff0000;font-family:Arial">Smyrna</text>
+
 
 
 
@@ -196,7 +208,8 @@
    y="332.88101"
    transform="scale(0.99841672,1.0015858)"
    id="City_Philadelphia"
-   style="font-size:10px;line-height:100%;font-family:Arial">Philadelphia</text>
+   style="font-size:10px;line-height:100%;fill:#ff0000;font-family:Arial">Philadelphia</text>
+
 
 
 
@@ -208,7 +221,8 @@
    y="319.73715"
    transform="scale(0.99841672,1.0015858)"
    id="City_Sardis"
-   style="font-size:10px;line-height:100%;font-family:Arial">Sardis</text>
+   style="font-size:10px;line-height:100%;fill:#ff0000;font-family:Arial">Sardis</text>
+
 
 
 
@@ -220,7 +234,8 @@
    y="294.8385"
    transform="scale(0.99841672,1.0015858)"
    id="City_Thyatira"
-   style="font-size:10px;line-height:100%;font-family:Arial">Thyatira</text>
+   style="font-size:10px;line-height:100%;fill:#ff0000;font-family:Arial">Thyatira</text>
+
 
 
 
@@ -232,7 +247,8 @@
    y="285.42914"
    transform="scale(0.99841672,1.0015858)"
    id="City_Pergamum"
-   style="font-size:10px;line-height:100%;font-family:Arial">Pergamum</text>
+   style="font-size:10px;line-height:100%;fill:#ff0000;font-family:Arial">Pergamum</text>
+
 
 
 

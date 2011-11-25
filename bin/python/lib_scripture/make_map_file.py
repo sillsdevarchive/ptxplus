@@ -23,6 +23,7 @@
 # 20090914 - djd - Removed code that was duplicating makefile functions like
 # creating the Maps folder, etc.
 # 20111118 - djd - Added data file copy from makefile script
+# 20111125 - djd - Fixed problem with no output on empty data field
 
 
 ###############################################################################
@@ -112,7 +113,7 @@ class MakeMapFile (object) :
 
 		# Replace the key fields in the XML data with the new map data
 		for key in map.keys() :
-			if dXML.has_key(key) :
+			if dXML.has_key(key) and map[key]:
 				dXML[key].text = unicode(map[key], 'utf-8')
 				if dXML[key].text != '' :
 					temp = re.sub("_.*$", '', key)

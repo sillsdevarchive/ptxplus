@@ -118,7 +118,7 @@ all-remove-$(1) :
 	@rm -f $(PATH_MAPS)/$(1)-org.$(EXT_PNG)
 	@rm -f $(PATH_MAPS)/$(1)-bkgrnd.$(EXT_PNG)
 	@rm -f $(PATH_MAPS)/$(1)-temp.$(EXT_SVG)
-
+	@rm -f $(PATH_ILLUSTRATIONS)/$(1)-bkgrnd-$(MAP_COLOR_MODE).$(EXT_PNG)
 
 ##### End SVG processing rules
 endef
