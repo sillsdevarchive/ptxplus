@@ -98,15 +98,14 @@
 % csname is required here in order to build a macro name containing a colon and possibly a number.
 %
 \def\defp@ram#1#2{\x@\def\csname\m@rker:#1\endcsname{#2}}
-\def\setp@ram#1#2#3{\x@\xdef\csname#2:#1\endcsname{#3}} % expand now, not later
+\def\setp@ram#1#2#3{\TRACE{setp@ram #2:#1 becomes #3}\x@\xdef\csname#2:#1\endcsname{#3}}
+
 %
 % \getp@aram: fetch the value of a style parameter into \p@ram
 %   #1 -> name of parameter to fetch
 %   #2 -> name of marker
 % Sets temporary macro \p@ram to the value
 %
-\def\getp@ram#1#2{\x@\let\x@\p@ram\csname#2:#1\endcsname}
-
 %
 %
 %
@@ -241,6 +240,7 @@
   \def\m@rker{c}\defp@ram{fontsize}{\dr@psize}
  }
 }
+
 {\catcode`P=12 \catcode`T=12 \lowercase{\gdef\strip@pt#1PT{#1}}}
 \def\AfterVerseSpaceFactor{2}
 \newif\ifOmitChapterNumber
@@ -306,9 +306,23 @@
 \def\@@id#1#2#3#4\end{\gdef\id@@@{#1#2#3}} % get first 3 chars of the \id
 \def\ptx@fig #1\fig*{\d@figure{#1}}
 
-%
 % \stylesheet{...} reads a Paratext stylesheet line by line
-%
+\def\getp@r@m#1#2{\x@\let\x@\p@ram\csname#2:#1\endcsname}
+% Diglot version = allow all parameters to have  Left/Right variant or use
+% default. (e.g when asked for paramter for v, check for vL|vR, default to v)
+\def\getp@ram#1#2{%
+\TRACE{getp@ram #1 #2}%
+\ifdiglot%
+  \ifdiglotL\getp@r@m{#1}{#2L}\else\getp@r@m{#1}{#2R}\fi%
+	\ifx\p@ram\relax%
+	  \getp@r@m{#1}{#2}%
+	  \TRACE{...default}%
+	\else%
+	  \TRACE{...side-specfic}%
+	\fi%
+\else%
+  \getp@r@m{#1}{#2}%
+\fi\x@\TRACE{\p@ram}}
 \newif\ifc@ntinue
 \newread\styl@sheet
 \def\stylesheet#1{
@@ -333,7 +347,6 @@
  \let\bold=\save@bold
  \let\italic=\save@italic
 }
-
 \def\@netimesetup{
  % stuff to execute after loading all stylesheets but before processing the first USFM file
  \s@tupsizes
@@ -433,6 +446,8 @@
 \def\ColumnGutterFactor{15} % relative to FontSizeUnit
 \def\HeaderPosition{0.5} % pos of baseline from top of page, relative to MarginUnit
 \def\FooterPosition{0.5} % pos of baseline from bottom of page, relative to MarginUnit
+\def\DiglotLeftFraction{0.5} % In case texts fit better with unequal columns
+\def\DiglotRightFraction{0.5} %
 
 \newcount\TitleColumns \TitleColumns=1
 \newcount\IntroColumns \IntroColumns=1
@@ -469,6 +484,14 @@
  \pdfpagewidth=\PaperWidth \pdfpageheight=\PaperHeight\fi
  \resetvsize
 }
+}
+
+\def\resetdropc@p{%
+  \message{Setting drop-cap size to \dr@psize}
+  \setp@ram{fontsize}{cL}{\dr@psize}%
+  \setp@ram{fontsize}{cR}{\dr@psize}%
+  \x@\let\csname font<cL>\endcsname=\relax %
+  \x@\let\csname font<cR>\endcsname=\relax %
 \newdimen\le@dingunit
 \newdimen\verticalsp@ceunit
 \newdimen\topm@rgin
