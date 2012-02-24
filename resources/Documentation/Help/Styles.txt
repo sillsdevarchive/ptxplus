@@ -73,3 +73,7 @@ A simple hook that will add leading (space between the lines) of section heading
 \sethook{start}{s1}{\baselineskip=14pt \relax}
 
 Change the {s1} to whatever marker you are working with and change the pt setting to suite the font and space you desire.
+
+==== Adding Space Between Characters ====
+This hook will add space between characters in text. This has not been tested to any great extent. Use with caution.:
+\sethook{start}{p}{\fontdimen2\font=0.1em}
