@@ -37,8 +37,6 @@ If you are using custom style files that are dependent on a parent style file, y
 To add an RGB color to a specific style you need to add a hook to the style such as this:
 
 \sethook{start}{v}{\special{color push rgb 0.13 0.54 0.13}}
-
-
 \sethook{end}{v}{\special{color pop}}
 
 This gives you Forest Green on the selected style. The numbers are percentage of R, G, and B. Go here for an RGB color chart:
@@ -53,8 +51,6 @@ This will push an RGB color to the color stack. Then, after the marker is over, 
 If the CMYK color space is desired replace 'rgb' with 'cmyk' and follow with four percentage numbers rather than three. Example:
 
 \sethook{start}{v}{\special{color push cmyk 1 0 1 0.5}}
-
-
 \sethook{end}{v}{\special{color pop}}
 
 This will give you green cmyk(100%, 0%, 100%, 50%)
@@ -77,3 +73,9 @@ Change the {s1} to whatever marker you are working with and change the pt settin
 ==== Adding Space Between Characters ====
 This hook will add space between characters in text. This has not been tested to any great extent. Use with caution.:
 \sethook{start}{p}{\fontdimen2\font=0.1em}
+
+==== Lifting Drop Cap/Chap Numbers ====
+It might be necessary to raise or lower your drop cap chapter numbers. As I write this I am not sure if there is actually a more automated/better way to do this or not but here's the stylesheet hook that worked:
+
+\sethook{start}{c}{\setbox0=\hbox\bgroup}
+\sethook{end}{c}{\egroup\raise2pt\box0\relax}
