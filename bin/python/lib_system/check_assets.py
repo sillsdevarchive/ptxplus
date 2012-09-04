@@ -152,14 +152,20 @@ class CheckAssets (object) :
 
 		# Make the admin folder if an admin code has been given
 		# This should be a one-time event
-		eCode = self._log_manager._settings['Project'].get('entityCode', '').lower()
-		if eCode != '' :
-			if not os.path.isdir(pathAdmin) :
-				os.mkdir(pathAdmin)
-				self._log_manager.log('INFO', 'Added Admin folder', 'true')
-				# Now copy the files in that are for this entity
-				tools.copyAll(baseSysLib + '/Admin/' + eCode, pathAdmin)
-				self._log_manager.log('INFO', 'Copied entity admin files to project', 'true')
+		# NOTE: The act of copying in all the possible admin forms, etc is being
+		# depricated. This tends to not be useful in this context. We will create
+		# the Admin folder but nothing else.
+		if not os.path.isdir(pathAdmin) :
+			os.mkdir(pathAdmin)
+			self._log_manager.log('INFO', 'Added Admin folder', 'true')
+#        eCode = self._log_manager._settings['Project'].get('entityCode', '').lower()
+#        if eCode != '' :
+#            if not os.path.isdir(pathAdmin) :
+#                os.mkdir(pathAdmin)
+#                self._log_manager.log('INFO', 'Added Admin folder', 'true')
+#                # Now copy the files in that are for this entity
+#                tools.copyAll(baseSysLib + '/Admin/' + eCode, pathAdmin)
+#                self._log_manager.log('INFO', 'Copied entity admin files to project', 'true')
 
 		# The font folder will be a little more complex
 		# If no fonts are listed or the setting is missing for some

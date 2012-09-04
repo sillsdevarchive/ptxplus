@@ -3,7 +3,7 @@ Manual installation instructions for the developer version of the ptxplus packag
 	Last edited: 18/06/2012
 
 
-These are instruction for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently Precise, 12.04). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
+These are instructions for manually installing the developer version of the ptxplus publishing system package on a typical Ubuntu operating system (currently Precise, 12.04). Ultimately we want ptxplus to completely install from the package but at this point, given the state of flux it is in, it is best to get the latest code from the repository and manually install it. Most of the installation commands here will be done in the terminal. If you have not opened a terminal yet, do it now.
 
 
 REQUIRED PACKAGES
@@ -18,7 +18,7 @@ Next, in gedit in the file you just opened, add this line to the third party dev
 
 Save the file and close it.
 
-Again, in the terminal, update your package list and update your system with the folling command and answer yes to the "install without verification" question:
+Again, in the terminal, update your package list and update your system with the following command and answer yes to the "install without verification" question:
 
 	sudo apt-get update
 	sudo apt-get upgrade
@@ -33,22 +33,26 @@ Suggested:
 
 	sudo apt-get install libgtk2-spell-perl mercurial meld libfont-ttf-scripts-perl tortoisehg
 
-Corrections for 12.04 install:
+Now try to install these rare SIL packages:
 
-Note: These didn't work and we need a solution for them:
+	sudo apt-get install libencode-registry-perl teckit
+
+Note: These may not install and give you these errors:
 
 E: Unable to locate package libteckit-perl
 E: Unable to locate package teckit
-
-At one point another version of XeTeX was needed and it was called texlive-xetex-snapshot. remove the other version and replace it with version 3.1415926-2.2-0.999.7 or greater. A copy of the package was kept in the SIL repo. It doesn't seem to be needed at this point.
 
 TECKit Work-around:
 There is a dependency conflict created in the way the texlive package is currently put together. It will block TECKit from being able to install correctly. It may be some time before this is fixed so a work-around can be applied by doing the following:
 
 	sudo dpkg-divert --package teckit --add /usr/bin/teckit_compile
 
+
 TeX Live XeTeX Snapshot Work-around:
-Another dependency conflict may be encountered with the texlive XeTeX package. The fix is similar.
+
+Note: At one point another version of XeTeX was needed and it was called texlive-xetex-snapshot. remove the other version and replace it with version 3.1415926-2.2-0.999.7 or greater. A copy of the package was kept in the SIL repo. It doesn't seem to be needed at this point.
+
+If you have to use this package, another dependency conflict may be encountered with the texlive XeTeX package. The fix is similar as with TECKit.
 
 	sudo dpkg-divert --package  texlive-xetex-snapshot --add /usr/share/doc/texlive-doc/generic/ifxetex/README
 	sudo dpkg-divert --package  texlive-xetex-snapshot --add /usr/share/texmf-texlive/tex/generic/ifxetex/ifxetex.sty
@@ -61,8 +65,22 @@ Finally, log out and log back in again so the system will properly recognize the
 
 With all the above packages installed, we are ready to move on to installing ptxplus publishing package.
 
+GETTING palaso.python
+???????????????????????????????????
+./setup.py --nokmn build
+sudo ./setup.py --nokmn install
+
+testing:
+python
+>>> import palaso.sfm
+>>> dir(palaso.sfm)
+
+
 GETTING ptxplus
 -----------------------------------------
+Shortcut! You should already have TortoiseHG intalled, you could use that to clone the ptxplus project on your local machine insted of the instructions below. Use the location given below. Also, you could restore
+
+
 To obtain the ptxplus, you need to check it out from the Mercurial repository it resides in. To simplify these instructions we will assume that the ptxplus package will go in this location:
 
 	~/Projects
@@ -115,11 +133,11 @@ Next we need link ptxplus (main program) to /usr/local/bin so it can be started 
 
 Now, you will need to link a couple utilities that are good to run globally out of the ~/bin folder and some links that will enable you to right-click from the Nautilus file browser. To make these links, run each of these commands in order:
 
-	sudo ln -s ~/Projects/ptxplus/bin/ptxplus /usr/local/bin/ptxplus
-	ln -s ~/Projects/ptxplus/bin/sh/multi-txtconv.sh ~/bin/multi-txtconv.sh
-	ln -s ~/Projects/ptxplus/bin/python/lib_extras/get-clip ~/bin/get-clip
-	ln -s ~/Projects/ptxplus/bin/sh/ptxplus ~/.gnome2/nautilus-scripts/ptxplus
-	ln -s ~/Projects/ptxplus/bin/sh/Open\ Terminal ~/.gnome2/nautilus-scripts/Open\ Terminal
+	sudo ln -sf ~/Projects/ptxplus/bin/ptxplus /usr/local/bin/ptxplus
+	ln -sf ~/Projects/ptxplus/bin/sh/multi-txtconv.sh ~/bin/multi-txtconv.sh
+	ln -sf ~/Projects/ptxplus/bin/python/lib_extras/get-clip ~/bin/get-clip
+	ln -sf ~/Projects/ptxplus/bin/sh/ptxplus ~/.gnome2/nautilus-scripts/ptxplus
+	ln -sf ~/Projects/ptxplus/bin/sh/Open\ Terminal ~/.gnome2/nautilus-scripts/Open\ Terminal
 
 This should complete the manual installation of ptxplus. Now you should be able to start the program from your terminal at any location with:
 
