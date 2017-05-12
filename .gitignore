@@ -1,0 +1,7 @@
+
+*.pyc
+*~
+
+.cache
+state.conf
+.zim
